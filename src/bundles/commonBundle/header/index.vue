@@ -1,7 +1,5 @@
 <template>
-  <header class="jc-header">
-
-  </header>
+  <header class="jc-header"></header>
 </template>
 
 <script>
@@ -9,18 +7,11 @@ export default {
   name: 'CommonHeader',
   data() {
     return {
-      menuActive: '1-4-1'
+
     }
   },
   created() {
 
-  },
-  methods: {
-    //菜单点击
-    handleSelect(key) {
-      this.menuActive = key
-      this.$router.push(key)
-    }
   }
 }
 </script>
