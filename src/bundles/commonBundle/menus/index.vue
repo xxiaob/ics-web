@@ -1,6 +1,6 @@
 <template>
-  <section class="mv-menu-space">
-    <el-menu :default-active="menuActive" class="el-menu-vertical-demo" @select="handleSelect" :collapse="isCollapse">
+  <section class="jc-menu-space">
+    <el-menu :default-active="menuActive" @select="handleSelect" :collapse="isCollapse">
       <el-submenu index="1">
         <template slot="title">
           <i class="el-icon-location"></i>·
@@ -36,10 +36,8 @@
 </template>
 
 <script>
-import menuModule from './modules/menuModule.js'
-
 export default {
-  mixins: [menuModule],
+  name: 'CommonMenus',
   data() {
     return {
       isCollapse: false
@@ -50,5 +48,14 @@ export default {
   }
 }
 </script>
-
-<style src="./index.scss" lang="scss"></style>
+<style lang="scss" scoped>
+.jc-menu-space {
+  position: relative;
+  width: 200px;
+  height: 100%;
+  z-index: 9;
+  background-color: #ffffff;
+  bottom: 0;
+  overflow: auto;
+}
+</style>

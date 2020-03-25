@@ -9,6 +9,7 @@ import VueI18n from 'vue-i18n' //引入语言切换工具
 import ElementUI from 'element-ui' //引入elementUI
 import store from './store' //引入vuex
 import './config/requestConfig' //axios 请求配置
+import './assets/theme/base/variables/element-variables.scss' //引入修改element-ui样式
 
 /*使用Vue-I18n做语言切换配置*/
 Vue.use(VueI18n)

@@ -57,7 +57,7 @@ exports.cssLoaders = function (options) {
   //新增添加sass全局通用变量编译
   // 全局文件引入 当然只想编译一个文件的话可以省去这个函数
   function resolveResource(name) {
-    return path.resolve(__dirname, '../src/' + name);
+    return path.resolve(__dirname, '../src/' + name)
   }
 
   function generateSassResourceLoader() {
@@ -68,10 +68,10 @@ exports.cssLoaders = function (options) {
         loader: 'sass-resources-loader',
         options: {
           // 多个文件时用数组的形式传入，单个文件时可以直接使用 path.resolve(__dirname, '../static/style/common.scss'
-          resources: [resolveResource('assets/theme/variables/index.scss')]
+          resources: [resolveResource('assets/theme/base/variables/index.scss')]
         }
       }
-    ];
+    ]
 
     if (options.extract) {
       return ExtractTextPlugin.extract({

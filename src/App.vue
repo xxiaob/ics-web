@@ -8,4 +8,4 @@ export default {
   name: 'APP'
 }
 </script>
-<style src="@/assets/theme/base.scss" lang="scss"></style>
+<style src="@/assets/theme/base/base.scss" lang="scss"></style>
