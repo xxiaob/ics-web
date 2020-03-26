@@ -32,6 +32,19 @@ let routerOptions = {
         title: '首页'
       }
     }, ...authRouter]
+  }, {
+    path: '/map',
+    name: 'map',
+    redirect: { name: 'mapDemo' },
+    component: () => import('@/bundles/commonBundle/pageContent/fullPage'),
+    children: [{
+      path: 'demo',
+      name: 'mapDemo',
+      component: () => import('@/bundles/mapBundle/demo'),
+      meta: {
+        title: '地图Demo'
+      }
+    }]
   }]
 }
 
