@@ -15,10 +15,11 @@
   </div>
 </template>
 <script>
-import { stringSearch } from '@/libs/util'
+import TreesFilter from '@/mixins/TreesFilter'
 
 export default {
   name: 'SystemOrganizationTreeCard',
+  mixins: [TreesFilter],
   props: {
     edit: {
       type: Boolean,
@@ -36,11 +37,8 @@ export default {
     }
   },
   methods: {
-    filter(val) {
-      this.$refs.tree.filter(val)
-    },
-    filterNode(value, data) {
-      return stringSearch(value, data.label)
+    initData() {
+
     }
   }
 }
