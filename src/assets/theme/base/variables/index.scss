@@ -27,11 +27,22 @@ $jc-color-text-primary: #303133 !default;
 $jc-color-text-regular: #606266 !default;
 $jc-color-text-secondary: #909399 !default;
 $jc-color-text-placeholder: #c0c4cc !default;
+$jc-color-disabled-base: #bbb !default;
+
+//字体大小控制
+$jc-font-size-larger: 20px !default;
+$jc-font-size-large: 18px !default;
+$jc-font-size-medium: 16px !default;
+$jc-font-size-base: 14px !default;
+$jc-font-size-small: 13px !default;
+$jc-font-size-smaller: 12px !default;
+$jc-font-weight-primary: 500 !default;
+$jc-font-weight-secondary: 100 !default;
+$jc-font-line-height-primary: 24px !default;
+$jc-font-line-height-secondary: 16px !default;
 
 //常用背影样式
-.jc-box-shadow {
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
-}
+$jc-box-shadow: 0 2px 12px 0 rgba(0, 0, 0, 0.1) !default;
 
 //border线
 $jc-color-line-primary: #dcdcdc !default;

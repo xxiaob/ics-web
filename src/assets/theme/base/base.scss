@@ -11,8 +11,7 @@ html,
 body {
   width: 100%;
   height: 100%;
-  font-size: 14px;
-  line-height: 1.42857143;
+  font-size: $jc-font-size-base;
   font-family: "微软雅黑";
   color: $jc-color-text-primary;
   background-color: $jc-bg-color;
@@ -169,5 +168,49 @@ body {
   .el-menu-item {
     height: $jc-menu-height;
     line-height: $jc-menu-height;
+  }
+}
+
+/*超出隐藏控制*/
+.jc-text-warp {
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  word-wrap: break-word;
+  word-break: break-all;
+}
+
+/*--------- 定义顶部filter 样式 --------------*/
+.jc-tabfilter-card {}
+
+.jc-card-title {
+  font-size: $jc-font-size-medium;
+  font-weight: $jc-font-weight-primary;
+}
+
+.jc-tabfilter-form {
+  .el-form-item {
+    margin-bottom: 0;
+  }
+}
+
+/*---------- table样式 --------*/
+.jc-table-card {
+  .jc-card-header {
+    position: relative;
+  }
+
+  .jc-button-group {
+    position: absolute;
+    right: 0;
+    top: -6px;
+  }
+
+  .el-card__body {
+    padding-top: 0;
+  }
+
+  .cell {
+    font-size: $jc-font-size-smaller;
   }
 }
