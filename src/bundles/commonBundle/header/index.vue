@@ -1,6 +1,6 @@
 <template>
   <header class="jc-header">
-    <el-menu :default-active="activeIndex" class="jc-header-menus" @select="menuSelect" mode="horizontal">
+    <el-menu :default-active="menuActive" class="jc-header-menus" @select="menuSelect" mode="horizontal">
       <el-submenu index="myMenu" :popper-append-to-body="false">
         <template slot="title"><i class="jc-user-header"></i>杨超</template>
         <el-menu-item index="resetPwd">修改密码</el-menu-item>
@@ -13,22 +13,23 @@
 <script>
 import { mapState, mapGetters, mapMutations } from 'vuex'
 import { getUser } from '@/libs/storage'
+
 export default {
   name: 'CommonHeader',
   data() {
     return {
-      activeIndex: ''
+      menuActive: ''
     }
   },
   created() {
     //设置用户信息
-    const user = getUser()
+    // const user = getUser()
 
-    if (user) {
-      this.setUser(user)
-    } else {
-      this.$router.push(`/login?callbackUrl=${this.$router.history.current.fullPath.split('?')[0]}`)
-    }
+    // if (user) {
+    //   this.setUser(user)
+    // } else {
+    //   this.$router.push(`/login?callbackUrl=${this.$router.history.current.fullPath.split('?')[0]}`)
+    // }
   },
   computed: {
     ...mapState('user', {
@@ -42,7 +43,7 @@ export default {
     ]),
     //菜单选择
     menuSelect(index, path) {
-      console.log(index, path)
+      console.log('header', index, path)
 
       if (index === 'loginOut') {
         // loginout().then(() => {
@@ -51,8 +52,6 @@ export default {
         //   this.$message.success('退出成功')
         //   this.$router.push({ name: 'login' })
         // })
-      } else {
-        this.$emit('menu-change', index)
       }
     }
   }
@@ -97,7 +96,7 @@ export default {
   background-position: center;
   background-repeat: no-repeat;
   background-size: 100% 100%;
-  background-image: url(./assets/user.png);
+  background-image: url(/static/images/user-header.png);
   vertical-align: middle;
   border-radius: 50%;
 }

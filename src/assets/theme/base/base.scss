@@ -69,6 +69,86 @@ body {
   user-select: none;
 }
 
+//常用样式和边距
+.jc-pl {
+  padding-left: $jc-default-dis;
+}
+
+.jc-pr {
+  padding-right: $jc-default-dis;
+}
+
+.jc-pt {
+  padding-top: $jc-default-dis;
+}
+
+.jc-pb {
+  padding-bottom: $jc-default-dis;
+}
+
+.jc-pv {
+  padding-top: $jc-default-dis;
+  padding-bottom: $jc-default-dis;
+}
+
+.jc-ph {
+  padding-left: $jc-default-dis;
+  padding-right: $jc-default-dis;
+}
+
+.jc-ml {
+  margin-left: $jc-default-dis;
+}
+
+.jc-mr {
+  margin-right: $jc-default-dis;
+}
+
+.jc-mt {
+  margin-top: $jc-default-dis;
+}
+
+.jc-mb {
+  margin-bottom: $jc-default-dis;
+}
+
+.jc-mv {
+  margin-top: $jc-default-dis;
+  margin-bottom: $jc-default-dis;
+}
+
+.jc-mh {
+  margin-left: $jc-default-dis;
+  margin-right: $jc-default-dis;
+}
+
+/*控制 display*/
+.d-n,
+[v-cloak] {
+  display: none !important;
+}
+
+.d-ib {
+  display: inline-block !important;
+}
+
+.d-b {
+  display: block !important;
+}
+
+//字体控制
+.text-left {
+  text-align: left !important;
+}
+
+.text-center {
+  text-align: center !important;
+}
+
+.text-right {
+  text-align: right !important;
+}
+
 /*清除浮动*/
 .jc-clearfix:after {
   content: "\20";

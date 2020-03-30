@@ -81,6 +81,7 @@ export default {
 }
 /deep/ .jc-main-container-warp {
   position: relative;
+  padding: $jc-default-dis;
   min-width: $jc-min-width;
   min-height: $jc-min-height;
 }

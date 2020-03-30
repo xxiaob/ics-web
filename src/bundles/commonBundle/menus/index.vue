@@ -1,13 +1,13 @@
 <template>
   <section class="jc-menu-space">
-    <el-menu :default-active="menuActive" @select="handleSelect" :collapse="isCollapse">
+    <el-menu :default-active="menuActive" @select="menuSelect" :collapse="isCollapse">
       <el-submenu index="system">
         <template slot="title">
           <i class="el-icon-setting"></i>
           <span slot="title">系统设置</span>
         </template>
-        <el-menu-item index="Organization">组织管理</el-menu-item>
-        <el-menu-item index="role">角色管理</el-menu-item>
+        <el-menu-item index="systemOrganization">组织管理</el-menu-item>
+        <el-menu-item index="systemRole">角色管理</el-menu-item>
         <el-menu-item index="user">用户管理</el-menu-item>
         <el-menu-item index="position">职位管理</el-menu-item>
         <el-menu-item index="menus">菜单管理</el-menu-item>
@@ -30,14 +30,12 @@ export default {
       menuActive: this.$route.name
     }
   },
-  created() {
-
-  },
   methods: {
-    //菜单点击
-    handleSelect(key) {
-      this.menuActive = key
-      this.$router.push(key)
+    menuSelect(index, path) {
+      //菜单点击
+      console.log('menus', index, path)
+      this.menuActive = index
+      this.$router.push({ name: index })
     }
   }
 }
