@@ -1,12 +1,12 @@
 <template>
   <div class="jc-tree-card" v-loading="loading">
-    <el-tree :data="trees" :props="props" empty-text="暂无组织结构，请添加">
+    <el-tree ref="tree" :data="trees" :props="props" empty-text="暂无组织架构，请添加" :filter-node-method="filterNode">
       <div class="custom-tree-node" slot-scope="{ node }">
         <div class="jc-tree-label">
           <div class="jc-text-warp" v-text="node.label"></div>
         </div>
         <div class="jc-tree-options" v-if="edit" v-on:click.stop>
-          <el-button type="text" size="small" icon="el-icon-delete"></el-button>
+          <el-button type="text" size="small" icon="el-icon-delete" v-if="node.level > 1"></el-button>
           <el-button type="text" size="small" icon="el-icon-edit-outline"></el-button>
           <el-button type="text" size="small" icon="el-icon-circle-plus-outline"></el-button>
         </div>
@@ -15,6 +15,8 @@
   </div>
 </template>
 <script>
+import { stringSearch } from '@/libs/util'
+
 export default {
   name: 'SystemOrganizationTreeCard',
   props: {
@@ -26,17 +28,20 @@ export default {
   data() {
     return {
       loading: false,
-      trees: [],
-      pid: 1,
+      trees: [{ label: '江苏省', children: [{ label: '南京市' }, { label: '无锡市' }] }],
       props: {
         children: 'children',
-        label: 'label',
-        isLeaf: 'leaf'
+        label: 'label'
       }
     }
   },
   methods: {
-
+    filter(val) {
+      this.$refs.tree.filter(val)
+    },
+    filterNode(value, data) {
+      return stringSearch(value, data.label)
+    }
   }
 }
 </script>

@@ -1,14 +1,14 @@
 <template>
   <div class="jc-main-container-warp">
-    <tab-filter></tab-filter>
-    <el-card class="jc-mt">
+    <el-card>
       <div slot="header" class="jc-card-header">
-        <div class="jc-card-title">列表内容</div>
+        <div class="jc-card-title">组织架构</div>
         <div class="jc-button-group">
+          <el-input v-model="filterText" class="jc-filter-input" clearable size="small" placeholder="输入关键字进行过滤"></el-input>
           <el-button type="primary" size="small" :icon="treeEdit?'el-icon-finished':'el-icon-edit'" @click="treeEdit = !treeEdit">{{treeEdit?'完成':'编辑'}}</el-button>
         </div>
       </div>
-      <tree-card :edit="treeEdit"></tree-card>
+      <tree-card ref="tree" :edit="treeEdit"></tree-card>
     </el-card>
   </div>
 </template>
@@ -17,7 +17,6 @@
 export default {
   name: 'SystemOrganizationIndex',
   components: {
-    TabFilter: () => import('./modules/tabFilter'),
     TreeCard: () => import('./modules/treeCard')
   },
   data() {
@@ -25,14 +24,19 @@ export default {
       list: [],
       loading: false,
       treeEdit: false,
-      filter: {}
+      filterText: ''
     }
   },
-  methods: {
-    goFilter(filter) {
-      this.filter = filter
-      this.currentChange(1)
+  watch: {
+    filterText(val) {
+      this.$refs.tree.filter(val)
     }
   }
 }
 </script>
+<style lang="scss" scoped>
+.jc-filter-input {
+  width: 200px;
+  display: inline-block;
+}
+</style>

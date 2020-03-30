@@ -43,46 +43,6 @@ let localData = {
 /*设置本地存储*/
 export { localData }
 
-let platForms = {
-  ua: window.navigator.userAgent,
-  /**
-   * 判断是否是平台
-   * @param {String} type 字符串
-   * @returns {Boolean} true or false
-   */
-  is: function (type) {
-    type = type.toLowerCase()
-    return this.ua.toLowerCase().indexOf(type) >= 0
-  },
-  isMobile: function () {
-    return !!this.ua.match(/(iPhone|iPod|Android|ios)/i)
-  },
-  isIOS: function () {
-    return !!this.ua.match(/\(i[^;]+;( U;)? CPU.+Mac OS X/) //ios终端
-  },
-  isIPad: function () {
-    return this.is('ipad')
-  },
-  isiPhone: function () {
-    return this.is('iPhone')
-  },
-  isAndroid: function () {
-    return this.is('android') || this.is('Linux')
-  },
-  isWindowsPhone: function () {
-    return this.is('Windows Phone')
-  },
-  isWx: function () {
-    return this.is('micromessenger')
-  },
-  isApp: function () {
-    return this.is('minivision')
-  }
-}
-
-/*判断平台*/
-export { platForms }
-
 /**
  * 匹配对象
  * @param {*} options
@@ -123,6 +83,43 @@ export function stringSearch(search = '', content = '') {
 }
 
 /**
+ * 时间格式化
+ * @param {string} time 时间
+ * @param {Boolean} isDate 是否是时间，默认false
+ * @returns {String} 返回格式化的时间
+ */
+export function formatDate(time, isDate = false) {
+  let date
+
+  if (time === '') {
+    date = new Date()
+  } else {
+    date = new Date(time)
+  }
+
+  let addTime = function (v) {
+    return v < 10 ? '0' + v : v
+  }
+
+  let year = date.getFullYear()
+
+  let month = date.getMonth() + 1
+
+  let day = date.getDate()
+
+  if (isDate == true) {
+    return year + '-' + addTime(month) + '-' + addTime(day)
+  }
+  let hour = date.getHours()
+
+  let minute = date.getMinutes()
+
+  let second = date.getSeconds()
+
+  return year + '-' + addTime(month) + '-' + addTime(day) + ' ' + addTime(hour) + ':' + addTime(minute) + ':' + addTime(second)
+}
+
+/**
  * 获取随机整数
  * @param {int} min 最小值
  * @param {int} max 最大值
@@ -133,29 +130,6 @@ export function getRandomNum(min, max) {
   const rand = Math.random()
 
   return (min + Math.round(rand * range))
-}
-
-/**
- * 滚动透传处理
- * @param {string} bodyClass 滚动透传body class
- * @returns {Object} 返回方法Object
- */
-export function maskOpenHelper(bodyClass = 'mask-open') {
-  let scrollElement = document.scrollingElement || document.body
-
-  let scrollTop
-
-  return {
-    afterOpen() {
-      scrollTop = scrollElement.scrollTop
-      document.body.classList.add(bodyClass)
-      document.body.style.top = -scrollTop + 'px'
-    },
-    beforeClose() {
-      document.body.classList.remove(bodyClass)
-      scrollElement.scrollTop = scrollTop
-    }
-  }
 }
 
 /**
@@ -179,5 +153,23 @@ export function convertImgToBase64(url, callback, outputFormat) {
 
     callback(dataURL)
     canvas = null
+  }
+}
+
+/**
+ * 将选择图片文件转成成url，可以实现图片在线预览
+ * @param {String} file 图片链接
+ * @param {Function} callback 转换成功后的回调
+ */
+export function imageFile2DataUrl(file, callback) {
+  if (file && file.type.indexOf('image/') !== -1) {
+    if (typeof FileReader === 'function') {
+      let fileReader = new FileReader()
+
+      fileReader.onload = (data) => {
+        callback(data.target.result)
+      }
+      fileReader.readAsDataURL(file)
+    }
   }
 }
