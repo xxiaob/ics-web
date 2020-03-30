@@ -9,7 +9,7 @@
         <el-menu-item index="Organization">组织管理</el-menu-item>
         <el-menu-item index="role">角色管理</el-menu-item>
         <el-menu-item index="user">用户管理</el-menu-item>
-        <el-menu-item index="position">职称管理</el-menu-item>
+        <el-menu-item index="position">职位管理</el-menu-item>
         <el-menu-item index="menus">菜单管理</el-menu-item>
       </el-submenu>
     </el-menu>
