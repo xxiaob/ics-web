@@ -1,6 +1,6 @@
 <template>
   <div class="jc-tree-card" v-loading="loading">
-    <el-tree ref="tree" :data="trees" :props="props" :filter-node-method="filterNode">
+    <el-tree ref="tree" :data="trees" :props="props" :filter-node-method="filterNode" @node-click="nodeClick">
       <div class="custom-tree-node" slot-scope="{ node }">
         <div class="jc-text-warp" v-text="node.label"></div>
       </div>
@@ -26,6 +26,10 @@ export default {
   methods: {
     initData() {
 
+    },
+    nodeClick(data, node) {
+      console.log('点击了节点', data, node)
+      this.$emit('node-change', { label: data.label })
     }
   }
 }

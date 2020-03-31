@@ -1,6 +1,6 @@
 <template>
   <div class="jc-main-full-container">
-    <org-trees class="jc-trees-warp"></org-trees>
+    <org-trees class="jc-trees-warp" @node-change="nodeChange"></org-trees>
     <div class="jc-trees-content">
       <user-list class="jc-main-container-warp"></user-list>
     </div>
@@ -12,6 +12,11 @@ export default {
   components: {
     OrgTrees: () => import('@/bundles/systemBundle/organization/modules/orgTrees'),
     UserList: () => import('./modules/users')
+  },
+  methods: {
+    nodeChange(data) {
+      console.log('用户管理，树节点change：', data)
+    }
   }
 }
 </script>

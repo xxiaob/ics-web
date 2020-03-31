@@ -3,7 +3,7 @@
     <div class="jc-title" v-text="title"></div>
     <el-input v-model="filterText" class="jc-filter-input" clearable size="mini" placeholder="输入关键字进行过滤"></el-input>
     <div class="jc-tree-warp">
-      <tree-card ref="tree"></tree-card>
+      <tree-card ref="tree" @node-change="nodeChange"></tree-card>
     </div>
   </div>
 </template>
@@ -27,6 +27,11 @@ export default {
   data() {
     return {
       filterText: ''
+    }
+  },
+  methods: {
+    nodeChange(data) {
+      this.$emit('node-change', { label: data.label })
     }
   }
 }
