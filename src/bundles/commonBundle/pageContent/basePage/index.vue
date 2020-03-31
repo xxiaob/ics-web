@@ -79,6 +79,12 @@ export default {
     width: $jc-menu-hide-width;
   }
 }
+/deep/ .jc-main-full-container {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
 /deep/ .jc-main-container-warp {
   position: relative;
   padding: $jc-default-dis;

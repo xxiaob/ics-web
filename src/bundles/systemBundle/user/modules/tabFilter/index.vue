@@ -19,7 +19,7 @@
 </template>
 <script>
 export default {
-  name: 'SystemPositionFilter',
+  name: 'SystemUserFilter',
   data() {
     return {
       form: {
