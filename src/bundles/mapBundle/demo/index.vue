@@ -1,36 +1,41 @@
 <template>
   <section class="jc-map-warp">
-    <div class="jc-map-space" id="myMap"></div>
+    <div class="jc-map-space" ref="myMap"></div>
   </section>
 </template>
 <script>
+import JcMapUtils from '@/libs/JcMapUtil'
+import { MapOptions } from '@/config/JcMapConfig'
+
+let boundsMap = new Map()
+
 export default {
   name: 'MapDemo',
   mounted() {
-    let mapEl = document.getElementById('myMap')
-
-    mapEl.addEventListener('DOMNodeInserted', (e) => {
-      let target = e.target
-
-      if (target.querySelector('.scale-control') || target.querySelector('.logo-text')) {
-        target.parentNode.removeChild(target)
-      }
-    }, false)
-    //定义地图中心点坐标
-    let center = new TMap.LatLng(32.05838, 118.79647)
-    //定义map变量，调用 TMap.Map() 构造函数创建地图
-
-    let map = new TMap.Map(mapEl, {
-      center: center, //设置地图中心点坐标
-      baseMap: {
-        type: 'vector',
-        features: ['base', 'building3d', 'building2d', 'point', 'label']
-      },
-      // viewMode: '2D',
-      zoom: 13, //设置地图缩放级别
-      pitch: 60, //设置俯仰角
-      rotation: 45 //设置地图旋转角度
+    JcMapUtils.init({ ...MapOptions, source: this.$refs.myMap }, () => {
+      //搜索南京市
+      this.search('320100')
+      JcMapUtils.map.on('zoomend', () => {
+        console.log(JcMapUtils.map.getZoom())
+      })
     })
+  },
+  methods: {
+    search(adcode) {
+      console.log('搜索的adcode：' + adcode)
+      JcMapUtils.districtSearch({ options: { level: 'city', extensions: 'all' }, keyword: adcode }, (result) => {
+        console.log(result)
+      })
+    },
+    loadChild() {
+
+    },
+    showTip(tip) {
+      console.log(`Amap----loading---${tip}`)
+    }
+  },
+  beforeDestroy() {
+    JcMapUtils.destroy() //销毁地图
   }
 }
 </script>

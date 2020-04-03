@@ -15,11 +15,11 @@
   </div>
 </template>
 <script>
-import TreesFilter from '@/mixins/TreesFilter'
+import TreesFilterMixins from '@/mixins/TreesFilterMixins'
 
 export default {
   name: 'SystemOrganizationTreeCard',
-  mixins: [TreesFilter],
+  mixins: [TreesFilterMixins],
   props: {
     edit: {
       type: Boolean,

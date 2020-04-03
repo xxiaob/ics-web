@@ -8,11 +8,11 @@
   </div>
 </template>
 <script>
-import TreesFilter from '@/mixins/TreesFilter'
+import TreesFilterMixins from '@/mixins/TreesFilterMixins'
 
 export default {
   name: 'SystemOrganizationTreesTreeCard',
-  mixins: [TreesFilter],
+  mixins: [TreesFilterMixins],
   data() {
     return {
       loading: false,

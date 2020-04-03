@@ -17,8 +17,7 @@ module.exports = {
   plugins: ["vue"],
   globals: {
     process: true,
-    '__dirname': true,
-    TMap: true
+    '__dirname': true
   },
   rules: {
     indent: [2, 2], //缩减两个空格
