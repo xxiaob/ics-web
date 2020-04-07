@@ -1,9 +1,13 @@
 <template>
-  <section class="jc-menu-space">
+  <section>
     <el-menu :default-active="menuActive" @select="menuSelect" :collapse="isCollapse">
-      <el-submenu index="system">
+      <el-menu-item index="systemOrganization" class="jc-menu-item">
+        <i class="jc-menu-icon el-icon-setting"></i>
+        <span slot="title">系统设置</span>
+      </el-menu-item>
+      <el-submenu index="system" class="jc-menu-item">
         <template slot="title">
-          <i class="el-icon-setting"></i>
+          <i class="jc-menu-icon el-icon-setting"></i>
           <span slot="title">系统设置</span>
         </template>
         <el-menu-item index="systemOrganization">组织管理</el-menu-item>
@@ -11,6 +15,25 @@
         <el-menu-item index="systemUser">用户管理</el-menu-item>
         <el-menu-item index="systemPosition">职位管理</el-menu-item>
         <el-menu-item index="systemMenus">菜单管理</el-menu-item>
+      </el-submenu>
+      <el-menu-item index="systemOrganization2" class="jc-menu-item">
+        <i class="jc-menu-icon el-icon-setting"></i>
+        <span slot="title">系统设置</span>
+      </el-menu-item>
+      <el-menu-item index="systemOrganization3" class="jc-menu-item">
+        <i class="jc-menu-icon el-icon-setting"></i>
+        <span slot="title">系统设置</span>
+      </el-menu-item>
+      <el-submenu index="system1" class="jc-menu-item">
+        <template slot="title">
+          <i class="jc-menu-icon el-icon-setting"></i>
+          <span slot="title">系统设置</span>
+        </template>
+        <el-menu-item index="systemOrganization1">组织管理</el-menu-item>
+        <el-menu-item index="systemRole1">角色管理</el-menu-item>
+        <el-menu-item index="systemUser1">用户管理</el-menu-item>
+        <el-menu-item index="systemPosition1">职位管理</el-menu-item>
+        <el-menu-item index="systemMenus1">菜单管理</el-menu-item>
       </el-submenu>
     </el-menu>
   </section>
@@ -41,10 +64,84 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-/deep/ .el-menu--collapse {
-  width: $jc-menu-hide-width;
-  .el-menu-item {
-    padding: 0;
+/deep/ .el-menu {
+  background-color: transparent;
+  border-right: none;
+
+  &.el-menu--collapse {
+    width: $jc-menu-hide-width;
+  }
+
+  .el-submenu__icon-arrow {
+    color: $jc-color-white;
+  }
+  .jc-menu-icon {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    width: $jc-menu-hide-width;
+    height: $jc-menu-height;
+    line-height: $jc-menu-height;
+    text-align: center;
+    color: $jc-color-white;
+  }
+
+  .jc-menu-item {
+    position: relative;
+    border-bottom: solid 1px mix($jc-color-white, $jc-menu-bg-color, 12%);
+    &.el-menu-item,
+    > .el-submenu__title {
+      position: relative;
+      padding-left: $jc-menu-hide-width !important;
+
+      &:before {
+        content: "";
+        width: 2px;
+        position: absolute;
+        top: 0;
+        left: 0;
+        bottom: 0;
+        background-color: $jc-color-primary;
+        transform: scaleY(0);
+        transition: transform 0.3s;
+        will-change: transform;
+      }
+      &:hover:before {
+        transform: scaleY(1);
+      }
+    }
+    &.is-active {
+      > .el-submenu__title {
+        &:before {
+          transform: scaleY(1);
+        }
+      }
+    }
+    .el-menu {
+      background-color: $jc-submenu-bg-color;
+      .el-menu-item {
+        &:hover {
+          background-color: $jc-menu-bg-color;
+        }
+      }
+    }
+  }
+
+  .el-menu-item,
+  .el-submenu__title {
+    color: $jc-color-white;
+    padding-right: 0;
+    height: $jc-menu-height;
+    line-height: $jc-menu-height;
+    background-color: transparent;
+    opacity: 0.8;
+    &:hover {
+      opacity: 1;
+    }
+    &.is-active {
+      background-color: $jc-color-primary !important;
+    }
   }
 }
 </style>

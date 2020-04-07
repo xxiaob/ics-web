@@ -159,11 +159,8 @@ body {
   *zoom: 1;
 }
 
-/*------ 重写menu样式 ----------*/
-.el-menu {
-  border-right: none;
-
-  .el-submenu__title,
+/*------ 重写弹出 menu样式 ----------*/
+.el-menu--popup {
   .el-menu-item {
     height: $jc-menu-height;
     line-height: $jc-menu-height;
@@ -213,5 +210,3 @@ body {
     font-size: $jc-font-size-smaller;
   }
 }
-
-/* --------- */

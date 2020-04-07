@@ -37,7 +37,7 @@ export default {
   padding-top: 30px;
   z-index: 9;
   left: 0;
-  background-color: #ffffff;
+  background-color: $jc-menu-bg-color;
   bottom: 0;
   overflow: hidden;
   transition: width 0.4s;
@@ -53,7 +53,12 @@ export default {
     line-height: 30px;
     text-align: center;
     cursor: pointer;
-    background-color: $jc-bg-color;
+    background-color: mix($jc-color-black, $jc-menu-bg-color, 10%);
+    color: $jc-color-white;
+    opacity: 0.8;
+    &:hover {
+      opacity: 1;
+    }
   }
 }
 .jc-menu-space {
