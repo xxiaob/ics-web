@@ -94,7 +94,7 @@ export default {
     transform: rotate(0);
     transition: transform 0.4s;
     will-change: transform;
-    font-size: $jc-font-size-small;
+    font-size: $jc-font-size-smaller;
   }
 }
 .jc-menu-popup {
