@@ -53,7 +53,7 @@ export default {
     line-height: 30px;
     text-align: center;
     cursor: pointer;
-    background-color: mix($jc-color-black, $jc-menu-bg-color, 10%);
+    background-color: $jc-menu-control-bg;
     color: $jc-color-white;
     opacity: 0.8;
     &:hover {

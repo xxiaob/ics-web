@@ -8,9 +8,13 @@ $jc-min-height: 500px;
 $jc-header-height: 60px;
 
 @mixin jc-header-style {
-  background-image: linear-gradient(0deg, #0d234a 0%, #283370 100%),
-    linear-gradient(#000000, #000000);
-  background-blend-mode: normal, normal;
+  background-image: linear-gradient(0deg,
+      #16356e 0%,
+      #273688 100%),
+    linear-gradient(#000000,
+      #000000);
+  background-blend-mode: normal,
+    normal;
   box-shadow: 0px 1px 9px 0px rgba(8, 33, 95, 0.8);
 }
 
@@ -18,9 +22,10 @@ $jc-header-height: 60px;
 $jc-menu-height: 40px;
 $jc-menu-hide-width: 40px;
 $jc-menu-width: 200px;
-$jc-menu-control-bg: #222d6d;
-$jc-menu-bg-color: #071c41;
-$jc-submenu-bg-color: #152f60;
+$jc-menu-control-bg: #102957;
+$jc-menu-bg-color: #16356e;
+$jc-submenu-bg-color: #0d2450;
+$jc-menu-active-bg: #2c66d2;
 
 //树结构侧边菜单宽度
 $jc-trees-width: 200px;

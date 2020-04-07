@@ -3,37 +3,18 @@
     <el-menu :default-active="menuActive" @select="menuSelect" :collapse="isCollapse">
       <el-menu-item index="systemOrganization" class="jc-menu-item">
         <i class="jc-menu-icon el-icon-setting"></i>
-        <span slot="title">系统设置</span>
+        <span class="jc-menu-arrow-title" slot="title">系统设置</span>
       </el-menu-item>
       <el-submenu index="system" class="jc-menu-item">
         <template slot="title">
           <i class="jc-menu-icon el-icon-setting"></i>
-          <span slot="title">系统设置</span>
+          <span class="jc-menu-arrow-title" slot="title">系统设置</span>
         </template>
         <el-menu-item index="systemOrganization">组织管理</el-menu-item>
         <el-menu-item index="systemRole">角色管理</el-menu-item>
         <el-menu-item index="systemUser">用户管理</el-menu-item>
         <el-menu-item index="systemPosition">职位管理</el-menu-item>
         <el-menu-item index="systemMenus">菜单管理</el-menu-item>
-      </el-submenu>
-      <el-menu-item index="systemOrganization2" class="jc-menu-item">
-        <i class="jc-menu-icon el-icon-setting"></i>
-        <span slot="title">系统设置</span>
-      </el-menu-item>
-      <el-menu-item index="systemOrganization3" class="jc-menu-item">
-        <i class="jc-menu-icon el-icon-setting"></i>
-        <span slot="title">系统设置</span>
-      </el-menu-item>
-      <el-submenu index="system1" class="jc-menu-item">
-        <template slot="title">
-          <i class="jc-menu-icon el-icon-setting"></i>
-          <span slot="title">系统设置</span>
-        </template>
-        <el-menu-item index="systemOrganization1">组织管理</el-menu-item>
-        <el-menu-item index="systemRole1">角色管理</el-menu-item>
-        <el-menu-item index="systemUser1">用户管理</el-menu-item>
-        <el-menu-item index="systemPosition1">职位管理</el-menu-item>
-        <el-menu-item index="systemMenus1">菜单管理</el-menu-item>
       </el-submenu>
     </el-menu>
   </section>
@@ -64,6 +45,9 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.jc-menu-arrow-title {
+  vertical-align: baseline;
+}
 /deep/ .el-menu {
   background-color: transparent;
   border-right: none;
@@ -89,7 +73,7 @@ export default {
 
   .jc-menu-item {
     position: relative;
-    border-bottom: solid 1px mix($jc-color-white, $jc-menu-bg-color, 12%);
+    border-bottom: solid 1px mix($jc-color-white, $jc-menu-bg-color, 10%);
     &.el-menu-item,
     > .el-submenu__title {
       position: relative;
@@ -97,12 +81,12 @@ export default {
 
       &:before {
         content: "";
-        width: 2px;
+        width: 3px;
         position: absolute;
         top: 0;
         left: 0;
         bottom: 0;
-        background-color: $jc-color-primary;
+        background-color: $jc-menu-active-bg;
         transform: scaleY(0);
         transition: transform 0.3s;
         will-change: transform;
@@ -140,7 +124,7 @@ export default {
       opacity: 1;
     }
     &.is-active {
-      background-color: $jc-color-primary !important;
+      background-color: $jc-menu-active-bg !important;
     }
   }
 }

@@ -177,17 +177,22 @@ body {
 }
 
 /*--------- 定义顶部filter 样式 --------------*/
-.jc-tabfilter-card {}
+.jc-tabfilter-card {
+  .jc-tabfilter-form {
+    .el-form-item {
+      margin-bottom: 0;
+    }
+  }
+
+  .jc-tabfilter-btns {
+    float: right;
+    margin-right: 0;
+  }
+}
 
 .jc-card-title {
   font-size: $jc-font-size-medium;
   font-weight: $jc-font-weight-primary;
-}
-
-.jc-tabfilter-form {
-  .el-form-item {
-    margin-bottom: 0;
-  }
 }
 
 /*---------- table样式 --------*/
