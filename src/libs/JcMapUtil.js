@@ -95,50 +95,37 @@ let JcMapUtils = {
           cb(result)
         }
       }, options.keywords || '')
-      // AMap.plugin(['AMap.DistrictSearch', 'AMap.Polygon'], function () {//异步加载插件
-      //   let polygons = [] //存储边界数据
-
-      //   let district = new AMap.DistrictSearch({
-      //     level: 'city',
-      //     extensions: 'all',
-      //     subdistrict: 1, //返回下一级行政区
-      //     showbiz: false //是否显示商圈
-      //   })
-
-
-      //   //搜索南京市
-      //   district.search('320100', (status, result) => {
-      //     console.log(status, result)
-      //     if (status === 'complete') {
-      //       //清除地图上所有覆盖物
-      //       for (let i = 0, l = polygons.length; i < l; i++) {
-      //         polygons[i].setMap(null)
-      //       }
-      //       let bounds = result.districtList[0].boundaries
-
-      //       if (bounds) {
-      //         for (let i = 0, l = bounds.length; i < l; i++) {
-      //           let polygon = new AMap.Polygon({
-      //             map: myMap,
-      //             strokeWeight: 1,
-      //             strokeColor: '#0091ea',
-      //             fillColor: '#80d8ff',
-      //             fillOpacity: 0.1,
-      //             path: bounds[i]
-      //           })
-
-      //           polygons.push(polygon)
-      //         }
-      //         myMap.setFitView()//地图自适应
-      //         console.log(myMap.getCenter(), myMap.getSize())
-      //       }
-      //     }
-      //   })
-      // })
     } else {
       JcMapUtils.initPlugins(['AMap.DistrictSearch'], function () {
         JcMapUtils.districtSearch(options, cb)
       })
+    }
+  },
+  polygon: {
+    /**
+     * 添加 多边形
+     * @param {Object} options 参数
+     * @param {Function} cb 回调 返回Polygon 对象
+     */
+    add(options, cb) {
+      if (JcMapUtils.AMap.Polygon) {
+        let polygons = []
+
+        for (let i = 0, l = options.path.length; i < l; i++) {
+          let polygon = new JcMapUtils.AMap.Polygon({ ...options, path: options.path[i] })
+
+          polygons.push(polygon)
+        }
+
+        cb(polygons)
+      } else {
+        JcMapUtils.initPlugins(['AMap.Polygon'], function () {
+          JcMapUtils.polygon.add(options, cb)
+        })
+      }
+    },
+    clear(polygons) {
+      JcMapUtils.map.remove(polygons)
     }
   },
   //销毁

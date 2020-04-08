@@ -8,13 +8,7 @@ $jc-min-height: 500px;
 $jc-header-height: 60px;
 
 @mixin jc-header-style {
-  background-image: linear-gradient(0deg,
-      #16356e 0%,
-      #273688 100%),
-    linear-gradient(#000000,
-      #000000);
-  background-blend-mode: normal,
-    normal;
+  background-color: #273688;
   box-shadow: 0px 1px 9px 0px rgba(8, 33, 95, 0.8);
 }
 
