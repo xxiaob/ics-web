@@ -1,6 +1,6 @@
 <template>
   <div class="jc-tree-card" v-loading="loading">
-    <el-tree ref="tree" :data="trees" :props="props" empty-text="暂无组织架构，请添加" :filter-node-method="filterNode">
+    <el-tree ref="tree" :data="trees" :props="props" :filter-node-method="filterNode" @node-click="nodeClick">
       <div class="custom-tree-node" slot-scope="{ node }">
         <div class="jc-tree-label">
           <div class="jc-text-warp" v-text="node.label"></div>
@@ -18,7 +18,7 @@
 import TreesFilterMixins from '@/mixins/TreesFilterMixins'
 
 export default {
-  name: 'SystemOrganizationTreeCard',
+  name: 'SystemOrganizationManageTreesTreeCard',
   mixins: [TreesFilterMixins],
   props: {
     edit: {
@@ -39,6 +39,10 @@ export default {
   methods: {
     initData() {
 
+    },
+    nodeClick(data, node) {
+      console.log('点击了节点', data, node)
+      this.$emit('node-change', { label: data.label })
     }
   }
 }
@@ -54,6 +58,7 @@ export default {
   .jc-tree-label {
     flex: 1;
     width: 0;
+    font-size: $jc-font-size-small;
   }
   .jc-tree-options {
     width: 50px;

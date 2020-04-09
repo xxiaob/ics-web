@@ -1,15 +1,18 @@
 <template>
   <div class="jc-card jc-ph">
-    <div class="jc-title" v-text="title"></div>
+    <div class="jc-title">
+      {{title}}
+      <el-button class="jc-edit-btn" type="text" size="small" :icon="treeEdit?'el-icon-finished':'el-icon-edit'" @click="treeEdit = !treeEdit"></el-button>
+    </div>
     <el-input v-model="filterText" class="jc-filter-input" clearable size="mini" placeholder="输入关键字进行过滤"></el-input>
     <div class="jc-tree-warp">
-      <tree-card ref="tree" @node-change="nodeChange"></tree-card>
+      <tree-card ref="tree" @node-change="nodeChange" :edit="treeEdit"></tree-card>
     </div>
   </div>
 </template>
 <script>
 export default {
-  name: 'SystemOrganizationTrees',
+  name: 'SystemOrganizationManageTrees',
   components: {
     TreeCard: () => import('./modules/treeCard')
   },
@@ -26,7 +29,8 @@ export default {
   },
   data() {
     return {
-      filterText: ''
+      filterText: '',
+      treeEdit: false
     }
   },
   methods: {
@@ -37,6 +41,14 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.jc-edit-btn {
+  float: right;
+  padding: 0;
+  border: none;
+  height: 40px;
+  line-height: 40px;
+  font-size: $jc-font-size-base;
+}
 .jc-title {
   height: 40px;
   line-height: 40px;

@@ -73,7 +73,6 @@ export default {
 
   .jc-menu-item {
     position: relative;
-    border-bottom: solid 1px mix($jc-color-white, $jc-menu-bg-color, 10%);
     &.el-menu-item,
     > .el-submenu__title {
       position: relative;

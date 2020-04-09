@@ -176,6 +176,13 @@ body {
   word-break: break-all;
 }
 
+/* 默认card 样式*/
+.jc-card {
+  background-color: $jc-color-white;
+  box-shadow: $jc-box-shadow;
+  border-radius: $jc-border-radius-base;
+}
+
 /*--------- 定义顶部filter 样式 --------------*/
 .jc-tabfilter-card {
   .jc-tabfilter-form {
