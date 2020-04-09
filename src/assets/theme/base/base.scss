@@ -198,7 +198,8 @@ body {
 }
 
 .jc-card-title {
-  font-size: $jc-font-size-medium;
+  height: 20px;
+  line-height: 20px;
   font-weight: $jc-font-weight-primary;
 }
 
@@ -216,6 +217,14 @@ body {
 .jc-table-card {
   .el-card__body {
     padding-top: 0;
+  }
+
+
+}
+
+.jc-table {
+  .el-button {
+    margin-left: 0;
   }
 
   .cell {
