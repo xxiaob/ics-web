@@ -5,7 +5,7 @@
       <div slot="header" class="jc-card-header">
         <div class="jc-card-title">列表内容</div>
         <div class="jc-button-group">
-          <el-button type="primary" icon="el-icon-plus" size="small">添加</el-button>
+          <el-button type="primary" icon="el-icon-plus" size="small" @click="manage(null)">添加</el-button>
         </div>
       </div>
       <el-table :data="list" v-loading="loading" row-key="id" class="jc-table">
@@ -16,13 +16,14 @@
         <el-table-column prop="adress" label="菜单地址"></el-table-column>
         <el-table-column width="120" label="操作">
           <template slot-scope="scope">
-            <el-button type="text" size="mini">编辑</el-button>
+            <el-button type="text" size="mini" @click="manage(scope.row)">编辑</el-button>
             <el-button type="text" size="mini">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
     </el-card>
-    <el-dialog title="提示" :visible.sync="visible" width="500" :append-to-body="true">
+    <el-dialog :title="info ? '编辑菜单':'新增菜单'" :visible.sync="visible" width="500" :append-to-body="true">
+      <jc-manage :options="info" :visible.sync="visible"></jc-manage>
     </el-dialog>
   </div>
 </template>
@@ -30,13 +31,14 @@
 export default {
   name: 'SystemMenusIndex',
   components: {
-    TabFilter: () => import('./modules/tabFilter')
+    TabFilter: () => import('./modules/tabFilter'),
+    JcManage: () => import('./modules/manage')
   },
   data() {
     return {
       list: [{ id: 1, icon: 'aa', name: 'asdf', parentName: 'asdf', adress: '11' }],
       loading: false,
-      visible: true,
+      visible: false,
       info: null,
       filter: {}
     }
@@ -45,6 +47,15 @@ export default {
     goFilter(filter) {
       this.filter = filter
       this.currentChange(1)
+    },
+    manage(row) {
+      if (row) {
+        this.info = row
+        this.visible = true
+      } else {
+        this.info = null
+        this.visible = true
+      }
     }
   }
 }

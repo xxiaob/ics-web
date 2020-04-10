@@ -17,8 +17,8 @@ let errorRun = () => {
 //拦截request请求，配置请求参数
 axios.interceptors.request.use(function (config) {
   // 这里统一处理请求头配置
-  config.headers.mtk = getToken() // 设置请求用户token
-  config.headers.loginDeviceTypeCode = 'app'
+  config.headers.token = getToken() // 设置请求用户token
+  config.headers.deviceType = 'web'
   return config
 }, function (error) {
   errorRun()
