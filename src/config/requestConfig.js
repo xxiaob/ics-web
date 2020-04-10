@@ -1,5 +1,6 @@
 import axios from 'axios'
 import router from '@/router'
+import { Message } from 'element-ui'
 import RESPONSE_CODE from '@/constant/RESPONSE_CODE'
 import { getToken } from '@/libs/storage'
 
@@ -30,17 +31,11 @@ axios.interceptors.response.use(function (res) {
   if (res.status === 200) {
     if (res.data.resCode === RESPONSE_CODE.SUCCESS) {
       return res.data.resData
-    } else if (res.data.resCode === RESPONSE_CODE.FAILED) {
-      let errorMsg = res.data.resMsg[0] || { msgCode: RESPONSE_CODE.FAILED, msgText: '' }
-
-      if (errorMsg.msgCode === RESPONSE_CODE.SEND_FAIL) {//短信验证码发送失败
-        return res.data
-      }
-      if (errorMsg.msgCode === RESPONSE_CODE.NOT_LOGIN) {
-        window.mvJsBridge.Alert('您未登录或账号已过期')
+    } else {
+      if (res.resData.resMsg === RESPONSE_CODE.AUTH_ERROR || res.resData.resMsg === RESPONSE_CODE.AUTH_EXPIRE) {
         router.push({ name: 'login' })
       } else {
-        window.mvJsBridge.Alert(errorMsg.msgText)
+        Message.error(res.data.resMsg.msgText)
       }
     }
   } else {

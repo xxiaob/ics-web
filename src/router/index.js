@@ -32,7 +32,7 @@ let routerOptions = {
       meta: {
         title: '首页'
       }
-    }, ...authRouter, ...systemRouter]
+    }, ...systemRouter]
   }, {
     path: '/map',
     name: 'map',
@@ -46,7 +46,7 @@ let routerOptions = {
         title: '地图Demo'
       }
     }]
-  }]
+  }, authRouter]
 }
 
 let router = new Router(routerOptions)
