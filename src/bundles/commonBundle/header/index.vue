@@ -26,13 +26,13 @@ export default {
   },
   created() {
     //设置用户信息
-    // const user = getUser()
+    const user = getUser()
 
-    // if (user) {
-    //   this.setUser(user)
-    // } else {
-    //   this.$router.push(`/login?callbackUrl=${this.$router.history.current.fullPath.split('?')[0]}`)
-    // }
+    if (user) {
+      this.setUser(user)
+    } else {
+      this.$router.push(`/login?callbackUrl=${this.$router.history.current.fullPath.split('?')[0]}`)
+    }
   },
   computed: {
     ...mapState('user', {
