@@ -19,7 +19,7 @@
 <script>
 import { mapMutations } from 'vuex'
 import { getStringRule } from '@/libs/rules'
-import { login } from '@/api/AUTH'
+import { login } from '@/api/auth'
 export default {
   name: 'Login',
   data() {
@@ -41,7 +41,13 @@ export default {
           if (valid) {
             this.loading = true
             login(this.form).then((res) => {
-              console.log('登录：', res)
+              this.setUser(res)
+              let goUrl = '/'
+
+              if (this.$route.query.callbackUrl && this.$route.query.callbackUrl.indexOf('login') < 0) {
+                goUrl = this.$route.query.callbackUrl
+              }
+              this.$router.push(goUrl)
               this.loading = false
             }).catch(() => {
               this.loading = false

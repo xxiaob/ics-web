@@ -23,16 +23,13 @@ const mutations = {
       setToken('')
       setUser('')
     } else {
+      setToken(user.token)
       setUser(user)
     }
     state.user = user
   },
   loginOut(state) {
     mutations.setUser(state, null)
-  },
-  setUserHead(state, userHead) {
-    state.user.userHead = userHead
-    mutations.setUser(state, state.user)
   }
 }
 
