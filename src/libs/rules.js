@@ -103,7 +103,7 @@ export function getIntegerRule(ignore = false, max, min) {
     extraRules.push({ min, message: `整数不小于${min}` })
   }
   if (ignore) {
-    return [{ type: 'integer', message: '请输入数字' }]
+    return [{ type: 'integer', message: '请输入整数' }]
   }
-  return [...NOT_NULL, { type: 'integer', message: '请输入数字' }]
+  return [...NOT_NULL, { type: 'integer', message: '请输入整数' }]
 }
