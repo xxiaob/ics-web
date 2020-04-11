@@ -4,7 +4,8 @@
 export default {
   data() {
     return {
-      form: this.formatFormData()
+      form: this.formatFormData(),
+      dialogVisible: false
     }
   },
   props: ['options', 'visible'],
@@ -23,10 +24,16 @@ export default {
   methods: {
     initForm() {
       this.form = this.formatFormData()
-      this.$refs.form.resetFields()
+      if (this.$refs.form) {
+        this.$refs.form.resetFields()
+      }
       if (this.initData) {
         this.initData()
       }
+      this.dialogVisible = this.visible
+    },
+    dialogClose() {
+      this.$emit('update:visible', false)
     }
   }
 }

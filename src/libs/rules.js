@@ -67,11 +67,43 @@ export function getStringRule(min = 1, max = 20) {
 /**
  * 校验数字
  * @param {Boolean} ignore 是否必填
+ * @param { Number } max 最大值
+ * @param { Number } min 最小值
  * @returns {Array} 返回校验数组
  */
-export function getNumberRule(ignore = false) {
+export function getNumberRule(ignore = false, max, min) {
+  let extraRules = []
+
+  if (max) {
+    extraRules.push({ max, message: `数字不大于${max}` })
+  }
+  if (min) {
+    extraRules.push({ min, message: `数字不小于${min}` })
+  }
   if (ignore) {
     return [{ type: 'number', message: '请输入数字' }]
   }
   return [...NOT_NULL, { type: 'number', message: '请输入数字' }]
+}
+
+/**
+ * 校验数字 为整数
+ * @param {Boolean} ignore 是否必填
+ * @param { Number } max 最大值
+ * @param { Number } min 最小值
+ * @returns {Array} 返回校验数组
+ */
+export function getIntegerRule(ignore = false, max, min) {
+  let extraRules = []
+
+  if (max) {
+    extraRules.push({ max, message: `整数不大于${max}` })
+  }
+  if (min) {
+    extraRules.push({ min, message: `整数不小于${min}` })
+  }
+  if (ignore) {
+    return [{ type: 'integer', message: '请输入数字' }]
+  }
+  return [...NOT_NULL, { type: 'integer', message: '请输入数字' }]
 }

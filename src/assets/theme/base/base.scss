@@ -232,3 +232,19 @@ body {
     font-size: $jc-font-size-smaller;
   }
 }
+
+.jc-manage-form {
+  .el-select {
+    width: 100%;
+  }
+}
+
+/* 修改dialog close 按钮效果 */
+.el-dialog__close {
+  transform: rotate(0deg);
+  transition: transform 0.4s;
+
+  &:hover {
+    transform: rotate(90deg);
+  }
+}

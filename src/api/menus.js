@@ -48,9 +48,9 @@ export function menusGet(id) {
 }
 /**
  * 删除
- * @param {Array} ids
+ * @param {String} resId
  * @returns {Object} axios 对象
  */
-export function menusDel(ids) {
-  return axios.post(API.menus.del, { ids: ids.join(',') })
+export function menusDel(resId) {
+  return axios.post(API.menus.del, { resId })
 }

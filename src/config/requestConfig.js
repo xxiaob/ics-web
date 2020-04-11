@@ -12,7 +12,7 @@ axios.defaults.baseURL = process.env.API_HOST.base /*eslint-disable-line*/
 //设置全局http请求
 let errorRun = () => {
   //这里处理请求出错的场景
-  window.mvJsBridge.Alert('网络请求失败')
+  Message.error('网络请求失败')
 }
 
 //拦截request请求，配置请求参数

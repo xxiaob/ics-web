@@ -9,7 +9,6 @@
         </div>
       </div>
       <el-table :data="list" v-loading="loading" row-key="resId" class="jc-table">
-        <el-table-column type="index" label="序号" width="50"></el-table-column>
         <el-table-column prop="icon" label="菜单图标">
           <template slot-scope="scope">
             <i v-if="scope.row.icon" :class="'iconfont ' + scope.row.icon"></i>
@@ -19,22 +18,20 @@
         <el-table-column prop="resName" label="菜单名称"></el-table-column>
         <el-table-column prop="pName" label="上级菜单"></el-table-column>
         <el-table-column prop="url" label="菜单地址"></el-table-column>
-        <el-table-column prop="sort" label="排序"></el-table-column>
+        <el-table-column prop="sort" label="序号"></el-table-column>
         <el-table-column width="120" label="操作">
           <template slot-scope="scope">
             <el-button type="text" size="mini" @click="manage(scope.row)">编辑</el-button>
-            <el-button type="text" size="mini">删除</el-button>
+            <el-button type="text" size="mini" @click="del(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
     </el-card>
-    <el-dialog :title="info ? '编辑菜单':'新增菜单'" :visible.sync="visible" width="500" :append-to-body="true">
-      <jc-manage :options="info" :visible.sync="visible"></jc-manage>
-    </el-dialog>
+    <jc-manage :options="info" :visible.sync="visible" @save-success="initData"></jc-manage>
   </div>
 </template>
 <script>
-import { menusList } from '@/api/menus'
+import { menusList, menusDel } from '@/api/menus'
 
 export default {
   name: 'SystemMenusIndex',
@@ -80,6 +77,14 @@ export default {
     goFilter(filter) {
       this.filter = filter
       this.currentChange(1)
+    },
+    del(row) {
+      this.$confirm('确认删除该菜单', '提示', { type: 'warning' }).then(() => {
+        menusDel(row.resId).then(() => {
+          this.$message.success('删除成功')
+          this.initData()
+        })
+      }).catch(() => {})
     },
     manage(row) {
       if (row) {
