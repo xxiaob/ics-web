@@ -11,5 +11,13 @@ export default {
     list: 'user-service/res/getAllResource',
     update: 'user-service/res/upd',
     del: 'user-service/res/del'
+  },
+  position: {
+    //职位管理
+    add: 'user-service/position/add',
+    get: 'user-service/position/byId',
+    list: 'user-service/position/list',
+    update: 'user-service/position/upd',
+    del: 'user-service/position/del'
   }
 }

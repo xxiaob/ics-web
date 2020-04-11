@@ -1,11 +1,12 @@
 <template>
   <div class="jc-main-container-warp">
-    <tab-filter></tab-filter>
+    <tab-filter @filter="goFilter"></tab-filter>
     <el-card class="jc-table-card jc-mt">
       <div slot="header" class="jc-card-header">
         <div class="jc-card-title">列表内容</div>
         <div class="jc-button-group">
           <el-button type="primary" icon="el-icon-plus" size="small">添加</el-button>
+          <el-button type="danger" icon="el-icon-delete" size="small">删除</el-button>
         </div>
       </div>
       <el-table :data="list" v-loading="loading" row-key="cardId">
@@ -20,7 +21,7 @@
         <el-table-column width="120" label="操作">
           <template slot-scope="scope">
             <el-button type="text" size="mini">编辑</el-button>
-            <el-button type="text" size="mini">详情</el-button>
+            <el-button type="text" size="mini">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -30,6 +31,7 @@
 </template>
 <script>
 import PaginationMixins from '@/mixins/PaginationMixins'
+import { positionList, positionDel } from '@/api/position'
 
 export default {
   name: 'SystemPositionIndex',
@@ -41,13 +43,46 @@ export default {
     return {
       list: [],
       loading: false,
+      visible: false,
+      info: null,
       filter: {}
     }
   },
+  created() {
+    this.initData()
+  },
   methods: {
+    initData() {
+      if (!this.loading) {
+        this.loading = true
+        positionList({ ...this.filter, ...this.page }).then(res => {
+          this.list = this.formatTree(res)
+          this.loading = false
+        }).catch(() => {
+          this.loading = false
+        })
+      }
+    },
     goFilter(filter) {
-      this.filter = filter
+      this.filter = { ...filter }
       this.currentChange(1)
+    },
+    del(row) {
+      this.$confirm('确认删除该菜单', '提示', { type: 'warning' }).then(() => {
+        positionDel(row.resId).then(() => {
+          this.$message.success('删除成功')
+          this.initData()
+        })
+      }).catch(() => {})
+    },
+    manage(row) {
+      if (row) {
+        this.info = row
+        this.visible = true
+      } else {
+        this.info = null
+        this.visible = true
+      }
     }
   }
 }

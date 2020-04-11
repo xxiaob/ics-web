@@ -1,6 +1,6 @@
 <template>
   <div class="jc-main-container-warp">
-    <tab-filter></tab-filter>
+    <tab-filter @filter="goFilter"></tab-filter>
     <el-card class="jc-table-card jc-mt">
       <div slot="header" class="jc-card-header">
         <div class="jc-card-title">列表内容</div>
@@ -53,7 +53,7 @@ export default {
     menus() {
       if (this.filter.name) {
         return this.list.filter(item => {
-          return stringSearch(item.resName, this.filter.name)
+          return stringSearch(this.filter.name, item.resName)
         })
       } else {
         return this.list
@@ -87,8 +87,7 @@ export default {
       return list
     },
     goFilter(filter) {
-      this.filter = filter
-      this.currentChange(1)
+      this.filter = { ...filter }
     },
     del(row) {
       this.$confirm('确认删除该菜单', '提示', { type: 'warning' }).then(() => {

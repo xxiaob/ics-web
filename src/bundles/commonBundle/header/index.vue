@@ -6,7 +6,7 @@
         <i class="jc-arrow-icon el-icon-arrow-right"></i>
         <div class="jc-menu-popup">
           <div class="jc-menu-item">修改密码</div>
-          <div class="jc-menu-item">退出登录</div>
+          <div class="jc-menu-item" @click="logout">退出登录</div>
         </div>
       </div>
     </div>
@@ -44,18 +44,10 @@ export default {
     ...mapMutations('user', [
       'setUser', 'loginOut'
     ]),
-    //菜单选择
-    menuSelect(index, path) {
-      console.log('header', index, path)
-
-      if (index === 'loginOut') {
-        // loginout().then(() => {
-        //   //退出登录 清空数据
-        //   this.loginOut()
-        //   this.$message.success('退出成功')
-        //   this.$router.push({ name: 'login' })
-        // })
-      }
+    logout() {
+      this.loginOut()
+      this.$message.success('退出成功')
+      this.$router.push({ name: 'login' })
     }
   }
 }
