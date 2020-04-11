@@ -32,7 +32,7 @@ axios.interceptors.response.use(function (res) {
     if (res.data.resCode === RESPONSE_CODE.SUCCESS) {
       return res.data.resData
     } else {
-      if (res.resData.resMsg === RESPONSE_CODE.AUTH_ERROR || res.resData.resMsg === RESPONSE_CODE.AUTH_EXPIRE) {
+      if (res.data.resMsg.msgCode === RESPONSE_CODE.AUTH_ERROR || res.data.resMsg.msgCode === RESPONSE_CODE.AUTH_EXPIRE) {
         router.push({ name: 'login' })
       } else {
         Message.error(res.data.resMsg.msgText)
