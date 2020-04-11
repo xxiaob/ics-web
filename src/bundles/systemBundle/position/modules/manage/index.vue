@@ -1,17 +1,13 @@
 <template>
-  <el-dialog :title="options ? '编辑菜单':'新增菜单'" :visible.sync="dialogVisible" width="600px" :append-to-body="true" @close="dialogClose">
-    <el-form ref="form" label-width="80px" :model="form" class="jc-manage-form">
-      <el-form-item label="菜单名称" prop="resName" :rules="rules.Len50">
-        <el-input v-model="form.resName" placeholder="请输入菜单名称"></el-input>
+  <el-dialog :title="options ? '编辑职位':'新增职位'" :visible.sync="dialogVisible" width="600px" :append-to-body="true" @close="dialogClose">
+    <el-form ref="form" label-width="100px" :model="form" class="jc-manage-form">
+      <el-form-item label="职位名称" prop="positionName" :rules="rules.Len50">
+        <el-input v-model="form.positionName" placeholder="请输入职位名称"></el-input>
       </el-form-item>
-      <el-form-item label="菜单图标" prop="icon">
-        <el-input v-model="form.icon" placeholder="请输入菜单图标"></el-input>
-      </el-form-item>
-      <el-form-item label="菜单地址" prop="url" :rules="rules.Len50">
-        <el-input v-model="form.url" placeholder="请输入菜单地址"></el-input>
-      </el-form-item>
-      <el-form-item label="序号" prop="sort" :rules="rules.Int">
-        <el-input v-model.number="form.sort" placeholder="请输入序号"></el-input>
+      <el-form-item label="允许登录终端" prop="type">
+        <el-checkbox-group v-model="form.type">
+          <el-checkbox v-for="item in types" :label="item.value" :key="item.value" name="type">{{item.label}}</el-checkbox>
+        </el-checkbox-group>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -24,8 +20,9 @@
 import { positionSave } from '@/api/position'
 import { getStringRule, getIntegerRule } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
+import { LOGIN_DEVICE_TYPES } from '@/constant/Dictionaries'
 
-let defaultForm = { resName: '', sort: 0, pid: '', url: '', icon: '' }
+let defaultForm = { positionName: '' }
 
 export default {
   name: 'SystemPositionManage',
@@ -33,6 +30,7 @@ export default {
   data() {
     return {
       loading: false,
+      types: LOGIN_DEVICE_TYPES.VALUES,
       rules: {
         Len50: getStringRule(1, 50),
         Int: getIntegerRule()
@@ -43,15 +41,12 @@ export default {
     formatFormData() {
       if (this.options) {
         return {
-          resId: this.options.resId,
-          resName: this.options.resName,
-          sort: this.options.sort,
-          pid: this.options.pid,
-          url: this.options.url,
-          icon: this.options.icon
+          positionId: this.options.positionId,
+          positionName: this.options.positionName,
+          type: []
         }
       } else {
-        return { ...defaultForm }
+        return { ...defaultForm, type: [] }
       }
     },
     onSubmit() {

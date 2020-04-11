@@ -39,12 +39,11 @@ export function menusSave(data) {
   return data.resId ? menusUpdate(data) : menusAdd(data)
 }
 /**
- * 获取明细
- * @param {String} id
+ * 根据用户获取菜单
  * @returns {Object} axios 对象
  */
-export function menusGet(id) {
-  return axios.post(API.menus.get, { id })
+export function menusGet() {
+  return axios.post(API.menus.get)
 }
 /**
  * 删除

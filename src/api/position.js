@@ -36,21 +36,21 @@ export function positionUpdate(data) {
  * @returns {Object} axios 对象
  */
 export function positionSave(data) {
-  return data.resId ? positionUpdate(data) : positionAdd(data)
+  return data.positionId ? positionUpdate(data) : positionAdd(data)
 }
 /**
  * 获取明细
- * @param {String} id
+ * @param {String} positionId
  * @returns {Object} axios 对象
  */
-export function positionGet(id) {
-  return axios.post(API.position.get, { id })
+export function positionGet(positionId) {
+  return axios.post(API.position.get, { positionId })
 }
 /**
  * 删除
- * @param {String} resId
+ * @param {String} positionId
  * @returns {Object} axios 对象
  */
-export function positionDel(resId) {
-  return axios.post(API.position.del + `?resId=${resId}`)
+export function positionDel(positionId) {
+  return axios.post(API.position.del, { positionId })
 }
