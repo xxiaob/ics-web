@@ -8,7 +8,7 @@
           <el-button type="primary" icon="el-icon-plus" size="small" @click="manage(null)">添加</el-button>
         </div>
       </div>
-      <el-table :data="list" v-loading="loading" row-key="resId" class="jc-table">
+      <el-table :data="menus" v-loading="loading" row-key="resId" class="jc-table">
         <el-table-column prop="icon" label="菜单图标">
           <template slot-scope="scope">
             <i v-if="scope.row.icon" :class="'iconfont ' + scope.row.icon"></i>
@@ -32,6 +32,7 @@
 </template>
 <script>
 import { menusList, menusDel } from '@/api/menus'
+import { stringSearch } from '@/libs/util'
 
 export default {
   name: 'SystemMenusIndex',
@@ -46,6 +47,17 @@ export default {
       visible: false,
       info: null,
       filter: {}
+    }
+  },
+  computed: {
+    menus() {
+      if (this.filter.name) {
+        return this.list.filter(item => {
+          return stringSearch(item.resName, this.filter.name)
+        })
+      } else {
+        return this.list
+      }
     }
   },
   created() {

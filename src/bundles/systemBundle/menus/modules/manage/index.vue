@@ -63,7 +63,6 @@ export default {
       return list
     },
     formatFormData() {
-      this.initData()
       if (this.options) {
         return {
           resId: this.options.resId,

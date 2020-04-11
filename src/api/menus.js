@@ -52,5 +52,5 @@ export function menusGet(id) {
  * @returns {Object} axios 对象
  */
 export function menusDel(resId) {
-  return axios.post(API.menus.del, { resId })
+  return axios.post(API.menus.del + `?resId=${resId}`)
 }
