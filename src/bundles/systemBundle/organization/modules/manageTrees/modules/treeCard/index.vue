@@ -42,7 +42,7 @@ export default {
       pNode: { name: '', pid: '' },
       props: {
         children: 'children',
-        label: 'orgName'
+        label: 'label'
       }
     }
   },
@@ -80,6 +80,7 @@ export default {
             name: pName,
             pid: item.pid,
             orgId: item.orgId,
+            label: item.orgName,
             orgName: item.orgName,
             sameLevelAuth: item.sameLevelAuth == 0 ? '0' : '1'
           }
