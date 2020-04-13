@@ -58,7 +58,7 @@ class JcEnum {
   * 允许登录终端
   */
 export const LOGIN_DEVICE_TYPES = new JcEnum([
-  { key: 'PC', value: 1, label: '电脑端' },
-  { key: 'MOBILE', value: 2, label: '移动端' },
-  { key: 'LAW', value: 3, label: '行政执法仪' }
+  { key: 'PC', value: '1', label: '电脑端' },
+  { key: 'MOBILE', value: '2', label: '移动端' },
+  { key: 'LAW', value: '3', label: '行政执法仪' }
 ])

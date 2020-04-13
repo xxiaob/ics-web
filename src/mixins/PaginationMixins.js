@@ -14,7 +14,7 @@ export default {
   methods: {
     //页面切换
     currentChange(index) {
-      this.page.pageNum = index
+      this.page.pageNum = index > 0 ? index : 1
       this.initData()
     },
     sizeChange(val) {

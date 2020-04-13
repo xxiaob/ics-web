@@ -48,9 +48,9 @@ export function positionGet(positionId) {
 }
 /**
  * 删除
- * @param {String} positionId
+ * @param {Array} positionIds
  * @returns {Object} axios 对象
  */
-export function positionDel(positionId) {
-  return axios.post(API.position.del, { positionId })
+export function positionDel(positionIds) {
+  return axios.post(API.position.del, { positionIds })
 }

@@ -43,7 +43,7 @@ export default {
         return {
           positionId: this.options.positionId,
           positionName: this.options.positionName,
-          type: []
+          type: this.options.type || []
         }
       } else {
         return { ...defaultForm, type: [] }
@@ -53,6 +53,7 @@ export default {
       this.loading = true
       this.$refs.form.validate(valid => {
         if (valid) {
+          this.form.loginType = this.form.type.join(',')
           positionSave(this.form).then(() => {
             this.$message.success('操作成功')
             this.dialogVisible = false
