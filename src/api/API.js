@@ -19,5 +19,13 @@ export default {
     list: 'user-service/position/list',
     update: 'user-service/position/upd',
     del: 'user-service/position/del'
+  },
+  organization: {
+    //组织管理
+    add: 'user-service/org/add',
+    get: 'user-service/org/byId',
+    list: 'user-service/org/list',
+    update: 'user-service/org/upd',
+    del: 'user-service/org/del'
   }
 }

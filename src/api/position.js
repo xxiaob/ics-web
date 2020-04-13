@@ -39,7 +39,7 @@ export function positionSave(data) {
   return data.positionId ? positionUpdate(data) : positionAdd(data)
 }
 /**
- * 获取明细
+ * 详情
  * @param {String} positionId
  * @returns {Object} axios 对象
  */

@@ -4,7 +4,7 @@
       {{title}}
       <el-button class="jc-edit-btn" type="text" size="small" :icon="treeEdit?'el-icon-finished':'el-icon-edit'" @click="treeEdit = !treeEdit"></el-button>
     </div>
-    <el-input v-model="filterText" class="jc-filter-input" clearable size="mini" placeholder="输入关键字进行过滤"></el-input>
+    <el-input v-model="filterText" prefix-icon="el-icon-search" class="jc-filter-input" clearable size="mini" placeholder="输入关键字进行过滤"></el-input>
     <div class="jc-tree-warp">
       <tree-card ref="tree" @node-change="nodeChange" :edit="treeEdit"></tree-card>
     </div>
@@ -35,7 +35,7 @@ export default {
   },
   methods: {
     nodeChange(data) {
-      this.$emit('node-change', { label: data.label })
+      this.$emit('node-change', data)
     }
   }
 }

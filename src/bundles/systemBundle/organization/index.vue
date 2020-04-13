@@ -2,7 +2,7 @@
   <div class="jc-main-full-container">
     <manage-trees class="jc-trees-warp" @node-change="nodeChange"></manage-trees>
     <div class="jc-trees-content">
-      <detail-info class="jc-detail-warp"></detail-info>
+      <detail-info ref="detail" class="jc-detail-warp"></detail-info>
       <area-manage class="jc-area-warp"></area-manage>
     </div>
   </div>
@@ -19,13 +19,14 @@ export default {
   methods: {
     nodeChange(data) {
       console.log('组织管理，树节点change：', data)
+      this.$refs.detail.initData(data)
     }
   }
 }
 </script>
 <style lang="scss" scoped>
-$jc-edit-trees-width: $jc-trees-width * 1.2;
-$jc-detail-height: 200px;
+$jc-edit-trees-width: $jc-trees-width * 1.3;
+$jc-detail-height: 110px;
 .jc-trees-warp {
   position: absolute;
   top: $jc-default-dis;
@@ -44,6 +45,13 @@ $jc-detail-height: 200px;
   .jc-detail-warp {
     height: $jc-detail-height;
     min-width: $jc-min-width - $jc-edit-trees-width;
+    background-color: $jc-color-white;
+    background-image: url(./assets/detail-bg.png);
+    background-position: right center;
+    background-repeat: no-repeat;
+    box-shadow: $jc-box-shadow;
+    border-radius: $jc-border-radius-base;
+    background-size: auto 100%;
   }
   .jc-area-warp {
     position: absolute;
