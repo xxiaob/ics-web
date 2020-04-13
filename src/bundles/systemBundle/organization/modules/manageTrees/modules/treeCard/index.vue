@@ -108,7 +108,7 @@ export default {
     },
     del(node) {
       this.$confirm('确认删除该组织架构', '提示', { type: 'warning' }).then(() => {
-        organizationDel(node.nodeId).then(() => {
+        organizationDel(node.orgId).then(() => {
           this.$message.success('删除成功')
           this.initData()
         })
