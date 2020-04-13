@@ -31,7 +31,7 @@ export default {
   },
   methods: {
     nodeChange(data) {
-      this.$emit('node-change', { label: data.label })
+      this.$emit('node-change', data)
     }
   }
 }

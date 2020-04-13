@@ -1,6 +1,6 @@
 <template>
   <div class="jc-tree-card" v-loading="loading">
-    <el-tree ref="tree" :data="trees" :props="props" :filter-node-method="filterNode" @node-click="nodeClick" :highlight-current="true">
+    <el-tree ref="tree" :data="trees" :props="props" :filter-node-method="filterNode" node-key="orgId" @node-change="nodeClick" :expand-on-click-node="false" :highlight-current="true">
       <div class="custom-tree-node" slot-scope="{ node }">
         <div class="jc-text-warp" v-text="node.label"></div>
       </div>
@@ -9,6 +9,7 @@
 </template>
 <script>
 import TreesFilterMixins from '@/mixins/TreesFilterMixins'
+import { organizationList } from '@/api/organization'
 
 export default {
   name: 'SystemOrganizationTreesTreeCard',
@@ -16,20 +17,61 @@ export default {
   data() {
     return {
       loading: false,
-      trees: [{ label: '江苏省', children: [{ label: '南京市' }, { label: '无锡市' }] }],
+      trees: [],
       props: {
         children: 'children',
         label: 'label'
       }
     }
   },
+  created() {
+    this.initData()
+  },
   methods: {
     initData() {
+      if (!this.loading) {
+        this.loading = true
+        organizationList().then(res => {
+          this.trees = this.formatTree(res)
+          if ( this.trees.length) {
+            this.$nextTick(() => {
+              let orgId = this.trees[0].orgId
 
+              this.$refs.tree.setCurrentKey(orgId)
+              this.$emit('node-change', { orgId: orgId, type: 'node-click' })
+            })
+          }
+          this.loading = false
+        }).catch(() => {
+          this.loading = false
+        })
+      }
     },
-    nodeClick(data, node) {
-      console.log('点击了节点', data, node)
-      this.$emit('node-change', { label: data.label })
+    formatTree(child, pName = '--') {
+      let trees = []
+
+      if (child && child.length) {
+        child.forEach(item => {
+          let node = {
+            name: pName,
+            pid: item.pid,
+            orgId: item.orgId,
+            label: item.orgName
+          }
+
+          let children = this.formatTree(item.children, node.orgName)
+
+          if (children && children.length) {
+            node.children = children
+          }
+
+          trees.push(node)
+        })
+      }
+      return trees
+    },
+    nodeClick(data) {
+      this.$emit('node-change', { orgId: data.orgId, type: 'node-click' })
     }
   }
 }

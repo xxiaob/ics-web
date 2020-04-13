@@ -1,6 +1,6 @@
 <template>
   <div class="jc-tree-card" v-loading="loading">
-    <el-tree ref="tree" :data="trees" :props="props" :filter-node-method="filterNode" node-key="orgId" @node-click="nodeClick" :highlight-current="true" :default-expand-all="true">
+    <el-tree ref="tree" :data="trees" :props="props" :filter-node-method="filterNode" node-key="orgId" @node-click="nodeClick" :expand-on-click-node="false" :highlight-current="true" :default-expand-all="true">
       <div class="custom-tree-node" slot-scope="{ node,data }">
         <div class="jc-tree-label">
           <div class="jc-text-warp" v-text="node.label"></div>
