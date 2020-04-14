@@ -32,7 +32,8 @@ export default {
     //角色管理
     add: 'user-service/role/add',
     get: 'user-service/role/byId',
-    list: 'user-service/role/list',
+    list: 'user-service/role/select',
+    listAll: 'user-service/role/list',
     update: 'user-service/role/upd',
     del: 'user-service/role/del'
   }

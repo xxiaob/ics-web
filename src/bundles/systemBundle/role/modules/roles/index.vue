@@ -12,9 +12,9 @@
       <el-table :data="list" v-loading="loading" row-key="roleId">
         <el-table-column type="selection" width="40"></el-table-column>
         <el-table-column type="index" label="序号" width="50"></el-table-column>
-        <el-table-column prop="cardNo" label="所属区域"></el-table-column>
-        <el-table-column prop="cardType" label="角色名称"></el-table-column>
-        <el-table-column prop="holderName" label="创建时间"></el-table-column>
+        <el-table-column prop="orgName" label="所属组织"></el-table-column>
+        <el-table-column prop="roleName" label="角色名称"></el-table-column>
+        <el-table-column prop="createTime" label="创建时间"></el-table-column>
         <el-table-column width="120" label="操作">
           <template slot-scope="scope">
             <el-button type="text" size="mini" @click="manage(scope.row)">编辑</el-button>
@@ -24,7 +24,7 @@
       </el-table>
       <el-pagination :hide-on-single-page="true" @current-change="currentChange" @size-change="sizeChange" :current-page.sync="page.pageNum" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.total" class="text-right jc-mt"></el-pagination>
     </el-card>
-    <jc-manage :options="info" :visible.sync="visible" @save-success="initData"></jc-manage>
+    <jc-manage :options="info" :orgId="orgId" :visible.sync="visible" @save-success="initData"></jc-manage>
   </div>
 </template>
 <script>
@@ -63,9 +63,7 @@ export default {
 
           if (res.resultList && res.resultList.length) {
             res.resultList.forEach(item => {
-              let type = item.loginType ? item.loginType.split(',') : []
-
-              list.push({ positionId: item.positionId, type, positionName: item.positionName, createTime: formatDate(item.createTime) })
+              list.push({ roleId: item.roleId, roleName: item.roleName, orgId: item.orgId, orgName: item.orgName, createTime: formatDate(item.createTime) })
             })
           }
           this.list = list
@@ -90,21 +88,24 @@ export default {
       this.ids = ids
     },
     del(row) {
-      this.$confirm('确认删除该菜单', '提示', { type: 'warning' }).then(() => {
-        roleDel(row.roleId).then(() => {
-          this.$message.success('删除成功')
-          this.initData()
-        })
+      this.$confirm('确认删除该角色', '提示', { type: 'warning' }).then(() => {
+        this.remove([row.roleId])
       }).catch(() => {})
     },
     removeAll() {
       if (this.ids.length) {
-        this.$confirm('确认删除选中的地块？', '提示', { type: 'warning' }).then(() => {
+        this.$confirm('确认删除选中的角色？', '提示', { type: 'warning' }).then(() => {
           this.remove(this.ids)
         }).catch(() => {})
       } else {
         this.$message.error('请先选择删除项')
       }
+    },
+    remove(ids) {
+      roleDel(ids).then(() => {
+        this.$message.success('删除成功')
+        this.currentChange(this.page.pageNum - 1)
+      })
     },
     manage(row) {
       if (row) {

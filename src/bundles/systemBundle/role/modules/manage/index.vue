@@ -1,22 +1,14 @@
 <template>
-  <el-dialog :title="options ? '编辑菜单':'新增菜单'" :visible.sync="dialogVisible" width="600px" :append-to-body="true" @close="dialogClose">
+  <el-dialog :title="options ? '编辑角色':'新增角色'" :visible.sync="dialogVisible" width="600px" :append-to-body="true" @close="dialogClose">
     <el-form ref="form" label-width="80px" :model="form" class="jc-manage-form">
-      <el-form-item label="菜单名称" prop="resName" :rules="rules.Len50">
-        <el-input v-model="form.resName" placeholder="请输入菜单名称"></el-input>
+      <el-form-item label="角色名称" prop="roleName" :rules="rules.Len50">
+        <el-input v-model="form.roleName" placeholder="请输入角色名称"></el-input>
       </el-form-item>
-      <el-form-item label="上级菜单" prop="pid">
-        <el-select v-model="form.pid" placeholder="请选择">
-          <el-option v-for="item in menus" :key="item.value" :label="item.label" :value="item.value"></el-option>
-        </el-select>
+      <el-form-item label="所属组织" prop="orgId" :rules="rules.SELECT_NOT_NULL">
+        <el-cascader v-model="form.orgId" :options="orgTree" filterable :props="{ expandTrigger: 'hover',checkStrictly: true,emitPath: false }"></el-cascader>
       </el-form-item>
-      <el-form-item label="菜单图标" prop="icon">
-        <el-input v-model="form.icon" placeholder="请输入菜单图标"></el-input>
-      </el-form-item>
-      <el-form-item label="菜单地址" prop="url" :rules="rules.Len50">
-        <el-input v-model="form.url" placeholder="请输入菜单地址"></el-input>
-      </el-form-item>
-      <el-form-item label="序号" prop="sort" :rules="rules.Int">
-        <el-input v-model="form.sort" placeholder="请输入序号"></el-input>
+      <el-form-item label="菜单权限">
+        <el-tree :data="menuTree" :props="props" node-key="resId" :default-expand-all="true" :show-checkbox="true"></el-tree>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -26,41 +18,83 @@
   </el-dialog>
 </template>
 <script>
-import { menusList, menusSave } from '@/api/menus'
-import { getStringRule, getIntegerRule } from '@/libs/rules'
+import { roleSave } from '@/api/role'
+import { menusGet } from '@/api/menus'
+import { organizationList } from '@/api/organization'
+import { getStringRule, SELECT_NOT_NULL } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
 
-let defaultForm = { resName: '', sort: 0, pid: '', url: '', icon: '' }
+let defaultForm = { roleName: '', orgId: '' }
 
 export default {
   name: 'SystemRoleManage',
   mixins: [FormMixins],
+  props: ['orgId'],
   data() {
     return {
       loading: false,
-      menus: [],
+      orgTree: [],
+      menuTree: [],
+      props: {
+        children: 'children',
+        label: 'resName'
+      },
       rules: {
         Len50: getStringRule(1, 50),
-        Int: getIntegerRule()
+        SELECT_NOT_NULL
       }
     }
   },
   methods: {
     initData() {
-      menusList().then(res => {
-        this.menus = this.formatMenus(res)
+      organizationList().then(res => {
+        this.orgTree = this.formatOrgTree(res)
+      })
+      menusGet().then(res => {
+        this.menuTree = this.formatMenuTree(res)
       })
     },
-    formatMenus(child) {
-      let list = []
+    formatOrgTree(child) {
+      let trees = []
 
       if (child && child.length) {
         child.forEach(item => {
-          list.push({ value: item.resId, label: item.resName })
-          list = [...list, ...this.formatMenus(item.children)]
+          let node = {
+            value: item.orgId,
+            label: item.orgName
+          }
+
+          let children = this.formatOrgTree(item.children)
+
+          if (children && children.length) {
+            node.children = children
+          }
+
+          trees.push(node)
         })
       }
-      return list
+      return trees
+    },
+    formatMenuTree(child) {
+      let trees = []
+
+      if (child && child.length) {
+        child.forEach(item => {
+          let node = {
+            resId: item.resId,
+            resName: item.resName
+          }
+
+          let children = this.formatMenuTree(item.children)
+
+          if (children && children.length) {
+            node.children = children
+          }
+
+          trees.push(node)
+        })
+      }
+      return trees
     },
     formatFormData() {
       if (this.options) {
@@ -80,7 +114,7 @@ export default {
       this.loading = true
       this.$refs.form.validate(valid => {
         if (valid) {
-          menusSave(this.form).then(() => {
+          roleSave(this.form).then(() => {
             this.$message.success('操作成功')
             this.dialogVisible = false
             this.$emit('save-success')

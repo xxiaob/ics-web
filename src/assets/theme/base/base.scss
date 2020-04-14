@@ -219,8 +219,6 @@ body {
   .el-card__body {
     padding-top: 0;
   }
-
-
 }
 
 .jc-table {
@@ -241,7 +239,8 @@ body {
 }
 
 .jc-manage-form {
-  .el-select {
+  .el-select,
+  .el-cascader {
     width: 100%;
   }
 }

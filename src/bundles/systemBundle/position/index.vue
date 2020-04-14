@@ -97,7 +97,7 @@ export default {
     },
     removeAll() {
       if (this.ids.length) {
-        this.$confirm('确认删除选中的地块？', '提示', { type: 'warning' }).then(() => {
+        this.$confirm('确认删除选中的职位？', '提示', { type: 'warning' }).then(() => {
           this.remove(this.ids)
         }).catch(() => {})
       } else {
