@@ -2,7 +2,7 @@
   <div class="jc-main-full-container">
     <org-trees class="jc-trees-warp" @node-change="nodeChange"></org-trees>
     <div class="jc-trees-content">
-      <role-list class="jc-main-container-warp"></role-list>
+      <role-list ref="myRoles" class="jc-main-container-warp"></role-list>
     </div>
   </div>
 </template>
@@ -16,6 +16,7 @@ export default {
   methods: {
     nodeChange(data) {
       console.log('角色管理，树节点change：', data)
+      this.$refs.myRoles.initData(data.orgId)
     }
   }
 }

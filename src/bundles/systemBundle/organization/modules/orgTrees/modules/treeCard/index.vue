@@ -1,6 +1,6 @@
 <template>
   <div class="jc-tree-card" v-loading="loading">
-    <el-tree ref="tree" :data="trees" :props="props" :filter-node-method="filterNode" node-key="orgId" @node-change="nodeClick" :expand-on-click-node="false" :highlight-current="true">
+    <el-tree ref="tree" :default-expanded-keys="expandedKeys" :data="trees" :props="props" :filter-node-method="filterNode" node-key="orgId" @node-click="nodeClick" :expand-on-click-node="false" :highlight-current="true">
       <div class="custom-tree-node" slot-scope="{ node }">
         <div class="jc-text-warp" v-text="node.label"></div>
       </div>
@@ -18,6 +18,7 @@ export default {
     return {
       loading: false,
       trees: [],
+      expandedKeys: [],
       props: {
         children: 'children',
         label: 'label'
@@ -37,8 +38,9 @@ export default {
             this.$nextTick(() => {
               let orgId = this.trees[0].orgId
 
+              this.expandedKeys = [orgId]
               this.$refs.tree.setCurrentKey(orgId)
-              this.$emit('node-change', { orgId: orgId, type: 'node-click' })
+              this.$emit('node-change', { orgId: orgId, type: 'manage' })
             })
           }
           this.loading = false
