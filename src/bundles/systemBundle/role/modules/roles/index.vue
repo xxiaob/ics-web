@@ -28,7 +28,7 @@
   </div>
 </template>
 <script>
-import { roleList, roleDel } from '@/api/role'
+import { roleList, roleDel, roleGet } from '@/api/role'
 import { formatDate } from '@/libs/util'
 import PaginationMixins from '@/mixins/PaginationMixins'
 
@@ -109,8 +109,10 @@ export default {
     },
     manage(row) {
       if (row) {
-        this.info = row
-        this.visible = true
+        roleGet(row.roleId).then(res => {
+          this.info = { roleId: res.roleId, roleName: res.roleName, orgId: res.orgId, resIds: res.resIds }
+          this.visible = true
+        })
       } else {
         this.info = null
         this.visible = true

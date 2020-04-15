@@ -44,7 +44,7 @@ export function roleSave(data) {
  * @returns {Object} axios 对象
  */
 export function roleGet(roleId) {
-  return axios.post(API.role.get, { roleId })
+  return axios.post(API.role.get + `?roleId=${roleId}`)
 }
 /**
  * 删除

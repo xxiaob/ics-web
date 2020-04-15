@@ -5,10 +5,10 @@
         <el-input v-model="form.roleName" placeholder="请输入角色名称"></el-input>
       </el-form-item>
       <el-form-item label="所属组织" prop="orgId" :rules="rules.SELECT_NOT_NULL">
-        <el-cascader v-model="form.orgId" :options="orgTree" filterable :props="{ expandTrigger: 'hover',checkStrictly: true,emitPath: false }"></el-cascader>
+        <el-cascader v-model="form.orgId" :options="orgTree" filterable :props="{ expandTrigger: 'hover',checkStrictly: true,emitPath: false }" :disabled="isEdit"></el-cascader>
       </el-form-item>
       <el-form-item label="菜单权限">
-        <el-tree ref="tree" :data="menuTree" :props="props" node-key="resId" :default-expand-all="true" :show-checkbox="true"></el-tree>
+        <el-tree ref="tree" :default-checked-keys="checkedKeys" :data="menuTree" :props="props" node-key="resId" :default-expand-all="true" :show-checkbox="true"></el-tree>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -35,6 +35,7 @@ export default {
       loading: false,
       orgTree: [],
       menuTree: [],
+      checkedKeys: [],
       props: {
         children: 'children',
         label: 'resName'
@@ -98,13 +99,11 @@ export default {
     },
     formatFormData() {
       if (this.options) {
+        this.checkedKeys = this.options.resIds || []
         return {
-          resId: this.options.resId,
-          resName: this.options.resName,
-          sort: this.options.sort,
-          pid: this.options.pid,
-          url: this.options.url,
-          icon: this.options.icon
+          roleId: this.options.roleId,
+          roleName: this.options.roleName,
+          orgId: this.options.orgId
         }
       } else {
         return { ...defaultForm, orgId: this.orgId }
