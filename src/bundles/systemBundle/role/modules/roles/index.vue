@@ -9,7 +9,7 @@
           <el-button type="danger" icon="el-icon-delete" size="small" @click="removeAll">删除</el-button>
         </div>
       </div>
-      <el-table :data="list" v-loading="loading" row-key="roleId" class="jc-table">
+      <el-table :data="list" v-loading="loading" row-key="roleId" class="jc-table" @selection-change="tableSelect">
         <el-table-column type="selection" width="40"></el-table-column>
         <el-table-column type="index" label="序号" width="50"></el-table-column>
         <el-table-column prop="orgName" label="所属组织"></el-table-column>
@@ -46,6 +46,7 @@ export default {
       visible: false,
       info: null,
       orgId: '',
+      ids: [],
       filter: { }
     }
   },
@@ -82,7 +83,7 @@ export default {
 
       if (selections && selections.length) {
         selections.forEach(item=> {
-          ids.push(item.positionId)
+          ids.push(item.roleId)
         })
       }
       this.ids = ids
