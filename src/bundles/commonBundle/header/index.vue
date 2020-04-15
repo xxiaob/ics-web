@@ -1,5 +1,6 @@
 <template>
   <header class="jc-header">
+    <img src="/static/images/header-logo.png" class="jc-header-logo" />
     <div class="jc-header-menus">
       <div class="jc-user-warp">
         <i class="jc-user-header"></i>杨超
@@ -59,6 +60,10 @@ export default {
   height: $jc-header-height;
   z-index: 99;
   @include jc-header-style;
+}
+.jc-header-logo {
+  width: auto;
+  height: 100%;
 }
 .jc-header-menus {
   float: right;

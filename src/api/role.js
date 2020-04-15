@@ -52,5 +52,5 @@ export function roleGet(roleId) {
  * @returns {Object} axios 对象
  */
 export function roleDel(roleId) {
-  return axios.post(API.role.del, { roleId })
+  return axios.post(API.role.del + `?roleId=${roleId}`)
 }

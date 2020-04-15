@@ -1,6 +1,6 @@
 <template>
   <div>
-    <tab-filter></tab-filter>
+    <tab-filter @filter="goFilter"></tab-filter>
     <el-card class="jc-table-card jc-mt">
       <div slot="header" class="jc-card-header">
         <div class="jc-card-title">列表内容</div>
@@ -18,7 +18,7 @@
         <el-table-column width="120" label="操作">
           <template slot-scope="scope">
             <el-button type="text" size="mini" @click="manage(scope.row)">编辑</el-button>
-            <el-button type="text" size="mini" @click="del(scope.row)">详情</el-button>
+            <el-button type="text" size="mini" @click="del(scope.row)">删除</el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -57,7 +57,7 @@ export default {
       }
       if (!this.loading) {
         this.loading = true
-        roleList({ ...this.filter, ...this.page, orgId }).then(res => {
+        roleList({ ...this.filter, ...this.page, orgId: this.orgId }).then(res => {
           this.page.total = res.total
 
           let list = []
