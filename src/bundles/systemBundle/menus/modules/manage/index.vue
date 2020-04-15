@@ -16,7 +16,7 @@
         <el-input v-model="form.url" placeholder="请输入菜单地址"></el-input>
       </el-form-item>
       <el-form-item label="序号" prop="sort" :rules="rules.Int">
-        <el-input v-model="form.sort" placeholder="请输入序号"></el-input>
+        <el-input v-model.number="form.sort" placeholder="请输入序号"></el-input>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">

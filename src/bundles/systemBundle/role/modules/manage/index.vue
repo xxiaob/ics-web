@@ -8,7 +8,7 @@
         <el-cascader v-model="form.orgId" :options="orgTree" filterable :props="{ expandTrigger: 'hover',checkStrictly: true,emitPath: false }"></el-cascader>
       </el-form-item>
       <el-form-item label="菜单权限">
-        <el-tree :data="menuTree" :props="props" node-key="resId" :default-expand-all="true" :show-checkbox="true"></el-tree>
+        <el-tree ref="tree" :data="menuTree" :props="props" node-key="resId" :default-expand-all="true" :show-checkbox="true"></el-tree>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -24,7 +24,7 @@ import { organizationList } from '@/api/organization'
 import { getStringRule, SELECT_NOT_NULL } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
 
-let defaultForm = { roleName: '', orgId: '' }
+let defaultForm = { roleName: '' }
 
 export default {
   name: 'SystemRoleManage',
@@ -107,14 +107,14 @@ export default {
           icon: this.options.icon
         }
       } else {
-        return { ...defaultForm }
+        return { ...defaultForm, orgId: this.orgId }
       }
     },
     onSubmit() {
       this.loading = true
       this.$refs.form.validate(valid => {
         if (valid) {
-          roleSave(this.form).then(() => {
+          roleSave({ ...this.form, resIds: this.$refs.tree.getCheckedKeys() }).then(() => {
             this.$message.success('操作成功')
             this.dialogVisible = false
             this.$emit('save-success')
