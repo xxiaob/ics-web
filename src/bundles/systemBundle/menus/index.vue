@@ -19,10 +19,10 @@
         <el-table-column prop="pName" label="上级菜单"></el-table-column>
         <el-table-column prop="url" label="菜单地址"></el-table-column>
         <el-table-column prop="sort" label="序号"></el-table-column>
-        <el-table-column width="120" label="操作">
+        <el-table-column width="60" label="操作">
           <template slot-scope="scope">
-            <el-button type="text" size="mini" @click="manage(scope.row)">编辑</el-button>
-            <el-button type="text" size="mini" @click="del(scope.row)">删除</el-button>
+            <el-button type="text" size="mini" icon="el-icon-edit-outline" @click="manage(scope.row)" title="编辑"></el-button>
+            <el-button type="text" size="mini" icon="el-icon-delete" @click="del(scope.row)" title="删除"></el-button>
           </template>
         </el-table-column>
       </el-table>

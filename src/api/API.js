@@ -16,7 +16,8 @@ export default {
     //职位管理
     add: 'user-service/position/add',
     get: 'user-service/position/byId',
-    list: 'user-service/position/list',
+    list: 'user-service/position/listByPage',
+    listAll: 'user-service/position/list',
     update: 'user-service/position/upd',
     del: 'user-service/position/del'
   },
@@ -36,5 +37,15 @@ export default {
     listAll: 'user-service/role/list',
     update: 'user-service/role/upd',
     del: 'user-service/role/del'
+  },
+  user: {
+    //用户管理
+    add: 'user-service/user/add',
+    get: 'user-service/user/byId',
+    list: 'user-service/user/list',
+    update: 'user-service/user/upd',
+    del: 'user-service/user/del',
+    resetUserPwd: 'user-service/user/resetUserPwd',
+    updateOrgReceiver: 'user-service/user/addOrgReceiver'
   }
 }

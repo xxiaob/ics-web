@@ -14,6 +14,13 @@ export function roleList(data = {}) {
   return axios.post(API.role.list, data)
 }
 /**
+ * 列表
+ * @returns {Object} axios 对象
+ */
+export function roleListAll() {
+  return axios.post(API.role.listAll)
+}
+/**
  * 添加
  * @param {object} data
  * @returns {Object} axios 对象

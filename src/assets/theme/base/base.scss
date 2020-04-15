@@ -68,6 +68,11 @@ body {
   user-select: none;
 }
 
+//字体样式
+.jc-link {
+  color: $jc-color-primary;
+}
+
 //常用样式和边距
 .jc-pl {
   padding-left: $jc-default-dis;
@@ -239,6 +244,7 @@ body {
 }
 
 .jc-manage-form {
+
   .el-select,
   .el-cascader {
     width: 100%;

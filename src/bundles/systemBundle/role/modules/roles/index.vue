@@ -15,10 +15,10 @@
         <el-table-column prop="orgName" label="所属组织"></el-table-column>
         <el-table-column prop="roleName" label="角色名称"></el-table-column>
         <el-table-column prop="createTime" label="创建时间"></el-table-column>
-        <el-table-column width="120" label="操作">
+        <el-table-column width="60" label="操作">
           <template slot-scope="scope">
-            <el-button type="text" size="mini" @click="manage(scope.row)">编辑</el-button>
-            <el-button type="text" size="mini" @click="del(scope.row)">删除</el-button>
+            <el-button type="text" size="mini" icon="el-icon-edit-outline" @click="manage(scope.row)" title="编辑"></el-button>
+            <el-button type="text" size="mini" icon="el-icon-delete" @click="del(scope.row)" title="删除"></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -95,7 +95,7 @@ export default {
     },
     removeAll() {
       if (this.ids.length) {
-        this.$confirm('确认删除选中的角色？', '提示', { type: 'warning' }).then(() => {
+        this.$confirm('确认删除选中的角色', '提示', { type: 'warning' }).then(() => {
           this.remove(this.ids)
         }).catch(() => {})
       } else {

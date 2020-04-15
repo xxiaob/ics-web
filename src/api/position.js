@@ -14,6 +14,13 @@ export function positionList(data) {
   return axios.post(API.position.list, data)
 }
 /**
+ * 列表
+ * @returns {Object} axios 对象
+ */
+export function positionListAll() {
+  return axios.post(API.position.listAll)
+}
+/**
  * 添加
  * @param {object} data
  * @returns {Object} axios 对象

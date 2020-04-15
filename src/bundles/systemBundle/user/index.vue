@@ -2,7 +2,7 @@
   <div class="jc-main-full-container">
     <org-trees class="jc-trees-warp" @node-change="nodeChange"></org-trees>
     <div class="jc-trees-content">
-      <user-list class="jc-main-container-warp"></user-list>
+      <user-list ref="myUsers" class="jc-main-container-warp"></user-list>
     </div>
   </div>
 </template>
@@ -16,6 +16,7 @@ export default {
   methods: {
     nodeChange(data) {
       console.log('用户管理，树节点change：', data)
+      this.$refs.myUsers.initData(data.orgId)
     }
   }
 }
