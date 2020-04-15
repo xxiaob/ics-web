@@ -119,7 +119,6 @@ export default {
     },
     formatFormData() {
       if (this.options) {
-        this.checkedKeys = this.options.resIds || []
         return {
           userId: this.options.userId,
           userName: this.options.userName,

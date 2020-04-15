@@ -74,7 +74,7 @@ export default {
 
           if (res.resultList && res.resultList.length) {
             res.resultList.forEach(item => {
-              list.push({ ...item, createTime: formatDate(item.createTime) })
+              list.push({ ...item, isDefReceiver: item.isDefReceiver + '', createTime: formatDate(item.createTime) })
             })
           }
           this.list = list
