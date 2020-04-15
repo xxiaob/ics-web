@@ -1,43 +1,46 @@
 <template>
   <el-dialog title="用户详情" :visible.sync="dialogVisible" width="600px" :append-to-body="true" @close="dialogClose">
-    <el-form ref="form" label-width="80px" :model="form" class="jc-manage-form">
-      <el-form-item label="用户名称">
-        <span v-text="form.userName"></span>
-      </el-form-item>
-      <el-form-item label="登录账号">
-
-      </el-form-item>
-      <el-form-item label="手机号">
-
-      </el-form-item>
-      <el-form-item label="执法证号">
-
-      </el-form-item>
-      <el-form-item label="胸牌号">
-
-      </el-form-item>
-      <el-form-item label="职位">
-        <el-select v-model="form.positionId" placeholder="职位">
-
-        </el-select>
-      </el-form-item>
-      <el-form-item label="默认接收人">
-
-      </el-form-item>
-      <el-form-item label="所属组织">
-
-      </el-form-item>
-      <el-form-item label="角色">
-
-      </el-form-item>
-    </el-form>
-    <div slot="footer" class="dialog-footer">
-      <el-button @click="dialogVisible = false">确 定</el-button>
+    <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png">杨超</el-avatar>
+    <div class="jc-info-item">
+      <label class="jc-info-label">用户名称：</label>
+      <div class="jc-info-content">杨超</div>
+    </div>
+    <div class="jc-info-item">
+      <label class="jc-info-label">登录账号：</label>
+      <div class="jc-info-content">杨超</div>
+    </div>
+    <div class="jc-info-item">
+      <label class="jc-info-label">手机号：</label>
+      <div class="jc-info-content">杨超</div>
+    </div>
+    <div class="jc-info-item">
+      <label class="jc-info-label">执法证号：</label>
+      <div class="jc-info-content">杨超</div>
+    </div>
+    <div class="jc-info-item">
+      <label class="jc-info-label">胸牌号：</label>
+      <div class="jc-info-content">杨超</div>
+    </div>
+    <div class="jc-info-item">
+      <label class="jc-info-label">职位：</label>
+      <div class="jc-info-content">杨超</div>
+    </div>
+    <div class="jc-info-item">
+      <label class="jc-info-label">默认接收人：</label>
+      <div class="jc-info-content">杨超</div>
+    </div>
+    <div class="jc-info-item">
+      <label class="jc-info-label">所属组织：</label>
+      <div class="jc-info-content">杨超</div>
+    </div>
+    <div class="jc-info-item">
+      <label class="jc-info-label">角色：</label>
+      <div class="jc-info-content">杨超</div>
     </div>
   </el-dialog>
 </template>
 <script>
-import { useGet } from '@/api/user'
+import { userGet } from '@/api/user'
 import FormMixins from '@/mixins/FormMixins'
 
 let defaultForm = { userName: '', account: '', phone: '', positionId: '', chestNbr: '', lawNbr: '', isDefReceiver: '0' }
@@ -52,7 +55,7 @@ export default {
   },
   methods: {
     initData() {
-      useGet(this.userId).then(res => {
+      userGet(this.userId).then(res => {
 
       })
     },
@@ -77,3 +80,23 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+$jc-info-item-height: 20px;
+.jc-info-item {
+  position: relative;
+  padding-left: 85px;
+  margin-bottom: 10px;
+  .jc-info-label {
+    position: absolute;
+    text-align: right;
+    width: 85px;
+    line-height: $jc-info-item-height;
+    top: 0;
+    left: 0;
+    color: $jc-color-text-secondary;
+  }
+  .jc-info-content {
+    line-height: $jc-info-item-height;
+  }
+}
+</style>

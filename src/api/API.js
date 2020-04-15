@@ -46,6 +46,6 @@ export default {
     update: 'user-service/user/upd',
     del: 'user-service/user/del',
     resetUserPwd: 'user-service/user/resetUserPwd',
-    updateOrgReceiver: 'user-service/user/addOrgReceiver'
+    updateOrgReceiver: 'user-service/user/updOrgReceiver'
   }
 }

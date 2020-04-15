@@ -27,7 +27,7 @@
           <template slot-scope="scope">
             <el-button type="text" size="mini" icon="el-icon-edit-outline" @click="manage(scope.row)" title="编辑"></el-button>
             <el-button type="text" size="mini" icon="el-icon-delete" @click="del(scope.row)" title="删除"></el-button>
-            <el-button type="text" size="mini" icon="el-icon-view" @click="del(scope.row)" title="查看详情"></el-button>
+            <el-button type="text" size="mini" icon="el-icon-view" @click="detail(scope.row)" title="查看详情"></el-button>
             <el-button type="text" size="mini" icon="el-icon-refresh" @click="reset(scope.row)" title="重置密码"></el-button>
           </template>
         </el-table-column>
@@ -35,10 +35,11 @@
       <el-pagination :hide-on-single-page="true" @current-change="currentChange" @size-change="sizeChange" :current-page.sync="page.pageNum" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.total" class="text-right jc-mt"></el-pagination>
     </el-card>
     <jc-manage :options="info" :orgId="orgId" :visible.sync="visible" @save-success="initData"></jc-manage>
+    <user-detail :userId="userId" :visible.sync="detailVisible"></user-detail>
   </div>
 </template>
 <script>
-import { userList, userDel, userGet, updateOrgReceiver, resetUserPwd } from '@/api/user'
+import { userList, userDel, updateOrgReceiver, resetUserPwd, userGet } from '@/api/user'
 import { formatDate } from '@/libs/util'
 import PaginationMixins from '@/mixins/PaginationMixins'
 
@@ -47,14 +48,17 @@ export default {
   mixins: [PaginationMixins],
   components: {
     TabFilter: () => import('../tabFilter'),
-    JcManage: () => import('../manage')
+    JcManage: () => import('../manage'),
+    UserDetail: () => import('../detail')
   },
   data() {
     return {
       list: [],
       loading: false,
       visible: false,
+      detailVisible: false,
       info: null,
+      userId: null,
       orgId: '',
       ids: [],
       filter: { }
@@ -136,10 +140,16 @@ export default {
         })
       }).catch(() => {})
     },
+    detail(row) {
+      this.userId = row.userId
+      this.detailVisible = true
+    },
     manage(row) {
       if (row) {
-        this.info = row
-        this.visible = true
+        userGet(row.userId).then(res => {
+          this.info = res
+          this.visible = true
+        })
       } else {
         this.info = null
         this.visible = true

@@ -52,7 +52,7 @@ export function userGet(userId) {
  * @returns {Object} axios 对象
  */
 export function userDel(delIdS) {
-  return axios.post(API.user.del, { delIdS })
+  return axios.post(API.user.del, delIdS)
 }
 /**
  * 重置密码
