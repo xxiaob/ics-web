@@ -6,11 +6,13 @@
         <i class="jc-user-header"></i>{{user.userName}}
         <i class="jc-arrow-icon el-icon-arrow-right"></i>
         <div class="jc-menu-popup">
+          <div class="jc-menu-item" @click="visible = true">个人信息</div>
           <div class="jc-menu-item">修改密码</div>
           <div class="jc-menu-item" @click="logout">退出登录</div>
         </div>
       </div>
     </div>
+    <user-detail :userId="user.userId" title="个人信息" :visible.sync="visible"></user-detail>
   </header>
 </template>
 
@@ -20,8 +22,12 @@ import { getUser } from '@/libs/storage'
 
 export default {
   name: 'CommonHeader',
+  components: {
+    UserDetail: () => import('@/bundles/systemBundle/user/modules/detail')
+  },
   data() {
     return {
+      visible: false,
       menuActive: ''
     }
   },

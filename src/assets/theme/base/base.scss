@@ -240,7 +240,12 @@ body {
 
   .cell {
     font-size: $jc-font-size-smaller;
+
+    .el-button {
+      font-size: $jc-font-size-base;
+    }
   }
+
 }
 
 .jc-manage-form {
