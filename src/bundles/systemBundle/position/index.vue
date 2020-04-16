@@ -15,12 +15,19 @@
         <el-table-column prop="positionName" label="职位名称"></el-table-column>
         <el-table-column label="电脑端">
           <template slot-scope="scope">
-            <!-- :class="{'jc-status-off': }" -->
-            <i class="jc-position-status"></i>
+            <i class="jc-position-status" :class="{'jc-status-on': scope.row.pc}"></i>
           </template>
         </el-table-column>
-        <el-table-column prop="devices" label="移动端"></el-table-column>
-        <el-table-column prop="devices" label="行政执法仪"></el-table-column>
+        <el-table-column label="移动端">
+          <template slot-scope="scope">
+            <i class="jc-position-status" :class="{'jc-status-on': scope.row.mobile}"></i>
+          </template>
+        </el-table-column>
+        <el-table-column label="行政执法仪">
+          <template slot-scope="scope">
+            <i class="jc-position-status jc-law" :class="{'jc-status-on': scope.row.law}"></i>
+          </template>
+        </el-table-column>
         <el-table-column prop="createTime" label="添加时间"></el-table-column>
         <el-table-column width="60" label="操作">
           <template slot-scope="scope">
@@ -73,7 +80,7 @@ export default {
             res.resultList.forEach(item => {
               let type = item.loginType ? item.loginType.split(',') : []
 
-              list.push({ positionId: item.positionId, type, devices: LOGIN_DEVICE_TYPES.toString(type) || '--', positionName: item.positionName, createTime: formatDate(item.createTime) })
+              list.push({ positionId: item.positionId, type, ...this.getDeviceStatusClass(item.loginType), positionName: item.positionName, createTime: formatDate(item.createTime) })
             })
           }
           this.list = list
@@ -82,6 +89,16 @@ export default {
           this.loading = false
         })
       }
+    },
+    getDeviceStatusClass(loginType) {
+      if (loginType) {
+        return {
+          pc: loginType.indexOf(LOGIN_DEVICE_TYPES.PC) > -1,
+          mobile: loginType.indexOf(LOGIN_DEVICE_TYPES.MOBILE) > -1,
+          law: loginType.indexOf(LOGIN_DEVICE_TYPES.LAW) > -1
+        }
+      }
+      return { pc: '', mobile: '', law: '' }
     },
     goFilter(filter) {
       this.filter = { ...filter }
@@ -134,10 +151,13 @@ export default {
   display: block;
   width: 36px;
   height: 16px;
-  background: url(./assets/on.png) no-repeat center;
+  background: url(./assets/off.png) no-repeat center;
   background-size: auto 100%;
-  &.jc-status-off {
-    background-image: url(./assets/off.png);
+  &.jc-law {
+    width: 60px;
+  }
+  &.jc-status-on {
+    background-image: url(./assets/on.png);
   }
 }
 </style>
