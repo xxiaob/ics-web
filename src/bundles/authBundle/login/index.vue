@@ -1,5 +1,6 @@
 <template>
   <div class="jc-login-warp">
+    <img src="./assets/login-bg.png" class="jc-login-bg" />
     <div class="jc-login-space">
       <div class="jc-login-title">行政执法指挥系统</div>
       <div class="jc-input-warp">
@@ -67,8 +68,12 @@ export default {
   position: relative;
   width: 100%;
   height: 100%;
+}
+.jc-login-bg {
+  display: block;
+  width: 100%;
+  height: 100%;
   object-fit: cover;
-  background: url(./assets/login-bg.png) no-repeat center;
 }
 .jc-login-space {
   position: absolute;

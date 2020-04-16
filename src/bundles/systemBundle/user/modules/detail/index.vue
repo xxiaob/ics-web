@@ -3,39 +3,35 @@
     <el-avatar src="https://cube.elemecdn.com/0/88/03b0d39583f48206768a7534e55bcpng.png">杨超</el-avatar>
     <div class="jc-info-item">
       <label class="jc-info-label">用户名称：</label>
-      <div class="jc-info-content">杨超</div>
+      <div class="jc-info-content" v-text="user.userName"></div>
     </div>
     <div class="jc-info-item">
       <label class="jc-info-label">登录账号：</label>
-      <div class="jc-info-content">杨超</div>
+      <div class="jc-info-content" v-text="user.account"></div>
     </div>
     <div class="jc-info-item">
       <label class="jc-info-label">手机号：</label>
-      <div class="jc-info-content">杨超</div>
+      <div class="jc-info-content" v-text="user.phone"></div>
     </div>
     <div class="jc-info-item">
       <label class="jc-info-label">执法证号：</label>
-      <div class="jc-info-content">杨超</div>
+      <div class="jc-info-content" v-text="user.lawNbr || '--'"></div>
     </div>
     <div class="jc-info-item">
       <label class="jc-info-label">胸牌号：</label>
-      <div class="jc-info-content">杨超</div>
+      <div class="jc-info-content" v-text="user.chestNbr || '--'"></div>
     </div>
     <div class="jc-info-item">
       <label class="jc-info-label">职位：</label>
-      <div class="jc-info-content">杨超</div>
-    </div>
-    <div class="jc-info-item">
-      <label class="jc-info-label">默认接收人：</label>
-      <div class="jc-info-content">杨超</div>
+      <div class="jc-info-content" v-text="user.positionName"></div>
     </div>
     <div class="jc-info-item">
       <label class="jc-info-label">所属组织：</label>
-      <div class="jc-info-content">杨超</div>
+      <div class="jc-info-content" v-text="user.orgName"></div>
     </div>
     <div class="jc-info-item">
       <label class="jc-info-label">角色：</label>
-      <div class="jc-info-content">杨超</div>
+      <div class="jc-info-content" v-text="user.roleIds"></div>
     </div>
   </el-dialog>
 </template>
@@ -51,12 +47,13 @@ export default {
   props: ['userId'],
   data() {
     return {
+      user: {}
     }
   },
   methods: {
     initData() {
       userGet(this.userId).then(res => {
-
+        this.user = res
       })
     },
     formatFormData() {
@@ -96,6 +93,7 @@ $jc-info-item-height: 20px;
     color: $jc-color-text-secondary;
   }
   .jc-info-content {
+    min-height: $jc-info-item-height;
     line-height: $jc-info-item-height;
   }
 }
