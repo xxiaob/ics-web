@@ -152,7 +152,7 @@ export default {
           })
         }
       })
-      polygon.on('click', () => {
+      polygon.on('dblclick', () => {
         let data = polygon.getExtData()
 
         this.showFloor(data.adcode, data.level)

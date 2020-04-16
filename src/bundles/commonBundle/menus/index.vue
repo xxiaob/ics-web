@@ -1,10 +1,6 @@
 <template>
   <section>
     <el-menu :default-active="menuActive" @select="menuSelect" :collapse="isCollapse">
-      <el-menu-item index="systemOrganization" class="jc-menu-item">
-        <i class="jc-menu-icon el-icon-setting"></i>
-        <span class="jc-menu-arrow-title" slot="title">系统设置</span>
-      </el-menu-item>
       <el-submenu index="system" class="jc-menu-item">
         <template slot="title">
           <i class="jc-menu-icon el-icon-setting"></i>

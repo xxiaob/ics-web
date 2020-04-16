@@ -14,6 +14,9 @@ export default {
     JcMapUtils.init({ ...MapOptions, source: this.$refs.myMap }, () => {
 
     })
+  },
+  beforeDestroy() {
+    JcMapUtils.destroy() //销毁地图
   }
 }
 </script>

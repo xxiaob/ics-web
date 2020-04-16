@@ -22,30 +22,32 @@ let JcMapUtils = {
    * @param {Function} cb 回调
    */
   init(options, cb = noop) {
-    if (!JcMapUtils.AMap) {
+    if (JcMapUtils.AMap) {
+      JcMapUtils.map = new JcMapUtils.AMap.Map(options.source, options.mapOptions)
+      let complete = false //防止map complete事件触发多次
+
+      JcMapUtils.map.on('complete', () => {
+        if (!complete) {
+          // 地图图块加载完成后触发
+          JcMapUtils.showConsole('地图加载完成，开始处理标记')
+          let mapEl = typeof options.source == 'string' ? document.getElementById(options.source) : options.source
+
+          let logoEL = mapEl.querySelector('.amap-logo')
+
+          let amapCopyrightEl = mapEl.querySelector('.amap-copyright')
+
+          logoEL.parentNode.removeChild(logoEL)
+          amapCopyrightEl.parentNode.removeChild(amapCopyrightEl)
+          JcMapUtils.showConsole('标记处理完成')
+          complete = true
+          cb()
+        }
+      })
+    } else {
       JcMapUtils.showConsole('地图加载中...')
       AMapLoader.load(options.loadOptions).then((AMap) => {
         JcMapUtils.AMap = AMap
-        JcMapUtils.map = new AMap.Map(options.source, options.mapOptions)
-        let complete = false //防止map complete事件触发多次
-
-        JcMapUtils.map.on('complete', () => {
-          if (!complete) {
-            // 地图图块加载完成后触发
-            JcMapUtils.showConsole('地图加载完成，开始处理标记')
-            let mapEl = typeof options.source == 'string' ? document.getElementById(options.source) : options.source
-
-            let logoEL = mapEl.querySelector('.amap-logo')
-
-            let amapCopyrightEl = mapEl.querySelector('.amap-copyright')
-
-            logoEL.parentNode.removeChild(logoEL)
-            amapCopyrightEl.parentNode.removeChild(amapCopyrightEl)
-            JcMapUtils.showConsole('标记处理完成')
-            complete = true
-            cb()
-          }
-        })
+        JcMapUtils.init(options, cb)
       }).catch(() => {
         JcMapUtils.showConsole('地图加载失败，请检查配置或网络...')
       })
