@@ -126,11 +126,13 @@ export default {
       let tip = row.isDefReceiver == 1 ? '设置' : '取消'
 
       this.$confirm(`确认${tip}用户 <span class="jc-link">${row.userName}</span> 为 <span class="jc-link">${row.orgName}</span> 的默认接收人`, '提示', { type: 'warning', dangerouslyUseHTMLString: true }).then(() => {
-        updateOrgReceiver({ userId: row.userId, orgId: row.orgId, isDefReceiver: row.isDefReceiver }).then(() => {
+        updateOrgReceiver({ userId: row.userId, orgId: this.orgId, isDefReceiver: row.isDefReceiver }).then(() => {
           this.$message.success('设置成功')
+        }).catch(() => {
+          row.isDefReceiver = row.isDefReceiver == 1 ? '0' : '1'
         })
       }).catch(() => {
-        row.isDefReceiver = !row.isDefReceiver
+        row.isDefReceiver = row.isDefReceiver == 1 ? '0' : '1'
       })
     },
     reset(row) {

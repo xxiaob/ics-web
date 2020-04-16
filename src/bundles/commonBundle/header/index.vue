@@ -3,7 +3,7 @@
     <img src="/static/images/header-logo.png" class="jc-header-logo" />
     <div class="jc-header-menus">
       <div class="jc-user-warp">
-        <i class="jc-user-header"></i>杨超
+        <i class="jc-user-header"></i>{{user.userName}}
         <i class="jc-arrow-icon el-icon-arrow-right"></i>
         <div class="jc-menu-popup">
           <div class="jc-menu-item">修改密码</div>

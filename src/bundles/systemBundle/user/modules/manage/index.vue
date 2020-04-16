@@ -21,9 +21,6 @@
           <el-option v-for="item in positions" :key="item.positionId" :label="item.positionName" :value="item.positionId"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="默认接收人">
-        <el-switch v-model="form.isDefReceiver" active-value="1" inactive-value="0"></el-switch>
-      </el-form-item>
       <el-form-item label="所属组织" prop="orgId" :rules="rules.SELECT_NOT_NULL">
         <el-cascader v-model="form.orgId" :options="orgTree" filterable :props="{ expandTrigger: 'hover',checkStrictly: true,emitPath: false }" :disabled="isEdit"></el-cascader>
       </el-form-item>
@@ -47,7 +44,7 @@ import { positionListAll } from '@/api/position'
 import { getStringRule, SELECT_NOT_NULL, getTelRule } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
 
-let defaultForm = { userName: '', account: '', phone: '', positionId: '', chestNbr: '', lawNbr: '', isDefReceiver: '0' }
+let defaultForm = { userName: '', account: '', phone: '', positionId: '', chestNbr: '', lawNbr: '' }
 
 export default {
   name: 'SystemUserManage',
@@ -126,7 +123,6 @@ export default {
           phone: this.options.phone,
           chestNbr: this.options.chestNbr,
           lawNbr: this.options.lawNbr,
-          isDefReceiver: this.options.isDefReceiver,
           roleIds: this.options.roleIds || [],
           orgId: this.options.orgId,
           positionId: this.options.positionId
