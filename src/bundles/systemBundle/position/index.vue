@@ -13,7 +13,14 @@
         <el-table-column type="selection" width="40"></el-table-column>
         <el-table-column type="index" label="序号" width="50"></el-table-column>
         <el-table-column prop="positionName" label="职位名称"></el-table-column>
-        <el-table-column prop="devices" label="允许登录终端"></el-table-column>
+        <el-table-column label="电脑端">
+          <template slot-scope="scope">
+            <!-- :class="{'jc-status-off': }" -->
+            <i class="jc-position-status"></i>
+          </template>
+        </el-table-column>
+        <el-table-column prop="devices" label="移动端"></el-table-column>
+        <el-table-column prop="devices" label="行政执法仪"></el-table-column>
         <el-table-column prop="createTime" label="添加时间"></el-table-column>
         <el-table-column width="60" label="操作">
           <template slot-scope="scope">
@@ -22,7 +29,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination :hide-on-single-page="true" @current-change="currentChange" @size-change="sizeChange" :current-page.sync="page.pageNum" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.total" class="text-right jc-mt"></el-pagination>
+      <el-pagination @current-change="currentChange" @size-change="sizeChange" :current-page.sync="page.pageNum" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.total" class="text-right jc-mt"></el-pagination>
     </el-card>
     <jc-manage :options="info" :visible.sync="visible" @save-success="initData"></jc-manage>
   </div>
@@ -122,3 +129,15 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.jc-position-status {
+  display: block;
+  width: 36px;
+  height: 16px;
+  background: url(./assets/on.png) no-repeat center;
+  background-size: auto 100%;
+  &.jc-status-off {
+    background-image: url(./assets/off.png);
+  }
+}
+</style>

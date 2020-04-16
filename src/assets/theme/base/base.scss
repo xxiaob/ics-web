@@ -251,12 +251,27 @@ body {
   }
 }
 
-/* 修改dialog close 按钮效果 */
-.el-dialog__close {
-  transform: rotate(0deg);
-  transition: transform 0.4s;
+/* 修改dialog */
+.el-dialog__header {
+  position: relative;
+  border-bottom: solid 1px $jc-color-line-primary;
+  padding: $jc-default-dis/2 $jc-default-dis;
 
-  &:hover {
-    transform: rotate(90deg);
+  .el-dialog__headerbtn {
+    top: 50%;
+    transform: translateY(-50%);
+
+    .el-dialog__close {
+      transform: rotate(0deg);
+      transition: transform 0.4s;
+
+      &:hover {
+        transform: rotate(90deg);
+      }
+    }
   }
+}
+
+.el-dialog__body {
+  padding: $jc-default-dis;
 }

@@ -46,7 +46,7 @@ class JcEnum {
     for (const [value, label] of this.map) {
       result.push(label)
     }
-    return result.join(',')
+    return result.join('，')
   }
 
   get [Symbol.toStringTag]() {

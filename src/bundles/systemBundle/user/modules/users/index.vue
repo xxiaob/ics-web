@@ -32,7 +32,7 @@
           </template>
         </el-table-column>
       </el-table>
-      <el-pagination :hide-on-single-page="true" @current-change="currentChange" @size-change="sizeChange" :current-page.sync="page.pageNum" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.total" class="text-right jc-mt"></el-pagination>
+      <el-pagination @current-change="currentChange" @size-change="sizeChange" :current-page.sync="page.pageNum" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.total" class="text-right jc-mt"></el-pagination>
     </el-card>
     <jc-manage :options="info" :orgId="orgId" :visible.sync="visible" @save-success="initData"></jc-manage>
     <user-detail :userId="userId" :visible.sync="detailVisible"></user-detail>
@@ -146,7 +146,15 @@ export default {
     },
     manage(row) {
       if (row) {
-        userGet(row.userId).then(res => {
+        userGet({ userId: row.userId, orgId: this.orgId }).then(res => {
+          if (res.roles && res.roles.length) {
+            let roleIds = []
+
+            res.roles.forEach(item => {
+              roleIds.push(item.roleId)
+            })
+            res.roleIds = roleIds
+          }
           this.info = res
           this.visible = true
         })

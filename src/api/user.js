@@ -40,11 +40,11 @@ export function userSave(data) {
 }
 /**
  * 详情
- * @param {String} userId
+ * @param {String} data
  * @returns {Object} axios 对象
  */
-export function userGet(userId) {
-  return axios.post(API.user.get + `?userId=${userId}`)
+export function userGet(data) {
+  return axios.post(API.user.get, data)
 }
 /**
  * 删除

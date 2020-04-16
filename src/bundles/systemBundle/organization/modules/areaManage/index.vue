@@ -18,6 +18,9 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.jc-map-warp {
+  position: relative;
+}
 .jc-title {
   position: absolute;
   top: 0;
@@ -27,9 +30,6 @@ export default {
   line-height: 30px;
   width: 100px;
   text-align: center;
-}
-.jc-map-warp {
-  padding: $jc-default-dis;
 }
 .jc-map-space {
   position: relative;
