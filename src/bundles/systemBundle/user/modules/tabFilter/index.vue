@@ -25,8 +25,8 @@ export default {
     return {
       positions: [],
       form: {
-        userInfo: '',
-        region: ''
+        positionId: '',
+        userInfo: ''
       }
     }
   },
