@@ -203,10 +203,30 @@ body {
   }
 }
 
+.jc-title-sign {
+  position: relative;
+  text-indent: $jc-default-dis/2;
+
+  &:before {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto 0;
+    content: '';
+    display: block;
+    width: 3px;
+    height: 14px;
+    border-radius: 2px;
+    background-color: $jc-color-primary;
+  }
+}
+
 .jc-card-title {
   height: 20px;
   line-height: 20px;
   font-weight: $jc-font-weight-primary;
+  @extend .jc-title-sign
 }
 
 /*---------- table样式 --------*/
