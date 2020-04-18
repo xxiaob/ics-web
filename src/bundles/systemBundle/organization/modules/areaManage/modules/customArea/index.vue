@@ -1,6 +1,9 @@
 <template>
   <div class="jc-custom-area" v-show="visible">
-
+    <i class="jc-custom-item iconfont icontuodong"></i>
+    <i class="jc-custom-item iconfont icontuodong"></i>
+    <i class="jc-custom-item iconfont icontuodong"></i>
+    <i class="jc-custom-item iconfont icontuodong"></i>
   </div>
 </template>
 <script>
@@ -24,13 +27,30 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+$jc-item-width: 36px;
 .jc-custom-area {
   position: absolute;
-  width: 300px;
-  bottom: $jc-default-dis;
+  width: $jc-item-width * 5;
+  bottom: 0;
   left: 0;
   right: 0;
   margin: 0 auto;
-  z-index: 9;
+  z-index: 8;
+  background-color: rgba($color: $jc-menu-bg-color, $alpha: 0.6);
+  border-radius: $jc-border-radius-base;
+  text-align: center;
+}
+.jc-custom-item {
+  display: inline-block;
+  vertical-align: middle;
+  width: $jc-item-width;
+  height: $jc-item-width;
+  line-height: $jc-item-width;
+  color: $jc-color-white;
+  cursor: pointer;
+  &:hover,
+  &.jc-active {
+    color: $jc-color-primary;
+  }
 }
 </style>
