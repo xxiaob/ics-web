@@ -8,7 +8,8 @@
         <i class="jc-controll-item iconfont iconSecondMenu-customize" title="自定义区域" @click="startArea(2)"></i>
       </div>
     </div>
-    <auto-area ref="autoArea" :visible="autoAreaVisible"></auto-area>
+    <auto-area ref="autoArea" :visible="this.edit && this.type == 1"></auto-area>
+    <custom-area ref="customArea" :visible="this.edit && this.type == 2"></custom-area>
     <div class="jc-map-space" ref="myMap"></div>
   </div>
 </template>
@@ -19,7 +20,8 @@ import { MapOptions } from '@/config/JcMapConfig'
 export default {
   name: 'SystemOrganizationAreaManage',
   components: {
-    AutoArea: () => import('./modules/autoArea')
+    AutoArea: () => import('./modules/autoArea'),
+    CustomArea: () => import('./modules/customArea')
   },
   mounted() {
     this.loading = true
@@ -34,15 +36,11 @@ export default {
       type: ''
     }
   },
-  computed: {
-    autoAreaVisible() {
-      return this.edit && this.type == 1
-    }
-  },
   methods: {
     changeWork() {
       if (this.edit) {
         //编辑状态，则进行必要的关闭处理
+        this.type = ''
       }
       this.edit = !this.edit
     },

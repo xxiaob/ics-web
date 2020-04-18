@@ -1,8 +1,6 @@
 <template>
-  <div class="jc-auto-area" v-show="visible">
-    <el-select v-model="adcode" placeholder="请选择" size="mini" @change="adCodeChange">
-      <el-option v-for="item in list" :key="item.adcode" :label="item.name" :value="item.adcode"></el-option>
-    </el-select>
+  <div class="jc-custom-area" v-show="visible">
+
   </div>
 </template>
 <script>
@@ -36,21 +34,18 @@ export default {
           console.log(areas, list)
         })
       }
-    },
-    adCodeChange(code) {
-      console.log(this.adcode, code)
     }
   }
 }
 </script>
 <style lang="scss" scoped>
-.jc-auto-area {
+.jc-custom-area {
   position: absolute;
-  top: 50px;
-  left: $jc-default-dis;
+  width: 300px;
+  bottom: $jc-default-dis;
+  left: 0;
+  right: 0;
+  margin: 0 auto;
   z-index: 9;
-  .el-select {
-    width: 90px;
-  }
 }
 </style>
