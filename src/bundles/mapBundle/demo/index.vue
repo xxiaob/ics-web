@@ -42,7 +42,8 @@ export default {
   },
   methods: {
     initData() {
-      this.showFloor('320000', 'province') //开始查询江苏省
+      // this.showFloor('320000', 'province') //开始查询江苏省
+      this.showFloor('320100') //开始查询南京市
     },
     showFloor(adcode, level = 'city') {
       if (adcode == this.floorData.adcode) {

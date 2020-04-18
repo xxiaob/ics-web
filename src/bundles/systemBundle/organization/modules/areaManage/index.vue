@@ -8,6 +8,7 @@
         <i class="jc-controll-item iconfont iconSecondMenu-customize"></i>
       </div>
     </div>
+    <auto-area></auto-area>
     <div class="jc-map-space" ref="myMap"></div>
   </div>
 </template>
@@ -17,6 +18,9 @@ import { MapOptions } from '@/config/JcMapConfig'
 
 export default {
   name: 'SystemOrganizationAreaManage',
+  components: {
+    AutoArea: () => import('./modules/autoArea')
+  },
   mounted() {
     JcMapUtils.init({ ...MapOptions, source: this.$refs.myMap }, () => {
 
@@ -24,7 +28,8 @@ export default {
   },
   data() {
     return {
-      edit: false
+      edit: false,
+      type: 1
     }
   },
   methods: {
