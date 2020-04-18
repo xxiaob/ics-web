@@ -9,7 +9,7 @@
 let JcMapUtils //用户承接工具类
 
 export default {
-  name: 'SystemOrganizationAutoArea',
+  name: 'SystemOrganizationCustomArea',
   props: ['visible'],
   data() {
     return {
@@ -48,7 +48,7 @@ export default {
   position: absolute;
   top: 50px;
   left: $jc-default-dis;
-  z-index: 8;
+  z-index: 9;
   .el-select {
     width: 90px;
   }

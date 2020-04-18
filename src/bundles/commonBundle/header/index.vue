@@ -129,6 +129,9 @@ export default {
     line-height: $jc-menu-height;
     text-align: center;
     color: $jc-color-text-secondary;
+    &:hover {
+      color: $jc-color-primary;
+    }
   }
 }
 .jc-user-header {

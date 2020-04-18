@@ -1,14 +1,14 @@
 <template>
-  <div class="jc-map-warp jc-card">
+  <div class="jc-map-warp jc-card" v-loading="loading">
     <div class="jc-title-warp">
       <div class="jc-title-sign">组织区域</div>
       <div class="jc-controll-warp" :class="{'jc-active': edit}">
         <i class="jc-controll-item iconfont" :class="edit ? 'iconchehui' : 'iconshezhi'" @click="changeWork"></i>
-        <i class="jc-controll-item iconfont iconkuaijieshezhi"></i>
-        <i class="jc-controll-item iconfont iconSecondMenu-customize"></i>
+        <i class="jc-controll-item iconfont iconkuaijieshezhi" title="快捷设置" @click="startArea(1)"></i>
+        <i class="jc-controll-item iconfont iconSecondMenu-customize" title="自定义区域" @click="startArea(2)"></i>
       </div>
     </div>
-    <auto-area></auto-area>
+    <auto-area ref="autoArea" :visible="autoAreaVisible"></auto-area>
     <div class="jc-map-space" ref="myMap"></div>
   </div>
 </template>
@@ -22,19 +22,39 @@ export default {
     AutoArea: () => import('./modules/autoArea')
   },
   mounted() {
+    this.loading = true
     JcMapUtils.init({ ...MapOptions, source: this.$refs.myMap }, () => {
-
+      this.loading = false
     })
   },
   data() {
     return {
+      loading: false,
       edit: false,
-      type: 1
+      type: ''
+    }
+  },
+  computed: {
+    autoAreaVisible() {
+      return this.edit && this.type == 1
     }
   },
   methods: {
     changeWork() {
+      if (this.edit) {
+        //编辑状态，则进行必要的关闭处理
+      }
       this.edit = !this.edit
+    },
+    startArea(type) {
+      //开始区域设置
+      this.type = type
+      if (type == 1) {
+        //快捷设置
+        this.$refs.autoArea.initData(JcMapUtils)
+      } else if (type == 2) {
+        //自定义设置
+      }
     }
   },
   beforeDestroy() {
