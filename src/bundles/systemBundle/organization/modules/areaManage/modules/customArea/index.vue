@@ -19,21 +19,6 @@ export default {
     initData(util) {
       this.adcode = ''
       JcMapUtils = util
-      if (this.list.length < 1) {
-        JcMapUtils.districtSearch({ keyword: '320100', options: { level: 'city' } }, (result) => {
-          let areas = result.districtList[0].districtList
-
-          let list = []
-
-          if (areas && areas.length) {
-            areas.forEach(item => {
-              list.push({ adcode: item.adcode, name: item.name, level: item.level })
-            })
-          }
-          this.list = list
-          console.log(areas, list)
-        })
-      }
     }
   }
 }
