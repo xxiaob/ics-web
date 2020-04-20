@@ -1,7 +1,7 @@
 <template>
   <header class="jc-header">
     <img src="/static/images/header-logo.png" class="jc-header-logo" />
-    <div class="jc-header-menus">
+    <div class="jc-header-menus" v-if="isLogin">
       <div class="jc-user-warp">
         <i class="jc-user-header"></i>{{user.userName}}
         <i class="jc-arrow-icon el-icon-arrow-right"></i>
@@ -38,7 +38,7 @@ export default {
     if (user) {
       this.setUser(user)
     } else {
-      this.$router.push(`/login?callbackUrl=${this.$router.history.current.fullPath.split('?')[0]}`)
+      this.$router.push({ name: 'login', query: { callbackUrl: this.$router.history.current.fullPath.split('?')[0] } })
     }
   },
   computed: {
