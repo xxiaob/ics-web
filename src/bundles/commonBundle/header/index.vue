@@ -1,18 +1,20 @@
 <template>
   <header class="jc-header">
     <img src="/static/images/header-logo.png" class="jc-header-logo" />
-    <div class="jc-header-menus" v-if="isLogin">
-      <div class="jc-user-warp">
-        <i class="jc-user-header"></i>{{user.userName}}
-        <i class="jc-arrow-icon el-icon-arrow-right"></i>
-        <div class="jc-menu-popup">
-          <div class="jc-menu-item" @click="visible = true">个人信息</div>
-          <div class="jc-menu-item">修改密码</div>
-          <div class="jc-menu-item" @click="logout">退出登录</div>
+    <template v-if="isLogin">
+      <div class="jc-header-menus">
+        <div class="jc-user-warp">
+          <i class="jc-user-header"></i>{{user.userName}}
+          <i class="jc-arrow-icon el-icon-arrow-right"></i>
+          <div class="jc-menu-popup">
+            <div class="jc-menu-item" @click="visible = true">个人信息</div>
+            <div class="jc-menu-item">修改密码</div>
+            <div class="jc-menu-item" @click="logout">退出登录</div>
+          </div>
         </div>
       </div>
-    </div>
-    <user-detail :userId="user.userId" title="个人信息" :visible.sync="visible"></user-detail>
+      <user-detail :userId="user.userId" title="个人信息" :visible.sync="visible"></user-detail>
+    </template>
   </header>
 </template>
 
