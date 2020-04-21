@@ -1,9 +1,8 @@
 <template>
   <div class="jc-custom-area" v-show="visible">
-    <i class="jc-custom-item iconfont icontuodong"></i>
-    <i class="jc-custom-item iconfont icontuodong"></i>
-    <i class="jc-custom-item iconfont icontuodong"></i>
-    <i class="jc-custom-item iconfont icontuodong"></i>
+    <i class="jc-custom-item iconfont icontuodong" title="新增区域"></i>
+    <i class="jc-custom-item iconfont icontuodong" title="保存设置"></i>
+    <i class="jc-custom-item iconfont icontuodong" title="重置"></i>
   </div>
 </template>
 <script>
@@ -30,7 +29,7 @@ export default {
 $jc-item-width: 36px;
 .jc-custom-area {
   position: absolute;
-  width: $jc-item-width * 5;
+  width: $jc-item-width * 4;
   bottom: 0;
   left: 0;
   right: 0;

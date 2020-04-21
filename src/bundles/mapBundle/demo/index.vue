@@ -21,6 +21,7 @@ export default {
   mounted() {
     JcMapUtils.init({ ...MapOptions, source: this.$refs.myMap }, () => {
       this.initData() //初始化
+      console.log(JcMapUtils.map)
       JcMapUtils.map.on('zoomend', () => {
         let nowZoom = JcMapUtils.map.getZoom()
 
@@ -35,6 +36,8 @@ export default {
           }
         } else {
           this.floorData.zoom = nowZoom
+          JcMapUtils.map.setStatus({ zoomEnable: true })
+          // JcMapUtils.
         }
         console.log(nowZoom)
       })
@@ -50,6 +53,7 @@ export default {
         return
       }
       this.floorData = { adcode, zoom: '' }
+      JcMapUtils.map.setStatus({ zoomEnable: false })
       console.log('搜索的adcode：' + adcode + '，level：' + level)
       let parentFloor = allBoundsMap[adcode]
 
@@ -112,7 +116,8 @@ export default {
         fillColor: '#80d8ff',
         extData: { adcode: item.adcode, name: item.name, level: item.level },
         fillOpacity: 0.1,
-        path: item.boundaries
+        path: item.boundaries,
+        strokeStyle: 'dashed'
       }, (polygons) => {
         useBoundsMap[item.adcode] = polygons
         polygons.forEach(polygon => {
@@ -134,10 +139,7 @@ export default {
 
         if (polygons && polygons.length) {
           polygons.forEach(item => {
-            item.setOptions({
-              fillColor: '#80d8ff',
-              fillOpacity: 0.3
-            })
+            item.setOptions({ fillOpacity: 0.3 })
           })
         }
       })
@@ -146,10 +148,7 @@ export default {
 
         if (polygons && polygons.length) {
           polygons.forEach(item => {
-            item.setOptions({
-              fillColor: '#80d8ff',
-              fillOpacity: 0.1
-            })
+            item.setOptions({ fillOpacity: 0.1 })
           })
         }
       })
