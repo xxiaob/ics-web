@@ -47,9 +47,9 @@ export function areaTypeGet() {
 }
 /**
  * 删除
- * @param {String} areaTypeId
- * @returns {Object} axios 对象
+ * @param { Array } areaTypeIds
+ * @returns { Object } axios 对象
  */
-export function areaTypeDel(areaTypeId) {
-  return axios.post(API.areaType.del, { areaTypeId })
+export function areaTypeDel(areaTypeIds) {
+  return axios.post(API.areaType.del, { areaTypeIds })
 }

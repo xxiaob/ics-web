@@ -1,22 +1,14 @@
 <template>
-  <el-dialog :title="options ? '编辑菜单':'新增菜单'" :visible.sync="dialogVisible" width="600px" :append-to-body="true" @close="dialogClose">
-    <el-form ref="form" label-width="80px" :model="form" class="jc-manage-form">
-      <el-form-item label="菜单名称" prop="resName" :rules="rules.Len50">
-        <el-input v-model="form.resName" placeholder="请输入菜单名称"></el-input>
+  <el-dialog :title="options ? '编辑区域类型':'新增区域类型'" :visible.sync="dialogVisible" width="600px" :append-to-body="true" @close="dialogClose">
+    <el-form ref="form" label-width="120px" :model="form" class="jc-manage-form">
+      <el-form-item label="区域类型名称" prop="areaTypeName" :rules="rules.Len50">
+        <el-input v-model="form.areaTypeName" placeholder="请输入区域类型名称"></el-input>
       </el-form-item>
-      <el-form-item label="上级菜单" prop="pid">
-        <el-select v-model="form.pid" placeholder="请选择">
-          <el-option v-for="item in areaType" :key="item.value" :label="item.label" :value="item.value"></el-option>
-        </el-select>
-      </el-form-item>
-      <el-form-item label="菜单图标" prop="icon">
-        <el-input v-model="form.icon" placeholder="请输入菜单图标"></el-input>
-      </el-form-item>
-      <el-form-item label="菜单地址" prop="url" :rules="rules.Len50">
-        <el-input v-model="form.url" placeholder="请输入菜单地址"></el-input>
-      </el-form-item>
-      <el-form-item label="序号" prop="sort" :rules="rules.Int">
-        <el-input v-model.number="form.sort" placeholder="请输入序号"></el-input>
+      <el-form-item label="区域类型图标" prop="icon" :rules="rules.SELECT_NOT_NULL">
+        <div class="jc-icon-img" :style="getIconStyle(form.icon)"></div>
+        <div class="jc-icon-space">
+          <div class="jc-icon-item" v-for="(item,key) in JcIcons" @click="iconsClick(key)" :key="key" :title="item.name" :style="{'background-image':` url(${item.icon})`}"></div>
+        </div>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -26,11 +18,12 @@
   </el-dialog>
 </template>
 <script>
-import { areaTypeList, areaTypeSave } from '@/api/areaType'
-import { getStringRule, getIntegerRule } from '@/libs/rules'
+import { areaTypeSave } from '@/api/areaType'
+import { getStringRule, SELECT_NOT_NULL } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
+import { JcIcons } from '@/config/JcIconConfig'
 
-let defaultForm = { resName: '', sort: 0, pid: '', url: '', icon: '' }
+let defaultForm = { areaTypeName: '', icon: '' }
 
 export default {
   name: 'SystemAreaTypeManage',
@@ -39,37 +32,28 @@ export default {
     return {
       loading: false,
       areaType: [],
+      JcIcons: JcIcons,
       rules: {
         Len50: getStringRule(1, 50),
-        Int: getIntegerRule()
+        SELECT_NOT_NULL
       }
     }
   },
   methods: {
-    initData() {
-      areaTypeList().then(res => {
-        this.areaType = this.formatareaType(res)
-      })
+    iconsClick(icon) {
+      this.form.icon = icon
+      this.showIcons = false
     },
-    formatareaType(child) {
-      let list = []
+    getIconStyle(icon) {
+      let useIcon = JcIcons[icon] || {}
 
-      if (child && child.length) {
-        child.forEach(item => {
-          list.push({ value: item.resId, label: item.resName })
-          list = [...list, ...this.formatareaType(item.children)]
-        })
-      }
-      return list
+      return `background-image: url(${useIcon.icon || ''});`
     },
     formatFormData() {
       if (this.options) {
         return {
-          resId: this.options.resId,
-          resName: this.options.resName,
-          sort: this.options.sort,
-          pid: this.options.pid,
-          url: this.options.url,
+          areaTypeId: this.options.areaTypeId,
+          areaTypeName: this.options.areaTypeName,
           icon: this.options.icon
         }
       } else {
@@ -96,3 +80,37 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.jc-icon-img {
+  width: 50px;
+  height: 40px;
+  cursor: pointer;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 40px 40px;
+}
+.jc-icon-space {
+  position: relative;
+  width: 100%;
+  border-top: solid 1px $jc-color-line-primary;
+  max-height: 200px;
+  margin-top: 10px;
+  padding-top: 10px;
+  overflow: auto;
+  .jc-icon-item {
+    display: block;
+    float: left;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: 40px 40px;
+    opacity: 0.9;
+    &:hover {
+      opacity: 1;
+      background-color: $jc-bg-color;
+    }
+  }
+}
+</style>

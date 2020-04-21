@@ -14,11 +14,11 @@
         <el-table-column type="index" label="序号" width="50"></el-table-column>
         <el-table-column prop="icon" label="区域类型图标">
           <template slot-scope="scope">
-            <i v-if="scope.row.icon" :class="'iconfont ' + scope.row.icon"></i>
-            <span v-else>--</span>
+            <i class="jc-area-icon" :style="getIconStyle(scope.row.icon)"></i>
           </template>
         </el-table-column>
-        <el-table-column prop="resName" label="区域类型名称"></el-table-column>
+        <el-table-column prop="areaTypeName" label="区域类型名称"></el-table-column>
+        <el-table-column prop="createTime" label="添加时间"></el-table-column>
         <el-table-column width="60" label="操作">
           <template slot-scope="scope">
             <el-button type="text" size="mini" icon="el-icon-edit-outline" @click="manage(scope.row)" title="编辑"></el-button>
@@ -34,6 +34,8 @@
 <script>
 import { areaTypeList, areaTypeDel } from '@/api/areaType'
 import PaginationMixins from '@/mixins/PaginationMixins'
+import { formatDate } from '@/libs/util'
+import { JcIcons } from '@/config/JcIconConfig'
 
 export default {
   name: 'SystemAreaTypeIndex',
@@ -60,12 +62,26 @@ export default {
       if (!this.loading) {
         this.loading = true
         areaTypeList({ ...this.filter, ...this.page }).then(res => {
-          console.log(res)
+          this.page.total = res.total
+
+          let list = []
+
+          if (res.resultList && res.resultList.length) {
+            res.resultList.forEach(item => {
+              list.push({ areaTypeId: item.areaTypeId, areaTypeName: item.areaTypeName, icon: item.icon, createTime: formatDate(item.createTime) })
+            })
+          }
+          this.list = list
           this.loading = false
         }).catch(() => {
           this.loading = false
         })
       }
+    },
+    getIconStyle(icon) {
+      let useIcon = JcIcons[icon] || {}
+
+      return `background-image: url(${useIcon.icon || ''});`
     },
     goFilter(filter) {
       this.filter = { ...filter }
@@ -113,3 +129,18 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.jc-area-icon {
+  position: absolute;
+  display: block;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  margin: auto 0;
+  width: 40px;
+  height: 40px;
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+</style>

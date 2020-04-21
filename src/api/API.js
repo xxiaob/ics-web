@@ -50,10 +50,10 @@ export default {
   },
   areaType: {
     //区域类型管理
-    add: 'user-service/areaType/add',
-    get: 'user-service/areaType/detail',
-    list: 'user-service/areaType/list',
-    update: 'user-service/areaType/update',
-    del: 'user-service/areaType/delete'
+    add: 'area-service/areaType/add',
+    get: 'area-service/areaType/detail',
+    list: 'area-service/areaType/listByPage',
+    update: 'area-service/areaType/update',
+    del: 'area-service/areaType/delete'
   }
 }
