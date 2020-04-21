@@ -34,4 +34,11 @@ export default [{
   meta: {
     title: '系统设置-菜单管理'
   }
+}, {
+  path: 'system/areatype',
+  name: 'systemAreaType',
+  component: () => import('@/bundles/systemBundle/areaType'),
+  meta: {
+    title: '系统设置-区域类型'
+  }
 }]

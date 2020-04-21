@@ -47,5 +47,13 @@ export default {
     del: 'user-service/user/del',
     resetUserPwd: 'user-service/user/resetUserPwd',
     updateOrgReceiver: 'user-service/user/updOrgReceiver'
+  },
+  areaType: {
+    //区域类型管理
+    add: 'user-service/areaType/add',
+    get: 'user-service/areaType/detail',
+    list: 'user-service/areaType/list',
+    update: 'user-service/areaType/update',
+    del: 'user-service/areaType/delete'
   }
 }

@@ -7,6 +7,7 @@
           <span class="jc-menu-arrow-title" slot="title">系统设置</span>
         </template>
         <el-menu-item index="systemOrganization">组织管理</el-menu-item>
+        <el-menu-item index="systemAreaType">区域类型</el-menu-item>
         <el-menu-item index="systemRole">角色管理</el-menu-item>
         <el-menu-item index="systemUser">用户管理</el-menu-item>
         <el-menu-item index="systemPosition">职位管理</el-menu-item>
