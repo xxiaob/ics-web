@@ -82,6 +82,7 @@ export default {
             orgId: item.orgId,
             label: item.orgName,
             orgName: item.orgName,
+            orgCode: item.orgCode,
             sameLevelAuth: item.sameLevelAuth == 0 ? '0' : '1'
           }
 
@@ -99,7 +100,7 @@ export default {
     manage(node, type) {
       if (type == 1) {
         this.pNode = { name: node.name, pid: node.pid }
-        this.info = { orgId: node.orgId, orgName: node.orgName, sameLevelAuth: node.sameLevelAuth }
+        this.info = { orgId: node.orgId, orgName: node.orgName, orgCode: node.orgCode, sameLevelAuth: node.sameLevelAuth }
       } else if (type == 2) {
         this.pNode = { name: node.orgName, pid: node.orgId }
         this.info = null

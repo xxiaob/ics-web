@@ -3,7 +3,7 @@
     <manage-trees class="jc-trees-warp" @node-change="nodeChange"></manage-trees>
     <div class="jc-trees-content">
       <detail-info ref="detail" class="jc-detail-warp"></detail-info>
-      <area-manage class="jc-area-warp"></area-manage>
+      <area-manage ref="area" class="jc-area-warp"></area-manage>
     </div>
   </div>
 </template>
@@ -20,6 +20,7 @@ export default {
     nodeChange(data) {
       console.log('组织管理，树节点change：', data)
       this.$refs.detail.initData(data)
+      this.$refs.area.initData(data)
     }
   }
 }

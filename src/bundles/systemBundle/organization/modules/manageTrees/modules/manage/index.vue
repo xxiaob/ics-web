@@ -7,6 +7,9 @@
       <el-form-item label="组织名称" prop="orgName" :rules="rules.Len50">
         <el-input v-model="form.orgName" placeholder="请输入组织名称"></el-input>
       </el-form-item>
+      <el-form-item label="组织编码" prop="orgCode">
+        <el-input v-model="form.orgCode" placeholder="请输入组织编码"></el-input>
+      </el-form-item>
       <el-form-item label="是否同级查看" prop="sameLevelAuth">
         <el-switch v-model="form.sameLevelAuth" active-value="1" inactive-value="0"></el-switch>
       </el-form-item>
@@ -22,7 +25,7 @@ import { organizationSave } from '@/api/organization'
 import { getStringRule } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
 
-let defaultForm = { orgName: '', sameLevelAuth: '1' }
+let defaultForm = { orgName: '', sameLevelAuth: '1', orgCode: '' }
 
 export default {
   name: 'SystemOrganizationManage',

@@ -5,7 +5,7 @@
 </template>
 <script>
 import JcMapUtils from '@/libs/JcMapUtil'
-import { MapOptions } from '@/config/JcMapConfig'
+import { MapOptions, PolygonStyle } from '@/config/JcMapConfig'
 
 let allBoundsMap = {}
 
@@ -110,15 +110,7 @@ export default {
       })
     },
     addChild(item) {
-      JcMapUtils.polygon.add({
-        strokeWeight: 1,
-        strokeColor: '#0091ea',
-        fillColor: '#80d8ff',
-        extData: { adcode: item.adcode, name: item.name, level: item.level },
-        fillOpacity: 0.1,
-        path: item.boundaries,
-        strokeStyle: 'dashed'
-      }, (polygons) => {
+      JcMapUtils.polygon.add({ ...PolygonStyle.base, extData: { adcode: item.adcode, name: item.name, level: item.level }, path: item.boundaries }, (polygons) => {
         useBoundsMap[item.adcode] = polygons
         polygons.forEach(polygon => {
           this.addEvent(polygon)
@@ -139,7 +131,7 @@ export default {
 
         if (polygons && polygons.length) {
           polygons.forEach(item => {
-            item.setOptions({ fillOpacity: 0.3 })
+            item.setOptions(PolygonStyle.active)
           })
         }
       })
@@ -148,7 +140,7 @@ export default {
 
         if (polygons && polygons.length) {
           polygons.forEach(item => {
-            item.setOptions({ fillOpacity: 0.1 })
+            item.setOptions(PolygonStyle.normal)
           })
         }
       })

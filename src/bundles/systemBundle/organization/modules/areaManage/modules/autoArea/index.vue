@@ -18,8 +18,8 @@ export default {
     }
   },
   methods: {
-    initData(util) {
-      this.adcode = ''
+    initData(util, adcode) {
+      this.adcode = adcode
       JcMapUtils = util
       if (this.list.length < 1) {
         JcMapUtils.districtSearch({ keyword: '320100', options: { level: 'city' } }, (result) => {

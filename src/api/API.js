@@ -55,5 +55,14 @@ export default {
     list: 'area-service/areaType/listByPage',
     update: 'area-service/areaType/update',
     del: 'area-service/areaType/delete'
+  },
+  area: {
+    //区域管理
+    add: 'area-service/area/add',
+    get: 'area-service/area/detail',
+    list: 'area-service/area/list',
+    update: 'area-service/area/update',
+    del: 'area-service/area/delete',
+    getOrgInfo: 'area-service/area/getOrgInfo'
   }
 }

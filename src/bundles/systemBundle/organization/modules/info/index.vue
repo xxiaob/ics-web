@@ -15,8 +15,7 @@
   </div>
 </template>
 <script>
-import { organizationGet } from '@/api/organization'
-import { formatDate } from '@/libs/util'
+import { getOrgInfo } from '@/api/area'
 
 export default {
   name: 'SystemOrganizationInfo',
@@ -30,12 +29,15 @@ export default {
     initData(data) {
       if (data.orgId != this.info.orgId || data.type == 'manage') {
         this.loading = true
-        organizationGet(data.orgId).then(res=> {
+        getOrgInfo(data.orgId).then(res=> {
           Object.assign(this.info, {
-            createTime: formatDate(res.createTime),
+            createTime: res.createrTime,
             orgId: res.orgId,
             orgName: res.orgName,
+            orgCode: res.orgCode,
+            defaultUser: res.receivers && res.receivers.length ? res.receivers.join('，') : '--',
             pid: res.pid,
+            setArea: res.settingArea == 0 ? '否' : '是',
             sameLevelAuth: res.sameLevelAuth == 0 ? '否' : '是'
           })
           this.loading = false

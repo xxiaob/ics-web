@@ -13,3 +13,16 @@ export const MapOptions = {
     viewMode: '3D'
   }
 }
+
+//多边形样式
+export const PolygonStyle = {
+  base: {
+    strokeWeight: 1,
+    strokeColor: '#0091ea',
+    fillColor: '#80d8ff',
+    fillOpacity: 0.1,
+    strokeStyle: 'dashed'
+  },
+  normal: { fillOpacity: 0.1 },
+  active: { fillOpacity: 0.3 }
+}

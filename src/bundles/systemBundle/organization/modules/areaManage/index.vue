@@ -8,35 +8,49 @@
         <i class="jc-controll-item iconfont iconSecondMenu-customize" title="自定义区域" @click="startArea(2)"></i>
       </div>
     </div>
-    <auto-area ref="autoArea" :visible="this.edit && this.type == 1"></auto-area>
-    <custom-area ref="customArea" :visible="this.edit && this.type == 2"></custom-area>
+    <auto-area ref="autoArea" :visible="edit && type == 1"></auto-area>
+    <custom-area ref="customArea" :visible="edit && type" :type="type"></custom-area>
     <div class="jc-map-space" ref="myMap"></div>
   </div>
 </template>
 <script>
 import JcMapUtils from '@/libs/JcMapUtil'
 import { MapOptions } from '@/config/JcMapConfig'
+import { areaList } from '@/api/area'
+import amapMixins from './modules/mixins/amapMixins'
 
 export default {
   name: 'SystemOrganizationAreaManage',
+  mixins: [amapMixins],
   components: {
     AutoArea: () => import('./modules/autoArea'),
     CustomArea: () => import('./modules/customArea')
-  },
-  mounted() {
-    this.loading = true
-    JcMapUtils.init({ ...MapOptions, source: this.$refs.myMap }, () => {
-      this.loading = false
-    })
   },
   data() {
     return {
       loading: false,
       edit: false,
-      type: ''
+      type: '',
+      orgId: '',
+      adcode: ''
     }
   },
   methods: {
+    initData(data) {
+      this.orgId = data.orgId
+      this.loading = true
+      if (JcMapUtils.map) {
+        areaList({ orgId: this.orgId }).then(res => {
+          this.adcode = ''
+          this.drawPolygon(res, JcMapUtils) //去绘画边界
+          this.loading = false
+        })
+      } else {
+        JcMapUtils.init({ ...MapOptions, source: this.$refs.myMap }, () => {
+          this.initData(data)
+        })
+      }
+    },
     changeWork() {
       if (this.edit) {
         //编辑状态，则进行必要的关闭处理
@@ -49,7 +63,7 @@ export default {
       this.type = type
       if (type == 1) {
         //快捷设置
-        this.$refs.autoArea.initData(JcMapUtils)
+        this.$refs.autoArea.initData(JcMapUtils, this.adcode)
       } else if (type == 2) {
         //自定义设置
       }
@@ -64,6 +78,7 @@ export default {
 $jc-map-header-height: 40px; //map header高度
 .jc-map-warp {
   position: relative;
+  overflow: hidden;
 }
 .jc-title-warp {
   position: absolute;
