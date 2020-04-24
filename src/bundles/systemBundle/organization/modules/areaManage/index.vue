@@ -34,6 +34,8 @@ import amapMixins from './modules/mixins/amapMixins'
 import autoAreaMixins from './modules/mixins/autoAreaMixins'
 import customAreaMixins from './modules/mixins/customAreaMixins'
 
+let areas = []
+
 export default {
   name: 'SystemOrganizationAreaManage',
   mixins: [amapMixins, autoAreaMixins, customAreaMixins],
@@ -42,10 +44,9 @@ export default {
     return {
       loading: false,
       edit: false,
+      startEdit: false, //是否已经开始编辑
       type: '',
-      orgId: '',
-      adcode: '',
-      editadcode: ''
+      orgId: ''
     }
   },
   created() {

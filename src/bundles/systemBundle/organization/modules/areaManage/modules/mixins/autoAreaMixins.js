@@ -12,7 +12,9 @@ let allAreaPolygons = {}
 export default {
   data() {
     return {
-      autoAreas: []
+      autoAreas: [],
+      adcode: '',
+      editadcode: ''
     }
   },
   methods: {

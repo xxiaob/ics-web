@@ -19,29 +19,29 @@ export default {
     }
   },
   mounted() {
-    JcMapUtils.init({ ...MapOptions, source: this.$refs.myMap }, () => {
-      this.initData() //初始化
-      console.log(JcMapUtils.map)
-      JcMapUtils.map.on('zoomend', () => {
-        let nowZoom = JcMapUtils.map.getZoom()
+    // JcMapUtils.init({ ...MapOptions, source: this.$refs.myMap }, () => {
+    //   this.initData() //初始化
+    //   console.log(JcMapUtils.map)
+    //   JcMapUtils.map.on('zoomend', () => {
+    //     let nowZoom = JcMapUtils.map.getZoom()
 
-        if (this.floorData.zoom) {
-          if (nowZoom < this.floorData.zoom) {
-            let preBound = allBoundsMap[this.floorData.adcode].parent
+    //     if (this.floorData.zoom) {
+    //       if (nowZoom < this.floorData.zoom) {
+    //         let preBound = allBoundsMap[this.floorData.adcode].parent
 
-            if (preBound) {
-              console.log(preBound)
-              this.showFloor(preBound.adcode, preBound.level)
-            }
-          }
-        } else {
-          this.floorData.zoom = nowZoom
-          JcMapUtils.map.setStatus({ zoomEnable: true })
-          // JcMapUtils.
-        }
-        console.log(nowZoom)
-      })
-    })
+    //         if (preBound) {
+    //           console.log(preBound)
+    //           this.showFloor(preBound.adcode, preBound.level)
+    //         }
+    //       }
+    //     } else {
+    //       this.floorData.zoom = nowZoom
+    //       JcMapUtils.map.setStatus({ zoomEnable: true })
+    //       // JcMapUtils.
+    //     }
+    //     console.log(nowZoom)
+    //   })
+    // })
   },
   methods: {
     initData() {

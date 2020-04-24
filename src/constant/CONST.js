@@ -19,3 +19,16 @@ export const AREAS_TYPE = {
   OWN_AND_BRO: 3, //自己和自己下一级
   OWN_AND_CHILD: 4 //查询自己和所有
 }
+
+/** 地图类型 type*/
+export const MAP_SIGN_TYPE = {
+  Polygon: 'polygon', //多边形
+  Polyline: 'polyline', //线
+  Circle: 'circle' //圆
+}
+/** 地图类型 type*/
+export const MAP_EDIT_TYPE = {
+  ADD: 'add', //添加
+  EDIT: 'edit', //编辑
+  DELETE: 'delete' //删除
+}

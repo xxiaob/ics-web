@@ -54,22 +54,6 @@ let JcMapUtils = {
     }
   },
   /**
-   * 加载插件
-   * @param {Array} plugins 插件数组
-   * @param {Function} cb 回调
-   */
-  initPlugins(plugins, cb = noop) {
-    if (!JcMapUtils.map) {
-      JcMapUtils.showConsole('地图未初始化，请使用init先初始化...')
-      return
-    }
-    JcMapUtils.showConsole('加载地图插件->' + plugins.join(','))
-    JcMapUtils.AMap.plugin(plugins, function () {
-      JcMapUtils.showConsole('地图插件加载完成->' + plugins.join(','))
-      cb()
-    })
-  },
-  /**
    * 行政区查询服务
    * @param {*} options 搜索参数
    * @param {Object} options.options search参数，参考 https://lbs.amap.com/api/jsapi-v2/documentation#districtsearch
@@ -78,30 +62,24 @@ let JcMapUtils = {
    * @param {Function} cb 回调 返回Amap DistrictSearch标准格式
    */
   districtSearch(options, cb = noop) {
-    if (JcMapUtils.AMap.DistrictSearch) {
-      let defaultOptions = { showbiz: false }
+    let defaultOptions = { showbiz: false }
 
-      if (JcMapUtils.targets.district) {
-        if (options.options.level) {
-          JcMapUtils.targets.district.setLevel(options.options.level)
-        }
-        if (options.options.subdistrict) {
-          JcMapUtils.targets.district.setSubdistrict(options.options.subdistrict)
-        }
-      } else {
-        JcMapUtils.targets.district = new JcMapUtils.AMap.DistrictSearch(Object.assign({}, defaultOptions, options.options || {}))
+    if (JcMapUtils.targets.district) {
+      if (options.options.level) {
+        JcMapUtils.targets.district.setLevel(options.options.level)
       }
-
-      JcMapUtils.targets.district.search(options.keyword, function (status, result) {
-        if (status === 'complete') {
-          cb(result)
-        }
-      }, options.keywords || '')
+      if (options.options.subdistrict) {
+        JcMapUtils.targets.district.setSubdistrict(options.options.subdistrict)
+      }
     } else {
-      JcMapUtils.initPlugins(['AMap.DistrictSearch'], function () {
-        JcMapUtils.districtSearch(options, cb)
-      })
+      JcMapUtils.targets.district = new JcMapUtils.AMap.DistrictSearch(Object.assign({}, defaultOptions, options.options || {}))
     }
+
+    JcMapUtils.targets.district.search(options.keyword, function (status, result) {
+      if (status === 'complete') {
+        cb(result)
+      }
+    }, options.keywords || '')
   },
   polygon: {
     /**
@@ -110,24 +88,52 @@ let JcMapUtils = {
      * @param {Function} cb 回调 返回Polygon 对象
      */
     add(options, cb) {
-      if (JcMapUtils.AMap.Polygon) {
-        let polygons = []
+      let signs = []
 
-        for (let i = 0, l = options.path.length; i < l; i++) {
-          let polygon = new JcMapUtils.AMap.Polygon({ ...options, path: options.path[i] })
+      for (let i = 0, l = options.path.length; i < l; i++) {
+        let sign = new JcMapUtils.AMap.Polygon({ ...options, path: options.path[i] })
 
-          polygons.push(polygon)
-        }
-
-        cb(polygons)
-      } else {
-        JcMapUtils.initPlugins(['AMap.Polygon'], function () {
-          JcMapUtils.polygon.add(options, cb)
-        })
+        signs.push(sign)
       }
+
+      cb(signs)
     },
-    clear(polygons) {
-      JcMapUtils.map.remove(polygons)
+    clear(signs) {
+      JcMapUtils.map.remove(signs)
+    }
+  },
+  circle: {
+    /**
+     * 添加 圆形
+     * @param {Object} options 参数
+     * @param {Function} cb 回调 返回Polygon 对象
+     */
+    add(options, cb) {
+      let signs = []
+
+      for (let i = 0, l = options.path.length; i < l; i++) {
+        let sign = new JcMapUtils.AMap.Circle({ ...options, path: options.path[i] })
+
+        signs.push(sign)
+      }
+
+      cb(signs)
+    },
+    clear(signs) {
+      JcMapUtils.map.remove(signs)
+    }
+  },
+  sign: {
+    /**
+     * 添加 标记
+     * @param {Object} options 参数
+     * @param {Function} cb 回调 返回Polygon 对象
+     */
+    add(options, cb) {
+
+    },
+    clear(signs) {
+      JcMapUtils.map.remove(signs)
     }
   },
   //销毁

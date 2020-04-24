@@ -26,3 +26,5 @@ export const PolygonStyle = {
   normal: { fillOpacity: 0.1 },
   active: { fillOpacity: 0.3 }
 }
+
+export default { MapOptions, PolygonStyle }
