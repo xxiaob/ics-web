@@ -27,24 +27,22 @@ export default {
   },
   methods: {
     initData(data) {
-      if (data.orgId != this.info.orgId || data.type == 'manage') {
-        this.loading = true
-        getOrgInfo(data.orgId).then(res=> {
-          Object.assign(this.info, {
-            createTime: res.createrTime,
-            orgId: res.orgId,
-            orgName: res.orgName,
-            orgCode: res.orgCode,
-            defaultUser: res.receivers && res.receivers.length ? res.receivers.join('，') : '--',
-            pid: res.pid,
-            setArea: res.settingArea == 0 ? '否' : '是',
-            sameLevelAuth: res.sameLevelAuth == 0 ? '否' : '是'
-          })
-          this.loading = false
-        }).catch(() => {
-          this.loading = false
+      this.loading = true
+      getOrgInfo(data.orgId).then(res=> {
+        Object.assign(this.info, {
+          createTime: res.createrTime,
+          orgId: res.orgId,
+          orgName: res.orgName,
+          orgCode: res.orgCode,
+          defaultUser: res.receivers && res.receivers.length ? res.receivers.join('，') : '--',
+          pid: res.pid,
+          setArea: res.settingArea == 0 ? '否' : '是',
+          sameLevelAuth: res.sameLevelAuth == 0 ? '否' : '是'
         })
-      }
+        this.loading = false
+      }).catch(() => {
+        this.loading = false
+      })
     }
   }
 }

@@ -18,8 +18,8 @@ export const MapOptions = {
 export const PolygonStyle = {
   base: {
     strokeWeight: 1,
-    strokeColor: '#0091ea',
-    fillColor: '#80d8ff',
+    strokeColor: '#0183ff',
+    fillColor: '#0183ff',
     fillOpacity: 0.1,
     strokeStyle: 'dashed'
   },

@@ -11,3 +11,11 @@ export const LANG = {
   ZHCN: 'zh-CH', //简体中文
   ENUS: 'en-US' //美式英语
 }
+
+/** 区域类型查询 type*/
+export const AREAS_TYPE = {
+  OWN: 1, //自己
+  SAMELEVEL: 2, //同级
+  OWN_AND_BRO: 3, //自己和自己下一级
+  OWN_AND_CHILD: 4 //查询自己和所有
+}

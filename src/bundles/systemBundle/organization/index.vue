@@ -1,6 +1,6 @@
 <template>
   <div class="jc-main-full-container">
-    <manage-trees class="jc-trees-warp" @node-change="nodeChange"></manage-trees>
+    <manage-trees class="jc-trees-warp"></manage-trees>
     <div class="jc-trees-content">
       <detail-info ref="detail" class="jc-detail-warp"></detail-info>
       <area-manage ref="area" class="jc-area-warp"></area-manage>
@@ -15,6 +15,24 @@ export default {
     ManageTrees: () => import('./modules/manageTrees'),
     DetailInfo: () => import('./modules/info'),
     AreaManage: () => import('./modules/areaManage')
+  },
+  provide() {
+    let _this = this//eslint-disable-line
+    let getManageStatus = function (cb) {
+      cb()
+    }
+
+    return {
+      checkManage(cb) {
+        getManageStatus(cb)
+      },
+      nodeChange(data) {
+        _this.nodeChange(data)
+      },
+      registerManage(cb) {
+        getManageStatus = cb
+      }
+    }
   },
   methods: {
     nodeChange(data) {

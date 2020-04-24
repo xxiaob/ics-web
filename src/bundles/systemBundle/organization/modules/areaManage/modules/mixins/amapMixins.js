@@ -3,20 +3,19 @@
  */
 import { PolygonStyle } from '@/config/JcMapConfig'
 import { apiBoundariesFormat } from '@/libs/apiFormat'
+import { areaUpdate } from '@/api/area'
 
 let usePolygons = {}
 
 let JcMapUtils //用于存储工具类
 
-let orgPolygons = { base: [], edit: [] }
+let orgPolygons
 
 export default {
   methods: {
-    getAdcodeArea() {
-      //根据adcode 获取区域数据
-    },
     drawPolygon(data, util) {
       JcMapUtils = util
+      orgPolygons = { base: [], edit: [] }
       JcMapUtils.polygon.clear(this.getAllPolygons()) //清除之前的显示
       usePolygons = {}
       if (data && data.length) {
@@ -24,7 +23,7 @@ export default {
 
         data.forEach(item => {
           if (item.orgId == this.orgId) {
-            this.adcode = item.adcode || ''
+            this.adcode = item.areaCode || ''
           }
           orgs[item.orgId] = {
             data: { orgId: item.orgId, adcode: item.areaCode, areaId: item.areaId, areaName: item.areaName },
@@ -69,6 +68,55 @@ export default {
         polygons.push(...usePolygons[key])
       }
       return polygons
+    },
+    getOwnPolygons() {
+      return orgPolygons.base
+    },
+    getEditPolygons() {
+      return orgPolygons.edit
+    },
+    changePolygons(polygons) {
+      JcMapUtils.polygon.clear(orgPolygons.base)
+      JcMapUtils.polygon.clear(orgPolygons.edit)
+      orgPolygons.edit = polygons
+      JcMapUtils.map.add(orgPolygons.edit) //添加到map
+      JcMapUtils.map.setFitView()//地图自适应
+    },
+    clearEditPolygons() {
+      JcMapUtils.polygon.clear(orgPolygons.edit)
+      orgPolygons.edit = []
+    },
+    checkEdit() {
+      return orgPolygons.edit && orgPolygons.edit.length
+    },
+    reset() {
+      //重置数据
+      if (this.checkEdit()) {
+        this.$confirm('您有新的编辑数据，确认重置', '提示', { type: 'warning' }).then(() => {
+          this.clearEditPolygons()
+          this.reset()
+        }).catch(() => { })
+      } else {
+        JcMapUtils.map.add(orgPolygons.base) //添加到map
+        JcMapUtils.map.setFitView()//地图自适应
+      }
+    },
+    manage() {
+      if (this.checkEdit()) {
+        this.$confirm('确认保存当前设置', '提示', { type: 'warning' }).then(() => {
+          let params = { orgId: this.orgId }
+
+          if (this.type == 1) {
+            //自定义
+            params.adcode = this.editadcode
+          }
+          areaUpdate(params).then(() => {
+            this.nodeChange({ orgId: this.orgId })
+          })
+        }).catch(() => { })
+      } else {
+        this.$message.error('您未进行操作')
+      }
     }
   }
 }

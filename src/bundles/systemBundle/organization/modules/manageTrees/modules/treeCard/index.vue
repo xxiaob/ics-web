@@ -24,6 +24,7 @@ import { organizationList, organizationDel } from '@/api/organization'
 export default {
   name: 'SystemOrganizationManageTreesTreeCard',
   mixins: [TreesFilterMixins],
+  inject: ['checkManage', 'nodeChange'],
   components: {
     JcManage: () => import('../manage')
   },
@@ -39,6 +40,7 @@ export default {
       trees: [],
       visible: false,
       info: null,
+      orgId: '',
       pNode: { name: '', pid: '' },
       props: {
         children: 'children',
@@ -50,16 +52,16 @@ export default {
     this.initData()
   },
   methods: {
-    initData(orgId) {
+    initData() {
       if (!this.loading) {
         this.loading = true
         organizationList().then(res => {
           this.trees = this.formatTree(res)
           if ( this.trees.length) {
             this.$nextTick(() => {
-              orgId = orgId || this.trees[0].orgId
-              this.$refs.tree.setCurrentKey(orgId)
-              this.$emit('node-change', { orgId: orgId, type: 'manage' })
+              this.orgId = this.orgId || this.trees[0].orgId
+              this.$refs.tree.setCurrentKey(this.orgId)
+              this.nodeChange({ orgId: this.orgId, type: 'manage' })
             })
           }
           this.loading = false
@@ -69,7 +71,8 @@ export default {
       }
     },
     saveSuccess(orgId) {
-      this.initData(orgId)
+      this.orgId = orgId
+      this.initData()
     },
     formatTree(child, pName = '--') {
       let trees = []
@@ -98,25 +101,34 @@ export default {
       return trees
     },
     manage(node, type) {
-      if (type == 1) {
-        this.pNode = { name: node.name, pid: node.pid }
-        this.info = { orgId: node.orgId, orgName: node.orgName, orgCode: node.orgCode, sameLevelAuth: node.sameLevelAuth }
-      } else if (type == 2) {
-        this.pNode = { name: node.orgName, pid: node.orgId }
-        this.info = null
-      }
-      this.visible = true
+      this.checkManage(() => {
+        if (type == 1) {
+          this.pNode = { name: node.name, pid: node.pid }
+          this.info = { orgId: node.orgId, orgName: node.orgName, orgCode: node.orgCode, sameLevelAuth: node.sameLevelAuth }
+        } else if (type == 2) {
+          this.pNode = { name: node.orgName, pid: node.orgId }
+          this.info = null
+        }
+        this.visible = true
+      })
     },
     del(node) {
-      this.$confirm('确认删除该组织架构', '提示', { type: 'warning' }).then(() => {
-        organizationDel(node.orgId).then(() => {
-          this.$message.success('删除成功')
-          this.initData()
-        })
-      }).catch(() => {})
+      this.checkManage(() => {
+        this.$confirm('确认删除该组织架构', '提示', { type: 'warning' }).then(() => {
+          organizationDel(node.orgId).then(() => {
+            this.$message.success('删除成功')
+            this.initData()
+          })
+        }).catch(() => {})
+      })
     },
     nodeClick(data) {
-      this.$emit('node-change', { orgId: data.orgId, type: 'node-click' })
+      this.$refs.tree.setCurrentKey(this.orgId)
+      this.checkManage(() => {
+        this.orgId = data.orgId
+        this.$refs.tree.setCurrentKey(this.orgId)
+        this.nodeChange({ orgId: this.orgId, type: 'node-click' })
+      })
     }
   }
 }

@@ -8,6 +8,8 @@ import API from './API'
 /**
  * 列表
  * @param {object} data
+ * @param { String } data.orgId 组织id
+ * @param { String } data.type 查询类型，见CONST AREAS_TYPE 字典
  * @returns {Object} axios 对象
  */
 export function areaList(data) {
@@ -39,11 +41,12 @@ export function areaSave(data) {
   return data.areaId ? areaUpdate(data) : areaAdd(data)
 }
 /**
- * 根据用户获取菜单
+ * 获取区域详细
+ * @param {Object} data 参数
  * @returns {Object} axios 对象
  */
-export function areaGet() {
-  return axios.post(API.area.get)
+export function areaGet(data) {
+  return axios.post(API.area.get, data)
 }
 /**
  * 删除
