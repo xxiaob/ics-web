@@ -42,6 +42,24 @@ class JcMap {
 
   }
 
+  /**
+   * 添加事件监听
+   * @param {*} target 事件体 默认map
+   * @param {*} event 事件名称
+   * @param {*} cb 回调
+   */
+  on(target = this.map, event, cb, ...args) {
+    JcMapUtils.addEvent(target, event, cb, ...args)
+  }
+
+  /**
+   * 移除事件监听
+   * @param {*} target 事件体 默认map
+   * @param {*} event 事件名称
+   */
+  off(target = this.map, event, ...args) {
+    JcMapUtils.removeEvent(target, event, ...args)
+  }
 
   showConsole() {
     if (this.debug) {

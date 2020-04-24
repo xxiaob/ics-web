@@ -32,3 +32,10 @@ export const MAP_EDIT_TYPE = {
   EDIT: 'edit', //编辑
   DELETE: 'delete' //删除
 }
+
+/** 地图事件 字典 */
+export const MAP_EVENT = {
+  CLICK: 'click', //单击
+  DBCLICK: 'dblclick', //双击
+  ZOOMEND: 'zoomend' //缩放结束时触发
+}

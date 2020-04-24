@@ -6,6 +6,8 @@ import mapConfig from './config'
 
 let AMap = null
 
+let EventTrans = {} //事件转换
+
 /**
  *  初始化地图
  * @param {*} options
@@ -39,5 +41,23 @@ export async function init(options) {
   return map
 }
 
+/**
+ * 添加事件监听
+ * @param {*} target 事件体
+ * @param {*} event 事件名称
+ * @param {*} cb 回调
+ */
+export function addEvent(target, event, cb, ...args) {
+  target.on(EventTrans[event] || event, cb, ...args)
+}
 
-export default { init }
+/**
+ * 移除事件监听
+ * @param {*} target 事件体
+ * @param {*} event 事件名称
+ */
+export function removeEvent(target, event, ...args) {
+  target.off(EventTrans[event] || event, ...args)
+}
+
+export default { init, addEvent }
