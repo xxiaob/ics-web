@@ -2,8 +2,8 @@
   <div class="jc-map-warp jc-card" v-loading="loading" :class="{'jc-map-auto': type == 1, 'jc-map-custom': type == 2}">
     <div class="jc-title-warp">
       <div class="jc-title-sign">组织区域</div>
-      <div class="jc-controll-warp" :class="{'jc-active': edit}">
-        <i class="jc-controll-item iconfont" :class="edit ? 'iconchehui' : 'iconshezhi'" @click="changeWork"></i>
+      <div class="jc-controll-warp" :class="{'jc-active': editShow}">
+        <i class="jc-controll-item iconfont" :class="editShow ? 'iconchehui' : 'iconshezhi'" @click="changeWork"></i>
         <i class="jc-controll-item iconfont iconkuaijieshezhi" title="快捷设置" @click="startArea(1)"></i>
         <i class="jc-controll-item iconfont iconSecondMenu-customize" title="自定义区域" @click="startArea(2)"></i>
       </div>
@@ -26,15 +26,14 @@
   </div>
 </template>
 <script>
-import JcMapUtils from '@/libs/JcMapUtil'
-import { MapOptions } from '@/config/JcMapConfig'
+import JcMap from '@/maps'
 import { areaList } from '@/api/area'
 import { AREAS_TYPE } from '@/constant/CONST'
 import amapMixins from './modules/mixins/amapMixins'
 import autoAreaMixins from './modules/mixins/autoAreaMixins'
 import customAreaMixins from './modules/mixins/customAreaMixins'
 
-let areas = []
+let myJcMap //个人 map 对象
 
 export default {
   name: 'SystemOrganizationAreaManage',
@@ -43,75 +42,65 @@ export default {
   data() {
     return {
       loading: false,
-      edit: false,
+      editShow: false,
       startEdit: false, //是否已经开始编辑
+      areas: [], //基础区域数据
+      editAreas: [], //编辑的区域数据
       type: '',
-      orgId: ''
+      orgId: '',
+      areaId: ''
     }
   },
   created() {
-    this.registerManage(this.treeChangeCheck) //注册 编辑检查
+    myJcMap = new JcMap()
+    this.registerManage(this.editCheck) //注册 编辑检查
   },
   methods: {
     initData(data) {
       this.orgId = data.orgId
       this.loading = true
-      if (JcMapUtils.map) {
+      myJcMap.init({ source: this.$refs.myMap }).then(() => {
         areaList({ orgId: this.orgId, type: AREAS_TYPE.SAMELEVEL }).then(res => {
           this.adcode = ''
-          this.drawPolygon(res, JcMapUtils) //去绘画边界
+          this.drawPolygon(res, myJcMap) //去绘画边界
           this.loading = false
         }).catch(() => {
           this.loading = false
         })
-      } else {
-        JcMapUtils.init({ ...MapOptions, source: this.$refs.myMap }, () => {
-          this.initData(data)
-        })
-      }
+      })
     },
-    treeChangeCheck(cb) {
-      if (this.checkEdit()) {
+    editCheck(cb) {
+      if (this.startEdit) {
         this.$confirm('您有新的编辑数据，确认取消编辑', '提示', { type: 'warning' }).then(() => {
-          this.clearEditPolygons()
-          this.treeChangeCheck(cb)
+          // this.clearEditPolygons()
+          this.editCheck(cb)
         }).catch(() => {})
       } else {
         this.reset()
         this.type = ''
-        this.edit = false
+        this.editShow = false
         cb()
       }
     },
     changeWork() {
-      if (this.edit) {
-        //编辑状态，则进行必要的关闭处理
-        if (this.checkEdit()) {
-          this.$confirm('您有新的编辑数据，确认取消编辑', '提示', { type: 'warning' }).then(() => {
-            this.clearEditPolygons()
-            this.changeWork()
-          }).catch(() => {})
-        } else {
-          this.reset()
-          this.type = ''
-          this.edit = false
-        }
+      if (this.editShow) {
+        this.editCheck()
       } else {
-        this.edit = true
+        this.editShow = true
       }
     },
     startArea(type) {
       //开始区域设置
       this.type = type
       if (type == 1) {
-        this.initAutoArea(JcMapUtils)//快捷设置
+        this.initAutoArea(myJcMap)//快捷设置
       } else if (type == 2) {
-        this.initCustomArea(JcMapUtils) //自定义设置
+        this.initCustomArea(myJcMap) //自定义设置
       }
     }
   },
   beforeDestroy() {
-    JcMapUtils.destroy() //销毁地图
+    myJcMap.destroy() //销毁地图
   }
 }
 </script>

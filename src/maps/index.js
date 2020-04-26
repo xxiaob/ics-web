@@ -10,7 +10,7 @@ class JcMap {
    * @param {*} options
    * @param {Object} options.debug 配置 设法开启debug 模式，默认true
    */
-  constructor(options) {
+  constructor(options = {}) {
     this.debug = options.debug || true
   }
 
@@ -36,19 +36,28 @@ class JcMap {
 
   /**
    * 绘画标记
-   * @param {*} signs
+   * @param {Array} signs JcMapSign对象数组
    */
   async paintingSign(signs) {
+    JcMapUtils.paintingSign(this.map, signs)
+  }
 
+  /**
+   * 删除绘画标记
+   * @param {Array} signs JcMapSign对象数组，如果signs不传则是清除所有数据
+   */
+  async cleargSign(signs) {
+    JcMapUtils.cleargSign(this.map, signs)
   }
 
   /**
    * 添加事件监听
-   * @param {*} target 事件体 默认map
+   * @param {*} target 事件体
    * @param {*} event 事件名称
    * @param {*} cb 回调
    */
-  on(target = this.map, event, cb, ...args) {
+  on(target, event, cb, ...args) {
+    target = target || this.map
     JcMapUtils.addEvent(target, event, cb, ...args)
   }
 
@@ -57,13 +66,14 @@ class JcMap {
    * @param {*} target 事件体 默认map
    * @param {*} event 事件名称
    */
-  off(target = this.map, event, ...args) {
+  off(target, event, ...args) {
+    target = target || this.map
     JcMapUtils.removeEvent(target, event, ...args)
   }
 
   showConsole() {
     if (this.debug) {
-      console.log(arguments)
+      console.log(...arguments)
     }
   }
 

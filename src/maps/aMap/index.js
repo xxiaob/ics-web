@@ -42,6 +42,24 @@ export async function init(options) {
 }
 
 /**
+   * 绘画标记
+   * @param {AMap} map 地图对象
+   * @param {Array} signs
+   */
+export async function paintingSign(map, signs) {
+
+}
+
+/**
+ * 删除绘画标记
+ * @param {AMap} map 地图对象
+ * @param {Array} signs 如果signs不传则是清除所有数据
+ */
+export async function cleargSign(map, signs) {
+
+}
+
+/**
  * 添加事件监听
  * @param {*} target 事件体
  * @param {*} event 事件名称
@@ -60,4 +78,12 @@ export function removeEvent(target, event, ...args) {
   target.off(EventTrans[event] || event, ...args)
 }
 
-export default { init, addEvent }
+/**
+ * 销毁map
+ * @param {*} map map 对象
+ */
+export function destroy(map) {
+  map.destroy()
+}
+
+export default { init, addEvent, removeEvent, paintingSign, cleargSign, destroy }

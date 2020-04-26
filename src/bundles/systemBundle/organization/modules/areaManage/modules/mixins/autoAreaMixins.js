@@ -22,19 +22,7 @@ export default {
       JcMapUtils = util
       this.editadcode = this.adcode
       if (this.autoAreas.length < 1) {
-        JcMapUtils.districtSearch({ keyword: '320100', options: { level: 'city' } }, (result) => {
-          let areas = result.districtList[0].districtList
-
-          let list = []
-
-          if (areas && areas.length) {
-            areas.forEach(item => {
-              list.push({ adcode: item.adcode, name: item.name, level: item.level })
-            })
-          }
-          this.autoAreas = list
-          console.log(areas, list)
-        })
+        //去获取adcode 列表
       }
 
       //去处理显示

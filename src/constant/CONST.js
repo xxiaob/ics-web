@@ -22,6 +22,7 @@ export const AREAS_TYPE = {
 
 /** 地图类型 type*/
 export const MAP_SIGN_TYPE = {
+  Marker: 'marker', //点标记
   Polygon: 'polygon', //多边形
   Polyline: 'polyline', //线
   Circle: 'circle' //圆
