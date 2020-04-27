@@ -9,8 +9,8 @@ let target //存储操作对象
 
 export default {
   methods: {
-    initCustomArea(util) {
-      myJcMap = util
+    initCustomArea(mapUtil) {
+      myJcMap = mapUtil
       this.initContextMenu()
       //去处理显示
       this.endAutoArea()

@@ -69,18 +69,18 @@ class JcMap {
   }
 
   /**
- * 添加事件监听
- * @param {*} event 事件名称
- * @param {*} cb 回调
- */
+   * 添加事件监听
+   * @param {*} event 事件名称
+   * @param {*} cb 回调
+   */
   on(event, cb, ...args) {
     JcMapUtils.addEvent(this.map, event, cb, ...args)
   }
 
   /**
- * 移除事件监听
- * @param {*} event 事件名称
- */
+   * 移除事件监听
+   * @param {*} event 事件名称
+   */
   off(event, ...args) {
     JcMapUtils.removeEvent(this.map, event, ...args)
   }

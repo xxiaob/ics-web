@@ -38,6 +38,24 @@ class MapSignBase {
   hide() { }
 
   /**
+   * 添加事件监听
+   * @param {*} event 事件名称
+   * @param {*} cb 回调
+   */
+  on(event, cb, ...args) { }
+
+  /**
+   * 移除事件监听
+   * @param {*} event 事件名称
+   */
+  off(event, ...args) { }
+
+  /**
+   * 编辑
+   */
+  signEditor() { }
+
+  /**
    * 设置样式
    * @param {String} style
    */
