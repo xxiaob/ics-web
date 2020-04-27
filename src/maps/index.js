@@ -39,36 +39,42 @@ class JcMap {
    * @param {Array} signs JcMapSign对象数组
    */
   async paintingSign(signs) {
-    JcMapUtils.paintingSign(this.map, signs)
+    if (signs && signs.length) {
+      signs.forEach(item => {
+        item.show(this.map)
+      })
+    }
   }
 
   /**
    * 删除绘画标记
-   * @param {Array} signs JcMapSign对象数组，如果signs不传则是清除所有数据
+   * @param {Array} signs JcMapSign对象数组，如果signs为空则是清除所有数据
    */
   async cleargSign(signs) {
-    JcMapUtils.cleargSign(this.map, signs)
+    if (signs && signs.length) {
+      signs.forEach(item => {
+        item.hide()
+      })
+    } else {
+      JcMapUtils.clearMap(this.map) //清除所有标记
+    }
   }
 
   /**
    * 添加事件监听
-   * @param {*} target 事件体
    * @param {*} event 事件名称
    * @param {*} cb 回调
    */
-  on(target, event, cb, ...args) {
-    target = target || this.map
-    JcMapUtils.addEvent(target, event, cb, ...args)
+  on(event, cb, ...args) {
+    JcMapUtils.addEvent(this.map, event, cb, ...args)
   }
 
   /**
    * 移除事件监听
-   * @param {*} target 事件体 默认map
    * @param {*} event 事件名称
    */
-  off(target, event, ...args) {
-    target = target || this.map
-    JcMapUtils.removeEvent(target, event, ...args)
+  off(event, ...args) {
+    JcMapUtils.removeEvent(this.map, event, ...args)
   }
 
   showConsole() {

@@ -24,8 +24,13 @@ class MapSignBase {
 
   /**
    * 显示标记
+   * @param {*} map 显示在哪个地图上
    */
-  show() { }
+  show(map) {
+    if (map) {
+      this.map = map
+    }
+  }
 
   /**
    * 隐藏标记

@@ -3,6 +3,7 @@
  */
 import AMapLoader from '@amap/amap-jsapi-loader'
 import mapConfig from './config'
+import { MAP_SIGN_TYPE } from '@/constant/CONST'
 
 let AMap = null
 
@@ -41,23 +42,28 @@ export async function init(options) {
   return map
 }
 
-/**
-   * 绘画标记
-   * @param {AMap} map 地图对象
-   * @param {Array} signs
-   */
-export async function paintingSign(map, signs) {
-
-}
 
 /**
- * 删除绘画标记
- * @param {AMap} map 地图对象
- * @param {Array} signs 如果signs不传则是清除所有数据
+ * 绘画标记
+ * @param {JcMapSign} sign JcMapSign对象数组
+ * @param {Object} boundary boundary对象
+ * @returns {Object} 返回对象
  */
-export async function cleargSign(map, signs) {
-
+export function paintingSign(sign, boundary) {
+  if (MAP_SIGN_TYPE.Polygon == boundary.type) {
+    //显示矩形
+    return new AMap.Polygon(Object.assign({ path: boundary.path }, mapConfig.PolygonStyle.base, sign.active ? mapConfig.PolygonStyle.active : {}, sign.style && mapConfig.PolygonStyle[sign.style] ? mapConfig.PolygonStyle[sign.style] : {}))
+  }
 }
+
+/**
+ * 清除所有标记
+ * @param {AMap} map 地图对象
+ */
+export function clearMap(map) {
+  map.clearMap() //清除所有标记
+}
+
 
 /**
  * 添加事件监听
@@ -86,4 +92,4 @@ export function destroy(map) {
   map.destroy()
 }
 
-export default { init, addEvent, removeEvent, paintingSign, cleargSign, destroy }
+export default { init, paintingSign, addEvent, removeEvent, clearMap, destroy }

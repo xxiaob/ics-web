@@ -1,7 +1,7 @@
 /**
  * 自动区域处理
  */
-import { PolygonStyle } from '@/config/JcMapConfig'
+// import { PolygonStyle } from '@/config/JcMapConfig'
 import { apiBoundariesFormat } from '@/libs/apiFormat'
 import { areaGet } from '@/api/area'
 

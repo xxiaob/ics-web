@@ -4,9 +4,6 @@
   </section>
 </template>
 <script>
-import JcMapUtils from '@/libs/JcMapUtil'
-import { MapOptions, PolygonStyle } from '@/config/JcMapConfig'
-
 let allBoundsMap = {}
 
 let useBoundsMap = {}
