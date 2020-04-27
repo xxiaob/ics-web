@@ -65,3 +65,11 @@ export function areaDel(areaIds) {
 export function getOrgInfo(orgId) {
   return axios.post(API.area.getOrgInfo, { orgId })
 }
+
+/**
+ * 区域功能页面获取可用的省市区结构
+ * @returns {Object} axios 对象
+ */
+export function getUsableAdCodeList() {
+  return axios.post(API.area.getUsableAdCodeList)
+}

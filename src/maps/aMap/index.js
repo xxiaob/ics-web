@@ -52,7 +52,7 @@ export async function init(options) {
 export function paintingSign(sign, boundary) {
   if (MAP_SIGN_TYPE.Polygon == boundary.type) {
     //显示矩形
-    return new AMap.Polygon(Object.assign({ path: boundary.path }, mapConfig.PolygonStyle.base, sign.active ? mapConfig.PolygonStyle.active : {}, sign.style && mapConfig.PolygonStyle[sign.style] ? mapConfig.PolygonStyle[sign.style] : {}))
+    return new AMap.Polygon(Object.assign({ path: boundary.path, extData: { sign, boundary } }, mapConfig.PolygonStyle.base, sign.active ? mapConfig.PolygonStyle.active : {}, sign.style && mapConfig.PolygonStyle[sign.style] ? mapConfig.PolygonStyle[sign.style] : {}))
   }
 }
 
@@ -64,6 +64,29 @@ export function clearMap(map) {
   map.clearMap() //清除所有标记
 }
 
+/**
+ * 地图自适应 显示
+ * @param {AMap} map 地图对象
+ * @param {Array<JcMapSign>} signs JcMapSign对象数组
+ */
+export function fitView(map, signs) {
+  if (signs && signs.length) {
+    let targets = []
+
+    signs.forEach(sign => {
+      if (sign.boundaries && sign.boundaries.length) {
+        sign.boundaries.forEach(item => {
+          if (item.target) {
+            targets.push(item.target)
+          }
+        })
+      }
+    })
+    map.setFitView(targets)
+  } else {
+    map.setFitView()
+  }
+}
 
 /**
  * 添加事件监听
@@ -92,4 +115,4 @@ export function destroy(map) {
   map.destroy()
 }
 
-export default { init, paintingSign, addEvent, removeEvent, clearMap, destroy }
+export default { init, paintingSign, fitView, addEvent, removeEvent, clearMap, destroy }

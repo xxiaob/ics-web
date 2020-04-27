@@ -63,6 +63,7 @@ export default {
     list: 'area-service/area/list',
     update: 'area-service/area/update',
     del: 'area-service/area/delete',
-    getOrgInfo: 'area-service/area/getOrgInfo'
+    getOrgInfo: 'area-service/area/getOrgInfo',
+    getUsableAdCodeList: 'area-service/area/getUsableAdCodeList'
   }
 }

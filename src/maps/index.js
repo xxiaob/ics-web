@@ -23,8 +23,8 @@ class JcMap {
    * @returns {Promise} 返回Promise对象
    */
   async init(options) {
-    this.showConsole('开始初始化地图...')
     if (!this.map) {
+      this.showConsole('开始初始化地图...')
       try {
         this.map = await JcMapUtils.init(options)
       } catch (error) {
@@ -61,18 +61,26 @@ class JcMap {
   }
 
   /**
-   * 添加事件监听
-   * @param {*} event 事件名称
-   * @param {*} cb 回调
+   * 地图自适应 显示
+   * @param {Array<JcMapSign>} signs JcMapSign对象数组
    */
+  fitView(signs) {
+    JcMapUtils.fitView(this.map, signs)
+  }
+
+  /**
+ * 添加事件监听
+ * @param {*} event 事件名称
+ * @param {*} cb 回调
+ */
   on(event, cb, ...args) {
     JcMapUtils.addEvent(this.map, event, cb, ...args)
   }
 
   /**
-   * 移除事件监听
-   * @param {*} event 事件名称
-   */
+ * 移除事件监听
+ * @param {*} event 事件名称
+ */
   off(event, ...args) {
     JcMapUtils.removeEvent(this.map, event, ...args)
   }

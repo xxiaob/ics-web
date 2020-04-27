@@ -23,6 +23,7 @@ class AmapSign extends MapSignBase {
     if (this.boundaries && this.boundaries.length) {
       this.boundaries.forEach(item => {
         item.target = paintingSign(this, item)
+        this.map.add(item.target)
       })
     }
   }

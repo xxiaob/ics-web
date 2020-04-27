@@ -8,13 +8,6 @@ let polyEditor //多边形编辑对象
 let target //存储操作对象
 
 export default {
-  watch: {
-    type(newVal) {
-      if (newVal != 2) {
-        this.removeListener()
-      }
-    }
-  },
   methods: {
     initCustomArea(util) {
       JcMapUtils = util
@@ -79,6 +72,9 @@ export default {
       JcMapUtils.map.clearEvents('rightclick')
     },
     areaDelete() {
+
+    },
+    endCustomArea() {
 
     }
   }

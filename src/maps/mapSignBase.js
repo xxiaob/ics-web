@@ -7,17 +7,17 @@ class MapSignBase {
   /**
    * 构造
    * @param {*} options 初始化参数
-   * @param {String} options.id //标识id，可重复，可为空
+   * @param {String} options.id //标识id，当id 为空时会生成唯一id
    * @param {*} options.extData //额外参数，用于自定义数据处理
    * @param {Map} options.map //地图对象
    * @param {Boolean} options.active //是否使用选中样式
    * @param {String} options.style //设置额外样式，取配置的对应标记类型样式key
    */
   constructor(options) {
-    this.id = options.id || ''
+    this.id = options.id || new Date().getTime()
     this.extData = options.extData
     this.boundaries = options.boundaries || []
-    this.map = null
+    this.map = options.map || null
     this.active = options.active || false
     this.style = options.style
   }

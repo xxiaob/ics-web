@@ -2,13 +2,18 @@
  * 地图相关处理
  */
 import { apiBoundariesFormat } from '@/libs/apiFormat'
-import { areaUpdate } from '@/api/area'
+import { areaSave } from '@/api/area'
 import JcMapSign from '@/maps/JcMapSign'
+
+let myJcMap //承载JcMap对象
+
+let noop = function () { } //空函数
 
 export default {
   methods: {
-    drawPolygon(data, myJcMap) {
-      myJcMap.cleargSign(this.getAllPolygons()) //清除之前的显示
+    drawSign(data, mapUtil) {
+      myJcMap = mapUtil
+      myJcMap.cleargSign() //清除之前的显示
 
       let areas = []
 
@@ -20,59 +25,70 @@ export default {
           }
           areas.push(new JcMapSign({
             id: item.orgId,
+            map: myJcMap.map,
             extData: { orgId: item.orgId, adcode: item.areaCode, areaId: item.areaId, areaName: item.areaName },
             boundaries: apiBoundariesFormat(item),
             active: item.orgId == this.orgId ? true : false
           }))
         })
-        // let firstOrgId = data[0].orgId
-
-        // JcMapUtils.polygon.add({ ...PolygonStyle.base, extData: orgs[firstOrgId].data, path: orgs[firstOrgId].path }, (polygons) => {
-        //   usePolygons[firstOrgId] = polygons
-        //   for (let key in orgs) {
-        //     if (key != firstOrgId) {
-        //       this.addPolygon(orgs[key])
-        //     }
-        //   }
-
-        //   //处理当前组织
-        //   orgPolygons.base = usePolygons[this.orgId] || []
-
-        //   if (orgPolygons.base && orgPolygons.base.length) {
-        //     orgPolygons.base.forEach(polygon => {
-        //       polygon.setOptions(PolygonStyle.active)
-        //     })
-        //   }
-        //   JcMapUtils.map.add(this.getAllPolygons()) //添加到map
-        //   JcMapUtils.map.setFitView()//地图自适应
-        // })
       }
       this.areas = areas
       myJcMap.paintingSign(this.areas)
+      myJcMap.fitView()
     },
-    reset() {
+    reset(cb = noop) {
       //重置数据
       if (this.startEdit) {
         this.$confirm('您正在编辑中，确认取消编辑', '提示', { type: 'warning' }).then(() => {
-          // this.clearEditPolygons()
-          this.reset()
+          this.startEdit = false
+          this.reset(cb)
         }).catch(() => { })
       } else {
-        // JcMapUtils.map.add(orgPolygons.base) //添加到map
-        // JcMapUtils.map.setFitView()//地图自适应
+        if (this.type == 1) {
+          this.endAutoArea()
+        } else {
+          this.endCustomArea()
+        }
+        cb()
+      }
+    },
+    getActiveSign() {
+      let sign = null
+
+      if (this.areaId) {
+        for (let i = 0; i < this.areas.length; i++) {
+          let item = this.areas[i]
+
+          if (item.id == this.orgId) {
+            sign = item
+            break
+          }
+        }
+      }
+      return sign
+    },
+    hideActiveSign() {
+      let sign = this.getActiveSign()
+
+      if (sign) {
+        sign.hide()
       }
     },
     manage() {
-      if (this.checkEdit()) {
+      if (this.startEdit) {
         this.$confirm('确认保存当前设置', '提示', { type: 'warning' }).then(() => {
-          let params = { orgId: this.orgId }
+          let params = { orgId: this.orgId, areaId: this.areaId }
 
           if (this.type == 1) {
-            //自定义
+            //快捷绑定
             params.adcode = this.editadcode
+            params.drawCoordinateType = 2
           }
-          areaUpdate(params).then(() => {
-            this.nodeChange({ orgId: this.orgId })
+          areaSave(params).then(() => {
+            this.startEdit = false
+            this.changeWork(() => {
+              this.nodeChange({ orgId: this.orgId })
+            })
           })
         }).catch(() => { })
       } else {
