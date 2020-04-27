@@ -5,7 +5,7 @@ import { apiBoundariesFormat } from '@/libs/apiFormat'
 import { getUsableAdCodeList, areaGet } from '@/api/area'
 import JcMapSign from '@/maps/JcMapSign'
 
-let allAreaPolygons = {}
+let allAreaPolygons = {} //记录已经请求的边界数据
 
 let myJcMap //承载JcMap对象
 
@@ -28,9 +28,12 @@ export default {
         })
       }
       this.endCustomArea()
-      if (!this.adcode) {
+      if (this.adcode) {
+        this.showActiveSign()
+      } else {
         this.hideActiveSign()
       }
+      myJcMap.fitView()
     },
     formatAreas(child) {
       let trees = []
@@ -84,6 +87,12 @@ export default {
         this.editAreas[0].hide()
         this.editAreas = []
       }
+    },
+    autoAreaReset() {
+      this.reset(() => {
+        this.endAutoArea()
+        this.initAutoArea(myJcMap)
+      })
     }
   }
 }

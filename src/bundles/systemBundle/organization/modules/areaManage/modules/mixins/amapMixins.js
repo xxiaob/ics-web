@@ -7,8 +7,6 @@ import JcMapSign from '@/maps/JcMapSign'
 
 let myJcMap //承载JcMap对象
 
-let noop = function () { } //空函数
-
 export default {
   methods: {
     drawSign(data, mapUtil) {
@@ -36,19 +34,14 @@ export default {
       myJcMap.paintingSign(this.areas)
       myJcMap.fitView()
     },
-    reset(cb = noop) {
+    reset(cb) {
       //重置数据
       if (this.startEdit) {
         this.$confirm('您正在编辑中，确认取消编辑', '提示', { type: 'warning' }).then(() => {
           this.startEdit = false
-          this.reset(cb)
+          cb()
         }).catch(() => { })
       } else {
-        if (this.type == 1) {
-          this.endAutoArea()
-        } else {
-          this.endCustomArea()
-        }
         cb()
       }
     },
@@ -66,6 +59,13 @@ export default {
         }
       }
       return sign
+    },
+    showActiveSign() {
+      let sign = this.getActiveSign()
+
+      if (sign) {
+        sign.show()
+      }
     },
     hideActiveSign() {
       let sign = this.getActiveSign()

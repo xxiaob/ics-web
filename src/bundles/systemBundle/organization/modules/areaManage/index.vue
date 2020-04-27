@@ -14,12 +14,12 @@
     </div>
     <div class="jc-panel-area jc-panel-auto">
       <i class="jc-panel-item iconfont iconzu" title="保存设置" @click="manage"></i>
-      <i class="jc-panel-item iconfont iconfuwei" title="重置" @click="reset()"></i>
+      <i class="jc-panel-item iconfont iconfuwei" title="重置" @click="autoAreaReset"></i>
     </div>
     <div class="jc-panel-area jc-panel-custom">
       <i class="jc-panel-item iconfont iconxinzengquyu" title="新增区域" @click="addArea"></i>
       <i class="jc-panel-item iconfont iconzu" title="保存设置" @click="manage"></i>
-      <i class="jc-panel-item iconfont iconfuwei" title="重置" @click="reset()"></i>
+      <i class="jc-panel-item iconfont iconfuwei" title="重置" @click="customAreaReset"></i>
     </div>
   </div>
 </template>
@@ -72,6 +72,13 @@ export default {
     },
     editCheck(cb = noop) {
       this.reset(() => {
+        if (this.type == 1) {
+          this.endAutoArea()
+        } else {
+          this.endCustomArea()
+        }
+        this.showActiveSign()
+        myJcMap.fitView()
         this.type = ''
         this.editShow = false
         cb()
