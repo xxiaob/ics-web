@@ -11,7 +11,7 @@ export default {
   methods: {
     drawSign(data, mapUtil) {
       myJcMap = mapUtil
-      myJcMap.cleargSign() //清除之前的显示
+      myJcMap.clearSign() //清除之前的显示
 
       let areas = []
 
@@ -23,7 +23,8 @@ export default {
           }
           areas.push(new JcMapSign({
             id: item.orgId,
-            map: myJcMap.map,
+            map: myJcMap,
+            center: item.center.split(','),
             extData: { orgId: item.orgId, adcode: item.areaCode, areaId: item.areaId, areaName: item.areaName },
             boundaries: apiBoundariesFormat(item),
             active: item.orgId == this.orgId ? true : false
@@ -31,6 +32,7 @@ export default {
         })
       }
       this.areas = areas
+
       myJcMap.addSign(this.areas)
       myJcMap.fitView()
     },

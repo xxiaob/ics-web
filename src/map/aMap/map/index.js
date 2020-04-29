@@ -2,10 +2,8 @@
  * 封装高德map
  */
 import JcMapBase from '../../base/JcMap'
-import AMapLoader from '@amap/amap-jsapi-loader'
 import { MapOptions, EventTrans } from '../config'
-
-let AMap = null
+import { initAmap } from '../aMapUtil'
 
 class JcMap extends JcMapBase {
   /**
@@ -15,7 +13,6 @@ class JcMap extends JcMapBase {
    */
   constructor(options = {}) {
     super(options)
-    this.AMap = AMap
   }
 
   /**
@@ -30,10 +27,7 @@ class JcMap extends JcMapBase {
     if (!this.map) {
       this.console('开始初始化地图...')
       try {
-        if (!AMap) {
-          AMap = await AMapLoader.load(Object.assign({}, MapOptions.loadOptions, options.loadOptions || {}))
-          this.AMap = AMap
-        }
+        this.AMap = await initAmap(options.loadOptions)
         this.map = new this.AMap.Map(options.source, Object.assign({}, MapOptions.mapOptions, options.mapOptions || {}))
 
         let complete = false //防止map complete事件触发多次

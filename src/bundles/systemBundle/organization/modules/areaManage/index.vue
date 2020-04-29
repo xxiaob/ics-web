@@ -52,7 +52,6 @@ export default {
     }
   },
   created() {
-    console.log(JcMap)
     myJcMap = new JcMap()
     this.registerManage(this.editCheck) //注册 编辑检查
   },

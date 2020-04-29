@@ -73,7 +73,8 @@ export default {
         areaGet({ adcode }).then(res => {
           allAreaPolygons[adcode] = new JcMapSign({
             id: this.orgId,
-            map: myJcMap.map,
+            map: myJcMap,
+            center: res.center.split(','),
             extData: { orgId: this.orgId, adcode: adcode, areaId: res.areaId, areaName: res.areaName },
             boundaries: apiBoundariesFormat(res),
             active: true

@@ -33,7 +33,7 @@ export default {
           createTime: res.createrTime,
           orgId: res.orgId,
           orgName: res.orgName,
-          orgCode: res.orgCode,
+          orgCode: res.orgCode || '--',
           defaultUser: res.receivers && res.receivers.length ? res.receivers.join('，') : '--',
           pid: res.pid,
           setArea: res.settingArea == 0 ? '否' : '是',

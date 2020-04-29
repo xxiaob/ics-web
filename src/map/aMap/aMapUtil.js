@@ -1,8 +1,23 @@
 /**
  * 高德地图工具类
  */
+import AMapLoader from '@amap/amap-jsapi-loader'
 import { MAP_SIGN_TYPE } from '@/constant/CONST'
-import { PolygonStyle } from './config'
+import { MapOptions, PolygonStyle } from './config'
+
+let AMap = null //地图对象
+
+/**
+ * 初始化Amap对象
+ * @param {Object} options amap load 参数
+ * @returns {Amap} 对象
+ */
+export async function initAmap(options) {
+  if (!AMap) {
+    AMap = await AMapLoader.load(Object.assign({}, MapOptions.loadOptions, options || {}))
+  }
+  return AMap
+}
 
 /**
  * 绘画标记
