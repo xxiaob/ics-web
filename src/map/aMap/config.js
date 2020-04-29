@@ -30,4 +30,13 @@ export const PolygonStyle = {
   active: { fillOpacity: 0.3 }
 }
 
-export default { EventTrans, MapOptions, PolygonStyle }
+//搜索参数
+export const SearchOptions = {
+  PlaceSearchOptions: { //设置PlaceSearch属性
+    city: '南京市', //城市
+    type: '', //数据类别
+    pageSize: 10, //每页结果数,默认10
+    pageIndex: 1, //请求页码，默认1
+    extensions: 'base' //返回信息详略，默认为base（基本信息）
+  }
+}

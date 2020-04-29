@@ -31,7 +31,7 @@ $jc-map-header-height: 40px; //map header高度
   background-color: $jc-color-white;
   height: $jc-map-header-height;
   overflow: hidden;
-  transition: height 0.3s;
+  transition: height 0.4s;
   will-change: height;
 
   &.jc-active {
@@ -61,11 +61,17 @@ $jc-item-width: 36px;
   z-index: 8;
   opacity: .6;
   transform: translateY(-150%);
-  transition: transform 0.3s, opacity 0.3s;
+  transition: transform 0.4s, opacity 0.4s;
 
   .el-cascader {
     width: 120px;
   }
+}
+
+.jc-area-search {
+  opacity: .6;
+  transform: translateX(-150%);
+  transition: transform 0.4s, opacity 0.4s;
 }
 
 .jc-panel-area {
@@ -80,7 +86,7 @@ $jc-item-width: 36px;
   text-align: center;
   transform: translate(-50%, 100%);
   opacity: 0;
-  transition: transform 0.3s, opacity 0.3s;
+  transition: transform 0.4s, opacity 0.4s;
 
   &.jc-area-show {
     opacity: 1;
@@ -106,6 +112,11 @@ $jc-item-width: 36px;
     z-index: 9;
     opacity: 1;
     transform: translate(-50%, 0);
+  }
+
+  .jc-area-search {
+    opacity: 1;
+    transform: translateX(0);
   }
 }
 

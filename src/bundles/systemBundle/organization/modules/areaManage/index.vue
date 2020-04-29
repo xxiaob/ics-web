@@ -12,6 +12,7 @@
     <div class="jc-auto-area">
       <el-cascader v-model="editadcode" size="small" :show-all-levels="false" placeholder="请选择" :options="autoAreas" filterable :props="{ expandTrigger: 'hover', checkStrictly: true, emitPath: false }" @change="adCodeChange"></el-cascader>
     </div>
+    <map-search ref="mapSearch" class="jc-area-search"></map-search>
     <div class="jc-panel-area jc-panel-auto">
       <i class="jc-panel-item iconfont iconzu" title="保存设置" @click="manage"></i>
       <i class="jc-panel-item iconfont iconfuwei" title="重置" @click="autoAreaReset"></i>
@@ -39,6 +40,9 @@ export default {
   name: 'SystemOrganizationAreaManage',
   mixins: [amapMixins, autoAreaMixins, customAreaMixins],
   inject: ['registerManage', 'nodeChange'],
+  components: {
+    MapSearch: () => import('@/components/JcMap/MapSearch')
+  },
   data() {
     return {
       loading: false,
@@ -51,7 +55,7 @@ export default {
       areaId: ''
     }
   },
-  created() {
+  mounted() {
     myJcMap = new JcMap()
     this.registerManage(this.editCheck) //注册 编辑检查
   },
@@ -65,6 +69,7 @@ export default {
           this.areaId = ''
           this.drawSign(res, myJcMap) //去绘画边界
           this.loading = false
+          this.$refs.mapSearch.initData(myJcMap) //初始化搜索对象
         }).catch(() => {
           this.loading = false
         })
