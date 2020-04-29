@@ -24,7 +24,7 @@
   </div>
 </template>
 <script>
-import JcMap from '@/maps'
+import { JcMap } from '@/map'
 import { areaList } from '@/api/area'
 import { AREAS_TYPE } from '@/constant/CONST'
 import amapMixins from './modules/mixins/amapMixins'
@@ -52,6 +52,7 @@ export default {
     }
   },
   created() {
+    console.log(JcMap)
     myJcMap = new JcMap()
     this.registerManage(this.editCheck) //注册 编辑检查
   },

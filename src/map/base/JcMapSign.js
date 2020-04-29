@@ -1,19 +1,20 @@
 /**
- * 自定义地图标记 基础类
- * 用于定于方法和基础数据初始化，实现类见各地图mapsign
+ * 地图标记基础类
  */
-
-class MapSignBase {
+class JcMapSign {
   /**
    * 构造
    * @param {*} options 初始化参数
    * @param {String} options.id //标识id，当id 为空时会生成唯一id
    * @param {*} options.extData //额外参数，用于自定义数据处理
-   * @param {Map} options.map //地图对象
+   * @param {JcMap} options.map //JcMap地图对象
    * @param {Boolean} options.active //是否使用选中样式
+   * @param {Boolean} options.debug //配置 设法开启debug 模式，默认true
    * @param {String} options.style //设置额外样式，取配置的对应标记类型样式key
+   * @param {Array} options.boundaries //边界数组
    */
   constructor(options) {
+    this.debug = options.debug || true
     this.id = options.id || new Date().getTime()
     this.extData = options.extData
     this.boundaries = options.boundaries || []
@@ -24,11 +25,19 @@ class MapSignBase {
 
   /**
    * 显示标记
-   * @param {*} map 显示在哪个地图上
    */
-  show(map) {
+  show() { }
+
+  /**
+   * 设置map
+   * @param {JcMap} map 如果map 存在则显示，不存在则隐藏
+   */
+  setMap(map) {
     if (map) {
       this.map = map
+      this.show()
+    } else {
+      this.hide()
     }
   }
 
@@ -38,22 +47,27 @@ class MapSignBase {
   hide() { }
 
   /**
+   * 地图自适应 显示
+   */
+  fitView() {
+    if (this.map) {
+      this.map.fitView(this)
+    }
+  }
+
+  /**
    * 添加事件监听
    * @param {*} event 事件名称
    * @param {*} cb 回调
    */
-  on(event, cb, ...args) { }
+  on() { }
 
   /**
    * 移除事件监听
    * @param {*} event 事件名称
+   * @param {Function} cb 需要移除的回调
    */
-  off(event, ...args) { }
-
-  /**
-   * 编辑
-   */
-  signEditor() { }
+  off() { }
 
   /**
    * 设置样式
@@ -63,9 +77,18 @@ class MapSignBase {
     this.style = style
   }
 
+  /**
+   * 日志输出
+   */
+  console() {
+    if (this.debug) {
+      console.log(...arguments)
+    }
+  }
+
   get [Symbol.toStringTag]() {
-    return 'MapSignBase'
+    return 'JcMapSign'
   }
 }
 
-export default MapSignBase
+export default JcMapSign

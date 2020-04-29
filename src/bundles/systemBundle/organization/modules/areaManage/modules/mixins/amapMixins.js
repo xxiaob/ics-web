@@ -3,7 +3,7 @@
  */
 import { apiBoundariesFormat } from '@/libs/apiFormat'
 import { areaSave } from '@/api/area'
-import JcMapSign from '@/maps/JcMapSign'
+import { JcMapSign } from '@/map'
 
 let myJcMap //承载JcMap对象
 
@@ -31,7 +31,7 @@ export default {
         })
       }
       this.areas = areas
-      myJcMap.paintingSign(this.areas)
+      myJcMap.addSign(this.areas)
       myJcMap.fitView()
     },
     reset(cb) {

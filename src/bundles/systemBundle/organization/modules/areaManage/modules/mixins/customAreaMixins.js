@@ -1,4 +1,5 @@
 /**自动设置区域 */
+import { MAP_EVENT } from '@/constant/CONST'
 let myJcMap //承载JcMap对象
 
 let contextMenu //右键菜单
@@ -28,44 +29,8 @@ export default {
       //     contextMenu.addItem('删除该区域', this.areaDelete, 0)
       //   })
       // }
-      // this.addListener()
     },
     addArea() {
-      // if (polyEditor) {
-      //   polyEditor.close()
-      //   polyEditor.setTarget()
-      //   polyEditor.open()
-      // } else {
-      //   JcMapUtils.initPlugins(['AMap.PolygonEditor'], () => {
-      //     polyEditor = new JcMapUtils.AMap.PolygonEditor(JcMapUtils.map)
-      //     polyEditor.on('add', function (data) {
-      //       let polygon = data.target
-
-      //       polyEditor.addAdsorbPolygons(polygon)
-      //       polygon.on('dblclick', () => {
-      //         polyEditor.setTarget(polygon)
-      //         polyEditor.open()
-      //       })
-      //     })
-      //     this.addArea()
-      //   })
-      // }
-    },
-    addListener() {
-      // JcMapUtils.map.on('click', function (e) {
-      //   console.log(e)
-      // })
-      // JcMapUtils.map.on('rightclick', function (e) {
-      //   console.log(e)
-      //   target = e.target
-      //   contextMenu.open(JcMapUtils.map, e.lnglat)
-      // })
-    },
-    removeListener() {
-      // JcMapUtils.map.clearEvents('click')
-      // JcMapUtils.map.clearEvents('rightclick')
-    },
-    areaDelete() {
 
     },
     endCustomArea() {

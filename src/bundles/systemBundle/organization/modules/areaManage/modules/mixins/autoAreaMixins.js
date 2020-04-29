@@ -3,7 +3,7 @@
  */
 import { apiBoundariesFormat } from '@/libs/apiFormat'
 import { getUsableAdCodeList, areaGet } from '@/api/area'
-import JcMapSign from '@/maps/JcMapSign'
+import { JcMapSign } from '@/map'
 
 let allAreaPolygons = {} //记录已经请求的边界数据
 

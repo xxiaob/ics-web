@@ -1,6 +1,9 @@
 /**
- * 地图配置数据
+ * 高德地图配置数据
  */
+
+//事件转换
+export const EventTrans = {}
 
 //地图配置数据
 export const MapOptions = {
@@ -27,4 +30,4 @@ export const PolygonStyle = {
   active: { fillOpacity: 0.3 }
 }
 
-export default { MapOptions, PolygonStyle }
+export default { EventTrans, MapOptions, PolygonStyle }
