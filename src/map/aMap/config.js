@@ -30,6 +30,20 @@ export const PolygonStyle = {
   active: { fillOpacity: 0.3 }
 }
 
+//圆形样式
+export const CircleStyle = {
+  base: {
+    strokeWeight: 1,
+    strokeColor: '#0183ff',
+    fillColor: '#0183ff',
+    fillOpacity: 0.1,
+    strokeStyle: 'dashed'
+  },
+  normal: { fillOpacity: 0.1 },
+  active: { fillOpacity: 0.3 }
+}
+
+
 //搜索参数
 export const SearchOptions = {
   PlaceSearchOptions: { //设置PlaceSearch属性
