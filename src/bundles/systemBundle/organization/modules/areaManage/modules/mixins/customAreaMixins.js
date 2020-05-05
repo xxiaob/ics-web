@@ -25,12 +25,14 @@ export default {
       myJcMapEditor.addArea()
     },
     endCustomArea() {
-
+      if (myJcMapEditor) {
+        myJcMapEditor.destroy()
+        myJcMapEditor = null
+      }
     },
     customAreaReset() {
       this.reset(() => {
-        this.endCustomArea()
-        this.initCustomArea(myJcMap)
+        myJcMapEditor.reset()
       })
     }
   }

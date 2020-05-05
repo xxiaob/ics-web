@@ -2,7 +2,8 @@
  * 编辑工具
  */
 import JcMapEditorBase from '../../base/JcMapEditor'
-import { MAP_SIGN_TYPE } from '@/constant/CONST'
+import { MAP_SIGN_TYPE, MAP_EDIT_TYPE } from '@/constant/CONST'
+import { PolygonStyle } from '../config'
 
 class JcMapEditor extends JcMapEditorBase {
   /**
@@ -13,6 +14,20 @@ class JcMapEditor extends JcMapEditorBase {
   */
   constructor(options = {}) {
     super(options)
+    this.mousetool = new this.map.AMap.MouseTool(this.map.map)
+    this.mousetool.on('draw', (e) => {
+      this.map.map.setDefaultCursor('default')
+      this.mousetool.close(true)
+      let path = e.obj.getPath()
+
+      console.log('JcMapEditor - edit - end：', e, path)
+      if (this.editObject.type == MAP_SIGN_TYPE.Polygon) {
+        if (path && path.length > 2) {
+          //超过三个点则为多边形
+          e.obj.setMap(this.map.map)
+        }
+      }
+    })
   }
 
 
@@ -35,7 +50,18 @@ class JcMapEditor extends JcMapEditorBase {
     if (this.amapEditor) {
       this.amapEditor.close()
     }
+    this.map.map.setDefaultCursor('crosshair')
+    if (type === MAP_SIGN_TYPE.Polygon) {
+      //处理矩形
+      this.editObject = { type, opera: MAP_EDIT_TYPE.ADD }
+      this.mousetool.polygon({ ...PolygonStyle.base, ...PolygonStyle.active })
+    }
   }
+
+  /**
+   * 销毁编辑器
+   */
+  destroy() { }
 }
 
 export default JcMapEditor

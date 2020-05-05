@@ -64,12 +64,12 @@ export default {
       this.orgId = data.orgId
       this.loading = true
       myJcMap.init({ source: this.$refs.myMap }).then(() => {
+        this.$refs.mapSearch.initData(myJcMap) //初始化搜索对象
         areaList({ orgId: this.orgId, type: AREAS_TYPE.SAMELEVEL }).then(res => {
           this.adcode = ''
           this.areaId = ''
           this.drawSign(res, myJcMap) //去绘画边界
           this.loading = false
-          this.$refs.mapSearch.initData(myJcMap) //初始化搜索对象
         }).catch(() => {
           this.loading = false
         })

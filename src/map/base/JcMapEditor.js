@@ -30,6 +30,8 @@ class JcMapEditor {
    * 恢复重置
    */
   reset() {
+    //先销毁所有数据，然后进行重新初始化
+    this.destroy()
     this.initEditor()
   }
 

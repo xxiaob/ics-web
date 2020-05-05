@@ -27,7 +27,7 @@ export const MAP_SIGN_TYPE = {
   Polyline: 'polyline', //线
   Circle: 'circle' //圆
 }
-/** 地图类型 type*/
+/** 地图类型 操作 type*/
 export const MAP_EDIT_TYPE = {
   ADD: 'add', //添加
   EDIT: 'edit', //编辑
