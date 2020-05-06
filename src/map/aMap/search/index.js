@@ -48,7 +48,7 @@ class JcMapSearch extends JcMapSearchBase {
    * @param {Array} center 坐标点 [lng,lat]
    */
   fitView(center) {
-    this.map.map.setZoomAndCenter(16, center)
+    this.map.map.setZoomAndCenter(17, center)
   }
 }
 

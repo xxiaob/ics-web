@@ -85,6 +85,8 @@ export default {
             //快捷绑定
             params.adcode = this.editadcode
             params.drawCoordinateType = 2
+          } else if (this.type == 2) {
+            //自定义设置
           }
           areaSave(params).then(() => {
             this.startEdit = false

@@ -19,6 +19,9 @@ export default {
         sign = this.getActiveSign()
       }
       myJcMapEditor = new JcMapEditor({ map: myJcMap, sign })
+      myJcMapEditor.on('change', () => {
+        this.startEdit = true
+      })
       myJcMap.fitView()
     },
     addArea() {

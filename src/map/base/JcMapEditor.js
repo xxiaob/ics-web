@@ -15,6 +15,7 @@ class JcMapEditor {
     this.map = options.map || null
     this.sign = options.sign || null
     this.icon = options.icon || null
+    this.eventFactory = {} //事件工厂
     this.initEditor() //初始化编辑器
   }
 
@@ -36,6 +37,20 @@ class JcMapEditor {
     this.destroy()
     this.initEditor()
   }
+
+  /**
+   * 添加事件监听
+   * @param {*} event 事件名称
+   * @param {*} cb 回调
+   */
+  on() { }
+
+  /**
+   * 移除事件监听
+   * @param {*} event 事件名称
+   * @param {Function} cb 需要移除的回调
+   */
+  off() { }
 
   /**
    * 销毁编辑器

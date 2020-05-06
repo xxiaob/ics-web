@@ -4,6 +4,8 @@
 import JcMapEditorBase from '../../base/JcMapEditor'
 import { MAP_SIGN_TYPE, MAP_EDIT_TYPE } from '@/constant/CONST'
 import { PolygonStyle } from '../config'
+import { paintingSign } from '../aMapUtil'
+import { JcMapSign } from '../index'
 
 class JcMapEditor extends JcMapEditorBase {
   /**
@@ -16,8 +18,14 @@ class JcMapEditor extends JcMapEditorBase {
     super(options)
     this.mousetool = new this.map.AMap.MouseTool(this.map.map)
     this.contextMenu = new this.map.AMap.ContextMenu()
-    this.contextMenu.addItem('删除改区域', (e) => {
-      this.console(e)
+    this.contextMenu.addItem('删除该区域', () => {
+      this.console('区域删除', this.deleteItem)
+      if (this.deleteItem) {
+        this.endAmapEditor()
+        this.deleteItem.target.setMap(null)
+        this.deleteItem.target.clearEvents()
+        this.deleteItem.opera = MAP_EDIT_TYPE.DELETE //设置该区域为删除
+      }
     }, 0)
 
     this.mousetool.on('draw', (e) => {
@@ -46,6 +54,21 @@ class JcMapEditor extends JcMapEditorBase {
       //添加点标记
 
       //绘画已有数据
+      let boundaries = [] //存储边界数据
+
+      let overlays = [] //存储覆盖物
+
+      if (this.sign.boundaries && this.sign.boundaries.length) {
+        this.sign.boundaries.forEach(item => {
+          let target = paintingSign(new JcMapSign({ map: this.map, active: true }), { path: item.path })
+
+          boundaries.push({ id: item.id, type: item.type, target })
+          overlays.push(target)
+        })
+      }
+
+      this.boundaries = boundaries
+      this.map.map.add(overlays)
     }
   }
 
@@ -94,6 +117,7 @@ class JcMapEditor extends JcMapEditorBase {
           //右键显示菜单
           item.target.on('rightclick', (e) => {
             this.console('boundary - rightclick - item', item)
+            this.deleteItem = item
             this.contextMenu.open(item.target.getMap(), e.lnglat)
           })
         }
@@ -111,6 +135,8 @@ class JcMapEditor extends JcMapEditorBase {
       return
     }
     this.editItem = item
+
+    this.emit('change') //触发编辑修改
 
     if (item.type == MAP_SIGN_TYPE.Polygon) {
       //如果是矩形，则使用矩形编辑器
@@ -160,11 +186,52 @@ class JcMapEditor extends JcMapEditorBase {
       this.amapEditor.clearEvents()
     }
   }
+
+
+  /**
+   * 添加事件监听
+   * @param {*} event 事件名称
+   * @param {*} cb 回调
+   */
+  on(event, cb) {
+    this.eventFactory[event] = cb
+  }
+
+  /**
+   * 移除事件监听
+   * @param {*} event 事件名称
+   */
+  off(event) {
+    this.eventFactory[event] = null
+  }
+
+  /**
+   * 触发事件
+   * @param {*} event 事件名称
+   */
+  emit(event) {
+    if (this.eventFactory[event]) {
+      this.eventFactory[event].call(this)
+    }
+  }
+
   /**
    * 销毁编辑器
    */
   destroy() {
     this.endAmapEditor()
+    if (this.boundaries && this.boundaries.length) {
+      this.boundaries.forEach(item => {
+        if (item.target) {
+          item.target.clearEvents()
+          item.target.setMap()
+        }
+      })
+    }
+    this.boundaries = null
+    this.editItem = null
+    this.editObject = null
+    this.deleteItem = null
   }
 }
 
