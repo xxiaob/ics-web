@@ -8,11 +8,13 @@ class JcMapEditor {
    * @param {Object} options.debug 配置 设法开启debug 模式，默认true
    * @param {JcMap} options.map JcMap地图对象
    * @param {JcMapSign} options.sign 编辑的标记，或网格
+   * @param {String} options.icon 中心点标记图标，可以为url，也可以为JcIcons 的 key
    */
   constructor(options = {}) {
     this.debug = options.debug || true
     this.map = options.map || null
     this.sign = options.sign || null
+    this.icon = options.icon || null
     this.initEditor() //初始化编辑器
   }
 
