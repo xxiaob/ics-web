@@ -65,5 +65,14 @@ export default {
     del: 'area-service/area/delete',
     getOrgInfo: 'area-service/area/getOrgInfo',
     getUsableAdCodeList: 'area-service/area/getUsableAdCodeList'
-  }
+  },
+  deviceUpdate: {
+    //设备升级
+    add: 'device-service/deviceUpgPkg/add',
+    // get: 'device-service/area-service/area/detail',
+    list: 'device-service/deviceUpgPkg/listByPage',
+    update: 'device-service/deviceUpgPkg/upd',
+    del: 'device-service/deviceUpgPkg/del'
+  },
+  upload: 'file-server-service/upload/upload'
 }

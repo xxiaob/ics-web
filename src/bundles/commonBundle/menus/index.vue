@@ -12,6 +12,8 @@
         <el-menu-item index="systemUser">用户管理</el-menu-item>
         <el-menu-item index="systemPosition">职位管理</el-menu-item>
         <el-menu-item index="systemMenus">菜单管理</el-menu-item>
+        <el-menu-item index="systemDevice">设备管理</el-menu-item>
+        <el-menu-item index="systemDeviceUpdate">设备升级</el-menu-item>
       </el-submenu>
     </el-menu>
   </section>

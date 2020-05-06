@@ -41,4 +41,18 @@ export default [{
   meta: {
     title: '系统设置-区域类型'
   }
+}, {
+  path: 'system/device',
+  name: 'systemDevice',
+  component: () => import('@/bundles/systemBundle/device'),
+  meta: {
+    title: '系统设置-设备管理'
+  }
+}, {
+  path: 'system/deviceUpdate',
+  name: 'systemDeviceUpdate',
+  component: () => import('@/bundles/systemBundle/deviceUpdate'),
+  meta: {
+    title: '系统设置-设备升级'
+  }
 }]
