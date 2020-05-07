@@ -11,14 +11,16 @@
       </div>
       <el-table :data="list" v-loading="loading" row-key="id" class="jc-table" @selection-change="tableSelect">
         <el-table-column type="selection" width="40"></el-table-column>
+        <el-table-column type="index" label="序号" width="50"></el-table-column>
         <el-table-column prop="pkgName" label="应用名称"></el-table-column>
         <el-table-column prop="deviceType" label="设备类型" :formatter="formatDeviceType"></el-table-column>
         <el-table-column prop="version" label="版本号"></el-table-column>
-        <el-table-column prop="url" label="设备包名称"></el-table-column>
+        <el-table-column prop="url" label="设备包名称" show-overflow-tooltip></el-table-column>
         <el-table-column prop="state" label="状态" :formatter="formatState"></el-table-column>
         <el-table-column prop="createTime" label="创建时间" :formatter="formatTime"></el-table-column>
-        <el-table-column width="60" label="操作">
+        <el-table-column width="80" label="操作">
           <template slot-scope="scope">
+            <el-button type="text" size="mini" icon="el-icon-view" @click="manage(scope.row,true)" title="查看"></el-button>
             <el-button type="text" size="mini" icon="el-icon-edit-outline" @click="manage(scope.row)" title="编辑"></el-button>
             <el-button type="text" size="mini" icon="el-icon-delete" @click="del(scope.row)" title="删除"></el-button>
           </template>
@@ -131,9 +133,14 @@ export default {
         this.currentChange(this.page.pageNum - 1)
       })
     },
-    manage(row) {
+    manage(row, view) {
       if (row) {
         this.info = row
+        if (view) {
+          this.info.view = true
+        } else {
+          this.info.view = false
+        }
         this.visible = true
       } else {
         this.info = null
