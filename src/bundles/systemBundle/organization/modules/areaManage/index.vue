@@ -3,7 +3,7 @@
     <div class="jc-title-warp">
       <div class="jc-title-sign">组织区域</div>
       <div class="jc-controll-warp" :class="{'jc-active': editShow}">
-        <i class="jc-controll-item iconfont" :class="editShow ? 'iconchehui' : 'iconshezhi'" @click="changeWork"></i>
+        <i class="jc-controll-item iconfont" :class="editShow ? 'iconchehui' : 'iconshezhi'" @click="changeWork(null)"></i>
         <i class="jc-controll-item iconfont iconkuaijieshezhi" title="快捷设置" @click="startArea(1)"></i>
         <i class="jc-controll-item iconfont iconSecondMenu-customize" title="自定义区域" @click="startArea(2)"></i>
       </div>
@@ -89,11 +89,13 @@ export default {
         cb()
       })
     },
-    changeWork() {
+    changeWork(cb) {
+      cb = cb || noop
       if (this.editShow) {
-        this.editCheck()
+        this.editCheck(cb)
       } else {
         this.editShow = true
+        cb()
       }
     },
     startArea(type) {

@@ -12,14 +12,19 @@ export default {
       //去处理显示
       this.endAutoArea()
 
-      let sign = null
+      let sign = this.hideActiveSign()
 
-      if (this.adcode) {
-        this.hideActiveSign()
-      } else {
-        sign = this.getActiveSign()
+      let subSigns = []
+
+      for (let i = 0; i < this.areas.length; i++) {
+        let item = this.areas[i]
+
+        if (item.id != this.orgId) {
+          subSigns.push(item)
+        }
       }
-      myJcMapEditor = new JcMapEditor({ map: myJcMap, sign })
+
+      myJcMapEditor = new JcMapEditor({ map: myJcMap, sign: this.adcode ? null : sign, subSigns: subSigns })
       myJcMapEditor.on('change', () => {
         this.startEdit = true
       })

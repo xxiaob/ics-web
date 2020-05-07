@@ -8,6 +8,7 @@ class JcMapEditor {
    * @param {Object} options.debug 配置 设法开启debug 模式，默认true
    * @param {JcMap} options.map JcMap地图对象
    * @param {JcMapSign} options.sign 编辑的标记，或网格
+   * @param {Array<JcMapSign>} options.subSigns 自动需要吸附的多边形
    * @param {String} options.icon 中心点标记图标，可以为url，也可以为JcIcons 的 key
    * @param {String} options.name 标记名称
    */
@@ -17,6 +18,7 @@ class JcMapEditor {
     this.sign = options.sign || null
     this.icon = options.icon || null
     this.name = options.name || null
+    this.subSigns = options.subSigns || null
     this.eventFactory = {} //事件工厂
     this.initEditor() //初始化编辑器
   }

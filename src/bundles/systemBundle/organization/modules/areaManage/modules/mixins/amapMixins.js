@@ -45,6 +45,7 @@ export default {
           cb()
         }).catch(() => { })
       } else {
+        this.startEdit = false
         cb()
       }
     },
@@ -69,6 +70,7 @@ export default {
       if (sign) {
         sign.show()
       }
+      return sign
     },
     hideActiveSign() {
       let sign = this.getActiveSign()
@@ -76,6 +78,7 @@ export default {
       if (sign) {
         sign.hide()
       }
+      return sign
     },
     manage() {
       if (this.startEdit) {

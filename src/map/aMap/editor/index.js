@@ -53,7 +53,7 @@ class JcMapEditor extends JcMapEditorBase {
   initEditor() {
     if (this.sign) {
       //添加点标记
-
+      this.showMarket(this.sign.center)
       //绘画已有数据
       let boundaries = [] //存储边界数据
 
@@ -61,7 +61,7 @@ class JcMapEditor extends JcMapEditorBase {
 
       if (this.sign.boundaries && this.sign.boundaries.length) {
         this.sign.boundaries.forEach(item => {
-          let target = paintingSign(new JcMapSign({ map: this.map, active: true }), { path: item.path })
+          let target = paintingSign(new JcMapSign({ map: this.map, active: true }), { type: item.type, path: item.path })
 
           boundaries.push({ id: item.id, type: item.type, target })
           overlays.push(target)
@@ -70,7 +70,23 @@ class JcMapEditor extends JcMapEditorBase {
 
       this.boundaries = boundaries
       this.map.map.add(overlays)
+      this.refreshListener()
     }
+    //处理需要吸附的多边形
+    let subPolygon = []
+
+    if (this.subSigns && this.subSigns.length) {
+      this.subSigns.forEach(item => {
+        if (item.boundaries && item.boundaries.length) {
+          item.boundaries.forEach(boundary => {
+            if (boundary.type == MAP_SIGN_TYPE.Polygon) {
+              subPolygon.push(boundary.target)
+            }
+          })
+        }
+      })
+    }
+    this.subPolygon = subPolygon
   }
 
   /**
@@ -157,18 +173,20 @@ class JcMapEditor extends JcMapEditorBase {
 
     if (this.boundaries && this.boundaries.length) {
       this.boundaries.forEach(item => {
-        let resultItem = { type: item.type, opera: item.opera }
+        if (item.opera != MAP_EDIT_TYPE.DELETE) {
+          let resultItem = { type: item.type, opera: item.opera }
 
-        if (item.type == MAP_SIGN_TYPE.Polygon) {
-          //处理矩形
-          let resultPath = [], path = item.target.getPath()
+          if (item.type == MAP_SIGN_TYPE.Polygon) {
+            //处理矩形
+            let resultPath = [], path = item.target.getPath()
 
-          for (let i = 0; i < path.length; i++) {
-            resultPath.push({ index: i + 1, lat: path[i].lat, lng: path[i].lng })
+            for (let i = 0; i < path.length; i++) {
+              resultPath.push({ index: i + 1, lat: path[i].lat, lng: path[i].lng })
+            }
+            resultItem.path = resultPath
           }
-          resultItem.path = resultPath
+          result.boundaries.push(resultItem)
         }
-        result.boundaries.push()
       })
     }
 
@@ -193,7 +211,7 @@ class JcMapEditor extends JcMapEditorBase {
     if (item.type == MAP_SIGN_TYPE.Polygon) {
       //如果是矩形，则使用矩形编辑器
       this.amapEditor = new this.map.AMap.PolygonEditor(this.map.map)
-      let adsorbPolygons = []
+      let adsorbPolygons = [...this.subPolygon]
 
       this.boundaries.forEach(boundary => {
         if (boundary.id != item.id && boundary.type == MAP_SIGN_TYPE.Polygon) {
