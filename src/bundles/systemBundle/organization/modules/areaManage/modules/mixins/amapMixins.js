@@ -24,6 +24,7 @@ export default {
           areas.push(new JcMapSign({
             id: item.orgId,
             map: myJcMap,
+            name: item.areaName,
             center: item.center.split(','),
             extData: { orgId: item.orgId, adcode: item.areaCode, areaId: item.areaId, areaName: item.areaName },
             boundaries: apiBoundariesFormat(item),
@@ -87,6 +88,8 @@ export default {
             params.drawCoordinateType = 2
           } else if (this.type == 2) {
             //自定义设置
+            Object.assign(params, this.getData())
+            params.drawCoordinateType = 1
           }
           areaSave(params).then(() => {
             this.startEdit = false

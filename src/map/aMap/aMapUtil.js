@@ -31,3 +31,23 @@ export function paintingSign(sign, boundary) {
     return new sign.map.AMap.Polygon(Object.assign({ path: boundary.path, extData: { sign, boundary } }, PolygonStyle.base, sign.active ? PolygonStyle.active : {}, sign.style && PolygonStyle[sign.style] ? PolygonStyle[sign.style] : {}))
   }
 }
+
+/**
+ * 获取中心点
+ * @param {*} boundary 边界对象
+ * @returns {Array} 坐标点
+ */
+export function getCenter(boundary) {
+  if (MAP_SIGN_TYPE.Polygon == boundary.type) {
+    //矩形
+    let path = boundary.target.getPath()
+
+    let lng = 0, lat = 0
+
+    path.forEach(item => {
+      lat += item.lat
+      lng += item.lng
+    })
+    return [lng / path.length, lat / path.length]
+  }
+}

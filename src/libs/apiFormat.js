@@ -16,7 +16,7 @@ export function apiBoundariesFormat(boundaries = {}) {
   //处理圆形
   if (boundaries.withRadiusReqs && boundaries.withRadiusReqs.length) {
     boundaries.withRadiusReqs.forEach(item => {
-      result.push({ type: MAP_SIGN_TYPE.Polygon, center: [item.lng, item.lat], radius: item.radius })
+      result.push({ type: MAP_SIGN_TYPE.Circle, center: [item.lng, item.lat], radius: item.radius })
     })
   }
 
@@ -30,6 +30,34 @@ export function apiBoundariesFormat(boundaries = {}) {
           resultItem.path.push([item.withSequenceReqs[i].lng, item.withSequenceReqs[i].lat])
         }
         result.push(resultItem)
+      }
+    })
+  }
+
+  return result
+}
+/**
+ * 处理编辑返回的数据，使之可以进行后台接口提交
+ * @param { Object } data 编辑返回的数据
+ * @returns {Object} 返回处理过的数据
+ */
+
+export function signEditDataFormat(data = {}) {
+  let result = { center: data.center ? data.center.join(',') : '', withRadiusReqs: [], withExtWidthReqs: [], withoutRadiusReqs: [] }
+
+  //处理边界数据
+  if (data.boundaries && data.boundaries.length) {
+    data.boundaries.forEach(item => {
+      if (item.type == MAP_SIGN_TYPE.Polygon) {
+        //处理矩形
+        let withSequenceReqs = []
+
+        item.path.forEach(dot => {
+          withSequenceReqs.push({ sequence: dot.index, lat: dot.lat, lng: dot.lng })
+        })
+        result.withoutRadiusReqs.push({ withSequenceReqs: withSequenceReqs })
+      } else if (item.type == MAP_SIGN_TYPE.Circle) {
+        //处理原型
       }
     })
   }
