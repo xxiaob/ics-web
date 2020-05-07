@@ -139,7 +139,7 @@ export default {
   margin: auto 0;
   width: 40px;
   height: 40px;
-  background-size: 100% 100%;
+  background-size: auto 100%;
   background-repeat: no-repeat;
   background-position: center;
 }

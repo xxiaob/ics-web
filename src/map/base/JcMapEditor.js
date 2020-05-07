@@ -20,6 +20,7 @@ class JcMapEditor {
     this.name = options.name || null
     this.subSigns = options.subSigns || null
     this.eventFactory = {} //事件工厂
+    this.idIndex = 0 //用于区域id
     this.initEditor() //初始化编辑器
   }
 

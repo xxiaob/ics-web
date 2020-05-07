@@ -63,7 +63,7 @@ class JcMapEditor extends JcMapEditorBase {
         this.sign.boundaries.forEach(item => {
           let target = paintingSign(new JcMapSign({ map: this.map, active: true }), { type: item.type, path: item.path })
 
-          boundaries.push({ id: item.id, type: item.type, target })
+          boundaries.push({ id: this.idIndex++, type: item.type, target })
           overlays.push(target)
         })
       }
@@ -98,7 +98,7 @@ class JcMapEditor extends JcMapEditorBase {
     this.map.map.setDefaultCursor('crosshair')
     if (type === MAP_SIGN_TYPE.Polygon) {
       //处理矩形
-      this.editObject = { id: new Date().getTime(), type, opera: MAP_EDIT_TYPE.ADD }
+      this.editObject = { id: this.idIndex++, type, opera: MAP_EDIT_TYPE.ADD }
       this.mousetool.polygon({ ...PolygonStyle.base, ...PolygonStyle.active })
     }
   }
@@ -159,7 +159,7 @@ class JcMapEditor extends JcMapEditorBase {
         map: this.map.map,
         position,
         icon: '//a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-default.png',
-        offset: new this.map.AMap.Pixel(-13, -30),
+        anchor: 'bottom-center',
         draggable: true,
         title: this.name || '区域中心点'
       })

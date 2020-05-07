@@ -6,17 +6,24 @@
   * 图标icon
   */
 export const JcIcons = {
-  cscgd: { name: '菜市场岗点', icon: '/static/areaicons/cscgd.png' },
-  gd: { name: '岗点', icon: '/static/areaicons/gd.png' },
-  jdcl: { name: '街道车辆', icon: '/static/areaicons/jdcl.png' },
-  jydgd: { name: '积淹点岗点', icon: '/static/areaicons/jydgd.png' },
-  qjcl: { name: '区级车辆', icon: '/static/areaicons/qjcl.png' },
-  sgg: { name: '市管岗', icon: '/static/areaicons/sgg.png' },
-  sjcl: { name: '市级车辆', icon: '/static/areaicons/sjcl.png' },
-  sxgd: { name: '扫雪岗点', icon: '/static/areaicons/sxgd.png' },
-  sxt: { name: '摄像头', icon: '/static/areaicons/sxt.png' },
-  tycl: { name: '通用车辆', icon: '/static/areaicons/tycl.png' },
-  wrj: { name: '无人机', icon: '/static/areaicons/wrj.png' },
-  ztgd: { name: '渣土岗点', icon: '/static/areaicons/ztgd.png' },
-  ztkk: { name: '渣土卡口', icon: '/static/areaicons/ztkk.png' }
+  caichang: { name: '菜场', icon: '/static/areaicons/caichang.png' },
+  fangxunbaozhang: { name: '防汛保障', icon: '/static/areaicons/fangxunbaozhang.png' },
+  guojiagongji: { name: '国家公祭', icon: '/static/areaicons/guojiagongji.png' },
+  jiyangang: { name: '积淹岗', icon: '/static/areaicons/jiyangang.png' },
+  qujicheliang: { name: '区级车辆', icon: '/static/areaicons/qujicheliang.png' },
+  jiedaojicheliang: { name: '街道级车辆', icon: '/static/areaicons/jiedaojicheliang.png' },
+  lingshirenwu: { name: '临时任务', icon: '/static/areaicons/lingshirenwu.png' },
+  yinyuejie: { name: '音乐节', icon: '/static/areaicons/yinyuejie.png' },
+  saoxuefangdong: { name: '扫雪防冻', icon: '/static/areaicons/saoxuefangdong.png' },
+  saoxuegang: { name: '扫雪岗', icon: '/static/areaicons/saoxuegang.png' },
+  shangbaoshijian: { name: '上报事件', icon: '/static/areaicons/shangbaoshijian.png' },
+  shexiangtou: { name: '摄像头', icon: '/static/areaicons/shexiangtou.png' },
+  shijicheliang: { name: '市级车辆', icon: '/static/areaicons/shijicheliang.png' },
+  shuangdenghuiyingjibaozhang: { name: '双城灯会应急保障', icon: '/static/areaicons/shuangdenghuiyingjibaozhang.png' },
+  tongyongcheliang: { name: '通用车辆', icon: '/static/areaicons/tongyongcheliang.png' },
+  tongyongzhuangxiangfangkong: { name: '通用专项防控', icon: '/static/areaicons/tongyongzhuangxiangfangkong.png' },
+  wurenji: { name: '无人机', icon: '/static/areaicons/wurenji.png' },
+  zaijiangongdi: { name: '在建工地', icon: '/static/areaicons/zaijiangongdi.png' },
+  zhatu: { name: '渣土', icon: '/static/areaicons/zhatu.png' },
+  zhatukakou: { name: '渣土卡口', icon: '/static/areaicons/zhatukakou.png' }
 }

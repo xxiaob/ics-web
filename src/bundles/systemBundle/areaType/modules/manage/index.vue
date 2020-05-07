@@ -87,7 +87,7 @@ export default {
   cursor: pointer;
   background-position: center;
   background-repeat: no-repeat;
-  background-size: 40px 40px;
+  background-size: auto 40px;
 }
 .jc-icon-space {
   position: relative;
@@ -105,7 +105,7 @@ export default {
     cursor: pointer;
     background-position: center;
     background-repeat: no-repeat;
-    background-size: 40px 40px;
+    background-size: auto 40px;
     opacity: 0.9;
     &:hover {
       opacity: 1;
