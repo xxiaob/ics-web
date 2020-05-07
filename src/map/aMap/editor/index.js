@@ -133,6 +133,10 @@ class JcMapEditor extends JcMapEditorBase {
             this.startEdit(item)
           })
           //右键显示菜单
+          item.target.on('click', () => {
+            this.contextMenu.close()
+          })
+          //右键显示菜单
           item.target.on('rightclick', (e) => {
             this.console('boundary - rightclick - item', item)
             this.deleteItem = item
