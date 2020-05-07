@@ -9,7 +9,7 @@
           <el-button type="danger" icon="el-icon-delete" size="small" @click="removeAll">删除</el-button>
         </div>
       </div>
-      <el-table :data="list" v-loading="loading" row-key="id" class="jc-table" @selection-change="tableSelect">
+      <el-table :data="list" v-loading="loading" row-key="id" class="jc-table" @selection-change="tableSelect" :cell-class-name="cellClass">
         <el-table-column type="selection" width="40"></el-table-column>
         <el-table-column type="index" label="序号" width="50"></el-table-column>
         <el-table-column prop="pkgName" label="应用名称"></el-table-column>
@@ -18,11 +18,13 @@
         <el-table-column prop="url" label="设备包名称" show-overflow-tooltip></el-table-column>
         <el-table-column prop="state" label="状态" :formatter="formatState"></el-table-column>
         <el-table-column prop="createTime" label="创建时间" :formatter="formatTime"></el-table-column>
-        <el-table-column width="80" label="操作">
+        <el-table-column width="100" label="操作">
           <template slot-scope="scope">
             <el-button type="text" size="mini" icon="el-icon-view" @click="manage(scope.row,true)" title="查看"></el-button>
             <el-button type="text" size="mini" icon="el-icon-edit-outline" @click="manage(scope.row)" title="编辑"></el-button>
             <el-button type="text" size="mini" icon="el-icon-delete" @click="del(scope.row)" title="删除"></el-button>
+            <el-button v-if="!scope.row.state" type="text" size="mini" icon="el-icon-caret-right" @click="publish(scope.row.id,1)" title="发布"></el-button>
+            <el-button v-if="scope.row.state" type="text" size="mini" icon="el-icon-video-pause" @click="publish(scope.row.id,0)" title="撤回"></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -33,7 +35,7 @@
   </div>
 </template>
 <script>
-import { deviceUpdateList, deviceUpdateDel } from '@/api/deviceUpdate'
+import { deviceUpdateList, deviceUpdateDel, deviceUpdatePublish } from '@/api/deviceUpdate'
 import { formatDate } from '@/libs/util'
 import { deviceTypes, states } from './const'
 import PaginationMixins from '@/mixins/PaginationMixins'
@@ -59,6 +61,15 @@ export default {
     this.initData()
   },
   methods: {
+    cellClass({ row, column, rowIndex, columnIndex }) {
+      if (column.property === 'state') {
+        if (row.state) {
+          return 'green'
+        } else {
+          return 'red'
+        }
+      }
+    },
     formatDeviceType(row, column, cellValue, index) {
       return deviceTypes[cellValue]
     },
@@ -146,7 +157,32 @@ export default {
         this.info = null
         this.visible = true
       }
+    },
+    publish(id, state) {
+      const tip = state ? '发布' : '撤回'
+
+      this.$confirm(`确认${tip}版本`, '提示', { type: 'warning' }).then(async () => {
+        console.log(id, state)
+        try {
+          await deviceUpdatePublish({ pkgId: id, state })
+          this.currentChange(this.page.pageNum)
+          this.$message.success('操作成功')
+        } catch (error) {
+          console.error(error)
+        }
+      }).catch(() => {})
     }
   }
 }
 </script>
+
+<style lang="scss" scoped>
+.el-table /deep/ {
+  .red {
+    color: red;
+  }
+  .green {
+    color: green;
+  }
+}
+</style>

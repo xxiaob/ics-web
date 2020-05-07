@@ -39,12 +39,12 @@ export function deviceUpdateSave(data) {
   return data.id ? deviceUpdateUpdate(data) : deviceUpdateAdd(data)
 }
 /**
- * 根据ID查询详情
+ * 版本发布
  * @param {object} data
  * @returns {Object} axios 对象
  */
-export function deviceUpdateGet(data) {
-  return axios.post(API.deviceUpdate.get, data)
+export function deviceUpdatePublish(data) {
+  return axios.post(API.deviceUpdate.publish, data)
 }
 /**
  * 删除
