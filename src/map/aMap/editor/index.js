@@ -4,7 +4,7 @@
 import JcMapEditorBase from '../../base/JcMapEditor'
 import { MAP_SIGN_TYPE, MAP_EDIT_TYPE } from '@/constant/CONST'
 import { PolygonStyle } from '../config'
-import { paintingSign } from '../aMapUtil'
+import { paintingSign, getCenter } from '../aMapUtil'
 import { JcMapSign } from '../index'
 
 class JcMapEditor extends JcMapEditorBase {
@@ -16,18 +16,8 @@ class JcMapEditor extends JcMapEditorBase {
   */
   constructor(options = {}) {
     super(options)
+    //增加鼠标绘制工具
     this.mousetool = new this.map.AMap.MouseTool(this.map.map)
-    this.contextMenu = new this.map.AMap.ContextMenu()
-    this.contextMenu.addItem('删除该区域', () => {
-      this.console('区域删除', this.deleteItem)
-      if (this.deleteItem) {
-        this.endAmapEditor()
-        this.deleteItem.target.setMap(null)
-        this.deleteItem.target.clearEvents()
-        this.deleteItem.opera = MAP_EDIT_TYPE.DELETE //设置该区域为删除
-      }
-    }, 0)
-
     this.mousetool.on('draw', (e) => {
       this.map.map.setDefaultCursor('default')
       this.mousetool.close(true)
@@ -44,6 +34,17 @@ class JcMapEditor extends JcMapEditorBase {
       }
       this.editObject = null //清空编辑器
     })
+    //增加右键菜单和处理
+    this.contextMenu = new this.map.AMap.ContextMenu()
+    this.contextMenu.addItem('删除该区域', () => {
+      this.console('区域删除', this.deleteItem)
+      if (this.deleteItem) {
+        this.endAmapEditor()
+        this.deleteItem.target.setMap(null)
+        this.deleteItem.target.clearEvents()
+        this.deleteItem.opera = MAP_EDIT_TYPE.DELETE //设置该区域为删除
+      }
+    }, 0)
   }
 
   /**
@@ -95,6 +96,7 @@ class JcMapEditor extends JcMapEditorBase {
       this.boundaries.push(boundary)
     } else {
       this.boundaries = [boundary]
+      this.showMarket(getCenter(boundary))
     }
     this.refreshListener()
     this.console('新增之后启用编辑', boundary)
@@ -124,6 +126,56 @@ class JcMapEditor extends JcMapEditorBase {
       })
     }
   }
+
+  /**
+   * 显示地图标记
+   * @param {*} position 标记坐标点
+   */
+  showMarket(position) {
+    if (this.marker) {
+      this.marker.setPosition(position)
+    } else {
+      this.marker = new this.map.AMap.Marker({
+        map: this.map.map,
+        position,
+        icon: '//a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-default.png',
+        offset: new this.map.AMap.Pixel(-13, -30),
+        draggable: true,
+        title: this.name || '区域中心点'
+      })
+    }
+  }
+
+  /**
+   * 获取编辑数据
+   * @returns {Object} 返回数据
+   */
+  getData() {
+    let position = this.marker ? this.marker.getPosition() : null
+
+    let result = { boundaries: [], center: position ? [position.lng, position.lat] : null }
+
+    if (this.boundaries && this.boundaries.length) {
+      this.boundaries.forEach(item => {
+        let resultItem = { type: item.type, opera: item.opera }
+
+        if (item.type == MAP_SIGN_TYPE.Polygon) {
+          //处理矩形
+          let resultPath = [], path = item.target.getPath()
+
+          for (let i = 0; i < path.length; i++) {
+            resultPath.push({ index: i + 1, lat: path[i].lat, lng: path[i].lng })
+          }
+          resultItem.path = resultPath
+        }
+        result.boundaries.push()
+      })
+    }
+
+
+    return result
+  }
+
   /**
    * 启用编辑器
    * @param {*} item 编辑的边界对象

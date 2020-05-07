@@ -9,12 +9,14 @@ class JcMapEditor {
    * @param {JcMap} options.map JcMap地图对象
    * @param {JcMapSign} options.sign 编辑的标记，或网格
    * @param {String} options.icon 中心点标记图标，可以为url，也可以为JcIcons 的 key
+   * @param {String} options.name 标记名称
    */
   constructor(options = {}) {
     this.debug = options.debug || true
     this.map = options.map || null
     this.sign = options.sign || null
     this.icon = options.icon || null
+    this.name = options.name || null
     this.eventFactory = {} //事件工厂
     this.initEditor() //初始化编辑器
   }
@@ -37,6 +39,11 @@ class JcMapEditor {
     this.destroy()
     this.initEditor()
   }
+
+  /**
+   * 获取编辑数据
+   */
+  getData() { }
 
   /**
    * 添加事件监听

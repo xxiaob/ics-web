@@ -1,5 +1,6 @@
 /**自动设置区域 */
 import { JcMapEditor } from '@/map'
+import { signEditDataFormat } from '@/libs/apiFormat'
 let myJcMap //承载JcMap对象
 
 let myJcMapEditor //承载编辑体
@@ -23,6 +24,9 @@ export default {
         this.startEdit = true
       })
       myJcMap.fitView()
+    },
+    getData() {
+      return signEditDataFormat(myJcMapEditor.getData())
     },
     addArea() {
       myJcMapEditor.addArea()
