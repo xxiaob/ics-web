@@ -21,8 +21,8 @@
         <el-table-column width="100" label="操作">
           <template slot-scope="scope">
             <el-button type="text" size="mini" icon="el-icon-view" @click="manage(scope.row,true)" title="查看"></el-button>
-            <el-button type="text" size="mini" icon="el-icon-edit-outline" @click="manage(scope.row)" title="编辑"></el-button>
-            <el-button type="text" size="mini" icon="el-icon-delete" @click="del(scope.row)" title="删除"></el-button>
+            <el-button type="text" size="mini" icon="el-icon-edit-outline" @click="manage(scope.row)" title="编辑" :disabled="!!scope.row.state"></el-button>
+            <el-button type="text" size="mini" icon="el-icon-delete" @click="del(scope.row)" title="删除" :disabled="!!scope.row.state"></el-button>
             <el-button v-if="!scope.row.state" type="text" size="mini" icon="el-icon-caret-right" @click="publish(scope.row.id,1)" title="发布"></el-button>
             <el-button v-if="scope.row.state" type="text" size="mini" icon="el-icon-video-pause" @click="publish(scope.row.id,0)" title="撤回"></el-button>
           </template>
