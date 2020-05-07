@@ -15,9 +15,10 @@
       <el-form-item label="版本号" prop="version" :rules="rules.NOT_NULL">
         <el-input v-model="form.version" placeholder="请输入版本号"></el-input>
       </el-form-item>
-      <el-form-item label="应用文件" prop="url" :rules="[{ required: true, message: '请上传文件' }]">
-        <el-upload class="upload-demo" :action="uploadUrl" :headers="uploadHeaders" :on-success="handleSuccess">
-          <el-button size="small" type="primary">点击上传</el-button>
+      <el-form-item label="应用文件" prop="url" :rules="[{required: true, message: '请上传文件'}]">
+        <el-input v-model="form.url" disabled style="display:none"></el-input>
+        <el-upload class="upload-demo" :action="uploadUrl" :headers="uploadHeaders" :before-upload="handleBeforeUpload" :on-success="handleSuccess" :on-remove="handleRemove" :limit="1" :on-exceed="handleExceed" :file-list="fileList">
+          <el-button size="small" type="primary" :loading="loading">点击上传</el-button>
         </el-upload>
       </el-form-item>
     </el-form>
@@ -52,15 +53,33 @@ export default {
         Len20: getStringRule(1, 20),
         SELECT_NOT_NULL,
         NOT_NULL
-      }
+      },
+      fileList: []
     }
   },
   methods: {
+    handleExceed(files, fileList) {
+      if (fileList.length > 0) {
+        this.$message.warning('只能上传一个文件')
+      }
+    },
+    handleRemove(file, fileList) {
+      this.form.url = ''
+    },
+    handleBeforeUpload(file) {
+      this.loading = true
+    },
     handleSuccess(res, file) {
-      console.log(res)
+      // console.log(res.resCode, res.resData.url)
+      if (res.resCode) {
+        this.form.url = res.resData.url
+        this.$message.success('上传成功')
+      }
+      this.loading = false
     },
     formatFormData() {
       if (this.options) {
+        this.fileList = [{ name: this.options.url, url: this.options.url }]
         return {
           id: this.options.id,
           deviceType: this.options.deviceType.toString(),
@@ -70,6 +89,7 @@ export default {
           version: this.options.version
         }
       } else {
+        this.fileList = []
         return { ...defaultForm }
       }
     },
