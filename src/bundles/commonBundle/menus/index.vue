@@ -14,6 +14,7 @@
         <el-menu-item index="systemMenus">菜单管理</el-menu-item>
         <el-menu-item index="systemDevice">设备管理</el-menu-item>
         <el-menu-item index="systemDeviceUpdate">设备升级</el-menu-item>
+        <el-menu-item index="systemGrid">网格设置</el-menu-item>
       </el-submenu>
     </el-menu>
   </section>

@@ -55,4 +55,11 @@ export default [{
   meta: {
     title: '系统设置-设备升级'
   }
+}, {
+  path: 'system/grid',
+  name: 'systemGrid',
+  component: () => import('@/bundles/systemBundle/grid'),
+  meta: {
+    title: '系统设置-网格设置'
+  }
 }]
