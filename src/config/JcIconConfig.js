@@ -5,7 +5,7 @@
 /**
   * 默认market icon
   */
-export const defaultMarketIcon = '//a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-default.png'
+export const defaultMarketIcon = '/static/areaicons/default.png'
 
 /**
   * 图标icon

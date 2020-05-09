@@ -156,6 +156,10 @@ class JcMapEditor extends JcMapEditorBase {
       this.marker.show(position)
     } else {
       this.marker = new JcMapMarker({ map: this.map, position, icon: this.icon, draggable: true, name: this.name || '区域中心点' })
+      this.marker.on('dragstart', () => {
+        this.emit('change') //触发编辑修改
+        this.marker.off('dragstart')
+      })
     }
   }
 

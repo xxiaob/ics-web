@@ -311,10 +311,13 @@ body {
   position: absolute;
   top: 0;
   left: 50%;
-  color: $jc-color-primary;
-  height: 20px;
-  line-height: 20px;
+  color: $jc-marker-color;
+  line-height: 16px;
+  padding: 0 $jc-default-dis/2;
   font-size: $jc-font-size-smaller;
+  background-color: $jc-marker-bg;
+  border: solid 1px $jc-marker-color;
+  border-radius: 2px;
   max-width: 100px;
   transform: translateX(-50%);
   text-align: center;
@@ -326,6 +329,6 @@ body {
 }
 
 .jc-market-icon {
-  width: 24px;
+  width: 18px;
   object-fit: contain;
 }

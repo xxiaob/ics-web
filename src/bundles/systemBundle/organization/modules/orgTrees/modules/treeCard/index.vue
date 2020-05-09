@@ -88,5 +88,8 @@ export default {
   display: flex;
   width: 0;
   font-size: $jc-font-size-small;
+  padding-left: 15px;
+  background: url(/static/areaicons/organization.png) no-repeat left center;
+  background-size: 12px auto;
 }
 </style>
