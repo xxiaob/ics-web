@@ -44,5 +44,5 @@ export function eventManageSave(data) {
  * @returns {Object} axios 对象
  */
 export function eventManageDel(id) {
-  return axios.post(API.eventManage.del, { id })
+  return axios.post(API.eventManage.del + '?id=' + id)
 }

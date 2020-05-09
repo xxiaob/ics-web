@@ -9,12 +9,12 @@
           <!-- <el-button type="danger" icon="el-icon-delete" size="small" @click="removeAll">删除</el-button> -->
         </div>
       </div>
-      <el-table :data="list" v-loading="loading" row-key="id" class="jc-table" @selection-change="tableSelect">
+      <el-table :data="list" v-loading="loading" row-key="id" class="jc-table">
         <!-- <el-table-column type="selection" width="40"></el-table-column> -->
         <el-table-column type="index" label="序号" width="50"></el-table-column>
         <el-table-column prop="eventType" label="事件类型"></el-table-column>
         <el-table-column prop="reportUser" label="上报人"></el-table-column>
-        <el-table-column prop="orgId" label="所属组织"></el-table-column>
+        <el-table-column prop="orgId" label="所属组织" :formatter="formatOrg"></el-table-column>
         <el-table-column prop="desc" label="事件描述" show-overflow-tooltip></el-table-column>
         <el-table-column prop="createTime" label="创建时间" :formatter="formatTime"></el-table-column>
         <el-table-column width="100" label="操作">
@@ -28,7 +28,7 @@
       <el-pagination @current-change="currentChange" @size-change="sizeChange" :current-page.sync="page.pageNum" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.total" class="text-right jc-mt"></el-pagination>
 
     </el-card>
-    <jc-manage :options="info" :visible.sync="visible" @save-success="initData"></jc-manage>
+    <jc-manage :orgTree="orgTree" :options="info" :visible.sync="visible" @save-success="initData"></jc-manage>
   </div>
 </template>
 <script>
@@ -47,11 +47,12 @@ export default {
   data() {
     return {
       orgTree: [],
+      orgObj: {},
       list: [],
       loading: false,
       visible: false,
       info: null,
-      ids: [],
+      // ids: [],
       filter: {}
     }
   },
@@ -61,8 +62,11 @@ export default {
     this.initData()
   },
   methods: {
-    formatTime(row, column, cellValue, index) {
+    formatTime(row, column, cellValue) {
       return formatDate(cellValue)
+    },
+    formatOrg(row, column, cellValue) {
+      return this.orgObj[cellValue]
     },
     formatOrgTree(child) {
       let trees = []
@@ -85,13 +89,26 @@ export default {
       }
       return trees
     },
+    formatOrgTreeToObj(child) {
+      let objs = {}
+
+      if (child && child.length) {
+        child.forEach(item => {
+          if (item.children && item.children.length) {
+            objs = Object.assign(objs, this.formatOrgTreeToObj(item.children))
+          }
+          objs[item.orgId] = item.orgName
+        })
+      }
+      return objs
+    },
     async getOrgTree() {
       const res = await organizationList()
 
       this.orgTree = this.formatOrgTree(res)
+      this.orgObj = this.formatOrgTreeToObj(res)
     },
     async initData() {
-      // console.log(this.orgTree)
       if (!this.loading) {
         this.loading = true
         try {
@@ -129,32 +146,32 @@ export default {
       this.filter = filter
       this.currentChange(1)
     },
-    tableSelect(selections) {
-      let ids = []
+    // tableSelect(selections) {
+    //   let ids = []
 
-      if (selections && selections.length) {
-        selections.forEach(item=> {
-          ids.push(item.id)
-        })
-      }
-      this.ids = ids
-    },
+    //   if (selections && selections.length) {
+    //     selections.forEach(item=> {
+    //       ids.push(item.id)
+    //     })
+    //   }
+    //   this.ids = ids
+    // },
     del(row) {
       this.$confirm('确认删除该事件', '提示', { type: 'warning' }).then(() => {
         this.remove(row.id)
       }).catch(() => {})
     },
-    removeAll() {
-      if (this.ids.length) {
-        this.$confirm('确认删除选中的事件', '提示', { type: 'warning' }).then(() => {
-          this.remove(this.ids)
-        }).catch(() => {})
-      } else {
-        this.$message.error('请先选择删除项')
-      }
-    },
-    remove(ids) {
-      eventManageDel(ids).then(() => {
+    // removeAll() {
+    //   if (this.ids.length) {
+    //     this.$confirm('确认删除选中的事件', '提示', { type: 'warning' }).then(() => {
+    //       this.remove(this.ids)
+    //     }).catch(() => {})
+    //   } else {
+    //     this.$message.error('请先选择删除项')
+    //   }
+    // },
+    remove(id) {
+      eventManageDel(id).then(() => {
         this.$message.success('删除成功')
         this.currentChange(this.page.pageNum - 1)
       })
@@ -178,12 +195,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.el-table /deep/ {
-  .red {
-    color: red;
-  }
-  .green {
-    color: green;
-  }
-}
 </style>

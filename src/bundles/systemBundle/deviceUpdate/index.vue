@@ -61,22 +61,22 @@ export default {
     this.initData()
   },
   methods: {
-    cellClass({ row, column, rowIndex, columnIndex }) {
+    cellClass({ row, column }) {
       if (column.property === 'state') {
         if (row.state) {
-          return 'green'
+          return 'jc-state-publish'
         } else {
-          return 'red'
+          return 'jc-state-unpublish'
         }
       }
     },
-    formatDeviceType(row, column, cellValue, index) {
+    formatDeviceType(row, column, cellValue) {
       return deviceTypes[cellValue]
     },
-    formatState(row, column, cellValue, index) {
+    formatState(row, column, cellValue) {
       return states[cellValue]
     },
-    formatTime(row, column, cellValue, index) {
+    formatTime(row, column, cellValue) {
       return formatDate(cellValue)
     },
     async initData() {
@@ -178,10 +178,10 @@ export default {
 
 <style lang="scss" scoped>
 .el-table /deep/ {
-  .red {
+  .jc-state-unpublish {
     color: $jc-color-danger;
   }
-  .green {
+  .jc-state-publish {
     color: $jc-color-success;
   }
 }

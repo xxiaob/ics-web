@@ -33,14 +33,14 @@ export default {
         this.$message.warning('只能上传一个文件')
       }
     },
-    handleRemove(file, fileList) {
+    handleRemove() {
       this.$emit('update:url', '')
     },
-    handleBeforeUpload(file) {
+    handleBeforeUpload() {
       this.loading = true
       // this.$emit('update:url', '111')
     },
-    handleSuccess(res, file) {
+    handleSuccess(res) {
       if (res.resCode) {
         this.$emit('update:url', res.resData.url)
         this.$message.success('上传成功')

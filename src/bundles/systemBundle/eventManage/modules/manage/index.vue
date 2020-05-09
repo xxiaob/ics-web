@@ -12,8 +12,8 @@
           <el-option v-for="(value,key) in deviceTypes" :key="key" :label="value" :value="key"></el-option>
         </el-select>
       </el-form-item> -->
-      <el-form-item label="所属组织" prop="orgId" :rules="rules.NOT_NULL">
-        <el-input v-model="form.orgId" :disabled="view" placeholder="请输入所属组织"></el-input>
+      <el-form-item prop="orgId" label="所属组织" :rules="rules.SELECT_NOT_NULL">
+        <el-cascader :options="orgTree" :disabled="view" v-model="form.orgId" :props="{expandTrigger: 'hover', emitPath: false }" clearable></el-cascader>
       </el-form-item>
       <el-form-item label="事件描述" prop="desc" :rules="rules.NOT_NULL">
         <el-input v-model="form.desc" :disabled="view" placeholder="请输入事件描述" type="textarea"></el-input>
@@ -69,6 +69,11 @@ let defaultForm = {
 export default {
   name: 'SystemEventManageManage',
   mixins: [FormMixins],
+  props: {
+    orgTree: {
+      type: Array
+    }
+  },
   components: {
     upload
   },
