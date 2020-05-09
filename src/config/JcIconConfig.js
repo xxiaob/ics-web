@@ -3,6 +3,11 @@
  */
 
 /**
+  * 默认market icon
+  */
+export const defaultMarketIcon = '//a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-default.png'
+
+/**
   * 图标icon
   */
 export const JcIcons = {

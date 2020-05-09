@@ -24,7 +24,7 @@ export default {
         }
       }
 
-      myJcMapEditor = new JcMapEditor({ map: myJcMap, sign: this.adcode ? null : sign, subSigns: subSigns })
+      myJcMapEditor = new JcMapEditor({ map: myJcMap, sign: this.adcode ? null : sign, subSigns: subSigns, name: sign.name })
       myJcMapEditor.on('change', () => {
         this.startEdit = true
       })

@@ -5,7 +5,7 @@ import JcMapEditorBase from '../../base/JcMapEditor'
 import { MAP_SIGN_TYPE, MAP_EDIT_TYPE } from '@/constant/CONST'
 import { PolygonStyle } from '../config'
 import { paintingSign, getCenter } from '../aMapUtil'
-import { JcMapSign } from '../index'
+import { JcMapSign, JcMapMarker } from '../index'
 
 class JcMapEditor extends JcMapEditorBase {
   /**
@@ -153,16 +153,9 @@ class JcMapEditor extends JcMapEditorBase {
    */
   showMarket(position) {
     if (this.marker) {
-      this.marker.setPosition(position)
+      this.marker.show(position)
     } else {
-      this.marker = new this.map.AMap.Marker({
-        map: this.map.map,
-        position,
-        icon: '//a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-default.png',
-        anchor: 'bottom-center',
-        draggable: true,
-        title: this.name || '区域中心点'
-      })
+      this.marker = new JcMapMarker({ map: this.map, position, icon: this.icon, draggable: true, name: this.name || '区域中心点' })
     }
   }
 
@@ -301,6 +294,9 @@ class JcMapEditor extends JcMapEditorBase {
           item.target.setMap()
         }
       })
+    }
+    if (this.marker) {
+      this.marker.hide()
     }
     this.boundaries = null
     this.editItem = null
