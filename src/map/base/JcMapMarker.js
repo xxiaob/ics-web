@@ -25,7 +25,7 @@ class JcMapMarket {
     this.extData = options.extData
     this.position = options.position || []
     this.draggable = options.draggable || false
-    this.titleVisible = options.titleVisible || true
+    this.titleVisible = options.titleVisible == false ? false : true
   }
 
   /**

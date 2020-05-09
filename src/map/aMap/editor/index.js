@@ -53,7 +53,7 @@ class JcMapEditor extends JcMapEditorBase {
   initEditor() {
     if (this.sign) {
       //添加点标记
-      this.showMarket(this.sign.center)
+      this.showMarker(this.sign.center)
       //绘画已有数据
       let boundaries = [] //存储边界数据
 
@@ -112,7 +112,7 @@ class JcMapEditor extends JcMapEditorBase {
       this.boundaries.push(boundary)
     } else {
       this.boundaries = [boundary]
-      this.showMarket(getCenter(boundary))
+      this.showMarker(getCenter(boundary))
     }
     this.refreshListener()
     this.console('新增之后启用编辑', boundary)
@@ -151,7 +151,7 @@ class JcMapEditor extends JcMapEditorBase {
    * 显示地图标记
    * @param {*} position 标记坐标点
    */
-  showMarket(position) {
+  showMarker(position) {
     if (this.marker) {
       this.marker.show(position)
     } else {
