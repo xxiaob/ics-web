@@ -57,7 +57,7 @@ export default {
         this.loading = true
         organizationList().then(res => {
           this.trees = this.formatTree(res)
-          if ( this.trees.length) {
+          if (this.trees.length) {
             this.$nextTick(() => {
               this.orgId = this.orgId || this.trees[0].orgId
               this.$refs.tree.setCurrentKey(this.orgId)

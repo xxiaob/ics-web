@@ -1,9 +1,16 @@
 <template>
-  <div class="jc-map-warp jc-card" v-loading="loading">
+  <div class="jc-map-warp jc-card">
     <div class="jc-title-warp">
       <div class="jc-title-sign">组织区域</div>
     </div>
+    <map-search ref="mapSearch"></map-search>
     <div class="jc-map-space" ref="myMap"></div>
+    <manage-trees class="jc-trees-warp"></manage-trees>
+    <div class="jc-panel-area jc-area-show">
+      <i class="jc-panel-item iconfont iconxinzengquyu" title="新增区域"></i>
+      <i class="jc-panel-item iconfont iconzu" title="保存设置"></i>
+      <i class="jc-panel-item iconfont iconfuwei" title="重置"></i>
+    </div>
   </div>
 </template>
 <script>
@@ -14,18 +21,23 @@ let myJcMap //个人 map 对象
 export default {
   name: 'SystemGridIndex',
   components: {
-    MapSearch: () => import('@/components/JcMap/MapSearch')
+    MapSearch: () => import('@/components/JcMap/MapSearch'),
+    ManageTrees: () => import('./modules/manageTrees')
   },
   data() {
     return {
-      loading: false
     }
   },
   mounted() {
     myJcMap = new JcMap()
+    this.initData()
   },
   methods: {
-
+    initData() {
+      myJcMap.init({ source: this.$refs.myMap }).then(() => {
+        this.$refs.mapSearch.initData(myJcMap) //初始化搜索对象
+      })
+    }
   }
 }
 </script>
@@ -63,26 +75,6 @@ $jc-map-header-height: 40px; //map header高度
 
 $jc-item-width: 36px;
 
-.jc-auto-area {
-  position: absolute;
-  top: 50px;
-  left: $jc-default-dis;
-  z-index: 8;
-  opacity: 0.6;
-  transform: translateY(-150%);
-  transition: transform 0.4s, opacity 0.4s;
-
-  .el-cascader {
-    width: 120px;
-  }
-}
-
-.jc-area-search {
-  opacity: 0.6;
-  transform: translateX(-80px);
-  transition: transform 0.4s, opacity 0.4s;
-}
-
 .jc-panel-area {
   position: absolute;
   bottom: 0;
@@ -98,34 +90,9 @@ $jc-item-width: 36px;
   transition: transform 0.4s, opacity 0.4s;
 
   &.jc-area-show {
-    opacity: 1;
-    transform: translate(-50%, 0);
-  }
-}
-
-.jc-map-auto {
-  .jc-auto-area {
-    opacity: 1;
-    transform: translateY(0);
-  }
-
-  .jc-panel-auto {
     z-index: 9;
     opacity: 1;
     transform: translate(-50%, 0);
-  }
-}
-
-.jc-map-custom {
-  .jc-panel-custom {
-    z-index: 9;
-    opacity: 1;
-    transform: translate(-50%, 0);
-  }
-
-  .jc-area-search {
-    opacity: 1;
-    transform: translateX(0);
   }
 }
 
@@ -142,5 +109,8 @@ $jc-item-width: 36px;
   &.jc-active {
     color: $jc-color-primary;
   }
+}
+.jc-trees-warp {
+  top: $jc-map-header-height + $jc-default-dis;
 }
 </style>

@@ -14,7 +14,8 @@ class JcMapSign {
    * @param {Boolean} options.debug 配置 设法开启debug 模式，默认true
    * @param {String} options.style 设置额外样式，取配置的对应标记类型样式key
    * @param {Array} options.boundaries 边界数组
-   * @param {Boolean} options.tipVisible 是否显示tip
+   * @param {Boolean} options.tipVisible 是否显示区域边界
+   * @param {Boolean} options.tipVisible 是否显示中心点tip
    */
   constructor(options) {
     this.debug = options.debug || true
@@ -26,6 +27,7 @@ class JcMapSign {
     this.map = options.map || null
     this.active = options.active || false
     this.style = options.style || null
+    this.areaVisible = options.areaVisible == false ? false : true
     this.tipVisible = options.tipVisible == false ? false : true
   }
 
@@ -63,11 +65,21 @@ class JcMapSign {
   hideTip() { }
 
   /**
+   * 显示边界区域
+   */
+  showArea() { }
+
+  /**
+   * 隐藏边界区域
+   */
+  hideArea() { }
+
+  /**
    * 地图自适应 显示
    */
   fitView() {
     if (this.map) {
-      this.map.fitView(this)
+      this.map.fitView([this])
     }
   }
 
