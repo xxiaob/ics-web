@@ -54,3 +54,10 @@ export const SearchOptions = {
     extensions: 'base' //返回信息详略，默认为base（基本信息）
   }
 }
+
+//market配置参数
+export const markerOptions = {
+  base: {
+    anchor: 'bottom-center'
+  }
+}

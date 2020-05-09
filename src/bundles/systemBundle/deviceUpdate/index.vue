@@ -179,10 +179,10 @@ export default {
 <style lang="scss" scoped>
 .el-table /deep/ {
   .red {
-    color: red;
+    color: $jc-color-danger;
   }
   .green {
-    color: green;
+    color: $jc-color-success;
   }
 }
 </style>

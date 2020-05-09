@@ -5,7 +5,7 @@ import JcMapEditorBase from '../../base/JcMapEditor'
 import { MAP_SIGN_TYPE, MAP_EDIT_TYPE } from '@/constant/CONST'
 import { PolygonStyle } from '../config'
 import { paintingSign, getCenter } from '../aMapUtil'
-import { JcMapSign } from '../index'
+import { JcMapSign, JcMapMarker } from '../index'
 
 class JcMapEditor extends JcMapEditorBase {
   /**
@@ -53,7 +53,7 @@ class JcMapEditor extends JcMapEditorBase {
   initEditor() {
     if (this.sign) {
       //添加点标记
-      this.showMarket(this.sign.center)
+      this.showMarker(this.sign.center)
       //绘画已有数据
       let boundaries = [] //存储边界数据
 
@@ -112,7 +112,7 @@ class JcMapEditor extends JcMapEditorBase {
       this.boundaries.push(boundary)
     } else {
       this.boundaries = [boundary]
-      this.showMarket(getCenter(boundary))
+      this.showMarker(getCenter(boundary))
     }
     this.refreshListener()
     this.console('新增之后启用编辑', boundary)
@@ -151,17 +151,14 @@ class JcMapEditor extends JcMapEditorBase {
    * 显示地图标记
    * @param {*} position 标记坐标点
    */
-  showMarket(position) {
+  showMarker(position) {
     if (this.marker) {
-      this.marker.setPosition(position)
+      this.marker.show(position)
     } else {
-      this.marker = new this.map.AMap.Marker({
-        map: this.map.map,
-        position,
-        icon: '//a.amap.com/jsapi_demos/static/demo-center/icons/poi-marker-default.png',
-        anchor: 'bottom-center',
-        draggable: true,
-        title: this.name || '区域中心点'
+      this.marker = new JcMapMarker({ map: this.map, position, icon: this.icon, draggable: true, name: this.name || '区域中心点' })
+      this.marker.on('dragstart', () => {
+        this.emit('change') //触发编辑修改
+        this.marker.off('dragstart')
       })
     }
   }
@@ -301,6 +298,9 @@ class JcMapEditor extends JcMapEditorBase {
           item.target.setMap()
         }
       })
+    }
+    if (this.marker) {
+      this.marker.hide()
     }
     this.boundaries = null
     this.editItem = null

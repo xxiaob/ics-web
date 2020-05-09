@@ -4,6 +4,7 @@
 import JcMapSignBase from '../../base/JcMapSign'
 import { EventTrans } from '../config'
 import { paintingSign } from '../aMapUtil'
+import { JcMapMarker } from '../index'
 
 class JcMapSign extends JcMapSignBase {
   /**
@@ -25,6 +26,7 @@ class JcMapSign extends JcMapSignBase {
         this.map.map.add(item.target)
       })
     }
+    this.showTip()
   }
 
   /**
@@ -38,6 +40,31 @@ class JcMapSign extends JcMapSignBase {
           item.target = null
         }
       })
+    }
+    this.hideTip()
+  }
+
+  /**
+   * 显示中心点和说明
+   */
+  showTip() {
+    if (this.tipVisible) {
+      if (this.marker) {
+        this.marker.show()
+      } else {
+        this.marker = new JcMapMarker({ map: this.map, position: this.center, name: this.name })
+      }
+    } else {
+      this.hideTip()
+    }
+  }
+
+  /**
+   * 隐藏中心点和说明
+   */
+  hideTip() {
+    if (this.marker) {
+      this.marker.hide()
     }
   }
 

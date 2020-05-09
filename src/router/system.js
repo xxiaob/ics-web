@@ -62,4 +62,11 @@ export default [{
   meta: {
     title: '系统设置-事件管理'
   }
+}, {
+  path: 'system/grid',
+  name: 'systemGrid',
+  component: () => import('@/bundles/systemBundle/grid'),
+  meta: {
+    title: '系统设置-网格设置'
+  }
 }]

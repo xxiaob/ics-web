@@ -3,6 +3,11 @@
  */
 
 /**
+  * 默认market icon
+  */
+export const defaultMarketIcon = '/static/areaicons/default.png'
+
+/**
   * 图标icon
   */
 export const JcIcons = {
