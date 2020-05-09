@@ -43,7 +43,6 @@ export const CircleStyle = {
   active: { fillOpacity: 0.3 }
 }
 
-
 //搜索参数
 export const SearchOptions = {
   PlaceSearchOptions: { //设置PlaceSearch属性
