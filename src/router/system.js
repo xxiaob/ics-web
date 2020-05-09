@@ -55,4 +55,11 @@ export default [{
   meta: {
     title: '系统设置-设备升级'
   }
+}, {
+  path: 'system/eventManage',
+  name: 'systemEventManage',
+  component: () => import('@/bundles/systemBundle/eventManage'),
+  meta: {
+    title: '系统设置-事件管理'
+  }
 }]

@@ -28,7 +28,7 @@
   </div>
 </template>
 <script>
-import { roleList, roleDel, roleGet } from '@/api/role'
+import { roleList, roleDel } from '@/api/role'
 import { formatDate } from '@/libs/util'
 import PaginationMixins from '@/mixins/PaginationMixins'
 
@@ -51,27 +51,29 @@ export default {
     }
   },
   methods: {
-    initData(orgId) {
+    async initData(orgId) {
       if (orgId) {
         this.orgId = orgId
       }
       if (!this.loading) {
         this.loading = true
-        roleList({ ...this.filter, ...this.page, orgId: this.orgId }).then(res => {
-          this.page.total = res.total
+        try {
+          const { total, resultList } = await roleList({ ...this.filter, ...this.page, orgId: this.orgId })
 
+          this.page.total = total
           let list = []
 
-          if (res.resultList && res.resultList.length) {
-            res.resultList.forEach(item => {
+          if (resultList && resultList.length) {
+            resultList.forEach(item => {
               list.push({ roleId: item.roleId, roleName: item.roleName, orgId: item.orgId, orgName: item.orgName, createTime: formatDate(item.createTime) })
             })
           }
           this.list = list
           this.loading = false
-        }).catch(() => {
+        } catch (error) {
+          console.error(error)
           this.loading = false
-        })
+        }
       }
     },
     goFilter(filter) {
@@ -110,10 +112,8 @@ export default {
     },
     manage(row) {
       if (row) {
-        roleGet(row.roleId).then(res => {
-          this.info = { roleId: res.roleId, roleName: res.roleName, orgId: res.orgId, resIds: res.resIds }
-          this.visible = true
-        })
+        this.info = row
+        this.visible = true
       } else {
         this.info = null
         this.visible = true

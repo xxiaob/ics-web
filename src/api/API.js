@@ -69,11 +69,24 @@ export default {
   deviceUpdate: {
     //设备升级
     add: 'device-service/deviceUpgPkg/add',
-    // get: 'device-service/area-service/area/detail',
     list: 'device-service/deviceUpgPkg/listByPage',
     update: 'device-service/deviceUpgPkg/upd',
     del: 'device-service/deviceUpgPkg/del',
     publish: 'device-service/deviceUpgPkg/publishedPkg'
   },
-  upload: 'file-server-service/upload/upload'
+  upload: 'file-server-service/upload/upload',
+  device: {
+    //设备管理
+    add: 'device-service/deviceUpgPkg/add',
+    list: 'device-service/deviceUpgPkg/listByPage',
+    update: 'device-service/deviceUpgPkg/upd',
+    del: 'device-service/deviceUpgPkg/del'
+  },
+  eventManage: {
+    //事件管理
+    add: 'activiti-service/event/add',
+    list: 'activiti-service/event/list',
+    update: 'activiti-service/event/upd',
+    del: 'activiti-service/event/del'
+  }
 }
