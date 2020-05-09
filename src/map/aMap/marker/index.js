@@ -16,7 +16,6 @@ class JcMapmarker extends JcMapmarkerBase {
     this.marker = new this.map.AMap.Marker({
       ...markerOptions.base,
       position: this.position,
-      anchor: 'bottom-center',
       draggable: this.draggable
     })
     this.show()
@@ -27,8 +26,8 @@ class JcMapmarker extends JcMapmarkerBase {
    * @param {Array} position 中心点
    */
   show(position) {
-    this.setPosition(position)
     this.marker.setContent(defaultMarker({ icon: this.icon, title: this.name, titleVisible: this.titleVisible }))
+    this.setPosition(position)
     this.marker.setMap(this.map.map)
   }
 

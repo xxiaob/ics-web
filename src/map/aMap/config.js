@@ -58,6 +58,6 @@ export const SearchOptions = {
 //market配置参数
 export const markerOptions = {
   base: {
-    anchor: 'bottom-center'
+    anchor: [-9, -54]
   }
 }
