@@ -1,21 +1,22 @@
 <template>
   <div class="jc-main-container-warp">
-    <tab-filter :orgTree="orgTree" @filter="goFilter"></tab-filter>
+    <tab-filter @filter="goFilter"></tab-filter>
     <el-card class="jc-table-card jc-mt">
       <div slot="header" class="jc-card-header">
         <div class="jc-card-title">列表内容</div>
         <div class="jc-button-group">
-          <el-button type="primary" icon="el-icon-plus" size="small" @click="manage(null)">事件上报</el-button>
-          <!-- <el-button type="danger" icon="el-icon-delete" size="small" @click="removeAll">删除</el-button> -->
+          <el-button type="primary" icon="el-icon-plus" size="small" @click="manage(null)">日常任务</el-button>
+          <el-button type="primary" icon="el-icon-plus" size="small" @click="manage(null)">临时任务</el-button>
         </div>
       </div>
       <el-table :data="list" v-loading="loading" row-key="id" class="jc-table">
-        <!-- <el-table-column type="selection" width="40"></el-table-column> -->
         <el-table-column type="index" label="序号" width="50"></el-table-column>
-        <el-table-column prop="eventType" label="事件类型"></el-table-column>
-        <el-table-column prop="reportUserName" label="上报人"></el-table-column>
-        <el-table-column prop="orgId" label="所属组织" :formatter="formatOrg"></el-table-column>
-        <el-table-column prop="desc" label="事件描述" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="projectType" label="项目类型"></el-table-column>
+        <el-table-column prop="projectId" label="项目名称"></el-table-column>
+        <el-table-column prop="taskType" label="任务类型"></el-table-column>
+        <el-table-column prop="reportUser" label="下发人"></el-table-column>
+        <el-table-column prop="orgId" label="下发组织" :formatter="formatOrg"></el-table-column>
+        <el-table-column prop="desc" label="任务名称" show-overflow-tooltip></el-table-column>
         <el-table-column prop="createTime" label="创建时间" :formatter="formatTime"></el-table-column>
         <el-table-column width="100" label="操作">
           <template slot-scope="scope">
@@ -32,7 +33,7 @@
   </div>
 </template>
 <script>
-import { eventManageList, eventManageDel } from '@/api/eventManage'
+import { taskList, taskDel } from '@/api/task'
 import { formatDate } from '@/libs/util'
 import PaginationMixins from '@/mixins/PaginationMixins'
 import { organizationList } from '@/api/organization'
@@ -40,7 +41,7 @@ import { createNamespacedHelpers } from 'vuex'
 const { mapState } = createNamespacedHelpers('user')
 
 export default {
-  name: 'SystemEventManageIndex',
+  name: 'SystemTaskProcessIndex',
   mixins: [PaginationMixins],
   components: {
     TabFilter: () => import('./modules/tabFilter'),
@@ -54,8 +55,9 @@ export default {
       loading: false,
       visible: false,
       info: null,
-      // ids: [],
-      filter: {}
+      filter: {
+        selectType: '0'
+      }
     }
   },
   computed: {
@@ -117,7 +119,7 @@ export default {
       if (!this.loading) {
         this.loading = true
         try {
-          const { total, resultList } = await eventManageList({ ...this.filter, ...this.page })
+          const { total, resultList } = await taskList({ ...this.filter, ...this.page })
 
           this.page.total = total
           const list = []
@@ -135,7 +137,6 @@ export default {
                 id: item.id,
                 orgId: item.orgId,
                 reportUser: item.reportUser,
-                reportUserName: item.reportUserName,
                 videoAddr: item.videoAddr
               })
             })
@@ -152,32 +153,13 @@ export default {
       this.filter = filter
       this.currentChange(1)
     },
-    // tableSelect(selections) {
-    //   let ids = []
-
-    //   if (selections && selections.length) {
-    //     selections.forEach(item=> {
-    //       ids.push(item.id)
-    //     })
-    //   }
-    //   this.ids = ids
-    // },
     del(row) {
       this.$confirm('确认删除该事件', '提示', { type: 'warning' }).then(() => {
         this.remove(row.id)
       }).catch(() => {})
     },
-    // removeAll() {
-    //   if (this.ids.length) {
-    //     this.$confirm('确认删除选中的事件', '提示', { type: 'warning' }).then(() => {
-    //       this.remove(this.ids)
-    //     }).catch(() => {})
-    //   } else {
-    //     this.$message.error('请先选择删除项')
-    //   }
-    // },
     remove(id) {
-      eventManageDel(id).then(() => {
+      taskDel(id).then(() => {
         this.$message.success('删除成功')
         this.currentChange(this.page.pageNum - 1)
       })

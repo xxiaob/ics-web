@@ -69,4 +69,11 @@ export default [{
   meta: {
     title: '系统设置-网格设置'
   }
+}, {
+  path: 'system/taskProcess',
+  name: 'taskProcess',
+  component: () => import('@/bundles/systemBundle/taskProcess'),
+  meta: {
+    title: '系统设置-任务管理-任务处理'
+  }
 }]

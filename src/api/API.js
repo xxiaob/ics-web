@@ -88,5 +88,12 @@ export default {
     list: 'activiti-service/event/list',
     update: 'activiti-service/event/upd',
     del: 'activiti-service/event/del'
+  },
+  task: {
+    //任务管理
+    add: 'activiti-service/task/addTemporaryTask',
+    list: 'activiti-service/task/select',
+    update: 'activiti-service/task/updTemporaryTask',
+    del: 'activiti-service/task/delTemporaryTask'
   }
 }
