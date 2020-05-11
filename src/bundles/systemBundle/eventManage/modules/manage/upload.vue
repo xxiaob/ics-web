@@ -1,5 +1,5 @@
 <template>
-  <el-upload :action="uploadUrl" :headers="uploadHeaders" :before-upload="handleBeforeUpload" :on-success="handleSuccess" :on-remove="handleRemove" :limit="1" :on-exceed="handleExceed" :file-list="fileList">
+  <el-upload :action="uploadUrl" :accept="accept" :headers="uploadHeaders" :before-upload="handleBeforeUpload" :on-success="handleSuccess" :on-remove="handleRemove" :limit="1" :on-exceed="handleExceed" :file-list="fileList">
     <el-button size="small" type="primary" :loading="loading">点击上传</el-button>
   </el-upload>
 </template>
@@ -11,6 +11,10 @@ import { getToken } from '@/libs/storage'
 export default {
   props: {
     url: {
+      type: String,
+      default: ''
+    },
+    accept: {
       type: String,
       default: ''
     }

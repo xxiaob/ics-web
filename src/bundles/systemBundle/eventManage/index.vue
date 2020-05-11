@@ -20,8 +20,8 @@
         <el-table-column width="100" label="操作">
           <template slot-scope="scope">
             <el-button type="text" size="mini" icon="el-icon-view" @click="manage(scope.row,true)" title="查看"></el-button>
-            <el-button type="text" size="mini" icon="el-icon-edit-outline" @click="manage(scope.row)" title="编辑" :disabled="!!scope.row.state"></el-button>
-            <el-button type="text" size="mini" icon="el-icon-delete" @click="del(scope.row)" title="删除" :disabled="!!scope.row.state"></el-button>
+            <el-button type="text" size="mini" icon="el-icon-edit-outline" @click="manage(scope.row)" title="编辑" :disabled="!scope.row.reportUser===user.userId"></el-button>
+            <el-button type="text" size="mini" icon="el-icon-delete" @click="del(scope.row)" title="删除" :disabled="!scope.row.reportUser===user.userId"></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -36,6 +36,8 @@ import { eventManageList, eventManageDel } from '@/api/eventManage'
 import { formatDate } from '@/libs/util'
 import PaginationMixins from '@/mixins/PaginationMixins'
 import { organizationList } from '@/api/organization'
+import { createNamespacedHelpers } from 'vuex'
+const { mapState } = createNamespacedHelpers('user')
 
 export default {
   name: 'SystemEventManageIndex',
@@ -55,6 +57,9 @@ export default {
       // ids: [],
       filter: {}
     }
+  },
+  computed: {
+    ...mapState(['user'])
   },
   async created() {
     await this.getOrgTree()
