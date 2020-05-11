@@ -65,7 +65,7 @@ export default {
       this.loading = true
       myJcMap.init({ source: this.$refs.myMap }).then(() => {
         this.$refs.mapSearch.initData(myJcMap) //初始化搜索对象
-        areaList({ orgId: this.orgId, type: AREAS_TYPE.SAMELEVEL }).then(res => {
+        areaList({ orgId: this.orgId, orgSearchType: AREAS_TYPE.SAMELEVEL }).then(res => {
           this.adcode = ''
           this.areaId = ''
           this.drawSign(res, myJcMap) //去绘画边界

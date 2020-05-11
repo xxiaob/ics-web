@@ -302,6 +302,7 @@ class JcMapEditor extends JcMapEditorBase {
     if (this.marker) {
       this.marker.hide()
     }
+    this.map.map.setDefaultCursor('default')
     this.boundaries = null
     this.editItem = null
     this.editObject = null

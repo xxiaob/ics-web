@@ -5,9 +5,11 @@
     </div>
     <map-search ref="mapSearch"></map-search>
     <div class="jc-map-space" ref="myMap"></div>
-    <manage-trees class="jc-trees-warp"></manage-trees>
+    <manage-trees class="jc-trees-warp" @grid-change="gridChange"></manage-trees>
     <div class="jc-panel-area jc-area-show">
-      <i class="jc-panel-item iconfont iconxinzengquyu" title="新增区域"></i>
+      <i class="jc-panel-item iconfont iconhuatu" title="多边形"></i>
+      <i class="jc-panel-item iconfont iconluxian" title="圆"></i>
+      <i class="jc-panel-item iconfont iconluxian" title="线路"></i>
       <i class="jc-panel-item iconfont iconzu" title="保存设置"></i>
       <i class="jc-panel-item iconfont iconfuwei" title="重置"></i>
     </div>
@@ -15,13 +17,16 @@
 </template>
 <script>
 import { JcMap } from '@/map'
+import MapSearch from '@/components/JcMap/MapSearch'
 
 let myJcMap //个人 map 对象
+
+let areas = {}
 
 export default {
   name: 'SystemGridIndex',
   components: {
-    MapSearch: () => import('@/components/JcMap/MapSearch'),
+    MapSearch,
     ManageTrees: () => import('./modules/manageTrees')
   },
   data() {
@@ -37,6 +42,11 @@ export default {
       myJcMap.init({ source: this.$refs.myMap }).then(() => {
         this.$refs.mapSearch.initData(myJcMap) //初始化搜索对象
       })
+    },
+    gridChange(data) {
+      if (data.type == 'view') {
+        //控制显示
+      }
     }
   }
 }
