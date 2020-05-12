@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="options ? '编辑网格':'新增网格'" :visible.sync="dialogVisible" width="600px" :append-to-body="true" @close="dialogClose">
+  <el-dialog :title="options ? '编辑网格':'新增网格'" :visible.sync="dialogVisible" width="800px" :append-to-body="true" @close="dialogClose">
     <el-form ref="form" label-width="100px" :model="form" class="jc-manage-form">
       <el-form-item label="上级">
         <span v-text="pNode.name"></span>
@@ -7,8 +7,8 @@
       <el-form-item label="网格名称" prop="areaName" :rules="rules.Len50">
         <el-input v-model="form.areaName" placeholder="请输入网格名称"></el-input>
       </el-form-item>
-      <el-form-item label="网格类型" prop="areaTypeId" :rules="rules.SELECT_NOT_NULL">
-        <el-input v-model="form.areaTypeId" placeholder="请输入网格类型"></el-input>
+      <el-form-item label="区域类型" prop="areaTypeId" :rules="rules.SELECT_NOT_NULL">
+        <el-input v-model="form.areaTypeId" placeholder="请输入区域类型"></el-input>
       </el-form-item>
       <el-form-item label="描述" prop="desc" :rules="rules.NOT_NULL">
         <jc-editor v-model="form.desc"></jc-editor>

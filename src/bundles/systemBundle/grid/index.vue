@@ -114,10 +114,13 @@ $jc-item-width: 36px;
   line-height: $jc-item-width;
   color: $jc-color-white;
   cursor: pointer;
+  font-size: $jc-font-size-base;
+  transition: font-size 0.3s;
+  will-change: font-size;
 
   &:hover,
   &.jc-active {
-    color: $jc-color-primary;
+    font-size: $jc-font-size-larger;
   }
 }
 .jc-trees-warp {
