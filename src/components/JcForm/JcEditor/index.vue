@@ -22,6 +22,15 @@ export default {
       editor: null
     }
   },
+  watch: {
+    value(newVal) {
+      let html = this.editor.txt.html()
+
+      if (html != newVal) {
+        this.editor.txt.html(newVal)
+      }
+    }
+  },
   mounted() {
     this.initData()
   },
@@ -32,7 +41,7 @@ export default {
           this.editor = new Editor(this.$refs.editor)
 
           this.editor.customConfig.menus = [ 'head', 'bold', 'fontSize', 'italic', 'underline', 'strikeThrough', 'link', 'list', 'justify',
-            'quote', 'image', 'table', 'undo', 'redo'] // 自定义菜单配置
+            'quote', 'image', 'table'] // 自定义菜单配置
 
           this.editor.customConfig.showLinkImg = false // 隐藏“网络图片”tab
           this.editor.customConfig.uploadImgMaxSize = 2 * 1024 * 1024

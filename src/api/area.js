@@ -50,11 +50,11 @@ export function areaGet(data) {
 }
 /**
  * 删除
- * @param { Array } areaIds
+ * @param { String } areaId
  * @returns { Object } axios 对象
  */
-export function areaDel(areaIds) {
-  return axios.post(API.area.del, { areaIds })
+export function areaDel(areaId) {
+  return axios.post(API.area.del, { areaId })
 }
 
 /**

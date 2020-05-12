@@ -32,7 +32,7 @@
   </div>
 </template>
 <script>
-import { areaTypeList, areaTypeDel } from '@/api/areaType'
+import { areaTypeListByPage, areaTypeDel } from '@/api/areaType'
 import PaginationMixins from '@/mixins/PaginationMixins'
 import { formatDate } from '@/libs/util'
 import { JcIcons } from '@/config/JcIconConfig'
@@ -61,7 +61,7 @@ export default {
     initData() {
       if (!this.loading) {
         this.loading = true
-        areaTypeList({ ...this.filter, ...this.page }).then(res => {
+        areaTypeListByPage({ ...this.filter, ...this.page }).then(res => {
           this.page.total = res.total
 
           let list = []

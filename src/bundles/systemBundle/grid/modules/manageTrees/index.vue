@@ -5,7 +5,7 @@
     <div class="jc-tree-warp" v-loading="loading">
       <el-tree ref="tree" :default-expanded-keys="expandedKeys" :load="loadNode" lazy :props="props" :filter-node-method="filterNode" node-key="id" @node-click="nodeClick" :expand-on-click-node="false" :highlight-current="true">
         <div class="custom-tree-node" slot-scope="{ node, data }">
-          <div class="jc-tree-label">
+          <div class="jc-tree-label" :style="getIconStyle(data.icon)">
             <div class="jc-text-warp" v-text="node.label"></div>
           </div>
           <div class="jc-tree-options" :class="{'jc-area': data.areaId}" v-on:click.stop>
@@ -26,6 +26,7 @@ import OperaMixins from './modules/mixins/operaMixins'
 import { organizationList } from '@/api/organization'
 import { areaList } from '@/api/area'
 import { AREAS_TYPE, AREAS_SEARCH_TYPE } from '@/constant/CONST'
+import { JcIcons } from '@/config/JcIconConfig'
 
 export default {
   name: 'SystemGridManageTrees',
@@ -84,6 +85,14 @@ export default {
         this.orgs[orgs[0].pid] = orgs
       }
     },
+    getIconStyle(icon) {
+      if (icon) {
+        let useIcon = JcIcons[icon] || {}
+
+        return `background-image: url(${useIcon.icon || ''});`
+      }
+      return ''
+    },
     async getNodes(node) {
       let result = []
 
@@ -92,18 +101,24 @@ export default {
       if (node.level === 0) {
         await this.initData()
         result = [...this.parentNode]
-        params = { orgId: this.parentNode.orgId, orgSearchType: AREAS_TYPE.OWN_AND_BRO }
       } else {
-        let orgNode = this.orgs[node.data.orgId] || []
-
-        result = [...orgNode]
         if (node.data.areaId) {
-          params = { areaId: node.data.areaId }
+          Object.assign(params, { areaId: node.data.areaId })
         } else {
-          params = { orgId: node.data.orgId, orgSearchType: AREAS_TYPE.OWN_AND_BRO }
+          let orgNode = this.orgs[node.data.orgId] || []
+
+          result = [...orgNode]
+          Object.assign(params, { orgId: node.data.orgId, orgSearchType: AREAS_TYPE.OWN })
+        }
+        const res = await areaList(params)
+
+        console.log('查询的area list：', res)
+        if (res && res.length) {
+          res.forEach(item => {
+            result.push({ id: item.areaId, pid: item.pid, pName: node.data.name, orgId: item.orgId, areaId: item.areaId, desc: item.desc, areaTypeId: item.areaTypeId, name: item.areaName, icon: item.icon, view: false })
+          })
         }
       }
-      const res = areaList(params)
 
       return result
     },
@@ -184,9 +199,9 @@ $jc-controll-width: 38px;
     flex: 1;
     width: 0;
     font-size: $jc-font-size-small;
-    padding-left: 15px;
+    padding-left: 14px;
     background: url(/static/areaicons/organization.png) no-repeat left center;
-    background-size: 12px auto;
+    background-size: 11px auto;
   }
   .jc-tree-options {
     width: 36px;

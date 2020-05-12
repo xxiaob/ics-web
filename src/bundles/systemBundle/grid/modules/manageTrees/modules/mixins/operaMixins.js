@@ -1,30 +1,30 @@
 /**
- * 按钮才做 mixins
+ * 按钮操作 mixins
  */
+import { areaDel } from '@/api/area'
 export default {
   data() {
     return {
       visible: false,
       info: null,
-      pNode: { name: '', pid: '' }
+      pNode: { name: '', orgId: '', areaId: '' }
     }
   },
   methods: {
     del(node) {
-      this.checkManage(() => {
-        this.$confirm('确认删除该网格', '提示', { type: 'warning' }).then(() => {
-          // organizationDel(node.orgId).then(() => {
-          //   this.$message.success('删除成功')
-          //   this.initData()
-          // })
-        }).catch(() => { })
-      })
+      this.$confirm('确认删除该网格', '提示', { type: 'warning' }).then(() => {
+        areaDel(node.areaId).then(() => {
+          this.$message.success('删除成功')
+          this.$refs.tree.remove(node)
+        })
+      }).catch(() => { })
     },
     manage(data, type) {
-      this.pNode = data
       if (type == 1) {
-        this.info = { orgId: data.orgId, orgName: data.orgName, orgCode: data.orgCode }
+        this.pNode = { name: data.pName, orgId: data.orgId, areaId: data.areaId }
+        this.info = data
       } else if (type == 2) {
+        this.pNode = { name: data.name, orgId: data.orgId }
         this.info = null
       }
       this.visible = true
@@ -33,8 +33,8 @@ export default {
       this.$emit('grid-change', { type: 'view', data })
     },
     saveSuccess(orgId) {
-      this.orgId = orgId
-      this.initData()
+      // this.orgId = orgId
+      // this.initData()
     },
     nodeClick(data) {
       if (data.view) {

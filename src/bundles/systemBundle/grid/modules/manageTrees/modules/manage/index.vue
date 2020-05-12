@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="options ? '编辑网格':'新增网格'" :visible.sync="dialogVisible" width="800px" :append-to-body="true" @close="dialogClose">
+  <el-dialog :title="isEdit ? '编辑网格':'新增网格'" :visible.sync="dialogVisible" width="800px" :append-to-body="true" @close="dialogClose">
     <el-form ref="form" label-width="100px" :model="form" class="jc-manage-form">
       <el-form-item label="上级">
         <span v-text="pNode.name"></span>
@@ -8,10 +8,12 @@
         <el-input v-model="form.areaName" placeholder="请输入网格名称"></el-input>
       </el-form-item>
       <el-form-item label="区域类型" prop="areaTypeId" :rules="rules.SELECT_NOT_NULL">
-        <el-input v-model="form.areaTypeId" placeholder="请输入区域类型"></el-input>
+        <el-select v-model="form.areaTypeId" placeholder="请选择区域类型">
+          <el-option class="jc-area-item" v-for="item in areaTypes" :key="item.id" :label="item.name" :value="item.id" :style="getIconStyle(item.icon)"></el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="描述" prop="desc" :rules="rules.NOT_NULL">
-        <jc-editor v-model="form.desc"></jc-editor>
+        <jc-editor v-model="form.desc" ref="myEditor"></jc-editor>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -21,9 +23,11 @@
   </el-dialog>
 </template>
 <script>
-import { organizationSave } from '@/api/organization'
+import { areaAdd, areaUpdate } from '@/api/area'
+import { areaTypeList } from '@/api/areaType'
 import { getStringRule, NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
+import { JcIcons } from '@/config/JcIconConfig'
 
 let defaultForm = { areaName: '', desc: '', areaTypeId: '' }
 
@@ -37,22 +41,42 @@ export default {
   data() {
     return {
       loading: false,
+      areaTypes: [],
       rules: { NOT_NULL, SELECT_NOT_NULL, Len50: getStringRule(1, 50) }
     }
   },
   methods: {
+    initData() {
+      areaTypeList({}).then(res => {
+        let areaTypes = []
+
+        if (res && res.length) {
+          res.forEach(item => {
+            areaTypes.push({ id: item.areaTypeId, name: item.areaTypeName, icon: item.icon })
+          })
+        }
+        this.areaTypes = areaTypes
+      })
+    },
     formatFormData() {
       if (this.options) {
-        return { ...this.options }
+        return { areaName: this.options.name, desc: this.options.desc, areaTypeId: this.options.areaTypeId }
       } else {
         return { ...defaultForm }
       }
+    },
+    getIconStyle(icon) {
+      let useIcon = JcIcons[icon] || {}
+
+      return `background-image: url(${useIcon.icon || ''});`
     },
     onSubmit() {
       this.loading = true
       this.$refs.form.validate(valid => {
         if (valid) {
-          organizationSave({ ...this.form, pid: this.pNode.pid }).then((res) => {
+          let areaSave = this.isEdit ? areaUpdate : areaAdd
+
+          areaSave({ ...this.form, orgId: this.pNode.orgId, areaId: this.pNode.areaId, drawCoordinateType: 1 }).then((res) => {
             this.$message.success('操作成功')
             this.dialogVisible = false
             this.$emit('save-success', res.orgId)
@@ -68,3 +92,11 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.jc-area-item {
+  background-repeat: no-repeat;
+  background-size: auto 90%;
+  background-position: 20px center;
+  text-align: right;
+}
+</style>
