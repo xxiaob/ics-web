@@ -1,5 +1,6 @@
 <template>
-  <div class="jc-card jc-area-manage">
+  <div class="jc-card jc-area-manage" :class="{'jc-area-hide': manageHide}">
+    <div class="jc-area-controll" @click="manageHide = !manageHide"><i class="jc-area-icon el-icon-arrow-right"></i></div>
     <el-input v-model="filterText" prefix-icon="el-icon-search" class="jc-filter-input" clearable size="mini" placeholder="输入关键字进行过滤"></el-input>
     <div class="jc-tree-warp" v-loading="loading">
       <el-tree ref="tree" :default-expanded-keys="expandedKeys" :load="loadNode" lazy :props="props" :filter-node-method="filterNode" node-key="id" @node-click="nodeClick" :expand-on-click-node="false" :highlight-current="true">
@@ -24,7 +25,7 @@ import TreesFilterMixins from '@/mixins/TreesFilterMixins'
 import OperaMixins from './modules/mixins/operaMixins'
 import { organizationList } from '@/api/organization'
 import { areaList } from '@/api/area'
-import { AREAS_TYPE } from '@/constant/CONST'
+import { AREAS_TYPE, AREAS_SEARCH_TYPE } from '@/constant/CONST'
 
 export default {
   name: 'SystemGridManageTrees',
@@ -35,6 +36,7 @@ export default {
   data() {
     return {
       loading: false,
+      manageHide: false,
       filterText: '',
       orgs: {},
       parentNode: [],
@@ -85,7 +87,7 @@ export default {
     async getNodes(node) {
       let result = []
 
-      let params = {}
+      let params = { searchType: AREAS_SEARCH_TYPE.GRID }
 
       if (node.level === 0) {
         await this.initData()
@@ -128,6 +130,44 @@ export default {
   width: $jc-trees-width * 1.2;
   z-index: 10;
   padding: $jc-default-dis/2 $jc-default-dis;
+  transform: translateX(0);
+  transition: transform 0.5s;
+  will-change: transform;
+  &.jc-area-hide {
+    transform: translateX($jc-trees-width * 1.2 + $jc-default-dis);
+    .jc-area-controll {
+      .jc-area-icon {
+        transform: rotate(180deg);
+      }
+    }
+  }
+}
+$jc-controll-width: 38px;
+.jc-area-controll {
+  position: absolute;
+  width: $jc-controll-width;
+  height: $jc-controll-width;
+  line-height: $jc-controll-width;
+  top: 50%;
+  left: -$jc-controll-width;
+  color: $jc-color-primary;
+  z-index: 9;
+  background-color: $jc-color-white;
+  border-radius: 100% 0 0 100%;
+  transform: translate(50%, -50%);
+  cursor: pointer;
+  .jc-area-icon {
+    width: 16px;
+    height: 16px;
+    text-align: center;
+    font-weight: bold;
+    font-size: $jc-font-size-medium;
+    vertical-align: middle;
+    transform: rotate(0);
+    transition: transform 0.5s;
+    will-change: transform;
+    margin-left: 4px;
+  }
 }
 .jc-tree-warp {
   position: absolute;

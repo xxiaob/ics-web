@@ -1,17 +1,17 @@
 <template>
   <el-dialog :title="options ? '编辑网格':'新增网格'" :visible.sync="dialogVisible" width="600px" :append-to-body="true" @close="dialogClose">
     <el-form ref="form" label-width="100px" :model="form" class="jc-manage-form">
-      <el-form-item label="上级组织">
+      <el-form-item label="上级">
         <span v-text="pNode.name"></span>
       </el-form-item>
-      <el-form-item label="组织名称" prop="orgName" :rules="rules.Len50">
-        <el-input v-model="form.orgName" placeholder="请输入组织名称"></el-input>
+      <el-form-item label="网格名称" prop="areaName" :rules="rules.Len50">
+        <el-input v-model="form.areaName" placeholder="请输入网格名称"></el-input>
       </el-form-item>
-      <el-form-item label="组织编码" prop="orgCode">
-        <el-input v-model="form.orgCode" placeholder="请输入组织编码"></el-input>
+      <el-form-item label="网格类型" prop="areaTypeId" :rules="rules.SELECT_NOT_NULL">
+        <el-input v-model="form.areaTypeId" placeholder="请输入网格类型"></el-input>
       </el-form-item>
-      <el-form-item label="是否同级查看" prop="sameLevelAuth">
-        <el-switch v-model="form.sameLevelAuth" active-value="1" inactive-value="0"></el-switch>
+      <el-form-item label="描述" prop="desc" :rules="rules.NOT_NULL">
+        <jc-editor v-model="form.desc"></jc-editor>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -22,21 +22,22 @@
 </template>
 <script>
 import { organizationSave } from '@/api/organization'
-import { getStringRule } from '@/libs/rules'
+import { getStringRule, NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
 
-let defaultForm = { orgName: '', sameLevelAuth: '1', orgCode: '' }
+let defaultForm = { areaName: '', desc: '', areaTypeId: '' }
 
 export default {
   name: 'SystemGridManage',
   mixins: [FormMixins],
   props: ['pNode'],
+  components: {
+    JcEditor: () => import('@/components/JcForm/JcEditor')
+  },
   data() {
     return {
       loading: false,
-      rules: {
-        Len50: getStringRule(1, 50)
-      }
+      rules: { NOT_NULL, SELECT_NOT_NULL, Len50: getStringRule(1, 50) }
     }
   },
   methods: {

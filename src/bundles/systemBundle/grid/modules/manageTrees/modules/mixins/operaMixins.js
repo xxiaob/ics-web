@@ -20,12 +20,11 @@ export default {
         }).catch(() => { })
       })
     },
-    manage(node, type) {
+    manage(data, type) {
+      this.pNode = data
       if (type == 1) {
-        this.pNode = { name: node.name, pid: node.pid }
-        this.info = { orgId: node.orgId, orgName: node.orgName, orgCode: node.orgCode, sameLevelAuth: node.sameLevelAuth }
+        this.info = { orgId: data.orgId, orgName: data.orgName, orgCode: data.orgCode }
       } else if (type == 2) {
-        this.pNode = { name: node.orgName, pid: node.orgId }
         this.info = null
       }
       this.visible = true
