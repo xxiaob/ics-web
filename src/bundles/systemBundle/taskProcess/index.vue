@@ -5,35 +5,38 @@
       <div slot="header" class="jc-card-header">
         <div class="jc-card-title">列表内容</div>
         <div class="jc-button-group">
-          <el-button type="primary" icon="el-icon-plus" size="small" @click="manage(null)">日常任务</el-button>
+          <!-- <el-button type="primary" icon="el-icon-plus" size="small" @click="manage(null)">日常任务</el-button> -->
           <el-button type="primary" icon="el-icon-plus" size="small" @click="manage(null)">临时任务</el-button>
         </div>
       </div>
       <el-table :data="list" v-loading="loading" row-key="id" class="jc-table">
         <el-table-column type="index" label="序号" width="50"></el-table-column>
         <el-table-column prop="projectType" label="项目类型"></el-table-column>
-        <el-table-column prop="projectId" label="项目名称"></el-table-column>
+        <el-table-column prop="projectName" label="项目名称"></el-table-column>
         <el-table-column prop="taskType" label="任务类型"></el-table-column>
-        <el-table-column prop="reportUser" label="下发人"></el-table-column>
-        <el-table-column prop="orgId" label="下发组织" :formatter="formatOrg"></el-table-column>
-        <el-table-column prop="desc" label="任务名称" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="createTime" label="创建时间" :formatter="formatTime"></el-table-column>
-        <el-table-column width="100" label="操作">
+        <el-table-column prop="startUser" label="下发人"></el-table-column>
+        <el-table-column prop="startOrg" label="下发组织"></el-table-column>
+        <el-table-column prop="taskName" label="任务名称" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="taskStatus" label="任务状态" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="createTime" label="创建时间" :formatter="formatTime" width="140"></el-table-column>
+        <el-table-column width="90" label="操作">
           <template slot-scope="scope">
-            <el-button type="text" size="mini" icon="el-icon-view" @click="manage(scope.row,true)" title="查看"></el-button>
-            <el-button type="text" size="mini" icon="el-icon-edit-outline" @click="manage(scope.row)" title="编辑" :disabled="scope.row.reportUser!==user.userId"></el-button>
-            <el-button type="text" size="mini" icon="el-icon-delete" @click="del(scope.row)" title="删除" :disabled="scope.row.reportUser!==user.userId"></el-button>
+            <el-button type="text" size="mini" icon="el-icon-view" @click="manage(scope.row,true)" title="查看" v-if="filter.selectType==1||filter.selectType==2"></el-button>
+            <el-button type="text" size="mini" icon="el-icon-edit-outline" @click="manage(scope.row)" v-if="filter.selectType==3" title="编辑"></el-button>
+            <el-button type="text" size="mini" icon="el-icon-refresh-right" @click="nextTo(scope.row)" title="流转" v-if="filter.selectType==0"></el-button>
+            <el-button type="text" size="mini" icon="el-icon-arrow-down" @click="startTask(scope.row)" title="下发" v-if="filter.selectType==3"></el-button>
+            <el-button type="text" size="mini" icon="el-icon-delete" @click="del(scope.row)" title="删除" v-if="filter.selectType!=0"></el-button>
           </template>
         </el-table-column>
       </el-table>
       <el-pagination @current-change="currentChange" @size-change="sizeChange" :current-page.sync="page.pageNum" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.total" class="text-right jc-mt"></el-pagination>
 
     </el-card>
-    <jc-manage :orgTree="orgTree" :options="info" :visible.sync="visible" @save-success="initData"></jc-manage>
+    <jc-manage :orgTree="orgTree" :orgId="orgId" :options="info" :visible.sync="visible" @save-success="initData"></jc-manage>
   </div>
 </template>
 <script>
-import { taskList, taskDel } from '@/api/task'
+import { taskList, taskDel, taskStart, taskFinish } from '@/api/task'
 import { formatDate } from '@/libs/util'
 import PaginationMixins from '@/mixins/PaginationMixins'
 import { organizationList } from '@/api/organization'
@@ -57,7 +60,8 @@ export default {
       info: null,
       filter: {
         selectType: '0'
-      }
+      },
+      orgId: ''
     }
   },
   computed: {
@@ -122,26 +126,26 @@ export default {
           const { total, resultList } = await taskList({ ...this.filter, ...this.page })
 
           this.page.total = total
-          const list = []
+          // const list = []
 
-          if (resultList && resultList.length > 0) {
-            resultList.forEach(item=>{
-              list.push({
-                afterPhoto: item.afterPhoto,
-                audioAddr: item.audioAddr,
-                beforePhoto: item.beforePhoto,
-                createTime: item.createTime,
-                desc: item.desc,
-                eventNumber: item.eventNumber,
-                eventType: item.eventType,
-                id: item.id,
-                orgId: item.orgId,
-                reportUser: item.reportUser,
-                videoAddr: item.videoAddr
-              })
-            })
-          }
-          this.list = list
+          // if (resultList && resultList.length > 0) {
+          //   resultList.forEach(item=>{
+          //     list.push({
+          //       afterPhoto: item.afterPhoto,
+          //       audioAddr: item.audioAddr,
+          //       beforePhoto: item.beforePhoto,
+          //       createTime: item.createTime,
+          //       desc: item.desc,
+          //       eventNumber: item.eventNumber,
+          //       eventType: item.eventType,
+          //       id: item.id,
+          //       orgId: item.orgId,
+          //       reportUser: item.reportUser,
+          //       videoAddr: item.videoAddr
+          //     })
+          //   })
+          // }
+          this.list = resultList
           this.loading = false
         } catch (error) {
           console.error(error)
@@ -154,8 +158,8 @@ export default {
       this.currentChange(1)
     },
     del(row) {
-      this.$confirm('确认删除该事件', '提示', { type: 'warning' }).then(() => {
-        this.remove(row.id)
+      this.$confirm('确认删除该任务', '提示', { type: 'warning' }).then(() => {
+        this.remove(row.businessKey)
       }).catch(() => {})
     },
     remove(id) {
@@ -172,10 +176,40 @@ export default {
         } else {
           this.info.view = false
         }
-        this.visible = true
       } else {
         this.info = null
-        this.visible = true
+      }
+      this.orgId = this.user.orgId
+      this.visible = true
+    },
+    //下发任务
+    startTask(row) {
+      this.$confirm('确认下发该任务', '提示', { type: 'warning' }).then(async () => {
+        try {
+          await taskStart(row.businessKey)
+          this.$message.success('下发成功')
+          this.initData()
+        } catch (e) {
+          console.error(e)
+        }
+      }).catch(() => {})
+    },
+    //流转
+    async nextTo(row) {
+      const form = {
+        ifUpload: false,
+        assignees: ['1'],
+        businessKey: row.businessKey,
+        taskId: row.taskId,
+        remark: '测试备注'
+      }
+
+      console.log(form)
+      try {
+        await taskFinish(form)
+        this.$message.success('liu成功')
+      } catch (e) {
+        console.error(e)
       }
     }
   }

@@ -1,10 +1,10 @@
 /**
- * 处理设备升级
+ * 处理任务管理
  */
 import axios from 'axios'
 import API from './API'
 
-/*-------------------------------设备升级------------------------------------ */
+/*-------------------------------任务管理------------------------------------ */
 /**
  * 列表
  * @param {object} data
@@ -44,5 +44,29 @@ export function taskSave(data) {
  * @returns {Object} axios 对象
  */
 export function taskDel(id) {
-  return axios.post(API.task.del + '?taskId=' + id)
+  return axios.post(API.task.del + '?businessKey=' + id)
+}
+/**
+ * 启动任务流程
+ * @param {String} id
+ * @returns {Object} axios 对象
+ */
+export function taskStart(id) {
+  return axios.post(API.task.start + '?businessKey=' + id)
+}
+/**
+ * 启动任务流程
+ * @param {String} id
+ * @returns {Object} axios 对象
+ */
+export function taskUpdStatus(id) {
+  return axios.post(API.task.updTaskStatus + '?businessKey=' + id)
+}
+/**
+ * 完成任务
+ * @param {object} data
+ * @returns {Object} axios 对象
+ */
+export function taskFinish(data) {
+  return axios.post(API.task.finish, data)
 }

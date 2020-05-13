@@ -1,45 +1,43 @@
 <template>
-  <el-dialog :title="options ? options.view?'查看任务':'编辑任务' : '新增任务'" :visible.sync="dialogVisible" width="600px" :append-to-body="true" @close="dialogClose">
-    <el-form ref="form" label-width="100px" :model="form" class="jc-manage-form">
-      <el-form-item label="任务ID" prop="eventNumber" :rules="rules.Len50">
-        <el-input v-model="form.eventNumber" :disabled="view" placeholder="请输入任务ID"></el-input>
+  <el-dialog :title="options ? options.view?'查看临时任务':'编辑临时任务' : '新增临时任务'" :visible.sync="dialogVisible" width="900px" :append-to-body="true" @close="dialogClose">
+    <el-form ref="form" label-width="80px" :model="form" class="jc-manage-form">
+      <div class="jc-clearboth">
+        <el-form-item label="项目类型" prop="projectType" :rules="rules.NOT_NULL" class="jc-left-width40">
+          <el-input v-model="form.projectType" :disabled="view" placeholder="请输入项目类型"></el-input>
+        </el-form-item>
+        <el-form-item label="项目名称" prop="projectId" :rules="rules.NOT_NULL" class="jc-left-width60">
+          <el-input v-model="form.projectId" :disabled="view" placeholder="请输入项目名称"></el-input>
+        </el-form-item>
+      </div>
+      <div class="jc-clearboth">
+        <el-form-item label="任务名称" prop="taskName" :rules="rules.Len50" class="jc-left-width40">
+          <el-input v-model="form.taskName" :disabled="view" placeholder="请输入任务名称"></el-input>
+        </el-form-item>
+        <el-form-item label="任务时间" prop="date" :rules="rules.NOT_NULL" class="jc-left-width60">
+          <el-date-picker style="width:100%" :disabled="view" v-model="form.date" @change="changeDate" value-format="timestamp" type="datetimerange" range-separator="至" start-placeholder="开始时间" end-placeholder="结束时间">
+          </el-date-picker>
+        </el-form-item>
+      </div>
+      <div class="jc-clearboth">
+        <el-form-item label="任务位置" prop="taskPositionName" :rules="rules.NOT_NULL" class="jc-left-width40">
+          <el-input v-model="form.taskPositionName" :disabled="view" placeholder="请输入任务位置"></el-input>
+        </el-form-item>
+        <el-form-item label="任务来源" prop="taskSource" :rules="rules.NOT_NULL" class="jc-left-width60">
+          <el-input v-model="form.taskSource" :disabled="view" placeholder="请输入任务来源"></el-input>
+        </el-form-item>
+      </div>
+      <el-form-item label="任务指派" prop="taskPosition" :rules="rules.NOT_NULL">
+        <el-input v-model="form.taskPosition" :disabled="view" placeholder="请输入任务指派"></el-input>
       </el-form-item>
-      <el-form-item label="上报人" prop="reportUser" v-show="view">
-        <el-input v-model="form.reportUser" disabled></el-input>
-      </el-form-item>
-      <!-- <el-form-item label="设备类型" prop="deviceType" :rules="rules.SELECT_NOT_NULL">
-        <el-select v-model="form.deviceType" placeholder="选择设备类型" :disabled="view">
-          <el-option v-for="(value,key) in deviceTypes" :key="key" :label="value" :value="key"></el-option>
+      <el-form-item label="任务人员" prop="orgIds" :rules="rules.SELECT_NOT_NULL">
+        <el-cascader :options="orgTree" :disabled="view" v-model="form.orgIds" :props="{expandTrigger: 'hover', emitPath: false, multiple: true ,checkStrictly: true}" clearable placeholder="请选择组织(必填)" :show-all-levels="false" @change="changeOrg" class="jc-left-width50"></el-cascader>
+        <el-select v-model="form.userIds" multiple placeholder="请选择人员(选填)" clearable class="jc-left-width50">
+          <el-option v-for="item in users" :key="item.id" :label="item.name" :value="item.id">
+          </el-option>
         </el-select>
-      </el-form-item> -->
-      <el-form-item prop="orgId" label="所属组织" :rules="rules.SELECT_NOT_NULL">
-        <el-cascader :options="orgTree" :disabled="view" v-model="form.orgId" :props="{expandTrigger: 'hover', emitPath: false }" clearable></el-cascader>
       </el-form-item>
-      <el-form-item label="任务描述" prop="desc" :rules="rules.NOT_NULL">
-        <el-input v-model="form.desc" :disabled="view" placeholder="请输入任务描述" type="textarea"></el-input>
-      </el-form-item>
-      <el-form-item label="任务类型" prop="eventType" :rules="rules.NOT_NULL">
-        <el-input v-model="form.eventType" :disabled="view" placeholder="请输入任务类型"></el-input>
-      </el-form-item>
-      <el-form-item label="处理前图片" prop="beforePhoto" :rules="[{required: true, message: '请上传文件'}]">
-        <el-input v-model="form.beforePhoto" v-show="false"></el-input>
-        <img :src="form.beforePhoto" alt="" v-show="view" width="100%">
-        <upload v-show="!view" :url.sync="form.beforePhoto" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg"></upload>
-      </el-form-item>
-      <el-form-item label="处理后图片" prop="afterPhoto" :rules="[{required: true, message: '请上传文件'}]">
-        <el-input v-model="form.afterPhoto" v-show="false"></el-input>
-        <img :src="form.afterPhoto" alt="" v-show="view" width="100%">
-        <upload v-show="!view" :url.sync="form.afterPhoto" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg"></upload>
-      </el-form-item>
-      <el-form-item label="视频文件" prop="videoAddr" :rules="[{required: true, message: '请上传文件'}]">
-        <el-input v-model="form.videoAddr" v-show="false"></el-input>
-        <video :src="form.videoAddr" alt="" v-show="view" width="100%" controls></video>
-        <upload v-show="!view" :url.sync="form.videoAddr" accept="video/*"></upload>
-      </el-form-item>
-      <el-form-item label="音频文件" prop="audioAddr" :rules="[{required: true, message: '请上传文件'}]">
-        <el-input v-model="form.audioAddr" v-show="false"></el-input>
-        <audio :src="form.audioAddr" alt="" v-show="view" controls></audio>
-        <upload v-show="!view" :url.sync="form.audioAddr" accept="audio/*"></upload>
+      <el-form-item label="任务描述" prop="taskDesc" :rules="rules.NOT_NULL">
+        <el-input v-model="form.taskDesc" :disabled="view" placeholder="请输入任务描述" type="textarea"></el-input>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer" v-show="!view">
@@ -49,21 +47,25 @@
   </el-dialog>
 </template>
 <script>
-import { eventManageSave } from '@/api/eventManage'
+import { taskSave } from '@/api/task'
+import { userListByOrg } from '@/api/user'
 import { getStringRule, NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
-import upload from './upload'
 
 let defaultForm = {
-  type: 0,
+  businessKey: '',
+  projectId: '',
+  projectType: '',
   taskName: '',
+  taskSource: '',
   beginTime: '',
   endTime: '',
   taskDesc: '',
   taskPosition: '',
   taskPositionName: '',
-  orgIdS: '',
-  userIdS: ''
+  orgIds: [],
+  userIds: [],
+  date: null
 }
 
 export default {
@@ -72,42 +74,70 @@ export default {
   props: {
     orgTree: {
       type: Array
+    },
+    orgId: {
+      type: String
     }
-  },
-  components: {
-    upload
   },
   data() {
     return {
       loading: false,
-      menus: [],
       rules: {
         Len50: getStringRule(1, 50),
         SELECT_NOT_NULL,
         NOT_NULL
       },
-      view: false
+      view: false,
+      users: []
     }
   },
   methods: {
+    changeOrg(orgIds) {
+      if (orgIds.length) {
+        this.getUser(orgIds)
+      } else {
+        this.users = []
+      }
+      this.form.userIds = []
+    },
+    async getUser(orgIds) {
+      try {
+        const res = await userListByOrg(orgIds)
+        const users = []
+
+        if (res && res.length) {
+          res.forEach(item=>{
+            users.push({
+              id: item.userId,
+              name: item.userName
+            })
+          })
+        }
+        this.users = users
+      } catch (error) {
+        console.error(error)
+      }
+    },
+    changeDate(value) {
+      if (value) {
+        this.form.startDate = value[0]
+        this.form.endDate = value[1]
+      } else {
+        this.form.startDate = ''
+        this.form.endDate = ''
+      }
+    },
     formatFormData() {
       if (this.options) {
-        // this.fileList = [{ name: this.options.url, url: this.options.url }]
+        console.log(this.options)
         this.view = this.options.view || false
-        return {
-          afterPhoto: this.options.afterPhoto,
-          audioAddr: this.options.audioAddr,
-          beforePhoto: this.options.beforePhoto,
-          desc: this.options.desc,
-          eventNumber: this.options.eventNumber,
-          eventType: this.options.eventType,
-          id: this.options.id,
-          orgId: this.options.orgId,
-          reportUser: this.options.reportUser,
-          videoAddr: this.options.videoAddr
-        }
+        const form = {}
+
+        Object.keys(defaultForm).forEach(key=>{
+          form[key] = this.options[key] || ''
+        })
+        return form
       } else {
-        // this.fileList = []
         this.view = false
         return { ...defaultForm }
       }
@@ -116,19 +146,60 @@ export default {
       this.loading = true
       this.$refs.form.validate(valid => {
         if (valid) {
-          eventManageSave(this.form).then(() => {
-            this.$message.success('操作成功')
-            this.dialogVisible = false
-            this.$emit('save-success')
-            this.loading = false
-          }).catch(() => {
-            this.loading = false
-          })
+          this.confirmSave()
         } else {
           this.loading = false
         }
       })
+    },
+    async confirmSave() {
+      let orgIds = [], userIds = []
+
+      if (this.form.userIds) {
+        orgIds = []
+        userIds = this.form.userIds
+      } else {
+        orgIds = this.form.orgIds
+        userIds = []
+      }
+      const form = {
+        optType: 0,
+        orgIds,
+        userIds,
+        taskPO: { orgId: this.orgId, ...this.form },
+        temporaryTaskPO: this.form
+      }
+
+      try {
+        await taskSave(form)
+        this.$message.success('操作成功')
+        this.dialogVisible = false
+        this.$emit('save-success')
+        this.loading = false
+      } catch (error) {
+        this.loading = false
+      }
     }
   }
 }
 </script>
+<style lang="scss" scoped>
+.jc-left-width50 {
+  width: 50%;
+  float: left;
+}
+.jc-left-width40 {
+  width: 40%;
+  float: left;
+}
+.jc-left-width60 {
+  width: 60%;
+  float: left;
+}
+.jc-clearboth::after,
+.jc-clearboth::before {
+  content: "";
+  display: table;
+  clear: both;
+}
+</style>

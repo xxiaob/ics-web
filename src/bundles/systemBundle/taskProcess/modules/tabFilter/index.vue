@@ -12,7 +12,7 @@
         </el-select>
       </el-form-item>
       <el-form-item prop="" label="时间">
-        <el-date-picker v-model="date" @change="changeDate" value-format="timestamp" type="datetimerange" range-separator="至" start-placeholder="开始日期" end-placeholder="结束日期">
+        <el-date-picker v-model="date" @change="changeDate" value-format="timestamp" type="datetimerange" range-separator="至" start-placeholder="开始时间" end-placeholder="结束时间">
         </el-date-picker>
       </el-form-item>
       <el-form-item prop="desc" label="任务名称">
@@ -50,7 +50,7 @@ export default {
   },
   methods: {
     changeStatus(value) {
-      console.log(value)
+      // console.log(value)
       this.reset()
       this.form.selectType = value
       this.onSubmit()
@@ -66,15 +66,20 @@ export default {
     },
     reset() {
       this.$refs.form.resetFields()
-      this.form.orgId = ''
       this.form.startDate = ''
       this.form.endDate = ''
-      this.orgIds = []
       this.date = null
       this.form.selectType = this.status
     },
     onSubmit() {
-      this.$emit('filter', this.form)
+      const form = {}
+
+      Object.keys(this.form).forEach(key=>{
+        if (this.form[key]) {
+          form[key] = this.form[key]
+        }
+      })
+      this.$emit('filter', form)
     }
   }
 }

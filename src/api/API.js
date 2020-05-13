@@ -43,6 +43,7 @@ export default {
     add: 'user-service/user/add',
     get: 'user-service/user/byId',
     list: 'user-service/user/list',
+    listByOrg: 'user-service/user/getUserByOrg',
     update: 'user-service/user/upd',
     del: 'user-service/user/del',
     resetUserPwd: 'user-service/user/resetUserPwd',
@@ -91,9 +92,12 @@ export default {
   },
   task: {
     //任务管理
-    add: 'activiti-service/task/addTemporaryTask',
+    add: 'activiti-service/task/addTask',
     list: 'activiti-service/task/select',
-    update: 'activiti-service/task/updTemporaryTask',
-    del: 'activiti-service/task/delTemporaryTask'
+    update: 'activiti-service/task/updTask',
+    del: 'activiti-service/task/delTask',
+    start: 'activiti-service/task/start',
+    updTaskStatus: 'activiti-service/task/updTaskStatus',
+    finish: 'activiti-service/task/finish'
   }
 }

@@ -3,6 +3,7 @@
  */
 import axios from 'axios'
 import API from './API'
+import qs from 'qs'
 
 /*-------------------------------用户管理------------------------------------ */
 /**
@@ -12,6 +13,23 @@ import API from './API'
  */
 export function userList(data = {}) {
   return axios.post(API.user.list, data)
+}
+/**
+ * 根据组织ID查询列表
+ * @param {Array} orgIds
+ * @returns {Object} axios 对象
+ */
+export function userListByOrg(orgIds) {
+  return axios({
+    url: API.user.listByOrg,
+    method: 'post',
+    params: {
+      orgIds
+    },
+    paramsSerializer(params) {
+      return qs.stringify(params, { arrayFormat: 'repeat' })
+    }
+  })
 }
 /**
  * 添加
