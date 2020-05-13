@@ -1,10 +1,11 @@
 <template>
-  <div class="jc-card jc-area-manage">
+  <div class="jc-card jc-area-manage" :class="{'jc-area-hide': manageHide}">
+    <div class="jc-area-controll" @click="manageHide = !manageHide"><i class="jc-area-icon el-icon-arrow-right"></i></div>
     <el-input v-model="filterText" prefix-icon="el-icon-search" class="jc-filter-input" clearable size="mini" placeholder="输入关键字进行过滤"></el-input>
     <div class="jc-tree-warp" v-loading="loading">
       <el-tree ref="tree" :default-expanded-keys="expandedKeys" :load="loadNode" lazy :props="props" :filter-node-method="filterNode" node-key="id" @node-click="nodeClick" :expand-on-click-node="false" :highlight-current="true">
         <div class="custom-tree-node" slot-scope="{ node, data }">
-          <div class="jc-tree-label">
+          <div class="jc-tree-label" :style="getIconStyle(data.icon)">
             <div class="jc-text-warp" v-text="node.label"></div>
           </div>
           <div class="jc-tree-options" :class="{'jc-area': data.areaId}" v-on:click.stop>
@@ -24,7 +25,8 @@ import TreesFilterMixins from '@/mixins/TreesFilterMixins'
 import OperaMixins from './modules/mixins/operaMixins'
 import { organizationList } from '@/api/organization'
 import { areaList } from '@/api/area'
-import { AREAS_TYPE } from '@/constant/CONST'
+import { AREAS_TYPE, AREAS_SEARCH_TYPE } from '@/constant/CONST'
+import { JcIcons } from '@/config/JcIconConfig'
 
 export default {
   name: 'SystemGridManageTrees',
@@ -35,6 +37,7 @@ export default {
   data() {
     return {
       loading: false,
+      manageHide: false,
       filterText: '',
       orgs: {},
       parentNode: [],
@@ -82,26 +85,40 @@ export default {
         this.orgs[orgs[0].pid] = orgs
       }
     },
+    getIconStyle(icon) {
+      if (icon) {
+        let useIcon = JcIcons[icon] || {}
+
+        return `background-image: url(${useIcon.icon || ''});`
+      }
+      return ''
+    },
     async getNodes(node) {
       let result = []
 
-      let params = {}
+      let params = { searchType: AREAS_SEARCH_TYPE.GRID }
 
       if (node.level === 0) {
         await this.initData()
         result = [...this.parentNode]
-        params = { orgId: this.parentNode.orgId, orgSearchType: AREAS_TYPE.OWN_AND_BRO }
       } else {
-        let orgNode = this.orgs[node.data.orgId] || []
-
-        result = [...orgNode]
         if (node.data.areaId) {
-          params = { areaId: node.data.areaId }
+          Object.assign(params, { areaId: node.data.areaId })
         } else {
-          params = { orgId: node.data.orgId, orgSearchType: AREAS_TYPE.OWN_AND_BRO }
+          let orgNode = this.orgs[node.data.orgId] || []
+
+          result = [...orgNode]
+          Object.assign(params, { orgId: node.data.orgId, orgSearchType: AREAS_TYPE.OWN })
+        }
+        const res = await areaList(params)
+
+        console.log('查询的area list：', res)
+        if (res && res.length) {
+          res.forEach(item => {
+            result.push({ id: item.areaId, pid: item.pid, pName: node.data.name, orgId: item.orgId, areaId: item.areaId, desc: item.desc, areaTypeId: item.areaTypeId, name: item.areaName, icon: item.icon, view: false })
+          })
         }
       }
-      const res = areaList(params)
 
       return result
     },
@@ -128,6 +145,44 @@ export default {
   width: $jc-trees-width * 1.2;
   z-index: 10;
   padding: $jc-default-dis/2 $jc-default-dis;
+  transform: translateX(0);
+  transition: transform 0.5s;
+  will-change: transform;
+  &.jc-area-hide {
+    transform: translateX($jc-trees-width * 1.2 + $jc-default-dis);
+    .jc-area-controll {
+      .jc-area-icon {
+        transform: rotate(180deg);
+      }
+    }
+  }
+}
+$jc-controll-width: 38px;
+.jc-area-controll {
+  position: absolute;
+  width: $jc-controll-width;
+  height: $jc-controll-width;
+  line-height: $jc-controll-width;
+  top: 50%;
+  left: -$jc-controll-width;
+  color: $jc-color-primary;
+  z-index: 9;
+  background-color: $jc-color-white;
+  border-radius: 100% 0 0 100%;
+  transform: translate(50%, -50%);
+  cursor: pointer;
+  .jc-area-icon {
+    width: 16px;
+    height: 16px;
+    text-align: center;
+    font-weight: bold;
+    font-size: $jc-font-size-medium;
+    vertical-align: middle;
+    transform: rotate(0);
+    transition: transform 0.5s;
+    will-change: transform;
+    margin-left: 4px;
+  }
 }
 .jc-tree-warp {
   position: absolute;
@@ -144,9 +199,9 @@ export default {
     flex: 1;
     width: 0;
     font-size: $jc-font-size-small;
-    padding-left: 15px;
+    padding-left: 14px;
     background: url(/static/areaicons/organization.png) no-repeat left center;
-    background-size: 12px auto;
+    background-size: 11px auto;
   }
   .jc-tree-options {
     width: 36px;

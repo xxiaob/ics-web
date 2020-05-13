@@ -53,7 +53,8 @@ export default {
     //区域类型管理
     add: 'area-service/areaType/add',
     get: 'area-service/areaType/detail',
-    list: 'area-service/areaType/listByPage',
+    listByPage: 'area-service/areaType/listByPage',
+    list: 'area-service/areaType/list',
     update: 'area-service/areaType/update',
     del: 'area-service/areaType/delete'
   },

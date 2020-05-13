@@ -12,12 +12,18 @@ export const LANG = {
   ENUS: 'en-US' //美式英语
 }
 
-/** 区域类型查询 type*/
+/** 区域查询 方式 type*/
 export const AREAS_TYPE = {
-  OWN: 1, //自己
-  SAMELEVEL: 2, //同级
-  OWN_AND_BRO: 3, //自己和自己下一级
-  OWN_AND_CHILD: 4 //查询自己和所有
+  OWN: 1, //查本机构
+  SAMELEVEL: 2, //查本机构和所有同级机构
+  OWN_AND_BRO: 3, //查本机构和所有的下级机构
+  OWN_AND_CHILD: 4 //查本机构和所有下一级的机构
+}
+
+/** 区域查询 类型 type*/
+export const AREAS_SEARCH_TYPE = {
+  ORG: 1, //组织
+  GRID: 2 //网格
 }
 
 /** 地图类型 type*/

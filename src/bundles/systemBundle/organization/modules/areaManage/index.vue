@@ -27,7 +27,7 @@
 <script>
 import { JcMap } from '@/map'
 import { areaList } from '@/api/area'
-import { AREAS_TYPE } from '@/constant/CONST'
+import { AREAS_TYPE, AREAS_SEARCH_TYPE } from '@/constant/CONST'
 import amapMixins from './modules/mixins/amapMixins'
 import autoAreaMixins from './modules/mixins/autoAreaMixins'
 import customAreaMixins from './modules/mixins/customAreaMixins'
@@ -65,7 +65,7 @@ export default {
       this.loading = true
       myJcMap.init({ source: this.$refs.myMap }).then(() => {
         this.$refs.mapSearch.initData(myJcMap) //初始化搜索对象
-        areaList({ orgId: this.orgId, orgSearchType: AREAS_TYPE.SAMELEVEL }).then(res => {
+        areaList({ orgId: this.orgId, orgSearchType: AREAS_TYPE.SAMELEVEL, searchType: AREAS_SEARCH_TYPE.ORG }).then(res => {
           this.adcode = ''
           this.areaId = ''
           this.drawSign(res, myJcMap) //去绘画边界

@@ -10,6 +10,14 @@ import API from './API'
  * @param {object} data
  * @returns {Object} axios 对象
  */
+export function areaTypeListByPage(data) {
+  return axios.post(API.areaType.listByPage, data)
+}
+/**
+ * 列表不分页
+ * @param {object} data
+ * @returns {Object} axios 对象
+ */
 export function areaTypeList(data) {
   return axios.post(API.areaType.list, data)
 }

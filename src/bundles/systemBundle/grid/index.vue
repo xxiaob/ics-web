@@ -7,9 +7,9 @@
     <div class="jc-map-space" ref="myMap"></div>
     <manage-trees class="jc-trees-warp" @grid-change="gridChange"></manage-trees>
     <div class="jc-panel-area jc-area-show">
-      <i class="jc-panel-item iconfont iconhuatu" title="多边形"></i>
-      <i class="jc-panel-item iconfont iconluxian" title="圆"></i>
-      <i class="jc-panel-item iconfont iconluxian" title="线路"></i>
+      <i class="jc-panel-item iconfont iconduobianxing" title="多边形"></i>
+      <i class="jc-panel-item iconfont iconhuayuan" title="圆"></i>
+      <i class="jc-panel-item iconfont iconhuaxian" title="线路"></i>
       <i class="jc-panel-item iconfont iconzu" title="保存设置"></i>
       <i class="jc-panel-item iconfont iconfuwei" title="重置"></i>
     </div>
@@ -18,13 +18,13 @@
 <script>
 import { JcMap } from '@/map'
 import MapSearch from '@/components/JcMap/MapSearch'
+import GridChangeMixins from './modules/minxins/gridChangeMixins'
 
 let myJcMap //个人 map 对象
 
-let areas = {}
-
 export default {
   name: 'SystemGridIndex',
+  mixins: [GridChangeMixins],
   components: {
     MapSearch,
     ManageTrees: () => import('./modules/manageTrees')
@@ -43,9 +43,12 @@ export default {
         this.$refs.mapSearch.initData(myJcMap) //初始化搜索对象
       })
     },
-    gridChange(data) {
-      if (data.type == 'view') {
-        //控制显示
+    gridChange(options) {
+      if (options.type == 'view') {
+        //处理区域显示隐藏
+        this.viewControl(myJcMap, options).then(() => {
+          myJcMap.fitView()
+        })
       }
     }
   }
@@ -114,10 +117,13 @@ $jc-item-width: 36px;
   line-height: $jc-item-width;
   color: $jc-color-white;
   cursor: pointer;
+  font-size: $jc-font-size-base;
+  transition: font-size 0.3s;
+  will-change: font-size;
 
   &:hover,
   &.jc-active {
-    color: $jc-color-primary;
+    font-size: $jc-font-size-larger;
   }
 }
 .jc-trees-warp {
