@@ -99,6 +99,7 @@ export default {
     del: 'activiti-service/task/delTask',
     start: 'activiti-service/task/start',
     updTaskStatus: 'activiti-service/task/updTaskStatus',
-    finish: 'activiti-service/task/finish'
+    finish: 'activiti-service/task/finish',
+    get: 'activiti-service/task/getTemporaryTask'
   }
 }

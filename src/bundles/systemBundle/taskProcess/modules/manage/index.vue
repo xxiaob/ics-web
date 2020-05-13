@@ -31,7 +31,7 @@
       </el-form-item>
       <el-form-item label="任务人员" prop="orgIds" :rules="rules.SELECT_NOT_NULL">
         <el-cascader :options="orgTree" :disabled="view" v-model="form.orgIds" :props="{expandTrigger: 'hover', emitPath: false, multiple: true ,checkStrictly: true}" clearable placeholder="请选择组织(必填)" :show-all-levels="false" @change="changeOrg" class="jc-left-width50"></el-cascader>
-        <el-select v-model="form.userIds" multiple placeholder="请选择人员(选填)" clearable class="jc-left-width50">
+        <el-select v-model="form.userIds" multiple placeholder="请选择人员(选填)" :disabled="view" clearable class="jc-left-width50">
           <el-option v-for="item in users" :key="item.id" :label="item.name" :value="item.id">
           </el-option>
         </el-select>
@@ -39,21 +39,47 @@
       <el-form-item label="任务描述" prop="taskDesc" :rules="rules.NOT_NULL">
         <el-input v-model="form.taskDesc" :disabled="view" placeholder="请输入任务描述" type="textarea"></el-input>
       </el-form-item>
+      <el-form-item label="流转记录" v-show="view">
+        <div>流转记录</div>
+      </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer" v-show="!view">
       <el-button @click="dialogVisible = false">取 消</el-button>
       <el-button type="primary" :loading="loading" @click="onSubmit">确 定</el-button>
     </div>
+    <div slot="footer" class="dialog-footer" v-show="handle">
+      <el-button @click="handleTask(true)" type="primary">流转任务</el-button>
+      <el-button @click="handleTask(false)" type="primary">结束任务</el-button>
+    </div>
+    <el-dialog title="流转任务" :visible.sync="dialogVisibleHandle" width="600px" append-to-body>
+      <el-form ref="taskForm" label-width="80px" :model="taskForm" class="jc-manage-form">
+        <el-form-item label="任务人员" prop="orgIds" :rules="rules.SELECT_NOT_NULL">
+          <el-cascader :options="orgTree" v-model="taskForm.orgIds" :props="{expandTrigger: 'hover', emitPath: false, multiple: true ,checkStrictly: true}" clearable placeholder="请选择组织(必填)" :show-all-levels="false" @change="changeOrg" class="jc-left-width50"></el-cascader>
+          <el-select v-model="taskForm.userIds" multiple placeholder="请选择人员(选填)" clearable class="jc-left-width50">
+            <el-option v-for="item in users" :key="item.id" :label="item.name" :value="item.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="备注" prop="remark" :rules="rules.NOT_NULL">
+          <el-input v-model="taskForm.remark" placeholder="请输入备注" type="textarea"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisibleHandle = false">取 消</el-button>
+        <el-button type="primary" @click="onSubmitTask">确 定</el-button>
+      </span>
+    </el-dialog>
   </el-dialog>
 </template>
 <script>
-import { taskSave } from '@/api/task'
+import { taskSave, taskFinish } from '@/api/task'
 import { userListByOrg } from '@/api/user'
 import { getStringRule, NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
 
 let defaultForm = {
   businessKey: '',
+  taskId: '',
   projectId: '',
   projectType: '',
   taskName: '',
@@ -88,7 +114,15 @@ export default {
         NOT_NULL
       },
       view: false,
-      users: []
+      users: [],
+      dialogVisibleHandle: false,
+      handle: false,
+      taskForm: {
+        ifUpload: false,
+        remark: '',
+        orgIds: [],
+        userIds: []
+      }
     }
   },
   methods: {
@@ -98,7 +132,11 @@ export default {
       } else {
         this.users = []
       }
-      this.form.userIds = []
+      if (this.handle) {
+        this.taskForm.userIds = []
+      } else {
+        this.form.userIds = []
+      }
     },
     async getUser(orgIds) {
       try {
@@ -120,25 +158,28 @@ export default {
     },
     changeDate(value) {
       if (value) {
-        this.form.startDate = value[0]
-        this.form.endDate = value[1]
+        this.form.beginTime = value[0]
+        this.form.endTime = value[1]
       } else {
-        this.form.startDate = ''
-        this.form.endDate = ''
+        this.form.beginTime = ''
+        this.form.endTime = ''
       }
     },
     formatFormData() {
       if (this.options) {
         console.log(this.options)
         this.view = this.options.view || false
+        this.handle = this.options.handle || false
         const form = {}
 
         Object.keys(defaultForm).forEach(key=>{
           form[key] = this.options[key] || ''
         })
+        form.date = [this.options.beginTime, this.options.endTime]
         return form
       } else {
         this.view = false
+        this.handle = false
         return { ...defaultForm }
       }
     },
@@ -178,6 +219,55 @@ export default {
         this.loading = false
       } catch (error) {
         this.loading = false
+      }
+    },
+    handleTask(ifUpload) {
+      if (this.$refs.taskForm) {
+        this.$refs.taskForm.resetFields()
+      }
+      this.taskForm.userIds = []
+      this.taskForm.ifUpload = ifUpload
+      this.dialogVisibleHandle = true
+    },
+    onSubmitTask() {
+      this.loading = true
+      this.$refs.taskForm.validate(valid => {
+        if (valid) {
+          this.nextTo()
+        } else {
+          this.loading = false
+        }
+      })
+    },
+    //流转
+    async nextTo() {
+      const { businessKey, taskId } = this.form
+      const { ifUpload, remark, userIds, orgIds } = this.taskForm
+      const form = {
+        ifUpload, // true 流转  false 完成
+        businessKey,
+        taskId,
+        remark
+      }
+
+      if (ifUpload) { // 流转带上组织id 或者 用户id
+        if (userIds.length) {
+          form.assignees = userIds
+        } else {
+          form.orgIds = orgIds
+        }
+      }
+      console.log(form)
+      try {
+        await taskFinish(form)
+        this.$message.success('操作成功')
+        this.dialogVisible = false
+        this.dialogVisibleHandle = false
+        this.$emit('save-success')
+        this.loading = false
+      } catch (e) {
+        this.loading = false
+        console.error(e)
       }
     }
   }

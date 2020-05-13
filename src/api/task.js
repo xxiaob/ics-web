@@ -47,6 +47,14 @@ export function taskDel(id) {
   return axios.post(API.task.del + '?businessKey=' + id)
 }
 /**
+ * 根据businessKey获取任务详情
+ * @param {String} id
+ * @returns {Object} axios 对象
+ */
+export function taskGet(id) {
+  return axios.post(API.task.get + '?businessKey=' + id)
+}
+/**
  * 启动任务流程
  * @param {String} id
  * @returns {Object} axios 对象

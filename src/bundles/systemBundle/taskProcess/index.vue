@@ -23,7 +23,7 @@
           <template slot-scope="scope">
             <el-button type="text" size="mini" icon="el-icon-view" @click="manage(scope.row,true)" title="查看" v-if="filter.selectType==1||filter.selectType==2"></el-button>
             <el-button type="text" size="mini" icon="el-icon-edit-outline" @click="manage(scope.row)" v-if="filter.selectType==3" title="编辑"></el-button>
-            <el-button type="text" size="mini" icon="el-icon-refresh-right" @click="nextTo(scope.row)" title="流转" v-if="filter.selectType==0"></el-button>
+            <el-button type="text" size="mini" icon="el-icon-refresh-right" @click="handle(scope.row)" title="处理" v-if="filter.selectType==0"></el-button>
             <el-button type="text" size="mini" icon="el-icon-arrow-down" @click="startTask(scope.row)" title="下发" v-if="filter.selectType==3"></el-button>
             <el-button type="text" size="mini" icon="el-icon-delete" @click="del(scope.row)" title="删除" v-if="filter.selectType!=0"></el-button>
           </template>
@@ -36,7 +36,7 @@
   </div>
 </template>
 <script>
-import { taskList, taskDel, taskStart, taskFinish } from '@/api/task'
+import { taskList, taskDel, taskStart, taskGet } from '@/api/task'
 import { formatDate } from '@/libs/util'
 import PaginationMixins from '@/mixins/PaginationMixins'
 import { organizationList } from '@/api/organization'
@@ -127,21 +127,9 @@ export default {
 
           this.page.total = total
           // const list = []
-
-          // if (resultList && resultList.length > 0) {
+          // if (resultList && resultList.length) {
           //   resultList.forEach(item=>{
           //     list.push({
-          //       afterPhoto: item.afterPhoto,
-          //       audioAddr: item.audioAddr,
-          //       beforePhoto: item.beforePhoto,
-          //       createTime: item.createTime,
-          //       desc: item.desc,
-          //       eventNumber: item.eventNumber,
-          //       eventType: item.eventType,
-          //       id: item.id,
-          //       orgId: item.orgId,
-          //       reportUser: item.reportUser,
-          //       videoAddr: item.videoAddr
           //     })
           //   })
           // }
@@ -162,14 +150,21 @@ export default {
         this.remove(row.businessKey)
       }).catch(() => {})
     },
-    remove(id) {
-      taskDel(id).then(() => {
+    async remove(id) {
+      try {
+        await taskDel(id)
         this.$message.success('删除成功')
         this.currentChange(this.page.pageNum - 1)
-      })
+      } catch (error) {
+        console.error(error)
+      }
     },
-    manage(row, view) {
+    //添加 编辑 查看
+    async manage(row, view) {
       if (row) {
+        const res = await taskGet(row.businessKey)
+
+        console.log(res)
         this.info = row
         if (view) {
           this.info.view = true
@@ -194,23 +189,12 @@ export default {
         }
       }).catch(() => {})
     },
-    //流转
-    async nextTo(row) {
-      const form = {
-        ifUpload: false,
-        assignees: ['1'],
-        businessKey: row.businessKey,
-        taskId: row.taskId,
-        remark: '测试备注'
-      }
-
-      console.log(form)
-      try {
-        await taskFinish(form)
-        this.$message.success('liu成功')
-      } catch (e) {
-        console.error(e)
-      }
+    //任务处理
+    async handle(row) {
+      this.info = row
+      this.info.view = true
+      this.info.handle = true
+      this.visible = true
     }
   }
 }
