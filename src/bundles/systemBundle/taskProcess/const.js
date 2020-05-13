@@ -9,3 +9,11 @@ export const selectTypes = {
   2: '已发',
   3: '草稿'
 }
+
+export const states = {
+  0: '未下发',
+  1: '已下发',
+  2: '处理中',
+  3: '已完成',
+  4: '已超时'
+}

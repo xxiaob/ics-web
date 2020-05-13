@@ -1,14 +1,20 @@
 <template>
   <el-card class="jc-tabfilter-card">
-    <div class="jc-status-group">
-      <el-radio-group v-model="status" size="medium" @change="changeStatus">
-        <el-radio-button v-for="(value,key) in selectTypes" :key="key" :label="key">{{value}}</el-radio-button>
-      </el-radio-group>
-    </div>
     <el-form ref="form" :inline="true" :model="form" class="jc-tabfilter-form" size="small">
       <el-form-item prop="eventType" label="项目名称">
         <el-select v-model="form.eventType" placeholder="选择项目名称">
           <el-option v-for="(value,key) in eventTypes" :key="key" :label="value" :value="key"></el-option>
+        </el-select>
+        <el-select v-model="form.eventType" placeholder="选择项目名称">
+          <el-option v-for="(value,key) in eventTypes" :key="key" :label="value" :value="key"></el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item prop="orgId" label="所属组织">
+        <el-cascader :options="orgTree" v-model="form.orgId" :props="{expandTrigger: 'hover', emitPath: false }" clearable></el-cascader>
+      </el-form-item>
+      <el-form-item prop="state" label="任务状态">
+        <el-select v-model="form.state" placeholder="选择任务状态">
+          <el-option v-for="(value,key) in states" :key="key" :label="value" :value="key"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item prop="" label="时间">
@@ -26,21 +32,27 @@
   </el-card>
 </template>
 <script>
-import { selectTypes } from '../../const'
+import { states } from '../../../taskProcess/const'
 export default {
   name: 'SystemTaskProcessFilter',
+  props: {
+    orgTree: {
+      type: Array,
+      default: ()=>[]
+    }
+  },
   data() {
     return {
       eventTypes: [],
-      selectTypes,
-      status: '0',
+      states,
       form: {
-        selectType: '0',
         projectId: '',
         projectType: '',
+        orgId: '',
         startDate: '',
         endDate: '',
-        desc: ''
+        desc: '',
+        state: ''
       },
       date: null
     }
@@ -49,12 +61,6 @@ export default {
 
   },
   methods: {
-    changeStatus(value) {
-      // console.log(value)
-      this.reset()
-      this.form.selectType = value
-      this.onSubmit()
-    },
     changeDate(value) {
       if (value) {
         this.form.startDate = value[0]
@@ -69,7 +75,6 @@ export default {
       this.form.startDate = ''
       this.form.endDate = ''
       this.date = null
-      this.form.selectType = this.status
     },
     onSubmit() {
       const form = {}
@@ -86,7 +91,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.jc-status-group {
-  margin-bottom: $jc-default-dis;
-}
 </style>

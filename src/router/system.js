@@ -74,6 +74,13 @@ export default [{
   name: 'taskProcess',
   component: () => import('@/bundles/systemBundle/taskProcess'),
   meta: {
-    title: '系统设置-任务管理-任务处理'
+    title: '任务管理-任务处理'
+  }
+}, {
+  path: 'system/taskSearch',
+  name: 'taskSearch',
+  component: () => import('@/bundles/systemBundle/taskSearch'),
+  meta: {
+    title: '任务管理-任务查询'
   }
 }]

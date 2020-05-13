@@ -7,7 +7,7 @@
           <span class="jc-menu-arrow-title" slot="title">任务管理</span>
         </template>
         <el-menu-item index="taskProcess">任务处理</el-menu-item>
-        <el-menu-item index="taskProcess1">任务查询</el-menu-item>
+        <el-menu-item index="taskSearch">任务查询</el-menu-item>
       </el-submenu>
       <el-submenu index="system" class="jc-menu-item">
         <template slot="title">
