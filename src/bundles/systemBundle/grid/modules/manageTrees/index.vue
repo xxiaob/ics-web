@@ -3,10 +3,10 @@
     <div class="jc-area-controll" @click="manageHide = !manageHide"><i class="jc-area-icon el-icon-arrow-right"></i></div>
     <el-input v-model="filterText" prefix-icon="el-icon-search" class="jc-filter-input" clearable size="mini" placeholder="输入关键字进行过滤"></el-input>
     <div class="jc-tree-warp" v-loading="loading">
-      <el-tree ref="tree" :default-expanded-keys="expandedKeys" :load="loadNode" lazy :props="props" :filter-node-method="filterNode" node-key="id" @node-click="nodeClick" :expand-on-click-node="false" :highlight-current="true">
+      <el-tree ref="tree" :default-expanded-keys="expandedKeys" :load="loadNode" lazy :props="props" :filter-node-method="filterNode" node-key="id" :expand-on-click-node="false" :highlight-current="true">
         <div class="custom-tree-node" slot-scope="{ node, data }">
-          <div class="jc-tree-label" :style="getIconStyle(data.icon)">
-            <div class="jc-text-warp" v-text="node.label"></div>
+          <div class="jc-tree-label no-select" :style="getIconStyle(data.icon)" @dblclick="goEdit(data)">
+            <div class="jc-text-warp" v-text="data.name"></div>
           </div>
           <div class="jc-tree-options" :class="{'jc-area': data.areaId}" v-on:click.stop>
             <el-button type="text" size="small" icon="el-icon-delete" class="jc-area-btn" @click="del(data)"></el-button>
@@ -126,6 +126,13 @@ export default {
       console.log(node)
       this.getNodes(node).then((data) => {
         resolve(data)
+        if (this.currentKey) {
+          let currentNode = this.$refs.tree.getNode(this.currentKey)
+
+          this.goEdit(currentNode.data)
+          this.$refs.tree.setCurrentKey(this.currentKey)
+          this.currentKey = null
+        }
       }).catch(() => {
         node.loading = false
         node.expanded = false

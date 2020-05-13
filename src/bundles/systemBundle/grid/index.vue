@@ -6,12 +6,13 @@
     <map-search ref="mapSearch"></map-search>
     <div class="jc-map-space" ref="myMap"></div>
     <manage-trees class="jc-trees-warp" @grid-change="gridChange"></manage-trees>
-    <div class="jc-panel-area jc-area-show">
-      <i class="jc-panel-item iconfont iconduobianxing" title="多边形"></i>
-      <i class="jc-panel-item iconfont iconhuayuan" title="圆"></i>
-      <i class="jc-panel-item iconfont iconhuaxian" title="线路"></i>
-      <i class="jc-panel-item iconfont iconzu" title="保存设置"></i>
-      <i class="jc-panel-item iconfont iconfuwei" title="重置"></i>
+    <div class="jc-panel-area" :class="{'jc-area-show': editShow}">
+      <i class="jc-panel-item iconfont iconduobianxing" title="多边形" @click="addArea(1)"></i>
+      <i class="jc-panel-item iconfont iconhuayuan" title="圆" @click="addArea(2)"></i>
+      <i class="jc-panel-item iconfont iconhuaxian" title="线路" @click="addArea(3)"></i>
+      <i class="jc-panel-item iconfont iconzu" title="保存设置" @click="areaSave"></i>
+      <i class="jc-panel-item iconfont iconfuwei" title="重置" @click="reset"></i>
+      <i class="jc-panel-item iconfont iconchehui1" title="取消" @click="cancel"></i>
     </div>
   </div>
 </template>
@@ -19,19 +20,16 @@
 import { JcMap } from '@/map'
 import MapSearch from '@/components/JcMap/MapSearch'
 import GridChangeMixins from './modules/minxins/gridChangeMixins'
+import AreaManageMinxins from './modules/minxins/areaManageMinxins'
 
 let myJcMap //个人 map 对象
 
 export default {
   name: 'SystemGridIndex',
-  mixins: [GridChangeMixins],
+  mixins: [GridChangeMixins, AreaManageMinxins],
   components: {
     MapSearch,
     ManageTrees: () => import('./modules/manageTrees')
-  },
-  data() {
-    return {
-    }
   },
   mounted() {
     myJcMap = new JcMap()
@@ -45,12 +43,30 @@ export default {
     },
     gridChange(options) {
       if (options.type == 'view') {
-        //处理区域显示隐藏
-        this.viewControl(myJcMap, options).then(() => {
-          myJcMap.fitView()
-        })
+        //处理区域显示隐藏，如果当前区域正在编辑，则不处理
+        if (this.editShow && this.areaId == options.data.id) {
+          this.$message.error('该网格您正在编辑中')
+        } else {
+          this.viewControl(myJcMap, options).then(() => {
+            myJcMap.fitView()
+          })
+        }
+      } else if (options.type == 'areaedit') {
+        if (this.editShow) {
+          if (this.areaId == options.data.id) {
+            this.cancel()
+          } else {
+            this.$message.error('有网格正在编辑中，请先取消编辑')
+          }
+        } else {
+          options.data.view = true
+          this.initMapEditor(myJcMap, options.data)
+        }
       }
     }
+  },
+  beforeDestroy() {
+    myJcMap.destroy() //销毁地图
   }
 }
 </script>

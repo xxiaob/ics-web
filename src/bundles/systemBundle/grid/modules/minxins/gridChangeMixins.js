@@ -27,28 +27,58 @@ export default {
         return true
       }
 
+      let item = null
+
       if (options.data.areaId) {
-        //获取区域
-        const res = await areaGet({ areaId: options.data.areaId })
+        item = await areaGet({ areaId: options.data.areaId })//获取区域
       } else {
         const res = await areaList({ orgId: options.data.orgId, orgSearchType: AREAS_TYPE.OWN, searchType: AREAS_SEARCH_TYPE.ORG })
 
         if (res && res.length) {
-          let item = res[0]
-
-          areaSign = new JcMapSign({
-            id: item.areaId,
-            map: myJcMap,
-            name: item.areaName,
-            center: item.center ? item.center.split(',') : null,
-            extData: {},
-            boundaries: apiBoundariesFormat(item)
-          })
-          areas[options.data.id] = areaSign
-          options.data.view = true
-          areaSign.show()
+          item = res[0]
         }
       }
+      if (item) {
+        areaSign = new JcMapSign({
+          id: options.data.id,
+          map: myJcMap,
+          icon: item.item,
+          name: item.areaName,
+          center: item.center ? item.center.split(',') : null,
+          extData: {},
+          boundaries: apiBoundariesFormat(item)
+        })
+        areas[options.data.id] = areaSign
+        areaSign.show()
+      }
+      options.data.view = true
+    },
+    refreshSign(myJcMap, areaId) {
+      //刷新标记
+      this.getSign(myJcMap, areaId).then(sign => {
+        sign.show()
+        myJcMap.fitView()
+      })
+    },
+    async getSign(myJcMap, areaId, renew = false) {
+      let areaSign = areas[areaId]
+
+      if (renew || !areaSign) {
+        let item = await areaGet({ areaId })//获取区域
+
+        areaSign = new JcMapSign({
+          id: areaId,
+          map: myJcMap,
+          icon: item.item,
+          name: item.areaName,
+          center: item.center ? item.center.split(',') : null,
+          extData: {},
+          boundaries: apiBoundariesFormat(item)
+        })
+        areas[areaId] = areaSign
+      }
+
+      return areaSign
     }
   }
 }

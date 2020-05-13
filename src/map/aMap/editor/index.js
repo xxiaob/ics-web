@@ -152,6 +152,9 @@ class JcMapEditor extends JcMapEditorBase {
    * @param {*} position 标记坐标点
    */
   showMarker(position) {
+    if (!position || position.length != 2) {
+      return
+    }
     if (this.marker) {
       this.marker.show(position)
     } else {

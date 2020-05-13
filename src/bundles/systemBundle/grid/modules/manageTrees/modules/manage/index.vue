@@ -23,7 +23,7 @@
   </el-dialog>
 </template>
 <script>
-import { areaAdd, areaUpdate } from '@/api/area'
+import { areaAdd, areaGet, areaUpdate } from '@/api/area'
 import { areaTypeList } from '@/api/areaType'
 import { getStringRule, NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
@@ -70,24 +70,32 @@ export default {
 
       return `background-image: url(${useIcon.icon || ''});`
     },
-    onSubmit() {
+    async save() {
+      let areaSave = this.isEdit ? areaUpdate : areaAdd
+
+      try {
+        const { areaId } = await areaSave({ ...this.form, orgId: this.pNode.orgId, areaId: this.pNode.areaId, drawCoordinateType: 1 })
+        const item = await areaGet({ areaId })//获取区域信息
+
+        this.$message.success('操作成功')
+        this.dialogVisible = false
+        this.$emit('save-success', { id: item.areaId, pid: item.pid, pName: this.pNode.name, orgId: item.orgId, areaId: item.areaId, desc: item.desc, areaTypeId: item.areaTypeId, name: item.areaName, icon: item.icon })
+        this.loading = false
+      } catch (error) {
+        this.loading = false
+      }
+      return true
+    },
+    async onSubmit() {
       this.loading = true
       this.$refs.form.validate(valid => {
         if (valid) {
-          let areaSave = this.isEdit ? areaUpdate : areaAdd
-
-          areaSave({ ...this.form, orgId: this.pNode.orgId, areaId: this.pNode.areaId, drawCoordinateType: 1 }).then((res) => {
-            this.$message.success('操作成功')
-            this.dialogVisible = false
-            this.$emit('save-success', res.orgId)
-            this.loading = false
-          }).catch(() => {
-            this.loading = false
-          })
+          this.save()
         } else {
           this.loading = false
         }
       })
+      return true
     }
   }
 }
