@@ -28,7 +28,7 @@
       <el-pagination @current-change="currentChange" @size-change="sizeChange" :current-page.sync="page.pageNum" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.total" class="text-right jc-mt"></el-pagination>
 
     </el-card>
-    <jc-manage :orgTree="orgTree" :options="info" :visible.sync="visible" @save-success="initData"></jc-manage>
+    <jc-manage :orgTree="orgTree" :orgId="orgId" :options="info" :visible.sync="visible" @save-success="initData"></jc-manage>
   </div>
 </template>
 <script>
@@ -55,7 +55,8 @@ export default {
       visible: false,
       info: null,
       // ids: [],
-      filter: {}
+      filter: {},
+      orgId: ''
     }
   },
   computed: {
@@ -190,11 +191,11 @@ export default {
         } else {
           this.info.view = false
         }
-        this.visible = true
       } else {
         this.info = null
-        this.visible = true
       }
+      this.orgId = this.user.orgId
+      this.visible = true
     }
   }
 }

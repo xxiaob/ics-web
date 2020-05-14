@@ -60,6 +60,12 @@
             </el-option>
           </el-select>
         </el-form-item>
+        <el-form-item label="事件" prop="eventIds" :rules="rules.SELECT_NOT_NULL" v-if="!taskForm.ifUpload">
+          <el-select v-model="taskForm.eventIds" multiple placeholder="请选择事件" clearable class="jc-left-width50">
+            <el-option v-for="item in events" :key="item.id" :label="item.name" :value="item.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
         <el-form-item label="备注" prop="remark" :rules="rules.NOT_NULL">
           <el-input v-model="taskForm.remark" placeholder="请输入备注" type="textarea"></el-input>
         </el-form-item>
@@ -74,10 +80,11 @@
 <script>
 import { taskSave, taskFinish } from '@/api/task'
 import { userListByOrg } from '@/api/user'
+import { eventManageList } from '@/api/eventManage'
 import { getStringRule, NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
 
-let defaultForm = {
+const defaultForm = {
   businessKey: '',
   taskId: '',
   projectId: '',
@@ -113,9 +120,11 @@ export default {
         SELECT_NOT_NULL,
         NOT_NULL
       },
+      // taskPeople: 'orgIds',
       view: false,
       users: [],
       dialogVisibleHandle: false,
+      events: [],
       handle: false,
       taskForm: {
         ifUpload: false,
@@ -125,6 +134,9 @@ export default {
         eventIds: []
       }
     }
+  },
+  created() {
+    this.getEvents()
   },
   methods: {
     changeOrg(orgIds) {
@@ -157,6 +169,28 @@ export default {
         console.error(error)
       }
     },
+    async getEvents() {
+      try {
+        const res = await eventManageList({
+          pageNum: 1,
+          pageSize: 10
+        })
+        const events = []
+
+        console.log(res)
+        // if (res && res.length) {
+        //   res.forEach(item=>{
+        //     events.push({
+        //       id: item.userId,
+        //       name: item.userName
+        //     })
+        //   })
+        // }
+        // this.events = events
+      } catch (error) {
+        console.error(error)
+      }
+    },
     changeDate(value) {
       if (value) {
         this.form.beginTime = value[0]
@@ -169,14 +203,42 @@ export default {
     formatFormData() {
       if (this.options) {
         console.log(this.options)
-        this.view = this.options.view || false
-        this.handle = this.options.handle || false
-        const form = {}
+        const { view, handle, taskId, taskSource, taskPositionName, taskPosition, orgIds, assignees, detailViewVO: { businessKey, projectId, taskDesc, taskName, endDate, startDate } } = this.options
 
-        Object.keys(defaultForm).forEach(key=>{
-          form[key] = this.options[key] || ''
-        })
-        form.date = [this.options.beginTime, this.options.endTime]
+        this.view = view || false
+        this.handle = handle || false
+        const form = {
+          businessKey,
+          taskId,
+          projectId,
+          projectType: projectId,
+          taskName,
+          taskSource,
+          beginTime: startDate,
+          endTime: endDate,
+          taskDesc,
+          taskPosition,
+          taskPositionName,
+          date: [startDate, endDate]
+        }
+
+        if (assignees.length) {
+          const userIds = [], UserOrgIds = []
+
+          assignees.forEach(item=>{
+            userIds.push(item.userId)
+            if (!UserOrgIds.includes(item.orgId)) {
+              UserOrgIds.push(item.orgId)
+            }
+          })
+          this.getUser(UserOrgIds)
+          form.userIds = userIds
+          form.orgIds = UserOrgIds
+        } else {
+          this.users = []
+          form.userIds = []
+          form.orgIds = orgIds
+        }
         return form
       } else {
         this.view = false

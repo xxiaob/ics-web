@@ -36,7 +36,7 @@ export function taskUpdate(data) {
  * @returns {Object} axios 对象
  */
 export function taskSave(data) {
-  return data.id ? taskUpdate(data) : taskAdd(data)
+  return data.taskPO.businessKey ? taskUpdate(data) : taskAdd(data)
 }
 /**
  * 删除
@@ -63,7 +63,7 @@ export function taskStart(id) {
   return axios.post(API.task.start + '?businessKey=' + id)
 }
 /**
- * 启动任务流程
+ * 修改任务状态为处理中
  * @param {String} id
  * @returns {Object} axios 对象
  */

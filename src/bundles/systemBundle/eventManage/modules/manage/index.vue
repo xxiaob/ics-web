@@ -1,19 +1,14 @@
 <template>
   <el-dialog :title="options ? options.view?'查看事件':'编辑事件' : '事件上报'" :visible.sync="dialogVisible" width="600px" :append-to-body="true" @close="dialogClose">
     <el-form ref="form" label-width="100px" :model="form" class="jc-manage-form">
-      <el-form-item label="事件ID" prop="eventNumber" :rules="rules.Len50">
+      <el-form-item label="事件ID" prop="eventNumber" v-show="view">
         <el-input v-model="form.eventNumber" :disabled="view" placeholder="请输入事件ID"></el-input>
       </el-form-item>
-      <el-form-item label="上报人" prop="reportUser" v-show="view">
-        <el-input v-model="form.reportUser" disabled></el-input>
+      <el-form-item label="上报人" prop="reportUserName" v-show="view">
+        <el-input v-model="form.reportUserName" disabled></el-input>
       </el-form-item>
-      <!-- <el-form-item label="设备类型" prop="deviceType" :rules="rules.SELECT_NOT_NULL">
-        <el-select v-model="form.deviceType" placeholder="选择设备类型" :disabled="view">
-          <el-option v-for="(value,key) in deviceTypes" :key="key" :label="value" :value="key"></el-option>
-        </el-select>
-      </el-form-item> -->
-      <el-form-item prop="orgId" label="所属组织" :rules="rules.SELECT_NOT_NULL">
-        <el-cascader :options="orgTree" :disabled="view" v-model="form.orgId" :props="{expandTrigger: 'hover', emitPath: false }" clearable></el-cascader>
+      <el-form-item prop="orgId" label="所属组织" v-show="view">
+        <el-cascader :options="orgTree" disabled v-model="form.orgId" :props="{expandTrigger: 'hover', emitPath: false }" clearable></el-cascader>
       </el-form-item>
       <el-form-item label="事件描述" prop="desc" :rules="rules.NOT_NULL">
         <el-input v-model="form.desc" :disabled="view" placeholder="请输入事件描述" type="textarea"></el-input>
@@ -59,10 +54,8 @@ let defaultForm = {
   audioAddr: '',
   beforePhoto: '',
   desc: '',
-  eventNumber: '',
   eventType: '',
   orgId: '',
-  reportUser: '',
   videoAddr: ''
 }
 
@@ -72,6 +65,9 @@ export default {
   props: {
     orgTree: {
       type: Array
+    },
+    orgId: {
+      type: String
     }
   },
   components: {
@@ -92,7 +88,6 @@ export default {
   methods: {
     formatFormData() {
       if (this.options) {
-        // this.fileList = [{ name: this.options.url, url: this.options.url }]
         this.view = this.options.view || false
         return {
           afterPhoto: this.options.afterPhoto,
@@ -103,13 +98,12 @@ export default {
           eventType: this.options.eventType,
           id: this.options.id,
           orgId: this.options.orgId,
-          reportUser: this.options.reportUser,
+          reportUserName: this.options.reportUserName,
           videoAddr: this.options.videoAddr
         }
       } else {
-        // this.fileList = []
         this.view = false
-        return { ...defaultForm }
+        return { ...defaultForm, orgId: this.orgId }
       }
     },
     onSubmit() {

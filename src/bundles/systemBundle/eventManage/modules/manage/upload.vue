@@ -42,12 +42,13 @@ export default {
     },
     handleBeforeUpload() {
       this.loading = true
-      // this.$emit('update:url', '111')
     },
     handleSuccess(res) {
       if (res.resCode) {
         this.$emit('update:url', res.resData.url)
         this.$message.success('上传成功')
+      } else {
+        this.$message.error(res.resMsg.msgText)
       }
       this.loading = false
     }

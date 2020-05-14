@@ -13,11 +13,11 @@
         <el-table-column type="index" label="序号" width="50"></el-table-column>
         <el-table-column prop="projectType" label="项目类型"></el-table-column>
         <el-table-column prop="projectName" label="项目名称"></el-table-column>
-        <el-table-column prop="taskType" label="任务类型"></el-table-column>
+        <el-table-column prop="taskTypeName" label="任务类型"></el-table-column>
         <el-table-column prop="startUser" label="下发人"></el-table-column>
         <el-table-column prop="startOrg" label="下发组织"></el-table-column>
         <el-table-column prop="taskName" label="任务名称" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="taskStatus" label="任务状态" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="taskStatusName" label="任务状态" show-overflow-tooltip></el-table-column>
         <el-table-column prop="createTime" label="创建时间" :formatter="formatTime" width="140"></el-table-column>
         <el-table-column width="90" label="操作">
           <template slot-scope="scope">
@@ -36,7 +36,7 @@
   </div>
 </template>
 <script>
-import { taskList, taskDel, taskStart, taskGet } from '@/api/task'
+import { taskList, taskDel, taskStart, taskGet, taskUpdStatus } from '@/api/task'
 import { formatDate } from '@/libs/util'
 import PaginationMixins from '@/mixins/PaginationMixins'
 import { organizationList } from '@/api/organization'
@@ -164,8 +164,7 @@ export default {
       if (row) {
         const res = await taskGet(row.businessKey)
 
-        console.log(res)
-        this.info = row
+        this.info = res
         if (view) {
           this.info.view = true
         } else {
@@ -191,10 +190,23 @@ export default {
     },
     //任务处理
     async handle(row) {
-      this.info = row
+      // this.info = row
+      const res = await taskGet(row.businessKey)
+
+      this.info = res
+      this.info.taskId = row.taskId
       this.info.view = true
       this.info.handle = true
       this.visible = true
+
+      if (row.taskStatus === 1) {
+        try {
+          await taskUpdStatus(row.businessKey)
+          // this.initData()
+        } catch (error) {
+          console.error(error)
+        }
+      }
     }
   }
 }
