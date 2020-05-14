@@ -88,6 +88,7 @@ export default {
     //事件管理
     add: 'activiti-service/event/add',
     list: 'activiti-service/event/list',
+    selectList: 'activiti-service/event/selectList',
     update: 'activiti-service/event/upd',
     del: 'activiti-service/event/del',
     typeList: 'activiti-service/event/typeList'

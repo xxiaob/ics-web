@@ -54,3 +54,11 @@ export function eventManageDel(id) {
 export function eventManageTypeList(name) {
   return axios.post(API.eventManage.typeList + '?name=' + name)
 }
+/**
+ * 事件列表查询 根据title
+ * @param {String} title
+ * @returns {Object} axios 对象
+ */
+export function eventManageSelectList(title) {
+  return axios.post(API.eventManage.selectList + '?title=' + title)
+}

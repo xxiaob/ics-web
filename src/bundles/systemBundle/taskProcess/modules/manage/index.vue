@@ -61,8 +61,8 @@
           </el-select>
         </el-form-item>
         <el-form-item label="事件" prop="eventIds" :rules="rules.SELECT_NOT_NULL" v-if="!taskForm.ifUpload">
-          <el-select v-model="taskForm.eventIds" multiple placeholder="请选择事件" clearable class="jc-left-width50">
-            <el-option v-for="item in events" :key="item.id" :label="item.name" :value="item.id">
+          <el-select v-model="taskForm.eventIds" multiple filterable remote reserve-keyword placeholder="请输入关键词" :remote-method="remoteMethod" :loading="loading">
+            <el-option v-for="item in events" :key="item.id" :label="item.title" :value="item.id">
             </el-option>
           </el-select>
         </el-form-item>
@@ -80,7 +80,7 @@
 <script>
 import { taskSave, taskFinish } from '@/api/task'
 import { userListByOrg } from '@/api/user'
-import { eventManageList } from '@/api/eventManage'
+import { eventManageSelectList } from '@/api/eventManage'
 import { getStringRule, NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
 
@@ -136,7 +136,7 @@ export default {
     }
   },
   created() {
-    this.getEvents()
+    this.remoteMethod('')
   },
   methods: {
     changeOrg(orgIds) {
@@ -169,26 +169,14 @@ export default {
         console.error(error)
       }
     },
-    async getEvents() {
+    async remoteMethod(query) {
+      this.loading = true
       try {
-        const res = await eventManageList({
-          pageNum: 1,
-          pageSize: 10
-        })
-        const events = []
-
-        console.log(res)
-        // if (res && res.length) {
-        //   res.forEach(item=>{
-        //     events.push({
-        //       id: item.userId,
-        //       name: item.userName
-        //     })
-        //   })
-        // }
-        // this.events = events
+        this.events = await eventManageSelectList(query)
+        this.loading = false
       } catch (error) {
         console.error(error)
+        this.loading = false
       }
     },
     changeDate(value) {
