@@ -70,7 +70,7 @@ export default {
         if (data.view) {
           this.$emit('grid-change', { type: 'fitview', data })
         }
-      }, 300)
+      }, 250)
     },
     goEdit(data) {
       console.log('编辑处理', data)
