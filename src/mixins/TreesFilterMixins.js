@@ -9,7 +9,7 @@ export default {
       this.$refs.tree.filter(val)
     },
     filterNode(value, data) {
-      return stringSearch(value, data.label)
+      return stringSearch(value, data.label || data.name)
     }
   }
 }
