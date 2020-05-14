@@ -25,6 +25,7 @@ export default {
       this.areaId = data.id
 
       this.getSign(myJcMap, this.areaId).then(sign => {
+        sign.show()
         sign.fitView()
         sign.hide()
         myJcMapEditor = new JcMapEditor({ map: myJcMap, sign, icon: data.icon, name: data.name })
