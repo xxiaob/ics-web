@@ -71,7 +71,7 @@ export default {
     areaSave() {
       if (this.startEdit) {
         this.$confirm('确认保存当前设置', '提示', { type: 'warning' }).then(() => {
-          let params = { areaId: this.areaId, drawCoordinateType: 1 }
+          let params = { areaId: this.areaId, drawCoordinateType: 1, griddingUptType: 2 }
 
           Object.assign(params, this.getData())
           areaSave(params).then(() => {
