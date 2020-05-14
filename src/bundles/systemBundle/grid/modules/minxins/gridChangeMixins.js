@@ -55,7 +55,7 @@ export default {
     },
     refreshSign(myJcMap, areaId) {
       //刷新标记
-      this.getSign(myJcMap, areaId).then(sign => {
+      this.getSign(myJcMap, areaId, true).then(sign => {
         sign.show()
         myJcMap.fitView()
       })
@@ -67,24 +67,37 @@ export default {
         areaSign.fitView()
       }
     },
+    deleteSign(data) {
+      let areaSign = areas[data.id]
+
+      if (areaSign) {
+        areaSign.hide()
+        delete areas[data.id]
+      }
+    },
     async getSign(myJcMap, areaId, renew = false) {
       let areaSign = areas[areaId]
 
-      if (renew || !areaSign) {
-        let item = await areaGet({ areaId })//获取区域
-
-        areaSign = new JcMapSign({
-          id: areaId,
-          map: myJcMap,
-          icon: item.icon,
-          name: item.areaName,
-          center: item.center ? item.center.split(',') : null,
-          extData: {},
-          boundaries: apiBoundariesFormat(item)
-        })
-        areas[areaId] = areaSign
-        console.log('网格详情：', areaSign)
+      if (areaSign) {
+        if (renew) {
+          areaSign.hide()
+        } else {
+          return areaSign
+        }
       }
+      let item = await areaGet({ areaId })//获取区域
+
+      areaSign = new JcMapSign({
+        id: areaId,
+        map: myJcMap,
+        icon: item.icon,
+        name: item.areaName,
+        center: item.center ? item.center.split(',') : null,
+        extData: {},
+        boundaries: apiBoundariesFormat(item)
+      })
+      areas[areaId] = areaSign
+      console.log('网格详情：', areaSign)
 
       return areaSign
     }

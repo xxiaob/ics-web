@@ -52,7 +52,16 @@ export default {
           })
         }
       } else if (options.type == 'fitview') {
-        this.fitView(options.data.id)
+        this.fitView(options.data.id) //定位显示区域
+      } else if (options.type == 'refreshsign') {
+        //在区域编辑保存后刷新区域显示
+        this.getSign(myJcMap, options.data.id, true).then(sign => {
+          if (options.data.view) {
+            sign.show()
+          }
+        })
+      } else if (options.type == 'deletesign') {
+        this.deleteSign(options.data) //删除标记
       } else if (options.type == 'areaedit') {
         if (this.editShow) {
           //如果需要编辑的区域是当前正在编辑的区域，则取消编辑
