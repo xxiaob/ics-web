@@ -74,7 +74,7 @@ export default {
       let areaSave = this.isEdit ? areaUpdate : areaAdd
 
       try {
-        const { areaId } = await areaSave({ ...this.form, orgId: this.pNode.orgId, areaId: this.pNode.areaId, drawCoordinateType: 1 })
+        const { areaId } = await areaSave({ ...this.form, orgId: this.pNode.orgId, areaId: this.pNode.areaId, drawCoordinateType: 1, griddingUptType: 1 })
         const item = await areaGet({ areaId })//获取区域信息
 
         this.$message.success('操作成功')

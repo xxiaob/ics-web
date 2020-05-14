@@ -83,7 +83,7 @@ export default {
     manage() {
       if (this.startEdit) {
         this.$confirm('确认保存当前设置', '提示', { type: 'warning' }).then(() => {
-          let params = { orgId: this.orgId, areaId: this.areaId }
+          let params = { orgId: this.orgId, areaId: this.areaId, griddingUptType: 2 }
 
           if (this.type == 1) {
             //快捷绑定
