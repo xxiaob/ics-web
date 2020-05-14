@@ -3,7 +3,7 @@
  */
 import JcMapEditorBase from '../../base/JcMapEditor'
 import { MAP_SIGN_TYPE, MAP_EDIT_TYPE } from '@/constant/CONST'
-import { PolygonStyle, CircleStyle } from '../config'
+import { PolygonStyle, CircleStyle, PolylineStyle } from '../config'
 import { paintingSign, getCenter } from '../aMapUtil'
 import { JcMapSign, JcMapMarker } from '../index'
 
@@ -41,6 +41,16 @@ class JcMapEditor extends JcMapEditorBase {
           //半径超过0 则为圆
           e.obj.setMap(this.map.map)
 
+          this.editObject.target = e.obj
+          this.addboundary(this.editObject)
+        }
+      } else if (this.editObject.type == MAP_SIGN_TYPE.Polyline) {
+        let path = e.obj.getPath()
+
+        this.console('JcMapEditor - editPolyline - end：', e, path)
+        if (path && path.length > 1) {
+          //超过两个个点则为线段
+          e.obj.setMap(this.map.map)
           this.editObject.target = e.obj
           this.addboundary(this.editObject)
         }
@@ -118,6 +128,9 @@ class JcMapEditor extends JcMapEditorBase {
     } else if (type === MAP_SIGN_TYPE.Circle) {
       //处理圆形
       this.mousetool.circle({ ...CircleStyle.base, ...CircleStyle.active })
+    } else if (type === MAP_SIGN_TYPE.Polyline) {
+      //处理划线
+      this.mousetool.polyline({ ...PolylineStyle.base, ...PolylineStyle.active })
     }
   }
 
@@ -206,11 +219,20 @@ class JcMapEditor extends JcMapEditorBase {
             }
             resultItem.path = resultPath
           } else if (item.type == MAP_SIGN_TYPE.Circle) {
+            //处理圆形
             let center = item.target.getCenter()
 
             resultItem.lng = center.lng
             resultItem.lat = center.lat
             resultItem.radius = item.target.getRadius()
+          } else if (item.type == MAP_SIGN_TYPE.Polyline) {
+            //处理线
+            let resultPath = [], path = item.target.getPath()
+
+            for (let i = 0; i < path.length; i++) {
+              resultPath.push({ index: i + 1, lat: path[i].lat, lng: path[i].lng, extWidth: 5 })
+            }
+            resultItem.path = resultPath
           }
           result.boundaries.push(resultItem)
         }
@@ -248,8 +270,12 @@ class JcMapEditor extends JcMapEditorBase {
       this.amapEditor.setAdsorbPolygons(adsorbPolygons)
       this.amapEditor.setTarget(item.target)
     } else if (item.type == MAP_SIGN_TYPE.Circle) {
-      //如果是矩形，则使用矩形编辑器
+      //如果是圆形，则使用圆形编辑器
       this.amapEditor = new this.map.AMap.CircleEditor(this.map.map, item.target)
+    } else if (item.type == MAP_SIGN_TYPE.Polyline) {
+      //如果是线，则使用线编辑器
+      this.amapEditor = new this.map.AMap.PolylineEditor(this.map.map)
+      this.amapEditor.setTarget(item.target)
     }
     this.amapEditor.on('end', (e) => {
       this.console('amapEditor - end ->', item)

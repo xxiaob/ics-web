@@ -34,6 +34,20 @@ export function apiBoundariesFormat(boundaries = {}) {
     })
   }
 
+  //处理线段
+  if (boundaries.withExtWidthReqs && boundaries.withExtWidthReqs.length) {
+    boundaries.withExtWidthReqs.forEach(item => {
+      if (item.withExtWidthInnerReqs && item.withExtWidthInnerReqs.length) {
+        let resultItem = { type: MAP_SIGN_TYPE.Polyline, path: [], extWidth: item.withExtWidthInnerReqs[0].extWidth }
+
+        for (let i = 0; i < item.withExtWidthInnerReqs.length; i++) {
+          resultItem.path.push([item.withExtWidthInnerReqs[i].lng, item.withExtWidthInnerReqs[i].lat])
+        }
+        result.push(resultItem)
+      }
+    })
+  }
+
   return result
 }
 /**
@@ -59,6 +73,14 @@ export function signEditDataFormat(data = {}) {
       } else if (item.type == MAP_SIGN_TYPE.Circle) {
         //处理圆形
         result.withRadiusReqs.push({ lat: item.lat, lng: item.lng, radius: item.radius })
+      } else if (item.type == MAP_SIGN_TYPE.Polyline) {
+        //处理线段
+        let withExtWidthInnerReqs = []
+
+        item.path.forEach(dot => {
+          withExtWidthInnerReqs.push({ sequence: dot.index, lat: dot.lat, lng: dot.lng, extWidth: dot.extWidth })
+        })
+        result.withExtWidthReqs.push({ withExtWidthInnerReqs: withExtWidthInnerReqs })
       }
     })
   }

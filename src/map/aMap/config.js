@@ -10,7 +10,7 @@ export const MapOptions = {
   loadOptions: {
     key: 'c3282c235dc7d1aa55244c9be6de81ce', // 申请好的Web端开发者Key，首次调用 load 时必填
     version: '2.0', // 指定要加载的 JSAPI 的版本，缺省时默认为 1.4.15
-    plugins: ['AMap.MouseTool', 'AMap.Polygon', 'AMap.PolygonEditor', 'AMap.CircleEditor', 'AMap.Circle', 'AMap.PlaceSearch'] //插件列表
+    plugins: ['AMap.MouseTool', 'AMap.Polygon', 'AMap.Circle', 'AMap.Polyline', 'AMap.PolygonEditor', 'AMap.CircleEditor', 'AMap.PolylineEditor', 'AMap.PlaceSearch'] //插件列表
   },
   mapOptions: {
     viewMode: '3D'
@@ -38,6 +38,22 @@ export const CircleStyle = {
     fillColor: '#0183ff',
     fillOpacity: 0.1,
     strokeStyle: 'dashed'
+  },
+  normal: { fillOpacity: 0.1 },
+  active: { fillOpacity: 0.3 }
+}
+
+//线的样式
+export const PolylineStyle = {
+  base: {
+    strokeWeight: 2,
+    // isOutline: false,
+    // borderWeight: 5,
+    // outlineColor: '#cccccc',
+    strokeColor: '#0183ff',
+    strokeStyle: 'dashed',
+    lineJoin: 'round',
+    lineCap: 'round'
   },
   normal: { fillOpacity: 0.1 },
   active: { fillOpacity: 0.3 }
