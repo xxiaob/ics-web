@@ -13,12 +13,13 @@ export default {
     }
   },
   methods: {
-    del(node) {
+    del(data) {
       this.$parent.checkWork(() => {
         this.$confirm('确认删除该网格', '提示', { type: 'warning' }).then(() => {
-          areaDel(node.areaId).then(() => {
+          areaDel(data.areaId).then(() => {
             this.$message.success('删除成功')
-            this.$refs.tree.remove(node)
+            this.$refs.tree.remove(data)
+            this.$emit('grid-change', { type: 'deletesign', data })
           })
         }).catch(() => { })
       })
@@ -45,6 +46,7 @@ export default {
 
         console.log('区域操作，编辑，saveSuccess', data, node)
         Object.assign(node.data, data)
+        this.$emit('grid-change', { type: 'refreshsign', data: node.data })
       } else {
         let node = this.$refs.tree.getNode(this.pNode.areaId || this.pNode.orgId)
 
