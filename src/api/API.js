@@ -89,7 +89,8 @@ export default {
     add: 'activiti-service/event/add',
     list: 'activiti-service/event/list',
     update: 'activiti-service/event/upd',
-    del: 'activiti-service/event/del'
+    del: 'activiti-service/event/del',
+    typeList: 'activiti-service/event/typeList'
   },
   task: {
     //任务管理

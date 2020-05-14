@@ -10,11 +10,17 @@
       <el-form-item prop="orgId" label="所属组织" v-show="view">
         <el-cascader :options="orgTree" disabled v-model="form.orgId" :props="{expandTrigger: 'hover', emitPath: false }" clearable></el-cascader>
       </el-form-item>
+      <el-form-item label="事件标题" prop="eventTitle" :rules="rules.Len50">
+        <el-input v-model="form.eventTitle" :disabled="view" placeholder="请输入事事件标题"></el-input>
+      </el-form-item>
       <el-form-item label="事件描述" prop="desc" :rules="rules.NOT_NULL">
         <el-input v-model="form.desc" :disabled="view" placeholder="请输入事件描述" type="textarea"></el-input>
       </el-form-item>
-      <el-form-item label="事件类型" prop="eventType" :rules="rules.NOT_NULL">
-        <el-input v-model="form.eventType" :disabled="view" placeholder="请输入事件类型"></el-input>
+      <el-form-item label="事件类型" prop="eventType" :rules="rules.SELECT_NOT_NULL">
+        <el-select v-model="form.eventType" filterable remote reserve-keyword placeholder="请输入关键词" :disabled="view" :remote-method="remoteMethod" :loading="loading">
+          <el-option v-for="item in eventTypes" :key="item.id" :label="item.typeName" :value="item.id">
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item label="处理前图片" prop="beforePhoto" :rules="[{required: true, message: '请上传文件'}]">
         <el-input v-model="form.beforePhoto" v-show="false"></el-input>
@@ -44,18 +50,19 @@
   </el-dialog>
 </template>
 <script>
-import { eventManageSave } from '@/api/eventManage'
+import { eventManageSave, eventManageTypeList } from '@/api/eventManage'
 import { getStringRule, NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
 import upload from './upload'
 
 let defaultForm = {
+  orgId: '',
+  eventType: '',
+  desc: '',
+  eventTitle: '',
   afterPhoto: '',
   audioAddr: '',
   beforePhoto: '',
-  desc: '',
-  eventType: '',
-  orgId: '',
   videoAddr: ''
 }
 
@@ -82,10 +89,24 @@ export default {
         SELECT_NOT_NULL,
         NOT_NULL
       },
-      view: false
+      view: false,
+      eventTypes: []
     }
   },
+  created() {
+    this.remoteMethod('')
+  },
   methods: {
+    async remoteMethod(query) {
+      this.loading = true
+      try {
+        this.eventTypes = await eventManageTypeList(query)
+        this.loading = false
+      } catch (error) {
+        console.error(error)
+        this.loading = false
+      }
+    },
     formatFormData() {
       if (this.options) {
         this.view = this.options.view || false
@@ -94,8 +115,9 @@ export default {
           audioAddr: this.options.audioAddr,
           beforePhoto: this.options.beforePhoto,
           desc: this.options.desc,
+          eventTitle: this.options.eventTitle,
           eventNumber: this.options.eventNumber,
-          eventType: this.options.eventType,
+          eventType: this.options.eventType.toString(),
           id: this.options.id,
           orgId: this.options.orgId,
           reportUserName: this.options.reportUserName,

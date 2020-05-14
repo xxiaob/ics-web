@@ -12,7 +12,8 @@
       <el-table :data="list" v-loading="loading" row-key="id" class="jc-table">
         <!-- <el-table-column type="selection" width="40"></el-table-column> -->
         <el-table-column type="index" label="序号" width="50"></el-table-column>
-        <el-table-column prop="eventType" label="事件类型"></el-table-column>
+        <el-table-column prop="eventTitle" label="事件标题"></el-table-column>
+        <el-table-column prop="typeName" label="事件类型"></el-table-column>
         <el-table-column prop="reportUserName" label="上报人"></el-table-column>
         <el-table-column prop="orgId" label="所属组织" :formatter="formatOrg"></el-table-column>
         <el-table-column prop="desc" label="事件描述" show-overflow-tooltip></el-table-column>
@@ -131,8 +132,10 @@ export default {
                 beforePhoto: item.beforePhoto,
                 createTime: item.createTime,
                 desc: item.desc,
+                eventTitle: item.eventTitle,
                 eventNumber: item.eventNumber,
                 eventType: item.eventType,
+                typeName: item.typeName,
                 id: item.id,
                 orgId: item.orgId,
                 reportUser: item.reportUser,
@@ -153,30 +156,11 @@ export default {
       this.filter = filter
       this.currentChange(1)
     },
-    // tableSelect(selections) {
-    //   let ids = []
-
-    //   if (selections && selections.length) {
-    //     selections.forEach(item=> {
-    //       ids.push(item.id)
-    //     })
-    //   }
-    //   this.ids = ids
-    // },
     del(row) {
       this.$confirm('确认删除该事件', '提示', { type: 'warning' }).then(() => {
         this.remove(row.id)
       }).catch(() => {})
     },
-    // removeAll() {
-    //   if (this.ids.length) {
-    //     this.$confirm('确认删除选中的事件', '提示', { type: 'warning' }).then(() => {
-    //       this.remove(this.ids)
-    //     }).catch(() => {})
-    //   } else {
-    //     this.$message.error('请先选择删除项')
-    //   }
-    // },
     remove(id) {
       eventManageDel(id).then(() => {
         this.$message.success('删除成功')

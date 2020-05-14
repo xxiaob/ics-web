@@ -46,3 +46,11 @@ export function eventManageSave(data) {
 export function eventManageDel(id) {
   return axios.post(API.eventManage.del + '?id=' + id)
 }
+/**
+ * 事件类型列表
+ * @param {String} name
+ * @returns {Object} axios 对象
+ */
+export function eventManageTypeList(name) {
+  return axios.post(API.eventManage.typeList + '?name=' + name)
+}
