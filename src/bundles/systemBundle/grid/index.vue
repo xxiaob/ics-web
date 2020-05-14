@@ -51,10 +51,13 @@ export default {
             myJcMap.fitView()
           })
         }
+      } else if (options.type == 'fitview') {
+        this.fitView(options.data.id)
       } else if (options.type == 'areaedit') {
         if (this.editShow) {
+          //如果需要编辑的区域是当前正在编辑的区域，则取消编辑
           if (this.areaId == options.data.id) {
-            this.cancel()
+            this.cancel() //取消区域编辑
           } else {
             this.$message.error('有网格正在编辑中，请先取消编辑')
           }

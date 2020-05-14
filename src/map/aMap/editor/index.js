@@ -3,7 +3,7 @@
  */
 import JcMapEditorBase from '../../base/JcMapEditor'
 import { MAP_SIGN_TYPE, MAP_EDIT_TYPE } from '@/constant/CONST'
-import { PolygonStyle } from '../config'
+import { PolygonStyle, CircleStyle } from '../config'
 import { paintingSign, getCenter } from '../aMapUtil'
 import { JcMapSign, JcMapMarker } from '../index'
 
@@ -21,13 +21,26 @@ class JcMapEditor extends JcMapEditorBase {
     this.mousetool.on('draw', (e) => {
       this.map.map.setDefaultCursor('default')
       this.mousetool.close(true)
-      let path = e.obj.getPath()
 
-      this.console('JcMapEditor - edit - end：', e, path)
+
       if (this.editObject.type == MAP_SIGN_TYPE.Polygon) {
+        let path = e.obj.getPath()
+
+        this.console('JcMapEditor - editPolygon - end：', e, path)
         if (path && path.length > 2) {
           //超过三个点则为多边形
           e.obj.setMap(this.map.map)
+          this.editObject.target = e.obj
+          this.addboundary(this.editObject)
+        }
+      } else if (this.editObject.type == MAP_SIGN_TYPE.Circle) {
+        let radius = e.obj.getRadius()
+
+        this.console('JcMapEditor - editCircle - end：', e, radius)
+        if (radius > 0) {
+          //半径超过0 则为圆
+          e.obj.setMap(this.map.map)
+
           this.editObject.target = e.obj
           this.addboundary(this.editObject)
         }
@@ -51,6 +64,7 @@ class JcMapEditor extends JcMapEditorBase {
    *初始化编辑器
    */
   initEditor() {
+    this.map.map.setStatus({ doubleClickZoom: false }) //设置禁止双击缩放
     if (this.sign) {
       //添加点标记
       this.showMarker(this.sign.center)
@@ -61,7 +75,8 @@ class JcMapEditor extends JcMapEditorBase {
 
       if (this.sign.boundaries && this.sign.boundaries.length) {
         this.sign.boundaries.forEach(item => {
-          let target = paintingSign(new JcMapSign({ map: this.map, active: true }), { type: item.type, path: item.path })
+          this.console(item)
+          let target = paintingSign(new JcMapSign({ map: this.map, active: true }), item)
 
           boundaries.push({ id: this.idIndex++, type: item.type, target })
           overlays.push(target)
@@ -96,10 +111,13 @@ class JcMapEditor extends JcMapEditorBase {
   addArea(type = MAP_SIGN_TYPE.Polygon) {
     this.endAmapEditor()
     this.map.map.setDefaultCursor('crosshair')
+    this.editObject = { id: this.idIndex++, type, opera: MAP_EDIT_TYPE.ADD }
     if (type === MAP_SIGN_TYPE.Polygon) {
       //处理矩形
-      this.editObject = { id: this.idIndex++, type, opera: MAP_EDIT_TYPE.ADD }
       this.mousetool.polygon({ ...PolygonStyle.base, ...PolygonStyle.active })
+    } else if (type === MAP_SIGN_TYPE.Circle) {
+      //处理圆形
+      this.mousetool.circle({ ...CircleStyle.base, ...CircleStyle.active })
     }
   }
 
@@ -161,7 +179,6 @@ class JcMapEditor extends JcMapEditorBase {
       this.marker = new JcMapMarker({ map: this.map, position, icon: this.icon, draggable: true, name: this.name || '区域中心点' })
       this.marker.on('dragstart', () => {
         this.emit('change') //触发编辑修改
-        this.marker.off('dragstart')
       })
     }
   }
@@ -188,6 +205,12 @@ class JcMapEditor extends JcMapEditorBase {
               resultPath.push({ index: i + 1, lat: path[i].lat, lng: path[i].lng })
             }
             resultItem.path = resultPath
+          } else if (item.type == MAP_SIGN_TYPE.Circle) {
+            let center = item.target.getCenter()
+
+            resultItem.lng = center.lng
+            resultItem.lat = center.lat
+            resultItem.radius = item.target.getRadius()
           }
           result.boundaries.push(resultItem)
         }
@@ -224,12 +247,15 @@ class JcMapEditor extends JcMapEditorBase {
       })
       this.amapEditor.setAdsorbPolygons(adsorbPolygons)
       this.amapEditor.setTarget(item.target)
-      this.amapEditor.on('end', (e) => {
-        this.console('amapEditor - end ->', item)
-        this.endEdit(item, e.target)
-      })
-      this.amapEditor.open()
+    } else if (item.type == MAP_SIGN_TYPE.Circle) {
+      //如果是矩形，则使用矩形编辑器
+      this.amapEditor = new this.map.AMap.CircleEditor(this.map.map, item.target)
     }
+    this.amapEditor.on('end', (e) => {
+      this.console('amapEditor - end ->', item)
+      this.endEdit(item, e.target)
+    })
+    this.amapEditor.open()
   }
 
   /**
@@ -306,6 +332,7 @@ class JcMapEditor extends JcMapEditorBase {
       this.marker.hide()
     }
     this.map.map.setDefaultCursor('default')
+    this.map.map.setStatus({ doubleClickZoom: true }) //恢复地图双击缩放
     this.boundaries = null
     this.editItem = null
     this.editObject = null

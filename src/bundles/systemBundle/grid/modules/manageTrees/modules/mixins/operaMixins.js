@@ -8,6 +8,7 @@ export default {
       currentKey: null,
       visible: false,
       info: null,
+      timer: null,
       pNode: { name: '', orgId: '', areaId: '' }
     }
   },
@@ -60,8 +61,18 @@ export default {
         console.log('区域操作，添加，saveSuccess', data, node)
       }
     },
+    nodeChange(data) {
+      clearTimeout(this.timer)
+      this.timer = setTimeout(() => {
+        console.log('树节点改变', data)
+        if (data.view) {
+          this.$emit('grid-change', { type: 'fitview', data })
+        }
+      }, 300)
+    },
     goEdit(data) {
       console.log('编辑处理', data)
+      clearTimeout(this.timer)
       if (data.areaId) {
         this.$emit('grid-change', { type: 'areaedit', data })
       }

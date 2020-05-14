@@ -26,7 +26,7 @@ export default {
 
       this.getSign(myJcMap, this.areaId).then(sign => {
         sign.hide()
-        myJcMapEditor = new JcMapEditor({ map: myJcMap, sign, name: data.name })
+        myJcMapEditor = new JcMapEditor({ map: myJcMap, sign, icon: data.icon, name: data.name })
         myJcMapEditor.on('change', () => {
           this.startEdit = true
         })

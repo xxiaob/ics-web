@@ -42,14 +42,14 @@ export default {
         areaSign = new JcMapSign({
           id: options.data.id,
           map: myJcMap,
-          icon: item.item,
+          icon: item.icon,
           name: item.areaName,
           center: item.center ? item.center.split(',') : null,
           extData: {},
           boundaries: apiBoundariesFormat(item)
         })
-        areas[options.data.id] = areaSign
         areaSign.show()
+        areas[options.data.id] = areaSign
       }
       options.data.view = true
     },
@@ -60,6 +60,13 @@ export default {
         myJcMap.fitView()
       })
     },
+    fitView(id) {
+      let areaSign = areas[id]
+
+      if (areaSign) {
+        areaSign.fitView()
+      }
+    },
     async getSign(myJcMap, areaId, renew = false) {
       let areaSign = areas[areaId]
 
@@ -69,13 +76,14 @@ export default {
         areaSign = new JcMapSign({
           id: areaId,
           map: myJcMap,
-          icon: item.item,
+          icon: item.icon,
           name: item.areaName,
           center: item.center ? item.center.split(',') : null,
           extData: {},
           boundaries: apiBoundariesFormat(item)
         })
         areas[areaId] = areaSign
+        console.log('网格详情：', areaSign)
       }
 
       return areaSign

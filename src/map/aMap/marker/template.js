@@ -10,7 +10,9 @@ import { defaultMarketIcon, JcIcons } from '@/config/JcIconConfig'
  */
 let getIconUrl = function (icon) {
   if (icon) {
-    return JcIcons[icon] || icon
+    let iconItem = JcIcons[icon]
+
+    return iconItem ? iconItem.icon : icon
   }
   return defaultMarketIcon
 }

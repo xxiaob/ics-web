@@ -9,12 +9,13 @@ class JcMapSign {
    * @param {String} options.name 标记名称
    * @param {*} options.extData 额外参数，用于自定义数据处理
    * @param {Array<String>} options.center 标记中心点
+   * @param {String} options.icon 中心点标记图标，可以为url，也可以为JcIcons 的 key
    * @param {JcMap} options.map JcMap地图对象
    * @param {Boolean} options.active 是否使用选中样式
    * @param {Boolean} options.debug 配置 设法开启debug 模式，默认true
    * @param {String} options.style 设置额外样式，取配置的对应标记类型样式key
    * @param {Array} options.boundaries 边界数组
-   * @param {Boolean} options.tipVisible 是否显示区域边界
+   * @param {Boolean} options.areaVisible 是否显示区域边界
    * @param {Boolean} options.tipVisible 是否显示中心点tip
    */
   constructor(options) {
@@ -23,6 +24,7 @@ class JcMapSign {
     this.name = options.name || ''
     this.extData = options.extData
     this.center = options.center || []
+    this.icon = options.icon || null
     this.boundaries = options.boundaries || []
     this.map = options.map || null
     this.active = options.active || false

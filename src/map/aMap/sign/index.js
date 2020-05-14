@@ -42,7 +42,7 @@ class JcMapSign extends JcMapSignBase {
       if (this.marker) {
         this.marker.show()
       } else if (this.center && this.center.length == 2) {
-        this.marker = new JcMapMarker({ map: this.map, position: this.center, name: this.name })
+        this.marker = new JcMapMarker({ map: this.map, position: this.center, name: this.name, icon: this.icon })
         this.marker.on('click', () => {
           this.fitView()
         })

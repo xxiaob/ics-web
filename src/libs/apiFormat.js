@@ -57,7 +57,8 @@ export function signEditDataFormat(data = {}) {
         })
         result.withoutRadiusReqs.push({ withSequenceReqs: withSequenceReqs })
       } else if (item.type == MAP_SIGN_TYPE.Circle) {
-        //处理原型
+        //处理圆形
+        result.withRadiusReqs.push({ lat: item.lat, lng: item.lng, radius: item.radius })
       }
     })
   }

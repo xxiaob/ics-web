@@ -3,7 +3,7 @@
  */
 import AMapLoader from '@amap/amap-jsapi-loader'
 import { MAP_SIGN_TYPE } from '@/constant/CONST'
-import { MapOptions, PolygonStyle } from './config'
+import { MapOptions, PolygonStyle, CircleStyle } from './config'
 
 let AMap = null //地图对象
 
@@ -29,6 +29,9 @@ export function paintingSign(sign, boundary) {
   if (MAP_SIGN_TYPE.Polygon == boundary.type) {
     //显示矩形
     return new sign.map.AMap.Polygon(Object.assign({ path: boundary.path, extData: { sign, boundary } }, PolygonStyle.base, sign.active ? PolygonStyle.active : {}, sign.style && PolygonStyle[sign.style] ? PolygonStyle[sign.style] : {}))
+  } else if (MAP_SIGN_TYPE.Circle == boundary.type) {
+    //显示圆形
+    return new sign.map.AMap.Circle(Object.assign({ center: boundary.center, radius: boundary.radius, extData: { sign, boundary } }, CircleStyle.base, sign.active ? CircleStyle.active : {}, sign.style && CircleStyle[sign.style] ? CircleStyle[sign.style] : {}))
   }
 }
 
@@ -49,5 +52,11 @@ export function getCenter(boundary) {
       lng += item.lng
     })
     return [lng / path.length, lat / path.length]
+  } else if (MAP_SIGN_TYPE.Circle == boundary.type) {
+    //圆形
+    let center = boundary.target.getCenter()
+
+    return [center.lng, center.lat]
   }
+  return []
 }
