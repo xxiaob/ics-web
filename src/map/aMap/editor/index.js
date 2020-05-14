@@ -143,6 +143,9 @@ class JcMapEditor extends JcMapEditorBase {
       this.boundaries.push(boundary)
     } else {
       this.boundaries = [boundary]
+    }
+    //如果标记不存在则显示标记
+    if (!this.marker) {
       this.showMarker(getCenter(boundary))
     }
     this.refreshListener()
