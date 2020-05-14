@@ -37,11 +37,11 @@ export function apiBoundariesFormat(boundaries = {}) {
   //处理线段
   if (boundaries.withExtWidthReqs && boundaries.withExtWidthReqs.length) {
     boundaries.withExtWidthReqs.forEach(item => {
-      if (item.withExtWidthInnerReqs && item.withExtWidthInnerReqs.length) {
-        let resultItem = { type: MAP_SIGN_TYPE.Polyline, path: [], extWidth: item.withExtWidthInnerReqs[0].extWidth }
+      if (item.withExtWidthReqs && item.withExtWidthReqs.length) {
+        let resultItem = { type: MAP_SIGN_TYPE.Polyline, path: [], extWidth: item.withExtWidthReqs[0].extWidth }
 
-        for (let i = 0; i < item.withExtWidthInnerReqs.length; i++) {
-          resultItem.path.push([item.withExtWidthInnerReqs[i].lng, item.withExtWidthInnerReqs[i].lat])
+        for (let i = 0; i < item.withExtWidthReqs.length; i++) {
+          resultItem.path.push([item.withExtWidthReqs[i].lng, item.withExtWidthReqs[i].lat])
         }
         result.push(resultItem)
       }
