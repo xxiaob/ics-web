@@ -68,6 +68,12 @@ body {
   user-select: none;
 }
 
+/*修改输入框显示*/
+input::-webkit-input-placeholder {
+  color: $jc-color-text-placeholder;
+  font-size: $jc-font-size-smaller;
+}
+
 //字体样式
 .jc-link {
   color: $jc-color-primary;

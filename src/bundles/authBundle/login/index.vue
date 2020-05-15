@@ -1,60 +1,62 @@
 <template>
   <div class="jc-login-warp">
     <img src="./assets/login-bg.png" class="jc-login-bg" />
+    <div class="jc-login-header"></div>
     <div class="jc-login-space">
-      <div class="jc-login-title">行政执法指挥系统</div>
+      <div class="jc-login-title">欢迎登录</div>
       <div class="jc-input-warp">
-        <el-form ref="form" :model="form" :hide-required-asterisk="true" label-width="0">
-          <el-form-item prop="userName" :rules="rules.Len20">
-            <el-input v-model="form.userName" type="text" placeholder="请输入账号"></el-input>
-          </el-form-item>
-          <el-form-item prop="password" :rules="rules.Len20">
-            <el-input v-model="form.password" type="password" placeholder="请输入密码"></el-input>
-          </el-form-item>
-        </el-form>
-        <el-button type="primary" @click="onSubmit" :loading="loading" class="jc-login-btn">登录</el-button>
+        <input class="jc-login-input" type="text" v-model="form.userName" placeholder="请输入账号" maxlength="20" />
+      </div>
+      <div class="jc-input-warp">
+        <input class="jc-login-input" type="password" v-model="form.password" placeholder="请输入密码" maxlength="20" />
+      </div>
+      <div class="jc-tip" v-text="tip"></div>
+      <div class="jc-login-btn" @click="onSubmit">
+        <JcSpinner v-if="loading"></JcSpinner>
+        <span v-else>登 录</span>
       </div>
     </div>
   </div>
 </template>
 <script>
 import { mapMutations } from 'vuex'
-import { getStringRule } from '@/libs/rules'
 import { login } from '@/api/auth'
 export default {
   name: 'Login',
+  components: {
+    JcSpinner: () => import('./modules/spinner')
+  },
   data() {
     return {
       loading: false,
+      tip: '',
       form: {
         userName: '',
         password: ''
-      },
-      rules: {
-        Len20: getStringRule(1, 20)
       }
     }
   },
   methods: {
     onSubmit() {
-      if (!this.loading) {
-        this.$refs.form.validate(valid => {
-          if (valid) {
-            this.loading = true
-            login(this.form).then((res) => {
-              this.setUser(res)
-              let goUrl = '/'
+      this.tip = ''
+      if (this.form.userName && this.form.password) {
+        if (!this.loading) {
+          this.loading = true
+          login(this.form).then((res) => {
+            this.setUser(res)
+            let goUrl = '/'
 
-              if (this.$route.query.callbackUrl && this.$route.query.callbackUrl.indexOf('login') < 0) {
-                goUrl = this.$route.query.callbackUrl
-              }
-              this.$router.push(goUrl)
-              this.loading = false
-            }).catch(() => {
-              this.loading = false
-            })
-          }
-        })
+            if (this.$route.query.callbackUrl && this.$route.query.callbackUrl.indexOf('login') < 0) {
+              goUrl = this.$route.query.callbackUrl
+            }
+            this.$router.push(goUrl)
+            this.loading = false
+          }).catch(() => {
+            this.loading = false
+          })
+        }
+      } else {
+        this.tip = '账号密码不能为空'
       }
     },
     ...mapMutations('user', [
@@ -68,6 +70,7 @@ export default {
   position: relative;
   width: 100%;
   height: 100%;
+  overflow: hidden;
 }
 .jc-login-bg {
   display: block;
@@ -75,32 +78,94 @@ export default {
   height: 100%;
   object-fit: cover;
 }
-.jc-login-space {
+.jc-login-header {
   position: absolute;
   top: 0;
   left: 0;
+  right: 0;
+  height: 110px;
+  z-index: 9;
+  background: url(./assets/login-logo.png) no-repeat;
+  background-position: 60px center;
+  border-bottom: solid 1px #253270;
+}
+.jc-login-space {
+  position: absolute;
+  top: 0;
+  left: 60%;
   bottom: 0;
   right: 0;
-  margin: auto;
-  width: 500px;
-  height: 300px;
-  background-color: $jc-color-white;
-  border-radius: $jc-border-radius-base;
+  margin: auto 0 auto 0;
+  width: 560px;
+  height: 500px;
+  background: url(./assets/login-warp.png) no-repeat center;
+  background-size: 100% 100%;
+  padding: 60px 92px 84px 108px;
 }
 .jc-login-title {
   text-align: center;
-  height: 50px;
-  line-height: 50px;
-  font-size: $jc-font-size-larger;
-  border-bottom: solid 1px $jc-color-line-primary;
-}
-.jc-input-warp {
-  padding: 30px 50px;
+  height: 110px;
+  line-height: 110px;
+  font-size: 34px;
+  letter-spacing: 5px;
+  color: $jc-color-white;
 }
 
+.jc-input-warp {
+  position: relative;
+  height: 40px;
+  padding: 0 20px;
+  background-color: #0e6aae;
+  box-shadow: 0 0 2px #5bd0e8;
+  border-radius: 20px;
+  overflow: hidden;
+  margin-bottom: 24px;
+  transform: all 0.3s;
+  &:hover,
+  &:focus {
+    box-shadow: 0 0 3px #5bd0e8;
+  }
+  .jc-login-input {
+    height: 40px;
+    line-height: 40px;
+    width: 100%;
+    background-color: transparent;
+    border: none;
+    outline: none;
+    box-shadow: 0 0 0 1000px #0e6aae inset !important;
+    color: $jc-color-white;
+
+    &::-webkit-input-placeholder {
+      color: rgba($color: $jc-color-white, $alpha: 0.8);
+    }
+    &:-webkit-autofill {
+      color: $jc-color-white !important;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: $jc-color-white !important;
+    }
+  }
+}
+
+.jc-tip {
+  height: 24px;
+  line-height: 20px;
+  color: $jc-color-danger;
+}
 .jc-login-btn {
+  position: relative;
   width: 100%;
-  height: 45px;
-  margin-top: 20px;
+  background-color: #46b0e2;
+  color: $jc-color-white;
+  text-align: center;
+  font-size: 18px;
+  height: 40px;
+  line-height: 40px;
+  margin-top: 10px;
+  cursor: pointer;
+  opacity: 0.8;
+  border-radius: 20px;
+  &:hover {
+    opacity: 1;
+  }
 }
 </style>
