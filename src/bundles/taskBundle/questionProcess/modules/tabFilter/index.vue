@@ -7,8 +7,8 @@
       <slot name="manage"></slot>
     </div>
     <el-form ref="form" :inline="true" :model="form" class="jc-tabfilter-form" size="small">
-      <el-form-item prop="eventType" label="问题类型">
-        <el-select v-model="form.eventType" placeholder="选择项目名称">
+      <el-form-item prop="problemType" label="问题类型">
+        <el-select v-model="form.problemType" placeholder="选择问题类型">
           <el-option v-for="(value,key) in eventTypes" :key="key" :label="value" :value="key"></el-option>
         </el-select>
       </el-form-item>
@@ -16,8 +16,8 @@
         <el-date-picker v-model="date" @change="changeDate" value-format="timestamp" type="datetimerange" range-separator="至" start-placeholder="开始时间" end-placeholder="结束时间">
         </el-date-picker>
       </el-form-item>
-      <el-form-item prop="desc" label="问题描述">
-        <el-input v-model="form.desc" placeholder="请输入任务描述"></el-input>
+      <el-form-item prop="problemDesc" label="问题描述">
+        <el-input v-model="form.problemDesc" placeholder="请输入任务描述"></el-input>
       </el-form-item>
       <el-form-item class="jc-tabfilter-btns">
         <el-button type="primary" @click="onSubmit">查询</el-button>
@@ -29,7 +29,7 @@
 <script>
 import { selectTypes } from '../../const'
 export default {
-  name: 'SystemQuestionProcessFilter',
+  name: 'TaskQuestionProcessFilter',
   data() {
     return {
       eventTypes: [],
@@ -37,11 +37,10 @@ export default {
       status: '0',
       form: {
         selectType: '0',
-        projectId: '',
-        projectType: '',
+        problemType: '',
         startDate: '',
         endDate: '',
-        desc: ''
+        problemDesc: ''
       },
       date: null
     }

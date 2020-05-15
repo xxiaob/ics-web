@@ -1,108 +1,53 @@
 <template>
-  <el-dialog :title="options ? options.view?'查看临时任务':'编辑临时任务' : '新增临时任务'" :visible.sync="dialogVisible" width="900px" :append-to-body="true" @close="dialogClose">
-    <el-form ref="form" label-width="80px" :model="form" class="jc-manage-form">
-      <div class="jc-clearboth">
-        <el-form-item label="项目类型" prop="projectType" :rules="rules.NOT_NULL" class="jc-left-width40">
-          <el-input v-model="form.projectType" :disabled="view" placeholder="请输入项目类型"></el-input>
-        </el-form-item>
-        <el-form-item label="项目名称" prop="projectId" :rules="rules.NOT_NULL" class="jc-left-width60">
-          <el-input v-model="form.projectId" :disabled="view" placeholder="请输入项目名称"></el-input>
-        </el-form-item>
-      </div>
-      <div class="jc-clearboth">
-        <el-form-item label="任务名称" prop="taskName" :rules="rules.Len50" class="jc-left-width40">
-          <el-input v-model="form.taskName" :disabled="view" placeholder="请输入任务名称"></el-input>
-        </el-form-item>
-        <el-form-item label="任务时间" prop="date" :rules="rules.NOT_NULL" class="jc-left-width60">
-          <el-date-picker style="width:100%" :disabled="view" v-model="form.date" @change="changeDate" value-format="timestamp" type="datetimerange" range-separator="至" start-placeholder="开始时间" end-placeholder="结束时间">
-          </el-date-picker>
-        </el-form-item>
-      </div>
-      <div class="jc-clearboth">
-        <el-form-item label="任务位置" prop="taskPositionName" :rules="rules.NOT_NULL" class="jc-left-width40">
-          <el-input v-model="form.taskPositionName" :disabled="view" placeholder="请输入任务位置"></el-input>
-        </el-form-item>
-        <el-form-item label="任务来源" prop="taskSource" :rules="rules.NOT_NULL" class="jc-left-width60">
-          <el-input v-model="form.taskSource" :disabled="view" placeholder="请输入任务来源"></el-input>
-        </el-form-item>
-      </div>
-      <el-form-item label="任务指派" prop="taskPosition" :rules="rules.NOT_NULL">
-        <el-input v-model="form.taskPosition" :disabled="view" placeholder="请输入任务指派"></el-input>
+  <el-dialog :title="options ? options.view?'查看问题':'编辑问题' : '问题反馈'" :visible.sync="dialogVisible" width="600px" :append-to-body="true" @close="dialogClose">
+    <el-form ref="form" label-width="100px" :model="form" class="jc-manage-form">
+      <el-form-item label="问题ID" prop="id" v-show="view">
+        <el-input v-model="form.id" :disabled="view"></el-input>
       </el-form-item>
-      <el-form-item label="任务人员" prop="orgIds" :rules="rules.SELECT_NOT_NULL">
-        <el-cascader :options="orgTree" :disabled="view" v-model="form.orgIds" :props="{expandTrigger: 'hover', emitPath: false, multiple: true ,checkStrictly: true}" clearable placeholder="请选择组织(必填)" :show-all-levels="false" @change="changeOrg" class="jc-left-width50"></el-cascader>
-        <el-select v-model="form.userIds" multiple placeholder="请选择人员(选填)" :disabled="view" clearable class="jc-left-width50">
-          <el-option v-for="item in users" :key="item.id" :label="item.name" :value="item.id">
+      <el-form-item label="上报人" prop="userName" v-show="view">
+        <el-input v-model="form.userName" disabled></el-input>
+      </el-form-item>
+      <el-form-item prop="orgId" label="所属组织" v-show="view">
+        <el-cascader :options="orgTree" disabled v-model="form.orgId" :props="{expandTrigger: 'hover', emitPath: false }" clearable></el-cascader>
+      </el-form-item>
+      <el-form-item label="问题标题" prop="problemTitle" :rules="rules.Len50">
+        <el-input v-model="form.problemTitle" :disabled="view" placeholder="请输入问题标题"></el-input>
+      </el-form-item>
+      <el-form-item label="问题描述" prop="problemDesc" :rules="rules.NOT_NULL">
+        <el-input v-model="form.problemDesc" :disabled="view" placeholder="请输入问题描述" type="textarea"></el-input>
+      </el-form-item>
+      <el-form-item label="问题类型" prop="problemType" :rules="rules.SELECT_NOT_NULL">
+        <el-select v-model="form.problemType" filterable remote reserve-keyword placeholder="请输入关键词" :disabled="view" :remote-method="remoteMethod" :loading="loading">
+          <el-option v-for="item in questionTypes" :key="item.id" :label="item.typeName" :value="item.id">
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="任务描述" prop="taskDesc" :rules="rules.NOT_NULL">
-        <el-input v-model="form.taskDesc" :disabled="view" placeholder="请输入任务描述" type="textarea"></el-input>
-      </el-form-item>
-      <el-form-item label="流转记录" v-show="view">
-        <div>流转记录</div>
+      <el-form-item label="附件" prop="uploadFilePaths" :rules="[{required: true, message: '请上传文件'}]">
+        <upload v-show="!view" :urls.sync="form.uploadFilePaths" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg,video/*,audio/*"></upload>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer" v-show="!view">
       <el-button @click="dialogVisible = false">取 消</el-button>
-      <el-button type="primary" :loading="loading" @click="onSubmit">确 定</el-button>
+      <el-button type="primary" :loading="loading" @click="onSubmit(true)">反馈</el-button>
+      <el-button type="primary" :loading="loading" @click="onSubmit(false)">暂存</el-button>
     </div>
-    <div slot="footer" class="dialog-footer" v-show="handle">
-      <el-button @click="handleTask(true)" type="primary">流转任务</el-button>
-      <el-button @click="handleTask(false)" type="primary">结束任务</el-button>
-    </div>
-    <el-dialog :title="taskForm.ifUpload?'流转任务':'结束任务'" :visible.sync="dialogVisibleHandle" width="600px" append-to-body>
-      <el-form ref="taskForm" label-width="80px" :model="taskForm" class="jc-manage-form">
-        <el-form-item label="任务人员" prop="orgIds" :rules="rules.SELECT_NOT_NULL" v-if="taskForm.ifUpload">
-          <el-cascader :options="orgTree" v-model="taskForm.orgIds" :props="{expandTrigger: 'hover', emitPath: false, multiple: true ,checkStrictly: true}" clearable placeholder="请选择组织(必填)" :show-all-levels="false" @change="changeOrg" class="jc-left-width50"></el-cascader>
-          <el-select v-model="taskForm.userIds" multiple placeholder="请选择人员(选填)" clearable class="jc-left-width50">
-            <el-option v-for="item in users" :key="item.id" :label="item.name" :value="item.id">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="事件" prop="eventIds" :rules="rules.SELECT_NOT_NULL" v-if="!taskForm.ifUpload">
-          <el-select v-model="taskForm.eventIds" multiple filterable remote reserve-keyword placeholder="请输入关键词" :remote-method="remoteMethod" :loading="loading">
-            <el-option v-for="item in events" :key="item.id" :label="item.title" :value="item.id">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="备注" prop="remark" :rules="rules.NOT_NULL">
-          <el-input v-model="taskForm.remark" placeholder="请输入备注" type="textarea"></el-input>
-        </el-form-item>
-      </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisibleHandle = false">取 消</el-button>
-        <el-button type="primary" @click="onSubmitTask">确 定</el-button>
-      </span>
-    </el-dialog>
   </el-dialog>
 </template>
 <script>
-import { taskSave, taskFinish } from '@/api/task'
-import { userListByOrg } from '@/api/user'
-import { eventManageSelectList } from '@/api/eventManage'
+import { questionSave } from '@/api/question'
 import { getStringRule, NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
+import upload from './upload'
 
-const defaultForm = {
-  businessKey: '',
-  taskId: '',
-  projectId: '',
-  projectType: '',
-  taskName: '',
-  taskSource: '',
-  beginTime: '',
-  endTime: '',
-  taskDesc: '',
-  taskPosition: '',
-  taskPositionName: '',
-  orgIds: [],
-  userIds: [],
-  date: null
+let defaultForm = {
+  problemDesc: '',
+  problemTitle: '',
+  problemType: '',
+  uploadFilePaths: []
 }
 
 export default {
-  name: 'SystemQuestionProcessManage',
+  name: 'TaskQuestionProcessManage',
   mixins: [FormMixins],
   props: {
     orgTree: {
@@ -112,236 +57,75 @@ export default {
       type: String
     }
   },
+  components: {
+    upload
+  },
   data() {
     return {
       loading: false,
+      menus: [],
       rules: {
         Len50: getStringRule(1, 50),
         SELECT_NOT_NULL,
         NOT_NULL
       },
-      // taskPeople: 'orgIds',
       view: false,
-      users: [],
-      dialogVisibleHandle: false,
-      events: [],
-      handle: false,
-      taskForm: {
-        ifUpload: false,
-        remark: '',
-        orgIds: [],
-        userIds: [],
-        eventIds: []
-      }
+      questionTypes: [
+        { id: 1, typeName: 'typeName' }
+      ]
     }
   },
   created() {
     this.remoteMethod('')
   },
   methods: {
-    changeOrg(orgIds) {
-      if (orgIds.length) {
-        this.getUser(orgIds)
-      } else {
-        this.users = []
-      }
-      if (this.handle) {
-        this.taskForm.userIds = []
-      } else {
-        this.form.userIds = []
-      }
-    },
-    async getUser(orgIds) {
-      try {
-        const res = await userListByOrg(orgIds)
-        const users = []
-
-        if (res && res.length) {
-          res.forEach(item=>{
-            users.push({
-              id: item.userId,
-              name: item.userName
-            })
-          })
-        }
-        this.users = users
-      } catch (error) {
-        console.error(error)
-      }
-    },
     async remoteMethod(query) {
       this.loading = true
       try {
-        this.events = await eventManageSelectList(query)
+        // this.eventTypes = await eventManageTypeList(query)
         this.loading = false
       } catch (error) {
         console.error(error)
         this.loading = false
-      }
-    },
-    changeDate(value) {
-      if (value) {
-        this.form.beginTime = value[0]
-        this.form.endTime = value[1]
-      } else {
-        this.form.beginTime = ''
-        this.form.endTime = ''
       }
     },
     formatFormData() {
       if (this.options) {
-        console.log(this.options)
-        const { view, handle, taskId, taskSource, taskPositionName, taskPosition, orgIds, assignees, detailViewVO: { businessKey, projectId, taskDesc, taskName, endDate, startDate } } = this.options
+        this.view = this.options.view || false
+        const { id, orgId, userName, problemDesc, problemTitle, problemType, uploadFilePaths } = this.options
 
-        this.view = view || false
-        this.handle = handle || false
-        const form = {
-          businessKey,
-          taskId,
-          projectId,
-          projectType: projectId,
-          taskName,
-          taskSource,
-          beginTime: startDate,
-          endTime: endDate,
-          taskDesc,
-          taskPosition,
-          taskPositionName,
-          date: [startDate, endDate]
+        return {
+          id,
+          orgId,
+          userName,
+          problemDesc,
+          problemTitle,
+          problemType: problemType.toString(),
+          uploadFilePaths: uploadFilePaths || []
         }
-
-        if (assignees.length) {
-          const userIds = [], UserOrgIds = []
-
-          assignees.forEach(item=>{
-            userIds.push(item.userId)
-            if (!UserOrgIds.includes(item.orgId)) {
-              UserOrgIds.push(item.orgId)
-            }
-          })
-          this.getUser(UserOrgIds)
-          form.userIds = userIds
-          form.orgIds = UserOrgIds
-        } else {
-          this.users = []
-          form.userIds = []
-          form.orgIds = orgIds
-        }
-        return form
       } else {
         this.view = false
-        this.handle = false
-        return { ...defaultForm }
+        return { ...defaultForm, orgId: this.orgId }
       }
     },
-    onSubmit() {
+    onSubmit(ifReport) {
       this.loading = true
+      this.form.ifReport = ifReport // ture 直接反馈   false 暂存
       this.$refs.form.validate(valid => {
         if (valid) {
-          this.confirmSave()
+          questionSave(this.form).then(() => {
+            this.$message.success('操作成功')
+            this.dialogVisible = false
+            this.$emit('save-success')
+            this.loading = false
+          }).catch(() => {
+            this.loading = false
+          })
         } else {
           this.loading = false
         }
       })
-    },
-    async confirmSave() {
-      let orgIds = [], userIds = []
-
-      if (this.form.userIds) {
-        orgIds = []
-        userIds = this.form.userIds
-      } else {
-        orgIds = this.form.orgIds
-        userIds = []
-      }
-      const form = {
-        optType: 0,
-        orgIds,
-        userIds,
-        taskPO: { orgId: this.orgId, ...this.form },
-        temporaryTaskPO: this.form
-      }
-
-      try {
-        await taskSave(form)
-        this.$message.success('操作成功')
-        this.dialogVisible = false
-        this.$emit('save-success')
-        this.loading = false
-      } catch (error) {
-        this.loading = false
-      }
-    },
-    handleTask(ifUpload) {
-      if (this.$refs.taskForm) {
-        this.$refs.taskForm.resetFields()
-      }
-      this.taskForm.userIds = []
-      this.taskForm.ifUpload = ifUpload
-      this.dialogVisibleHandle = true
-    },
-    onSubmitTask() {
-      this.loading = true
-      this.$refs.taskForm.validate(valid => {
-        if (valid) {
-          this.nextTo()
-        } else {
-          this.loading = false
-        }
-      })
-    },
-    //流转
-    async nextTo() {
-      const { businessKey, taskId } = this.form
-      const { ifUpload, remark, userIds, orgIds, eventIds } = this.taskForm
-      const form = {
-        ifUpload, // true 流转  false 完成
-        businessKey,
-        taskId,
-        remark,
-        eventIds
-      }
-
-      if (ifUpload) { // 流转带上组织id 或者 用户id
-        if (userIds.length) {
-          form.assignees = userIds
-        } else {
-          form.orgIds = orgIds
-        }
-      }
-      console.log(form)
-      try {
-        await taskFinish(form)
-        this.$message.success('操作成功')
-        this.dialogVisible = false
-        this.dialogVisibleHandle = false
-        this.$emit('save-success')
-        this.loading = false
-      } catch (e) {
-        this.loading = false
-        console.error(e)
-      }
     }
   }
 }
 </script>
-<style lang="scss" scoped>
-.jc-left-width50 {
-  width: 50%;
-  float: left;
-}
-.jc-left-width40 {
-  width: 40%;
-  float: left;
-}
-.jc-left-width60 {
-  width: 60%;
-  float: left;
-}
-.jc-clearboth::after,
-.jc-clearboth::before {
-  content: "";
-  display: table;
-  clear: both;
-}
-</style>

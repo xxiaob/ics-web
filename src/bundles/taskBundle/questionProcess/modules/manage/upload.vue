@@ -1,0 +1,83 @@
+<template>
+  <el-upload :action="uploadUrl" :accept="accept" :headers="uploadHeaders" :before-upload="handleBeforeUpload" :on-success="handleSuccess" :on-remove="handleRemove" :on-exceed="handleExceed" :file-list="fileList">
+    <el-button size="small" type="primary" :loading="loading">点击上传</el-button>
+  </el-upload>
+</template>
+
+<script>
+import api from '@/api/API'
+import { getToken } from '@/libs/storage'
+
+export default {
+  props: {
+    urls: {
+      type: Array,
+      default: ()=>[]
+    },
+    accept: {
+      type: String,
+      default: ''
+    }
+  },
+  data() {
+    return {
+      uploadUrl: process.env.API_HOST.base + api.upload,
+      uploadHeaders: { token: getToken() },
+      loading: false
+    }
+  },
+  computed: {
+    fileList() {
+      let files = []
+
+      if (this.urls.length) {
+        files = this.urls.map(url=>({ name: url, url: url }))
+      }
+      return files
+    }
+  },
+  methods: {
+    handleExceed(files, fileList) {
+      // if (fileList.length > 0) {
+      //   this.$message.warning('只能上传一个文件')
+      // }
+    },
+    handleRemove(file, fileList) {
+      console.log(file, fileList)
+      let urls = []
+
+      if (fileList.length) {
+        urls = this.formatUrls(fileList)
+      }
+      this.$emit('update:urls', urls)
+    },
+    formatUrls(fileList) {
+      return fileList.map(item=>{
+        if (item.url) {
+          return item.url
+        } else if (item.response) {
+          return item.response.resData.url
+        }
+      })
+    },
+    handleBeforeUpload() {
+      this.loading = true
+    },
+    handleSuccess(res, file, fileList) {
+      console.log(file, fileList)
+      if (res.resCode) {
+        const urls = this.formatUrls(fileList)
+
+        this.$emit('update:urls', urls)
+        this.$message.success('上传成功')
+      } else {
+        this.$message.error(res.resMsg.msgText)
+      }
+      this.loading = false
+    }
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+</style>

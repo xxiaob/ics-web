@@ -103,5 +103,15 @@ export default {
     updTaskStatus: 'activiti-service/task/updTaskStatus',
     finish: 'activiti-service/task/finish',
     get: 'activiti-service/task/getTemporaryTask'
+  },
+  question: {
+    //问题管理
+    add: 'activiti-service/problem/add',
+    list: 'activiti-service/problem/select',
+    update: 'activiti-service/problem/upd',
+    del: 'activiti-service/problem/del',
+    start: 'activiti-service/problem/start',
+    report: 'activiti-service/problem/report',
+    get: 'activiti-service/problem/getProblemTask'
   }
 }
