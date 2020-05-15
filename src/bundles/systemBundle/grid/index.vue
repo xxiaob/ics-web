@@ -1,7 +1,7 @@
 <template>
   <div class="jc-map-warp jc-card">
     <div class="jc-title-warp">
-      <div class="jc-title-sign">组织区域</div>
+      <div class="jc-title-sign">网格设置</div>
     </div>
     <map-search ref="mapSearch"></map-search>
     <div class="jc-map-space" ref="myMap"></div>

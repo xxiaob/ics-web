@@ -1,6 +1,14 @@
 <template>
   <section>
     <el-menu :default-active="menuActive" @select="menuSelect" :collapse="isCollapse">
+      <el-submenu index="project" class="jc-menu-item">
+        <template slot="title">
+          <i class="jc-menu-icon el-icon-setting"></i>
+          <span class="jc-menu-arrow-title" slot="title">项目管理</span>
+        </template>
+        <el-menu-item index="emergencySupport">应急保障</el-menu-item>
+        <el-menu-item index="specialControl">专项管控</el-menu-item>
+      </el-submenu>
       <el-menu-item index="taskEventManage" class="jc-menu-item">
         <i class="jc-menu-icon el-icon-setting"></i>
         <span class="jc-menu-arrow-title" slot="title">事件管理</span>
