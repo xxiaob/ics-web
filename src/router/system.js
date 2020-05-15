@@ -56,31 +56,10 @@ export default [{
     title: '系统设置-设备升级'
   }
 }, {
-  path: 'system/eventManage',
-  name: 'systemEventManage',
-  component: () => import('@/bundles/systemBundle/eventManage'),
-  meta: {
-    title: '系统设置-事件管理'
-  }
-}, {
   path: 'system/grid',
   name: 'systemGrid',
   component: () => import('@/bundles/systemBundle/grid'),
   meta: {
     title: '系统设置-网格设置'
-  }
-}, {
-  path: 'system/taskProcess',
-  name: 'taskProcess',
-  component: () => import('@/bundles/systemBundle/taskProcess'),
-  meta: {
-    title: '任务管理-任务处理'
-  }
-}, {
-  path: 'system/taskSearch',
-  name: 'taskSearch',
-  component: () => import('@/bundles/systemBundle/taskSearch'),
-  meta: {
-    title: '任务管理-任务查询'
   }
 }]

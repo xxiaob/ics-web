@@ -1,6 +1,17 @@
 <template>
   <section>
     <el-menu :default-active="menuActive" @select="menuSelect" :collapse="isCollapse">
+      <el-menu-item index="taskEventManage" class="jc-menu-item">
+        <i class="jc-menu-icon el-icon-setting"></i>
+        <span class="jc-menu-arrow-title" slot="title">事件管理</span>
+      </el-menu-item>
+      <el-submenu index="question" class="jc-menu-item">
+        <template slot="title">
+          <i class="jc-menu-icon el-icon-setting"></i>
+          <span class="jc-menu-arrow-title" slot="title">问题管理</span>
+        </template>
+        <el-menu-item index="questionProcess">问题处理</el-menu-item>
+      </el-submenu>
       <el-submenu index="task" class="jc-menu-item">
         <template slot="title">
           <i class="jc-menu-icon el-icon-setting"></i>
@@ -22,7 +33,6 @@
         <el-menu-item index="systemMenus">菜单管理</el-menu-item>
         <el-menu-item index="systemDevice">设备管理</el-menu-item>
         <el-menu-item index="systemDeviceUpdate">设备升级</el-menu-item>
-        <el-menu-item index="systemEventManage">事件管理</el-menu-item>
         <el-menu-item index="systemGrid">网格设置</el-menu-item>
       </el-submenu>
     </el-menu>

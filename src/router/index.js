@@ -4,6 +4,7 @@ import { setTitle } from '@/libs/util'
 //引入分类 router
 import authRouter from './auth'
 import systemRouter from './system'
+import taskRouter from './task'
 
 // 解决两次访问相同路由地址报错
 // const originalPush = Router.prototype.push
@@ -32,7 +33,7 @@ let routerOptions = {
       meta: {
         title: '首页'
       }
-    }, ...systemRouter]
+    }, ...systemRouter, ...taskRouter]
   }, {
     path: '/map',
     name: 'map',
