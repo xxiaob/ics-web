@@ -19,7 +19,12 @@
         <el-table-column prop="positionName" label="职位"></el-table-column>
         <el-table-column label="默认接收人">
           <template slot-scope="scope">
-            <el-switch v-model="scope.row.isDefReceiver" active-value="1" inactive-value="0" @change="userStateChange(scope.row)"></el-switch>
+            <el-switch v-model="scope.row.isDefReceiver" active-value="1" inactive-value="0" @change="userStateChange(scope.row,1)"></el-switch>
+          </template>
+        </el-table-column>
+        <el-table-column label="默认接警人">
+          <template slot-scope="scope">
+            <el-switch v-model="scope.row.isDefUploadReceiver" active-value="1" inactive-value="0" @change="userStateChange(scope.row,2)"></el-switch>
           </template>
         </el-table-column>
         <el-table-column prop="createTime" label="创建时间"></el-table-column>
@@ -122,17 +127,21 @@ export default {
         this.currentChange(this.page.pageNum - 1)
       })
     },
-    userStateChange(row) {
-      let tip = row.isDefReceiver == 1 ? '设置' : '取消'
+    userStateChange(row, type) {
+      let key = type == 1 ? 'isDefReceiver' : 'isDefUploadReceiver'
 
-      this.$confirm(`确认${tip}用户 <span class="jc-link">${row.userName}</span> 为 <span class="jc-link">${row.orgName}</span> 的默认接收人`, '提示', { type: 'warning', dangerouslyUseHTMLString: true }).then(() => {
-        updateOrgReceiver({ userId: row.userId, orgId: this.orgId, isDefReceiver: row.isDefReceiver }).then(() => {
+      let changeName = type == 1 ? '默认接收人' : '默认接警人'
+
+      let tip = row[key] == 1 ? '设置' : '取消'
+
+      this.$confirm(`确认${tip}该用户为当前组织的${changeName}`, '提示', { type: 'warning', dangerouslyUseHTMLString: true }).then(() => {
+        updateOrgReceiver({ userId: row.userId, orgId: this.orgId, isDefReceiver: row.isDefReceiver, isDefUploadReceiver: row.isDefUploadReceiver }).then(() => {
           this.$message.success('设置成功')
         }).catch(() => {
-          row.isDefReceiver = row.isDefReceiver == 1 ? '0' : '1'
+          row[key] = row[key] == 1 ? '0' : '1'
         })
       }).catch(() => {
-        row.isDefReceiver = row.isDefReceiver == 1 ? '0' : '1'
+        row[key] = row[key] == 1 ? '0' : '1'
       })
     },
     reset(row) {
