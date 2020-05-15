@@ -31,10 +31,15 @@
       <el-button type="primary" :loading="loading" @click="onSubmit(true)">反馈</el-button>
       <el-button type="primary" :loading="loading" @click="onSubmit(false)">暂存</el-button>
     </div>
+    <div slot="footer" class="dialog-footer" v-show="handle">
+      <el-button @click="toSuperior" :loading="loading" type="primary">反馈至上级</el-button>
+      <el-button @click="generateTask" :loading="loading" type="primary">生成任务</el-button>
+      <el-button @click="closeQuestion" :loading="loading">关闭问题</el-button>
+    </div>
   </el-dialog>
 </template>
 <script>
-import { questionSave } from '@/api/question'
+import { questionSave, questionReport } from '@/api/question'
 import { getStringRule, NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
 import upload from './upload'
@@ -70,6 +75,7 @@ export default {
         NOT_NULL
       },
       view: false,
+      handle: false,
       questionTypes: [
         { id: 1, typeName: 'typeName' }
       ]
@@ -91,11 +97,13 @@ export default {
     },
     formatFormData() {
       if (this.options) {
-        this.view = this.options.view || false
-        const { id, orgId, userName, problemDesc, problemTitle, problemType, uploadFilePaths } = this.options
+        const { view, handle, id, taskId, orgId, userName, problemDesc, problemTitle, problemType, uploadFilePaths } = this.options
 
+        this.view = view || false
+        this.handle = handle || false
         return {
           id,
+          taskId,
           orgId,
           userName,
           problemDesc,
@@ -105,6 +113,7 @@ export default {
         }
       } else {
         this.view = false
+        this.handle = false
         return { ...defaultForm, orgId: this.orgId }
       }
     },
@@ -125,6 +134,56 @@ export default {
           this.loading = false
         }
       })
+    },
+    //反馈至上级
+    toSuperior() {
+      this.loading = true
+      console.log('toSuperior')
+      const form = {
+        ifUpload: true
+      }
+
+      this.questionReport(form)
+    },
+    //生成任务
+    async generateTask() {
+      // this.loading = true
+      console.log('generateTask')
+      // const form = {
+      //   ifUpload: false,
+      //   ifClose: false
+      // }
+
+      // await this.questionReport(form)
+      const { id, problemTitle } = this.form
+
+      this.$router.push({ path: 'taskProcess', query: { id, problemTitle } })
+    },
+    //关闭问题
+    closeQuestion() {
+      this.loading = true
+      console.log('closeQuestion')
+      const form = {
+        ifUpload: false,
+        ifClose: true
+      }
+
+      this.questionReport(form)
+    },
+    async questionReport(form, cb = ()=>{}) {
+      const { id: businessKey, taskId } = this.form
+
+      try {
+        await questionReport({ businessKey, taskId, ...form })
+        this.$message.success('操作成功')
+        this.loading = false
+        this.dialogVisible = false
+        this.dialogVisibleHandle = false
+        this.$emit('save-success')
+      } catch (error) {
+        this.loading = false
+        console.error(error)
+      }
     }
   }
 }

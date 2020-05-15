@@ -136,6 +136,12 @@ export default {
     }
   },
   created() {
+    const { id, problemTitle } = this.$route.query
+
+    if (id) {
+      this.dialogVisible = true
+    }
+
     this.remoteMethod('')
   },
   methods: {

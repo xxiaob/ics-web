@@ -176,22 +176,13 @@ export default {
         }
       }).catch(() => {})
     },
-    //任务处理
+    //处理问题
     async handle(row) {
       this.info = await questionGet(row.businessKey)
-
+      this.info.taskId = row.taskId
       this.info.view = true
       this.info.handle = true
       this.visible = true
-
-      if (row.taskStatus === 1) {
-        try {
-          await taskUpdStatus(row.businessKey)
-          // this.initData()
-        } catch (error) {
-          console.error(error)
-        }
-      }
     }
   }
 }
