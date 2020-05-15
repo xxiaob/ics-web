@@ -1,7 +1,10 @@
 <template>
   <div class="jc-map-warp jc-card">
     <div class="jc-title-warp">
-      <div class="jc-title-sign">网格设置</div>
+      <div class="jc-title-sign">
+        网格设置
+        <div class="jc-edit-tip" v-if="areaId">正在编辑：<span class="jc-link" v-text="areaName"></span></div>
+      </div>
     </div>
     <map-search ref="mapSearch"></map-search>
     <div class="jc-map-space" ref="myMap"></div>
@@ -106,6 +109,11 @@ $jc-map-header-height: 40px; //map header高度
   line-height: $jc-map-header-height;
   padding-left: $jc-default-dis;
   background-color: $jc-color-white;
+  .jc-edit-tip {
+    display: block;
+    padding-right: $jc-default-dis;
+    float: right;
+  }
 }
 
 .jc-map-space {

@@ -15,6 +15,7 @@ export default {
     return {
       editShow: false,
       startEdit: false,
+      areaName: '',
       areaId: ''
     }
   },
@@ -22,6 +23,7 @@ export default {
     initMapEditor(map, data) {
       myJcMap = map
       this.editShow = true
+      this.areaName = data.name
       this.areaId = data.id
 
       this.getSign(myJcMap, this.areaId).then(sign => {
@@ -42,6 +44,7 @@ export default {
           myJcMapEditor = null
         }
         this.areaId = null
+        this.areaName = null
       })
     },
     checkWork(cb) {
