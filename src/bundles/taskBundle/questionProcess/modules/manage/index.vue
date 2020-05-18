@@ -109,7 +109,7 @@ export default {
           problemDesc,
           problemTitle,
           problemType: problemType.toString(),
-          uploadFilePaths: uploadFilePaths || []
+          uploadFilePaths
         }
       } else {
         this.view = false
@@ -157,7 +157,7 @@ export default {
       // await this.questionReport(form)
       const { id, problemTitle } = this.form
 
-      this.$router.push({ path: 'taskProcess', query: { id, problemTitle } })
+      this.$router.push({ name: 'taskProcess', query: { id, problemTitle } })
     },
     //关闭问题
     closeQuestion() {
@@ -170,7 +170,7 @@ export default {
 
       this.questionReport(form)
     },
-    async questionReport(form, cb = ()=>{}) {
+    async questionReport(form) {
       const { id: businessKey, taskId } = this.form
 
       try {

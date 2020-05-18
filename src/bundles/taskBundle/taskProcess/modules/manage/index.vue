@@ -123,6 +123,7 @@ export default {
       // taskPeople: 'orgIds',
       view: false,
       users: [],
+      source: [],
       dialogVisibleHandle: false,
       events: [],
       handle: false,
@@ -140,6 +141,8 @@ export default {
 
     if (id) {
       this.dialogVisible = true
+      console.log(id, problemTitle)
+      this.$router.push({ name: 'taskProcess' })
     }
 
     this.remoteMethod('')

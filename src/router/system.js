@@ -62,4 +62,11 @@ export default [{
   meta: {
     title: '系统设置-网格设置'
   }
+}, {
+  path: 'system/pttGroup',
+  name: 'systemPttGroup',
+  component: () => import('@/bundles/systemBundle/pttGroup'),
+  meta: {
+    title: '系统设置-PTT群组'
+  }
 }]

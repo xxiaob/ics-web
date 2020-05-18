@@ -113,5 +113,12 @@ export default {
     start: 'activiti-service/problem/start',
     report: 'activiti-service/problem/report',
     get: 'activiti-service/problem/getProblemTask'
+  },
+  pttGroup: {
+    //PTT群组
+    add: 'user-service/userGroup/addGroup',
+    list: 'user-service/userGroup/selectGroupByPage',
+    update: 'user-service/userGroup/updateGroup',
+    del: 'user-service/userGroup/deleteGroup'
   }
 }
