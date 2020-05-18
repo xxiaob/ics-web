@@ -155,9 +155,9 @@ export default {
       // }
 
       // await this.questionReport(form)
-      const { id, problemTitle } = this.form
+      const { id, problemTitle, taskId } = this.form
 
-      this.$router.push({ name: 'taskProcess', query: { id, problemTitle } })
+      this.$router.push({ name: 'taskProcess', query: { id, taskId, problemTitle } })
     },
     //关闭问题
     closeQuestion() {

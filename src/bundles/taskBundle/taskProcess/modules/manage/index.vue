@@ -22,8 +22,10 @@
         <el-form-item label="任务位置" prop="taskPositionName" :rules="rules.NOT_NULL" class="jc-left-width40">
           <el-input v-model="form.taskPositionName" :disabled="view" placeholder="请输入任务位置"></el-input>
         </el-form-item>
-        <el-form-item label="任务来源" prop="taskSource" :rules="rules.NOT_NULL" class="jc-left-width60">
-          <el-input v-model="form.taskSource" :disabled="view" placeholder="请输入任务来源"></el-input>
+        <el-form-item label="任务来源" prop="taskSource" :rules="rules.SELECT_NOT_NULL" class="jc-left-width60">
+          <el-select v-model="form.taskSource" placeholder="选择任务来源" :disabled="taskSourceDisabled">
+            <el-option v-for="(value,key) in taskSources" :key="key" :label="value" :value="key"></el-option>
+          </el-select>
         </el-form-item>
       </div>
       <el-form-item label="任务指派" prop="taskPosition" :rules="rules.NOT_NULL">
@@ -81,8 +83,12 @@
 import { taskSave, taskFinish } from '@/api/task'
 import { userListByOrg } from '@/api/user'
 import { eventManageSelectList } from '@/api/eventManage'
+import { questionReport } from '@/api/question'
 import { getStringRule, NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
+import { taskSources } from '../../const'
+
+const defaultTaskSourceKeys = Object.keys(taskSources)
 
 const defaultForm = {
   businessKey: '',
@@ -123,7 +129,8 @@ export default {
       // taskPeople: 'orgIds',
       view: false,
       users: [],
-      source: [],
+      taskSources: JSON.parse(JSON.stringify(taskSources)),
+      taskSourceDisabled: false,
       dialogVisibleHandle: false,
       events: [],
       handle: false,
@@ -133,21 +140,33 @@ export default {
         orgIds: [],
         userIds: [],
         eventIds: []
+      },
+      questionForm: {
+        ifUpload: false,
+        ifClose: false,
+        businessKey: '',
+        taskId: ''
       }
     }
   },
   created() {
-    const { id, problemTitle } = this.$route.query
-
-    if (id) {
-      this.dialogVisible = true
-      console.log(id, problemTitle)
-      this.$router.push({ name: 'taskProcess' })
-    }
-
+    this.formatQuestionForm()
     this.remoteMethod('')
   },
   methods: {
+    formatQuestionForm() {
+      const { id, problemTitle, taskId } = this.$route.query
+
+      if (id) {
+        this.taskSources[id] = problemTitle
+        this.form.taskSource = id
+        this.questionForm.businessKey = id
+        this.questionForm.taskId = taskId
+        this.taskSourceDisabled = true
+        this.dialogVisible = true
+        this.$router.push({ name: 'taskProcess' })
+      }
+    },
     changeOrg(orgIds) {
       if (orgIds.length) {
         this.getUser(orgIds)
@@ -198,6 +217,12 @@ export default {
       }
     },
     formatFormData() {
+      const { id } = this.$route.query
+
+      if (!id) {
+        this.taskSources = JSON.parse(JSON.stringify(taskSources))
+        this.taskSourceDisabled = false
+      }
       if (this.options) {
         console.log(this.options)
         const { view, handle, taskId, taskSource, taskPositionName, taskPosition, orgIds, assignees, detailViewVO: { businessKey, projectId, taskDesc, taskName, endDate, startDate } } = this.options
@@ -219,7 +244,7 @@ export default {
           date: [startDate, endDate]
         }
 
-        if (assignees.length) {
+        if (assignees && assignees.length) {
           const userIds = [], UserOrgIds = []
 
           assignees.forEach(item=>{
@@ -256,7 +281,7 @@ export default {
     async confirmSave() {
       let orgIds = [], userIds = []
 
-      if (this.form.userIds) {
+      if (this.form.userIds.length) {
         orgIds = []
         userIds = this.form.userIds
       } else {
@@ -273,6 +298,9 @@ export default {
 
       try {
         await taskSave(form)
+        if (!defaultTaskSourceKeys.includes(this.form.taskSource)) {
+          questionReport(this.questionForm)
+        }
         this.$message.success('操作成功')
         this.dialogVisible = false
         this.$emit('save-success')
