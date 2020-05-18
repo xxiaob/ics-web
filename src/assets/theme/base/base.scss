@@ -197,9 +197,13 @@ input::-webkit-input-placeholder {
 
 /*--------- 定义顶部filter 样式 --------------*/
 .jc-tabfilter-card {
+  .el-card__body {
+    padding-bottom: 0;
+  }
+
   .jc-tabfilter-form {
     .el-form-item {
-      margin-bottom: 0;
+      margin-bottom: $jc-default-dis;
     }
   }
 

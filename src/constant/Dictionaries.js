@@ -62,3 +62,21 @@ export const LOGIN_DEVICE_TYPES = new JcEnum([
   { key: 'MOBILE', value: '2', label: '移动端' },
   { key: 'LAW', value: '3', label: '行政执法仪' }
 ])
+
+/**
+ * 项目类型
+ */
+export const PROJECT_TYPES = new JcEnum([
+  { key: 'NORMAL', value: '0', label: '常态管控' },
+  { key: 'EmergencySupport', value: '1', label: '应急保障' },
+  { key: 'SpecialControl', value: '2', label: '专项管控' }
+])
+
+/**
+ * 项目状态
+ */
+export const PROJECT_STATUS = new JcEnum([
+  { key: 'NOTSTART', value: '1', label: '未开始' },
+  { key: 'RUNNING', value: '2', label: '进行中' },
+  { key: 'FINISHED', value: '3', label: '已结束' }
+])
