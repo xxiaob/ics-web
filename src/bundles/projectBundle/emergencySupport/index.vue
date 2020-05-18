@@ -16,6 +16,7 @@
 </template>
 <script>
 import PaginationMixins from '@/mixins/PaginationMixins'
+import { PROJECT_TYPES } from '@/constant/Dictionaries'
 
 export default {
   name: 'ProjectEmergencySupport',

@@ -10,7 +10,7 @@
       </el-form-item>
       <el-form-item prop="status" label="项目状态">
         <el-select v-model="form.status" placeholder="请选择">
-          <el-option label="全部" value="shanghai"></el-option>
+          <el-option label="全部" value=""></el-option>
           <el-option v-for="item in projectStatus" :key="item.key" :label="item.label" :value="item.value"></el-option>
         </el-select>
       </el-form-item>
@@ -22,7 +22,7 @@
   </el-card>
 </template>
 <script>
-import { PROJECT_TYPES, PROJECT_STATUS } from '@/constant/Dictionaries'
+import { PROJECT_STATUS } from '@/constant/Dictionaries'
 export default {
   name: 'ProjectEmergencySupportFilter',
   data() {
@@ -40,7 +40,7 @@ export default {
       this.$refs.form.resetFields()
     },
     onSubmit() {
-      this.$emit('filter', { ...this.form })
+      this.$emit('filter', { ...this.form, ...(this.form.date.length ? { beginTime: this.form.date[0], endTime: this.form.date[1] } : {}) })
     }
   }
 }
