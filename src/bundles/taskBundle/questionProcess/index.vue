@@ -1,35 +1,46 @@
 <template>
   <div class="jc-main-container-warp">
-    <tab-filter @filter="goFilter">
-      <template v-slot:manage>
-        <el-button class="jc-tabfilter-btns" type="primary" icon="el-icon-plus" size="small" @click="manage(null)">问题反馈</el-button>
-      </template>
-    </tab-filter>
-    <el-card class="jc-table-card jc-mt">
+    <div v-show="!detailShow">
+      <tab-filter @filter="goFilter">
+        <template v-slot:manage>
+          <el-button class="jc-tabfilter-btns" type="primary" icon="el-icon-plus" size="small" @click="manage(null)">问题反馈</el-button>
+        </template>
+      </tab-filter>
+      <el-card class="jc-table-card jc-mt">
+        <div slot="header" class="jc-card-header">
+          <div class="jc-card-title">列表内容</div>
+        </div>
+        <el-table :data="list" v-loading="loading" row-key="id" class="jc-table">
+          <el-table-column type="index" label="序号" width="50"></el-table-column>
+          <el-table-column prop="problemType" label="问题类型"></el-table-column>
+          <el-table-column prop="userName" label="反馈人"></el-table-column>
+          <el-table-column prop="orgName" label="所属组织"></el-table-column>
+          <el-table-column prop="problemTitle" label="标题"></el-table-column>
+          <el-table-column prop="statusName" label="状态"></el-table-column>
+          <el-table-column prop="createTime" label="创建时间" :formatter="formatTime" width="140"></el-table-column>
+          <el-table-column width="90" label="操作">
+            <template slot-scope="scope">
+              <el-button type="text" size="mini" icon="el-icon-view" @click="handle(scope.row,false)" title="查看" v-if="filter.selectType===QUESTION_TYPES.PROCESSED||filter.selectType===QUESTION_TYPES.FEEDBACK"></el-button>
+              <el-button type="text" size="mini" icon="el-icon-edit-outline" @click="manage(scope.row)" v-if="filter.selectType===QUESTION_TYPES.DEAFT" title="编辑"></el-button>
+              <el-button type="text" size="mini" icon="el-icon-refresh-right" @click="handle(scope.row,true)" title="处理" v-if="filter.selectType===QUESTION_TYPES.PENDING"></el-button>
+              <el-button type="text" size="mini" icon="el-icon-arrow-down" @click="startTask(scope.row)" title="反馈" v-if="filter.selectType===QUESTION_TYPES.DEAFT"></el-button>
+              <el-button type="text" size="mini" icon="el-icon-delete" @click="del(scope.row)" title="删除" v-if="filter.selectType!==QUESTION_TYPES.PENDING"></el-button>
+            </template>
+          </el-table-column>
+        </el-table>
+        <el-pagination @current-change="currentChange" @size-change="sizeChange" :current-page.sync="page.pageNum" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.total" class="text-right jc-mt"></el-pagination>
+      </el-card>
+    </div>
+    <el-card class="jc-table-card jc-mt" v-show="detailShow">
       <div slot="header" class="jc-card-header">
-        <div class="jc-card-title">列表内容</div>
+        <div class="jc-card-title">{{info&&info.handle?'处理问题':'问题详情'}}</div>
+        <div class="jc-button-group">
+          <el-button size="small" icon="el-icon-arrow-left" @click="detailShow=false">返回</el-button>
+        </div>
       </div>
-      <el-table :data="list" v-loading="loading" row-key="id" class="jc-table">
-        <el-table-column type="index" label="序号" width="50"></el-table-column>
-        <el-table-column prop="problemType" label="问题类型"></el-table-column>
-        <el-table-column prop="userName" label="反馈人"></el-table-column>
-        <el-table-column prop="orgName" label="所属组织"></el-table-column>
-        <el-table-column prop="problemTitle" label="标题"></el-table-column>
-        <el-table-column prop="statusName" label="状态"></el-table-column>
-        <el-table-column prop="createTime" label="创建时间" :formatter="formatTime" width="140"></el-table-column>
-        <el-table-column width="90" label="操作">
-          <template slot-scope="scope">
-            <el-button type="text" size="mini" icon="el-icon-view" @click="manage(scope.row,true)" title="查看" v-if="filter.selectType===QUESTION_TYPES.PROCESSED||filter.selectType===QUESTION_TYPES.FEEDBACK"></el-button>
-            <el-button type="text" size="mini" icon="el-icon-edit-outline" @click="manage(scope.row)" v-if="filter.selectType===QUESTION_TYPES.DEAFT" title="编辑"></el-button>
-            <el-button type="text" size="mini" icon="el-icon-refresh-right" @click="handle(scope.row)" title="处理" v-if="filter.selectType===QUESTION_TYPES.PENDING"></el-button>
-            <el-button type="text" size="mini" icon="el-icon-arrow-down" @click="startTask(scope.row)" title="反馈" v-if="filter.selectType===QUESTION_TYPES.DEAFT"></el-button>
-            <el-button type="text" size="mini" icon="el-icon-delete" @click="del(scope.row)" title="删除" v-if="filter.selectType!==QUESTION_TYPES.PENDING"></el-button>
-          </template>
-        </el-table-column>
-      </el-table>
-      <el-pagination @current-change="currentChange" @size-change="sizeChange" :current-page.sync="page.pageNum" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.total" class="text-right jc-mt"></el-pagination>
-
+      <jc-detail :info="info" :firstOrgIds="firstOrgIds" :detailShow.sync="detailShow" @save-success="initData"></jc-detail>
     </el-card>
+
     <jc-manage :orgTree="orgTree" :orgId="orgId" :options="info" :visible.sync="visible" @save-success="initData"></jc-manage>
   </div>
 </template>
@@ -47,7 +58,8 @@ export default {
   mixins: [PaginationMixins],
   components: {
     TabFilter: () => import('./modules/tabFilter'),
-    JcManage: () => import('./modules/manage')
+    JcManage: () => import('./modules/manage'),
+    JcDetail: () => import('./modules/detail')
   },
   data() {
     return {
@@ -60,7 +72,9 @@ export default {
       filter: {
         selectType: QUESTION_TYPES.PENDING
       },
-      orgId: ''
+      orgId: '',
+      firstOrgIds: [],
+      detailShow: false
     }
   },
   computed: {
@@ -99,23 +113,11 @@ export default {
       }
       return trees
     },
-    formatOrgTreeToObj(child) {
-      let objs = {}
-
-      if (child && child.length) {
-        child.forEach(item => {
-          if (item.children && item.children.length) {
-            objs = Object.assign(objs, this.formatOrgTreeToObj(item.children))
-          }
-          objs[item.orgId] = item.orgName
-        })
-      }
-      return objs
-    },
     async getOrgTree() {
       const res = await organizationList()
 
       this.orgTree = this.formatOrgTree(res)
+      this.firstOrgIds = res.map(item=>item.orgId)
     },
     async initData() {
       if (!this.loading) {
@@ -150,15 +152,10 @@ export default {
         console.error(error)
       }
     },
-    //添加 编辑 查看
-    async manage(row, view) {
+    //添加 编辑
+    async manage(row) {
       if (row) {
         this.info = await questionGet(row.businessKey)
-        if (view) {
-          this.info.view = true
-        } else {
-          this.info.view = false
-        }
       } else {
         this.info = null
       }
@@ -177,13 +174,12 @@ export default {
         }
       }).catch(() => {})
     },
-    //处理问题
-    async handle(row) {
+    //handle   true处理问题  false 查看问题
+    async handle(row, handle) {
       this.info = await questionGet(row.businessKey)
       this.info.taskId = row.taskId
-      this.info.view = true
-      this.info.handle = true
-      this.visible = true
+      this.info.handle = handle
+      this.detailShow = true
     }
   }
 }

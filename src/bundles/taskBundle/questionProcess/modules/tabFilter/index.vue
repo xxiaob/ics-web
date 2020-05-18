@@ -16,8 +16,8 @@
         <el-date-picker v-model="date" @change="changeDate" value-format="timestamp" type="datetimerange" range-separator="至" start-placeholder="开始时间" end-placeholder="结束时间">
         </el-date-picker>
       </el-form-item>
-      <el-form-item prop="problemDesc" label="问题描述">
-        <el-input v-model="form.problemDesc" placeholder="请输入任务描述"></el-input>
+      <el-form-item prop="problemDesc" label="问题信息">
+        <el-input v-model="form.problemDesc" placeholder="输入标题或反馈人"></el-input>
       </el-form-item>
       <el-form-item class="jc-tabfilter-btns">
         <el-button type="primary" @click="onSubmit">查询</el-button>
@@ -34,9 +34,9 @@ export default {
     return {
       eventTypes: [],
       selectTypes: QUESTION_TYPES.VALUES,
-      status: '0',
+      status: QUESTION_TYPES.PENDING,
       form: {
-        selectType: '0',
+        selectType: QUESTION_TYPES.PENDING,
         problemType: '',
         startDate: '',
         endDate: '',
