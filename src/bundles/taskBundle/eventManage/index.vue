@@ -6,11 +6,9 @@
         <div class="jc-card-title">列表内容</div>
         <div class="jc-button-group">
           <el-button type="primary" icon="el-icon-plus" size="small" @click="manage(null)">事件上报</el-button>
-          <!-- <el-button type="danger" icon="el-icon-delete" size="small" @click="removeAll">删除</el-button> -->
         </div>
       </div>
       <el-table :data="list" v-loading="loading" row-key="id" class="jc-table">
-        <!-- <el-table-column type="selection" width="40"></el-table-column> -->
         <el-table-column type="index" label="序号" width="50"></el-table-column>
         <el-table-column prop="eventTitle" label="事件标题"></el-table-column>
         <el-table-column prop="typeName" label="事件类型"></el-table-column>
@@ -33,7 +31,7 @@
   </div>
 </template>
 <script>
-import { eventManageList, eventManageDel } from '@/api/eventManage'
+import { eventManageList, eventManageDel, eventManageGet } from '@/api/eventManage'
 import { formatDate } from '@/libs/util'
 import PaginationMixins from '@/mixins/PaginationMixins'
 import { organizationList } from '@/api/organization'
@@ -55,7 +53,6 @@ export default {
       loading: false,
       visible: false,
       info: null,
-      // ids: [],
       filter: {},
       orgId: ''
     }
@@ -127,9 +124,6 @@ export default {
           if (resultList && resultList.length > 0) {
             resultList.forEach(item=>{
               list.push({
-                afterPhoto: item.afterPhoto,
-                audioAddr: item.audioAddr,
-                beforePhoto: item.beforePhoto,
                 createTime: item.createTime,
                 desc: item.desc,
                 eventTitle: item.eventTitle,
@@ -139,8 +133,7 @@ export default {
                 id: item.id,
                 orgId: item.orgId,
                 reportUser: item.reportUser,
-                reportUserName: item.reportUserName,
-                videoAddr: item.videoAddr
+                reportUserName: item.reportUserName
               })
             })
           }
@@ -167,8 +160,11 @@ export default {
         this.currentChange(this.page.pageNum - 1)
       })
     },
-    manage(row, view) {
+    async manage(row, view) {
       if (row) {
+        const res = await eventManageGet(row.id)
+
+        console.log(res)
         this.info = row
         if (view) {
           this.info.view = true

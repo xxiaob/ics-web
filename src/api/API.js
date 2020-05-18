@@ -87,6 +87,7 @@ export default {
   eventManage: {
     //事件管理
     add: 'activiti-service/event/add',
+    get: 'activiti-service/event/getById',
     list: 'activiti-service/event/list',
     selectList: 'activiti-service/event/selectList',
     update: 'activiti-service/event/upd',

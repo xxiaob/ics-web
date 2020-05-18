@@ -23,24 +23,28 @@
         </el-select>
       </el-form-item>
       <el-form-item label="处理前图片" prop="beforePhoto" :rules="[{required: true, message: '请上传文件'}]">
-        <el-input v-model="form.beforePhoto" v-show="false"></el-input>
-        <img :src="form.beforePhoto" alt="" v-show="view" width="100%">
-        <upload v-show="!view" :url.sync="form.beforePhoto" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg"></upload>
+        <div v-if="view">
+          <img v-for="url in form.beforePhoto" :key="url" :src="url" alt="" width="100%">
+        </div>
+        <upload v-show="!view" :urls.sync="form.beforePhoto" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg"></upload>
       </el-form-item>
       <el-form-item label="处理后图片" prop="afterPhoto" :rules="[{required: true, message: '请上传文件'}]">
-        <el-input v-model="form.afterPhoto" v-show="false"></el-input>
-        <img :src="form.afterPhoto" alt="" v-show="view" width="100%">
-        <upload v-show="!view" :url.sync="form.afterPhoto" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg"></upload>
+        <div v-if="view">
+          <img v-for="url in form.afterPhoto" :key="url" :src="url" alt="" width="100%">
+        </div>
+        <upload v-show="!view" :urls.sync="form.afterPhoto" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg"></upload>
       </el-form-item>
       <el-form-item label="视频文件" prop="videoAddr" :rules="[{required: true, message: '请上传文件'}]">
-        <el-input v-model="form.videoAddr" v-show="false"></el-input>
-        <video :src="form.videoAddr" alt="" v-show="view" width="100%" controls></video>
-        <upload v-show="!view" :url.sync="form.videoAddr" accept="video/*"></upload>
+        <div v-if="view">
+          <video v-for="url in form.videoAddr" :key="url" :src="url" alt="" width="100%" controls></video>
+        </div>
+        <upload v-show="!view" :urls.sync="form.videoAddr" accept="video/*"></upload>
       </el-form-item>
       <el-form-item label="音频文件" prop="audioAddr">
-        <el-input v-model="form.audioAddr" v-show="false"></el-input>
-        <audio :src="form.audioAddr" alt="" v-show="view&&form.audioAddr" controls></audio>
-        <upload v-show="!view" :url.sync="form.audioAddr" accept="audio/*"></upload>
+        <div v-if="view">
+          <audio v-for="url in form.audioAddr" :key="url" :src="url" alt="" controls></audio>
+        </div>
+        <upload v-show="!view" :urls.sync="form.audioAddr" accept="audio/*"></upload>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer" v-show="!view">
@@ -53,17 +57,16 @@
 import { eventManageSave, eventManageTypeList } from '@/api/eventManage'
 import { getStringRule, NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
-import upload from './upload'
 
 let defaultForm = {
   orgId: '',
   eventType: '',
   desc: '',
   eventTitle: '',
-  afterPhoto: '',
-  audioAddr: '',
-  beforePhoto: '',
-  videoAddr: ''
+  afterPhoto: [],
+  audioAddr: [],
+  beforePhoto: [],
+  videoAddr: []
 }
 
 export default {
@@ -78,7 +81,7 @@ export default {
     }
   },
   components: {
-    upload
+    upload: () => import('@/components/JcUpload')
   },
   data() {
     return {

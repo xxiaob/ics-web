@@ -47,6 +47,14 @@ export function eventManageDel(id) {
   return axios.post(API.eventManage.del + '?id=' + id)
 }
 /**
+ * 根据id获取详情
+ * @param {String} id
+ * @returns {Object} axios 对象
+ */
+export function eventManageGet(id) {
+  return axios.post(API.eventManage.get + '?id=' + id)
+}
+/**
  * 事件类型列表
  * @param {String} name
  * @returns {Object} axios 对象
