@@ -37,9 +37,9 @@
         <video :src="form.videoAddr" alt="" v-show="view" width="100%" controls></video>
         <upload v-show="!view" :url.sync="form.videoAddr" accept="video/*"></upload>
       </el-form-item>
-      <el-form-item label="音频文件" prop="audioAddr" :rules="[{required: true, message: '请上传文件'}]">
+      <el-form-item label="音频文件" prop="audioAddr">
         <el-input v-model="form.audioAddr" v-show="false"></el-input>
-        <audio :src="form.audioAddr" alt="" v-show="view" controls></audio>
+        <audio :src="form.audioAddr" alt="" v-show="view&&form.audioAddr" controls></audio>
         <upload v-show="!view" :url.sync="form.audioAddr" accept="audio/*"></upload>
       </el-form-item>
     </el-form>
