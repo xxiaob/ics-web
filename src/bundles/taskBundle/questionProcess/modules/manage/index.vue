@@ -42,7 +42,6 @@
 import { questionSave, questionReport } from '@/api/question'
 import { getStringRule, NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
-import upload from './upload'
 
 let defaultForm = {
   problemDesc: '',
@@ -63,7 +62,7 @@ export default {
     }
   },
   components: {
-    upload
+    upload: () => import('@/components/JcUpload')
   },
   data() {
     return {
@@ -147,14 +146,6 @@ export default {
     },
     //生成任务
     async generateTask() {
-      // this.loading = true
-      console.log('generateTask')
-      // const form = {
-      //   ifUpload: false,
-      //   ifClose: false
-      // }
-
-      // await this.questionReport(form)
       const { id, problemTitle, taskId } = this.form
 
       this.$router.push({ name: 'taskProcess', query: { id, taskId, problemTitle } })

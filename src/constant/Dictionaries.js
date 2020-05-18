@@ -80,3 +80,23 @@ export const PROJECT_STATUS = new JcEnum([
   { key: 'RUNNING', value: '2', label: '进行中' },
   { key: 'FINISHED', value: '3', label: '已结束' }
 ])
+
+
+/**
+ * 问题处理 - 处理状态（个人）
+ */
+export const QUESTION_TYPES = new JcEnum([
+  { key: 'PENDING', value: '0', label: '待处理' },
+  { key: 'PROCESSED', value: '1', label: '已处理' },
+  { key: 'FEEDBACK', value: '2', label: '已反馈' },
+  { key: 'DEAFT', value: '3', label: '草稿箱' }
+])
+
+/**
+ * 问题处理 - 状态（问题）
+ */
+export const QUESTION_STATES = new JcEnum([
+  { key: 'NOTREPORTED', value: '0', label: '未上报' },
+  { key: 'INPROGRESS', value: '1', label: '进行中' },
+  { key: 'CLOSED', value: '2', label: '已关闭' }
+])

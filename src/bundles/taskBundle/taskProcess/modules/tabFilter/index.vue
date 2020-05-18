@@ -15,8 +15,8 @@
         <el-date-picker v-model="date" @change="changeDate" value-format="timestamp" type="datetimerange" range-separator="至" start-placeholder="开始时间" end-placeholder="结束时间">
         </el-date-picker>
       </el-form-item>
-      <el-form-item prop="desc" label="任务描述">
-        <el-input v-model="form.desc" placeholder="请输入任务描述"></el-input>
+      <el-form-item prop="desc" label="任务信息">
+        <el-input v-model="form.desc" placeholder="输入下发人或任务名称"></el-input>
       </el-form-item>
       <el-form-item class="jc-tabfilter-btns">
         <el-button type="primary" @click="onSubmit">查询</el-button>

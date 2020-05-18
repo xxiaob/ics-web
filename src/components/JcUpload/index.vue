@@ -1,5 +1,5 @@
 <template>
-  <el-upload :action="uploadUrl" :accept="accept" :headers="uploadHeaders" :before-upload="handleBeforeUpload" :on-success="handleSuccess" :on-remove="handleRemove" :on-exceed="handleExceed" :file-list="fileList">
+  <el-upload :action="uploadUrl" :accept="accept" :headers="uploadHeaders" :before-upload="handleBeforeUpload" :on-success="handleSuccess" :on-remove="handleRemove" :file-list="fileList">
     <el-button size="small" type="primary" :loading="loading">点击上传</el-button>
   </el-upload>
 </template>
@@ -30,23 +30,18 @@ export default {
     fileList() {
       let files = []
 
-      if (this.urls.length) {
+      if (this.urls && this.urls.length) {
         files = this.urls.map(url=>({ name: url, url: url }))
       }
       return files
     }
   },
   methods: {
-    handleExceed(files, fileList) {
-      // if (fileList.length > 0) {
-      //   this.$message.warning('只能上传一个文件')
-      // }
-    },
     handleRemove(file, fileList) {
       console.log(file, fileList)
       let urls = []
 
-      if (fileList.length) {
+      if (fileList && fileList.length) {
         urls = this.formatUrls(fileList)
       }
       this.$emit('update:urls', urls)
@@ -64,7 +59,7 @@ export default {
       this.loading = true
     },
     handleSuccess(res, file, fileList) {
-      console.log(file, fileList)
+      // console.log(file, fileList)
       if (res.resCode) {
         const urls = this.formatUrls(fileList)
 
@@ -78,6 +73,3 @@ export default {
   }
 }
 </script>
-
-<style lang="scss" scoped>
-</style>

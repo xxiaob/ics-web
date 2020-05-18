@@ -2,7 +2,7 @@
   <el-card class="jc-tabfilter-card">
     <div class="jc-status-group">
       <el-radio-group v-model="status" size="medium" @change="changeStatus">
-        <el-radio-button v-for="(value,key) in selectTypes" :key="key" :label="key">{{value}}</el-radio-button>
+        <el-radio-button v-for="item in selectTypes" :key="item.value" :label="item.value">{{item.label}}</el-radio-button>
       </el-radio-group>
       <slot name="manage"></slot>
     </div>
@@ -27,13 +27,13 @@
   </el-card>
 </template>
 <script>
-import { selectTypes } from '../../const'
+import { QUESTION_TYPES } from '@/constant/Dictionaries'
 export default {
   name: 'TaskQuestionProcessFilter',
   data() {
     return {
       eventTypes: [],
-      selectTypes,
+      selectTypes: QUESTION_TYPES.VALUES,
       status: '0',
       form: {
         selectType: '0',

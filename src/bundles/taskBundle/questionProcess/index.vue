@@ -16,15 +16,14 @@
         <el-table-column prop="orgName" label="所属组织"></el-table-column>
         <el-table-column prop="problemTitle" label="标题"></el-table-column>
         <el-table-column prop="statusName" label="状态"></el-table-column>
-        <!-- <el-table-column prop=" taskStatusName" label="任务状态"></el-table-column> -->
         <el-table-column prop="createTime" label="创建时间" :formatter="formatTime" width="140"></el-table-column>
         <el-table-column width="90" label="操作">
           <template slot-scope="scope">
-            <el-button type="text" size="mini" icon="el-icon-view" @click="manage(scope.row,true)" title="查看" v-if="filter.selectType==1||filter.selectType==2"></el-button>
-            <el-button type="text" size="mini" icon="el-icon-edit-outline" @click="manage(scope.row)" v-if="filter.selectType==3" title="编辑"></el-button>
-            <el-button type="text" size="mini" icon="el-icon-refresh-right" @click="handle(scope.row)" title="处理" v-if="filter.selectType==0"></el-button>
-            <el-button type="text" size="mini" icon="el-icon-arrow-down" @click="startTask(scope.row)" title="反馈" v-if="filter.selectType==3"></el-button>
-            <el-button type="text" size="mini" icon="el-icon-delete" @click="del(scope.row)" title="删除" v-if="filter.selectType!=0"></el-button>
+            <el-button type="text" size="mini" icon="el-icon-view" @click="manage(scope.row,true)" title="查看" v-if="filter.selectType===QUESTION_TYPES.PROCESSED||filter.selectType===QUESTION_TYPES.FEEDBACK"></el-button>
+            <el-button type="text" size="mini" icon="el-icon-edit-outline" @click="manage(scope.row)" v-if="filter.selectType===QUESTION_TYPES.DEAFT" title="编辑"></el-button>
+            <el-button type="text" size="mini" icon="el-icon-refresh-right" @click="handle(scope.row)" title="处理" v-if="filter.selectType===QUESTION_TYPES.PENDING"></el-button>
+            <el-button type="text" size="mini" icon="el-icon-arrow-down" @click="startTask(scope.row)" title="反馈" v-if="filter.selectType===QUESTION_TYPES.DEAFT"></el-button>
+            <el-button type="text" size="mini" icon="el-icon-delete" @click="del(scope.row)" title="删除" v-if="filter.selectType!==QUESTION_TYPES.PENDING"></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -36,6 +35,7 @@
 </template>
 <script>
 import { questionList, questionDel, questionStart, questionGet } from '@/api/question'
+import { QUESTION_TYPES } from '@/constant/Dictionaries'
 import { formatDate } from '@/libs/util'
 import PaginationMixins from '@/mixins/PaginationMixins'
 import { organizationList } from '@/api/organization'
@@ -56,8 +56,9 @@ export default {
       loading: false,
       visible: false,
       info: null,
+      QUESTION_TYPES,
       filter: {
-        selectType: '0'
+        selectType: QUESTION_TYPES.PENDING
       },
       orgId: ''
     }
@@ -136,7 +137,7 @@ export default {
       this.currentChange(1)
     },
     del(row) {
-      this.$confirm('确认删除该任务', '提示', { type: 'warning' }).then(() => {
+      this.$confirm('确认删除该问题', '提示', { type: 'warning' }).then(() => {
         this.remove(row.businessKey)
       }).catch(() => {})
     },
