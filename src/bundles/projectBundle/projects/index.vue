@@ -18,8 +18,9 @@ import PaginationMixins from '@/mixins/PaginationMixins'
 import { PROJECT_TYPES } from '@/constant/Dictionaries'
 
 export default {
-  name: 'ProjectEmergencySupport',
+  name: 'ProjectProjects',
   mixins: [PaginationMixins],
+  props: ['projectType'],
   components: {
     TabFilter: () => import('./modules/tabFilter'),
     JcManage: () => import('./modules/manage')

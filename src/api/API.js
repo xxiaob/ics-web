@@ -120,5 +120,14 @@ export default {
     list: 'user-service/userGroup/selectGroupByPage',
     update: 'user-service/userGroup/updateGroup',
     del: 'user-service/userGroup/deleteGroup'
+  },
+  projects: {
+    //项目管理
+    add: 'project-service/project/add',
+    get: '',
+    listByPage: 'project-service/project/listByPage',
+    list: 'project-service/project/list',
+    update: 'project-service/project/update',
+    del: 'project-service/project/delete'
   }
 }
