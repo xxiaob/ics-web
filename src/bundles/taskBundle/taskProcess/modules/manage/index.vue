@@ -114,7 +114,7 @@ const defaultForm = {
 }
 
 export default {
-  name: 'SystemTaskProcessManage',
+  name: 'TaskProcessManage',
   mixins: [FormMixins],
   props: {
     orgTree: {
@@ -132,7 +132,6 @@ export default {
         SELECT_NOT_NULL,
         NOT_NULL
       },
-      // taskPeople: 'orgIds',
       view: false,
       users: [],
       taskSources: JSON.parse(JSON.stringify(taskSources)),
@@ -230,8 +229,8 @@ export default {
         this.taskSourceDisabled = false
       }
       if (this.options) {
-        console.log(this.options)
-        const { view, handle, taskId, taskSource, taskPositionName, taskPosition, orgIds, assignees, detailViewVO: { businessKey, projectId, taskDesc, taskName, endDate, startDate } } = this.options
+        // console.log(this.options)
+        const { view, handle, taskId, orgIds, assignees, detailViewVO: { businessKey, projectId, taskDesc, taskName, endDate, startDate }, taskDetailVO: { taskPosition, taskPositionName, taskSource, taskSourceName } } = this.options
 
         this.view = view || false
         this.handle = handle || false

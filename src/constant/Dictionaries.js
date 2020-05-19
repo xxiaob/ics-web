@@ -129,3 +129,15 @@ export const TASK_STATES = new JcEnum([
   { key: 'FINISHED', value: '3', label: '已完成' },
   { key: 'OVERTIME', value: '4', label: '已超时' }
 ])
+
+/**
+ * 任务处理 - 问题来源
+ */
+export const TASK_SOURCES = new JcEnum([
+  { key: 'government', value: '0', label: '12345' },
+  { key: 'CITYBUILD', value: '1', label: '12319' },
+  { key: 'OTHER', value: '2', label: '其他来源' },
+  { key: 'SELFCREATION', value: '3', label: '自主创建' },
+  { key: 'PROBLEMFEEDBACK', value: '4', label: '问题反馈' },
+  { key: 'WORKORDER', value: '5', label: '工单' }
+])

@@ -1,0 +1,287 @@
+<template>
+  <div>
+    <div class="jc-card-title">{{form.handle?'任务处理':'任务详情'}}</div>
+    <el-card class="jc-table-card jc-mt">
+      <div slot="header">
+        <div class="jc-title">基础信息</div>
+      </div>
+      <el-form ref="form" label-width="80px" :model="form" class="jc-manage-form" size="small">
+        <div class="jc-clearboth">
+          <el-form-item label="任务名称" class="jc-left-width25">
+            <span>{{form.taskName}}</span>
+          </el-form-item>
+          <el-form-item label="创建时间" class="jc-left-width25">
+            <span>{{form.createTime|filterTime}}</span>
+          </el-form-item>
+          <el-form-item label="项目类型" class="jc-left-width25">
+            <span>{{form.projectType}}</span>
+          </el-form-item>
+          <el-form-item label="项目名称" class="jc-left-width25">
+            <span>{{form.projectName}}</span>
+          </el-form-item>
+        </div>
+        <div class="jc-clearboth">
+          <el-form-item label="任务时间" class="jc-left-width50">
+            <span>{{form.startDate|filterTime}} - {{form.endDate|filterTime}}</span>
+          </el-form-item>
+          <el-form-item label="任务类型" class="jc-left-width25">
+            <span>{{form.taskTypeName}}</span>
+          </el-form-item>
+          <el-form-item label="任务状态" class="jc-left-width25">
+            <span>{{form.taskStatusName}}</span>
+          </el-form-item>
+        </div>
+        <div class="jc-clearboth">
+          <el-form-item label="任务来源" class="jc-left-width50">
+            <span>{{taskSourceName}}</span>
+          </el-form-item>
+          <el-form-item label="下发组织" class="jc-left-width25">
+            <span>{{form.startOrg}}</span>
+          </el-form-item>
+          <el-form-item label="下发人" class="jc-left-width25">
+            <span>{{form.startUser}}</span>
+          </el-form-item>
+        </div>
+        <div class="jc-clearboth">
+          <el-form-item label="任务位置" class="jc-left-width50">
+            <span>{{form.taskPositionName}}</span>
+          </el-form-item>
+          <el-form-item label="任务人员">
+            {{formatUsers}}
+          </el-form-item>
+        </div>
+        <el-form-item label="任务描述">
+          {{form.taskDesc}}
+        </el-form-item>
+        <el-form-item label="流转记录">
+          <div>流转记录</div>
+        </el-form-item>
+      </el-form>
+    </el-card>
+    <div class="jc-detail-footer">
+      <el-button @click="handleTask(true)" size="small" v-if="form.handle">流转任务</el-button>
+      <el-button @click="handleTask(false)" size="small" v-if="form.handle">结束任务</el-button>
+      <el-button size="small" type="primary" @click="$emit('update:detailShow', false)">返回</el-button>
+    </div>
+    <el-dialog :title="taskForm.ifUpload?'流转任务':'结束任务'" :visible.sync="dialogVisibleHandle" width="600px" append-to-body>
+      <el-form ref="taskForm" label-width="80px" :model="taskForm" class="jc-manage-form">
+        <el-form-item label="任务人员" prop="orgIds" :rules="rules.SELECT_NOT_NULL" v-if="taskForm.ifUpload">
+          <el-cascader :options="orgTree" v-model="taskForm.orgIds" :props="{expandTrigger: 'hover', emitPath: false, multiple: true ,checkStrictly: true}" clearable placeholder="请选择组织(必填)" :show-all-levels="false" @change="changeOrg" class="jc-left-width50"></el-cascader>
+          <el-select v-model="taskForm.userIds" multiple placeholder="请选择人员(选填)" clearable class="jc-left-width50">
+            <el-option v-for="item in users" :key="item.id" :label="item.name" :value="item.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="事件" prop="eventIds" :rules="rules.SELECT_NOT_NULL" v-if="!taskForm.ifUpload">
+          <el-select v-model="taskForm.eventIds" multiple filterable remote reserve-keyword placeholder="请输入关键词" :remote-method="remoteMethod" :loading="loading">
+            <el-option v-for="item in events" :key="item.id" :label="item.title" :value="item.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="备注" prop="remark" :rules="rules.NOT_NULL">
+          <el-input v-model="taskForm.remark" placeholder="请输入备注" type="textarea"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisibleHandle = false">取 消</el-button>
+        <el-button type="primary" @click="onSubmitTask">确 定</el-button>
+      </span>
+    </el-dialog>
+  </div>
+</template>
+<script>
+import { taskFinish } from '@/api/task'
+import { eventManageSelectList } from '@/api/eventManage'
+import { userListByOrg } from '@/api/user'
+import { NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
+import { formatDate } from '@/libs/util'
+import { TASK_SOURCES } from '@/constant/Dictionaries'
+
+export default {
+  name: 'TaskProcessDetail',
+  props: {
+    info: {
+      type: Object,
+      default: ()=>{}
+    },
+    orgTree: {
+      type: Array
+    },
+    orgObj: {
+      type: Object
+    }
+  },
+  data() {
+    return {
+      loading: false,
+      dialogVisibleHandle: false,
+      events: [],
+      users: [],
+      handle: false,
+      rules: {
+        SELECT_NOT_NULL,
+        NOT_NULL
+      },
+      taskForm: {
+        ifUpload: false,
+        remark: '',
+        orgIds: [],
+        userIds: [],
+        eventIds: []
+      }
+    }
+  },
+  computed: {
+    form() {
+      if (this.info) {
+        return { ...this.info, ...this.info.detailViewVO, ...this.info.taskDetailVO }
+      } else {
+        return {}
+      }
+    },
+    taskSourceName() {
+      if (this.form.taskSourceName) {
+        return this.form.taskSourceName
+      } else {
+        return TASK_SOURCES.toString(this.form.taskSource)
+      }
+    },
+    formatUsers() {
+      if (this.form.assignees && this.form.assignees.length) {
+        const userNames = this.form.assignees.map(item=>item.userName)
+
+        return userNames.join('、')
+      } else if (this.form.orgIds && this.form.orgIds.length) {
+        const orgNames = this.form.orgIds.map(value=>this.orgObj[value])
+
+        return orgNames.join('、')
+      } else {
+        return ''
+      }
+    }
+  },
+  filters: {
+    filterTime(value) {
+      return formatDate(value)
+    }
+  },
+  created() {
+    this.remoteMethod('')
+  },
+  methods: {
+    changeOrg(orgIds) {
+      if (orgIds.length) {
+        this.getUser(orgIds)
+      } else {
+        this.users = []
+      }
+      this.taskForm.userIds = []
+    },
+    async getUser(orgIds) {
+      try {
+        const res = await userListByOrg(orgIds)
+        const users = []
+
+        if (res && res.length) {
+          res.forEach(item=>{
+            users.push({
+              id: item.userId,
+              name: item.userName
+            })
+          })
+        }
+        this.users = users
+      } catch (error) {
+        console.error(error)
+      }
+    },
+    async remoteMethod(query) {
+      this.loading = true
+      try {
+        this.events = await eventManageSelectList(query)
+        this.loading = false
+      } catch (error) {
+        console.error(error)
+        this.loading = false
+      }
+    },
+    handleTask(ifUpload) {
+      if (this.$refs.taskForm) {
+        this.$refs.taskForm.resetFields()
+      }
+      this.taskForm.userIds = []
+      this.taskForm.ifUpload = ifUpload
+      this.dialogVisibleHandle = true
+    },
+    onSubmitTask() {
+      this.loading = true
+      this.$refs.taskForm.validate(valid => {
+        if (valid) {
+          this.nextTo()
+        } else {
+          this.loading = false
+        }
+      })
+    },
+    //流转
+    async nextTo() {
+      const { businessKey, taskId } = this.form
+      const { ifUpload, remark, userIds, orgIds, eventIds } = this.taskForm
+      const form = {
+        ifUpload, // true 流转  false 完成
+        businessKey,
+        taskId,
+        remark,
+        eventIds
+      }
+
+      if (ifUpload) { // 流转带上组织id 或者 用户id
+        if (userIds.length) {
+          form.assignees = userIds
+        } else {
+          form.orgIds = orgIds
+        }
+      }
+      console.log(form)
+      try {
+        await taskFinish(form)
+        this.$message.success('操作成功')
+        this.dialogVisible = false
+        this.dialogVisibleHandle = false
+        this.$emit('save-success')
+        this.loading = false
+        this.$emit('update:detailShow', false)
+      } catch (e) {
+        this.loading = false
+        console.error(e)
+      }
+    }
+  }
+}
+</script>
+<style lang="scss" scoped>
+.el-card /deep/ .el-card__header {
+  border: none;
+}
+.jc-title {
+  color: $jc-color-primary;
+}
+.jc-detail-footer {
+  text-align: center;
+  margin-top: $jc-default-dis;
+}
+.jc-left-width50 {
+  width: 50%;
+  float: left;
+}
+.jc-left-width25 {
+  width: 25%;
+  float: left;
+}
+.jc-clearboth::after,
+.jc-clearboth::before {
+  content: "";
+  display: table;
+  clear: both;
+}
+</style>
