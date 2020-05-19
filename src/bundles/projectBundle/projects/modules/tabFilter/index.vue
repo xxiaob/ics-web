@@ -35,6 +35,11 @@ export default {
       }
     }
   },
+  watch: {
+    '$route'() {
+      this.reset()
+    }
+  },
   methods: {
     reset() {
       this.$refs.form.resetFields()

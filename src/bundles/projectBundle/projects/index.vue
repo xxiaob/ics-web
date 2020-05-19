@@ -55,6 +55,12 @@ export default {
       filter: {}
     }
   },
+  watch: {
+    '$route'() {
+      this.filter = {}
+      this.initData()
+    }
+  },
   created() {
     this.initData()
   },
@@ -64,6 +70,7 @@ export default {
         this.loading = true
         projectsListByPage({ projectType: this.projectType, ...this.filter }).then(res => {
           console.log('项目管理', res)
+          this.loading = false
         }).catch(() => {
           this.loading = false
         })
