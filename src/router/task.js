@@ -14,6 +14,13 @@ export default [{
     title: '问题管理-问题处理'
   }
 }, {
+  path: 'task/questionSearch',
+  name: 'questionSearch',
+  component: () => import('@/bundles/taskBundle/questionSearch'),
+  meta: {
+    title: '问题管理-问题查询'
+  }
+}, {
   path: 'task/taskProcess',
   name: 'taskProcess',
   component: () => import('@/bundles/taskBundle/taskProcess'),

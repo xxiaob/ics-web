@@ -44,6 +44,9 @@ export default {
     },
     firstOrgIds: {
       type: Array
+    },
+    detailShow: {
+      type: Boolean
     }
   },
   data() {
@@ -63,9 +66,11 @@ export default {
   watch: {
     info: {
       handler(newValue) {
-        const { uploadFilePaths } = newValue
+        if (this.detailShow) {
+          const { uploadFilePaths } = newValue
 
-        this.handleUrls(uploadFilePaths)
+          this.handleUrls(uploadFilePaths)
+        }
       },
       deep: true
     }

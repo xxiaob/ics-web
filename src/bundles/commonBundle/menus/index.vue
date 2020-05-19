@@ -19,6 +19,7 @@
           <span class="jc-menu-arrow-title" slot="title">问题管理</span>
         </template>
         <el-menu-item index="questionProcess">问题处理</el-menu-item>
+        <el-menu-item index="questionSearch">问题查询</el-menu-item>
       </el-submenu>
       <el-submenu index="task" class="jc-menu-item">
         <template slot="title">
