@@ -141,6 +141,14 @@
       &.jc-not-start {
         background-image: url(../assets/not-start.png);
       }
+
+      &.jc-running {
+        background-image: url(../assets/running.png);
+      }
+
+      &.jc-finished {
+        background-image: url(../assets/finished.png);
+      }
     }
 
     .jc-project-opera {

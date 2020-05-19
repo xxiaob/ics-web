@@ -1,15 +1,10 @@
 <template>
   <el-dialog :title="options ? '编辑区域类型':'新增区域类型'" :visible.sync="dialogVisible" width="600px" :append-to-body="true" @close="dialogClose">
     <el-form ref="form" label-width="120px" :model="form" class="jc-manage-form">
-      <el-form-item label="区域类型名称" prop="areaTypeName" :rules="rules.Len50">
-        <el-input v-model="form.areaTypeName" placeholder="请输入区域类型名称"></el-input>
+      <el-form-item label="区域类型名称" prop="projectName" :rules="rules.Len50">
+        <el-input v-model="form.areaTypeName" placeholder="请输入项目名称"></el-input>
       </el-form-item>
-      <el-form-item label="区域类型图标" prop="icon" :rules="rules.SELECT_NOT_NULL">
-        <div class="jc-icon-img" :style="getIconStyle(form.icon)"></div>
-        <div class="jc-icon-space">
-          <div class="jc-icon-item" v-for="(item,key) in JcIcons" @click="iconsClick(key)" :key="key" :title="item.name" :style="{'background-image':` url(${item.icon})`}"></div>
-        </div>
-      </el-form-item>
+
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="dialogVisible = false">取 消</el-button>
@@ -18,21 +13,20 @@
   </el-dialog>
 </template>
 <script>
-import { areaTypeSave } from '@/api/areaType'
+import { PROJECT_TYPES } from '@/constant/Dictionaries'
+import { projectsSave } from '@/api/projects'
 import { getStringRule, SELECT_NOT_NULL } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
-import { JcIcons } from '@/config/JcIconConfig'
 
-let defaultForm = { areaTypeName: '', icon: '' }
+let defaultForm = { projectName: '', projectType: '' }
 
 export default {
-  name: 'SystemAreaTypeManage',
+  name: 'ProjectProjectsManage',
   mixins: [FormMixins],
   data() {
     return {
       loading: false,
       areaType: [],
-      JcIcons: JcIcons,
       rules: {
         Len50: getStringRule(1, 50),
         SELECT_NOT_NULL
@@ -64,7 +58,7 @@ export default {
       this.loading = true
       this.$refs.form.validate(valid => {
         if (valid) {
-          areaTypeSave(this.form).then(() => {
+          projectsSave(this.form).then(() => {
             this.$message.success('操作成功')
             this.dialogVisible = false
             this.$emit('save-success')

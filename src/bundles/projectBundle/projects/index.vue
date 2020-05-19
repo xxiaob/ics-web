@@ -19,7 +19,7 @@
 </template>
 <script>
 import PaginationMixins from '@/mixins/PaginationMixins'
-import { projectsListByPage, projectsDel } from '@/api/projects'
+import { projectsListByPage } from '@/api/projects'
 
 export default {
   name: 'ProjectProjects',
@@ -32,7 +32,7 @@ export default {
   },
   data() {
     return {
-      list: [{ projectId: 1, title: '扫雪防冻专项管控', projectType: 1 }, { projectId: 2, title: '扫雪防冻专项管控', projectType: 2 }],
+      list: [],
       loading: false,
       visible: false,
       info: null,
@@ -53,6 +53,15 @@ export default {
         this.loading = true
         projectsListByPage({ projectType: this.projectType, ...this.filter }).then(res => {
           console.log('项目管理', res)
+          this.page.total = res.total
+          let list = []
+
+          if (res.resultList && res.resultList.length) {
+            res.resultList.forEach(item => {
+              list.push({ projectId: item.projectId, projectName: item.projectName, projectType: item.projectType, beginTime: item.beginTime, endTime: item.endTime })
+            })
+          }
+          this.list = list
           this.loading = false
         }).catch(() => {
           this.loading = false
@@ -62,14 +71,6 @@ export default {
     goFilter(filter) {
       this.filter = { ...filter }
       this.currentChange(1)
-    },
-    del(row) {
-      this.$confirm('确认删除该项目', '提示', { type: 'warning' }).then(() => {
-        projectsDel(row.projectId).then(() => {
-          this.$message.success('删除成功')
-          this.currentChange(this.page.pageNum - 1)
-        })
-      }).catch(() => {})
     },
     manage(row) {
       if (row) {

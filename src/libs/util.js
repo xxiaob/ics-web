@@ -91,7 +91,7 @@ export function stringSearch(search = '', content = '') {
 export function formatDate(time, isDate = false) {
   let date
 
-  if (time === '') {
+  if (!time) {
     date = new Date()
   } else {
     date = new Date(time)
