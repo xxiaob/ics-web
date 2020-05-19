@@ -1,4 +1,4 @@
-.jc-project-item {
+/deep/ .jc-project-item {
   position: relative;
   margin: 0 auto $jc-default-dis auto;
   width: 90%;
@@ -87,11 +87,19 @@
       &.jc-screen-command {
         background-image: url(../assets/command-bg.png);
         transform: translateX(-120%);
+
+        &:hover {
+          background-image: url(../assets/command-on.png);
+        }
       }
 
       &.jc-screen-data {
         background-image: url(../assets/data-bg.png);
         transform: translateX(120%);
+
+        &:hover {
+          background-image: url(../assets/data-on.png);
+        }
       }
     }
   }
@@ -106,6 +114,11 @@
     background-color: rgba($color: $jc-color-black, $alpha: 0);
     transition: background-color .4s;
 
+    .iconfont {
+      padding-right: 4px;
+      font-size: $jc-font-size-smaller;
+    }
+
     .jc-project-info {
       position: relative;
       background-repeat: no-repeat;
@@ -114,11 +127,7 @@
       opacity: 1;
       transform: scale(1);
       transition: opacity .3s, transform .3s;
-
-      .iconfont {
-        padding-right: 4px;
-        font-size: $jc-font-size-smaller;
-      }
+      z-index: 3;
 
       .jc-info-item {
         height: 20px;
@@ -132,10 +141,27 @@
       &.jc-not-start {
         background-image: url(../assets/not-start.png);
       }
+    }
 
-      .jc-project-opera {
-        position: absolute;
-        // top: 
+    .jc-project-opera {
+      position: absolute;
+      top: $jc-default-dis/2;
+      left: $jc-default-dis/2;
+      right: $jc-default-dis/2;
+      bottom: $jc-default-dis/2;
+      text-align: center;
+      z-index: 1;
+
+      .jc-opera-item {
+        display: inline-block;
+        width: 38%;
+        font-size: $jc-font-size-smaller;
+        height: 20px;
+        line-height: 20px;
+
+        @extend .jc-hover-style;
+        transform: translateY(60px);
+        will-change: transform;
       }
     }
   }
@@ -161,6 +187,31 @@
     .jc-project-info {
       opacity: 0;
       transform: scale(1.2);
+    }
+
+    .jc-project-opera {
+      z-index: 8;
+
+      .jc-opera-item {
+        transform: translateY(0);
+        transition: transform .4s;
+
+        &.first {
+          transition-delay: .2s;
+        }
+
+        &.second {
+          transition-delay: .35s;
+        }
+
+        &.three {
+          transition-delay: .5s;
+        }
+
+        &.four {
+          transition-delay: .65s;
+        }
+      }
     }
   }
 }
