@@ -164,8 +164,7 @@ export default {
       if (row) {
         const res = await eventManageGet(row.id)
 
-        console.log(res)
-        this.info = row
+        this.info = res
         if (view) {
           this.info.view = true
         } else {

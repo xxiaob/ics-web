@@ -114,9 +114,9 @@ export default {
       if (this.options) {
         this.view = this.options.view || false
         return {
-          afterPhoto: this.options.afterPhoto,
-          audioAddr: this.options.audioAddr,
-          beforePhoto: this.options.beforePhoto,
+          afterPhoto: this.options.afterPhotos,
+          audioAddr: this.options.audioAddrs,
+          beforePhoto: this.options.beforePhotos,
           desc: this.options.desc,
           eventTitle: this.options.eventTitle,
           eventNumber: this.options.eventNumber,
@@ -124,7 +124,7 @@ export default {
           id: this.options.id,
           orgId: this.options.orgId,
           reportUserName: this.options.reportUserName,
-          videoAddr: this.options.videoAddr
+          videoAddr: this.options.videoAddrs
         }
       } else {
         this.view = false
