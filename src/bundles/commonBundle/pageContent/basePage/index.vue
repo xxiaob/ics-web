@@ -64,6 +64,8 @@ export default {
 .jc-menu-space {
   width: $jc-menu-width;
   height: 100%;
+  overflow-x: hidden;
+  overflow-y: auto;
 }
 .jc-main-container {
   position: absolute;

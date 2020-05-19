@@ -181,11 +181,7 @@ input::-webkit-input-placeholder {
 
 /*超出隐藏控制*/
 .jc-text-warp {
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  overflow: hidden;
-  word-wrap: break-word;
-  word-break: break-all;
+  @include jc-text-warp()
 }
 
 /* 默认card 样式*/
