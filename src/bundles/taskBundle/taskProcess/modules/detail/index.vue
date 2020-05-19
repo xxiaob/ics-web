@@ -46,7 +46,7 @@
           <el-form-item label="任务位置" class="jc-left-width50">
             <span>{{form.taskPositionName}}</span>
           </el-form-item>
-          <el-form-item label="任务人员">
+          <el-form-item label="任务人员" class="jc-left-width50">
             {{formatUsers}}
           </el-form-item>
         </div>
