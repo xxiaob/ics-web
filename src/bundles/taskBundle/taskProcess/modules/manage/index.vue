@@ -86,8 +86,14 @@ import { eventManageSelectList } from '@/api/eventManage'
 import { questionReport } from '@/api/question'
 import { getStringRule, NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
-import { taskSources } from '../../const'
-
+import { TASK_TYPES } from '@/constant/Dictionaries'
+const taskSources = {
+  0: '任务来源0',
+  1: '任务来源1',
+  2: '任务来源2',
+  3: '任务来源3',
+  4: '任务来源4'
+}
 const defaultTaskSourceKeys = Object.keys(taskSources)
 
 const defaultForm = {
@@ -289,7 +295,7 @@ export default {
         userIds = []
       }
       const form = {
-        optType: 0,
+        optType: TASK_TYPES.TEMPORARY,
         orgIds,
         userIds,
         taskPO: { orgId: this.orgId, ...this.form },

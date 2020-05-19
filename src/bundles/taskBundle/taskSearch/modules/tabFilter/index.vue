@@ -14,7 +14,7 @@
       </el-form-item>
       <el-form-item prop="state" label="任务状态">
         <el-select v-model="form.state" placeholder="选择任务状态">
-          <el-option v-for="(value,key) in states" :key="key" :label="value" :value="key"></el-option>
+          <el-option v-for="item in states" :key="item.value" :label="item.label" :value="item.value"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item prop="" label="时间">
@@ -32,7 +32,7 @@
   </el-card>
 </template>
 <script>
-import { states } from '../../../taskProcess/const'
+import { TASK_STATES } from '@/constant/Dictionaries'
 export default {
   name: 'SystemTaskProcessFilter',
   props: {
@@ -44,7 +44,7 @@ export default {
   data() {
     return {
       eventTypes: [],
-      states,
+      states: TASK_STATES.VALUES,
       form: {
         projectId: '',
         projectType: '',

@@ -100,3 +100,32 @@ export const QUESTION_STATES = new JcEnum([
   { key: 'INPROGRESS', value: '1', label: '进行中' },
   { key: 'CLOSED', value: '2', label: '已关闭' }
 ])
+
+/**
+ * 任务处理 - 任务类型
+ */
+export const TASK_TYPES = new JcEnum([
+  { key: 'TEMPORARY', value: '0', label: '临时任务' },
+  { key: 'DAILY', value: '1', label: '日常任务' }
+])
+
+/**
+ * 任务处理 - 处理状态（个人）
+ */
+export const TASK_SELECT_TYPES = new JcEnum([
+  { key: 'PENDING', value: '0', label: '待办' },
+  { key: 'DONE', value: '1', label: '已办' },
+  { key: 'ISSUED', value: '2', label: '已发' },
+  { key: 'DEAFT', value: '3', label: '草稿' }
+])
+
+/**
+ * 任务处理 - 处理状态（任务）
+ */
+export const TASK_STATES = new JcEnum([
+  { key: 'NOTISSUED', value: '0', label: '未下发' },
+  { key: 'ISSUED', value: '1', label: '已下发' },
+  { key: 'PROCESSING', value: '2', label: '处理中' },
+  { key: 'FINISHED', value: '3', label: '已完成' },
+  { key: 'OVERTIME', value: '4', label: '已超时' }
+])
