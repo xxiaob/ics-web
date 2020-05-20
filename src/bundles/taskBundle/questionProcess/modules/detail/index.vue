@@ -30,6 +30,9 @@
       <el-button @click="generateTask" :loading="loading" type="primary" size="small">生成任务</el-button>
       <el-button @click="closeQuestion" :loading="loading" size="small">关闭问题</el-button>
     </div>
+
+    <task-manage :orgTree="orgTree" :orgId="orgId" :question="question" :visible.sync="TaskManageShow" @save-success="generateTaskSuccess"></task-manage>
+
   </div>
 </template>
 <script>
@@ -38,6 +41,12 @@ import { questionReport } from '@/api/question'
 export default {
   name: 'TaskQuestionProcessDetail',
   props: {
+    orgTree: {
+      type: Array
+    },
+    orgId: {
+      type: String
+    },
     types: {
       type: Array,
       default: ()=>[]
@@ -53,13 +62,18 @@ export default {
       type: Boolean
     }
   },
+  components: {
+    TaskManage: () => import('../../../taskProcess/modules/manage')
+  },
   data() {
     return {
       loading: false,
       handle: false,
       imgs: [],
       videos: [],
-      audios: []
+      audios: [],
+      question: null,
+      TaskManageShow: false
     }
   },
   computed: {
@@ -124,20 +138,39 @@ export default {
     },
     //生成任务
     async generateTask() {
-      const { id, problemTitle, taskId } = this.form
+      const { id, problemTitle } = this.form
 
-      this.$router.push({ name: 'taskProcess', query: { id, taskId, problemTitle } })
+      this.question = {
+        key: id.toString(),
+        value: id,
+        label: problemTitle
+      }
+      this.TaskManageShow = true
+    },
+    //成功生成任务后的回调
+    generateTaskSuccess() {
+      this.loading = true
+      const form = {
+        ifUpload: false,
+        ifClose: false
+      }
+
+      try {
+        this.questionReport(form)
+      } catch (e) {
+        console.error(e)
+      }
     },
     //关闭问题
     closeQuestion() {
       this.$confirm('确认关闭问题', '提示', { type: 'warning' }).then(async () => {
-        try {
-          this.loading = true
-          const form = {
-            ifUpload: false,
-            ifClose: true
-          }
+        this.loading = true
+        const form = {
+          ifUpload: false,
+          ifClose: true
+        }
 
+        try {
           this.questionReport(form)
         } catch (e) {
           console.error(e)

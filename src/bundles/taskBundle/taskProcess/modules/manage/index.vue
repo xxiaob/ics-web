@@ -44,7 +44,7 @@
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="dialogVisible = false">取 消</el-button>
-      <el-button type="primary" :loading="loading" @click="onSubmit(false)">暂 存</el-button>
+      <el-button type="primary" :loading="loading" @click="onSubmit(false)" v-if="!question">暂 存</el-button>
       <el-button type="primary" :loading="loading" @click="onSubmit(true)">下 发</el-button>
     </div>
   </el-dialog>
@@ -52,12 +52,9 @@
 <script>
 import { taskSave } from '@/api/task'
 import { userListByOrg } from '@/api/user'
-import { questionReport } from '@/api/question'
 import { getStringRule, NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
 import { TASK_TYPES, TASK_SOURCES } from '@/constant/Dictionaries'
-
-const defaultTaskSourceKeys = TASK_SOURCES.VALUES.map(item=>item.value)
 
 const defaultForm = {
   businessKey: '',
@@ -80,6 +77,7 @@ export default {
   name: 'TaskProcessManage',
   mixins: [FormMixins],
   props: {
+    question: {},
     orgTree: {
       type: Array
     },
@@ -97,30 +95,17 @@ export default {
       },
       users: [],
       taskSources: JSON.parse(JSON.stringify(TASK_SOURCES.VALUES)),
-      taskSourceDisabled: false,
-      questionForm: {
-        ifUpload: false,
-        ifClose: false,
-        businessKey: '',
-        taskId: ''
-      }
+      taskSourceDisabled: false
     }
-  },
-  created() {
-    this.formatQuestionForm()
   },
   methods: {
     formatQuestionForm() {
-      const { id, problemTitle, taskId } = this.$route.query
+      const { id, problemTitle } = this.$route.query
 
       if (id) {
         this.taskSources.push({ key: id, value: id, label: problemTitle })
         this.form.taskSource = id
-        this.questionForm.businessKey = id
-        this.questionForm.taskId = taskId
         this.taskSourceDisabled = true
-        this.dialogVisible = true
-        this.$router.push({ name: 'taskProcess' })
       }
     },
     changeOrg(orgIds) {
@@ -159,20 +144,22 @@ export default {
       }
     },
     formatFormData() {
-      const { id } = this.$route.query
+      let questionTaskSource = ''
 
-      if (!id) {
+      if (this.question) {
+        this.taskSources.push(this.question)
+        questionTaskSource = this.question.value
+        this.taskSourceDisabled = true
+      } else {
         this.taskSources = JSON.parse(JSON.stringify(TASK_SOURCES.VALUES))
         this.taskSourceDisabled = false
       }
+
       if (this.options) {
         // console.log(this.options)
-        const { taskId, orgIds, assignees, detailViewVO: { businessKey, projectId, taskDesc, taskName, endDate, startDate }, taskDetailVO: { taskPosition, taskPositionName, taskSource, taskSourceName } } = this.options
+        const { taskId, orgIds, assignees, detailViewVO: { businessKey, projectId, taskDesc, taskName, endDate, startDate }, taskDetailVO: { taskPosition, taskPositionName, taskSource } } = this.options
 
-        if (taskSourceName) {
-          this.taskSourceDisabled = true
-          this.taskSources.push({ key: taskSource, value: taskSource, label: taskSourceName })
-        }
+
         const form = {
           businessKey,
           taskId,
@@ -207,31 +194,18 @@ export default {
         }
         return form
       } else {
-        return { ...defaultForm }
+        return { ...defaultForm, taskSource: questionTaskSource }
       }
     },
     onSubmit(ifStart) {
       this.loading = true
       this.$refs.form.validate(valid => {
         if (valid) {
-          this.confirmQuestionReport(ifStart)
+          this.saveTask(ifStart)
         } else {
           this.loading = false
         }
       })
-    },
-    async confirmQuestionReport(ifStart) {
-      if (!defaultTaskSourceKeys.includes(this.form.taskSource) && ifStart) {
-        try {
-          await questionReport(this.questionForm)
-          this.saveTask(ifStart)
-        } catch (error) {
-          console.log(error)
-          this.loading = false
-        }
-      } else {
-        this.saveTask(ifStart)
-      }
     },
     async saveTask(ifStart) {
       let orgIds = [], userIds = []

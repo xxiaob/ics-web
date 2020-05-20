@@ -38,7 +38,7 @@
           <el-button size="small" icon="el-icon-arrow-left" @click="detailShow=false">返回</el-button>
         </div>
       </div>
-      <jc-detail :types="types" :info="info" :firstOrgIds="firstOrgIds" :detailShow.sync="detailShow" @save-success="initData"></jc-detail>
+      <jc-detail :types="types" :info="info" :orgTree="orgTree" :orgId="orgId" :firstOrgIds="firstOrgIds" :detailShow.sync="detailShow" @save-success="initData"></jc-detail>
     </el-card>
 
     <jc-manage :types="types" :orgTree="orgTree" :orgId="orgId" :options="info" :visible.sync="visible" @save-success="initData"></jc-manage>
@@ -185,6 +185,7 @@ export default {
       this.info = await questionGet(row.businessKey)
       this.info.taskId = row.taskId
       this.info.handle = handle
+      this.orgId = this.user.orgId
       this.detailShow = true
     }
   }
