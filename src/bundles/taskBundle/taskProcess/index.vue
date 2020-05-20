@@ -44,7 +44,7 @@
   </div>
 </template>
 <script>
-import { taskList, taskDel, taskStart, taskGet, taskUpdStatus } from '@/api/task'
+import { taskList, taskDel, taskStart, taskGet, taskUpdStatus, taskGetDaily } from '@/api/task'
 import { formatDate } from '@/libs/util'
 import PaginationMixins from '@/mixins/PaginationMixins'
 import { organizationList } from '@/api/organization'
@@ -186,7 +186,7 @@ export default {
     //添加 编辑  日常任务
     async manageDaily(row) {
       if (row) {
-        const res = await taskGet(row.businessKey)
+        const res = await taskGetDaily(row.businessKey)
 
         this.info = res
       } else {

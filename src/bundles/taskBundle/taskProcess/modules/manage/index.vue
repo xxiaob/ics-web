@@ -44,7 +44,8 @@
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="dialogVisible = false">取 消</el-button>
-      <el-button type="primary" :loading="loading" @click="onSubmit">确 定</el-button>
+      <el-button type="primary" :loading="loading" @click="onSubmit(false)">暂 存</el-button>
+      <el-button type="primary" :loading="loading" @click="onSubmit(true)">下 发</el-button>
     </div>
   </el-dialog>
 </template>
@@ -209,17 +210,30 @@ export default {
         return { ...defaultForm }
       }
     },
-    onSubmit() {
+    onSubmit(ifStart) {
       this.loading = true
       this.$refs.form.validate(valid => {
         if (valid) {
-          this.confirmSave()
+          this.confirmQuestionReport(ifStart)
         } else {
           this.loading = false
         }
       })
     },
-    async confirmSave() {
+    async confirmQuestionReport(ifStart) {
+      if (!defaultTaskSourceKeys.includes(this.form.taskSource) && ifStart) {
+        try {
+          await questionReport(this.questionForm)
+          this.saveTask(ifStart)
+        } catch (error) {
+          console.log(error)
+          this.loading = false
+        }
+      } else {
+        this.saveTask(ifStart)
+      }
+    },
+    async saveTask(ifStart) {
       let orgIds = [], userIds = []
 
       if (this.form.userIds.length) {
@@ -230,6 +244,7 @@ export default {
         userIds = []
       }
       const form = {
+        ifStart,
         optType: TASK_TYPES.TEMPORARY,
         orgIds,
         userIds,
@@ -239,10 +254,6 @@ export default {
 
       try {
         await taskSave(form)
-        console.log(defaultTaskSourceKeys)
-        if (!defaultTaskSourceKeys.includes(this.form.taskSource)) {
-          questionReport(this.questionForm)
-        }
         this.$message.success('操作成功')
         this.dialogVisible = false
         this.$emit('save-success')

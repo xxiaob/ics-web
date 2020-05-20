@@ -18,14 +18,14 @@
         </el-date-picker>
       </el-form-item>
       <el-form-item label="任务要求">
-        <el-form-item label="在岗时间" prop="taskTimePOS" :rules="rules.SELECT_NOT_NULL">
+        <el-form-item label="在岗时间" prop="taskTimePOS">
           <!-- <el-input v-model="form.taskTimePOS" placeholder="请输入在岗时间"></el-input> -->
         </el-form-item>
         <el-form-item label="在岗时长" prop="workTime" :rules="rules.num">
-          <el-input v-model="form.workTime" placeholder="请输入在岗时长"></el-input>
+          <el-input v-model.number="form.workTime" type="number" placeholder="请输入在岗时长"></el-input>
         </el-form-item>
         <el-form-item label="在岗人数" prop="workPeopleNbr" :rules="rules.num">
-          <el-input v-model="form.workPeopleNbr" placeholder="请输入在岗人数"></el-input>
+          <el-input v-model.number="form.workPeopleNbr" type="number" placeholder="请输入在岗人数"></el-input>
         </el-form-item>
       </el-form-item>
       <el-form-item label="任务人员" prop="orgIds" :rules="rules.SELECT_NOT_NULL">
@@ -74,7 +74,7 @@ const defaultForm = {
 }
 
 export default {
-  name: 'TaskProcessManage',
+  name: 'TaskProcessManageDaily',
   mixins: [FormMixins],
   props: {
     orgTree: {
@@ -89,7 +89,7 @@ export default {
       loading: false,
       rules: {
         Len50: getStringRule(1, 50),
-        num: getNumberRule(true),
+        num: getNumberRule(false),
         SELECT_NOT_NULL,
         NOT_NULL
       },
