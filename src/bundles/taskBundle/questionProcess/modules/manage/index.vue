@@ -8,8 +8,8 @@
         <el-input v-model="form.problemDesc" placeholder="请输入问题描述" type="textarea"></el-input>
       </el-form-item>
       <el-form-item label="问题类型" prop="problemType" :rules="rules.SELECT_NOT_NULL">
-        <el-select v-model="form.problemType" filterable remote reserve-keyword placeholder="请输入关键词" :remote-method="remoteMethod" :loading="loading">
-          <el-option v-for="item in questionTypes" :key="item.id" :label="item.typeName" :value="item.id">
+        <el-select v-model="form.problemType" placeholder="选择问题类型">
+          <el-option v-for="item in types" :key="item.id" :label="item.typeName" :value="item.id">
           </el-option>
         </el-select>
       </el-form-item>
@@ -40,6 +40,9 @@ export default {
   name: 'TaskQuestionProcessManage',
   mixins: [FormMixins],
   props: {
+    types: {
+      type: Array
+    },
     orgTree: {
       type: Array
     },
@@ -57,10 +60,7 @@ export default {
         Len50: getStringRule(1, 50),
         SELECT_NOT_NULL,
         NOT_NULL
-      },
-      questionTypes: [
-        { id: 1, typeName: 'typeName' }
-      ]
+      }
     }
   },
   created() {

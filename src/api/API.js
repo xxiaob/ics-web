@@ -113,7 +113,8 @@ export default {
     del: 'activiti-service/problem/del',
     start: 'activiti-service/problem/start',
     report: 'activiti-service/problem/report',
-    get: 'activiti-service/problem/getProblemTask'
+    get: 'activiti-service/problem/getProblemTask',
+    typeList: 'activiti-service/problem/getProblemTypes'
   },
   pttGroup: {
     //PTT群组

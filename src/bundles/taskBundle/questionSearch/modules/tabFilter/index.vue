@@ -2,11 +2,11 @@
   <el-card class="jc-tabfilter-card">
     <el-form ref="form" :inline="true" :model="form" class="jc-tabfilter-form" size="small">
       <el-form-item prop="orgId" label="所属组织">
-        <el-cascader :options="orgTree" v-model="form.orgId" :props="{expandTrigger: 'hover', emitPath: false }" clearable></el-cascader>
+        <el-cascader :options="orgTree" v-model="form.orgId" :props="{expandTrigger: 'hover', emitPath: false,checkStrictly:true }" clearable></el-cascader>
       </el-form-item>
       <el-form-item prop="problemType" label="问题类型">
         <el-select v-model="form.problemType" placeholder="选择问题类型">
-          <el-option v-for="(value,key) in eventTypes" :key="key" :label="value" :value="key"></el-option>
+          <el-option v-for="item in types" :key="item.id" :label="item.typeName" :value="item.id"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item prop="" label="时间">
@@ -27,6 +27,10 @@
 export default {
   name: 'TaskQuestionProcessFilter',
   props: {
+    types: {
+      type: Array,
+      default: ()=>[]
+    },
     orgTree: {
       type: Array,
       default: ()=>[]
@@ -34,7 +38,6 @@ export default {
   },
   data() {
     return {
-      eventTypes: [],
       form: {
         problemType: '',
         startDate: '',
@@ -44,9 +47,6 @@ export default {
       },
       date: null
     }
-  },
-  created() {
-
   },
   methods: {
     changeDate(value) {

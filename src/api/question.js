@@ -70,3 +70,10 @@ export function questionStart(id) {
 export function questionReport(data) {
   return axios.post(API.question.report, data)
 }
+/**
+ * 问题类型列表
+ * @returns {Object} axios 对象
+ */
+export function questionTypeList() {
+  return axios.post(API.question.typeList)
+}

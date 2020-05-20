@@ -17,7 +17,7 @@
         <span>{{form.problemDesc}}</span>
       </el-form-item>
       <el-form-item label="问题类型">
-        <span>{{form.problemType}}</span>
+        <span>{{formatType(form.problemType)}}</span>
       </el-form-item>
       <el-form-item label="附件">
         <el-image v-for="url in imgs" :key="url" :src="url" :preview-src-list="imgs" class="jc-img"></el-image>
@@ -38,6 +38,10 @@ import { questionReport } from '@/api/question'
 export default {
   name: 'TaskQuestionProcessDetail',
   props: {
+    types: {
+      type: Array,
+      default: ()=>[]
+    },
     info: {
       type: Object,
       default: ()=>{}
@@ -62,6 +66,7 @@ export default {
     form() {
       return this.info || {}
     }
+
   },
   watch: {
     info: {
@@ -75,9 +80,12 @@ export default {
       deep: true
     }
   },
-  created() {
-  },
   methods: {
+    formatType(value) {
+      const type = this.types.filter(item=>item.id == value)
+
+      return (type[0] && type[0].typeName) || ''
+    },
     //根据文件格式 区分url
     handleUrls(urls) {
       const imgs = [], videos = [], audios = []

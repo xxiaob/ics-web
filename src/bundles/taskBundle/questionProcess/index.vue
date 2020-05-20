@@ -1,7 +1,7 @@
 <template>
   <div class="jc-main-container-warp">
     <div v-show="!detailShow">
-      <tab-filter @filter="goFilter">
+      <tab-filter :types="types" @filter="goFilter">
         <template v-slot:manage>
           <el-button class="jc-tabfilter-btns" type="primary" icon="el-icon-plus" size="small" @click="manage(null)">问题反馈</el-button>
         </template>
@@ -12,7 +12,7 @@
         </div>
         <el-table :data="list" v-loading="loading" row-key="id" class="jc-table">
           <el-table-column type="index" label="序号" width="50"></el-table-column>
-          <el-table-column prop="problemType" label="问题类型"></el-table-column>
+          <el-table-column prop="problemType" label="问题类型" :formatter="formatType"></el-table-column>
           <el-table-column prop="userName" label="反馈人"></el-table-column>
           <el-table-column prop="orgName" label="所属组织"></el-table-column>
           <el-table-column prop="problemTitle" label="标题"></el-table-column>
@@ -38,14 +38,14 @@
           <el-button size="small" icon="el-icon-arrow-left" @click="detailShow=false">返回</el-button>
         </div>
       </div>
-      <jc-detail :info="info" :firstOrgIds="firstOrgIds" :detailShow.sync="detailShow" @save-success="initData"></jc-detail>
+      <jc-detail :types="types" :info="info" :firstOrgIds="firstOrgIds" :detailShow.sync="detailShow" @save-success="initData"></jc-detail>
     </el-card>
 
-    <jc-manage :orgTree="orgTree" :orgId="orgId" :options="info" :visible.sync="visible" @save-success="initData"></jc-manage>
+    <jc-manage :types="types" :orgTree="orgTree" :orgId="orgId" :options="info" :visible.sync="visible" @save-success="initData"></jc-manage>
   </div>
 </template>
 <script>
-import { questionList, questionDel, questionStart, questionGet } from '@/api/question'
+import { questionList, questionDel, questionStart, questionGet, questionTypeList } from '@/api/question'
 import { QUESTION_TYPES } from '@/constant/Dictionaries'
 import { formatDate } from '@/libs/util'
 import PaginationMixins from '@/mixins/PaginationMixins'
@@ -63,6 +63,7 @@ export default {
   },
   data() {
     return {
+      types: [],
       orgTree: [],
       list: [],
       loading: false,
@@ -82,12 +83,17 @@ export default {
   },
   async created() {
     await this.getOrgTree()
-
+    this.types = await questionTypeList() || []
     this.initData()
   },
   methods: {
     formatTime(row, column, cellValue) {
       return formatDate(cellValue)
+    },
+    formatType(row, column, cellValue) {
+      const type = this.types.filter(item=>item.id == cellValue)
+
+      return (type[0] && type[0].typeName) || ''
     },
     formatOrg(row, column, cellValue) {
       return this.orgObj[cellValue]

@@ -7,8 +7,8 @@
         <div slot="header" class="jc-card-header">
           <div class="jc-card-title">列表内容</div>
           <div class="jc-button-group">
-            <!-- <el-button type="primary" icon="el-icon-plus" size="small" @click="manage(null)">日常任务</el-button> -->
-            <el-button type="primary" icon="el-icon-plus" size="small" @click="manage(null)">临时任务</el-button>
+            <el-button type="primary" icon="el-icon-plus" size="small" @click="manageDaily(null)">日常任务</el-button>
+            <el-button type="primary" icon="el-icon-plus" size="small" @click="manageTemporary(null)">临时任务</el-button>
           </div>
         </div>
         <el-table :data="list" v-loading="loading" row-key="id" class="jc-table">
@@ -38,6 +38,9 @@
     <jc-detail :orgTree="orgTree" :orgObj="orgObj" :info="info" :detailShow.sync="detailShow" v-show="detailShow" @save-success="initData"></jc-detail>
 
     <jc-manage :orgTree="orgTree" :orgId="orgId" :options="info" :visible.sync="visible" @save-success="initData"></jc-manage>
+
+    <jc-manage-daily :orgTree="orgTree" :orgId="orgId" :options="info" :visible.sync="visibleDaily" @save-success="initData"></jc-manage-daily>
+
   </div>
 </template>
 <script>
@@ -48,7 +51,7 @@ import { organizationList } from '@/api/organization'
 import { createNamespacedHelpers } from 'vuex'
 const { mapState } = createNamespacedHelpers('user')
 
-import { TASK_SELECT_TYPES, TASK_STATES } from '@/constant/Dictionaries'
+import { TASK_SELECT_TYPES, TASK_STATES, TASK_TYPES } from '@/constant/Dictionaries'
 
 export default {
   name: 'TaskProcessIndex',
@@ -56,7 +59,8 @@ export default {
   components: {
     TabFilter: () => import('./modules/tabFilter'),
     JcManage: () => import('./modules/manage'),
-    JcDetail: () => import('./modules/detail')
+    JcDetail: () => import('./modules/detail'),
+    JcManageDaily: () => import('./modules/manageDaily')
   },
   data() {
     return {
@@ -66,6 +70,7 @@ export default {
       list: [],
       loading: false,
       visible: false,
+      visibleDaily: false,
       info: null,
       filter: {
         selectType: TASK_SELECT_TYPES.PENDING
@@ -159,8 +164,15 @@ export default {
         console.error(error)
       }
     },
+    manage(row) {
+      if (row.taskType == TASK_TYPES.DAILY) {
+        this.manageDaily(row)
+      } else if (row.taskType == TASK_TYPES.TEMPORARY) {
+        this.manageTemporary(row)
+      }
+    },
     //添加 编辑  临时任务
-    async manage(row) {
+    async manageTemporary(row) {
       if (row) {
         const res = await taskGet(row.businessKey)
 
@@ -170,6 +182,18 @@ export default {
       }
       this.orgId = this.user.orgId
       this.visible = true
+    },
+    //添加 编辑  日常任务
+    async manageDaily(row) {
+      if (row) {
+        const res = await taskGet(row.businessKey)
+
+        this.info = res
+      } else {
+        this.info = null
+      }
+      this.orgId = this.user.orgId
+      this.visibleDaily = true
     },
     //下发任务
     startTask(row) {

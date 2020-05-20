@@ -1,14 +1,14 @@
 <template>
   <div class="jc-main-container-warp">
     <div v-show="!detailShow">
-      <tab-filter :orgTree="orgTree" @filter="goFilter"></tab-filter>
+      <tab-filter :types="types" :orgTree="orgTree" @filter="goFilter"></tab-filter>
       <el-card class="jc-table-card jc-mt">
         <div slot="header" class="jc-card-header">
           <div class="jc-card-title">列表内容</div>
         </div>
         <el-table :data="list" v-loading="loading" row-key="id" class="jc-table">
           <el-table-column type="index" label="序号" width="50"></el-table-column>
-          <el-table-column prop="problemType" label="问题类型"></el-table-column>
+          <el-table-column prop="problemType" label="问题类型" :formatter="formatType"></el-table-column>
           <el-table-column prop="userName" label="反馈人"></el-table-column>
           <el-table-column prop="orgName" label="所属组织"></el-table-column>
           <el-table-column prop="problemTitle" label="标题"></el-table-column>
@@ -30,13 +30,12 @@
           <el-button size="small" icon="el-icon-arrow-left" @click="detailShow=false">返回</el-button>
         </div>
       </div>
-      <jc-detail :info="info" :firstOrgIds="firstOrgIds" :detailShow.sync="detailShow" @save-success="initData"></jc-detail>
+      <jc-detail :types="types" :info="info" :firstOrgIds="firstOrgIds" :detailShow.sync="detailShow" @save-success="initData"></jc-detail>
     </el-card>
   </div>
 </template>
 <script>
-import { questionList, questionGet } from '@/api/question'
-import { QUESTION_TYPES } from '@/constant/Dictionaries'
+import { questionList, questionGet, questionTypeList } from '@/api/question'
 import { formatDate } from '@/libs/util'
 import PaginationMixins from '@/mixins/PaginationMixins'
 import { organizationList } from '@/api/organization'
@@ -50,27 +49,30 @@ export default {
   },
   data() {
     return {
+      types: [],
       orgTree: [],
       list: [],
       loading: false,
       visible: false,
       info: null,
-      QUESTION_TYPES,
-      filter: {
-        selectType: QUESTION_TYPES.PENDING
-      },
+      filter: {},
       firstOrgIds: [],
       detailShow: false
     }
   },
   async created() {
     await this.getOrgTree()
-
+    this.types = await questionTypeList() || []
     this.initData()
   },
   methods: {
     formatTime(row, column, cellValue) {
       return formatDate(cellValue)
+    },
+    formatType(row, column, cellValue) {
+      const type = this.types.filter(item=>item.id == cellValue)
+
+      return (type[0] && type[0].typeName) || ''
     },
     formatOrgTree(child) {
       let trees = []

@@ -9,7 +9,7 @@
     <el-form ref="form" :inline="true" :model="form" class="jc-tabfilter-form" size="small">
       <el-form-item prop="problemType" label="问题类型">
         <el-select v-model="form.problemType" placeholder="选择问题类型">
-          <el-option v-for="(value,key) in eventTypes" :key="key" :label="value" :value="key"></el-option>
+          <el-option v-for="item in types" :key="item.id" :label="item.typeName" :value="item.id"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item prop="" label="时间">
@@ -30,9 +30,14 @@
 import { QUESTION_TYPES } from '@/constant/Dictionaries'
 export default {
   name: 'TaskQuestionProcessFilter',
+  props: {
+    types: {
+      type: Array,
+      default: ()=>[]
+    }
+  },
   data() {
     return {
-      eventTypes: [],
       selectTypes: QUESTION_TYPES.VALUES,
       status: QUESTION_TYPES.PENDING,
       form: {
