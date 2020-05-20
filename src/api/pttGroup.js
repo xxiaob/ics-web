@@ -40,9 +40,9 @@ export function pttGroupSave(data) {
 }
 /**
  * 删除
- * @param {Array} ids
+ * @param {Array} groupId
  * @returns {Object} axios 对象
  */
-export function pttGroupDel(ids) {
-  return axios.post(API.pttGroup.del, { ids })
+export function pttGroupDel(groupId) {
+  return axios.post(API.pttGroup.del, { groupId })
 }

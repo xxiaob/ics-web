@@ -6,14 +6,14 @@
         <div class="jc-card-title">列表内容</div>
         <div class="jc-button-group">
           <el-button type="primary" icon="el-icon-plus" size="small" @click="manage(null)">添加</el-button>
-          <el-button type="danger" icon="el-icon-delete" size="small" @click="removeAll">删除</el-button>
+          <!-- <el-button type="danger" icon="el-icon-delete" size="small" @click="removeAll">删除</el-button> -->
         </div>
       </div>
       <el-table :data="list" v-loading="loading" row-key="id" class="jc-table" @selection-change="tableSelect">
-        <el-table-column type="selection" width="40"></el-table-column>
+        <!-- <el-table-column type="selection" width="40"></el-table-column> -->
         <el-table-column type="index" label="序号" width="50"></el-table-column>
         <el-table-column prop="groupName" label="群组名称"></el-table-column>
-        <el-table-column prop="userIds" label="群组用户"></el-table-column>
+        <el-table-column prop="userIds" label="群组用户" :formatter="formatUser"></el-table-column>
         <el-table-column prop="createTime" label="创建时间" :formatter="formatTime"></el-table-column>
         <el-table-column width="100" label="操作">
           <template slot-scope="scope">
@@ -57,6 +57,11 @@ export default {
     formatTime(row, column, cellValue) {
       return formatDate(cellValue)
     },
+    formatUser(row, column, cellValue) {
+      const users = cellValue.map(item=>item.userName)
+
+      return users.join('、')
+    },
     async initData() {
       if (!this.loading) {
         this.loading = true
@@ -74,7 +79,7 @@ export default {
                 groupId,
                 groupName,
                 userIds,
-                createTime: createTime || ''
+                createTime
               })
             })
           }
@@ -102,7 +107,7 @@ export default {
     },
     del(row) {
       this.$confirm('确认删除该群组', '提示', { type: 'warning' }).then(() => {
-        this.remove([row.id])
+        this.remove(row.groupId)
       }).catch(() => {})
     },
     removeAll() {

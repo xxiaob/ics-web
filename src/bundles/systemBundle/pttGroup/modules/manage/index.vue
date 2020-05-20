@@ -1,12 +1,12 @@
 <template>
   <el-dialog :title="options ? '编辑群组' : '新增群组'" :visible.sync="dialogVisible" width="600px" :append-to-body="true" @close="dialogClose">
     <el-form ref="form" label-width="80px" :model="form" class="jc-manage-form">
-      <el-form-item label="群组名称" prop="pkgName" :rules="rules.Len20">
-        <el-input v-model="form.pkgName" placeholder="请输入群组名称"></el-input>
+      <el-form-item label="群组名称" prop="groupName" :rules="rules.Len20">
+        <el-input v-model="form.groupName" placeholder="请输入群组名称"></el-input>
       </el-form-item>
-      <el-form-item label="群组用户" prop="userIds" :rules="rules.SELECT_NOT_NULL">
-        <el-cascader :options="orgTree" v-model="form.orgId" :props="{expandTrigger: 'hover', emitPath: false, multiple: true ,checkStrictly: true}" clearable placeholder="请选择组织" :show-all-levels="false" @change="changeOrg" class="jc-left-width50"></el-cascader>
-        <el-select v-model="form.userIds" multiple placeholder="请选择用户" clearable class="jc-left-width50">
+      <el-form-item label="群组用户" prop="addUserIds" :rules="rules.SELECT_NOT_NULL">
+        <el-cascader :options="orgTree" v-model="orgIds" :props="{expandTrigger: 'hover', emitPath: false, multiple: true ,checkStrictly: true}" clearable placeholder="请选择组织" :show-all-levels="false" @change="changeOrg" class="jc-left-width50"></el-cascader>
+        <el-select v-model="form.addUserIds" multiple placeholder="请选择用户" clearable class="jc-left-width50">
           <el-option v-for="item in users" :key="item.id" :label="item.name" :value="item.id">
           </el-option>
         </el-select>
@@ -25,7 +25,7 @@ import { userListByOrg } from '@/api/user'
 import { getStringRule, NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
 
-let defaultForm = { groupName: '', orgId: '', userIds: [] }
+let defaultForm = { groupName: '', addUserIds: [] }
 
 export default {
   name: 'SystemPttGroupManage',
@@ -39,6 +39,7 @@ export default {
         NOT_NULL
       },
       orgTree: [],
+      orgIds: [],
       users: []
     }
   },
@@ -76,9 +77,9 @@ export default {
       if (orgIds.length) {
         this.getUser(orgIds)
       } else {
-        this.users = []
+        this.addUserIds = []
       }
-      this.form.userIds = []
+      this.form.addUserIds = []
     },
     async getUser(orgIds) {
       try {
@@ -100,15 +101,24 @@ export default {
     },
     formatFormData() {
       if (this.options) {
-        const { groupId, groupName, userIds, orgId } = this.options
+        const { groupId, groupName, userIds } = this.options
+        const addUserIds = [], orgIds = []
 
+        userIds.forEach(item=>{
+          addUserIds.push(item.userId)
+          if (!orgIds.includes(item.orgId)) {
+            orgIds.push(item.orgId)
+          }
+        })
+        this.orgIds = orgIds
+        this.getUser(orgIds)
         return {
           groupId,
           groupName,
-          userIds,
-          orgId
+          addUserIds
         }
       } else {
+        this.orgIds = []
         return { ...defaultForm }
       }
     },
