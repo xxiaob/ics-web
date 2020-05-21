@@ -92,7 +92,8 @@ export default {
     selectList: 'task-service/event/selectList',
     update: 'task-service/event/upd',
     del: 'task-service/event/del',
-    typeList: 'task-service/event/typeList'
+    typeList: 'task-service/event/typeList',
+    listByTask: 'task-service/eventBind/getEvents'
   },
   task: {
     //任务管理

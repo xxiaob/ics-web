@@ -70,3 +70,11 @@ export function eventManageTypeList(name) {
 export function eventManageSelectList(title) {
   return axios.post(API.eventManage.selectList + '?title=' + title)
 }
+/**
+ * 事件列表查询 根据taskId
+ * @param {String} taskId
+ * @returns {Object} axios 对象
+ */
+export function eventManageListByTask(taskId) {
+  return axios.post(API.eventManage.listByTask + '?taskId=' + taskId)
+}

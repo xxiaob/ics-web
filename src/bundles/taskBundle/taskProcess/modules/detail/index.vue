@@ -58,6 +58,12 @@
         </el-form-item>
       </el-form>
     </el-card>
+    <el-card class="jc-table-card jc-mt" v-if="TASK_STATES.FINISHED==form.taskStatus">
+      <div slot="header">
+        <div class="jc-title">关联事件</div>
+      </div>
+      <jc-event-list :taskId="form.businessKey"></jc-event-list>
+    </el-card>
     <div class="jc-detail-footer">
       <el-button @click="handleTask(true)" size="small" v-if="form.handle">流转任务</el-button>
       <el-button @click="handleTask(false)" size="small" v-if="form.handle">结束任务</el-button>
@@ -95,7 +101,7 @@ import { eventManageSelectList } from '@/api/eventManage'
 import { userListByOrg } from '@/api/user'
 import { NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
 import { formatDate } from '@/libs/util'
-import { TASK_SOURCES } from '@/constant/Dictionaries'
+import { TASK_SOURCES, TASK_STATES } from '@/constant/Dictionaries'
 
 export default {
   name: 'TaskProcessDetail',
@@ -114,8 +120,12 @@ export default {
       type: Object
     }
   },
+  components: {
+    JcEventList: () => import('./eventList')
+  },
   data() {
     return {
+      TASK_STATES,
       loading: false,
       dialogVisibleHandle: false,
       events: [],
