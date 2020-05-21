@@ -5,16 +5,16 @@
       <el-row>
         <el-col :span="6">
           <div class="jc-project-item">
-            <div class="jc-item-add">添加</div>
+            <div class="jc-item-add" @click="manage(null)">添加</div>
           </div>
         </el-col>
         <el-col :span="6" v-for="item in list" :key="item.projectId">
-          <list-item :item="item"></list-item>
+          <list-item :item="item" @manage="manage(item)"></list-item>
         </el-col>
       </el-row>
       <el-pagination @current-change="currentChange" @size-change="sizeChange" :current-page.sync="page.pageNum" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.total" class="text-right jc-mt"></el-pagination>
     </el-card>
-    <jc-manage :options="info" :visible.sync="visible" @save-success="initData"></jc-manage>
+    <jc-manage :options="info" :projectType="projectType" :visible.sync="visible" @save-success="initData"></jc-manage>
   </div>
 </template>
 <script>
