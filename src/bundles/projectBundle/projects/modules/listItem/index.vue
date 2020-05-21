@@ -2,7 +2,7 @@
   <div class="jc-project-item" :class="getItemClass(item.projectType)">
     <div class="jc-title-warp">
       <div class="jc-title" v-text="item.projectName"></div>
-      <i class="jc-setting el-icon-setting"></i>
+      <i class="jc-setting el-icon-setting" @click="$emit('manage')"></i>
     </div>
     <div class="jc-project-screen">
       <div class="jc-screen jc-screen-command">指挥大屏</div>

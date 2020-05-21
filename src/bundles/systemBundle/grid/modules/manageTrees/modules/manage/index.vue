@@ -13,7 +13,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="描述" prop="desc" :rules="rules.NOT_NULL">
-        <jc-editor v-model="form.desc" ref="myEditor"></jc-editor>
+        <jc-editor v-model="form.desc"></jc-editor>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">

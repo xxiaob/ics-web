@@ -1,10 +1,18 @@
 <template>
-  <el-dialog :title="options ? '编辑区域类型':'新增区域类型'" :visible.sync="dialogVisible" width="600px" :append-to-body="true" @close="dialogClose">
+  <el-dialog :title="options ? '编辑项目':'新增项目'" :visible.sync="dialogVisible" width="600px" :append-to-body="true" @close="dialogClose">
     <el-form ref="form" label-width="120px" :model="form" class="jc-manage-form">
-      <el-form-item label="区域类型名称" prop="projectName" :rules="rules.Len50">
-        <el-input v-model="form.areaTypeName" placeholder="请输入项目名称"></el-input>
+      <el-form-item label="项目名称" prop="projectName" :rules="rules.Len50">
+        <el-input v-model="form.projectName" placeholder="请输入项目名称"></el-input>
       </el-form-item>
-
+      <el-form-item label="项目类型">
+        <span v-text="projectTypeStr"></span>
+      </el-form-item>
+      <el-form-item label="项目时间" prop="date" :rules="rules.NOT_NULL">
+        <el-date-picker v-model="form.date" value-format="timestamp" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
+      </el-form-item>
+      <el-form-item label="描述" prop="description" :rules="rules.NOT_NULL">
+        <jc-editor v-model="form.description"></jc-editor>
+      </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="dialogVisible = false">取 消</el-button>
@@ -15,34 +23,34 @@
 <script>
 import { PROJECT_TYPES } from '@/constant/Dictionaries'
 import { projectsSave } from '@/api/projects'
-import { getStringRule, SELECT_NOT_NULL } from '@/libs/rules'
+import { getStringRule, NOT_NULL } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
 
-let defaultForm = { projectName: '', projectType: '' }
+let defaultForm = { projectName: '', date: '', description: '' }
 
 export default {
   name: 'ProjectProjectsManage',
   mixins: [FormMixins],
+  components: {
+    JcEditor: () => import('@/components/JcForm/JcEditor')
+  },
+  props: ['projectType'],
   data() {
     return {
       loading: false,
       areaType: [],
       rules: {
         Len50: getStringRule(1, 50),
-        SELECT_NOT_NULL
+        NOT_NULL
       }
     }
   },
+  computed: {
+    projectTypeStr() {
+      return PROJECT_TYPES.toString(this.projectType)
+    }
+  },
   methods: {
-    iconsClick(icon) {
-      this.form.icon = icon
-      this.showIcons = false
-    },
-    getIconStyle(icon) {
-      let useIcon = JcIcons[icon] || {}
-
-      return `background-image: url(${useIcon.icon || ''});`
-    },
     formatFormData() {
       if (this.options) {
         return {
