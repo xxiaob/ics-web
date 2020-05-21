@@ -203,7 +203,7 @@ input::-webkit-input-placeholder {
     }
 
     .el-form-item__content {
-      &>el-range-editor {
+      &>.el-range-editor {
         width: 280px;
       }
 

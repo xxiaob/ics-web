@@ -9,7 +9,7 @@
           </div>
         </el-col>
         <el-col :span="6" v-for="item in list" :key="item.projectId">
-          <list-item :item="item" @manage="manage(item)"></list-item>
+          <list-item :item="item" @manage="manage(item)" @opera-change="operaChange"></list-item>
         </el-col>
       </el-row>
       <el-pagination @current-change="currentChange" @size-change="sizeChange" :current-page.sync="page.pageNum" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.total" class="text-right jc-mt"></el-pagination>
@@ -49,38 +49,39 @@ export default {
   },
   methods: {
     async initData() {
-      if (!this.loading) {
-        this.loading = true
-        try {
-          const { total, resultList } = await projectsListByPage({ projectType: this.projectType, ...this.filter })
-
-          this.page.total = total
-          let list = []
-
-          if (resultList && resultList.length) {
-            resultList.forEach(item => {
-              list.push({ projectId: item.projectId, projectName: item.projectName, projectType: item.projectType, beginTime: item.beginTime, endTime: item.endTime, orgId: item.orgId, orgName: item.orgName })
-            })
-          }
-          this.list = list
-        } catch (error) {
-          console.log(error)
-        }
-        this.loading = false
+      if (this.loading) {
+        return false
       }
+      this.loading = true
+      try {
+        const { total, resultList } = await projectsListByPage({ projectType: this.projectType, ...this.filter })
+
+        this.page.total = total
+        let list = []
+
+        if (resultList && resultList.length) {
+          resultList.forEach(item => {
+            list.push({ projectId: item.projectId, projectName: item.projectName, projectType: item.projectType, beginTime: item.beginTime, endTime: item.endTime, orgId: item.orgId, orgName: item.orgName, description: item.description })
+          })
+        }
+        this.list = list
+      } catch (error) {
+        console.log(error)
+      }
+      this.loading = false
     },
     goFilter(filter) {
       this.filter = { ...filter }
       this.currentChange(1)
     },
-    manage(row) {
-      if (row) {
-        this.info = row
-        this.visible = true
-      } else {
-        this.info = null
-        this.visible = true
+    operaChange(data) {
+      if (data.opera == 'delete-success') {
+        this.currentChange(this.page.pageNum - 1)
       }
+    },
+    manage(row) {
+      this.info = row ? row : null
+      this.visible = true
     }
   }
 }
