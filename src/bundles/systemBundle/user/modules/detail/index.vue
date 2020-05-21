@@ -74,10 +74,12 @@ export default {
     }
   },
   methods: {
-    initData() {
-      userGet({ userId: this.userId }).then(res => {
-        this.user = res
-      })
+    async initData() {
+      try {
+        this.user = await userGet({ userId: this.userId })
+      } catch (error) {
+        console.log(error)
+      }
     },
     formatFormData() {
       return {}

@@ -1,7 +1,7 @@
 <template>
   <div class="jc-main-container-warp">
     <tab-filter @filter="goFilter"></tab-filter>
-    <el-card class="jc-mt">
+    <el-card class="jc-mt" v-loading="loading">
       <el-row>
         <el-col :span="6">
           <div class="jc-project-item">
@@ -48,24 +48,25 @@ export default {
     this.initData()
   },
   methods: {
-    initData() {
+    async initData() {
       if (!this.loading) {
         this.loading = true
-        projectsListByPage({ projectType: this.projectType, ...this.filter }).then(res => {
-          console.log('项目管理', res)
-          this.page.total = res.total
+        try {
+          const { total, resultList } = await projectsListByPage({ projectType: this.projectType, ...this.filter })
+
+          this.page.total = total
           let list = []
 
-          if (res.resultList && res.resultList.length) {
-            res.resultList.forEach(item => {
-              list.push({ projectId: item.projectId, projectName: item.projectName, projectType: item.projectType, beginTime: item.beginTime, endTime: item.endTime })
+          if (resultList && resultList.length) {
+            resultList.forEach(item => {
+              list.push({ projectId: item.projectId, projectName: item.projectName, projectType: item.projectType, beginTime: item.beginTime, endTime: item.endTime, orgId: item.orgId, orgName: item.orgName })
             })
           }
           this.list = list
-          this.loading = false
-        }).catch(() => {
-          this.loading = false
-        })
+        } catch (error) {
+          console.log(error)
+        }
+        this.loading = false
       }
     },
     goFilter(filter) {
