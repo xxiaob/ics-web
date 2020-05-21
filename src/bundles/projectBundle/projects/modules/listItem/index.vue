@@ -10,14 +10,14 @@
     </div>
     <div class="jc-project-footer">
       <div class="jc-project-info" :class="projectSC">
-        <div class="jc-info-item"><i class="iconfont iconmingchengguanliqi"></i>{{item.title}}</div>
+        <div class="jc-info-item"><i class="iconfont iconmingchengguanliqi"></i>{{item.orgName}}</div>
         <div class="jc-info-item"><i class="iconfont iconshijian1"></i>{{projectTime}}</div>
       </div>
       <div class="jc-project-opera">
         <div class="jc-opera-item first"><i class="iconfont icontoufangziyuanshezhi"></i>资源设置</div>
         <div class="jc-opera-item second"><i class="iconfont iconwanggeshezhi"></i>网格设置</div>
         <div class="jc-opera-item three"><i class="iconfont icontongjifenxi"></i>统计分析</div>
-        <div class="jc-opera-item four"><i class="iconfont iconlujing"></i>删除项目</div>
+        <div class="jc-opera-item four"><i class="iconfont iconlujing" @click="del"></i>删除项目</div>
       </div>
     </div>
   </div>
@@ -56,9 +56,9 @@ export default {
 
       return types.get(projectType + '') || ''
     },
-    del(row) {
+    del() {
       this.$confirm('确认删除该项目', '提示', { type: 'warning' }).then(() => {
-        projectsDel(row.projectId).then(() => {
+        projectsDel(this.item.projectId).then(() => {
           this.$message.success('删除成功')
           this.currentChange(this.page.pageNum - 1)
         })

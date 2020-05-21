@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="options ? '编辑项目':'新增项目'" :visible.sync="dialogVisible" width="600px" :append-to-body="true" @close="dialogClose">
+  <el-dialog :title="options ? '编辑项目':'新增项目'" :visible.sync="dialogVisible" width="800px" :append-to-body="true" @close="dialogClose">
     <el-form ref="form" label-width="120px" :model="form" class="jc-manage-form">
       <el-form-item label="项目名称" prop="projectName" :rules="rules.Len50">
         <el-input v-model="form.projectName" placeholder="请输入项目名称"></el-input>
@@ -7,8 +7,8 @@
       <el-form-item label="项目类型">
         <span v-text="projectTypeStr"></span>
       </el-form-item>
-      <el-form-item label="项目时间" prop="date" :rules="rules.NOT_NULL">
-        <el-date-picker v-model="form.date" value-format="timestamp" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
+      <el-form-item label="项目周期" prop="date" :rules="rules.NOT_NULL">
+        <el-date-picker v-model="form.date" value-format="yyyy-MM-dd HH:mm:ss" type="datetimerange" :default-time="['00:00:00','23:59:59']" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
       </el-form-item>
       <el-form-item label="描述" prop="description" :rules="rules.NOT_NULL">
         <jc-editor v-model="form.description"></jc-editor>
@@ -66,7 +66,7 @@ export default {
       this.loading = true
       this.$refs.form.validate(valid => {
         if (valid) {
-          projectsSave(this.form).then(() => {
+          projectsSave({ ...this.form, projectType: this.projectType, beginTime: this.form.date[0], endTime: this.form.date[1] }).then(() => {
             this.$message.success('操作成功')
             this.dialogVisible = false
             this.$emit('save-success')
