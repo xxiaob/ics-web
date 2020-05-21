@@ -1,14 +1,14 @@
 <template>
   <el-dialog :title="options ? '编辑临时任务' : '新增临时任务'" :visible.sync="dialogVisible" width="900px" :append-to-body="true" @close="dialogClose">
     <el-form ref="form" label-width="80px" :model="form" class="jc-manage-form">
-      <div class="jc-clearboth">
+      <el-form-item label="项目名称" prop="projectId" :rules="rules.SELECT_NOT_NULL">
+        <el-cascader v-model="form.projectId" :options="projectList" :props="{expandTrigger:'hover',emitPath:false}"></el-cascader>
+      </el-form-item>
+      <!-- <div class="jc-clearboth">
         <el-form-item label="项目类型" prop="projectType" :rules="rules.NOT_NULL" class="jc-left-width40">
           <el-input v-model="form.projectType" placeholder="请输入项目类型"></el-input>
         </el-form-item>
-        <el-form-item label="项目名称" prop="projectId" :rules="rules.NOT_NULL" class="jc-left-width60">
-          <el-input v-model="form.projectId" placeholder="请输入项目名称"></el-input>
-        </el-form-item>
-      </div>
+      </div> -->
       <div class="jc-clearboth">
         <el-form-item label="任务名称" prop="taskName" :rules="rules.Len50" class="jc-left-width40">
           <el-input v-model="form.taskName" placeholder="请输入任务名称"></el-input>
@@ -60,7 +60,7 @@ const defaultForm = {
   businessKey: '',
   taskId: '',
   projectId: '',
-  projectType: '',
+  // projectType: '',
   taskName: '',
   taskSource: '',
   beginTime: '',
@@ -79,6 +79,9 @@ export default {
   props: {
     question: {},
     orgTree: {
+      type: Array
+    },
+    projectList: {
       type: Array
     },
     orgId: {
@@ -164,7 +167,7 @@ export default {
           businessKey,
           taskId,
           projectId,
-          projectType: projectId,
+          // projectType: projectId,
           taskName,
           taskSource,
           beginTime: startDate,

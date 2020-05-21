@@ -13,11 +13,11 @@
           <el-form-item label="创建时间" class="jc-left-width25">
             <span>{{form.createTime|filterTime}}</span>
           </el-form-item>
-          <el-form-item label="项目类型" class="jc-left-width25">
+          <!-- <el-form-item label="项目类型" class="jc-left-width25">
             <span>{{form.projectType}}</span>
-          </el-form-item>
-          <el-form-item label="项目名称" class="jc-left-width25">
-            <span>{{form.projectName}}</span>
+          </el-form-item> -->
+          <el-form-item label="项目名称" class="jc-left-width50">
+            <span>{{formatProject}}</span>
           </el-form-item>
         </div>
         <div class="jc-clearboth">
@@ -101,6 +101,9 @@ export default {
       type: Object,
       default: ()=>{}
     },
+    projectListArr: {
+      type: Array
+    },
     orgTree: {
       type: Array
     },
@@ -150,6 +153,11 @@ export default {
       } else {
         return ''
       }
+    },
+    formatProject() {
+      const project = this.projectListArr.filter(item=>item.value == this.form.projectId)
+
+      return (project[0] && project[0].label) || ''
     }
   },
   filters: {

@@ -86,38 +86,38 @@ export default {
   },
   eventManage: {
     //事件管理
-    add: 'activiti-service/event/add',
-    get: 'activiti-service/event/getById',
-    list: 'activiti-service/event/list',
-    selectList: 'activiti-service/event/selectList',
-    update: 'activiti-service/event/upd',
-    del: 'activiti-service/event/del',
-    typeList: 'activiti-service/event/typeList'
+    add: 'task-service/event/add',
+    get: 'task-service/event/getById',
+    list: 'task-service/event/list',
+    selectList: 'task-service/event/selectList',
+    update: 'task-service/event/upd',
+    del: 'task-service/event/del',
+    typeList: 'task-service/event/typeList'
   },
   task: {
     //任务管理
-    add: 'activiti-service/task/addTask',
-    list: 'activiti-service/task/select',
-    update: 'activiti-service/task/updTask',
-    del: 'activiti-service/task/delTask',
-    start: 'activiti-service/task/start',
-    updTaskStatus: 'activiti-service/task/updTaskStatus',
-    finish: 'activiti-service/task/finish',
-    get: 'activiti-service/task/getTemporaryTask',
-    getDaily: 'activiti-service/task/getDailyTask',
-    addRemark: 'activiti-service/task/addTaskRemark',
-    listRemark: 'activiti-service/task/remarkSelect'
+    add: 'task-service/task/addTask',
+    list: 'task-service/task/select',
+    update: 'task-service/task/updTask',
+    del: 'task-service/task/delTask',
+    start: 'task-service/task/start',
+    updTaskStatus: 'task-service/task/updTaskStatus',
+    finish: 'task-service/task/finish',
+    get: 'task-service/task/getTemporaryTask',
+    getDaily: 'task-service/task/getDailyTask',
+    addRemark: 'task-service/task/addTaskRemark',
+    listRemark: 'task-service/task/remarkSelect'
   },
   question: {
     //问题管理
-    add: 'activiti-service/problem/add',
-    list: 'activiti-service/problem/select',
-    update: 'activiti-service/problem/upd',
-    del: 'activiti-service/problem/del',
-    start: 'activiti-service/problem/start',
-    report: 'activiti-service/problem/report',
-    get: 'activiti-service/problem/getProblemTask',
-    typeList: 'activiti-service/problem/getProblemTypes'
+    add: 'task-service/problem/add',
+    list: 'task-service/problem/select',
+    update: 'task-service/problem/upd',
+    del: 'task-service/problem/del',
+    start: 'task-service/problem/start',
+    report: 'task-service/problem/report',
+    get: 'task-service/problem/getProblemTask',
+    typeList: 'task-service/problem/getProblemTypes'
   },
   pttGroup: {
     //PTT群组

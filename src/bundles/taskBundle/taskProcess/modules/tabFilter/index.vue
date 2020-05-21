@@ -6,10 +6,8 @@
       </el-radio-group>
     </div>
     <el-form ref="form" :inline="true" :model="form" class="jc-tabfilter-form" size="small">
-      <el-form-item prop="eventType" label="项目名称">
-        <el-select v-model="form.eventType" placeholder="选择项目名称">
-          <el-option v-for="(value,key) in eventTypes" :key="key" :label="value" :value="key"></el-option>
-        </el-select>
+      <el-form-item prop="projectId" label="项目名称">
+        <el-cascader v-model="form.projectId" :options="projectList" :props="{expandTrigger:'hover',emitPath:false}"></el-cascader>
       </el-form-item>
       <el-form-item prop="" label="时间">
         <el-date-picker v-model="date" @change="changeDate" value-format="timestamp" type="datetimerange" range-separator="至" start-placeholder="开始时间" end-placeholder="结束时间">
@@ -29,16 +27,21 @@
 import { TASK_SELECT_TYPES } from '@/constant/Dictionaries'
 
 export default {
-  name: 'SystemTaskProcessFilter',
+  name: 'TaskProcessFilter',
+  props: {
+    projectList: {
+      type: Array,
+      default: ()=>[]
+    }
+  },
   data() {
     return {
-      eventTypes: [],
       selectTypes: TASK_SELECT_TYPES.VALUES,
       status: TASK_SELECT_TYPES.PENDING,
       form: {
         selectType: TASK_SELECT_TYPES.PENDING,
         projectId: '',
-        projectType: '',
+        // projectType: '',
         startDate: '',
         endDate: '',
         desc: ''

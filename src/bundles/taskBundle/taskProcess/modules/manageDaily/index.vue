@@ -1,11 +1,11 @@
 <template>
   <el-dialog :title="options ? '编辑日常任务' : '新增日常任务'" :visible.sync="dialogVisible" width="600px" :append-to-body="true" @close="dialogClose">
     <el-form ref="form" label-width="80px" :model="form" class="jc-manage-form">
-      <el-form-item label="项目类型" prop="projectType" :rules="rules.NOT_NULL">
+      <!-- <el-form-item label="项目类型" prop="projectType" :rules="rules.NOT_NULL">
         <el-input v-model="form.projectType" placeholder="请输入项目类型"></el-input>
-      </el-form-item>
-      <el-form-item label="项目名称" prop="projectId" :rules="rules.NOT_NULL">
-        <el-input v-model="form.projectId" placeholder="请输入项目名称"></el-input>
+      </el-form-item> -->
+      <el-form-item label="项目名称" prop="projectId" :rules="rules.SELECT_NOT_NULL">
+        <el-cascader v-model="form.projectId" :options="projectList" :props="{expandTrigger:'hover',emitPath:false}"></el-cascader>
       </el-form-item>
       <el-form-item label="任务名称" prop="taskName" :rules="rules.Len50">
         <el-input v-model="form.taskName" placeholder="请输入任务名称"></el-input>
@@ -58,7 +58,7 @@ import { TASK_TYPES } from '@/constant/Dictionaries'
 const defaultForm = {
   businessKey: '',
   projectId: '',
-  projectType: '',
+  // projectType: '',
   taskName: '',
   beginTime: '',
   endTime: '',
@@ -75,6 +75,9 @@ export default {
   name: 'TaskProcessManageDaily',
   mixins: [FormMixins],
   props: {
+    projectList: {
+      type: Array
+    },
     orgTree: {
       type: Array
     },
@@ -148,7 +151,7 @@ export default {
         const { orgIds, assignees, detailViewVO: { businessKey, projectId, taskDesc, taskName, endDate, startDate }, taskTimePOS, workPeopleNbr, workTime } = this.options
 
 
-        const form = { businessKey, projectId, projectType: projectId, taskName, beginTime: startDate, endTime: endDate, taskDesc, date: [startDate, endDate], taskTimePOS, workPeopleNbr, workTime }
+        const form = { businessKey, projectId, taskName, beginTime: startDate, endTime: endDate, taskDesc, date: [startDate, endDate], taskTimePOS, workPeopleNbr, workTime }
 
         const times = []
 
