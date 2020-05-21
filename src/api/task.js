@@ -94,3 +94,11 @@ export function taskFinish(data) {
 export function taskAddRemark(data) {
   return axios.post(API.task.addRemark, data)
 }
+/**
+ * 日常任务 备注列表
+ * @param {object} data
+ * @returns {Object} axios 对象
+ */
+export function taskListRemark(data) {
+  return axios.post(API.task.listRemark, data)
+}

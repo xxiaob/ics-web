@@ -11,7 +11,7 @@
           <el-table-column type="index" label="序号" width="50"></el-table-column>
           <el-table-column prop="projectType" label="项目类型"></el-table-column>
           <el-table-column prop="projectName" label="项目名称"></el-table-column>
-          <el-table-column prop="taskType" label="任务类型"></el-table-column>
+          <el-table-column prop="taskTypeName" label="任务类型"></el-table-column>
           <el-table-column prop="startUser" label="下发人"></el-table-column>
           <el-table-column prop="startOrg" label="下发组织"></el-table-column>
           <el-table-column prop="taskName" label="任务名称" show-overflow-tooltip></el-table-column>

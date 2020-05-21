@@ -56,9 +56,15 @@
         </el-form-item>
       </el-form>
     </el-card>
-    <div class="jc-detail-footer" v-if="form.handle">
-      <el-button @click="handleTask(true)" size="small">流转任务</el-button>
-      <el-button @click="handleTask(false)" size="small">添加备注</el-button>
+    <el-card class="jc-table-card jc-mt">
+      <div slot="header">
+        <div class="jc-title">任务备注</div>
+      </div>
+      <jc-remark-list :taskId="form.businessKey" ref="remark"></jc-remark-list>
+    </el-card>
+    <div class="jc-detail-footer">
+      <el-button @click="handleTask(true)" size="small" v-if="form.handle">流转任务</el-button>
+      <el-button @click="handleTask(false)" size="small" v-if="form.handle">添加备注</el-button>
       <el-button size="small" type="primary" @click="$emit('update:dailyDetailShow', false)">返回</el-button>
     </div>
     <el-dialog :title="taskForm.ifUpload?'流转任务':'添加备注'" :visible.sync="dialogVisibleHandle" width="600px" append-to-body>
@@ -86,6 +92,7 @@ import { taskFinish, taskAddRemark } from '@/api/task'
 import { userListByOrg } from '@/api/user'
 import { NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
 import { formatDate } from '@/libs/util'
+import moment from 'moment'
 
 export default {
   name: 'TaskProcessDetailDaily',
@@ -100,6 +107,9 @@ export default {
     orgObj: {
       type: Object
     }
+  },
+  components: {
+    JcRemarkList: () => import('./remarkList')
   },
   data() {
     return {
@@ -208,10 +218,11 @@ export default {
     async remark() {
       const { businessKey } = this.form
       const { remark } = this.taskForm
+      const nowDate = moment().format('YYYY-MM-DD')
       const form = {
-        markTime: new Date().getTime(),
+        markTime: new Date(nowDate).getTime(),
         taskId: businessKey,
-        remark
+        text: remark
       }
 
       try {
@@ -219,6 +230,7 @@ export default {
         this.$message.success('操作成功')
         this.dialogVisibleHandle = false
         this.loading = false
+        this.$refs.remark.initData()
         // this.$emit('save-success')
         // this.$emit('update:dailyDetailShow', false)
       } catch (e) {
@@ -284,5 +296,8 @@ export default {
   content: "";
   display: table;
   clear: both;
+}
+.el-form .el-form-item {
+  margin-bottom: 10px;
 }
 </style>

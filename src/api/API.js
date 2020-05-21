@@ -105,7 +105,8 @@ export default {
     finish: 'activiti-service/task/finish',
     get: 'activiti-service/task/getTemporaryTask',
     getDaily: 'activiti-service/task/getDailyTask',
-    addRemark: 'activiti-service/task/addTaskRemark'
+    addRemark: 'activiti-service/task/addTaskRemark',
+    listRemark: 'activiti-service/task/remarkSelect'
   },
   question: {
     //问题管理
