@@ -1,7 +1,7 @@
 <template>
   <div class="jc-main-container-warp">
 
-    <div v-show="!detailShow">
+    <div v-show="!detailShow&&!dailyDetailShow">
       <tab-filter @filter="goFilter"></tab-filter>
       <el-card class="jc-table-card jc-mt">
         <div slot="header" class="jc-card-header">
@@ -41,6 +41,8 @@
 
     <jc-manage-daily :orgTree="orgTree" :orgId="orgId" :options="dailyInfo" :visible.sync="visibleDaily" @save-success="initData"></jc-manage-daily>
 
+    <jc-detail-daily :orgTree="orgTree" :orgObj="orgObj" :info="dailyInfo" :dailyDetailShow.sync="dailyDetailShow" v-show="dailyDetailShow" @save-success="initData"></jc-detail-daily>
+
   </div>
 </template>
 <script>
@@ -60,6 +62,7 @@ export default {
     TabFilter: () => import('./modules/tabFilter'),
     JcManage: () => import('./modules/manage'),
     JcDetail: () => import('./modules/detail'),
+    JcDetailDaily: () => import('./modules/detailDaily'),
     JcManageDaily: () => import('./modules/manageDaily')
   },
   data() {

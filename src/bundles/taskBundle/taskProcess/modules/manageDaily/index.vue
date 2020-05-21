@@ -14,12 +14,12 @@
         <el-input v-model="form.taskPositionName" placeholder="请输入任务区域"></el-input>
       </el-form-item> -->
       <el-form-item label="任务周期" prop="date" :rules="rules.SELECT_NOT_NULL">
-        <el-date-picker style="width:100%" v-model="form.date" @change="changeDate" value-format="timestamp" type="daterange" range-separator="-" start-placeholder="开始时间" end-placeholder="结束时间">
+        <el-date-picker v-model="form.date" @change="changeDate" value-format="timestamp" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期">
         </el-date-picker>
       </el-form-item>
       <!-- <el-form-item label="任务要求"></el-form-item> -->
       <el-form-item label="在岗时间" prop="taskTimePOS" :rules="rules.SELECT_NOT_NULL">
-        <el-date-picker v-for="(item,index) in taskTimes" v-model="taskTimes[index]" :key="index" value-format="timestamp" type="datetimerange" range-separator="至" start-placeholder="开始时间" end-placeholder="结束时间">
+        <el-date-picker style="width: 400px;" v-for="(item,index) in taskTimes" v-model="taskTimes[index]" :key="index" value-format="timestamp" type="datetimerange" range-separator="至" start-placeholder="开始时间" end-placeholder="结束时间">
         </el-date-picker>
         <el-button icon="el-icon-close" circle size="mini" title="增加" @click="delTime"></el-button>
         <el-button icon="el-icon-plus" circle size="mini" title="删除" @click="addTime"></el-button>

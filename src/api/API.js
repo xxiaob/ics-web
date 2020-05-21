@@ -104,7 +104,8 @@ export default {
     updTaskStatus: 'activiti-service/task/updTaskStatus',
     finish: 'activiti-service/task/finish',
     get: 'activiti-service/task/getTemporaryTask',
-    getDaily: 'activiti-service/task/getDailyTask'
+    getDaily: 'activiti-service/task/getDailyTask',
+    addRemark: 'activiti-service/task/addTaskRemark'
   },
   question: {
     //问题管理

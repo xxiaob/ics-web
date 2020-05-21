@@ -86,3 +86,11 @@ export function taskUpdStatus(id) {
 export function taskFinish(data) {
   return axios.post(API.task.finish, data)
 }
+/**
+ * 添加备注 - 日常任务
+ * @param {object} data
+ * @returns {Object} axios 对象
+ */
+export function taskAddRemark(data) {
+  return axios.post(API.task.addRemark, data)
+}
