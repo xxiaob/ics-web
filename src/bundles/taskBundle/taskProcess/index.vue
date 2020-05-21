@@ -39,7 +39,7 @@
 
     <jc-manage :orgTree="orgTree" :orgId="orgId" :options="info" :visible.sync="visible" @save-success="initData"></jc-manage>
 
-    <jc-manage-daily :orgTree="orgTree" :orgId="orgId" :options="info" :visible.sync="visibleDaily" @save-success="initData"></jc-manage-daily>
+    <jc-manage-daily :orgTree="orgTree" :orgId="orgId" :options="dailyInfo" :visible.sync="visibleDaily" @save-success="initData"></jc-manage-daily>
 
   </div>
 </template>
@@ -72,11 +72,13 @@ export default {
       visible: false,
       visibleDaily: false,
       info: null,
+      dailyInfo: null,
       filter: {
         selectType: TASK_SELECT_TYPES.PENDING
       },
       orgId: '',
-      detailShow: false
+      detailShow: false,
+      dailyDetailShow: false
     }
   },
   computed: {
@@ -188,9 +190,9 @@ export default {
       if (row) {
         const res = await taskGetDaily(row.businessKey)
 
-        this.info = res
+        this.dailyInfo = res
       } else {
-        this.info = null
+        this.dailyInfo = null
       }
       this.orgId = this.user.orgId
       this.visibleDaily = true
@@ -209,17 +211,26 @@ export default {
     },
     //handle   true任务处理  false任务详情
     async handle(row, handle) {
-      const res = await taskGet(row.businessKey)
-
-      this.info = { ...row, ...res }
-      this.info.handle = handle
-      this.detailShow = true
       if (row.taskStatus == TASK_STATES.ISSUED) {
         try {
           await taskUpdStatus(row.businessKey)
         } catch (error) {
           console.error(error)
         }
+      }
+      if (row.taskType == TASK_TYPES.DAILY) {
+        console.log('日常任务')
+        const res = await taskGetDaily(row.businessKey)
+
+        this.dailyInfo = { ...row, ...res }
+        this.dailyInfo.handle = handle
+        this.dailyDetailShow = true
+      } else if (row.taskType == TASK_TYPES.TEMPORARY) {
+        const res = await taskGet(row.businessKey)
+
+        this.info = { ...row, ...res }
+        this.info.handle = handle
+        this.detailShow = true
       }
     }
   }

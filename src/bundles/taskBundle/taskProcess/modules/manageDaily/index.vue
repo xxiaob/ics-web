@@ -13,20 +13,22 @@
       <!-- <el-form-item label="任务区域" prop="taskPositionName" :rules="rules.NOT_NULL">
         <el-input v-model="form.taskPositionName" placeholder="请输入任务区域"></el-input>
       </el-form-item> -->
-      <el-form-item label="任务周期" prop="date" :rules="rules.NOT_NULL">
-        <el-date-picker style="width:100%" v-model="form.date" @change="changeDate" value-format="timestamp" type="datetimerange" range-separator="至" start-placeholder="开始时间" end-placeholder="结束时间">
+      <el-form-item label="任务周期" prop="date" :rules="rules.SELECT_NOT_NULL">
+        <el-date-picker style="width:100%" v-model="form.date" @change="changeDate" value-format="timestamp" type="daterange" range-separator="-" start-placeholder="开始时间" end-placeholder="结束时间">
         </el-date-picker>
       </el-form-item>
-      <el-form-item label="任务要求">
-        <el-form-item label="在岗时间" prop="taskTimePOS">
-          <!-- <el-input v-model="form.taskTimePOS" placeholder="请输入在岗时间"></el-input> -->
-        </el-form-item>
-        <el-form-item label="在岗时长" prop="workTime" :rules="rules.num">
-          <el-input v-model.number="form.workTime" type="number" placeholder="请输入在岗时长"></el-input>
-        </el-form-item>
-        <el-form-item label="在岗人数" prop="workPeopleNbr" :rules="rules.num">
-          <el-input v-model.number="form.workPeopleNbr" type="number" placeholder="请输入在岗人数"></el-input>
-        </el-form-item>
+      <!-- <el-form-item label="任务要求"></el-form-item> -->
+      <el-form-item label="在岗时间" prop="taskTimePOS" :rules="rules.SELECT_NOT_NULL">
+        <el-date-picker v-for="(item,index) in taskTimes" v-model="taskTimes[index]" :key="index" value-format="timestamp" type="datetimerange" range-separator="至" start-placeholder="开始时间" end-placeholder="结束时间">
+        </el-date-picker>
+        <el-button icon="el-icon-close" circle size="mini" title="增加" @click="delTime"></el-button>
+        <el-button icon="el-icon-plus" circle size="mini" title="删除" @click="addTime"></el-button>
+      </el-form-item>
+      <el-form-item label="在岗时长" prop="workTime" :rules="rules.num">
+        <el-input v-model.number="form.workTime" type="number" placeholder="请输入在岗时长"></el-input>
+      </el-form-item>
+      <el-form-item label="在岗人数" prop="workPeopleNbr" :rules="rules.num">
+        <el-input v-model.number="form.workPeopleNbr" type="number" placeholder="请输入在岗人数"></el-input>
       </el-form-item>
       <el-form-item label="任务人员" prop="orgIds" :rules="rules.SELECT_NOT_NULL">
         <el-cascader :options="orgTree" v-model="form.orgIds" :props="{expandTrigger: 'hover', emitPath: false, multiple: true ,checkStrictly: true}" clearable placeholder="请选择组织(必填)" :show-all-levels="false" @change="changeOrg" class="jc-left-width50"></el-cascader>
@@ -41,7 +43,8 @@
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="dialogVisible = false">取 消</el-button>
-      <el-button type="primary" :loading="loading" @click="onSubmit">确 定</el-button>
+      <el-button type="primary" :loading="loading" @click="onSubmit(false)">暂 存</el-button>
+      <el-button type="primary" :loading="loading" @click="onSubmit(true)">下 发</el-button>
     </div>
   </el-dialog>
 </template>
@@ -63,14 +66,9 @@ const defaultForm = {
   orgIds: [],
   userIds: [],
   date: null,
-  workTime: '',
+  workTime: 0,
   workPeopleNbr: 0,
-  taskTimePOS: [
-    {
-      endTime: '',
-      startTime: ''
-    }
-  ]
+  taskTimePOS: []
 }
 
 export default {
@@ -93,10 +91,23 @@ export default {
         SELECT_NOT_NULL,
         NOT_NULL
       },
-      users: []
+      users: [],
+      taskTimes: [null]
     }
   },
   methods: {
+    delTime() {
+      const len = this.taskTimes.length
+
+      if (len > 1) {
+        this.taskTimes.splice(len - 1, 1)
+      } else {
+        this.$message.warning('不能删除最后一个')
+      }
+    },
+    addTime() {
+      this.taskTimes.push(null)
+    },
     changeOrg(orgIds) {
       if (orgIds.length) {
         this.getUser(orgIds)
@@ -134,22 +145,21 @@ export default {
     },
     formatFormData() {
       if (this.options) {
-        const { orgIds, assignees, detailViewVO: { businessKey, projectId, taskDesc, taskName, endDate, startDate }, taskDetailVO: { taskPosition, taskPositionName } } = this.options
+        const { orgIds, assignees, detailViewVO: { businessKey, projectId, taskDesc, taskName, endDate, startDate }, taskTimePOS, workPeopleNbr, workTime } = this.options
 
 
-        const form = {
-          businessKey,
-          projectId,
-          projectType: projectId,
-          taskName,
-          beginTime: startDate,
-          endTime: endDate,
-          taskDesc,
-          taskPosition,
-          taskPositionName,
-          date: [startDate, endDate]
+        const form = { businessKey, projectId, projectType: projectId, taskName, beginTime: startDate, endTime: endDate, taskDesc, date: [startDate, endDate], taskTimePOS, workPeopleNbr, workTime }
+
+        const times = []
+
+        if (taskTimePOS && taskTimePOS.length) {
+          taskTimePOS.forEach(item=>{
+            if (item) {
+              times.push([item.startTime, item.endTime])
+            }
+          })
         }
-
+        this.taskTimes = times
         if (assignees && assignees.length) {
           const userIds = [], UserOrgIds = []
 
@@ -172,17 +182,28 @@ export default {
         return { ...defaultForm }
       }
     },
-    onSubmit() {
+    onSubmit(ifStart) {
+      const times = []
+
+      this.taskTimes.forEach(item=>{
+        if (item) {
+          times.push({
+            startTime: item[0],
+            endTime: item[1]
+          })
+        }
+      })
+      this.form.taskTimePOS = times
       this.loading = true
       this.$refs.form.validate(valid => {
         if (valid) {
-          this.confirmSave()
+          this.confirmSave(ifStart)
         } else {
           this.loading = false
         }
       })
     },
-    async confirmSave() {
+    async confirmSave(ifStart) {
       let orgIds = [], userIds = []
 
       if (this.form.userIds.length) {
@@ -193,6 +214,7 @@ export default {
         userIds = []
       }
       const form = {
+        ifStart,
         optType: TASK_TYPES.DAILY,
         orgIds,
         userIds,

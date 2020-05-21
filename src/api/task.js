@@ -60,7 +60,7 @@ export function taskGet(id) {
  * @returns {Object} axios 对象
  */
 export function taskGetDaily(id) {
-  return axios.post(API.task.get + '?businessKey=' + id)
+  return axios.post(API.task.getDaily + '?businessKey=' + id)
 }
 /**
  * 启动任务流程
