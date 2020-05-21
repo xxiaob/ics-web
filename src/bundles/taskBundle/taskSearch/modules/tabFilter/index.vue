@@ -1,13 +1,8 @@
 <template>
   <el-card class="jc-tabfilter-card">
     <el-form ref="form" :inline="true" :model="form" class="jc-tabfilter-form" size="small">
-      <el-form-item prop="eventType" label="项目名称">
-        <el-select v-model="form.eventType" placeholder="选择项目名称">
-          <el-option v-for="(value,key) in eventTypes" :key="key" :label="value" :value="key"></el-option>
-        </el-select>
-        <el-select v-model="form.eventType" placeholder="选择项目名称">
-          <el-option v-for="(value,key) in eventTypes" :key="key" :label="value" :value="key"></el-option>
-        </el-select>
+      <el-form-item prop="projectId" label="项目名称">
+        <el-cascader v-model="form.projectId" :options="projectList" :props="{expandTrigger:'hover',emitPath:false}"></el-cascader>
       </el-form-item>
       <el-form-item prop="orgId" label="所属组织">
         <el-cascader :options="orgTree" v-model="form.orgId" :props="{expandTrigger: 'hover', emitPath: false }" clearable></el-cascader>
@@ -18,7 +13,7 @@
         </el-select>
       </el-form-item>
       <el-form-item prop="" label="时间">
-        <el-date-picker v-model="date" @change="changeDate" value-format="timestamp" type="datetimerange" range-separator="至" start-placeholder="开始时间" end-placeholder="结束时间">
+        <el-date-picker v-model="date" @change="changeDate" value-format="timestamp" type="datetimerange" range-separator="-" start-placeholder="开始时间" end-placeholder="结束时间">
         </el-date-picker>
       </el-form-item>
       <el-form-item prop="desc" label="任务描述">
@@ -36,6 +31,10 @@ import { TASK_STATES } from '@/constant/Dictionaries'
 export default {
   name: 'SystemTaskProcessFilter',
   props: {
+    projectList: {
+      type: Array,
+      default: ()=>[]
+    },
     orgTree: {
       type: Array,
       default: ()=>[]
@@ -43,11 +42,9 @@ export default {
   },
   data() {
     return {
-      eventTypes: [],
       states: TASK_STATES.VALUES,
       form: {
         projectId: '',
-        projectType: '',
         orgId: '',
         startDate: '',
         endDate: '',
@@ -56,9 +53,6 @@ export default {
       },
       date: null
     }
-  },
-  created() {
-
   },
   methods: {
     changeDate(value) {

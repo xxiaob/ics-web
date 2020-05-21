@@ -13,7 +13,7 @@
         </el-select>
       </el-form-item>
       <el-form-item prop="" label="时间">
-        <el-date-picker v-model="date" @change="changeDate" value-format="timestamp" type="datetimerange" range-separator="至" start-placeholder="开始时间" end-placeholder="结束时间">
+        <el-date-picker v-model="date" @change="changeDate" value-format="timestamp" type="datetimerange" range-separator="-" start-placeholder="开始时间" end-placeholder="结束时间">
         </el-date-picker>
       </el-form-item>
       <el-form-item prop="problemDesc" label="问题信息">

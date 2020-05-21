@@ -2,15 +2,15 @@
   <div class="jc-main-container-warp">
 
     <div v-show="!detailShow&&!dailyDetailShow">
-      <tab-filter :orgTree="orgTree" @filter="goFilter"></tab-filter>
+      <tab-filter :orgTree="orgTree" :projectList="projectList" @filter="goFilter"></tab-filter>
       <el-card class="jc-table-card jc-mt">
         <div slot="header" class="jc-card-header">
           <div class="jc-card-title">列表内容</div>
         </div>
         <el-table :data="list" v-loading="loading" row-key="id" class="jc-table">
           <el-table-column type="index" label="序号" width="50"></el-table-column>
-          <el-table-column prop="projectType" label="项目类型"></el-table-column>
-          <el-table-column prop="projectName" label="项目名称"></el-table-column>
+          <!-- <el-table-column prop="projectType" label="项目类型"></el-table-column> -->
+          <el-table-column prop="projectId" label="项目名称" :formatter="formatProject"></el-table-column>
           <el-table-column prop="taskTypeName" label="任务类型"></el-table-column>
           <el-table-column prop="startUser" label="下发人"></el-table-column>
           <el-table-column prop="startOrg" label="下发组织"></el-table-column>
@@ -27,9 +27,9 @@
       </el-card>
     </div>
 
-    <jc-detail :orgTree="orgTree" :orgObj="orgObj" :info="info" :detailShow.sync="detailShow" v-show="detailShow" @save-success="initData"></jc-detail>
+    <jc-detail :orgTree="orgTree" :orgObj="orgObj" :projectListArr="projectListArr" :info="info" :detailShow.sync="detailShow" v-show="detailShow" @save-success="initData"></jc-detail>
 
-    <jc-detail-daily :orgTree="orgTree" :orgObj="orgObj" :info="dailyInfo" :dailyDetailShow.sync="dailyDetailShow" v-show="dailyDetailShow" @save-success="initData"></jc-detail-daily>
+    <jc-detail-daily :orgTree="orgTree" :orgObj="orgObj" :projectListArr="projectListArr" :info="dailyInfo" :dailyDetailShow.sync="dailyDetailShow" v-show="dailyDetailShow" @save-success="initData"></jc-detail-daily>
 
   </div>
 </template>
@@ -38,7 +38,8 @@ import { taskList, taskGet, taskGetDaily } from '@/api/task'
 import { formatDate } from '@/libs/util'
 import PaginationMixins from '@/mixins/PaginationMixins'
 import { organizationList } from '@/api/organization'
-import { TASK_TYPES } from '@/constant/Dictionaries'
+import { projectsList } from '@/api/projects'
+import { TASK_TYPES, PROJECT_TYPES } from '@/constant/Dictionaries'
 
 export default {
   name: 'SystemTaskSearchIndex',
@@ -59,17 +60,52 @@ export default {
       filter: {},
       orgId: '',
       detailShow: false,
-      dailyDetailShow: false
+      dailyDetailShow: false,
+      projectList: [],
+      projectListArr: []
     }
   },
   async created() {
     await this.getOrgTree()
+    await this.formatProjectList()
 
     this.initData()
   },
   methods: {
     formatTime(row, column, cellValue) {
       return formatDate(cellValue)
+    },
+    formatProject(row, column, cellValue) {
+      const project = this.projectListArr.filter(item=>item.value == cellValue)
+
+      return (project[0] && project[0].label) || ''
+    },
+    async formatProjectList() {
+      this.EmergencySupport = await this.getProjectList(PROJECT_TYPES.EmergencySupport)
+      this.SpecialControl = await this.getProjectList(PROJECT_TYPES.SpecialControl)
+
+      this.projectListArr = [...PROJECT_TYPES.VALUES]
+      if (this.EmergencySupport) {
+        this.projectListArr = [...this.projectListArr, ...this.EmergencySupport]
+      }
+      if (this.SpecialControl) {
+        this.projectListArr = [...this.projectListArr, ...this.SpecialControl]
+      }
+
+      this.projectList = PROJECT_TYPES.VALUES.map(item=>{
+        const { value, label, key } = item
+
+        return { value, label, children: this[key] || null }
+      })
+    },
+    async getProjectList(projectType) {
+      const res = await projectsList({ projectType })
+
+      if (res && res.length) {
+        return res.map(item=>({ value: item.projectId, label: item.projectName }))
+      } else {
+        return null
+      }
     },
     formatOrgTree(child) {
       let trees = []

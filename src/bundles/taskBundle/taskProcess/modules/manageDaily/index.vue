@@ -19,7 +19,7 @@
       </el-form-item>
       <!-- <el-form-item label="任务要求"></el-form-item> -->
       <el-form-item label="在岗时间" prop="taskTimePOS" :rules="rules.SELECT_NOT_NULL">
-        <el-date-picker style="width: 400px;" v-for="(item,index) in taskTimes" v-model="taskTimes[index]" :key="index" value-format="timestamp" type="datetimerange" range-separator="至" start-placeholder="开始时间" end-placeholder="结束时间">
+        <el-date-picker style="width: 400px;" v-for="(item,index) in taskTimes" v-model="taskTimes[index]" :key="index" value-format="timestamp" type="datetimerange" range-separator="-" start-placeholder="开始时间" end-placeholder="结束时间">
         </el-date-picker>
         <el-button icon="el-icon-close" circle size="mini" title="增加" @click="delTime"></el-button>
         <el-button icon="el-icon-plus" circle size="mini" title="删除" @click="addTime"></el-button>

@@ -14,7 +14,7 @@
           <el-input v-model="form.taskName" placeholder="请输入任务名称"></el-input>
         </el-form-item>
         <el-form-item label="任务时间" prop="date" :rules="rules.NOT_NULL" class="jc-left-width60">
-          <el-date-picker style="width:100%" v-model="form.date" @change="changeDate" value-format="timestamp" type="datetimerange" range-separator="至" start-placeholder="开始时间" end-placeholder="结束时间">
+          <el-date-picker style="width:100%" v-model="form.date" @change="changeDate" value-format="timestamp" type="datetimerange" range-separator="-" start-placeholder="开始时间" end-placeholder="结束时间">
           </el-date-picker>
         </el-form-item>
       </div>
