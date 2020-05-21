@@ -58,25 +58,29 @@ export default {
     this.initData()
   },
   methods: {
-    initData() {
-      if (!this.loading) {
-        this.loading = true
-        areaTypeListByPage({ ...this.filter, ...this.page }).then(res => {
-          this.page.total = res.total
-
-          let list = []
-
-          if (res.resultList && res.resultList.length) {
-            res.resultList.forEach(item => {
-              list.push({ areaTypeId: item.areaTypeId, areaTypeName: item.areaTypeName, icon: item.icon, createTime: formatDate(item.createTime) })
-            })
-          }
-          this.list = list
-          this.loading = false
-        }).catch(() => {
-          this.loading = false
-        })
+    async initData() {
+      if (this.loading) {
+        return false
       }
+      this.loading = true
+      try {
+        const { total, resultList } = await areaTypeListByPage({ ...this.filter, ...this.page })
+
+        this.page.total = total
+
+        let list = []
+
+        if (resultList && resultList.length) {
+          resultList.forEach(item => {
+            list.push({ areaTypeId: item.areaTypeId, areaTypeName: item.areaTypeName, icon: item.icon, createTime: formatDate(item.createTime) })
+          })
+        }
+        this.list = list
+      } catch (error) {
+        console.log(error)
+      }
+
+      this.loading = false
     },
     getIconStyle(icon) {
       let useIcon = JcIcons[icon] || {}
@@ -118,13 +122,8 @@ export default {
       })
     },
     manage(row) {
-      if (row) {
-        this.info = row
-        this.visible = true
-      } else {
-        this.info = null
-        this.visible = true
-      }
+      this.info = row ? row : null
+      this.visible = true
     }
   }
 }

@@ -54,9 +54,10 @@ export default {
     formatFormData() {
       if (this.options) {
         return {
-          areaTypeId: this.options.areaTypeId,
-          areaTypeName: this.options.areaTypeName,
-          icon: this.options.icon
+          projectId: this.options.projectId,
+          projectName: this.options.projectName,
+          date: [this.options.beginTime, this.options.endTime],
+          description: this.options.description
         }
       } else {
         return { ...defaultForm }
