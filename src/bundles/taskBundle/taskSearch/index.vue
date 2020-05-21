@@ -1,7 +1,7 @@
 <template>
   <div class="jc-main-container-warp">
 
-    <div v-show="!detailShow">
+    <div v-show="!detailShow&&!dailyDetailShow">
       <tab-filter :orgTree="orgTree" @filter="goFilter"></tab-filter>
       <el-card class="jc-table-card jc-mt">
         <div slot="header" class="jc-card-header">
@@ -15,7 +15,7 @@
           <el-table-column prop="startUser" label="下发人"></el-table-column>
           <el-table-column prop="startOrg" label="下发组织"></el-table-column>
           <el-table-column prop="taskName" label="任务名称" show-overflow-tooltip></el-table-column>
-          <el-table-column prop="taskStatus" label="任务状态" show-overflow-tooltip></el-table-column>
+          <el-table-column prop="taskStatusName" label="任务状态" show-overflow-tooltip></el-table-column>
           <el-table-column prop="createTime" label="创建时间" :formatter="formatTime" width="140"></el-table-column>
           <el-table-column width="50" label="操作">
             <template slot-scope="scope">
@@ -29,19 +29,24 @@
 
     <jc-detail :orgTree="orgTree" :orgObj="orgObj" :info="info" :detailShow.sync="detailShow" v-show="detailShow" @save-success="initData"></jc-detail>
 
+    <jc-detail-daily :orgTree="orgTree" :orgObj="orgObj" :info="dailyInfo" :dailyDetailShow.sync="dailyDetailShow" v-show="dailyDetailShow" @save-success="initData"></jc-detail-daily>
+
   </div>
 </template>
 <script>
-import { taskList, taskGet } from '@/api/task'
+import { taskList, taskGet, taskGetDaily } from '@/api/task'
 import { formatDate } from '@/libs/util'
 import PaginationMixins from '@/mixins/PaginationMixins'
 import { organizationList } from '@/api/organization'
+import { TASK_TYPES } from '@/constant/Dictionaries'
+
 export default {
   name: 'SystemTaskSearchIndex',
   mixins: [PaginationMixins],
   components: {
     TabFilter: () => import('./modules/tabFilter'),
-    JcDetail: () => import('../taskProcess/modules/detail')
+    JcDetail: () => import('../taskProcess/modules/detail'),
+    JcDetailDaily: () => import('../taskProcess/modules/detailDaily')
   },
   data() {
     return {
@@ -50,9 +55,11 @@ export default {
       list: [],
       loading: false,
       info: null,
+      dailyInfo: null,
       filter: {},
       orgId: '',
-      detailShow: false
+      detailShow: false,
+      dailyDetailShow: false
     }
   },
   async created() {
@@ -125,11 +132,19 @@ export default {
     },
     //handle   true任务处理  false任务详情
     async handle(row, handle) {
-      const res = await taskGet(row.businessKey)
+      if (row.taskType == TASK_TYPES.DAILY) {
+        const res = await taskGetDaily(row.businessKey)
 
-      this.info = { ...row, ...res }
-      this.info.handle = handle
-      this.detailShow = true
+        this.dailyInfo = { ...row, ...res }
+        this.dailyInfo.handle = handle
+        this.dailyDetailShow = true
+      } else if (row.taskType == TASK_TYPES.TEMPORARY) {
+        const res = await taskGet(row.businessKey)
+
+        this.info = { ...row, ...res }
+        this.info.handle = handle
+        this.detailShow = true
+      }
     }
   }
 }

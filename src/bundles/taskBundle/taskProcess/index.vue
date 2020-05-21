@@ -50,10 +50,11 @@ import { taskList, taskDel, taskStart, taskGet, taskUpdStatus, taskGetDaily } fr
 import { formatDate } from '@/libs/util'
 import PaginationMixins from '@/mixins/PaginationMixins'
 import { organizationList } from '@/api/organization'
+import { projectsList } from '@/api/projects'
 import { createNamespacedHelpers } from 'vuex'
 const { mapState } = createNamespacedHelpers('user')
 
-import { TASK_SELECT_TYPES, TASK_STATES, TASK_TYPES } from '@/constant/Dictionaries'
+import { TASK_SELECT_TYPES, TASK_STATES, TASK_TYPES, PROJECT_TYPES } from '@/constant/Dictionaries'
 
 export default {
   name: 'TaskProcessIndex',
@@ -222,7 +223,6 @@ export default {
         }
       }
       if (row.taskType == TASK_TYPES.DAILY) {
-        console.log('日常任务')
         const res = await taskGetDaily(row.businessKey)
 
         this.dailyInfo = { ...row, ...res }
