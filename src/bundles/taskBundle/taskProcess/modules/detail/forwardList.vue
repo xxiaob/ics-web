@@ -5,7 +5,7 @@
       <span>{{item.creatorId}}</span>
       <span>{{item.eventType|filterType}}</span>
       <span v-show="item.eventData">至</span>
-      <span v-show="item.eventData">{{item.eventData}}</span>
+      <template v-show="item.eventData">{{item|filterEventData}}</template>
     </li>
   </ul>
 </template>
@@ -31,10 +31,22 @@ export default {
   },
   filters: {
     filterTime(value) {
-      return formatDate(value.createTime)
+      return formatDate(value)
     },
     filterType(value) {
       return TASK_REPEATS.toString(value.toString())
+    },
+    filterEventData(value) {
+      if (value.eventData) {
+        const jsonData = JSON.parse(value.eventData)
+
+        let res = jsonData.assignees
+
+        if (jsonData.remark) {
+          res += ('　备注　' + jsonData.remark)
+        }
+        return res
+      }
     }
   },
   watch: {

@@ -10,9 +10,13 @@
       <el-form-item label="任务名称" prop="taskName" :rules="rules.Len50">
         <el-input v-model="form.taskName" placeholder="请输入任务名称"></el-input>
       </el-form-item>
-      <!-- <el-form-item label="任务区域" prop="taskPositionName" :rules="rules.NOT_NULL">
-        <el-input v-model="form.taskPositionName" placeholder="请输入任务区域"></el-input>
-      </el-form-item> -->
+      <el-form-item label="任务区域" prop="taskAreas">
+        <el-radio-group v-model="areaType" size="mini" @change="changeAreaType">
+          <el-radio-button label="0">组织区域</el-radio-button>
+          <el-radio-button label="1">网格区域</el-radio-button>
+        </el-radio-group>
+
+      </el-form-item>
       <el-form-item label="任务周期" prop="date" :rules="rules.SELECT_NOT_NULL">
         <el-date-picker v-model="form.date" @change="changeDate" value-format="timestamp" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期">
         </el-date-picker>
@@ -25,7 +29,7 @@
         <el-button icon="el-icon-plus" circle size="mini" title="删除" @click="addTime"></el-button>
       </el-form-item>
       <el-form-item label="在岗时长" prop="workTime" :rules="rules.num">
-        <el-input v-model.number="form.workTime" type="number" placeholder="请输入在岗时长"></el-input>
+        <el-input v-model.number="form.workTime" type="number" placeholder="请输入在岗时长(单位小时)"></el-input>
       </el-form-item>
       <el-form-item label="在岗人数" prop="workPeopleNbr" :rules="rules.num">
         <el-input v-model.number="form.workPeopleNbr" type="number" placeholder="请输入在岗人数"></el-input>
@@ -56,6 +60,7 @@ import FormMixins from '@/mixins/FormMixins'
 import { TASK_TYPES } from '@/constant/Dictionaries'
 
 const defaultForm = {
+  taskAreas: [],
   businessKey: '',
   projectId: '',
   // projectType: '',
@@ -87,6 +92,7 @@ export default {
   },
   data() {
     return {
+      areaType: '0',
       loading: false,
       rules: {
         Len50: getStringRule(1, 50),
@@ -99,6 +105,9 @@ export default {
     }
   },
   methods: {
+    changeAreaType(value) {
+      console.log(value)
+    },
     delTime() {
       const len = this.taskTimes.length
 

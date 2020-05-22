@@ -5,56 +5,53 @@
       <div slot="header">
         <div class="jc-title">基础信息</div>
       </div>
-      <el-form ref="form" label-width="80px" :model="form" class="jc-manage-form" size="small">
+      <el-form ref="form" label-width="90px" :model="form" class="jc-manage-form" size="small">
         <div class="jc-clearboth">
-          <el-form-item label="任务名称" class="jc-left-width25">
+          <el-form-item label="任务名称：" class="jc-left-width25">
             <span>{{form.taskName}}</span>
           </el-form-item>
-          <el-form-item label="创建时间" class="jc-left-width25">
+          <el-form-item label="创建时间：" class="jc-left-width25">
             <span>{{form.createTime|filterTime}}</span>
           </el-form-item>
           <!-- <el-form-item label="项目类型" class="jc-left-width25">
             <span>{{form.projectType}}</span>
           </el-form-item> -->
-          <el-form-item label="项目名称" class="jc-left-width50">
+          <el-form-item label="项目名称：" class="jc-left-width50">
             <span>{{formatProject}}</span>
           </el-form-item>
         </div>
         <div class="jc-clearboth">
-          <el-form-item label="任务时间" class="jc-left-width50">
+          <el-form-item label="任务时间：" class="jc-left-width50">
             <span>{{form.startDate|filterTime}} - {{form.endDate|filterTime}}</span>
           </el-form-item>
-          <el-form-item label="任务类型" class="jc-left-width25">
+          <el-form-item label="任务类型：" class="jc-left-width25">
             <span>{{form.taskTypeName}}</span>
           </el-form-item>
-          <el-form-item label="任务状态" class="jc-left-width25">
+          <el-form-item label="任务状态：" class="jc-left-width25">
             <span>{{form.taskStatusName}}</span>
           </el-form-item>
         </div>
         <div class="jc-clearboth">
-          <el-form-item label="任务来源" class="jc-left-width50">
+          <el-form-item label="任务来源：" class="jc-left-width50">
             <span>{{taskSourceName}}</span>
           </el-form-item>
-          <el-form-item label="下发组织" class="jc-left-width25">
+          <el-form-item label="下发组织：" class="jc-left-width25">
             <span>{{form.startOrg}}</span>
           </el-form-item>
-          <el-form-item label="下发人" class="jc-left-width25">
+          <el-form-item label="下发人：" class="jc-left-width25">
             <span>{{form.startUser}}</span>
           </el-form-item>
         </div>
         <div class="jc-clearboth">
-          <el-form-item label="任务位置" class="jc-left-width50">
+          <el-form-item label="任务位置：" class="jc-left-width50">
             <span>{{form.taskPositionName}}</span>
           </el-form-item>
-          <el-form-item label="任务人员" class="jc-left-width50">
+          <el-form-item label="任务人员：" class="jc-left-width50">
             {{formatUsers}}
           </el-form-item>
         </div>
-        <el-form-item label="任务描述">
+        <el-form-item label="任务描述：">
           {{form.taskDesc}}
-        </el-form-item>
-        <el-form-item label="流转记录">
-          <div>流转记录</div>
         </el-form-item>
       </el-form>
     </el-card>
