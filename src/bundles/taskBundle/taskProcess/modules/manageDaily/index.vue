@@ -11,11 +11,15 @@
         <el-input v-model="form.taskName" placeholder="请输入任务名称"></el-input>
       </el-form-item>
       <el-form-item label="任务区域" prop="taskAreas">
-        <el-radio-group v-model="areaType" size="mini" @change="changeAreaType">
+        <el-radio-group v-model="areaType" size="small" @change="changeAreaType">
           <el-radio-button label="0">组织区域</el-radio-button>
           <el-radio-button label="1">网格区域</el-radio-button>
         </el-radio-group>
-
+        <el-input placeholder="输入关键字进行过滤" v-model="filterText" size="small"></el-input>
+        <el-button type="" @click="setCheckedKeys" size="mini">全选</el-button>
+        <el-button type="" @click="resetChecked" size="mini">清空</el-button>
+        <el-button type="primary" @click="getCheckedKeys" size="mini">获取选中节点</el-button>
+        <el-tree ref="tree" :data="orgTree" show-checkbox node-key="id" :check-strictly="true" :filter-node-method="filterNode" default-expand-all></el-tree>
       </el-form-item>
       <el-form-item label="任务周期" prop="date" :rules="rules.SELECT_NOT_NULL">
         <el-date-picker v-model="form.date" @change="changeDate" value-format="timestamp" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期">
@@ -80,6 +84,9 @@ export default {
   name: 'TaskProcessManageDaily',
   mixins: [FormMixins],
   props: {
+    orgObj: {
+      type: Object
+    },
     projectList: {
       type: Array
     },
@@ -101,10 +108,45 @@ export default {
         NOT_NULL
       },
       users: [],
-      taskTimes: [null]
+      taskTimes: [null],
+      filterText: '',
+      filterArr: []
     }
   },
+  watch: {
+    filterText(val) {
+      console.log(val)
+      this.filterArr = []
+      this.$refs.tree.filter(val)
+    }
+  },
+  created() {
+    setTimeout(()=>{
+      this.filterArr = Object.keys(this.orgObj)
+    })
+  },
   methods: {
+    getCheckedKeys() {
+      console.log(this.$refs.tree.getCheckedKeys())
+    },
+    setCheckedKeys() {
+      this.$refs.tree.setCheckedKeys(this.filterArr)
+    },
+    resetChecked() {
+      this.$refs.tree.setCheckedKeys([])
+    },
+    filterNode(value, data) {
+      if (!value) {
+        this.filterArr.push(data.value)
+        return true
+      }
+      if (data.label.indexOf(value) !== -1) {
+        this.filterArr.push(data.value)
+        return true
+      } else {
+        return false
+      }
+    },
     changeAreaType(value) {
       console.log(value)
     },
@@ -248,6 +290,12 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.el-tree {
+  height: 200px;
+  overflow: auto;
+  border: 1px solid #dcdfe6;
+  border-radius: 4px;
+}
 .jc-left-width50 {
   width: 50%;
   float: left;

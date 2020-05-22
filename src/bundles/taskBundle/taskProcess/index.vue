@@ -39,7 +39,7 @@
 
     <jc-manage :orgTree="orgTree" :projectList="projectList" :orgId="orgId" :options="info" :visible.sync="visible" @save-success="initData"></jc-manage>
 
-    <jc-manage-daily :orgTree="orgTree" :projectList="projectList" :orgId="orgId" :options="dailyInfo" :visible.sync="visibleDaily" @save-success="initData"></jc-manage-daily>
+    <jc-manage-daily :orgTree="orgTree" :projectList="projectList" :orgObj="orgObj" :orgId="orgId" :options="dailyInfo" :visible.sync="visibleDaily" @save-success="initData"></jc-manage-daily>
 
     <jc-detail-daily :orgTree="orgTree" :projectListArr="projectListArr" :orgObj="orgObj" :info="dailyInfo" :dailyDetailShow.sync="dailyDetailShow" v-show="dailyDetailShow" @save-success="initData"></jc-detail-daily>
 
@@ -137,6 +137,7 @@ export default {
       if (child && child.length) {
         child.forEach(item => {
           let node = {
+            id: item.orgId,
             value: item.orgId,
             label: item.orgName
           }
