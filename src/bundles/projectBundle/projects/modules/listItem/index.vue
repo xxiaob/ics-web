@@ -14,8 +14,8 @@
         <div class="jc-info-item"><i class="iconfont iconshijian1"></i>{{projectTime}}</div>
       </div>
       <div class="jc-project-opera">
-        <div class="jc-opera-item first"><i class="iconfont icontoufangziyuanshezhi"></i>资源设置</div>
-        <div class="jc-opera-item second"><i class="iconfont iconwanggeshezhi"></i>网格设置</div>
+        <div class="jc-opera-item first" @click="operaChange('resource-setting')"><i class="iconfont icontoufangziyuanshezhi"></i>资源设置</div>
+        <div class="jc-opera-item second" @click="operaChange('grid-setting')"><i class="iconfont iconwanggeshezhi"></i>网格设置</div>
         <div class="jc-opera-item three"><i class="iconfont icontongjifenxi"></i>统计分析</div>
         <div class="jc-opera-item four" @click="del"><i class="iconfont iconlujing"></i>删除项目</div>
       </div>
@@ -56,12 +56,15 @@ export default {
 
       return types.get(projectType + '') || ''
     },
+    operaChange(opera) {
+      this.$emit('opera-change', { opera, data: this.item })
+    },
     async del() {
       try {
         await this.$confirm('确认删除该项目', '提示', { type: 'warning' })
         await projectsDel(this.item.projectId)
         this.$message.success('删除成功')
-        this.$emit('opera-change', { opera: 'delete-success' })
+        this.operaChange('delete-success')
       } catch (error) {
         console.log(error)
       }

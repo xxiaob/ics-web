@@ -1,3 +1,13 @@
+.jc-projects-warp {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.jc-main-container-warp {
+  z-index: 4;
+}
+
 /deep/ .jc-project-item {
   position: relative;
   margin: 0 auto $jc-default-dis auto;

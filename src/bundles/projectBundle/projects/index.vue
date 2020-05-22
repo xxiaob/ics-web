@@ -1,20 +1,23 @@
 <template>
-  <div class="jc-main-container-warp">
-    <tab-filter @filter="goFilter"></tab-filter>
-    <el-card class="jc-mt" v-loading="loading">
-      <el-row>
-        <el-col :span="6">
-          <div class="jc-project-item">
-            <div class="jc-item-add" @click="manage(null)">添加</div>
-          </div>
-        </el-col>
-        <el-col :span="6" v-for="item in list" :key="item.projectId">
-          <list-item :item="item" @manage="manage(item)" @opera-change="operaChange"></list-item>
-        </el-col>
-      </el-row>
-      <el-pagination @current-change="currentChange" @size-change="sizeChange" :current-page.sync="page.pageNum" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.total" class="text-right jc-mt"></el-pagination>
-    </el-card>
-    <jc-manage :options="info" :projectType="projectType" :visible.sync="visible" @save-success="initData"></jc-manage>
+  <div class="jc-projects-warp">
+    <div class="jc-main-container-warp">
+      <tab-filter @filter="goFilter"></tab-filter>
+      <el-card class="jc-mt" v-loading="loading">
+        <el-row>
+          <el-col :span="6">
+            <div class="jc-project-item">
+              <div class="jc-item-add" @click="manage(null)">添加</div>
+            </div>
+          </el-col>
+          <el-col :span="6" v-for="item in list" :key="item.projectId">
+            <list-item :item="item" @manage="manage(item)" @opera-change="operaChange"></list-item>
+          </el-col>
+        </el-row>
+        <el-pagination @current-change="currentChange" @size-change="sizeChange" :current-page.sync="page.pageNum" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.total" class="text-right jc-mt"></el-pagination>
+      </el-card>
+      <jc-manage :options="info" :projectType="projectType" :visible.sync="visible" @save-success="initData"></jc-manage>
+    </div>
+    <grid-setting :options="grid" :visible.sync="gridVisible"></grid-setting>
   </div>
 </template>
 <script>
@@ -28,7 +31,8 @@ export default {
   components: {
     TabFilter: () => import('./modules/tabFilter'),
     JcManage: () => import('./modules/manage'),
-    ListItem: () => import('./modules/listItem')
+    ListItem: () => import('./modules/listItem'),
+    GridSetting: () => import('../projectSetting/grid')
   },
   data() {
     return {
@@ -36,6 +40,8 @@ export default {
       loading: false,
       visible: false,
       info: null,
+      grid: { projectName: '--' },
+      gridVisible: false,
       filter: {}
     }
   },
@@ -74,9 +80,12 @@ export default {
       this.filter = { ...filter }
       this.currentChange(1)
     },
-    operaChange(data) {
-      if (data.opera == 'delete-success') {
+    operaChange(options) {
+      if (options.opera == 'delete-success') {
         this.currentChange(this.page.pageNum - 1)
+      } else if (options.opera == 'grid-setting') {
+        this.grid = options.data
+        this.gridVisible = true
       }
     },
     manage(row) {
