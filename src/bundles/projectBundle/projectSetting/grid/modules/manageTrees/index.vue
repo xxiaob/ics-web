@@ -3,7 +3,7 @@
     <div class="jc-area-controll" @click="manageHide = !manageHide"><i class="jc-area-icon el-icon-arrow-right"></i></div>
     <el-input v-model="filterText" prefix-icon="el-icon-search" class="jc-filter-input" clearable size="mini" placeholder="输入关键字进行过滤"></el-input>
     <div class="jc-tree-warp">
-      <el-tree ref="tree" :default-expanded-keys="expandedKeys" :load="loadNode" lazy :props="props" :filter-node-method="filterNode" node-key="id" :expand-on-click-node="false" :highlight-current="true">
+      <el-tree ref="tree" v-if="treeShow" :default-expanded-keys="expandedKeys" :load="loadNode" lazy :props="props" :filter-node-method="filterNode" node-key="id" :expand-on-click-node="false" :highlight-current="true">
         <div class="custom-tree-node" slot-scope="{ node, data }" @click.stop="nodeChange(data)">
           <div class="jc-tree-label no-select" :style="getIconStyle(data.icon)" @dblclick="goEdit(data)">
             <div class="jc-text-warp" v-text="data.name"></div>
@@ -36,6 +36,7 @@ export default {
   data() {
     return {
       manageHide: false,
+      treeShow: false,
       filterText: '',
       project: { projectId: '--' },
       parentNode: [],
@@ -53,7 +54,12 @@ export default {
       this.project = data
       this.expandedKeys = [data.orgId]
       this.parentNode = [{ id: data.orgId, pid: data.pid, pName: '--', orgId: data.orgId, name: data.projectName, view: false }]
-      return true
+      this.treeShow = false
+      console.log('开始初始化tree')
+      this.$nextTick(() => {
+        console.log('初始化tree完成')
+        this.treeShow = true
+      })
     },
     getIconStyle(icon) {
       if (icon) {
@@ -68,29 +74,27 @@ export default {
 
       let params = { searchType: AREAS_SEARCH_TYPE.GRID }
 
-      if (node.level > 0) {
-        if (node.data.areaId) {
-          Object.assign(params, { areaId: node.data.areaId })
-        } else {
-          let orgNode = this.orgs[node.data.orgId] || []
+      if (node.data.areaId) {
+        Object.assign(params, { areaId: node.data.areaId })
+      } else {
+        Object.assign(params, { orgId: node.data.orgId, orgSearchType: AREAS_TYPE.OWN })
+      }
+      const res = await areaList(params)
 
-          result = [...orgNode]
-          Object.assign(params, { orgId: node.data.orgId, orgSearchType: AREAS_TYPE.OWN })
-        }
-        const res = await areaList(params)
-
-        console.log('查询的area list：', res)
-        if (res && res.length) {
-          res.forEach(item => {
-            result.push({ id: item.areaId, pid: item.pid, pName: node.data.name, orgId: item.orgId, areaId: item.areaId, desc: item.desc, areaTypeId: item.areaTypeId, name: item.areaName, icon: item.icon, view: false })
-          })
-        }
+      console.log('查询的area list：', res)
+      if (res && res.length) {
+        res.forEach(item => {
+          result.push({ id: item.areaId, pid: item.pid, pName: node.data.name, orgId: item.orgId, areaId: item.areaId, desc: item.desc, areaTypeId: item.areaTypeId, name: item.areaName, icon: item.icon, view: false })
+        })
       }
 
       return result
     },
     loadNode(node, resolve) {
       console.log(node)
+      if (node.level == 0) {
+        return this.parentNode
+      }
       this.getNodes(node).then((data) => {
         resolve(data)
         if (this.currentKey) {

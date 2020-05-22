@@ -48,10 +48,10 @@ export default {
       this.$refs.myManageTree.initData(this.options)
       if (!myJcMap) {
         myJcMap = new JcMap()
-        myJcMap.init({ source: this.$refs.myMap }).then(() => {
-          this.$refs.mapSearch.initData(myJcMap) //初始化搜索对象
-        })
       }
+      myJcMap.init({ source: this.$refs.myMap }).then(() => {
+        this.$refs.mapSearch.initData(myJcMap) //初始化搜索对象
+      })
     },
     gridChange(options) {
       if (options.type == 'view') {
@@ -95,7 +95,9 @@ export default {
     }
   },
   beforeDestroy() {
-    myJcMap.destroy() //销毁地图
+    if (myJcMap) {
+      myJcMap.destroy() //销毁地图
+    }
   }
 }
 </script>
