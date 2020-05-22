@@ -107,7 +107,8 @@ export default {
     get: 'task-service/task/getTemporaryTask',
     getDaily: 'task-service/task/getDailyTask',
     addRemark: 'task-service/task/addTaskRemark',
-    listRemark: 'task-service/task/remarkSelect'
+    listRemark: 'task-service/task/remarkSelect',
+    listRecord: 'task-service/task/getTaskRecord'
   },
   question: {
     //问题管理

@@ -45,7 +45,7 @@ export default {
       return formatDate(cellValue)
     },
     async initData() {
-      if (!this.loading) {
+      if (!this.loading && this.taskId) {
         this.loading = true
         try {
           const resultList = await eventManageListByTask(this.taskId)

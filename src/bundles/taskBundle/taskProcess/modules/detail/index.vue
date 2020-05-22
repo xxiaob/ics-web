@@ -58,6 +58,12 @@
         </el-form-item>
       </el-form>
     </el-card>
+    <el-card class="jc-table-card jc-mt">
+      <div slot="header">
+        <div class="jc-title">流转记录</div>
+      </div>
+      <jc-forward-list :taskId="form.businessKey" ref="forward"></jc-forward-list>
+    </el-card>
     <el-card class="jc-table-card jc-mt" v-if="TASK_STATES.FINISHED==form.taskStatus">
       <div slot="header">
         <div class="jc-title">关联事件</div>
@@ -121,7 +127,8 @@ export default {
     }
   },
   components: {
-    JcEventList: () => import('./eventList')
+    JcEventList: () => import('./eventList'),
+    JcForwardList: () => import('./forwardList')
   },
   data() {
     return {
@@ -267,6 +274,7 @@ export default {
         this.dialogVisible = false
         this.dialogVisibleHandle = false
         this.$emit('save-success')
+        this.$refs.forward.initData()
         this.loading = false
         this.$emit('update:detailShow', false)
       } catch (e) {
@@ -278,6 +286,9 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.el-form /deep/ .el-form-item {
+  margin-bottom: 0;
+}
 .el-card /deep/ .el-card__header {
   border: none;
 }

@@ -141,3 +141,14 @@ export const TASK_SOURCES = new JcEnum([
   { key: 'PROBLEMFEEDBACK', value: '4', label: '问题反馈' },
   { key: 'WORKORDER', value: '5', label: '工单' }
 ])
+
+/**
+ * 任务处理 - 流转行为
+ */
+export const TASK_REPEATS = new JcEnum([
+  { key: 'ESTABLISH', value: '0', label: '创建任务' },
+  { key: 'HAIRDOWN', value: '1', label: '下发任务' },
+  { key: 'FORWARD', value: '2', label: '转发任务' },
+  { key: 'FINISHED', value: '3', label: '结束任务' },
+  { key: 'REMARK', value: '4', label: '备注添加' }
+])

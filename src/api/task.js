@@ -102,3 +102,11 @@ export function taskAddRemark(data) {
 export function taskListRemark(data) {
   return axios.post(API.task.listRemark, data)
 }
+/**
+ * 列表流转记录
+ * @param {object} id
+ * @returns {Object} axios 对象
+ */
+export function taskListRecord(id) {
+  return axios.post(API.task.listRecord + '?businessKey=' + id)
+}

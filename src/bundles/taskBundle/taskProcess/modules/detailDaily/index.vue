@@ -58,6 +58,12 @@
     </el-card>
     <el-card class="jc-table-card jc-mt">
       <div slot="header">
+        <div class="jc-title">流转记录</div>
+      </div>
+      <jc-forward-list :taskId="form.businessKey" ref="forward"></jc-forward-list>
+    </el-card>
+    <el-card class="jc-table-card jc-mt">
+      <div slot="header">
         <div class="jc-title">任务备注</div>
       </div>
       <jc-remark-list :taskId="form.businessKey" ref="remark"></jc-remark-list>
@@ -112,7 +118,8 @@ export default {
     }
   },
   components: {
-    JcRemarkList: () => import('./remarkList')
+    JcRemarkList: () => import('./remarkList'),
+    JcForwardList: () => import('../detail/forwardList')
   },
   data() {
     return {
@@ -239,6 +246,7 @@ export default {
         this.dialogVisibleHandle = false
         this.loading = false
         this.$refs.remark.initData()
+        this.$refs.forward.initData()
         // this.$emit('save-success')
         // this.$emit('update:dailyDetailShow', false)
       } catch (e) {
@@ -271,6 +279,7 @@ export default {
         this.dialogVisibleHandle = false
         this.$emit('save-success')
         this.loading = false
+        this.$refs.forward.initData()
         this.$emit('update:dailyDetailShow', false)
       } catch (e) {
         this.loading = false
@@ -281,6 +290,9 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.el-form /deep/ .el-form-item {
+  margin-bottom: 0;
+}
 .el-card /deep/ .el-card__header {
   border: none;
 }
@@ -304,8 +316,5 @@ export default {
   content: "";
   display: table;
   clear: both;
-}
-.el-form .el-form-item {
-  margin-bottom: 10px;
 }
 </style>
