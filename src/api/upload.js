@@ -5,7 +5,7 @@ import axios from 'axios'
 import API from './API'
 
 /**
- * 置顶
+ * 文件上传
  * @param {Object} data
  * @returns {Object} axios 对象
  */
