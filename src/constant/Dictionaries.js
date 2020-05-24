@@ -152,3 +152,11 @@ export const TASK_REPEATS = new JcEnum([
   { key: 'FINISHED', value: '3', label: '结束任务' },
   { key: 'REMARK', value: '4', label: '添加备注' }
 ])
+
+/**
+ * 任务处理 - 日常任务 - 区域类型
+ */
+export const TASK_AREA_TYPES = new JcEnum([
+  { key: 'ORG', value: '0', label: '组织区域' },
+  { key: 'GRID', value: '1', label: '网格区域' }
+])

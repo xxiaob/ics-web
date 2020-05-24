@@ -10,16 +10,8 @@
       <el-form-item label="任务名称" prop="taskName" :rules="rules.Len50">
         <el-input v-model="form.taskName" placeholder="请输入任务名称"></el-input>
       </el-form-item>
-      <el-form-item label="任务区域" prop="taskAreas">
-        <el-radio-group v-model="areaType" size="small" @change="changeAreaType">
-          <el-radio-button label="0">组织区域</el-radio-button>
-          <el-radio-button label="1">网格区域</el-radio-button>
-        </el-radio-group>
-        <el-input placeholder="输入关键字进行过滤" v-model="filterText" size="small"></el-input>
-        <el-button type="" @click="setCheckedKeys" size="mini">全选</el-button>
-        <el-button type="" @click="resetChecked" size="mini">清空</el-button>
-        <el-button type="primary" @click="getCheckedKeys" size="mini">获取选中节点</el-button>
-        <el-tree ref="tree" :data="orgTree" show-checkbox node-key="id" :check-strictly="true" :filter-node-method="filterNode" default-expand-all></el-tree>
+      <el-form-item label="任务区域" prop="assigneeAreaPOS" :rules="rules.NOT_NULL">
+        <jc-task-area :areaType.sync="form.workAreaType" :selectedAreas.sync="form.assigneeAreaPOS" :orgTree="orgTree"></jc-task-area>
       </el-form-item>
       <el-form-item label="任务周期" prop="date" :rules="rules.SELECT_NOT_NULL">
         <el-date-picker v-model="form.date" @change="changeDate" value-format="timestamp" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期">
@@ -61,10 +53,11 @@ import { taskSave } from '@/api/task'
 import { userListByOrg } from '@/api/user'
 import { getStringRule, getNumberRule, NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
-import { TASK_TYPES } from '@/constant/Dictionaries'
+import { TASK_TYPES, TASK_AREA_TYPES } from '@/constant/Dictionaries'
 
 const defaultForm = {
-  taskAreas: [],
+  workAreaType: TASK_AREA_TYPES.ORG,
+  assigneeAreaPOS: [],
   businessKey: '',
   projectId: '',
   // projectType: '',
@@ -97,9 +90,11 @@ export default {
       type: String
     }
   },
+  components: {
+    JcTaskArea: () => import('./taskArea')
+  },
   data() {
     return {
-      areaType: '0',
       loading: false,
       rules: {
         Len50: getStringRule(1, 50),
@@ -108,48 +103,10 @@ export default {
         NOT_NULL
       },
       users: [],
-      taskTimes: [null],
-      filterText: '',
-      filterArr: []
+      taskTimes: [null]
     }
-  },
-  watch: {
-    filterText(val) {
-      console.log(val)
-      this.filterArr = []
-      this.$refs.tree.filter(val)
-    }
-  },
-  created() {
-    setTimeout(()=>{
-      this.filterArr = Object.keys(this.orgObj)
-    })
   },
   methods: {
-    getCheckedKeys() {
-      console.log(this.$refs.tree.getCheckedKeys())
-    },
-    setCheckedKeys() {
-      this.$refs.tree.setCheckedKeys(this.filterArr)
-    },
-    resetChecked() {
-      this.$refs.tree.setCheckedKeys([])
-    },
-    filterNode(value, data) {
-      if (!value) {
-        this.filterArr.push(data.value)
-        return true
-      }
-      if (data.label.indexOf(value) !== -1) {
-        this.filterArr.push(data.value)
-        return true
-      } else {
-        return false
-      }
-    },
-    changeAreaType(value) {
-      console.log(value)
-    },
     delTime() {
       const len = this.taskTimes.length
 
@@ -199,10 +156,11 @@ export default {
     },
     formatFormData() {
       if (this.options) {
-        const { orgIds, assignees, detailViewVO: { businessKey, projectId, taskDesc, taskName, endDate, startDate }, taskTimePOS, workPeopleNbr, workTime } = this.options
+        const { orgIds, assignees, detailViewVO: { businessKey, projectId, taskDesc, taskName, endDate, startDate }, taskTimePOS, workPeopleNbr, workTime, workAreaType, assigneeAreaPOS } = this.options
 
 
-        const form = { businessKey, projectId, taskName, beginTime: startDate, endTime: endDate, taskDesc, date: [startDate, endDate], taskTimePOS, workPeopleNbr, workTime }
+        const form = { businessKey, projectId, taskName, beginTime: startDate, endTime: endDate, taskDesc, date: [startDate, endDate], taskTimePOS, workPeopleNbr, workTime, workAreaType,
+          assigneeAreaPOS: assigneeAreaPOS.map(item=>item.areaId) }
 
         const times = []
 
@@ -267,6 +225,7 @@ export default {
         orgIds = this.form.orgIds
         userIds = []
       }
+      this.form.assigneeAreaPOS = this.form.assigneeAreaPOS.map(item=>({ areaId: item }))
       const form = {
         ifStart,
         optType: TASK_TYPES.DAILY,
@@ -290,12 +249,6 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.el-tree {
-  height: 200px;
-  overflow: auto;
-  border: 1px solid #dcdfe6;
-  border-radius: 4px;
-}
 .jc-left-width50 {
   width: 50%;
   float: left;
