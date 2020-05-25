@@ -66,15 +66,16 @@ export default {
     }
   },
   methods: {
-    check(checkedNodes, checkedKeys) {
-      console.log(checkedNodes, checkedKeys.checkedKeys)
-      this.$emit('update:selectedAreas', checkedKeys.checkedKeys)
+    check(checkedNodes, { checkedKeys }) {
+      this.$emit('update:selectedAreas', checkedKeys)
     },
     // getCheckedKeys() {
     //   this.$emit('update:selectedAreas', this.$refs.tree.getCheckedKeys())
     // },
     setCheckedKeys() {
-      this.$emit('update:selectedAreas', this.filterArr)
+      const areas = new Set([...this.filterArr, ...this.selectedAreas])
+
+      this.$emit('update:selectedAreas', [...areas])
     },
     resetChecked() {
       this.$emit('update:selectedAreas', [])
