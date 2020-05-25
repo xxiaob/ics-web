@@ -27,7 +27,7 @@
 <script>
 import { eventManageTypeList } from '@/api/eventManage'
 export default {
-  name: 'SystemEventManageFilter',
+  name: 'EventManageFilter',
   props: {
     orgTree: {
       type: Array

@@ -18,16 +18,19 @@
         <el-table-column prop="createTime" label="创建时间" :formatter="formatTime"></el-table-column>
         <el-table-column width="100" label="操作">
           <template slot-scope="scope">
-            <el-button type="text" size="mini" icon="el-icon-view" @click="manage(scope.row,true)" title="查看"></el-button>
+            <el-button type="text" size="mini" icon="el-icon-view" @click="detail(scope.row)" title="查看"></el-button>
             <el-button type="text" size="mini" icon="el-icon-edit-outline" @click="manage(scope.row)" title="编辑" :disabled="scope.row.reportUser!==user.userId"></el-button>
             <el-button type="text" size="mini" icon="el-icon-delete" @click="del(scope.row)" title="删除" :disabled="scope.row.reportUser!==user.userId"></el-button>
           </template>
         </el-table-column>
       </el-table>
       <el-pagination @current-change="currentChange" @size-change="sizeChange" :current-page.sync="page.pageNum" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.total" class="text-right jc-mt"></el-pagination>
-
     </el-card>
+
     <jc-manage :orgTree="orgTree" :orgId="orgId" :options="info" :visible.sync="visible" @save-success="initData"></jc-manage>
+
+    <jc-detail :info="detailInfo" :visible.sync="detailVisible"></jc-detail>
+
   </div>
 </template>
 <script>
@@ -39,11 +42,12 @@ import { createNamespacedHelpers } from 'vuex'
 const { mapState } = createNamespacedHelpers('user')
 
 export default {
-  name: 'SystemEventManageIndex',
+  name: 'EventManageIndex',
   mixins: [PaginationMixins],
   components: {
     TabFilter: () => import('./modules/tabFilter'),
-    JcManage: () => import('./modules/manage')
+    JcManage: () => import('./modules/manage'),
+    JcDetail: () => import('./modules/detail')
   },
   data() {
     return {
@@ -52,7 +56,9 @@ export default {
       list: [],
       loading: false,
       visible: false,
+      detailVisible: false,
       info: null,
+      detailInfo: null,
       filter: {},
       orgId: ''
     }
@@ -160,21 +166,20 @@ export default {
         this.currentChange(this.page.pageNum - 1)
       })
     },
-    async manage(row, view) {
+    async manage(row) {
       if (row) {
         const res = await eventManageGet(row.id)
 
         this.info = res
-        if (view) {
-          this.info.view = true
-        } else {
-          this.info.view = false
-        }
       } else {
         this.info = null
       }
       this.orgId = this.user.orgId
       this.visible = true
+    },
+    detail(row) {
+      this.detailInfo = row
+      this.detailVisible = true
     }
   }
 }
