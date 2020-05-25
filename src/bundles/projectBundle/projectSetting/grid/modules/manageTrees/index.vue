@@ -55,7 +55,7 @@ export default {
       this.expandedKeys = [data.orgId]
       this.parentNode = [{ id: data.orgId, pid: data.pid, pName: '--', orgId: data.orgId, name: data.projectName, view: false }]
       this.treeShow = false
-      console.log('开始初始化tree')
+      console.log('开始初始化tree', this.project, this.parentNode)
       this.$nextTick(() => {
         console.log('初始化tree完成')
         this.treeShow = true
@@ -93,7 +93,7 @@ export default {
     loadNode(node, resolve) {
       console.log(node)
       if (node.level == 0) {
-        return this.parentNode
+        resolve(this.parentNode)
       }
       this.getNodes(node).then((data) => {
         resolve(data)
