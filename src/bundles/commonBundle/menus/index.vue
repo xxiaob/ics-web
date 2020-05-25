@@ -29,6 +29,15 @@
         <el-menu-item index="taskProcess">任务处理</el-menu-item>
         <el-menu-item index="taskSearch">任务查询</el-menu-item>
       </el-submenu>
+      <el-submenu index="attend" class="jc-menu-item">
+        <template slot="title">
+          <i class="jc-menu-icon el-icon-setting"></i>
+          <span class="jc-menu-arrow-title" slot="title">考勤管理</span>
+        </template>
+        <el-menu-item index="myAttend">我的考勤</el-menu-item>
+        <el-menu-item index="peopleAttend">人员考勤</el-menu-item>
+        <el-menu-item index="postAttend">岗点考勤</el-menu-item>
+      </el-submenu>
       <el-submenu index="system" class="jc-menu-item">
         <template slot="title">
           <i class="jc-menu-icon el-icon-setting"></i>

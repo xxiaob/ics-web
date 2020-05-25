@@ -160,3 +160,12 @@ export const TASK_AREA_TYPES = new JcEnum([
   { key: 'ORG', value: '0', label: '组织区域' },
   { key: 'GRID', value: '1', label: '网格区域' }
 ])
+
+/**
+ * 考勤 - 考勤周期
+ */
+export const ATTEND_PERIODS = new JcEnum([
+  { key: 'DAY', value: '0', label: '日数据' },
+  { key: 'WEEK', value: '1', label: '周数据' },
+  { key: 'MONTH', value: '2', label: '月数据' }
+])

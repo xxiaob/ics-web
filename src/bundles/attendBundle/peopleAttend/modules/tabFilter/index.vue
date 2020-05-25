@@ -1,0 +1,101 @@
+<template>
+  <el-card class="jc-tabfilter-card">
+    <div class="jc-status-group">
+      <el-radio-group v-model="status" size="medium" @change="changeStatus">
+        <el-radio-button v-for="item in ATTEND_PERIODS.VALUES" :key="item.value" :label="item.value">{{item.label}}</el-radio-button>
+      </el-radio-group>
+    </div>
+    <el-form ref="form" :inline="true" :model="form" class="jc-tabfilter-form" size="small">
+      <el-form-item prop="orgId" label="所属组织" v-if="!self">
+        <el-cascader :options="orgTree" v-model="form.orgId" :props="{expandTrigger: 'hover', emitPath: false,checkStrictly:true }" clearable></el-cascader>
+      </el-form-item>
+      <el-form-item prop="" label="时间">
+        <el-date-picker v-if="status===ATTEND_PERIODS.DAY" v-model="date" @change="changeDate" value-format="yyyy-MM-dd HH:mm:ss" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期">
+        </el-date-picker>
+        <div v-if="status===ATTEND_PERIODS.WEEK">
+          <el-date-picker v-model="form.startDate" value-format="yyyy-MM-dd HH:mm:ss" type="week" format="yyyy 第 WW 周" placeholder="开始周"></el-date-picker>
+          <span>-</span>
+          <el-date-picker v-model="form.endDate" value-format="yyyy-MM-dd HH:mm:ss" type="week" format="yyyy 第 WW 周" placeholder="结束周"></el-date-picker>
+        </div>
+        <el-date-picker v-if="status===ATTEND_PERIODS.MONTH" v-model="date" @change="changeDate" value-format="yyyy-MM-dd HH:mm:ss" type="monthrange" range-separator="-" start-placeholder="开始月" end-placeholder="结束月">
+        </el-date-picker>
+      </el-form-item>
+      <el-form-item class="jc-tabfilter-btns">
+        <el-button type="primary" @click="onSubmit">查询</el-button>
+        <el-button @click="reset">重置</el-button>
+        <el-button type="primary" @click="exportData">导出</el-button>
+      </el-form-item>
+    </el-form>
+  </el-card>
+</template>
+<script>
+import { ATTEND_PERIODS } from '@/constant/Dictionaries'
+export default {
+  name: 'AttendFilter',
+  props: {
+    self: {
+      type: Boolean,
+      default: false
+    },
+    orgTree: {
+      type: Array,
+      default: ()=>[]
+    }
+  },
+  data() {
+    return {
+      ATTEND_PERIODS,
+      status: ATTEND_PERIODS.DAY,
+      form: {
+        selectType: ATTEND_PERIODS.DAY,
+        startDate: '',
+        endDate: '',
+        orgId: ''
+      },
+      date: null
+    }
+  },
+  methods: {
+    changeStatus(value) {
+      this.reset()
+      this.form.selectType = value
+      this.onSubmit()
+    },
+    changeDate(value) {
+      if (value) {
+        this.form.startDate = value[0]
+        this.form.endDate = value[1]
+      } else {
+        this.form.startDate = ''
+        this.form.endDate = ''
+      }
+    },
+    reset() {
+      this.$refs.form.resetFields()
+      this.form.startDate = ''
+      this.form.endDate = ''
+      this.date = null
+      this.form.selectType = this.status
+    },
+    onSubmit() {
+      const form = {}
+
+      Object.keys(this.form).forEach(key=>{
+        if (this.form[key]) {
+          form[key] = this.form[key]
+        }
+      })
+      this.$emit('filter', form)
+    },
+    exportData() {
+      console.log('exportData')
+    }
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.jc-status-group {
+  margin-bottom: $jc-default-dis;
+}
+</style>
