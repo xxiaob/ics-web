@@ -23,9 +23,7 @@ export function userListByOrg(orgIds) {
   return axios({
     url: API.user.listByOrg,
     method: 'post',
-    params: {
-      orgIds
-    },
+    params: { orgIds },
     paramsSerializer(params) {
       return qs.stringify(params, { arrayFormat: 'repeat' })
     }

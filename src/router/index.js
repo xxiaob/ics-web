@@ -7,6 +7,7 @@ import systemRouter from './system'
 import taskRouter from './task'
 import projectRouter from './project'
 import attendRouter from './attend'
+import screenRouter from './screen' //大屏路由
 
 // 解决两次访问相同路由地址报错
 // const originalPush = Router.prototype.push
@@ -37,19 +38,11 @@ let routerOptions = {
       }
     }, ...systemRouter, ...taskRouter, ...projectRouter, ...attendRouter]
   }, {
-    path: '/map',
-    name: 'map',
-    redirect: { name: 'mapDemo' },
+    path: '/',
+    name: 'fullPage',
     component: () => import('@/bundles/commonBundle/pageContent/fullPage'),
-    children: [{
-      path: 'demo',
-      name: 'mapDemo',
-      component: () => import('@/bundles/mapBundle/demo'),
-      meta: {
-        title: '地图Demo'
-      }
-    }]
-  }, authRouter]
+    children: [...authRouter, ...screenRouter]
+  }]
 }
 
 let router = new Router(routerOptions)
