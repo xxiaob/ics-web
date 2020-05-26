@@ -1,15 +1,16 @@
 /**
  * 高德地图配置数据
  */
+import { mapStyle } from '@/map/mapConst'
 
 //事件转换
 export const EventTrans = {}
 
 //地图样式配置参数
 export const MapStyle = {
-  satellite: 'satellite',
-  base: 'amap://styles/df688c24215141f7d10385089cad4d4a',
-  dark: 'amap://styles/20e11eef65806a574506d42f2c8d0f6c'
+  [mapStyle.BASE]: 'amap://styles/df688c24215141f7d10385089cad4d4a',
+  [mapStyle.DARK]: 'amap://styles/20e11eef65806a574506d42f2c8d0f6c',
+  [mapStyle.SATELLITE]: mapStyle.SATELLITE
 }
 
 //地图配置数据
@@ -20,51 +21,122 @@ export const MapOptions = {
     plugins: ['AMap.MouseTool', 'AMap.Polygon', 'AMap.Circle', 'AMap.Polyline', 'AMap.PolygonEditor', 'AMap.CircleEditor', 'AMap.PolylineEditor', 'AMap.PlaceSearch'] //插件列表
   },
   mapOptions: {
-    mapStyle: MapStyle.base,
-    viewMode: '3D'
+    [mapStyle.BASE]: { mapStyle: MapStyle[mapStyle.BASE], viewMode: '3D' },
+    [mapStyle.DARK]: { mapStyle: MapStyle[mapStyle.DARK], viewMode: '3D' },
+    [mapStyle.SATELLITE]: { viewMode: '3D' }
   }
 }
 
 //多边形样式
 export const PolygonStyle = {
-  base: {
-    strokeWeight: 1,
-    strokeColor: '#0183ff',
-    fillColor: '#0183ff',
-    fillOpacity: 0.1,
-    strokeStyle: 'dashed'
+  [mapStyle.BASE]: {
+    base: {
+      strokeWeight: 1,
+      strokeColor: '#0183ff',
+      fillColor: '#0183ff',
+      fillOpacity: 0.1,
+      strokeStyle: 'dashed'
+    },
+    normal: { fillOpacity: 0.1 },
+    active: { fillOpacity: 0.3 }
   },
-  normal: { fillOpacity: 0.1 },
-  active: { fillOpacity: 0.3 }
+  [mapStyle.DARK]: {
+    base: {
+      strokeWeight: 1,
+      strokeColor: '#0183ff',
+      fillColor: '#0183ff',
+      fillOpacity: 0.1,
+      strokeStyle: 'dashed'
+    },
+    normal: { fillOpacity: 0.1 },
+    active: { fillOpacity: 0.3 }
+  },
+  [mapStyle.SATELLITE]: {
+    base: {
+      strokeWeight: 1,
+      strokeColor: '#0183ff',
+      fillColor: '#0183ff',
+      fillOpacity: 0.1,
+      strokeStyle: 'dashed'
+    },
+    normal: { fillOpacity: 0.1 },
+    active: { fillOpacity: 0.3 }
+  }
 }
 
 //圆形样式
 export const CircleStyle = {
-  base: {
-    strokeWeight: 1,
-    strokeColor: '#0183ff',
-    fillColor: '#0183ff',
-    fillOpacity: 0.1,
-    strokeStyle: 'dashed'
+  [mapStyle.BASE]: {
+    base: {
+      strokeWeight: 1,
+      strokeColor: '#0183ff',
+      fillColor: '#0183ff',
+      fillOpacity: 0.1,
+      strokeStyle: 'dashed'
+    },
+    normal: { fillOpacity: 0.1 },
+    active: { fillOpacity: 0.3 }
   },
-  normal: { fillOpacity: 0.1 },
-  active: { fillOpacity: 0.3 }
+  [mapStyle.DARK]: {
+    base: {
+      strokeWeight: 1,
+      strokeColor: '#0183ff',
+      fillColor: '#0183ff',
+      fillOpacity: 0.1,
+      strokeStyle: 'dashed'
+    },
+    normal: { fillOpacity: 0.1 },
+    active: { fillOpacity: 0.3 }
+  },
+  [mapStyle.SATELLITE]: {
+    base: {
+      strokeWeight: 1,
+      strokeColor: '#0183ff',
+      fillColor: '#0183ff',
+      fillOpacity: 0.1,
+      strokeStyle: 'dashed'
+    },
+    normal: { fillOpacity: 0.1 },
+    active: { fillOpacity: 0.3 }
+  }
 }
 
 //线的样式
 export const PolylineStyle = {
-  base: {
-    strokeWeight: 2,
-    // isOutline: false,
-    // borderWeight: 5,
-    // outlineColor: '#cccccc',
-    strokeColor: '#0183ff',
-    strokeStyle: 'dashed',
-    lineJoin: 'round',
-    lineCap: 'round'
+  [mapStyle.BASE]: {
+    base: {
+      strokeWeight: 2,
+      strokeColor: '#0183ff',
+      strokeStyle: 'dashed',
+      lineJoin: 'round',
+      lineCap: 'round'
+    },
+    normal: { fillOpacity: 0.1 },
+    active: { fillOpacity: 0.3 }
   },
-  normal: { fillOpacity: 0.1 },
-  active: { fillOpacity: 0.3 }
+  [mapStyle.DARK]: {
+    base: {
+      strokeWeight: 2,
+      strokeColor: '#0183ff',
+      strokeStyle: 'dashed',
+      lineJoin: 'round',
+      lineCap: 'round'
+    },
+    normal: { fillOpacity: 0.1 },
+    active: { fillOpacity: 0.3 }
+  },
+  [mapStyle.SATELLITE]: {
+    base: {
+      strokeWeight: 2,
+      strokeColor: '#0183ff',
+      strokeStyle: 'dashed',
+      lineJoin: 'round',
+      lineCap: 'round'
+    },
+    normal: { fillOpacity: 0.1 },
+    active: { fillOpacity: 0.3 }
+  }
+
 }
 
 //搜索参数
@@ -78,9 +150,25 @@ export const SearchOptions = {
   }
 }
 
+import { defaultMarker } from './marker/template'
 //market配置参数
 export const markerOptions = {
-  base: {
-    anchor: [-9, -54]
+  [mapStyle.BASE]: {
+    base: {
+      anchor: [-9, -54]
+    },
+    getContent: defaultMarker
+  },
+  [mapStyle.DARK]: {
+    base: {
+      anchor: [-9, -54]
+    },
+    getContent: defaultMarker
+  },
+  [mapStyle.SATELLITE]: {
+    base: {
+      anchor: [-9, -54]
+    },
+    getContent: defaultMarker
   }
 }

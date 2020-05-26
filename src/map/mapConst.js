@@ -4,7 +4,7 @@
 import JcEnum from '@/libs/JcEnum'
 
 /**
- * 地图样式
+ * 地图样式风格
  */
 export const mapStyle = new JcEnum([
   { key: 'BASE', value: 'base', label: '标准' },

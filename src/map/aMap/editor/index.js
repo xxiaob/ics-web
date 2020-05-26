@@ -124,13 +124,13 @@ class JcMapEditor extends JcMapEditorBase {
     this.editObject = { id: this.idIndex++, type, opera: MAP_EDIT_TYPE.ADD }
     if (type === MAP_SIGN_TYPE.Polygon) {
       //处理矩形
-      this.mousetool.polygon({ ...PolygonStyle.base, ...PolygonStyle.active })
+      this.mousetool.polygon({ ...PolygonStyle[this.map.mapStyle].base, ...PolygonStyle[this.map.mapStyle].active })
     } else if (type === MAP_SIGN_TYPE.Circle) {
       //处理圆形
-      this.mousetool.circle({ ...CircleStyle.base, ...CircleStyle.active })
+      this.mousetool.circle({ ...CircleStyle[this.map.mapStyle].base, ...CircleStyle[this.map.mapStyle].active })
     } else if (type === MAP_SIGN_TYPE.Polyline) {
       //处理划线
-      this.mousetool.polyline({ ...PolylineStyle.base, ...PolylineStyle.active })
+      this.mousetool.polyline({ ...PolylineStyle.base[this.map.mapStyle], ...PolylineStyle[this.map.mapStyle].active })
     }
   }
 

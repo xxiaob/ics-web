@@ -3,7 +3,6 @@
  */
 import JcMapmarkerBase from '../../base/JcMapMarker'
 import { EventTrans, markerOptions } from '../config'
-import { defaultMarker } from './template'
 
 class JcMapmarker extends JcMapmarkerBase {
   /**
@@ -14,7 +13,7 @@ class JcMapmarker extends JcMapmarkerBase {
     super(options)
     //处理标记显示
     this.marker = new this.map.AMap.Marker({
-      ...markerOptions.base,
+      ...markerOptions[this.mapStyle || this.map.mapStyle],
       position: this.position,
       draggable: this.draggable
     })
@@ -26,7 +25,7 @@ class JcMapmarker extends JcMapmarkerBase {
    * @param {Array} position 中心点
    */
   show(position) {
-    this.marker.setContent(defaultMarker({ icon: this.icon, title: this.name, titleVisible: this.titleVisible }))
+    this.marker.setContent(markerOptions[this.mapStyle || this.map.mapStyle].getContent({ icon: this.icon, title: this.name, titleVisible: this.titleVisible, extData: this.extData }))
     this.setPosition(position)
     this.marker.setMap(this.map.map)
   }

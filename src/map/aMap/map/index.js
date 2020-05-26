@@ -17,25 +17,22 @@ class JcMap extends JcMapBase {
 
   /**
    *  初始化地图
-   * @param {*} options
-   * @param {Object} options.loadOptions 地图load参数
-   * @param {Object} options.mapOptions 地图创建参数
-   * @param {Object} options.source 地图承接, 必填
+   * @param {Dom|String} source 地图承接, 必填
    * @returns {Promise} 返回Promise对象
    */
-  async init(options) {
+  async init(source) {
     if (!this.map) {
       this.console('开始初始化地图...')
       try {
         this.AMap = await initAmap()
-        this.map = new this.AMap.Map(options.source, Object.assign({}, MapOptions.mapOptions, options.mapOptions || {}))
+        this.map = new this.AMap.Map(source, MapOptions.mapOptions[this.mapStyle])
 
         let complete = false //防止map complete事件触发多次
 
         this.map.on('complete', () => {
           if (!complete) {
             // 地图图块加载完成后触发
-            let mapEl = typeof options.source == 'string' ? document.getElementById(options.source) : options.source
+            let mapEl = typeof source == 'string' ? document.getElementById(source) : source
 
             let logoEL = mapEl.querySelector('.amap-logo')
 

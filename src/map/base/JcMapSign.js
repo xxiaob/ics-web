@@ -13,7 +13,7 @@ class JcMapSign {
    * @param {JcMap} options.map JcMap地图对象
    * @param {Boolean} options.active 是否使用选中样式
    * @param {Boolean} options.debug 配置 设法开启debug 模式，默认true
-   * @param {String} options.style 设置额外样式，取配置的对应标记类型样式key
+   * @param {String} options.mapStyle 地图使用样式key,对应mapStyle枚举
    * @param {Array} options.boundaries 边界数组
    * @param {Boolean} options.areaVisible 是否显示区域边界
    * @param {Boolean} options.tipVisible 是否显示中心点tip
@@ -28,7 +28,7 @@ class JcMapSign {
     this.boundaries = options.boundaries || []
     this.map = options.map || null
     this.active = options.active || false
-    this.style = options.style || null
+    this.mapStyle = options.mapStyle
     this.areaVisible = options.areaVisible == false ? false : true
     this.tipVisible = options.tipVisible == false ? false : true
   }

@@ -1,14 +1,17 @@
 /**
  * 地图基础类，提供继承类必须重写的方法
  */
+import { mapStyle } from '@/map/mapConst'
+
 class JcMap {
   /**
    * 构造
    * @param {*} options
    * @param {Object} options.debug 配置 设法开启debug 模式，默认true
+   * @param {String} options.mapStyle 地图使用样式key,对应mapStyle枚举
    */
   constructor(options = {}) {
-    this.mapStyle = options.debug || true
+    this.mapStyle = options.mapStyle || mapStyle.BASE
     this.debug = options.debug || true
   }
 

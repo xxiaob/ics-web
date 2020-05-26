@@ -63,7 +63,7 @@ export default {
     initData(data) {
       this.orgId = data.orgId
       this.loading = true
-      myJcMap.init({ source: this.$refs.myMap }).then(() => {
+      myJcMap.init(this.$refs.myMap).then(() => {
         this.$refs.mapSearch.initData(myJcMap) //初始化搜索对象
         areaList({ orgId: this.orgId, orgSearchType: AREAS_TYPE.SAMELEVEL, searchType: AREAS_SEARCH_TYPE.ORG }).then(res => {
           this.adcode = ''

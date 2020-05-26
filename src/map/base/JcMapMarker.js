@@ -13,6 +13,7 @@ class JcMapMarket {
    * @param {JcMap} options.map JcMap地图对象
    * @param {*} options.extData 额外参数，用于自定义数据处理
    * @param {Array<String>} options.position 标记中心点
+   * @param {String} options.mapStyle 地图使用样式key,对应mapStyle枚举
    * @param {Boolean} options.draggable 是否可以拖动
    * @param {Boolean} options.titleVisible 标题是否可见
    */
@@ -24,6 +25,7 @@ class JcMapMarket {
     this.map = options.map || null
     this.extData = options.extData
     this.position = options.position || []
+    this.mapStyle = options.mapStyle
     this.draggable = options.draggable || false
     this.titleVisible = options.titleVisible == false ? false : true
   }

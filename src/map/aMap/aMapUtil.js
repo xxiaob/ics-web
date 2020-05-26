@@ -27,13 +27,19 @@ export async function initAmap() {
 export function paintingSign(sign, boundary) {
   if (MAP_SIGN_TYPE.Polygon == boundary.type) {
     //显示矩形
-    return new sign.map.AMap.Polygon(Object.assign({ path: boundary.path, extData: { sign, boundary } }, PolygonStyle.base, sign.active ? PolygonStyle.active : {}, sign.style && PolygonStyle[sign.style] ? PolygonStyle[sign.style] : {}))
+    let activeStyle = PolygonStyle[sign.mapStyle || sign.map.mapStyle]
+
+    return new sign.map.AMap.Polygon(Object.assign({ path: boundary.path, extData: { sign, boundary } }, activeStyle.base, sign.active ? activeStyle.active : {}))
   } else if (MAP_SIGN_TYPE.Circle == boundary.type) {
     //显示圆形
-    return new sign.map.AMap.Circle(Object.assign({ center: boundary.center, radius: boundary.radius, extData: { sign, boundary } }, CircleStyle.base, sign.active ? CircleStyle.active : {}, sign.style && CircleStyle[sign.style] ? CircleStyle[sign.style] : {}))
+    let activeStyle = CircleStyle[sign.mapStyle || sign.map.mapStyle]
+
+    return new sign.map.AMap.Circle(Object.assign({ center: boundary.center, radius: boundary.radius, extData: { sign, boundary } }, activeStyle.base, sign.active ? activeStyle.active : {}))
   } else if (MAP_SIGN_TYPE.Polyline == boundary.type) {
     //显示矩形
-    return new sign.map.AMap.Polyline(Object.assign({ path: boundary.path, extData: { sign, boundary } }, PolylineStyle.base, sign.active ? PolylineStyle.active : {}, sign.style && PolylineStyle[sign.style] ? PolylineStyle[sign.style] : {}))
+    let activeStyle = PolylineStyle[sign.mapStyle || sign.map.mapStyle]
+
+    return new sign.map.AMap.Polyline(Object.assign({ path: boundary.path, extData: { sign, boundary } }, activeStyle.base, sign.active ? activeStyle.active : {}))
   }
 }
 

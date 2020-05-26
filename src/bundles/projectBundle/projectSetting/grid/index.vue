@@ -49,7 +49,7 @@ export default {
       if (!myJcMap) {
         myJcMap = new JcMap()
       }
-      myJcMap.init({ source: this.$refs.myMap }).then(() => {
+      myJcMap.init(this.$refs.myMap).then(() => {
         this.$refs.mapSearch.initData(myJcMap) //初始化搜索对象
       })
     },
