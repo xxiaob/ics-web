@@ -47,7 +47,8 @@ export default {
     update: 'user-service/user/upd',
     del: 'user-service/user/del',
     resetUserPwd: 'user-service/user/resetUserPwd',
-    updateOrgReceiver: 'user-service/user/updOrgReceiver'
+    updateOrgReceiver: 'user-service/user/updOrgReceiver',
+    getOrgUserList: 'user-service/user/getOrgUserList'
   },
   areaType: {
     //区域类型管理
@@ -135,6 +136,11 @@ export default {
     listByPage: 'project-service/project/listByPage',
     list: 'project-service/project/list',
     update: 'project-service/project/update',
-    del: 'project-service/project/delete'
+    del: 'project-service/project/delete',
+    projectUserRef: {
+      //项目关联人员
+      add: '/projectUserRef/add',
+      list: '/projectUserRef/list'
+    }
   }
 }

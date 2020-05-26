@@ -88,3 +88,11 @@ export function resetUserPwd(userId) {
 export function updateOrgReceiver(data) {
   return axios.post(API.user.updateOrgReceiver, data)
 }
+/**
+ * 根据组织id查询所有组织和用户
+ * @param {object} data
+ * @returns {Object} axios 对象
+ */
+export function getOrgUserList(data) {
+  return axios.post(API.user.getOrgUserList, data)
+}
