@@ -8,6 +8,7 @@ class JcMap {
    * @param {Object} options.debug 配置 设法开启debug 模式，默认true
    */
   constructor(options = {}) {
+    this.mapStyle = options.debug || true
     this.debug = options.debug || true
   }
 

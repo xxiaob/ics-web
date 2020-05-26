@@ -27,7 +27,7 @@ class JcMap extends JcMapBase {
     if (!this.map) {
       this.console('开始初始化地图...')
       try {
-        this.AMap = await initAmap(options.loadOptions)
+        this.AMap = await initAmap()
         this.map = new this.AMap.Map(options.source, Object.assign({}, MapOptions.mapOptions, options.mapOptions || {}))
 
         let complete = false //防止map complete事件触发多次

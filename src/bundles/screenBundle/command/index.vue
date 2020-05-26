@@ -1,7 +1,7 @@
 <template>
   <section class="jc-screen-warp">
     <map-search ref="mapSearch" class="jc-area-search"></map-search>
-    <div class="jc-map-space" ref="myMap"></div>
+    <div class="jc-screen-space" ref="myMap"></div>
   </section>
 </template>
 <script>
@@ -16,7 +16,7 @@ export default {
   },
   data() {
     return {
-      floorData: { adcode: '', zoom: '' }
+
     }
   },
   mounted() {
@@ -31,7 +31,7 @@ export default {
     }
   },
   beforeDestroy() {
-
+    myJcMap.destroy()
   }
 }
 </script>

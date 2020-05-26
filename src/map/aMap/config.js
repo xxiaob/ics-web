@@ -5,6 +5,13 @@
 //事件转换
 export const EventTrans = {}
 
+//地图样式配置参数
+export const MapStyle = {
+  satellite: 'satellite',
+  base: 'amap://styles/df688c24215141f7d10385089cad4d4a',
+  dark: 'amap://styles/20e11eef65806a574506d42f2c8d0f6c'
+}
+
 //地图配置数据
 export const MapOptions = {
   loadOptions: {
@@ -13,6 +20,7 @@ export const MapOptions = {
     plugins: ['AMap.MouseTool', 'AMap.Polygon', 'AMap.Circle', 'AMap.Polyline', 'AMap.PolygonEditor', 'AMap.CircleEditor', 'AMap.PolylineEditor', 'AMap.PlaceSearch'] //插件列表
   },
   mapOptions: {
+    mapStyle: MapStyle.base,
     viewMode: '3D'
   }
 }

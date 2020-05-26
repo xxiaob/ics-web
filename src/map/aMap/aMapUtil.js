@@ -9,12 +9,11 @@ let AMap = null //地图对象
 
 /**
  * 初始化Amap对象
- * @param {Object} options amap load 参数
  * @returns {Amap} 对象
  */
-export async function initAmap(options) {
+export async function initAmap() {
   if (!AMap) {
-    AMap = await AMapLoader.load(Object.assign({}, MapOptions.loadOptions, options || {}))
+    AMap = await AMapLoader.load(MapOptions.loadOptions)
   }
   return AMap
 }
