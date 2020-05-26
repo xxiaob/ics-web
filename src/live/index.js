@@ -77,11 +77,21 @@ export class Live {
   leaveChannel() {
     this.client.leaveChannel(success => {
       console.log('leaveChannel 成功: ' + success)
-      this.client.unpublish(this.localStream, err => {
-        console.log('unpublish 报错: ' + err)
-      })
+      if (this.localStream) {
+        this.localStream.close()
+      }
+      const selfLive = document.getElementById('live')
+
+      selfLive.innerHTML = ''
     }, err => {
       console.log('leaveChannel 报错: ' + err)
+    })
+  }
+
+  //停止发布本地流
+  unpublish() {
+    this.client.unpublish(this.localStream, err => {
+      console.log('unpublish 报错: ' + err)
     })
   }
 }
