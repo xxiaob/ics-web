@@ -49,6 +49,19 @@ let routerOptions = {
         title: '地图Demo'
       }
     }]
+  }, {
+    path: '/live',
+    name: 'live',
+    redirect: { name: 'liveDemo' },
+    component: () => import('@/bundles/commonBundle/pageContent/fullPage'),
+    children: [{
+      path: 'demo',
+      name: 'liveDemo',
+      component: () => import('@/bundles/liveBundle/demo'),
+      meta: {
+        title: 'liveDemo'
+      }
+    }]
   }, authRouter]
 }
 
