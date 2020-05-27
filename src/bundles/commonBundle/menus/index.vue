@@ -1,7 +1,7 @@
 <template>
   <section>
     <el-menu :default-active="menuActive" @select="menuSelect" :collapse="isCollapse">
-      <el-submenu index="project" class="jc-menu-item">
+      <el-submenu index="normalCt" class="jc-menu-item">
         <template slot="title">
           <i class="jc-menu-icon el-icon-setting"></i>
           <span class="jc-menu-arrow-title" slot="title">常态管控</span>
