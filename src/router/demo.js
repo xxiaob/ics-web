@@ -8,4 +8,11 @@ export default [{
   meta: {
     title: 'liveDemo'
   }
+}, {
+  path: 'imDemo',
+  name: 'imDemo',
+  component: () => import('@/bundles/liveBundle/imDemo'),
+  meta: {
+    title: 'imDemo'
+  }
 }]

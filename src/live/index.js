@@ -19,6 +19,15 @@ export class Live {
     this.client.create(context, '408a34ed80ac4b43b5353b56ec1cd5f1', () => {
       console.log('client inited 成功')
     })
+
+    //监听远端流移除
+    this.client.on('stream-removed', e => {
+      console.log('stream-removed 远端流移除成功', e)
+    })
+    //监听用户离开
+    this.client.on('peer-leave', e => {
+      console.log('peer-leave 用户离开成功', e)
+    })
   }
 
   /**

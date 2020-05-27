@@ -6,6 +6,7 @@
     <el-button @click="leaveChannel">退出房间</el-button>
     <div id="live"></div>
     <div id="tolive"></div>
+    <!-- <video id="test"></video> -->
   </div>
 </template>
 
@@ -20,6 +21,24 @@ export default {
   },
   mounted() {
     this.live = new Live()
+    // hwplayerloaded(function () {
+    //   let options = {
+    //     //是否显示控制栏，包括进度条，播放暂停按钮，音量调节等组件
+    //     controls: true,
+    //     width: 640,
+    //     height: 360
+    //   }
+    //   var player = new HWPlayer('test', options, function () {
+    //     //播放器已经准备好了
+    //     player.src('rtmp://play.bg365.top/live/aaa')
+    //     // "this"指向的是HWPlayer的实例对象player
+    //     player.play()
+    //     // 使用事件监听
+    //     player.on('ended', function () {
+    //       //播放结束了
+    //     })
+    //   })
+    // })
   },
   methods: {
     joinChannel() {
