@@ -35,12 +35,4 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
-.jc-screen-warp,
-.jc-screen-space {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  z-index: 1;
-}
-</style>
+<style lang="scss" scoped src="./css/command.scss"></style>
