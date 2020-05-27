@@ -1,7 +1,12 @@
 export class Live {
-  constructor() {
+  constructor(localId = 'live', remoteId = 'tolive') {
     console.log('constructor')
     this.client = null
+    //本地流播放的容器id
+    this.localId = localId
+    //远端流播放的容器id
+    this.remoteId = remoteId
+    this.appId = '408a34ed80ac4b43b5353b56ec1cd5f1'
     this.init()
   }
 
@@ -16,18 +21,32 @@ export class Live {
     }
 
     //创建客户端对象
-    this.client.create(context, '408a34ed80ac4b43b5353b56ec1cd5f1', () => {
+    this.client.create(context, this.appId, () => {
       console.log('client inited 成功')
     })
 
     //监听远端流移除
     this.client.on('stream-removed', e => {
-      console.log('stream-removed 远端流移除成功', e)
+      console.log('stream-removed 远端流移除成功', e, e.uid)
+      this.removePlayer(e.uid)
     })
     //监听用户离开
     this.client.on('peer-leave', e => {
-      console.log('peer-leave 用户离开成功', e)
+      console.log('peer-leave 用户离开成功', e, e.uid)
+      this.removePlayer(e.uid)
     })
+  }
+
+  /**
+   * 移除远端流的播放dom
+   * @param {String} id
+  */
+  removePlayer(id) {
+    const playerDom = document.getElementById('player_' + id)
+
+    if (playerDom) {
+      playerDom.remove()
+    }
   }
 
   /**
@@ -50,46 +69,42 @@ export class Live {
     })
 
     //本地流初始化
-    this.localStream.init(success => {
-      console.log('localStream.init 成功: ' + success)
+    this.localStream.init(() => {
+      console.log('localStream.init 本地流初始化 成功')
       //播放本地流
-      this.localStream.play('live')
+      this.localStream.play(this.localId)
       //发布本地流
       this.client.publishStream(this.localStream, err => {
-        console.log('publishStream 报错: ' + err)
+        console.log('publishStream 发布本地流 报错: ' + err)
       })
     }, err => {
-      console.log('localStream.init 报错: ' + err)
+      console.log('localStream.init 本地流初始化 报错: ' + err)
     })
 
     //监听客户端的新增流
     this.client.on('stream-added', e => {
-      console.log('stream-added 成功', e)
-      const stream = e.stream
-
+      console.log('stream-added 监听客户端的新增流 成功', e)
       //订阅远端流，触发订阅事件
-      this.client.subscribe(stream, err => {
+      this.client.subscribe(e.stream, err => {
         console.log('Subscribe stream failed 失败', err)
       })
     })
     //监听订阅事件 并播放远端流
     this.client.on('stream-subscribed', e => {
-      console.log('stream-subscribed 成功', e)
-      const remoteStream = e.stream
-
+      console.log('stream-subscribed 监听订阅事件 成功', e)
       //接下来可以选择在本地播放远端流
-      remoteStream.play('tolive')
+      e.stream.play(this.remoteId)
     })
   }
 
   //离开房间
   leaveChannel() {
-    this.client.leaveChannel(success => {
-      console.log('leaveChannel 成功: ' + success)
+    this.client.leaveChannel(() => {
+      console.log('leaveChannel 离开房间 成功')
       if (this.localStream) {
         this.localStream.close()
       }
-      const selfLive = document.getElementById('live')
+      const selfLive = document.getElementById(this.localId)
 
       selfLive.innerHTML = ''
     }, err => {

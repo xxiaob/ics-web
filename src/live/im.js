@@ -2,14 +2,23 @@ import '../../static/jimsdk/jmessage-sdk-web.2.6.0.min.js'
 import md5 from 'md5'
 
 export class IM {
-  constructor() {
+  /**
+   * @param {String} username 用户名
+   * @param {Function} cb 回调函数
+  */
+  constructor(username, cb) {
+    this.username = username
     this.JIM = new JMessage({
       // debug: true
     })
-    this.init()
+    this.init(cb)
   }
-  //初始化
-  init() {
+
+  /**
+   * 初始化
+   * @param {Function} cb 回调函数
+  */
+  init(cb) {
     const secret = 'b8542135bfc2995812894d6a',
       appkey = 'f8409a2c88ceee289baaf57d',
       randomStr = 'dsadadwqeq213123edwqeq2131',
@@ -23,40 +32,60 @@ export class IM {
       signature
     }).onSuccess(data => {
       console.log('init success', data)
+      this.on(cb)
+      this.login(this.username)
     }).onFail(data => {
       console.log('init error', data)
     })
   }
 
-  register() {
+  /**
+   * 用户注册
+   * @param {String} username 用户名
+  */
+  register(username) {
     this.JIM.register({
-      'username': 'lxy2',
-      'password': '123456',
-      'nickname': '李向玉'
-    }).onSuccess(function (data) {
+      username,
+      password: '123456',
+      nickname: '李向玉'
+    }).onSuccess(data => {
       console.log('register success', data)
-    }).onFail(function (data) {
+    }).onFail(data => {
       console.log('register error', data)
     })
   }
 
-  login() {
+  /**
+   * 用户登录
+   * @param {String} username 用户名
+  */
+  login(username) {
     this.JIM.login({
-      'username': 'lxy2',
-      'password': '123456'
+      username,
+      password: '123456'
     }).onSuccess(data => {
       console.log('login success', data)
-      this.on()
-    }).onFail(function (data) {
-      console.log('error:' + JSON.stringify(data))
-    }).onTimeout(function (data) {
-      console.log('timeout:' + JSON.stringify(data))
+    }).onFail(data => {
+      console.log('login error:', data)
+    }).onTimeout(data => {
+      console.log('login timeout:', data)
     })
   }
 
-  on() {
+  //退出登录
+  loginOut() {
+    this.JIM.loginOut()
+  }
+
+  /**
+   * 消息监听
+   * @param {Function} cb 回调函数
+  */
+  on(cb) {
+    //聊天消息实时监听
     this.JIM.onMsgReceive(data => {
       console.log('onMsgReceive 实时数据:', data)
+      cb(data)
     })
 
     this.JIM.onEventNotification(function (data) {
@@ -98,8 +127,8 @@ export class IM {
 
   sendSingleMsg() {
     this.JIM.sendSingleMsg({
-      'target_username': 'lxx123',
-      'content': '啦啦啦'
+      target_username: 'lxx123',
+      content: '啦啦啦'
     }).onSuccess((data, msg) => {
       console.log('sendSingleMsg success data:', data)
       console.log('sendSingleMsg succes msg:', msg)
