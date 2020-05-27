@@ -10,7 +10,7 @@ import { JcMap } from '@/map'
 let myJcMap //个人 map 对象
 
 export default {
-  name: 'MapDemo',
+  name: 'ScreenCommand',
   components: {
     MapSearch: () => import('@/components/JcMap/MapSearch')
   },
