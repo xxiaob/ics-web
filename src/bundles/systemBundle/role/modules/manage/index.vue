@@ -60,10 +60,7 @@ export default {
 
       if (child && child.length) {
         child.forEach(item => {
-          let node = {
-            value: item.orgId,
-            label: item.orgName
-          }
+          let node = { value: item.orgId, label: item.orgName }
 
           let children = this.formatOrgTree(item.children)
 
