@@ -50,6 +50,7 @@ export default {
   },
   watch: {
     '$route'() {
+      this.gridVisible = false
       this.goFilter({})
     }
   },

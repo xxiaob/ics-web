@@ -65,12 +65,10 @@ export default {
             this.parentNode = [{ id: item.orgId, pid: item.pid, pName: '--', orgId: item.orgId, name: item.orgName, view: false }]
             this.formatOrg(item.children, item.orgName)
           }
-
-          this.loading = false
         } catch (error) {
-          this.loading = false
+          console.log(error)
         }
-
+        this.loading = false
         return true
       }
     },

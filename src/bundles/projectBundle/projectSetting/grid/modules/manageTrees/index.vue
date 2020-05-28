@@ -17,12 +17,14 @@
         </div>
       </el-tree>
     </div>
-    <jc-manage :options="info" :pNode="pNode" :projectId="project.projectId" :visible.sync="visible" @save-success="saveSuccess"></jc-manage>
+    <jc-manage :options="info" :pNode="pNode" :project="project" :visible.sync="visible" @save-success="saveSuccess"></jc-manage>
   </div>
 </template>
 <script>
+import { PROJECT_TYPES } from '@/constant/Dictionaries'
 import TreesFilterMixins from '@/mixins/TreesFilterMixins'
 import OperaMixins from './modules/mixins/operaMixins'
+import { organizationList } from '@/api/organization'
 import { areaList } from '@/api/area'
 import { AREAS_TYPE, AREAS_SEARCH_TYPE } from '@/constant/CONST'
 import { JcIcons } from '@/config/JcIconConfig'
@@ -39,6 +41,7 @@ export default {
       treeShow: false,
       filterText: '',
       project: { projectId: '--' },
+      orgs: {},
       parentNode: [],
       expandedKeys: [],
       props: { children: 'children', label: 'name' }
@@ -53,7 +56,7 @@ export default {
     initData(data) {
       this.project = data
       this.expandedKeys = [data.orgId]
-      this.parentNode = [{ id: data.orgId, pid: data.pid, pName: '--', orgId: data.orgId, name: data.projectName, view: false }]
+      this.orgs = {}
       this.treeShow = false
       console.log('开始初始化tree', this.project, this.parentNode)
       this.$nextTick(() => {
@@ -69,14 +72,52 @@ export default {
       }
       return ''
     },
+    async initOrg() {
+      //初始化组织,如果是专项,则需要初始化默认组织
+      if (PROJECT_TYPES.SpecialControl == this.project.projectType) {
+        try {
+          const res = await organizationList()
+
+          if (res && res.length) {
+            let item = res[0]
+
+            this.expandedKeys = [item.orgId]
+            this.parentNode = [{ id: item.orgId, pid: item.pid, pName: '--', orgId: item.orgId, name: item.orgName, view: false }]
+            this.formatOrg(item.children, item.orgName)
+          }
+        } catch (error) {
+          console.log(error)
+        }
+      } else {
+        this.parentNode = [{ id: this.project.orgId, pid: this.project.pid, pName: '--', orgId: this.project.orgId, name: this.project.projectName, view: false }]
+      }
+    },
+    formatOrg(child, pName = '--') {
+      if (child && child.length) {
+        let orgs = []
+
+        child.forEach(item => {
+          orgs.push({ id: item.orgId, pid: item.pid, pName, orgId: item.orgId, name: item.orgName, view: false })
+          this.formatOrg(item.children, item.orgName)
+        })
+        this.orgs[orgs[0].pid] = orgs
+      }
+    },
     async getNodes(node) {
+      if (node.level == 0) {
+        await this.initOrg()
+        return [...this.parentNode]
+      }
       let result = []
 
-      let params = { searchType: AREAS_SEARCH_TYPE.GRID }
+      let params = { projectId: this.project.projectId, searchType: AREAS_SEARCH_TYPE.GRID }
 
       if (node.data.areaId) {
         Object.assign(params, { areaId: node.data.areaId })
       } else {
+        let orgNode = this.orgs[node.data.orgId] || []
+
+        result = [...orgNode]
         Object.assign(params, { orgId: node.data.orgId, orgSearchType: AREAS_TYPE.OWN })
       }
       const res = await areaList(params)
@@ -92,9 +133,6 @@ export default {
     },
     loadNode(node, resolve) {
       console.log(node)
-      if (node.level == 0) {
-        resolve(this.parentNode)
-      }
       this.getNodes(node).then((data) => {
         resolve(data)
         if (this.currentKey) {
