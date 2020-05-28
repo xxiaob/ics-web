@@ -2,6 +2,7 @@ export class Live {
   constructor(localId = 'live', remoteId = 'tolive') {
     console.log('constructor')
     this.client = null
+    this.inChannel = false
     //本地流播放的容器id
     this.localId = localId
     //远端流播放的容器id
@@ -54,9 +55,10 @@ export class Live {
    * @param {String} channelId 房间ID
    * @param {String} role 角色 主播(host)和观众(audience)
   */
-  joinChannel(channelId = '1001', role = 'host') {
+  joinChannel(channelId = '123456', role = 'host') {
     this.client.joinChannel(null, channelId, null, null, null, role, () => {
       console.log('joinChannel 成功')
+      this.inChannel = true
     })
 
     console.log(this.client)
@@ -101,6 +103,7 @@ export class Live {
   leaveChannel() {
     this.client.leaveChannel(() => {
       console.log('leaveChannel 离开房间 成功')
+      this.inChannel = false
       if (this.localStream) {
         this.localStream.close()
       }

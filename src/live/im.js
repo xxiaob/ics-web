@@ -32,8 +32,10 @@ export class IM {
       signature
     }).onSuccess(data => {
       console.log('init success', data)
-      this.on(cb)
-      this.login(this.username)
+      // this.on(cb)
+      if (this.username) {
+        this.login(this.username)
+      }
     }).onFail(data => {
       console.log('init error', data)
     })
@@ -60,21 +62,31 @@ export class IM {
    * @param {String} username 用户名
   */
   login(username) {
-    this.JIM.login({
-      username,
-      password: '123456'
-    }).onSuccess(data => {
-      console.log('login success', data)
-    }).onFail(data => {
-      console.log('login error:', data)
-    }).onTimeout(data => {
-      console.log('login timeout:', data)
-    })
+    if (this.isLogin()) {
+      console.log('用户已登录')
+    } else {
+      this.JIM.login({
+        username,
+        password: '123456'
+      }).onSuccess(data => {
+        console.log('login success 登录成功', data)
+        this.isLogin()
+      }).onFail(data => {
+        console.log('login error:', data)
+      }).onTimeout(data => {
+        console.log('login timeout:', data)
+      })
+    }
   }
 
   //退出登录
   loginOut() {
     this.JIM.loginOut()
+  }
+
+  //登录状态
+  isLogin() {
+    return this.JIM.isLogin()
   }
 
   /**
@@ -125,10 +137,19 @@ export class IM {
     })
   }
 
-  sendSingleMsg() {
+  /**
+   * 发送消息
+   * @param {String} username 用户名
+   * @param {Object} obj 消息体
+   * @param {String} obj.channelId 房间id
+   * @param {String} obj.content 消息内容
+   * @param {String} obj.inviteType "0":正常,"1":强拉
+   * @param {String} obj.mediaType "0":音频,"1":视频
+  */
+  sendSingleMsg(username, obj) {
     this.JIM.sendSingleMsg({
-      target_username: 'lxx123',
-      content: '啦啦啦'
+      target_username: username,
+      content: JSON.stringify(obj)
     }).onSuccess((data, msg) => {
       console.log('sendSingleMsg success data:', data)
       console.log('sendSingleMsg succes msg:', msg)
