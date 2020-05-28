@@ -132,13 +132,14 @@ export default {
   projects: {
     //项目管理
     add: 'user-service/project',
+    get: 'user-service/project/detail/',
     listByPage: 'user-service/project/listByPage',
     list: 'user-service/project/list',
-    update: 'user-service/project/update',
-    del: 'user-service/project/delete',
+    update: 'user-service/project',
+    del: 'user-service/project/',
     projectUserRef: {
       //项目关联人员
-      save: 'user-service/projectUserRef/save',
+      save: 'user-service/projectUserRef',
       list: 'user-service/projectUserRef/list'
     }
   }

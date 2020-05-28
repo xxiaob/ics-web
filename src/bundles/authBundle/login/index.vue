@@ -5,10 +5,10 @@
     <div class="jc-login-space">
       <div class="jc-login-title">欢迎登录</div>
       <div class="jc-input-warp">
-        <input class="jc-login-input" type="text" v-model="form.userName" placeholder="请输入账号" maxlength="20" />
+        <input class="jc-login-input" type="text" v-model="form.userName" placeholder="请输入账号" maxlength="20" @keyup.enter="onSubmit" />
       </div>
       <div class="jc-input-warp">
-        <input class="jc-login-input" type="password" v-model="form.password" placeholder="请输入密码" maxlength="20" />
+        <input class="jc-login-input" type="password" v-model="form.password" placeholder="请输入密码" maxlength="20" @keyup.enter="onSubmit" />
       </div>
       <div class="jc-tip" v-text="tip"></div>
       <div class="jc-login-btn" @click="onSubmit">

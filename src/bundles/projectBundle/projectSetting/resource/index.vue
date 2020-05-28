@@ -14,8 +14,7 @@
 </template>
 <script>
 import { getOrgUserList } from '@/api/user'
-import { PROJECT_TYPES } from '@/constant/Dictionaries'
-import { projectsSave } from '@/api/projects'
+import { projectUserRefList, projectUserRefSave } from '@/api/projects'
 import TreesFilterMixins from '@/mixins/TreesFilterMixins'
 
 export default {
@@ -30,7 +29,8 @@ export default {
       treesLoading: '',
       trees: [],
       expandedKeys: [],
-      props: { children: 'children', label: 'label' }
+      props: { children: 'children', label: 'label' },
+      checkKeys: []
     }
   },
   watch: {
@@ -46,15 +46,30 @@ export default {
   methods: {
     async initData() {
       this.trees = []
+      this.expandedKeys = []
+      this.checkKeys = []
       this.filterText = ''
       this.dialogVisible = this.visible
-      this.expandedKeys = []
       this.treesLoading = true
       try {
         const orgsAndUsers = await getOrgUserList()
 
         this.trees = this.formatUserOrgTrees(orgsAndUsers)//处理组织和用户
-        this.expandedKeys = this.trees.length ? [this.trees[0].id] : []
+        this.expandedKeys = this.trees.length ? [this.trees[0].id] : [] //设置第一级默认展开
+
+        //处理原有用户显示
+        const checkUsers = await projectUserRefList({ projectId: this.options.projectId })
+
+        if (checkUsers && checkUsers.length) {
+          let checkKeys = []
+
+          checkUsers.forEach(item => {
+            checkKeys.push(item.userId)
+          })
+          this.checkKeys = checkKeys
+        }
+
+        this.$refs.tree.setCheckedKeys(this.checkKeys)
       } catch (error) {
         console.log(error)
       }
@@ -80,22 +95,50 @@ export default {
       }
       return trees
     },
-    onSubmit() {
+    async onSubmit() {
       this.loading = true
-      this.$refs.form.validate(valid => {
-        if (valid) {
-          projectsSave({ ...this.form, projectType: this.projectType, beginTime: this.form.date[0], endTime: this.form.date[1] }).then(() => {
-            this.$message.success('操作成功')
-            this.dialogVisible = false
-            this.$emit('save-success')
-            this.loading = false
-          }).catch(() => {
-            this.loading = false
-          })
-        } else {
-          this.loading = false
+      let checkNodes = this.$refs.tree.getCheckedNodes(true)
+
+      let checkUsers = []
+
+      checkNodes.forEach(item => {
+        if (item.type == 'user') {
+          checkUsers.push(item.id)
         }
       })
+
+      console.log('选中的用户id', checkUsers)
+      //处理保存参数
+      let params = { addUserIds: [], deleteUserIds: [], projectId: this.options.projectId }
+
+      if (this.checkKeys.length) {
+        if (checkUsers.length) {
+          this.checkKeys.forEach(id => {
+            let index = checkUsers.indexOf(id)
+
+            if (index < 0) {
+              params.deleteUserIds.push(id)
+            } else {
+              checkUsers.splice(index, 1)
+            }
+          })
+          params.addUserIds = checkUsers
+        } else {
+          params.deleteUserIds = this.checkKeys
+        }
+      } else {
+        params.addUserIds = checkUsers
+      }
+      console.log('提交用户更新', this.checkKeys, params)
+      try {
+        await projectUserRefSave(params)
+        this.$message.success('操作成功')
+        this.dialogVisible = false
+        this.$emit('save-success')
+      } catch (error) {
+        console.log(error)
+      }
+      this.loading = false
     },
     dialogClose() {
       this.$emit('update:visible', false)

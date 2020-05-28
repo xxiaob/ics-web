@@ -35,7 +35,7 @@ export function projectsAdd(data) {
  * @returns {Object} axios 对象
  */
 export function projectsUpdate(data) {
-  return axios.post(API.projects.update, data)
+  return axios.put(API.projects.update, data)
 }
 
 /**
@@ -47,12 +47,20 @@ export function projectsSave(data) {
   return data.projectId ? projectsUpdate(data) : projectsAdd(data)
 }
 /**
+ * 详情
+ * @param {String} projectId 项目id
+ * @returns {Object} axios 对象
+ */
+export function projectGet(projectId) {
+  return axios.post(API.project.get + projectId)
+}
+/**
  * 删除
  * @param {String} projectId
  * @returns {Object} axios 对象
  */
 export function projectsDel(projectId) {
-  return axios.post(API.projects.del, { projectId })
+  return axios.delete(API.projects.del + projectId)
 }
 /*-------------------------------项目关联人员管理------------------------------------ */
 /**
