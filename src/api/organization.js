@@ -3,6 +3,7 @@
  */
 import axios from 'axios'
 import API from './API'
+import { getUser } from '@/libs/storage'
 
 /*-------------------------------组织管理------------------------------------ */
 /**
@@ -11,7 +12,9 @@ import API from './API'
  * @returns {Object} axios 对象
  */
 export function organizationList(data = {}) {
-  return axios.post(API.organization.list, data)
+  let user = getUser()
+
+  return axios.post(API.organization.list, { orgId: user ? user.orgId : '', ...data })
 }
 /**
  * 添加

@@ -63,3 +63,19 @@ export function projectsDel(projectId) {
   return axios.post(API.projects.del, { projectId })
 }
 /*-------------------------------项目关联人员管理------------------------------------ */
+/**
+ * 列表 不分页
+ * @param {object} data
+ * @returns {Object} axios 对象
+ */
+export function projectUserRefList(data = {}) {
+  return axios.post(API.projects.projectUserRef.list, data)
+}
+/**
+ * 保存&更新
+ * @param {object} data
+ * @returns {Object} axios 对象
+ */
+export function projectUserRefSave(data = {}) {
+  return axios.post(API.projects.projectUserRef.save, data)
+}

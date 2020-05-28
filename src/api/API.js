@@ -131,16 +131,16 @@ export default {
   },
   projects: {
     //项目管理
-    add: 'project-service/project/add',
-    get: '',
-    listByPage: 'project-service/project/listByPage',
-    list: 'project-service/project/list',
-    update: 'project-service/project/update',
-    del: 'project-service/project/delete',
+    add: 'user-service/project',
+    get: 'user-service/project/get',
+    listByPage: 'user-service/project/listByPage',
+    list: 'user-service/project/list',
+    update: 'user-service/project/update',
+    del: 'user-service/project/delete',
     projectUserRef: {
       //项目关联人员
-      add: '/projectUserRef/add',
-      list: '/projectUserRef/list'
+      save: 'user-service/projectUserRef/save',
+      list: 'user-service/projectUserRef/list'
     }
   }
 }

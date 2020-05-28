@@ -4,6 +4,7 @@
 import axios from 'axios'
 import API from './API'
 import qs from 'qs'
+import { getUser } from '@/libs/storage'
 
 /*-------------------------------用户管理------------------------------------ */
 /**
@@ -92,5 +93,7 @@ export function updateOrgReceiver(data) {
  * @returns {Object} axios 对象
  */
 export function getOrgUserList(data) {
-  return axios.post(API.user.getOrgUserList, data)
+  let user = getUser()
+
+  return axios.post(API.user.getOrgUserList, { orgId: user ? user.orgId : '', ...data })
 }
