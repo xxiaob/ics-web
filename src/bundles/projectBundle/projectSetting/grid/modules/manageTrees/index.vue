@@ -57,7 +57,6 @@ export default {
       this.project = data
       this.expandedKeys = [data.orgId]
       this.orgs = {}
-      this.parentNode = [{ id: data.orgId, pid: data.pid, pName: '--', orgId: data.orgId, name: data.projectName, view: false }]
       this.treeShow = false
       console.log('开始初始化tree', this.project, this.parentNode)
       this.$nextTick(() => {
@@ -74,16 +73,23 @@ export default {
       return ''
     },
     async initOrg() {
+      //初始化组织,如果是专项,则需要初始化默认组织
       if (PROJECT_TYPES.SpecialControl == this.project.projectType) {
         try {
           const res = await organizationList()
 
           if (res && res.length) {
-            this.formatOrg(res[0].children, res[0].orgName)
+            let item = res[0]
+
+            this.expandedKeys = [item.orgId]
+            this.parentNode = [{ id: item.orgId, pid: item.pid, pName: '--', orgId: item.orgId, name: item.orgName, view: false }]
+            this.formatOrg(item.children, item.orgName)
           }
         } catch (error) {
           console.log(error)
         }
+      } else {
+        this.parentNode = [{ id: this.project.orgId, pid: this.project.pid, pName: '--', orgId: this.project.orgId, name: this.project.projectName, view: false }]
       }
     },
     formatOrg(child, pName = '--') {

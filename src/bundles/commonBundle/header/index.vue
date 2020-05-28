@@ -55,7 +55,6 @@ export default {
     ]),
     logout() {
       this.loginOut()
-      this.$message.success('退出成功')
       this.$router.push({ name: 'login' })
     }
   }

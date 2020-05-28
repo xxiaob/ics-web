@@ -23,7 +23,6 @@
   </el-dialog>
 </template>
 <script>
-import { PROJECT_TYPES } from '@/constant/Dictionaries'
 import { areaAdd, areaGet, areaUpdate } from '@/api/area'
 import { areaTypeList } from '@/api/areaType'
 import { getStringRule, NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
@@ -75,12 +74,8 @@ export default {
       let areaSave = this.isEdit ? areaUpdate : areaAdd
 
       try {
-        let params = { projectId: this.project.projectId, ...this.form, areaId: this.pNode.areaId, drawCoordinateType: 1, griddingUptType: 1 }
+        let params = { projectId: this.project.projectId, ...this.form, orgId: this.pNode.orgId, areaId: this.pNode.areaId, drawCoordinateType: 1, griddingUptType: 1 }
 
-        //如果项目是应急项目,则不需要传orgId
-        if (PROJECT_TYPES.SpecialControl == this.project.projectType) {
-          params.orgId = this.pNode.orgId
-        }
         //如果是新增,且新增的父级是网格,则需要设置pid
         if (!this.isEdit && this.pNode.areaId) {
           params.pid = this.pNode.areaId
