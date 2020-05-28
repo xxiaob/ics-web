@@ -1,24 +1,22 @@
 import '../../static/jimsdk/jmessage-sdk-web.2.6.0.min.js'
 import md5 from 'md5'
-
+import JMessage from 'JMessage'
 export class IM {
   /**
    * @param {String} username 用户名
-   * @param {Function} cb 回调函数
   */
-  constructor(username, cb) {
+  constructor(username) {
     this.username = username
     this.JIM = new JMessage({
       // debug: true
     })
-    this.init(cb)
+    this.init()
   }
 
   /**
    * 初始化
-   * @param {Function} cb 回调函数
   */
-  init(cb) {
+  init() {
     const secret = 'b8542135bfc2995812894d6a',
       appkey = 'f8409a2c88ceee289baaf57d',
       randomStr = 'dsadadwqeq213123edwqeq2131',
@@ -97,43 +95,43 @@ export class IM {
     //聊天消息实时监听
     this.JIM.onMsgReceive(data => {
       console.log('onMsgReceive 实时数据:', data)
-      cb(data)
+      cb('onMsgReceive', data)
     })
 
-    this.JIM.onEventNotification(function (data) {
-      console.log('event_receive: ' + JSON.stringify(data))
+    this.JIM.onEventNotification(data => {
+      console.log('event_receive: ', data)
     })
 
-    this.JIM.onSyncConversation(function (data) { //离线消息同步监听
-      console.log(data)
+    this.JIM.onSyncConversation(data => { //离线消息同步监听
+      console.log('onSyncConversation', data)
     })
 
-    this.JIM.onUserInfUpdate(function (data) {
-      console.log('onUserInfUpdate : ' + JSON.stringify(data))
+    this.JIM.onUserInfUpdate(data => {
+      console.log('onUserInfUpdate : ', data)
     })
 
-    this.JIM.onSyncEvent(function (data) {
-      console.log('onSyncEvent : ' + JSON.stringify(data))
+    this.JIM.onSyncEvent(data => {
+      console.log('onSyncEvent : ', data)
     })
 
-    this.JIM.onMsgReceiptChange(function (data) {
-      console.log('onMsgReceiptChange : ' + JSON.stringify(data))
+    this.JIM.onMsgReceiptChange(data => {
+      console.log('onMsgReceiptChange : ', data)
     })
 
-    this.JIM.onSyncMsgReceipt(function (data) {
-      console.log('onSyncMsgReceipt : ' + JSON.stringify(data))
+    this.JIM.onSyncMsgReceipt(data => {
+      console.log('onSyncMsgReceipt : ', data)
     })
 
-    this.JIM.onMutiUnreadMsgUpdate(function (data) {
-      console.log('onConversationUpdate : ' + JSON.stringify(data))
+    this.JIM.onMutiUnreadMsgUpdate(data => {
+      console.log('onConversationUpdate : ', data)
     })
 
-    this.JIM.onTransMsgRec(function (data) {
-      console.log('onTransMsgRec : ' + JSON.stringify(data))
+    this.JIM.onTransMsgRec(data => {
+      console.log('onTransMsgRec : ', data)
     })
 
-    this.JIM.onRoomMsg(function (data) {
-      console.log('onRoomMsg  : ' + JSON.stringify(data))
+    this.JIM.onRoomMsg(data => {
+      console.log('onRoomMsg  : ', data)
     })
   }
 
@@ -145,6 +143,8 @@ export class IM {
    * @param {String} obj.content 消息内容
    * @param {String} obj.inviteType "0":正常,"1":强拉
    * @param {String} obj.mediaType "0":音频,"1":视频
+   * 接收方  回复消息  agree  channelId
+   * @param {String} obj.agree "0":拒绝邀请, "1":接受邀请
   */
   sendSingleMsg(username, obj) {
     this.JIM.sendSingleMsg({

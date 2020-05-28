@@ -47,8 +47,8 @@ export default {
     this.live = new Live('live', 'tolive')
   },
   methods: {
-    msgCb(data) {
-      console.log('vue 数据', data)
+    msgCb(onType, data) {
+      console.log('vue 数据', onType, data)
       const { from_username: fromUsername, content: { msg_body: { text } } } = data.messages[0]
 
       this.fromUsername = fromUsername

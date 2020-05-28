@@ -1,3 +1,4 @@
+import LiveClient from 'LiveClient'
 export class Live {
   constructor(localId = 'live', remoteId = 'tolive') {
     console.log('constructor')

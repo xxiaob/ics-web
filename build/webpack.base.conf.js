@@ -77,5 +77,9 @@ module.exports = {
     net: 'empty',
     tls: 'empty',
     child_process: 'empty'
+  },
+  externals: {
+    LiveClient: 'LiveClient',
+    JMessage: 'JMessage'
   }
 }
