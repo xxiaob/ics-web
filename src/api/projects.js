@@ -47,14 +47,6 @@ export function projectsSave(data) {
   return data.projectId ? projectsUpdate(data) : projectsAdd(data)
 }
 /**
- * 详情
- * @param {String} projectId
- * @returns {Object} axios 对象
- */
-export function projectsGet(projectId) {
-  return axios.post(API.projects.get, { projectId })
-}
-/**
  * 删除
  * @param {String} projectId
  * @returns {Object} axios 对象

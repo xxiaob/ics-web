@@ -17,7 +17,8 @@
       </el-card>
       <jc-manage :options="info" :projectType="projectType" :visible.sync="visible" @save-success="initData"></jc-manage>
     </div>
-    <grid-setting :options="grid" :visible.sync="gridVisible"></grid-setting>
+    <grid-setting :options="opreaData" :visible.sync="gridVisible"></grid-setting>
+    <resource-setting :options="opreaData" :visible.sync="resourceVisible"></resource-setting>
   </div>
 </template>
 <script>
@@ -32,7 +33,8 @@ export default {
     TabFilter: () => import('./modules/tabFilter'),
     JcManage: () => import('./modules/manage'),
     ListItem: () => import('./modules/listItem'),
-    GridSetting: () => import('../projectSetting/grid')
+    GridSetting: () => import('../projectSetting/grid'),
+    ResourceSetting: () => import('../projectSetting/resource')
   },
   data() {
     return {
@@ -40,8 +42,9 @@ export default {
       loading: false,
       visible: false,
       info: null,
-      grid: { projectName: '--' },
+      opreaData: { projectName: '--' },
       gridVisible: false,
+      resourceVisible: false,
       filter: {}
     }
   },
@@ -81,11 +84,13 @@ export default {
       this.currentChange(1)
     },
     operaChange(options) {
+      this.opreaData = options.data
       if (options.opera == 'delete-success') {
         this.currentChange(this.page.pageNum - 1)
       } else if (options.opera == 'grid-setting') {
-        this.grid = options.data
         this.gridVisible = true
+      } else if (options.opera == 'resource-setting') {
+        this.resourceVisible = true
       }
     },
     manage(row) {

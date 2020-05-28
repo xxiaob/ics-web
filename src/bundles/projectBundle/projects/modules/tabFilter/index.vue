@@ -1,11 +1,11 @@
 <template>
   <el-card class="jc-tabfilter-card">
     <el-form ref="form" :inline="true" :model="form" class="jc-tabfilter-form" size="small">
-      <el-form-item prop="areaTypeName" label="项目名称">
-        <el-input v-model="form.areaTypeName" placeholder="请输入项目名称"></el-input>
+      <el-form-item prop="projectName" label="项目名称">
+        <el-input v-model="form.projectName" placeholder="请输入项目名称"></el-input>
       </el-form-item>
       <el-form-item prop="date" label="项目时间">
-        <el-date-picker v-model="form.date" value-format="timestamp" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期">
+        <el-date-picker v-model="form.date" value-format="yyyy-MM-dd" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期">
         </el-date-picker>
       </el-form-item>
       <el-form-item prop="status" label="项目状态">
@@ -31,7 +31,7 @@ export default {
       form: {
         date: '',
         status: '',
-        areaTypeName: ''
+        projectName: ''
       }
     }
   },

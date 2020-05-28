@@ -45,7 +45,7 @@
     height: 30px;
     line-height: 30px;
     padding-left: $jc-default-dis/2;
-    background-color: rgba($color: $jc-color-black, $alpha: .3);
+    background-color: rgba($color: $jc-color-black, $alpha: 0.3);
     display: flex;
     z-index: 10;
   }
@@ -54,7 +54,7 @@
     flex: 1;
     width: 0;
     @extend .jc-hover-style;
-    @include jc-text-warp(1)
+    @include jc-text-warp(1);
   }
 
   .jc-setting {
@@ -64,7 +64,7 @@
     line-height: 30px;
     text-align: center;
     transform: rotate(0);
-    transition: transform .4s;
+    transition: transform 0.4s;
     @extend .jc-hover-style;
 
     &:hover {
@@ -91,7 +91,7 @@
       background-position: center;
       background-size: auto 100%;
       @extend .jc-hover-style;
-      transition: transform .3s;
+      transition: transform 0.3s;
       will-change: transform;
 
       &.jc-screen-command {
@@ -122,7 +122,7 @@
     z-index: 10;
     padding: $jc-default-dis/2 $jc-default-dis/2;
     background-color: rgba($color: $jc-color-black, $alpha: 0);
-    transition: background-color .4s;
+    transition: background-color 0.4s;
 
     .iconfont {
       padding-right: 4px;
@@ -136,7 +136,7 @@
       background-position: center right;
       opacity: 1;
       transform: scale(1);
-      transition: opacity .3s, transform .3s;
+      transition: opacity 0.3s, transform 0.3s;
       z-index: 3;
 
       .jc-info-item {
@@ -199,7 +199,7 @@
     }
 
     .jc-project-footer {
-      background-color: rgba($color: $jc-color-black, $alpha: .2);
+      background-color: rgba($color: $jc-color-black, $alpha: 0.2);
     }
 
     .jc-project-info {
@@ -212,22 +212,22 @@
 
       .jc-opera-item {
         transform: translateY(0);
-        transition: transform .4s;
+        transition: transform 0.4s;
 
         &.first {
-          transition-delay: .2s;
+          transition-delay: 0.2s;
         }
 
         &.second {
-          transition-delay: .35s;
+          transition-delay: 0.35s;
         }
 
         &.three {
-          transition-delay: .5s;
+          transition-delay: 0.5s;
         }
 
         &.four {
-          transition-delay: .65s;
+          transition-delay: 0.65s;
         }
       }
     }
@@ -252,7 +252,7 @@
   cursor: pointer;
   background: url(../assets/add.png) no-repeat top center;
   background-size: 60px auto;
-  opacity: .8;
+  opacity: 0.8;
 
   &:hover {
     opacity: 1;

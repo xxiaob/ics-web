@@ -132,7 +132,6 @@ export default {
   projects: {
     //项目管理
     add: 'user-service/project',
-    get: 'user-service/project/get',
     listByPage: 'user-service/project/listByPage',
     list: 'user-service/project/list',
     update: 'user-service/project/update',
