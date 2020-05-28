@@ -5,6 +5,7 @@
     <div>
       <el-button type="primary" @click="joinChannel" v-if="!inChannel">进入房间</el-button>
       <el-button @click="leaveChannel" v-if="inChannel">退出房间</el-button>
+      <el-input v-model="invitUserId" placeholder="邀请用户"></el-input>
       <el-button type="primary" @click="inviteUser">邀请用户</el-button>
     </div>
     <div v-if="invitedButton">
@@ -26,6 +27,8 @@
 <script>
 import { IM } from '@/live/im'
 import { Live } from '@/live'
+import { getImAuth } from '@/api/live'
+
 export default {
   name: 'liveDemo',
   data() {
@@ -33,14 +36,18 @@ export default {
       username: 'lxy2',
       channelId: '123456',
       invited: false,
+      invitUserId: '',
       invitedButton: false,
       mediaType: '1',
       fromUsername: '',
       inChannel: false
     }
   },
-  created() {
+  async created() {
+    const res = await getImAuth()
+
     this.im = new IM(this.username)
+    this.im.init(res)
     this.im.on(this.msgCb)
   },
   mounted() {
@@ -104,7 +111,7 @@ export default {
         mediaType: '1' //"0":音频,"1":视频
       }
 
-      this.im.sendSingleMsg('lxx123', msg)
+      this.im.sendSingleMsg(this.invitUserId, msg)
       if (!this.live.inChannel) {
         this.joinChannel()
       }
@@ -127,6 +134,6 @@ export default {
 #tolive {
   width: 300px;
   height: 200px;
-  display: inline-block;
+  float: left;
 }
 </style>

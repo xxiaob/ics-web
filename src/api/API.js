@@ -141,5 +141,9 @@ export default {
       save: 'user-service/projectUserRef/save',
       list: 'user-service/projectUserRef/list'
     }
+  },
+  live: {
+    //直播相关
+    imAuth: 'user-service/getAuthToken'
   }
 }

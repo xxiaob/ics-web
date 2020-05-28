@@ -1,5 +1,5 @@
 import '../../static/jimsdk/jmessage-sdk-web.2.6.0.min.js'
-import md5 from 'md5'
+// import md5 from 'md5'
 import JMessage from 'JMessage'
 export class IM {
   /**
@@ -10,25 +10,23 @@ export class IM {
     this.JIM = new JMessage({
       // debug: true
     })
-    this.init()
   }
 
   /**
    * 初始化
+   * @param {Object} authToken 用户名
+   * @param {String} authToken.appkey
+   * @param {String} authToken.random_str 随机数
+   * @param {String} authToken.timestamp  时间戳
+   * @param {String} authToken.signature  签名
   */
-  init() {
-    const secret = 'b8542135bfc2995812894d6a',
-      appkey = 'f8409a2c88ceee289baaf57d',
-      randomStr = 'dsadadwqeq213123edwqeq2131',
-      timestamp = new Date().getTime(),
-      signature = md5(`appkey=${appkey}&timestamp=${timestamp}&random_str=${randomStr}&key=${secret}`)
-
-    this.JIM.init({
-      appkey,
-      random_str: randomStr,
-      timestamp,
-      signature
-    }).onSuccess(data => {
+  init(authToken) {
+    // const secret = 'b8542135bfc2995812894d6a',
+    //   appkey = 'f8409a2c88ceee289baaf57d',
+    //   randomStr = 'dsadadwqeq213123edwqeq2131',
+    //   timestamp = new Date().getTime(),
+    //   signature = md5(`appkey=${appkey}&timestamp=${timestamp}&random_str=${randomStr}&key=${secret}`)
+    this.JIM.init({ ...authToken }).onSuccess(data => {
       console.log('init success', data)
       // this.on(cb)
       if (this.username) {
@@ -37,17 +35,24 @@ export class IM {
     }).onFail(data => {
       console.log('init error', data)
     })
+    // console.log(this.isInit())
+    // if (this.isInit()) {
+    //   console.log('已经初始化')
+    // } else {
+
+    // }
   }
 
   /**
    * 用户注册
-   * @param {String} username 用户名
+   * @param {String} username 用户名 4-128
+   * @param {String} nickname 昵称
   */
-  register(username) {
+  register(username, nickname) {
     this.JIM.register({
       username,
       password: '123456',
-      nickname: '李向玉'
+      nickname
     }).onSuccess(data => {
       console.log('register success', data)
     }).onFail(data => {
@@ -68,7 +73,6 @@ export class IM {
         password: '123456'
       }).onSuccess(data => {
         console.log('login success 登录成功', data)
-        this.isLogin()
       }).onFail(data => {
         console.log('login error:', data)
       }).onTimeout(data => {
@@ -80,6 +84,16 @@ export class IM {
   //退出登录
   loginOut() {
     this.JIM.loginOut()
+  }
+
+  //连接状态
+  isConnect() {
+    return this.JIM.isConnect()
+  }
+
+  //初始化状态
+  isInit() {
+    return this.JIM.isInit()
   }
 
   //登录状态
