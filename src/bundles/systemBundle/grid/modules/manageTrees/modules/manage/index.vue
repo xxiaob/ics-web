@@ -76,6 +76,7 @@ export default {
       try {
         let params = { ...this.form, orgId: this.pNode.orgId, areaId: this.pNode.areaId, drawCoordinateType: 1, griddingUptType: 1 }
 
+        //如果是新增,且新增的父级是网格,则需要设置pid
         if (!this.isEdit && this.pNode.areaId) {
           params.pid = this.pNode.areaId
         }
