@@ -25,7 +25,7 @@ import { organizationSave } from '@/api/organization'
 import { getStringRule } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
 
-let defaultForm = { orgName: '', sameLevelAuth: '1', orgCode: '' }
+let defaultForm = { orgName: '', sameLevelAuth: '0', orgCode: '' }
 
 export default {
   name: 'SystemOrganizationManage',

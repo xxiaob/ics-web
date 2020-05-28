@@ -7,7 +7,7 @@
           <span class="jc-menu-arrow-title" slot="title">常态管控</span>
         </template>
         <el-menu-item index="commandScreen">指挥大屏</el-menu-item>
-        <el-menu-item index="specialControl">数据大屏</el-menu-item>
+        <el-menu-item index="dataScreen">数据大屏</el-menu-item>
       </el-submenu>
       <el-submenu index="project" class="jc-menu-item">
         <template slot="title">
@@ -78,6 +78,12 @@ export default {
   data() {
     return {
       menuActive: this.$route.name
+    }
+  },
+  watch: {
+    '$route'(to) {
+      console.log('Header 路由切换，当前路由', to.name)
+      this.menuActive = to.name
     }
   },
   methods: {
