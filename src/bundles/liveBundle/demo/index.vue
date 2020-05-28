@@ -7,6 +7,7 @@
       <el-button @click="leaveChannel" v-if="inChannel">退出房间</el-button>
       <el-input v-model="invitUserId" placeholder="邀请用户"></el-input>
       <el-button type="primary" @click="inviteUser">邀请用户</el-button>
+      <el-button type="primary" @click="pushs">推流</el-button>
     </div>
     <div v-if="invitedButton">
       <el-button type="primary" @click="agree">接受</el-button>
@@ -117,13 +118,17 @@ export default {
       }
     },
     async joinChannel() {
-      await this.live.joinChannel(this.channelId)
+      await this.live.joinChannel(this.channelId, 'host', this.fromUsername)
       this.inChannel = true
     },
     async leaveChannel() {
       await this.live.leaveChannel()
       this.invited = false
       this.inChannel = false
+      this.fromUsername = ''
+    },
+    pushs() {
+      this.live.publishStreamUrl('lxyad')
     }
   }
 }
