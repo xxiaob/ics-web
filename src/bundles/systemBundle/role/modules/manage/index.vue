@@ -7,7 +7,7 @@
       <el-form-item label="所属组织" prop="orgId" :rules="rules.SELECT_NOT_NULL">
         <el-cascader v-model="form.orgId" :options="orgTree" filterable :props="{ expandTrigger: 'hover',checkStrictly: true,emitPath: false }" :disabled="isEdit"></el-cascader>
       </el-form-item>
-      <el-form-item label="菜单权限">
+      <el-form-item label="菜单权限" class="jc-menu-tree">
         <el-tree ref="tree" :default-checked-keys="checkedKeys" :data="menuTree" :props="props" node-key="resId" :default-expand-all="true" :show-checkbox="true"></el-tree>
       </el-form-item>
     </el-form>
@@ -103,6 +103,7 @@ export default {
           orgId: this.options.orgId
         }
       } else {
+        this.checkedKeys = []
         return { ...defaultForm, orgId: this.orgId }
       }
     },
@@ -126,3 +127,11 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.jc-menu-tree {
+  /deep/ .el-form-item__content {
+    height: 360px;
+    overflow: auto;
+  }
+}
+</style>
