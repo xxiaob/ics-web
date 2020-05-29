@@ -153,6 +153,7 @@ export class IM {
    * 发送消息
    * @param {String} username 用户名
    * @param {Object} obj 消息体
+   * @param {String} obj.msgType "0":正常,"1":邀请视频
    * @param {String} obj.channelId 房间id
    * @param {String} obj.content 消息内容
    * @param {String} obj.inviteType "0":正常,"1":强拉

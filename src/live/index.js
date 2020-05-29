@@ -12,6 +12,10 @@ export class Live {
     this.pushUrl = 'rtmp://push.bg365.top/live/'
     this.pushed = false
     this.fromUsername = ''
+    //所有远端流的id
+    this.remoteHostIds = []
+    this.isLiving = false
+    this.restartLive = false
     this.init()
     this.on()
   }
@@ -42,7 +46,7 @@ export class Live {
       } else {
         console.log('推流')
         setTimeout(() => {
-          this.publishStreamUrl('lxyad')
+          this.publishStreamUrl('lxyada')
         })
         this.pushed = true
       }
@@ -50,7 +54,13 @@ export class Live {
 
     //监听客户端的新增流
     this.client.on('stream-added', e => {
-      console.log('stream-added 监听客户端的新增流 成功', e)
+      console.log('stream-added 监听客户端的新增流 成功', e, e.stream.getId())
+      this.remoteHostIds.push(e.stream.getId())
+      this.publishStreamUrl('lxyada')
+      // if (this.isLiving) {
+      //   this.restartLive = true
+      //   this.stopPublishStream('lxyada')
+      // }
       //订阅远端流，触发订阅事件
       this.client.subscribe(e.stream, err => {
         console.log('Subscribe stream failed 失败', err)
@@ -68,17 +78,40 @@ export class Live {
     this.client.on('stream-removed', e => {
       console.log('stream-removed 远端流移除成功', e, e.uid)
       this.removePlayer(e.uid)
+      const index = this.remoteHostIds.findIndex(v => v === e.uid)
+
+      if (index > -1) {
+        this.remoteHostIds.splice(index, 1)
+        this.publishStreamUrl('lxyada')
+      }
+      // if (this.isLiving) {
+      //   this.restartLive = true
+      //   this.stopPublishStream('lxyada')
+      // }
     })
 
     //监听用户离开
     this.client.on('peer-leave', e => {
       console.log('peer-leave 用户离开成功', e, e.uid)
       this.removePlayer(e.uid)
+      const index = this.remoteHostIds.findIndex(v => v === e.uid)
+
+      if (index > -1) {
+        this.remoteHostIds.splice(index, 1)
+        this.publishStreamUrl('lxyada')
+      }
+      // if (this.isLiving) {
+      //   this.restartLive = true
+      //   this.stopPublishStream('lxyada')
+      // }
     })
 
     //开启直播成功
     this.client.on('liveStreamingStarted', e => {
       console.log('liveStreamingStarted 开启直播成功', e)
+      // if (this.restartLive) {
+      //   this.restartLive = false
+      // }
     })
 
     //开启直播失败
@@ -89,6 +122,10 @@ export class Live {
     //中断直播
     this.client.on('liveStreamingStopped', e => {
       console.log('liveStreamingStopped 中断直播', e)
+      // if (this.restartLive) {
+      //   this.isLiving = true
+      //   this.publishStreamUrl('lxyada')
+      // }
     })
 
     //直播更新
@@ -153,7 +190,7 @@ export class Live {
   //离开房间
   leaveChannel() {
     if (this.pushed) {
-      this.stopPublishStream('lxyad')
+      this.stopPublishStream('lxyada')
       console.log('结束推流成功')
     }
     this.client.leaveChannel(() => {
@@ -182,8 +219,7 @@ export class Live {
    * @param {String} id 流id
   */
   publishStreamUrl(id) {
-    console.log('publishStreamUrl', this.client.uid)
-    let count = 0
+    console.log('publishStreamUrl 推流', this.client.uid)
     const transcodingUsers = [
       {
         uid: this.client.uid,
@@ -195,6 +231,21 @@ export class Live {
         alpha: 1
       }
     ]
+
+    let count = 0
+
+    this.remoteHostIds.forEach(hostId => {
+      transcodingUsers.push({
+        uid: hostId,
+        x: 640 + Math.floor(count / 3) * 213,
+        y: (count % 3) * 160,
+        width: 213,
+        height: 160,
+        zOrder: 100,
+        alpha: 1
+      })
+      count++
+    })
     const LiveTranscoding = {
       width: 640 + 213 * (Math.floor((count - 1) / 3) + 1),
       height: 480,
@@ -212,9 +263,12 @@ export class Live {
       transcodingUsers: transcodingUsers
     }
 
-    console.log(LiveTranscoding)
+    console.log('正在直播', this.isLiving, LiveTranscoding)
     this.client.setLiveTranscoding(LiveTranscoding)
-    this.client.addPublishStreamUrl(this.pushUrl + id, true)
+    if (!this.isLiving) {
+      this.client.addPublishStreamUrl(this.pushUrl + id, true)
+      this.isLiving = true
+    }
   }
 
   /**
@@ -223,5 +277,6 @@ export class Live {
   */
   stopPublishStream(id) {
     this.client.removePublishStreamUrl(id)
+    this.isLiving = false
   }
 }

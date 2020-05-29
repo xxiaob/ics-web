@@ -47,7 +47,7 @@ export default {
       mediaType: '1',
       fromUsername: '',
       inChannel: false,
-      playUrls: ['https://2021-cn-north-4.cdn-vod.huaweicloud.com/asset/881736f5417582b23993c5323c185ced/292e546ae80f6cd1c7dc010be5d14449.m3u8', 'https://2021-cn-north-4.cdn-vod.huaweicloud.com/asset/49d732a4a95b3794cbb73cab3bf35cc1/6c88e090bc09c70189a456385ad78dff.m3u8', 'http://play.bg365.top/live/lxyad.m3u8']
+      playUrls: ['https://2021-cn-north-4.cdn-vod.huaweicloud.com/asset/881736f5417582b23993c5323c185ced/292e546ae80f6cd1c7dc010be5d14449.m3u8', 'https://2021-cn-north-4.cdn-vod.huaweicloud.com/asset/49d732a4a95b3794cbb73cab3bf35cc1/6c88e090bc09c70189a456385ad78dff.m3u8', 'http://play.bg365.top/live/lxyada.m3u8']
     }
   },
   async created() {
@@ -102,6 +102,7 @@ export default {
     },
     agreeJoinChannel() {
       this.im.sendSingleMsg(this.fromUsername, {
+        msgType: '1',
         channelId: this.channelId,
         agree: '1' // "0":拒绝邀请, "1":接受邀请
       })
@@ -113,6 +114,7 @@ export default {
     },
     refuse() {
       this.im.sendSingleMsg(this.fromUsername, {
+        msgType: '1',
         channelId: this.channelId,
         agree: '0' // "0":拒绝邀请, "1":接受邀请
       })
@@ -127,6 +129,7 @@ export default {
     inviteUser() {
       this.invited = true
       const msg = {
+        msgType: '1',
         channelId: this.channelId,
         content: 'content',
         inviteType: '0', //"0":正常,"1":强拉
