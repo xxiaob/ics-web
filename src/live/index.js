@@ -11,7 +11,9 @@ export class Live {
     this.appId = '408a34ed80ac4b43b5353b56ec1cd5f1'
     this.pushUrl = 'rtmp://push.bg365.top/live/'
     this.pushed = false
+    this.fromUsername = ''
     this.init()
+    this.on()
   }
 
   //sdk初始化
@@ -28,16 +30,70 @@ export class Live {
     this.client.create(context, this.appId, () => {
       console.log('client inited 成功')
     })
+  }
+
+  //监听事件
+  on() {
+    //app本地流发布
+    this.client.on('stream-published', e => {
+      console.log('stream-published app本地流发布', e)
+      if (this.fromUsername) {
+        console.log('不用推流')
+      } else {
+        console.log('推流')
+        setTimeout(() => {
+          this.publishStreamUrl('lxyad')
+        })
+        this.pushed = true
+      }
+    })
+
+    //监听客户端的新增流
+    this.client.on('stream-added', e => {
+      console.log('stream-added 监听客户端的新增流 成功', e)
+      //订阅远端流，触发订阅事件
+      this.client.subscribe(e.stream, err => {
+        console.log('Subscribe stream failed 失败', err)
+      })
+    })
+
+    //监听订阅事件 并播放远端流
+    this.client.on('stream-subscribed', e => {
+      console.log('stream-subscribed 订阅远端流成功', e)
+      //接下来可以选择在本地播放远端流
+      e.stream.play(this.remoteId)
+    })
 
     //监听远端流移除
     this.client.on('stream-removed', e => {
       console.log('stream-removed 远端流移除成功', e, e.uid)
       this.removePlayer(e.uid)
     })
+
     //监听用户离开
     this.client.on('peer-leave', e => {
       console.log('peer-leave 用户离开成功', e, e.uid)
       this.removePlayer(e.uid)
+    })
+
+    //开启直播成功
+    this.client.on('liveStreamingStarted', e => {
+      console.log('liveStreamingStarted 开启直播成功', e)
+    })
+
+    //开启直播失败
+    this.client.on('liveStreamingFailed', e => {
+      console.log('liveStreamingFailed 开启直播失败', e)
+    })
+
+    //中断直播
+    this.client.on('liveStreamingStopped', e => {
+      console.log('liveStreamingStopped 中断直播', e)
+    })
+
+    //直播更新
+    this.client.on('liveTranscodingUpdated', e => {
+      console.log('liveTranscodingUpdated 直播更新', e)
     })
   }
 
@@ -60,6 +116,7 @@ export class Live {
    * @param {String} fromUsername 邀请方
   */
   joinChannel(channelId = '123456', role = 'host', fromUsername = '') {
+    this.fromUsername = fromUsername
     this.client.joinChannel(null, channelId, null, 0, null, role, () => {
       console.log('joinChannel 成功')
       this.inChannel = true
@@ -88,30 +145,8 @@ export class Live {
       this.client.publishStream(this.localStream, err => {
         console.log('publishStream 发布本地流 报错: ' + err)
       })
-      if (fromUsername) {
-        console.log('不用推流')
-      } else {
-        console.log('推流')
-        // this.publishStreamUrl('lxyad')
-        this.pushed = true
-      }
     }, err => {
       console.log('localStream.init 本地流初始化 报错: ' + err)
-    })
-
-    //监听客户端的新增流
-    this.client.on('stream-added', e => {
-      console.log('stream-added 监听客户端的新增流 成功', e)
-      //订阅远端流，触发订阅事件
-      this.client.subscribe(e.stream, err => {
-        console.log('Subscribe stream failed 失败', err)
-      })
-    })
-    //监听订阅事件 并播放远端流
-    this.client.on('stream-subscribed', e => {
-      console.log('stream-subscribed 监听订阅事件 成功', e)
-      //接下来可以选择在本地播放远端流
-      e.stream.play(this.remoteId)
     })
   }
 

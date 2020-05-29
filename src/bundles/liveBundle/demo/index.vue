@@ -7,7 +7,7 @@
       <el-button @click="leaveChannel" v-if="inChannel">退出房间</el-button>
       <el-input v-model="invitUserId" placeholder="邀请用户"></el-input>
       <el-button type="primary" @click="inviteUser">邀请用户</el-button>
-      <el-button type="primary" @click="pushs">推流</el-button>
+      <!-- <el-button type="primary" @click="pushs">推流</el-button> -->
     </div>
     <div v-if="invitedButton">
       <el-button type="primary" @click="agree">接受</el-button>
@@ -17,11 +17,16 @@
     <el-button type="primary" @click="register">注册</el-button>
     <el-input v-model="username" placeholder="用户名 4-128"></el-input>
     <el-button type="primary" @click="login">登录</el-button> -->
-    <div>
+    <div class="jc-clearboth">
       <div id="live"></div>
       <div id="tolive"></div>
     </div>
-
+    <hr>
+    <div>播放器</div>
+    <div>
+      <el-button type="primary" @click="startPlay">播放多个</el-button>
+    </div>
+    <video v-for="(item,index) in playUrls" :key="item" :id="'test'+index" class="video-js vjs-default-skin vjs-big-play-centered"></video>
   </div>
 </template>
 
@@ -41,7 +46,8 @@ export default {
       invitedButton: false,
       mediaType: '1',
       fromUsername: '',
-      inChannel: false
+      inChannel: false,
+      playUrls: ['https://2021-cn-north-4.cdn-vod.huaweicloud.com/asset/881736f5417582b23993c5323c185ced/292e546ae80f6cd1c7dc010be5d14449.m3u8', 'https://2021-cn-north-4.cdn-vod.huaweicloud.com/asset/49d732a4a95b3794cbb73cab3bf35cc1/6c88e090bc09c70189a456385ad78dff.m3u8', 'http://play.bg365.top/live/lxyad.m3u8']
     }
   },
   async created() {
@@ -55,6 +61,21 @@ export default {
     this.live = new Live('live', 'tolive')
   },
   methods: {
+    startPlay() {
+      hwplayerloaded(()=>{
+        this.playUrls.forEach((item, key)=>{
+          const player = new HWPlayer('test' + key, {
+            autoplay: true,
+            controls: true,
+            width: 320,
+            height: 240
+          }, ()=> {
+            console.log('播放器已经准备好了', item)
+            player.src(item)
+          })
+        })
+      })
+    },
     msgCb(onType, data) {
       console.log('vue 数据', onType, data)
       const { from_username: fromUsername, content: { msg_body: { text } } } = data.messages[0]
@@ -139,6 +160,15 @@ export default {
 #tolive {
   width: 300px;
   height: 200px;
+  float: left;
+}
+.jc-clearboth::before,
+.jc-clearboth::after {
+  display: table;
+  content: "";
+  clear: both;
+}
+.video-js {
   float: left;
 }
 </style>
