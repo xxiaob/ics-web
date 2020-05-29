@@ -5,3 +5,39 @@
   height: 100%;
   z-index: 1;
 }
+/* 大屏header */
+$jc-screen-height: 40px;
+
+/deep/ .jc-screen-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: $jc-screen-height;
+  z-index: 9;
+  background: url(../modules/header/assets/head-title-bg.png) no-repeat center;
+  background-size: 100% 100%;
+  .jc-screen-title {
+    position: relative;
+    margin: 0 auto;
+    width: 585px;
+    height: 60px;
+    background: url(../modules/header/assets/head-bg.png) no-repeat center;
+    background-size: 100% 100%;
+    font-size: 28px;
+    color: #ffffff;
+    text-align: center;
+    line-height: 54px;
+    letter-spacing: 1px;
+    &:after {
+      position: absolute;
+      content: "";
+      left: 20%;
+      right: 20%;
+      height: 3px;
+      bottom: 4px;
+      border-radius: 2px;
+      background-color: #ffffff;
+    }
+  }
+}
