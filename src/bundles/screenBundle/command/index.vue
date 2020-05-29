@@ -1,5 +1,6 @@
 <template>
   <section class="jc-screen-warp">
+    <command-header></command-header>
     <map-search ref="mapSearch" class="jc-area-search"></map-search>
     <div class="jc-screen-space" ref="myMap"></div>
   </section>
@@ -12,6 +13,7 @@ let myJcMap //个人 map 对象
 export default {
   name: 'ScreenCommand',
   components: {
+    CommandHeader: () => import('./modules/header'), //顶部
     MapSearch: () => import('@/components/JcMap/MapSearch')
   },
   data() {
