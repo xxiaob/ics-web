@@ -9,6 +9,9 @@ import { JcMapSign } from '@/map'
 let areas = {} //存储已经绘画的区域
 
 export default {
+  created() {
+    areas = {}
+  },
   methods: {
     async viewControl(myJcMap, options) {
       let areaSign = areas[options.data.id]
