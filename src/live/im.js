@@ -4,9 +4,11 @@ import JMessage from 'JMessage'
 export class IM {
   /**
    * @param {String} username 用户名
+   * @param {Boolean} debug
   */
-  constructor(username) {
+  constructor(username, debug = true) {
     this.username = username
+    this.debug = debug
     this.JIM = new JMessage({
       // debug: true
     })
@@ -27,17 +29,17 @@ export class IM {
     //   timestamp = new Date().getTime(),
     //   signature = md5(`appkey=${appkey}&timestamp=${timestamp}&random_str=${randomStr}&key=${secret}`)
     this.JIM.init({ ...authToken }).onSuccess(data => {
-      console.log('init success', data)
+      this.console('init success', data)
       // this.on(cb)
       if (this.username) {
         this.login(this.username)
       }
     }).onFail(data => {
-      console.log('init error', data)
+      this.console('init error', data)
     })
-    // console.log(this.isInit())
+    // this.console(this.isInit())
     // if (this.isInit()) {
-    //   console.log('已经初始化')
+    //   this.console('已经初始化')
     // } else {
 
     // }
@@ -54,9 +56,9 @@ export class IM {
       password: '123456',
       nickname
     }).onSuccess(data => {
-      console.log('register success', data)
+      this.console('register success', data)
     }).onFail(data => {
-      console.log('register error', data)
+      this.console('register error', data)
     })
   }
 
@@ -66,17 +68,17 @@ export class IM {
   */
   login(username) {
     if (this.isLogin()) {
-      console.log('用户已登录')
+      this.console('用户已登录')
     } else {
       this.JIM.login({
         username,
         password: '123456'
       }).onSuccess(data => {
-        console.log('login success 登录成功', data)
+        this.console('login success 登录成功', data)
       }).onFail(data => {
-        console.log('login error:', data)
+        this.console('login error:', data)
       }).onTimeout(data => {
-        console.log('login timeout:', data)
+        this.console('login timeout:', data)
       })
     }
   }
@@ -108,44 +110,44 @@ export class IM {
   on(cb) {
     //聊天消息实时监听
     this.JIM.onMsgReceive(data => {
-      console.log('onMsgReceive 实时数据:', data)
+      this.console('onMsgReceive 实时数据:', data)
       cb('onMsgReceive', data)
     })
 
     this.JIM.onEventNotification(data => {
-      console.log('event_receive: ', data)
+      this.console('event_receive: ', data)
     })
 
     this.JIM.onSyncConversation(data => { //离线消息同步监听
-      console.log('onSyncConversation', data)
+      this.console('onSyncConversation', data)
     })
 
     this.JIM.onUserInfUpdate(data => {
-      console.log('onUserInfUpdate : ', data)
+      this.console('onUserInfUpdate : ', data)
     })
 
     this.JIM.onSyncEvent(data => {
-      console.log('onSyncEvent : ', data)
+      this.console('onSyncEvent : ', data)
     })
 
     this.JIM.onMsgReceiptChange(data => {
-      console.log('onMsgReceiptChange : ', data)
+      this.console('onMsgReceiptChange : ', data)
     })
 
     this.JIM.onSyncMsgReceipt(data => {
-      console.log('onSyncMsgReceipt : ', data)
+      this.console('onSyncMsgReceipt : ', data)
     })
 
     this.JIM.onMutiUnreadMsgUpdate(data => {
-      console.log('onConversationUpdate : ', data)
+      this.console('onConversationUpdate : ', data)
     })
 
     this.JIM.onTransMsgRec(data => {
-      console.log('onTransMsgRec : ', data)
+      this.console('onTransMsgRec : ', data)
     })
 
     this.JIM.onRoomMsg(data => {
-      console.log('onRoomMsg  : ', data)
+      this.console('onRoomMsg  : ', data)
     })
   }
 
@@ -166,10 +168,17 @@ export class IM {
       target_username: username,
       content: JSON.stringify(obj)
     }).onSuccess((data, msg) => {
-      console.log('sendSingleMsg success data:', data)
-      console.log('sendSingleMsg succes msg:', msg)
+      this.console('sendSingleMsg success data:', data)
+      this.console('sendSingleMsg succes msg:', msg)
     }).onFail((data) => {
-      console.log('sendSingleMsg error:', data)
+      this.console('sendSingleMsg error:', data)
     })
+  }
+
+  //打印日志
+  console() {
+    if (this.debug) {
+      console.log(...arguments)
+    }
   }
 }

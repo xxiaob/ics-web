@@ -1,7 +1,8 @@
 import LiveClient from 'LiveClient'
 export class Live {
-  constructor(localId = 'live', remoteId = 'tolive') {
-    console.log('constructor')
+  constructor(localId = 'live', remoteId = 'tolive', debug = true) {
+    this.debug = debug
+    this.console('Live constructor')
     this.client = null
     this.inChannel = false
     //本地流播放的容器id
@@ -15,14 +16,13 @@ export class Live {
     //所有远端流的id
     this.remoteHostIds = []
     this.isLiving = false
-    this.restartLive = false
     this.init()
     this.on()
   }
 
   //sdk初始化
   init() {
-    console.log('init')
+    this.console('init')
     this.client = new LiveClient()
 
     const context = {
@@ -32,7 +32,7 @@ export class Live {
 
     //创建客户端对象
     this.client.create(context, this.appId, () => {
-      console.log('client inited 成功')
+      this.console('client inited 成功')
     })
   }
 
@@ -40,100 +40,85 @@ export class Live {
   on() {
     //app本地流发布
     this.client.on('stream-published', e => {
-      console.log('stream-published app本地流发布', e)
+      this.console('stream-published app本地流发布', e)
+      //是否 需要直播推流
       if (this.fromUsername) {
-        console.log('不用推流')
+        this.console('不用推流')
       } else {
-        console.log('推流')
+        this.console('推流')
         setTimeout(() => {
+          this.setPublish()
           this.publishStreamUrl('lxyada')
         })
-        this.pushed = true
       }
     })
 
     //监听客户端的新增流
     this.client.on('stream-added', e => {
-      console.log('stream-added 监听客户端的新增流 成功', e, e.stream.getId())
+      this.console('stream-added 监听客户端的新增流 成功', e, e.stream.getId())
       this.remoteHostIds.push(e.stream.getId())
-      this.publishStreamUrl('lxyada')
-      // if (this.isLiving) {
-      //   this.restartLive = true
-      //   this.stopPublishStream('lxyada')
-      // }
+      this.setPublish()
+
       //订阅远端流，触发订阅事件
       this.client.subscribe(e.stream, err => {
-        console.log('Subscribe stream failed 失败', err)
+        this.console('Subscribe stream failed 失败', err)
       })
     })
 
     //监听订阅事件 并播放远端流
     this.client.on('stream-subscribed', e => {
-      console.log('stream-subscribed 订阅远端流成功', e)
+      this.console('stream-subscribed 订阅远端流成功', e)
       //接下来可以选择在本地播放远端流
       e.stream.play(this.remoteId)
     })
 
     //监听远端流移除
     this.client.on('stream-removed', e => {
-      console.log('stream-removed 远端流移除成功', e, e.uid)
+      this.console('stream-removed 远端流移除成功', e, e.uid)
       this.removePlayer(e.uid)
-      const index = this.remoteHostIds.findIndex(v => v === e.uid)
-
-      if (index > -1) {
-        this.remoteHostIds.splice(index, 1)
-        this.publishStreamUrl('lxyada')
-      }
-      // if (this.isLiving) {
-      //   this.restartLive = true
-      //   this.stopPublishStream('lxyada')
-      // }
+      this.removeRemoteId(e.uid)
     })
 
     //监听用户离开
     this.client.on('peer-leave', e => {
-      console.log('peer-leave 用户离开成功', e, e.uid)
+      this.console('peer-leave 用户离开成功', e, e.uid)
       this.removePlayer(e.uid)
-      const index = this.remoteHostIds.findIndex(v => v === e.uid)
-
-      if (index > -1) {
-        this.remoteHostIds.splice(index, 1)
-        this.publishStreamUrl('lxyada')
-      }
-      // if (this.isLiving) {
-      //   this.restartLive = true
-      //   this.stopPublishStream('lxyada')
-      // }
+      this.removeRemoteId(e.uid)
     })
 
     //开启直播成功
     this.client.on('liveStreamingStarted', e => {
-      console.log('liveStreamingStarted 开启直播成功', e)
-      // if (this.restartLive) {
-      //   this.restartLive = false
-      // }
+      this.console('liveStreamingStarted 开启直播成功', e)
     })
 
     //开启直播失败
     this.client.on('liveStreamingFailed', e => {
-      console.log('liveStreamingFailed 开启直播失败', e)
+      this.console('liveStreamingFailed 开启直播失败', e)
     })
 
     //中断直播
     this.client.on('liveStreamingStopped', e => {
-      console.log('liveStreamingStopped 中断直播', e)
-      // if (this.restartLive) {
-      //   this.isLiving = true
-      //   this.publishStreamUrl('lxyada')
-      // }
+      this.console('liveStreamingStopped 中断直播', e)
     })
 
     //直播更新
     this.client.on('liveTranscodingUpdated', e => {
-      console.log('liveTranscodingUpdated 直播更新', e)
+      this.console('liveTranscodingUpdated 直播更新', e)
     })
   }
 
+  /**
+   * 移除远端流的id  从remoteHostIds中删除
+   * @param {String} id
+  */
+  removeRemoteId(id) {
+    const index = this.remoteHostIds.findIndex(v => v === id)
+
+    if (index > -1) {
+      this.remoteHostIds.splice(index, 1)
+      this.setPublish()
+    }
+  }
   /**
    * 移除远端流的播放dom
    * @param {String} id
@@ -155,11 +140,11 @@ export class Live {
   joinChannel(channelId = '123456', role = 'host', fromUsername = '') {
     this.fromUsername = fromUsername
     this.client.joinChannel(null, channelId, null, 0, null, role, () => {
-      console.log('joinChannel 成功')
+      this.console('joinChannel 成功')
       this.inChannel = true
     })
 
-    console.log(this.client)
+    this.console(this.client)
 
     //创建本地流
     this.localStream = this.client.createStream({
@@ -175,15 +160,15 @@ export class Live {
 
     //本地流初始化
     this.localStream.init(() => {
-      console.log('localStream.init 本地流初始化 成功', this.localStream.getId())
+      this.console('localStream.init 本地流初始化 成功', this.localStream.getId())
       //播放本地流
       this.localStream.play(this.localId)
       //发布本地流
       this.client.publishStream(this.localStream, err => {
-        console.log('publishStream 发布本地流 报错: ' + err)
+        this.console('publishStream 发布本地流 报错: ' + err)
       })
     }, err => {
-      console.log('localStream.init 本地流初始化 报错: ' + err)
+      this.console('localStream.init 本地流初始化 报错: ' + err)
     })
   }
 
@@ -191,10 +176,10 @@ export class Live {
   leaveChannel() {
     if (this.pushed) {
       this.stopPublishStream('lxyada')
-      console.log('结束推流成功')
+      this.console('结束推流成功')
     }
     this.client.leaveChannel(() => {
-      console.log('leaveChannel 离开房间 成功')
+      this.console('leaveChannel 离开房间 成功')
       this.inChannel = false
       if (this.localStream) {
         this.localStream.close()
@@ -203,23 +188,19 @@ export class Live {
 
       selfLive.innerHTML = ''
     }, err => {
-      console.log('leaveChannel 报错: ' + err)
+      this.console('leaveChannel 报错: ' + err)
     })
   }
 
   //停止发布本地流
   unpublish() {
     this.client.unpublish(this.localStream, err => {
-      console.log('unpublish 报错: ' + err)
+      this.console('unpublish 报错: ' + err)
     })
   }
 
-  /**
-   * 直播推流
-   * @param {String} id 流id
-  */
-  publishStreamUrl(id) {
-    console.log('publishStreamUrl 推流', this.client.uid)
+  //设置推流参数
+  setPublish() {
     const transcodingUsers = [
       {
         uid: this.client.uid,
@@ -263,12 +244,18 @@ export class Live {
       transcodingUsers: transcodingUsers
     }
 
-    console.log('正在直播', this.isLiving, LiveTranscoding)
     this.client.setLiveTranscoding(LiveTranscoding)
-    if (!this.isLiving) {
-      this.client.addPublishStreamUrl(this.pushUrl + id, true)
-      this.isLiving = true
-    }
+    this.console('设置推流参数', LiveTranscoding)
+  }
+  /**
+   * 直播推流
+   * @param {String} id 流id
+  */
+  publishStreamUrl(id) {
+    this.console('publishStreamUrl 推流', this.client.uid)
+    this.client.addPublishStreamUrl(this.pushUrl + id, true)
+    this.pushed = true
+    this.isLiving = true
   }
 
   /**
@@ -278,5 +265,12 @@ export class Live {
   stopPublishStream(id) {
     this.client.removePublishStreamUrl(id)
     this.isLiving = false
+  }
+
+  //打印日志
+  console() {
+    if (this.debug) {
+      console.log(...arguments)
+    }
   }
 }
