@@ -110,7 +110,7 @@ $jc-screen-height: 40px;
     }
     .jc-org-cascader {
       position: absolute;
-      top: $jc-screen-height;
+      top: $jc-screen-height + 5px;
       right: 0;
       background-color: #ffffff;
     }

@@ -6,6 +6,7 @@ import { MAP_SIGN_TYPE, MAP_EDIT_TYPE } from '@/constant/CONST'
 import { PolygonStyle, CircleStyle, PolylineStyle } from '../config'
 import { paintingSign, getCenter } from '../aMapUtil'
 import { JcMapSign, JcMapMarker } from '../index'
+import { getColors } from '../config'
 
 class JcMapEditor extends JcMapEditorBase {
   /**
@@ -16,6 +17,8 @@ class JcMapEditor extends JcMapEditorBase {
   */
   constructor(options = {}) {
     super(options)
+
+    this.colorStyle = getColors()
     //增加鼠标绘制工具
     this.mousetool = new this.map.AMap.MouseTool(this.map.map)
     this.mousetool.on('draw', (e) => {
@@ -124,13 +127,13 @@ class JcMapEditor extends JcMapEditorBase {
     this.editObject = { id: this.idIndex++, type, opera: MAP_EDIT_TYPE.ADD }
     if (type === MAP_SIGN_TYPE.Polygon) {
       //处理矩形
-      this.mousetool.polygon({ ...PolygonStyle[this.map.mapStyle].base, ...PolygonStyle[this.map.mapStyle].active })
+      this.mousetool.polygon({ ...PolygonStyle[this.map.mapStyle].base(), ...PolygonStyle[this.map.mapStyle].active, ...this.colorStyle })
     } else if (type === MAP_SIGN_TYPE.Circle) {
       //处理圆形
-      this.mousetool.circle({ ...CircleStyle[this.map.mapStyle].base, ...CircleStyle[this.map.mapStyle].active })
+      this.mousetool.circle({ ...CircleStyle[this.map.mapStyle].base(), ...CircleStyle[this.map.mapStyle].active, ...this.colorStyle })
     } else if (type === MAP_SIGN_TYPE.Polyline) {
       //处理划线
-      this.mousetool.polyline({ ...PolylineStyle.base[this.map.mapStyle], ...PolylineStyle[this.map.mapStyle].active })
+      this.mousetool.polyline({ ...PolylineStyle[this.map.mapStyle].base(), ...PolylineStyle[this.map.mapStyle].active, ...this.colorStyle })
     }
   }
 

@@ -10,7 +10,7 @@
     </div>
     <div class="jc-map-space" ref="myMap"></div>
     <div class="jc-auto-area">
-      <el-cascader v-model="editadcode" size="small" :show-all-levels="false" placeholder="请选择" :options="autoAreas" filterable :props="{ expandTrigger: 'hover', checkStrictly: true, emitPath: false }" @change="adCodeChange"></el-cascader>
+      <el-cascader v-model="editadcode" size="small" :show-all-levels="false" placeholder="请选择" :options="autoAreas" filterable :props="{ checkStrictly: true, emitPath: false }" @change="adCodeChange"></el-cascader>
     </div>
     <map-search ref="mapSearch" class="jc-area-search"></map-search>
     <div class="jc-panel-area jc-panel-auto">

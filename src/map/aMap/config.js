@@ -6,10 +6,23 @@ import { mapStyle } from '@/map/mapConst'
 //事件转换
 export const EventTrans = {}
 
+//颜色数组
+let colorIndex = 0
+
+export const Colors = ['#0183ff', '#fc005b', '#00b746', '#fc005b', '#ab00b5']
+
+//获取随机颜色
+export function getColors() {
+  console.log('colorIndex', colorIndex)
+  let useColor = Colors[colorIndex++ % Colors.length]
+
+  return { strokeColor: useColor, fillColor: useColor }
+}
+
 //地图样式配置参数
 export const MapStyle = {
   [mapStyle.BASE]: 'amap://styles/df688c24215141f7d10385089cad4d4a',
-  [mapStyle.DARK]: 'amap://styles/20e11eef65806a574506d42f2c8d0f6c',
+  [mapStyle.DARK]: 'amap://styles/20.081eef65806a574506d42f2c8d0f6c',
   [mapStyle.SATELLITE]: mapStyle.SATELLITE
 }
 
@@ -32,35 +45,29 @@ export const PolygonStyle = {
   [mapStyle.BASE]: {
     base: {
       strokeWeight: 1,
-      strokeColor: '#0183ff',
-      fillColor: '#0183ff',
-      fillOpacity: 0.1,
+      fillOpacity: 0.08,
       strokeStyle: 'dashed'
     },
-    normal: { fillOpacity: 0.1 },
-    active: { fillOpacity: 0.3 }
+    normal: { fillOpacity: 0.08 },
+    active: { fillOpacity: 0.32 }
   },
   [mapStyle.DARK]: {
     base: {
       strokeWeight: 1,
-      strokeColor: '#0183ff',
-      fillColor: '#0183ff',
-      fillOpacity: 0.1,
+      fillOpacity: 0.08,
       strokeStyle: 'dashed'
     },
-    normal: { fillOpacity: 0.1 },
-    active: { fillOpacity: 0.3 }
+    normal: { fillOpacity: 0.08 },
+    active: { fillOpacity: 0.32 }
   },
   [mapStyle.SATELLITE]: {
     base: {
       strokeWeight: 1,
-      strokeColor: '#0183ff',
-      fillColor: '#0183ff',
-      fillOpacity: 0.1,
+      fillOpacity: 0.08,
       strokeStyle: 'dashed'
     },
-    normal: { fillOpacity: 0.1 },
-    active: { fillOpacity: 0.3 }
+    normal: { fillOpacity: 0.08 },
+    active: { fillOpacity: 0.32 }
   }
 }
 
@@ -69,35 +76,29 @@ export const CircleStyle = {
   [mapStyle.BASE]: {
     base: {
       strokeWeight: 1,
-      strokeColor: '#0183ff',
-      fillColor: '#0183ff',
-      fillOpacity: 0.1,
+      fillOpacity: 0.08,
       strokeStyle: 'dashed'
     },
-    normal: { fillOpacity: 0.1 },
-    active: { fillOpacity: 0.3 }
+    normal: { fillOpacity: 0.08 },
+    active: { fillOpacity: 0.32 }
   },
   [mapStyle.DARK]: {
     base: {
       strokeWeight: 1,
-      strokeColor: '#0183ff',
-      fillColor: '#0183ff',
-      fillOpacity: 0.1,
+      fillOpacity: 0.08,
       strokeStyle: 'dashed'
     },
-    normal: { fillOpacity: 0.1 },
-    active: { fillOpacity: 0.3 }
+    normal: { fillOpacity: 0.08 },
+    active: { fillOpacity: 0.32 }
   },
   [mapStyle.SATELLITE]: {
     base: {
       strokeWeight: 1,
-      strokeColor: '#0183ff',
-      fillColor: '#0183ff',
-      fillOpacity: 0.1,
+      fillOpacity: 0.08,
       strokeStyle: 'dashed'
     },
-    normal: { fillOpacity: 0.1 },
-    active: { fillOpacity: 0.3 }
+    normal: { fillOpacity: 0.08 },
+    active: { fillOpacity: 0.32 }
   }
 }
 
@@ -106,35 +107,32 @@ export const PolylineStyle = {
   [mapStyle.BASE]: {
     base: {
       strokeWeight: 2,
-      strokeColor: '#0183ff',
       strokeStyle: 'dashed',
       lineJoin: 'round',
       lineCap: 'round'
     },
-    normal: { fillOpacity: 0.1 },
-    active: { fillOpacity: 0.3 }
+    normal: { fillOpacity: 0.08 },
+    active: { fillOpacity: 0.32 }
   },
   [mapStyle.DARK]: {
     base: {
       strokeWeight: 2,
-      strokeColor: '#0183ff',
       strokeStyle: 'dashed',
       lineJoin: 'round',
       lineCap: 'round'
     },
-    normal: { fillOpacity: 0.1 },
-    active: { fillOpacity: 0.3 }
+    normal: { fillOpacity: 0.08 },
+    active: { fillOpacity: 0.32 }
   },
   [mapStyle.SATELLITE]: {
     base: {
       strokeWeight: 2,
-      strokeColor: '#0183ff',
       strokeStyle: 'dashed',
       lineJoin: 'round',
       lineCap: 'round'
     },
-    normal: { fillOpacity: 0.1 },
-    active: { fillOpacity: 0.3 }
+    normal: { fillOpacity: 0.08 },
+    active: { fillOpacity: 0.32 }
   }
 
 }
