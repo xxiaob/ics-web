@@ -11,7 +11,7 @@
       <div class="jc-org-switch">
         <div class="jc-org-text" v-text="org.name"></div>
         <div class="jc-org-cascader">
-          <el-cascader-panel v-model="org" :options="orgs" filterable :props="{ expandTrigger: 'hover', checkStrictly: true, emitPath: true }"></el-cascader-panel>
+          <el-cascader-panel v-model="org" :options="orgs" filterable :props="{ checkStrictly: true, emitPath: true }"></el-cascader-panel>
         </div>
       </div>
     </div>

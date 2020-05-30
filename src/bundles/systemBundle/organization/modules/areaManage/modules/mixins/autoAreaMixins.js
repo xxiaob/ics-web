@@ -40,10 +40,7 @@ export default {
 
       if (child && child.length) {
         child.forEach(item => {
-          let node = {
-            value: item.adcode,
-            label: item.name
-          }
+          let node = { value: item.adcode, label: item.name }
 
           let children = this.formatAreas(item.adcodes)
 
