@@ -2,22 +2,19 @@
  * 高德地图配置数据
  */
 import { mapStyle } from '@/map/mapConst'
-import { getRandomNum } from '@/libs/util'
 
 //事件转换
 export const EventTrans = {}
 
 //颜色数组
-export const Colors = ['#0183ff', '#fc005b', '#fc005b', '#00b746', '#ab00b5']
+let colorIndex = 0
 
-//或去随机颜色
-let getColors = function () {
-  let index = getRandomNum(0, Colors.length)
+export const Colors = ['#0183ff', '#fc005b', '#00b746', '#fc005b', '#ab00b5']
 
-  console.log('随机数', index)
-
-  let useColor = Colors[index]
-
+//获取随机颜色
+export function getColors() {
+  console.log('colorIndex', colorIndex)
+  let useColor = Colors[colorIndex++ % Colors.length]
 
   return { strokeColor: useColor, fillColor: useColor }
 }
@@ -25,7 +22,7 @@ let getColors = function () {
 //地图样式配置参数
 export const MapStyle = {
   [mapStyle.BASE]: 'amap://styles/df688c24215141f7d10385089cad4d4a',
-  [mapStyle.DARK]: 'amap://styles/20e11eef65806a574506d42f2c8d0f6c',
+  [mapStyle.DARK]: 'amap://styles/20.081eef65806a574506d42f2c8d0f6c',
   [mapStyle.SATELLITE]: mapStyle.SATELLITE
 }
 
@@ -46,123 +43,96 @@ export const MapOptions = {
 //多边形样式
 export const PolygonStyle = {
   [mapStyle.BASE]: {
-    base() {
-      return {
-        strokeWeight: 1,
-        ...getColors(),
-        fillOpacity: 0.1,
-        strokeStyle: 'dashed'
-      }
+    base: {
+      strokeWeight: 1,
+      fillOpacity: 0.08,
+      strokeStyle: 'dashed'
     },
-    normal: { fillOpacity: 0.1 },
-    active: { fillOpacity: 0.3 }
+    normal: { fillOpacity: 0.08 },
+    active: { fillOpacity: 0.32 }
   },
   [mapStyle.DARK]: {
-    base() {
-      return {
-        strokeWeight: 1,
-        ...getColors(),
-        fillOpacity: 0.1,
-        strokeStyle: 'dashed'
-      }
+    base: {
+      strokeWeight: 1,
+      fillOpacity: 0.08,
+      strokeStyle: 'dashed'
     },
-    normal: { fillOpacity: 0.1 },
-    active: { fillOpacity: 0.3 }
+    normal: { fillOpacity: 0.08 },
+    active: { fillOpacity: 0.32 }
   },
   [mapStyle.SATELLITE]: {
-    base() {
-      return {
-        strokeWeight: 1,
-        ...getColors(),
-        fillOpacity: 0.1,
-        strokeStyle: 'dashed'
-      }
+    base: {
+      strokeWeight: 1,
+      fillOpacity: 0.08,
+      strokeStyle: 'dashed'
     },
-    normal: { fillOpacity: 0.1 },
-    active: { fillOpacity: 0.3 }
+    normal: { fillOpacity: 0.08 },
+    active: { fillOpacity: 0.32 }
   }
 }
 
 //圆形样式
 export const CircleStyle = {
   [mapStyle.BASE]: {
-    base() {
-      return {
-        strokeWeight: 1,
-        ...getColors(),
-        fillOpacity: 0.1,
-        strokeStyle: 'dashed'
-      }
+    base: {
+      strokeWeight: 1,
+      fillOpacity: 0.08,
+      strokeStyle: 'dashed'
     },
-    normal: { fillOpacity: 0.1 },
-    active: { fillOpacity: 0.3 }
+    normal: { fillOpacity: 0.08 },
+    active: { fillOpacity: 0.32 }
   },
   [mapStyle.DARK]: {
-    base() {
-      return {
-        strokeWeight: 1,
-        ...getColors(),
-        fillOpacity: 0.1,
-        strokeStyle: 'dashed'
-      }
+    base: {
+      strokeWeight: 1,
+      fillOpacity: 0.08,
+      strokeStyle: 'dashed'
     },
-    normal: { fillOpacity: 0.1 },
-    active: { fillOpacity: 0.3 }
+    normal: { fillOpacity: 0.08 },
+    active: { fillOpacity: 0.32 }
   },
   [mapStyle.SATELLITE]: {
-    base() {
-      return {
-        strokeWeight: 1,
-        ...getColors(),
-        fillOpacity: 0.1,
-        strokeStyle: 'dashed'
-      }
+    base: {
+      strokeWeight: 1,
+      fillOpacity: 0.08,
+      strokeStyle: 'dashed'
     },
-    normal: { fillOpacity: 0.1 },
-    active: { fillOpacity: 0.3 }
+    normal: { fillOpacity: 0.08 },
+    active: { fillOpacity: 0.32 }
   }
 }
 
 //线的样式
 export const PolylineStyle = {
   [mapStyle.BASE]: {
-    base() {
-      return {
-        strokeWeight: 2,
-        ...getColors(),
-        strokeStyle: 'dashed',
-        lineJoin: 'round',
-        lineCap: 'round'
-      }
+    base: {
+      strokeWeight: 2,
+      strokeStyle: 'dashed',
+      lineJoin: 'round',
+      lineCap: 'round'
     },
-    normal: { fillOpacity: 0.1 },
-    active: { fillOpacity: 0.3 }
+    normal: { fillOpacity: 0.08 },
+    active: { fillOpacity: 0.32 }
   },
   [mapStyle.DARK]: {
-    base() {
-      return {
-        strokeWeight: 2,
-        ...getColors(),
-        strokeStyle: 'dashed',
-        lineJoin: 'round',
-        lineCap: 'round'
-      }
+    base: {
+      strokeWeight: 2,
+      strokeStyle: 'dashed',
+      lineJoin: 'round',
+      lineCap: 'round'
     },
-    normal: { fillOpacity: 0.1 },
-    active: { fillOpacity: 0.3 }
+    normal: { fillOpacity: 0.08 },
+    active: { fillOpacity: 0.32 }
   },
   [mapStyle.SATELLITE]: {
-    base() {
-      return {
-        strokeWeight: 2,
-        ...getColors(),
-        strokeStyle: 'dashed',
-        lineJoin: 'round',
-        lineCap: 'round'
-      }
+    base: {
+      strokeWeight: 2,
+      strokeStyle: 'dashed',
+      lineJoin: 'round',
+      lineCap: 'round'
     },
-    normal: { fillOpacity: 0.1 },
-    active: { fillOpacity: 0.3 }
+    normal: { fillOpacity: 0.08 },
+    active: { fillOpacity: 0.32 }
   }
 
 }

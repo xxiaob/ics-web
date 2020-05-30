@@ -5,6 +5,7 @@ import JcMapSignBase from '../../base/JcMapSign'
 import { EventTrans } from '../config'
 import { paintingSign } from '../aMapUtil'
 import { JcMapMarker } from '../index'
+import { getColors } from '../config'
 
 class JcMapSign extends JcMapSignBase {
   /**
@@ -13,6 +14,7 @@ class JcMapSign extends JcMapSignBase {
    */
   constructor(options) {
     super(options)
+    this.colorStyle = getColors()
   }
 
   /**
@@ -65,8 +67,11 @@ class JcMapSign extends JcMapSignBase {
    * 显示边界区域
    * @param {Boolean} areaVisible 边界区域是否可见
    */
-  showArea(areaVisible) {
-    this.areaVisible = areaVisible == false ? false : true
+  showArea(areaVisible = null) {
+    if (areaVisible !== null) {
+      this.areaVisible = areaVisible == false ? false : true
+    }
+
     if (this.areaVisible && this.boundaries && this.boundaries.length) {
       let targets = []
 
