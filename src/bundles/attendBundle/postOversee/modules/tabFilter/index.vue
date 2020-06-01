@@ -1,23 +1,23 @@
 <template>
   <el-card class="jc-tabfilter-card">
-    <div class="jc-status-group" v-if="!self">
-      <el-radio-group v-model="status" size="medium" @change="changeStatus">
-        <el-radio-button v-for="item in ATTEND_PERIODS.VALUES" :key="item.value" :label="item.value">{{item.label}}</el-radio-button>
-      </el-radio-group>
-    </div>
     <el-form ref="form" :inline="true" :model="form" class="jc-tabfilter-form" size="small">
       <el-form-item prop="orgId" label="所属组织" v-if="!self">
         <el-cascader :options="orgTree" v-model="form.orgId" :props="{expandTrigger: 'hover', emitPath: false,checkStrictly:true }" clearable></el-cascader>
       </el-form-item>
+      <el-form-item prop="overseeResult" label="岗点类型">
+        <el-select v-model="form.overseeResult" placeholder="请选择岗点类型">
+          <el-option v-for="item in overseeResults" :key="item.id" :label="item.typeName" :value="item.id">
+          </el-option>
+        </el-select>
+      </el-form-item>
+      <el-form-item prop="overseeResult" label="督查结果">
+        <el-select v-model="form.overseeResult" placeholder="请选择督查结果">
+          <el-option v-for="item in overseeResults" :key="item.id" :label="item.typeName" :value="item.id">
+          </el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item prop="" label="时间">
-        <el-date-picker v-if="status===ATTEND_PERIODS.DAY" v-model="date" @change="changeDate" value-format="yyyy-MM-dd HH:mm:ss" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期">
-        </el-date-picker>
-        <div v-if="status===ATTEND_PERIODS.WEEK">
-          <el-date-picker v-model="form.startDate" value-format="yyyy-MM-dd HH:mm:ss" type="week" format="yyyy 第 WW 周" placeholder="开始周"></el-date-picker>
-          <span>-</span>
-          <el-date-picker v-model="form.endDate" value-format="yyyy-MM-dd HH:mm:ss" type="week" format="yyyy 第 WW 周" placeholder="结束周"></el-date-picker>
-        </div>
-        <el-date-picker v-if="status===ATTEND_PERIODS.MONTH" v-model="date" @change="changeDate" value-format="yyyy-MM-dd HH:mm:ss" type="monthrange" range-separator="-" start-placeholder="开始月" end-placeholder="结束月">
+        <el-date-picker v-model="date" @change="changeDate" value-format="yyyy-MM-dd HH:mm:ss" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期">
         </el-date-picker>
       </el-form-item>
       <el-form-item class="jc-tabfilter-btns">
@@ -29,7 +29,6 @@
   </el-card>
 </template>
 <script>
-import { ATTEND_PERIODS } from '@/constant/Dictionaries'
 export default {
   name: 'AttendFilter',
   props: {
@@ -44,10 +43,9 @@ export default {
   },
   data() {
     return {
-      ATTEND_PERIODS,
-      status: ATTEND_PERIODS.DAY,
+      overseeResults: [],
       form: {
-        selectType: ATTEND_PERIODS.DAY,
+        overseeResult: '',
         startDate: '',
         endDate: '',
         orgId: ''
@@ -56,11 +54,6 @@ export default {
     }
   },
   methods: {
-    changeStatus(value) {
-      this.reset()
-      this.form.selectType = value
-      this.onSubmit()
-    },
     changeDate(value) {
       if (value) {
         this.form.startDate = value[0]
@@ -75,7 +68,6 @@ export default {
       this.form.startDate = ''
       this.form.endDate = ''
       this.date = null
-      this.form.selectType = this.status
     },
     onSubmit() {
       const form = {}

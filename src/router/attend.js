@@ -20,4 +20,18 @@ export default [{
   meta: {
     title: '考勤管理-岗点考勤'
   }
+}, {
+  path: 'attend/peopleOversee',
+  name: 'peopleOversee',
+  component: () => import('@/bundles/attendBundle/peopleOversee'),
+  meta: {
+    title: '考勤管理-人员督查'
+  }
+}, {
+  path: 'attend/postOversee',
+  name: 'postOversee',
+  component: () => import('@/bundles/attendBundle/postOversee'),
+  meta: {
+    title: '考勤管理-岗点督查'
+  }
 }]

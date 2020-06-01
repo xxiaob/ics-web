@@ -45,6 +45,8 @@
         <el-menu-item index="myAttend">我的考勤</el-menu-item>
         <el-menu-item index="peopleAttend">人员考勤</el-menu-item>
         <el-menu-item index="postAttend">岗点考勤</el-menu-item>
+        <el-menu-item index="peopleOversee">人员督查</el-menu-item>
+        <el-menu-item index="postOversee">岗点督查</el-menu-item>
       </el-submenu>
       <el-submenu index="system" class="jc-menu-item">
         <template slot="title">
