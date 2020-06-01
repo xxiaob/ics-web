@@ -4,6 +4,7 @@
   width: 100%;
   height: 100%;
   z-index: 5;
+  overflow: hidden;
 }
 $jc-screen-bg: #030415;
 
@@ -120,6 +121,30 @@ $jc-screen-height: 40px;
       &.jc-org-show {
         height: 202px;
       }
+    }
+  }
+}
+
+/* 大屏操作区域 */
+/deep/ .jc-screen-opreate {
+  position: absolute;
+  left: 50%;
+  z-index: 6;
+  transform: translateX(-50%);
+  bottom: $jc-default-dis/2;
+  .jc-opreate-item {
+    display: inline-block;
+    width: 40px;
+    height: 40px;
+    background: url(../modules/operate/assets/opreate-bg.png) no-repeat center;
+    background-size: 100% 100%;
+    margin-left: $jc-default-dis/2;
+    cursor: pointer;
+    &:first-child {
+      margin-left: 0;
+    }
+    &:hover {
+      background-image: url(../modules/operate/assets/operate-on.png);
     }
   }
 }

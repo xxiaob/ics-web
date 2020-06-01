@@ -3,6 +3,7 @@
     <command-header @org-change="orgChange"></command-header>
     <map-search ref="mapSearch" class="jc-area-search"></map-search>
     <div class="jc-screen-space" ref="myMap"></div>
+    <command-operate></command-operate>
   </section>
 </template>
 <script>
@@ -14,6 +15,7 @@ export default {
   name: 'ScreenCommand',
   components: {
     CommandHeader: () => import('./modules/header'), //顶部
+    CommandOperate: () => import('./modules/operate'), //功能操作区域
     MapSearch: () => import('@/components/JcMap/MapSearch')
   },
   data() {
