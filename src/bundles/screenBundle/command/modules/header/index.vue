@@ -9,9 +9,9 @@
       <div class="jc-grid" title="网格"></div>
       <div class="jc-org" title="组织结构"></div>
       <div class="jc-org-switch">
-        <div class="jc-org-text" v-text="org.name"></div>
-        <div class="jc-org-cascader">
-          <el-cascader-panel v-model="org" :options="orgs" filterable :props="{ checkStrictly: true, emitPath: true }"></el-cascader-panel>
+        <div class="jc-org-text" v-text="org.name" @click="orgVisible = !orgVisible"></div>
+        <div class="jc-org-cascader" :class="{'jc-org-show': orgVisible}">
+          <el-cascader-panel v-model="orgId" :options="orgs" :props="{ checkStrictly: true, emitPath: true }" @change="orgChange"></el-cascader-panel>
         </div>
       </div>
     </div>
@@ -30,6 +30,8 @@ export default {
       weather: {},
       time: '',
       orgs: [],
+      orgId: '',
+      orgVisible: false,
       org: { name: '--' },
       timeInterval: null
     }
@@ -59,6 +61,10 @@ export default {
         return orgs
       }
       return []
+    },
+    orgChange(org) {
+      //行政区域切换
+      console.log(arguments)
     },
     setTime() {
       this.time = moment().format(`YYYY年MM月DD日 ${weeks[moment().day()]} HH:mm:ss`)

@@ -112,7 +112,14 @@ $jc-screen-height: 40px;
       position: absolute;
       top: $jc-screen-height + 5px;
       right: 0;
+      height: 0;
+      overflow: hidden;
       background-color: #ffffff;
+      transition: height 0.4s;
+      will-change: height;
+      &.jc-org-show {
+        height: 202px;
+      }
     }
   }
 }

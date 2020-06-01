@@ -54,6 +54,7 @@ export default {
       return trees
     },
     adCodeChange(adcode) {
+      this.$refs.myEditCascader.dropDownVisible = false //隐藏 自定义选择
       this.startEdit = true
       let sign = allAreaPolygons[adcode]
 

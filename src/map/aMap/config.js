@@ -22,7 +22,7 @@ export function getColors() {
 //地图样式配置参数
 export const MapStyle = {
   [mapStyle.BASE]: 'amap://styles/df688c24215141f7d10385089cad4d4a',
-  [mapStyle.DARK]: 'amap://styles/20.081eef65806a574506d42f2c8d0f6c',
+  [mapStyle.DARK]: 'amap://styles/1b8b05391432855bd2473c0d1d3628b5',
   [mapStyle.SATELLITE]: mapStyle.SATELLITE
 }
 
