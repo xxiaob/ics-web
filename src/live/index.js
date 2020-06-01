@@ -1,21 +1,23 @@
 import LiveClient from 'LiveClient'
+
 export class Live {
+  /**
+   * @param {String} localId 本地流播放的容器id
+   * @param {String} remoteId 远端流播放的容器id
+   * @param {Boolean} debug
+  */
   constructor(localId = 'live', remoteId = 'tolive', debug = true) {
     this.debug = debug
-    this.console('Live constructor')
-    this.client = null
-    this.inChannel = false
-    //本地流播放的容器id
     this.localId = localId
-    //远端流播放的容器id
     this.remoteId = remoteId
     this.appId = '408a34ed80ac4b43b5353b56ec1cd5f1'
-    this.pushUrl = 'rtmp://push.bg365.top/live/'
-    this.pushed = false
-    this.fromUsername = ''
-    //所有远端流的id
-    this.remoteHostIds = []
-    this.isLiving = false
+    this.pushUrl = 'rtmp://push.bg365.top/live/' //推流地址
+
+    this.client = null
+    this.inChannel = false //已经加入频道
+    this.pushed = false //已经推流
+    this.remoteHostIds = [] //所有远端流的id
+    this.fromUsername = '' //邀请人
     this.init()
     this.on()
   }
@@ -119,6 +121,7 @@ export class Live {
       this.setPublish()
     }
   }
+
   /**
    * 移除远端流的播放dom
    * @param {String} id
@@ -140,22 +143,33 @@ export class Live {
   joinChannel(channelId = '123456', role = 'host', fromUsername = '') {
     this.fromUsername = fromUsername
     this.client.joinChannel(null, channelId, null, 0, null, role, () => {
-      this.console('joinChannel 成功')
+      this.console('joinChannel 成功', role)
+      this.console(this.client)
       this.inChannel = true
+
+      if (role === 'host') {
+        //主播  创建本地流
+        this.createAndPublishStream()
+      }
     })
+  }
 
-    this.console(this.client)
+  /**
+   * 创建并且发布本地流
+   * @param {Boolean} video 是否开启摄像头
+  */
+  createAndPublishStream(video = true) {
+    this.console(this.client.uid, '创建本地流')
 
-    //创建本地流
     this.localStream = this.client.createStream({
       streamID: this.client.uid,
       audio: true,
-      video: true
+      video
     })
 
     //本地流初始化
     this.localStream.init(() => {
-      this.console('localStream.init 本地流初始化 成功', this.localStream.getId())
+      this.console('localStream.init 本地流初始化 成功', this.client.uid)
       //播放本地流
       this.localStream.play(this.localId)
       //发布本地流
@@ -176,6 +190,7 @@ export class Live {
     this.client.leaveChannel(() => {
       this.console('leaveChannel 离开房间 成功')
       this.inChannel = false
+      this.fromUsername = ''
       if (this.localStream) {
         this.localStream.close()
       }
@@ -242,6 +257,7 @@ export class Live {
     this.client.setLiveTranscoding(LiveTranscoding)
     this.console('设置推流参数', LiveTranscoding)
   }
+
   /**
    * 直播推流
    * @param {String} id 流id
@@ -250,7 +266,6 @@ export class Live {
     this.console('publishStreamUrl 推流', this.client.uid)
     this.client.addPublishStreamUrl(this.pushUrl + id, true)
     this.pushed = true
-    this.isLiving = true
   }
 
   /**
@@ -259,7 +274,7 @@ export class Live {
   */
   stopPublishStream(id) {
     this.client.removePublishStreamUrl(id)
-    this.isLiving = false
+    this.pushed = false
   }
 
   //打印日志
