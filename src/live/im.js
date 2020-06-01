@@ -3,11 +3,14 @@ import '../../static/jimsdk/jmessage-sdk-web.2.6.0.min.js'
 import JMessage from 'JMessage'
 export class IM {
   /**
-   * @param {String} username 用户名
+   * @param {String} username 用户id
+   * @param {String} nickname 用户昵称
    * @param {Boolean} debug
   */
-  constructor(username, debug = true) {
+  constructor(username, nickname, debug = true) {
     this.username = username
+    this.nickname = nickname
+    this.password = '123456'
     this.debug = debug
     this.JIM = new JMessage({
       // debug: true
@@ -30,19 +33,10 @@ export class IM {
     //   signature = md5(`appkey=${appkey}&timestamp=${timestamp}&random_str=${randomStr}&key=${secret}`)
     this.JIM.init({ ...authToken }).onSuccess(data => {
       this.console('init success', data)
-      // this.on(cb)
-      if (this.username) {
-        this.login(this.username)
-      }
+      this.login(this.username)
     }).onFail(data => {
       this.console('init error', data)
     })
-    // this.console(this.isInit())
-    // if (this.isInit()) {
-    //   this.console('已经初始化')
-    // } else {
-
-    // }
   }
 
   /**
@@ -53,10 +47,11 @@ export class IM {
   register(username, nickname) {
     this.JIM.register({
       username,
-      password: '123456',
+      password: this.password,
       nickname
     }).onSuccess(data => {
       this.console('register success', data)
+      this.login(this.username)
     }).onFail(data => {
       this.console('register error', data)
     })
@@ -72,13 +67,15 @@ export class IM {
     } else {
       this.JIM.login({
         username,
-        password: '123456'
+        password: this.password
       }).onSuccess(data => {
         this.console('login success 登录成功', data)
       }).onFail(data => {
-        this.console('login error:', data)
+        this.console('login error 登录失败', data)
+        this.register(this.username, this.nickname)
       }).onTimeout(data => {
-        this.console('login timeout:', data)
+        this.console('login timeout 登录超时', data)
+        this.login(this.username)
       })
     }
   }
@@ -111,7 +108,9 @@ export class IM {
     //聊天消息实时监听
     this.JIM.onMsgReceive(data => {
       this.console('onMsgReceive 实时数据:', data)
-      cb('onMsgReceive', data)
+      const { from_username: fromUsername, content: { msg_body: { text, extras } } } = data.messages[0]
+
+      cb('onMsgReceive', { fromUsername, content: JSON.parse(text) })
     })
 
     this.JIM.onEventNotification(data => {
@@ -156,17 +155,19 @@ export class IM {
    * @param {String} username 用户名
    * @param {Object} obj 消息体
    * @param {String} obj.msgType "0":正常,"1":邀请视频
-   * @param {String} obj.channelId 房间id
    * @param {String} obj.content 消息内容
-   * @param {String} obj.inviteType "0":正常,"1":强拉
-   * @param {String} obj.mediaType "0":音频,"1":视频
-   * 接收方  回复消息  agree  channelId
+   * 视频聊天相关参数
+   * @param {String} obj.channelId 房间id
+   * @param {String} obj.inviteType "0":正常, "1":强拉, 2":强制观摩(拉执法仪)
+   * @param {String} obj.mediaType "0":音频, "1":视频
    * @param {String} obj.agree "0":拒绝邀请, "1":接受邀请
+   * @param {String} obj.isExit "0":退出房间, "1":结束聊天
   */
   sendSingleMsg(username, obj) {
     this.JIM.sendSingleMsg({
       target_username: username,
-      content: JSON.stringify(obj)
+      content: JSON.stringify(obj),
+      extras: obj
     }).onSuccess((data, msg) => {
       this.console('sendSingleMsg success data:', data)
       this.console('sendSingleMsg succes msg:', msg)

@@ -4,7 +4,10 @@
     <el-input v-model="channelId" placeholder="房间号"></el-input>
     <div>
       <el-button type="primary" @click="joinChannel" v-if="!inChannel">进入房间</el-button>
-      <el-button @click="leaveChannel" v-if="inChannel">退出房间</el-button>
+      <div v-if="inChannel">
+        <el-button @click="exit('1')" v-if="invited">结束聊天</el-button>
+        <el-button @click="exit('0')" v-else>退出房间</el-button>
+      </div>
       <el-input v-model="invitUserId" placeholder="邀请用户"></el-input>
       <el-button type="primary" @click="inviteUser">邀请用户</el-button>
       <!-- <el-button type="primary" @click="pushs">推流</el-button> -->
@@ -34,12 +37,14 @@
 import { IM } from '@/live/im'
 import { Live } from '@/live'
 import { getImAuth } from '@/api/live'
+import { getUser } from '@/libs/storage'
 
 export default {
   name: 'liveDemo',
   data() {
     return {
       username: 'lxy2',
+      nickname: '李向玉',
       channelId: '123456',
       invited: false,
       invitUserId: '',
@@ -51,11 +56,12 @@ export default {
     }
   },
   async created() {
+    console.log(getUser())
     const res = await getImAuth()
 
-    this.im = new IM(this.username)
+    this.im = new IM(this.username, this.nickname)
     this.im.init(res)
-    this.im.on(this.msgCb)
+    this.im.on(this.imMsgCb)
   },
   mounted() {
     this.live = new Live('live', 'tolive')
@@ -76,35 +82,61 @@ export default {
         })
       })
     },
-    msgCb(onType, data) {
+    imMsgCb(onType, data) {
       console.log('vue 数据', onType, data)
-      const { from_username: fromUsername, content: { msg_body: { text } } } = data.messages[0]
+      const { fromUsername, content } = data
 
       this.fromUsername = fromUsername
-      const msg = JSON.parse(text)
-
-      if (this.invited) {
-        if (msg.agree === '1') {
-          console.log(this.fromUsername, '同意进入直播')
-        } else {
-          console.log(this.fromUsername, '拒绝进入直播')
+      if (content.msgType === '1') {
+        console.log('邀请视频')
+        if (content.isExit) {
+          //退出房间消息
+          this.exitHandel(content.isExit)
+        } else if (content.inviteType || content.agree) {
+          //邀请消息
+          if (this.invited) {
+          //我是邀请方，处理回来的信息
+            this.inviteHandelMsg(content)
+          } else {
+          //我是被邀请方，处理回来的信息
+            this.invitedHandelMsg(content)
+          }
         }
       } else {
-        this.channelId = msg.channelId
-        this.mediaType = msg.mediaType
-        if (msg.inviteType === '1') {
-          this.agreeJoinChannel()
-        } else {
-          this.invitedButton = true
-          console.log('正常邀请', msg)
-        }
+        console.log('普通消息')
       }
     },
+    exitHandel(isExit) {
+      if (isExit === '1') {
+        console.log('结束视频')
+        this.leaveChannel()
+      } else {
+        console.log(this.fromUsername, '退出房间')
+      }
+    },
+    inviteHandelMsg(content) {
+      if (content.agree === '1') {
+        console.log(this.fromUsername, '同意进入直播')
+      } else {
+        console.log(this.fromUsername, '拒绝进入直播')
+      }
+    },
+    invitedHandelMsg(content) {
+      this.channelId = content.channelId
+      this.mediaType = content.mediaType
+      if (content.inviteType === '1') {
+        this.agreeJoinChannel()
+      } else {
+        this.invitedButton = true
+        console.log('正常邀请', content)
+      }
+    },
+    //同意加入频道
     agreeJoinChannel() {
       this.im.sendSingleMsg(this.fromUsername, {
         msgType: '1',
         channelId: this.channelId,
-        agree: '1' // "0":拒绝邀请, "1":接受邀请
+        agree: '1' // "0":拒绝邀请, "1":接受邀请,
       })
       this.joinChannel()
     },
@@ -112,6 +144,7 @@ export default {
       this.agreeJoinChannel()
       this.invitedButton = false
     },
+    //拒绝加入频道
     refuse() {
       this.im.sendSingleMsg(this.fromUsername, {
         msgType: '1',
@@ -121,11 +154,12 @@ export default {
       this.invitedButton = false
     },
     register() {
-      this.im.register(this.username)
+      this.im.register(this.username, this.nickname)
     },
     login() {
-      this.im.login(this.username)
+      this.im.login(this.username, this.nickname)
     },
+    //邀请用户加入频道
     inviteUser() {
       this.invited = true
       const msg = {
@@ -141,6 +175,7 @@ export default {
         this.joinChannel()
       }
     },
+    //加入频道
     async joinChannel() {
       await this.live.joinChannel(this.channelId, 'host', this.fromUsername)
       this.inChannel = true
@@ -151,6 +186,17 @@ export default {
       this.inChannel = false
       this.fromUsername = ''
     },
+    exit(isExit) {
+      const msg = {
+        msgType: '1',
+        channelId: this.channelId,
+        isExit
+      }
+
+      this.im.sendSingleMsg(this.invitUserId, msg)
+      this.leaveChannel()
+    },
+    //推流
     pushs() {
       this.live.publishStreamUrl('lxyad')
     }

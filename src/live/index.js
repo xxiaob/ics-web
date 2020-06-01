@@ -150,12 +150,7 @@ export class Live {
     this.localStream = this.client.createStream({
       streamID: this.client.uid,
       audio: true,
-      video: true,
-      audioProcessing: {
-        AEC: true,
-        AGC: true,
-        ANS: true
-      }
+      video: true
     })
 
     //本地流初始化
