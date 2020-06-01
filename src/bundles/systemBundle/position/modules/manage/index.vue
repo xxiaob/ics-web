@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="options ? '编辑职位':'新增职位'" :visible.sync="dialogVisible" width="600px" :append-to-body="true" @close="dialogClose">
+  <el-dialog :title="options ? '编辑职位':'新增职位'" :visible.sync="dialogVisible" width="600px" :close-on-click-modal="false" :append-to-body="true" @close="dialogClose">
     <el-form ref="form" label-width="100px" :model="form" class="jc-manage-form">
       <el-form-item label="职位名称" prop="positionName" :rules="rules.Len50">
         <el-input v-model="form.positionName" placeholder="请输入职位名称"></el-input>

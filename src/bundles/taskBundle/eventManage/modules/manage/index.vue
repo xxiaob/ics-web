@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="options ? '编辑事件' : '事件上报'" :visible.sync="dialogVisible" width="600px" :append-to-body="true" @close="dialogClose">
+  <el-dialog :title="options ? '编辑事件' : '事件上报'" :visible.sync="dialogVisible" width="600px" :close-on-click-modal="false" :append-to-body="true" @close="dialogClose">
     <el-form ref="form" label-width="100px" :model="form" class="jc-manage-form">
       <!-- <el-form-item label="事件ID" prop="eventNumber" v-show="view">
         <el-input v-model="form.eventNumber"  placeholder="请输入事件ID"></el-input>

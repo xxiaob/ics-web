@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="title" :visible.sync="dialogVisible" width="600px" :append-to-body="true" @close="dialogClose">
+  <el-dialog :title="title" :visible.sync="dialogVisible" width="600px" :append-to-body="true" :close-on-click-modal="false" @close="dialogClose">
     <div class="text-center">
       <div class="jc-mb">
         <el-avatar :srcSet="user.photo ? user.photo : '/static/images/user-header.png'" :size="50">{{user.userName}}</el-avatar>

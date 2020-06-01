@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="options ? '编辑区域类型':'新增区域类型'" :visible.sync="dialogVisible" width="600px" :append-to-body="true" @close="dialogClose">
+  <el-dialog :title="options ? '编辑区域类型':'新增区域类型'" :visible.sync="dialogVisible" :close-on-click-modal="false" width="600px" :append-to-body="true" @close="dialogClose">
     <el-form ref="form" label-width="120px" :model="form" class="jc-manage-form">
       <el-form-item label="区域类型名称" prop="areaTypeName" :rules="rules.Len50">
         <el-input v-model="form.areaTypeName" placeholder="请输入区域类型名称"></el-input>

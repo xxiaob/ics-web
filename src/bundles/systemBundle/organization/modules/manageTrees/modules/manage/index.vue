@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="options ? '编辑组织':'新增组织'" :visible.sync="dialogVisible" width="600px" :append-to-body="true" @close="dialogClose">
+  <el-dialog :title="options ? '编辑组织':'新增组织'" :visible.sync="dialogVisible" width="600px" :append-to-body="true" :close-on-click-modal="false" @close="dialogClose">
     <el-form ref="form" label-width="100px" :model="form" class="jc-manage-form">
       <el-form-item label="上级组织">
         <span v-text="pNode.name"></span>

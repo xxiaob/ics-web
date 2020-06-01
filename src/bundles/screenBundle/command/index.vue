@@ -1,6 +1,6 @@
 <template>
   <section class="jc-screen-warp">
-    <command-header></command-header>
+    <command-header @org-change="orgChange"></command-header>
     <map-search ref="mapSearch" class="jc-area-search"></map-search>
     <div class="jc-screen-space" ref="myMap"></div>
   </section>
@@ -30,6 +30,9 @@ export default {
       myJcMap.init(this.$refs.myMap).then(() => {
         this.$refs.mapSearch.initData(myJcMap) //初始化搜索对象
       })
+    },
+    orgChange() {
+      //指挥级别切换
     }
   },
   beforeDestroy() {

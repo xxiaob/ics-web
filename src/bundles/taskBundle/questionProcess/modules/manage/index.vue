@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="options ? '编辑问题' : '新增问题'" :visible.sync="dialogVisible" width="600px" :append-to-body="true" @close="dialogClose">
+  <el-dialog :title="options ? '编辑问题' : '新增问题'" :visible.sync="dialogVisible" width="600px" :close-on-click-modal="false" :append-to-body="true" @close="dialogClose">
     <el-form ref="form" label-width="100px" :model="form" class="jc-manage-form">
       <el-form-item label="问题标题" prop="problemTitle" :rules="rules.Len50">
         <el-input v-model="form.problemTitle" placeholder="请输入问题标题"></el-input>

@@ -11,7 +11,7 @@
       <div class="jc-org-switch">
         <div class="jc-org-text" v-text="org.name" @click="orgVisible = !orgVisible"></div>
         <div class="jc-org-cascader" :class="{'jc-org-show': orgVisible}">
-          <el-cascader-panel ref='myOrgCascader' v-model="orgId" :options="orgs" :props="{ checkStrictly: true, emitPath: false }" @change="orgChange"></el-cascader-panel>
+          <el-cascader-panel ref='myOrgCascader' v-model="org.orgId" :options="orgs" :props="{ checkStrictly: true, emitPath: false }" @change="orgChange"></el-cascader-panel>
         </div>
       </div>
     </div>
@@ -23,16 +23,17 @@ import { organizationList } from '@/api/organization'
 
 let weeks = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六']
 
+let orgMap = {} //存储组织id和住址信息的对应关系
+
 export default {
   name: 'ScreenCommandHeader',
   data() {
     return {
       weather: {},
       time: '',
-      orgs: [],
-      orgId: '',
+      orgs: [], //存储组织树,用于cascader选择器使用
       orgVisible: false,
-      org: { name: '--' },
+      org: { name: '--', orgId: '' },
       timeInterval: null
     }
   },
@@ -46,6 +47,9 @@ export default {
         const res = await organizationList()
 
         this.orgs = this.formatOrg(res)
+        if (this.orgs.length) {
+          this.orgChange(this.orgs[0].value)
+        }
       } catch (error) {
         console.log(error)
       }
@@ -57,6 +61,7 @@ export default {
         child.forEach(item => {
           orgs.push({ value: item.orgId, label: item.orgName,
             ...(item.children && item.children.length ? { children: this.formatOrg(item.children) } : {}) })
+          orgMap[item.orgId] = { orgId: item.orgId, name: item.orgName }
         })
         return orgs
       }
@@ -64,7 +69,9 @@ export default {
     },
     orgChange(orgId) {
       //行政区域切换
-      console.log(orgId)
+      this.orgVisible = false
+      this.org = { ...orgMap[orgId] }
+      this.$emit('org-change', this.org)
     },
     setTime() {
       this.time = moment().format(`YYYY年MM月DD日 ${weeks[moment().day()]} HH:mm:ss`)

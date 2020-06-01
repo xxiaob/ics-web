@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="options ? '编辑项目':'新增项目'" :visible.sync="dialogVisible" width="800px" :append-to-body="true" @close="dialogClose">
+  <el-dialog :title="options ? '编辑项目':'新增项目'" :visible.sync="dialogVisible" width="800px" :close-on-click-modal="false" :append-to-body="true" @close="dialogClose">
     <el-form ref="form" label-width="120px" :model="form" class="jc-manage-form">
       <el-form-item label="项目名称" prop="projectName" :rules="rules.Len50">
         <el-input v-model="form.projectName" placeholder="请输入项目名称"></el-input>

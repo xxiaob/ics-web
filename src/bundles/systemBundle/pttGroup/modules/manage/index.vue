@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="options ? '编辑群组' : '新增群组'" :visible.sync="dialogVisible" width="600px" :append-to-body="true" @close="dialogClose">
+  <el-dialog :title="options ? '编辑群组' : '新增群组'" :visible.sync="dialogVisible" width="600px" :close-on-click-modal="false" :append-to-body="true" @close="dialogClose">
     <el-form ref="form" label-width="80px" :model="form" class="jc-manage-form">
       <el-form-item label="群组名称" prop="groupName" :rules="rules.Len20">
         <el-input v-model="form.groupName" placeholder="请输入群组名称"></el-input>

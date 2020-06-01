@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="事件详情" :visible.sync="dialogVisible" width="600px" :append-to-body="true" @close="dialogClose">
+  <el-dialog title="事件详情" :visible.sync="dialogVisible" width="600px" :append-to-body="true" :close-on-click-modal="false" @close="dialogClose">
     <el-form ref="form" label-width="100px" :model="form" class="jc-manage-form">
       <el-form-item label="事件ID">
         <span>{{form.eventNumber}}</span>

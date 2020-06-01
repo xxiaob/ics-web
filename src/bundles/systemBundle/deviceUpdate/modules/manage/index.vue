@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="options ? options.view?'查看版本':'编辑版本' : '新增版本'" :visible.sync="dialogVisible" width="600px" :append-to-body="true" @close="dialogClose">
+  <el-dialog :title="options ? options.view?'查看版本':'编辑版本' : '新增版本'" :visible.sync="dialogVisible" :close-on-click-modal="false" width="600px" :append-to-body="true" @close="dialogClose">
     <el-form ref="form" label-width="80px" :model="form" class="jc-manage-form">
       <el-form-item label="设备类型" prop="deviceType" :rules="rules.SELECT_NOT_NULL">
         <el-select v-model="form.deviceType" placeholder="选择设备类型" :disabled="view">

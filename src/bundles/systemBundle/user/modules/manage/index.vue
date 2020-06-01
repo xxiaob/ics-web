@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="options ? '编辑用户':'新增用户'" :visible.sync="dialogVisible" width="600px" :append-to-body="true" @close="dialogClose">
+  <el-dialog :title="options ? '编辑用户':'新增用户'" :visible.sync="dialogVisible" width="600px" :append-to-body="true" :close-on-click-modal="false" @close="dialogClose">
     <el-form ref="form" label-width="85px" :model="form" class="jc-manage-form">
       <el-form-item label="用户名称" prop="userName" :rules="rules.Len50">
         <el-input v-model="form.userName" placeholder="请输入用户名称"></el-input>

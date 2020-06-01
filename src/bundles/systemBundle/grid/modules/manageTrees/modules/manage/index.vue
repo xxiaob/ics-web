@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="isEdit ? '编辑网格':'新增网格'" :visible.sync="dialogVisible" width="800px" :append-to-body="true" @close="dialogClose">
+  <el-dialog :title="isEdit ? '编辑网格':'新增网格'" :visible.sync="dialogVisible" width="800px" :close-on-click-modal="false" :append-to-body="true" @close="dialogClose">
     <el-form ref="form" label-width="100px" :model="form" class="jc-manage-form">
       <el-form-item label="上级">
         <span v-text="pNode.name"></span>

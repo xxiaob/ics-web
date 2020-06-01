@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="options ? '编辑菜单':'新增菜单'" :visible.sync="dialogVisible" width="600px" :append-to-body="true" @close="dialogClose">
+  <el-dialog :title="options ? '编辑菜单':'新增菜单'" :visible.sync="dialogVisible" width="600px" :close-on-click-modal="false" :append-to-body="true" @close="dialogClose">
     <el-form ref="form" label-width="80px" :model="form" class="jc-manage-form">
       <el-form-item label="菜单名称" prop="resName" :rules="rules.Len50">
         <el-input v-model="form.resName" placeholder="请输入菜单名称"></el-input>
