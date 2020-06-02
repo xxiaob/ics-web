@@ -9,8 +9,8 @@
       <div class="jc-grid" title="网格"></div>
       <div class="jc-org" title="组织结构"></div>
       <div class="jc-org-switch">
-        <div class="jc-org-text" v-text="org.name" @click="orgVisible = !orgVisible"></div>
-        <div class="jc-org-cascader" :class="{'jc-org-show': orgVisible}">
+        <div class="jc-org-text" v-text="org.name"></div>
+        <div class="jc-org-cascader">
           <el-cascader-panel ref='myOrgCascader' v-model="org.orgId" :options="orgs" :props="{ checkStrictly: true, emitPath: false }" @change="orgChange"></el-cascader-panel>
         </div>
       </div>
@@ -32,7 +32,6 @@ export default {
       weather: {},
       time: '',
       orgs: [], //存储组织树,用于cascader选择器使用
-      orgVisible: false,
       org: { name: '--', orgId: '' },
       timeInterval: null
     }
@@ -69,7 +68,6 @@ export default {
     },
     orgChange(orgId) {
       //行政区域切换
-      this.orgVisible = false
       this.org = { ...orgMap[orgId] }
       this.$emit('org-change', this.org)
     },
