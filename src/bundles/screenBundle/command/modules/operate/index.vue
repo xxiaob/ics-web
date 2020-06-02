@@ -18,10 +18,26 @@
     <div class="jc-opreate-item">
       <i class="jc-map-switch"></i>
     </div>
+    <div class="jc-opreate-item">
+      <i class="jc-message"></i>
+    </div>
+    <div class="jc-opreate-item">
+      <i class="jc-talk"></i>
+    </div>
   </div>
 </template>
 <script>
 export default {
-  name: 'ScreenCommandOperate'
+  name: 'ScreenCommandOperate',
+  data() {
+    return {
+
+    }
+  },
+  methods: {
+    messageChange(name) {
+      this.$EventBus.$emit('message-component-change', { component: name, options: null }) //通知窗口改变
+    }
+  }
 }
 </script>

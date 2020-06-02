@@ -6,8 +6,8 @@
     </div>
     <div class="jc-screen-title">南京市常态管控指挥大屏</div>
     <div class="jc-header-right">
-      <div class="jc-grid" title="网格"></div>
-      <div class="jc-org" title="组织结构"></div>
+      <div class="jc-grid" title="网格" @click="viewChange('CommandGrid')"></div>
+      <div class="jc-org" title="组织结构" @click="viewChange('CommandOrg')"></div>
       <div class="jc-org-switch">
         <div class="jc-org-text" v-text="org.name"></div>
         <div class="jc-org-cascader">
@@ -69,7 +69,10 @@ export default {
     orgChange(orgId) {
       //行政区域切换
       this.org = { ...orgMap[orgId] }
-      this.$emit('org-change', this.org)
+      this.$EventBus.$emit('org-change', this.org) //使用事件总线进行级别切换通知
+    },
+    viewChange(name) {
+      this.$EventBus.$emit('view-component-change', { component: name, options: null }) //通知窗口改变
     },
     setTime() {
       this.time = moment().format(`YYYY年MM月DD日 ${weeks[moment().day()]} HH:mm:ss`)
