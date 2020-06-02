@@ -2,11 +2,11 @@
  * demo路由
  */
 export default [{
-  path: 'hwLive',
-  name: 'hwLive',
-  component: () => import('@/bundles/liveBundle/hwLive'),
+  path: 'imLive',
+  name: 'imLive',
+  component: () => import('@/bundles/liveBundle/imLive'),
   meta: {
-    title: 'hwLive'
+    title: 'imLive'
   }
 }, {
   path: 'jim',

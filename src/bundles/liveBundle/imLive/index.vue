@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>直播demo</h1>
+    <h1>imLive 直播demo</h1>
     <el-input v-model="channelId" placeholder="房间号"></el-input>
     <div>
       <el-button type="primary" @click="joinChannel" v-if="!inChannel">进入房间</el-button>
@@ -35,7 +35,7 @@
 
 <script>
 import { IM } from '@/live/im'
-import { Live } from '@/live'
+import { Live } from '@/live/agora'
 import { getImAuth } from '@/api/live'
 import { getUser } from '@/libs/storage'
 
@@ -177,7 +177,7 @@ export default {
     },
     //加入频道
     async joinChannel() {
-      await this.live.joinChannel(this.channelId, 'host', this.fromUsername)
+      await this.live.joinChannel(this.channelId)
       this.inChannel = true
     },
     async leaveChannel() {

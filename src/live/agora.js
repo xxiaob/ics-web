@@ -33,30 +33,50 @@ export class Live {
   //sdk初始化
   init() {
     this.console('init')
-    this.rtc.client = AgoraRTC.createClient({ mode: 'rtc', codec: 'h264' })
+    // mode 用于设置频道场景。一对一或多人通话中，建议设为 "rtc" ，使用通信场景；互动直播中，建议设为 "live"，使用直播场景。
+    this.rtc.client = AgoraRTC.createClient({ mode: 'live', codec: 'h264' })
     this.rtc.client.init(this.option.appID, () => {
       this.console('init success')
     }, err => {
       this.console('init err', err)
     })
+    //     让用户选择自己的角色是主播（"host"）还是观众（"audience"）。
+    // 调用 setClientRole 方法，传入用户选择的角色。
+    // // The value of role can be "host" or "audience".
+    // rtc.client.setClientRole(role);
   }
 
   //监听事件
   on() {
-    //app本地流发布
-    // this.rtc.client.on('stream-published', e => {
-    //   this.console('stream-published app本地流发布', e)
-    //   //是否 需要直播推流
-    //   if (this.fromUsername) {
-    //     this.console('不用推流')
-    //   } else {
-    //     this.console('推流')
-    //     setTimeout(() => {
-    //       this.setPublish()
-    //       this.publishStreamUrl('lxyada')
-    //     })
-    //   }
-    // })
+    //报错信息
+    this.rtc.client.on('error', (err) => {
+      this.console('error', err)
+    })
+
+    //本地流已发布
+    this.rtc.client.on('stream-published', e => {
+      this.console('stream-published 本地流发布', e)
+      //是否 需要直播推流
+      // if (this.fromUsername) {
+      //   this.console('不用推流')
+      // } else {
+      //   this.console('推流')
+      //   setTimeout(() => {
+      //     this.setPublish()
+      //     this.publishStreamUrl('lxyada')
+      //   })
+      // }
+    })
+
+    //本地音视频流已取消发布
+    this.rtc.client.on('stream-unpublished', e => {
+      this.console('local stream unpublished 本地音视频流已取消发布', e)
+    })
+
+    //有远端用户/主播加入频道
+    this.rtc.client.on('stream-unpublished', e => {
+      this.console('local stream unpublished 有远端用户/主播加入频道', e)
+    })
 
     //监听客户端的新增流
     this.rtc.client.on('stream-added', e => {
@@ -92,24 +112,24 @@ export class Live {
     })
 
     //开启直播成功
-    // this.rtc.client.on('liveStreamingStarted', e => {
-    //   this.console('liveStreamingStarted 开启直播成功', e)
-    // })
+    this.rtc.client.on('liveStreamingStarted', e => {
+      this.console('liveStreamingStarted 开启直播成功', e)
+    })
 
     //开启直播失败
-    // this.rtc.client.on('liveStreamingFailed', e => {
-    //   this.console('liveStreamingFailed 开启直播失败', e)
-    // })
+    this.rtc.client.on('liveStreamingFailed', e => {
+      this.console('liveStreamingFailed 开启直播失败', e)
+    })
 
     //中断直播
-    // this.rtc.client.on('liveStreamingStopped', e => {
-    //   this.console('liveStreamingStopped 中断直播', e)
-    // })
+    this.rtc.client.on('liveStreamingStopped', e => {
+      this.console('liveStreamingStopped 中断直播', e)
+    })
 
     //直播更新
-    // this.rtc.client.on('liveTranscodingUpdated', e => {
-    //   this.console('liveTranscodingUpdated 直播更新', e)
-    // })
+    this.rtc.client.on('liveTranscodingUpdated', e => {
+      this.console('liveTranscodingUpdated 直播更新', e)
+    })
   }
 
   /**
