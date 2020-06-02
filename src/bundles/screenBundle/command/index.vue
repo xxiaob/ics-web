@@ -4,6 +4,7 @@
     <map-search ref="mapSearch" class="jc-area-search"></map-search>
     <div class="jc-screen-space" ref="myMap"></div>
     <command-operate></command-operate>
+
   </section>
 </template>
 <script>
