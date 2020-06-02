@@ -13,6 +13,7 @@
     "lint-fix": "eslint --fix .js,.vue src"
   },
   "dependencies": {
+    "agora-rtc-sdk": "^3.1.1",
     "axios": "^0.19.0",
     "element-ui": "^2.13.0",
     "md5": "^2.2.1",

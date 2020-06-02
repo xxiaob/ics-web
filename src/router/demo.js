@@ -2,17 +2,24 @@
  * demo路由
  */
 export default [{
-  path: 'liveDemo',
-  name: 'liveDemo',
-  component: () => import('@/bundles/liveBundle/demo'),
+  path: 'hwLive',
+  name: 'hwLive',
+  component: () => import('@/bundles/liveBundle/hwLive'),
   meta: {
-    title: 'liveDemo'
+    title: 'hwLive'
   }
 }, {
-  path: 'imDemo',
-  name: 'imDemo',
-  component: () => import('@/bundles/liveBundle/imDemo'),
+  path: 'jim',
+  name: 'jim',
+  component: () => import('@/bundles/liveBundle/jim'),
   meta: {
-    title: 'imDemo'
+    title: 'jim'
+  }
+}, {
+  path: 'agoraLive',
+  name: 'agoraLive',
+  component: () => import('@/bundles/liveBundle/agoraLive'),
+  meta: {
+    title: 'agoraLive'
   }
 }]
