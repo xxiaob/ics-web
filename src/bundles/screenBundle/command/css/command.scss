@@ -8,7 +8,6 @@
   transform: translateZ(0);
 }
 /*基础参数定义*/
-$jc-screen-bg: #030415;
 $jc-right-content-width: 300px; //右侧内容区域宽度
 $jc-right-message-height: 150px; //右侧底部内容高度
 
@@ -32,7 +31,7 @@ $jc-screen-height: 40px;
     background: url(../modules/header/assets/head-bg.png) no-repeat center;
     background-size: 100% 100%;
     font-size: 28px;
-    color: #ffffff;
+    color: $jc-color-white;
     text-align: center;
     line-height: 54px;
     letter-spacing: 1px;
@@ -44,7 +43,7 @@ $jc-screen-height: 40px;
       height: 3px;
       bottom: 4px;
       border-radius: 2px;
-      background-color: #ffffff;
+      background-color: $jc-color-white;
     }
   }
   .jc-header-left {
@@ -80,9 +79,10 @@ $jc-screen-height: 40px;
     background: url(../modules/header/assets/grid.png) no-repeat center;
     background-size: 16px auto;
     width: $jc-screen-height;
+    opacity: 0.7;
     @extend .jc-header-item;
     &:hover {
-      background-image: url(../modules/header/assets/grid-on.png);
+      opacity: 1;
     }
   }
   .jc-org {
@@ -90,9 +90,10 @@ $jc-screen-height: 40px;
     background: url(../modules/header/assets/org.png) no-repeat center;
     background-size: 18px auto;
     width: $jc-screen-height;
+    opacity: 0.7;
     @extend .jc-header-item;
     &:hover {
-      background-image: url(../modules/header/assets/org-on.png);
+      opacity: 1;
     }
   }
   .jc-org-switch {
@@ -108,7 +109,6 @@ $jc-screen-height: 40px;
       height: $jc-screen-height * 0.6;
       padding: 0 $jc-default-dis;
       margin-top: $jc-screen-height * 0.2;
-      background-color: $jc-screen-bg;
       border-radius: 4px;
       border: solid 1px rgba(255, 255, 255, 0.28);
       color: #ffffff;
@@ -119,7 +119,7 @@ $jc-screen-height: 40px;
       right: 0;
       height: 0;
       overflow: hidden;
-      background-color: #ffffff;
+      background-color: $jc-color-white;
       transition: height 0.4s;
       will-change: height;
     }
@@ -134,22 +134,20 @@ $jc-screen-height: 40px;
 /* 大屏操作区域 */
 /deep/ .jc-screen-opreate {
   position: absolute;
-  left: 50%;
+  top: 50%;
+  left: $jc-default-dis;
   z-index: 6;
-  transform: translateX(-50%);
-  bottom: $jc-default-dis/2;
+  transform: translateY(-50%);
   .jc-opreate-item {
     position: relative;
-    display: inline-block;
     width: 36px;
     height: 36px;
-    vertical-align: middle;
-    background: url(../modules/operate/assets/opreate-bg.png) no-repeat center;
+    background: url(../modules/operate/assets/operate-bg.png) no-repeat center;
     background-size: 100% 100%;
-    margin-left: $jc-default-dis/2;
+    margin-top: $jc-default-dis/2;
     cursor: pointer;
     &:first-child {
-      margin-left: 0;
+      margin-top: 0;
     }
     &:hover,
     &.jc-active {
@@ -246,6 +244,7 @@ $jc-screen-height: 40px;
   box-orient: vertical;
   flex-flow: column;
   z-index: 8;
+  background-color: $jc-color-white;
   transform: translateX(0);
   opacity: 1;
   will-change: transform, opacity;
@@ -262,24 +261,32 @@ $jc-screen-height: 40px;
   }
 
   $jc-view-header-height: 36px;
+
+  /* 搜索框 样式*/
+  .jc-filter-input {
+    display: block;
+    width: auto;
+    margin: $jc-default-dis/2 $jc-default-dis;
+  }
+
   .jc-view-header {
     position: relative;
     width: 100%;
     height: $jc-view-header-height;
     line-height: $jc-view-header-height;
-    margin-bottom: 3px;
     padding: 0 $jc-view-header-height 0 $jc-default-dis;
     @include jc-text-warp();
-    background-color: rgba($color: #003583, $alpha: 0.8);
+    background-color: $jc-color-primary;
     color: $jc-color-white;
     .iconfont {
       position: absolute;
       top: 0;
       right: 0;
       text-align: center;
+      color: $jc-color-white;
       width: $jc-view-header-height;
       height: $jc-view-header-height;
-      opacity: 0.6;
+      opacity: 0.8;
       cursor: pointer;
       &:hover {
         opacity: 1;
@@ -289,7 +296,35 @@ $jc-screen-height: 40px;
   .jc-view-content {
     position: relative;
     flex: 1;
-    background-color: rgba($color: $jc-screen-bg, $alpha: 0.6);
+    overflow: auto;
+    .el-tree {
+      padding: 0 $jc-default-dis;
+    }
+  }
+  /* 树结构 */
+  .custom-tree-node {
+    flex: 1;
+    display: flex;
+    .jc-tree-label {
+      flex: 1;
+      width: 0;
+      font-size: $jc-font-size-small;
+      padding-left: 14px;
+      background: url(/static/areaicons/organization.png) no-repeat left center;
+      background-size: 11px auto;
+      &.jc-user {
+        background-image: url(../assets/user.png);
+      }
+    }
+    .jc-tree-options {
+      width: 50px;
+      padding-top: 2px;
+      .el-button {
+        padding: 0;
+        margin-left: 2px;
+        float: right;
+      }
+    }
   }
 }
 /* 右下角消息窗口 */
@@ -300,7 +335,7 @@ $jc-screen-height: 40px;
   right: $jc-default-dis;
   z-index: 8;
   bottom: $jc-default-dis/2;
-  background-color: rgba($color: $jc-screen-bg, $alpha: 0.6);
+  background-color: $jc-color-white;
   transform: translateY(0);
   opacity: 1;
   will-change: transform, opacity;
@@ -315,12 +350,4 @@ $jc-screen-height: 40px;
     opacity: 0.4;
     z-index: 6;
   }
-}
-
-/deep/ .jc-loading-spinner {
-  display: inline-block;
-  width: 42px;
-  height: 42px;
-  background: url(../assets/loading.gif) no-repeat center;
-  background-size: auto 90%;
 }

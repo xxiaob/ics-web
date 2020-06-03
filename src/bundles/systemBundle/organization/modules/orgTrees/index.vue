@@ -1,7 +1,7 @@
 <template>
   <div class="jc-card jc-ph">
     <div class="jc-title" v-text="title"></div>
-    <el-input v-model="filterText" prefix-icon="el-icon-search" class="jc-filter-input" clearable size="mini" placeholder="输入关键字进行过滤"></el-input>
+    <el-input v-model="filterText" prefix-icon="el-icon-search" clearable size="mini" placeholder="输入关键字进行过滤"></el-input>
     <div class="jc-tree-warp">
       <tree-card ref="tree" @node-change="nodeChange"></tree-card>
     </div>
