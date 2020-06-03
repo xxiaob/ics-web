@@ -14,11 +14,12 @@ export function roleList(data = {}) {
   return axios.post(API.role.list, data)
 }
 /**
- * 列表
+ * 列表,根据组织id获取角色
+ * @param {orgId} orgId 角色id
  * @returns {Object} axios 对象
  */
-export function roleListAll() {
-  return axios.post(API.role.listAll)
+export function roleListAll(orgId) {
+  return axios.post(API.role.listAll + `?orgId=${orgId}`)
 }
 /**
  * 添加

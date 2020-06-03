@@ -22,7 +22,7 @@
         </el-select>
       </el-form-item>
       <el-form-item label="所属组织" prop="orgId" :rules="rules.SELECT_NOT_NULL">
-        <el-cascader v-model="form.orgId" :options="orgTree" filterable :props="{ expandTrigger: 'hover',checkStrictly: true,emitPath: false }" :disabled="isEdit"></el-cascader>
+        <el-cascader v-model="form.orgId" :options="orgTree" filterable @change="orgChange" :props="{ expandTrigger: 'hover',checkStrictly: true,emitPath: false }" :disabled="isEdit"></el-cascader>
       </el-form-item>
       <el-form-item label="角色" prop="roleIds" :rules="rules.SELECT_NOT_NULL">
         <el-select v-model="form.roleIds" multiple placeholder="角色">
@@ -56,10 +56,7 @@ export default {
       orgTree: [],
       positions: [],
       roles: [],
-      props: {
-        children: 'children',
-        label: 'resName'
-      },
+      props: { children: 'children', label: 'resName' },
       rules: {
         Len50: getStringRule(1, 50),
         SELECT_NOT_NULL,
@@ -72,16 +69,7 @@ export default {
       organizationList().then(res => {
         this.orgTree = this.formatOrgTree(res)
       })
-      roleListAll().then(res => {
-        let list = []
 
-        if (res && res.length) {
-          res.forEach(item => {
-            list.push({ roleId: item.roleId, roleName: item.roleName })
-          })
-        }
-        this.roles = list
-      })
       positionListAll().then(res => {
         let list = []
 
@@ -92,27 +80,37 @@ export default {
         }
         this.positions = list
       })
+      //如果组织id存在则取获取角色数组
+      if (this.form.orgId) {
+        this.orgChange(this.form.orgId)
+      }
     },
     formatOrgTree(child) {
       let trees = []
 
       if (child && child.length) {
         child.forEach(item => {
-          let node = {
-            value: item.orgId,
-            label: item.orgName
-          }
-
-          let children = this.formatOrgTree(item.children)
-
-          if (children && children.length) {
-            node.children = children
-          }
-
-          trees.push(node)
+          trees.push({ value: item.orgId, label: item.orgName, ...(item.children && item.children.length ? { children: this.formatOrgTree(item.children) } : {}) })
         })
       }
       return trees
+    },
+    orgChange(orgId) {
+      //组织变化
+      console.log('orgChange', orgId)
+      if (orgId != this.form.orgId) {
+        this.form.roleIds = []
+      }
+      roleListAll(orgId).then(res => {
+        let list = []
+
+        if (res && res.length) {
+          res.forEach(item => {
+            list.push({ roleId: item.roleId, roleName: item.roleName })
+          })
+        }
+        this.roles = list
+      })
     },
     formatFormData() {
       if (this.options) {
