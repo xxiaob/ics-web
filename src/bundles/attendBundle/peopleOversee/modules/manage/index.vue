@@ -1,6 +1,10 @@
 <template>
   <el-dialog title="督查" :visible.sync="dialogVisible" width="600px" :close-on-click-modal="false" :append-to-body="true" @close="dialogClose">
-    <el-form ref="form" label-width="100px" :model="form" class="jc-manage-form">
+    <div class="jc-clearboth">
+      <div id="live" v-show="false"></div>
+      <div id="tolive">{{overseeTypeMsg}}</div>
+    </div>
+    <el-form ref="form" label-width="100px" :model="form" class="jc-manage-form" size="mini">
       <el-form-item label="督查对象">
         <span>督查对象</span>
       </el-form-item>
@@ -8,7 +12,7 @@
         <span>所属组织</span>
       </el-form-item>
       <el-form-item label="督查结果" prop="eventType" :rules="rules.SELECT_NOT_NULL">
-        <el-select v-model="form.eventType" placeholder="请输入关键词">
+        <el-select v-model="form.eventType" placeholder="请选择督查结果">
           <el-option v-for="item in eventTypes" :key="item.id" :label="item.typeName" :value="item.id">
           </el-option>
         </el-select>
@@ -27,34 +31,129 @@
 import { eventManageSave } from '@/api/eventManage'
 import { getStringRule, NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
+import { IM } from '@/live/im'
+import { Live } from '@/live/agora'
 
 export default {
   name: 'PeopleOverseeManage',
   mixins: [FormMixins],
+  props: {
+    user: {
+      type: Object,
+      default: ()=>{}
+    }
+  },
   data() {
     return {
+      invitUserId: '',
+      channelId: '',
       loading: false,
+      onCall: false,
       rules: {
         Len50: getStringRule(1, 50),
         SELECT_NOT_NULL,
         NOT_NULL
       },
-      eventTypes: []
+      eventTypes: [],
+      overseeType: 1,
+      overseeTypeMsg: ''
     }
   },
   created() {
+    this.im = new IM(this.user.userId, this.user.userName)
+    this.im.on(this.imMsgCb)
+  },
+  mounted() {
+    if (this.live) {
+      console.log('直播客户端已经初始化')
+    } else {
+      this.live = new Live('live', 'tolive')
+    }
   },
   methods: {
+    imMsgCb(onType, data) {
+      console.log('vue 数据', onType, data)
+      const { content: { agree, nickname, isExit } } = data
+
+      if (this.timeout) {
+        clearTimeout(this.timeout)
+      }
+      if (agree === '1') {
+        this.onCall = true
+        this.$message.success(nickname + '同意接听')
+        if (this.overseeType) {
+          this.overseeTypeMsg = '正在强制观摩' + nickname
+        } else {
+          this.overseeTypeMsg = '语音通话中'
+        }
+      } else if (agree === '0') {
+        this.$message.warning(nickname + '拒绝接听')
+        this.overseeTypeMsg = nickname + '拒绝接听'
+      }
+      if (isExit) {
+        this.onCall = false
+        this.$message.warning(nickname + '已经挂断')
+        this.leaveChannel()
+      }
+    },
     formatFormData() {
       if (this.options) {
-        console.log('options', this.options)
-        return {
-          desc: this.options.desc,
-          id: this.options.id,
-          orgId: this.options.orgId
+        const { overseeType } = this.options
+
+        this.invitUserId = 'lxx123'
+        this.overseeType = overseeType
+        if (overseeType) {
+          console.log('强制观摩')
+          this.overseeTypeMsg = '正在发起强制观摩'
+          this.inviteUser('2', '1', 'audience')
+        } else {
+          console.log('语音通话')
+          this.overseeTypeMsg = '正在邀请语音通话'
+          this.inviteUser('0', '0', 'host')
         }
+        this.timeout = setTimeout(()=>{
+          this.overseeTypeMsg = '对方不在线'
+        }, 5000)
+        return {}
       } else {
         return {}
+      }
+    },
+    //强制观摩 '2' , '1' , 'audience'  邀请语音通话 '0' , '0' , 'host'
+    inviteUser(inviteType, mediaType, role) {
+      this.channelId = new Date().getTime().toString()
+      const msg = {
+        msgType: '1',
+        nickName: this.user.userName,
+        channelId: this.channelId,
+        inviteDevice: '2',
+        inviteType, //"0":正常,"1":强拉 2":强制观摩(拉执法仪)
+        mediaType //"0":音频,"1":视频
+      }
+
+      this.im.sendSingleMsg(this.invitUserId, msg)
+      if (!this.live.joined) {
+        this.live.joinChannel(this.channelId, role, false)
+      }
+    },
+    //结束聊天
+    exit() {
+      if (this.onCall) {
+        const msg = {
+          msgType: '1',
+          nickName: this.user.userName,
+          channelId: this.channelId,
+          inviteDevice: '2',
+          isExit: '1'
+        }
+
+        this.im.sendSingleMsg(this.invitUserId, msg)
+      }
+      this.leaveChannel()
+    },
+    async leaveChannel() {
+      if (this.live.joined) {
+        await this.live.leaveChannel()
       }
     },
     onSubmit() {
@@ -65,6 +164,7 @@ export default {
             this.$message.success('操作成功')
             this.dialogVisible = false
             this.$emit('save-success')
+            this.exit()
             this.loading = false
           }).catch(() => {
             this.loading = false
@@ -73,7 +173,28 @@ export default {
           this.loading = false
         }
       })
+    },
+    dialogClose() {
+      console.log('dialogClose oversee manage')
+      this.exit()
+      this.$emit('update:visible', false)
     }
   }
 }
 </script>
+
+<style lang="scss" scoped>
+#live,
+#tolive {
+  width: 50%;
+  height: 150px;
+  // float: left;
+  margin: 0 auto;
+}
+.jc-clearboth::before,
+.jc-clearboth::after {
+  display: table;
+  content: "";
+  clear: both;
+}
+</style>

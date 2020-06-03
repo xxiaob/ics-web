@@ -17,6 +17,7 @@ export class IM {
     this.JIM = new JMessage({
       // debug: true
     })
+    this.init()
   }
 
   /**
@@ -43,6 +44,7 @@ export class IM {
         this.login(this.username)
       }).onFail(data => {
         this.console('init error', data)
+        this.init()
       })
     }
   }
@@ -163,15 +165,18 @@ export class IM {
    * @param {String} username 用户名
    * @param {Object} obj 消息体
    * @param {String} obj.msgType "0":正常,"1":邀请视频
-   * @param {String} obj.content 消息内容
+   * @param {String} obj.nickName 别名  系统里的用户名
+   * @param {String} obj.content 消息内容  "help":一键求助,"double":双人视频,"meet":多人视频, " observation":观摩
    * 视频聊天相关参数
    * @param {String} obj.channelId 房间id
    * @param {String} obj.inviteType "0":正常, "1":强拉, 2":强制观摩(拉执法仪)
    * @param {String} obj.mediaType "0":音频, "1":视频
+   * @param {String} obj.inviteDevice  "0":pc端, "1":移动端, "2":执法仪 , "3":全部
    * @param {String} obj.agree "0":拒绝邀请, "1":接受邀请
    * @param {String} obj.isExit "0":退出房间, "1":结束聊天
   */
   sendSingleMsg(username, obj) {
+    obj = { inviteDevice: '3', ...obj }
     this.JIM.sendSingleMsg({
       target_username: username,
       content: JSON.stringify(obj),

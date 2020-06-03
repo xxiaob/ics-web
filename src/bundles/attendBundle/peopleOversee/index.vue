@@ -18,8 +18,8 @@
         <el-table-column prop="orgName" label="任务完成数"></el-table-column>
         <el-table-column width="80" label="督查操作">
           <template slot-scope="scope">
-            <el-button type="text" size="mini" icon="el-icon-video-camera" @click="manage(scope.row)" title="强制观摩"></el-button>
-            <el-button type="text" size="mini" icon="el-icon-phone" @click="manage(scope.row)" title="语音通话"></el-button>
+            <el-button type="text" size="mini" icon="el-icon-video-camera" @click="manage(scope.row,1)" title="强制观摩"></el-button>
+            <el-button type="text" size="mini" icon="el-icon-phone" @click="manage(scope.row,0)" title="语音通话"></el-button>
           </template>
         </el-table-column>
         <el-table-column prop="orgName" label="督查人"></el-table-column>
@@ -29,7 +29,7 @@
       <el-pagination @current-change="currentChange" @size-change="sizeChange" :current-page.sync="page.pageNum" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.total" class="text-right jc-mt"></el-pagination>
     </el-card>
 
-    <jc-manage :options="info" :visible.sync="visible" @save-success="initData"></jc-manage>
+    <jc-manage :user="user" :options="info" :visible.sync="visible" @save-success="initData"></jc-manage>
   </div>
 </template>
 <script>
@@ -37,8 +37,8 @@ import { questionList } from '@/api/question'
 import { formatDate } from '@/libs/util'
 import PaginationMixins from '@/mixins/PaginationMixins'
 import { organizationList } from '@/api/organization'
-// import { createNamespacedHelpers } from 'vuex'
-// const { mapState } = createNamespacedHelpers('user')
+import { createNamespacedHelpers } from 'vuex'
+const { mapState } = createNamespacedHelpers('user')
 
 export default {
   name: 'PeopleOverseeIndex',
@@ -57,9 +57,9 @@ export default {
       info: null
     }
   },
-  // computed: {
-  //   ...mapState(['user'])
-  // },
+  computed: {
+    ...mapState(['user'])
+  },
   async created() {
     await this.getOrgTree()
     this.initData()
@@ -116,8 +116,9 @@ export default {
       this.filter = filter
       this.currentChange(1)
     },
-    manage(row) {
+    manage(row, overseeType) {
       this.info = row
+      this.info.overseeType = overseeType
       this.visible = true
     }
   }

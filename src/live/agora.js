@@ -40,10 +40,6 @@ export class Live {
     }, err => {
       this.console('init err', err)
     })
-    //     让用户选择自己的角色是主播（"host"）还是观众（"audience"）。
-    // 调用 setClientRole 方法，传入用户选择的角色。
-    // // The value of role can be "host" or "audience".
-    // rtc.client.setClientRole(role);
   }
 
   //监听事件
@@ -160,13 +156,21 @@ export class Live {
   /**
    * 加入频道
    * @param {String} channelId 房间ID
+   * @param {String} role 角色 主播(host)和观众(audience)
+   * @param {Boolean} video 是否开启摄像头
   */
-  joinChannel(channelId = '123456') {
+  joinChannel(channelId = '123456', role = 'host', video = true) {
+    // 让用户选择自己的角色是主播（"host"）还是观众（"audience"）。
+    // 调用 setClientRole 方法，传入用户选择的角色。
+    this.rtc.client.setClientRole(role)
     this.rtc.client.join(null, channelId, null, uid => {
       this.console('joinChannel 成功')
       this.console('this.rtc.client', this.rtc.client)
       this.rtc.params.uid = uid
-      this.createAndPublishStream()
+      this.joined = true
+      if (role === 'host') {
+        this.createAndPublishStream(video)
+      }
     })
   }
 
@@ -202,8 +206,11 @@ export class Live {
   leaveChannel() {
     this.rtc.client.leave(() => {
       this.console('leaveChannel 离开房间 成功')
-      this.rtc.localStream.stop()
-      this.rtc.localStream.close()
+      this.joined = false
+      if (this.rtc.localStream) {
+        this.rtc.localStream.stop()
+        this.rtc.localStream.close()
+      }
 
       // const selfLive = document.getElementById(this.localId)
       // selfLive.innerHTML = ''

@@ -17,10 +17,10 @@
         <el-table-column prop="orgName" label="触岗次数"></el-table-column>
         <el-table-column prop="orgName" label="事件上报数"></el-table-column>
         <el-table-column prop="orgName" label="岗点考核"></el-table-column>
-        <el-table-column width="100" label="督查操作">
+        <el-table-column width="80" label="督查操作">
           <template slot-scope="scope">
-            <el-button type="text" size="mini" icon="el-icon-view" @click="detail(scope.row)" title="查看"></el-button>
-            <el-button type="text" size="mini" icon="el-icon-view" @click="detail(scope.row)" title="查看"></el-button>
+            <el-button type="text" size="mini" icon="el-icon-video-camera" @click="manage(scope.row,1)" title="强制观摩"></el-button>
+            <el-button type="text" size="mini" icon="el-icon-phone" @click="manage(scope.row,0)" title="语音通话"></el-button>
           </template>
         </el-table-column>
         <el-table-column prop="orgName" label="督查人"></el-table-column>
@@ -29,6 +29,9 @@
       </el-table>
       <el-pagination @current-change="currentChange" @size-change="sizeChange" :current-page.sync="page.pageNum" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.total" class="text-right jc-mt"></el-pagination>
     </el-card>
+
+    <jc-manage :user="user" :options="info" :visible.sync="visible" @save-success="initData"></jc-manage>
+
   </div>
 </template>
 <script>
@@ -36,26 +39,29 @@ import { questionList } from '@/api/question'
 import { formatDate } from '@/libs/util'
 import PaginationMixins from '@/mixins/PaginationMixins'
 import { organizationList } from '@/api/organization'
-// import { createNamespacedHelpers } from 'vuex'
-// const { mapState } = createNamespacedHelpers('user')
+import { createNamespacedHelpers } from 'vuex'
+const { mapState } = createNamespacedHelpers('user')
 
 export default {
   name: 'PeopleAttendIndex',
   mixins: [PaginationMixins],
   components: {
-    TabFilter: () => import('./modules/tabFilter')
+    TabFilter: () => import('./modules/tabFilter'),
+    JcManage: () => import('../peopleOversee/modules/manage')
   },
   data() {
     return {
       orgTree: [],
       list: [],
       loading: false,
-      filter: {}
+      filter: {},
+      visible: false,
+      info: null
     }
   },
-  // computed: {
-  //   ...mapState(['user'])
-  // },
+  computed: {
+    ...mapState(['user'])
+  },
   async created() {
     await this.getOrgTree()
     this.initData()
@@ -111,6 +117,11 @@ export default {
     goFilter(filter) {
       this.filter = filter
       this.currentChange(1)
+    },
+    manage(row, overseeType) {
+      this.info = row
+      this.info.overseeType = overseeType
+      this.visible = true
     }
   }
 }

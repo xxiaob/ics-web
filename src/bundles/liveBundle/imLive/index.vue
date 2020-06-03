@@ -36,7 +36,7 @@
 <script>
 import { IM } from '@/live/im'
 import { Live } from '@/live/agora'
-import { getUser } from '@/libs/storage'
+// import { getUser } from '@/libs/storage'
 
 export default {
   name: 'liveDemo',
@@ -55,10 +55,10 @@ export default {
     }
   },
   created() {
-    console.log(getUser())
+    // console.log(getUser())
 
     this.im = new IM(this.username, this.nickname)
-    this.im.init()
+    // this.im.init()
     this.im.on(this.imMsgCb)
   },
   mounted() {
