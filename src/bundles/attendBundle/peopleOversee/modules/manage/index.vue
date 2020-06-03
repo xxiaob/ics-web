@@ -1,5 +1,5 @@
 <template>
-  <el-dialog title="督查" :visible.sync="dialogVisible" width="600px" :close-on-click-modal="false" :append-to-body="true" @close="dialogClose">
+  <el-dialog :title="title" :visible.sync="dialogVisible" width="600px" :close-on-click-modal="false" :append-to-body="true" @close="dialogClose">
     <div class="jc-clearboth">
       <div id="live" v-show="false"></div>
       <div id="tolive">{{overseeTypeMsg}}</div>
@@ -38,6 +38,10 @@ export default {
   name: 'PeopleOverseeManage',
   mixins: [FormMixins],
   props: {
+    title: {
+      type: String,
+      default: '督查'
+    },
     user: {
       type: Object,
       default: ()=>{}

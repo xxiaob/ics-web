@@ -29,7 +29,7 @@
       <el-pagination @current-change="currentChange" @size-change="sizeChange" :current-page.sync="page.pageNum" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.total" class="text-right jc-mt"></el-pagination>
     </el-card>
 
-    <jc-manage :user="user" :options="info" :visible.sync="visible" @save-success="initData"></jc-manage>
+    <jc-manage :user="user" title="人员督查" :options="info" :visible.sync="visible" @save-success="initData"></jc-manage>
   </div>
 </template>
 <script>
