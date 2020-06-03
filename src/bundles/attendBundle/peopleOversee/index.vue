@@ -16,10 +16,10 @@
         <el-table-column prop="orgName" label="事件上报数"></el-table-column>
         <el-table-column prop="orgName" label="问题反馈数"></el-table-column>
         <el-table-column prop="orgName" label="任务完成数"></el-table-column>
-        <el-table-column width="100" label="督查操作">
+        <el-table-column width="80" label="督查操作">
           <template slot-scope="scope">
-            <el-button type="text" size="mini" icon="el-icon-view" @click="detail(scope.row)" title="查看"></el-button>
-            <el-button type="text" size="mini" icon="el-icon-view" @click="detail(scope.row)" title="查看"></el-button>
+            <el-button type="text" size="mini" icon="el-icon-video-camera" @click="manage(scope.row)" title="强制观摩"></el-button>
+            <el-button type="text" size="mini" icon="el-icon-phone" @click="manage(scope.row)" title="语音通话"></el-button>
           </template>
         </el-table-column>
         <el-table-column prop="orgName" label="督查人"></el-table-column>
@@ -28,6 +28,8 @@
       </el-table>
       <el-pagination @current-change="currentChange" @size-change="sizeChange" :current-page.sync="page.pageNum" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.total" class="text-right jc-mt"></el-pagination>
     </el-card>
+
+    <jc-manage :options="info" :visible.sync="visible" @save-success="initData"></jc-manage>
   </div>
 </template>
 <script>
@@ -42,14 +44,17 @@ export default {
   name: 'PeopleOverseeIndex',
   mixins: [PaginationMixins],
   components: {
-    TabFilter: () => import('./modules/tabFilter')
+    TabFilter: () => import('./modules/tabFilter'),
+    JcManage: () => import('./modules/manage')
   },
   data() {
     return {
       orgTree: [],
       list: [],
       loading: false,
-      filter: {}
+      filter: {},
+      visible: false,
+      info: null
     }
   },
   // computed: {
@@ -110,6 +115,10 @@ export default {
     goFilter(filter) {
       this.filter = filter
       this.currentChange(1)
+    },
+    manage(row) {
+      this.info = row
+      this.visible = true
     }
   }
 }

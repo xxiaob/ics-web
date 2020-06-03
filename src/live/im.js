@@ -1,6 +1,8 @@
 import '../../static/jimsdk/jmessage-sdk-web.2.6.0.min.js'
 // import md5 from 'md5'
 import JMessage from 'JMessage'
+import { getImAuth } from '@/api/live'
+
 export class IM {
   /**
    * @param {String} username 用户id
@@ -25,18 +27,24 @@ export class IM {
    * @param {String} authToken.timestamp  时间戳
    * @param {String} authToken.signature  签名
   */
-  init(authToken) {
+  async init() {
     // const secret = 'b8542135bfc2995812894d6a',
     //   appkey = 'f8409a2c88ceee289baaf57d',
     //   randomStr = 'dsadadwqeq213123edwqeq2131',
     //   timestamp = new Date().getTime(),
     //   signature = md5(`appkey=${appkey}&timestamp=${timestamp}&random_str=${randomStr}&key=${secret}`)
-    this.JIM.init({ ...authToken }).onSuccess(data => {
-      this.console('init success', data)
-      this.login(this.username)
-    }).onFail(data => {
-      this.console('init error', data)
-    })
+    if (this.isInit()) {
+      this.console('已经初始化')
+    } else {
+      const authToken = await getImAuth()
+
+      this.JIM.init({ ...authToken }).onSuccess(data => {
+        this.console('init success', data)
+        this.login(this.username)
+      }).onFail(data => {
+        this.console('init error', data)
+      })
+    }
   }
 
   /**

@@ -36,7 +36,6 @@
 <script>
 import { IM } from '@/live/im'
 import { Live } from '@/live/agora'
-import { getImAuth } from '@/api/live'
 import { getUser } from '@/libs/storage'
 
 export default {
@@ -55,16 +54,19 @@ export default {
       playUrls: ['https://2021-cn-north-4.cdn-vod.huaweicloud.com/asset/881736f5417582b23993c5323c185ced/292e546ae80f6cd1c7dc010be5d14449.m3u8', 'https://2021-cn-north-4.cdn-vod.huaweicloud.com/asset/49d732a4a95b3794cbb73cab3bf35cc1/6c88e090bc09c70189a456385ad78dff.m3u8', 'http://play.bg365.top/live/lxyada.m3u8']
     }
   },
-  async created() {
+  created() {
     console.log(getUser())
-    const res = await getImAuth()
 
     this.im = new IM(this.username, this.nickname)
-    this.im.init(res)
+    this.im.init()
     this.im.on(this.imMsgCb)
   },
   mounted() {
-    this.live = new Live('live', 'tolive')
+    if (this.live) {
+      console.log('直播客户端已经初始化')
+    } else {
+      this.live = new Live('live', 'tolive')
+    }
   },
   methods: {
     startPlay() {
