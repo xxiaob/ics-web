@@ -133,22 +133,20 @@ $jc-screen-height: 40px;
 /* 大屏操作区域 */
 /deep/ .jc-screen-opreate {
   position: absolute;
-  left: 50%;
+  top: 50%;
+  left: $jc-default-dis;
   z-index: 6;
-  transform: translateX(-50%);
-  bottom: $jc-default-dis/2;
+  transform: translateY(-50%);
   .jc-opreate-item {
     position: relative;
-    display: inline-block;
     width: 36px;
     height: 36px;
-    vertical-align: middle;
-    background: url(../modules/operate/assets/opreate-bg.png) no-repeat center;
+    background: url(../modules/operate/assets/operate-bg.png) no-repeat center;
     background-size: 100% 100%;
-    margin-left: $jc-default-dis/2;
+    margin-top: $jc-default-dis/2;
     cursor: pointer;
     &:first-child {
-      margin-left: 0;
+      margin-top: 0;
     }
     &:hover,
     &.jc-active {

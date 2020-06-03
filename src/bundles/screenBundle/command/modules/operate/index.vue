@@ -22,10 +22,10 @@
       <i class="jc-message" @click="messageChange('CommandMessage')"></i>
       <span class="jc-num-tip" v-if="messageVal > 0" v-text="messageVal < 100 ? messageVal : '99'"></span>
     </div>
-    <!-- <div class="jc-opreate-item">
+    <div class="jc-opreate-item">
       <i class="jc-talk" @click="messageChange('ImTalk')"></i>
       <span class="jc-num-tip" v-if="talkVal > 0" v-text="talkVal < 100 ? talkVal : '99'"></span>
-    </div> -->
+    </div>
   </div>
 </template>
 <script>
