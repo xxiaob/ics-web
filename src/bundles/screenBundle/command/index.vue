@@ -40,7 +40,8 @@ export default {
       messageComponent: '',
       messageOptions: null,
       viewComponent: '',
-      viewOptions: null
+      viewOptions: null,
+      viewComponentQueue: []
     }
   },
   mounted() {
@@ -54,13 +55,21 @@ export default {
         this.messageComponent = 'CommandMessage'
       })
       this.$EventBus.$on('view-component-change', this.viewComponentChange) //监听 内容窗口改变
+      this.$EventBus.$on('view-component-back', this.viewBack) //监听 内容窗口返回
       this.$EventBus.$on('message-component-change', this.messageComponentChange) //消息 内容窗口改变
     },
     viewComponentChange(data) {
-      //内容窗口改变处理
+      //内容窗口改变处理,如果队列中存在,则移除再添加
+      for (let i = 0; i < this.viewComponentQueue.length; i++) {
+        if (this.viewComponentQueue[i].component == data.component) {
+          this.viewComponentQueue.splice(i, 1)
+          break
+        }
+      }
       this.viewOptions = data.options
       this.viewComponent = data.component
-      console.log(data)
+      this.viewComponentQueue.push(data)
+      console.log('viewComponentChange', data, this.viewComponentQueue)
     },
     messageComponentChange(data) {
       //内容窗口处理
@@ -70,12 +79,30 @@ export default {
         this.messageOptions = data.options
         this.messageComponent = data.component
       }
+      console.log('messageComponentChange', data)
+    },
+    viewBack() {
+      //view 窗口返回,处理队列中历史显示
+      let index = this.viewComponentQueue.length - 1
+
+      if (index < 1) {
+        this.viewOptions = null
+        this.viewComponent = ''
+        this.viewComponentQueue = []
+      } else {
+        this.viewComponentQueue.splice(index, 1)
+        let item = this.viewComponentQueue[index - 1]
+
+        this.viewOptions = item.options
+        this.viewComponent = item.component
+      }
     }
   },
   beforeDestroy() {
     myJcMap.destroy()
     //去除事件监听
     this.$EventBus.$off('view-component-change', this.viewComponentChange)
+    this.$EventBus.$off('view-component-back', this.viewBack)
     this.$EventBus.$off('message-component-change', this.messageComponentChange)
   }
 }

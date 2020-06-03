@@ -1,12 +1,13 @@
 <template>
-  <div class="jc-view-warp">
-    <div class="jc-view-header">zhelasdf</div>
-  </div>
+  <view-warp title="组织架构"></view-warp>
 </template>
 <script>
 export default {
   name: 'ScreenCommandOrg',
   props: ['options'],
+  components: {
+    ViewWarp: () => import('../commont/viewWarp')
+  },
   data() {
     return {
 
