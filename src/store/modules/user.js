@@ -1,7 +1,7 @@
-import { setToken, setUser } from '@/libs/storage'
+import { getUser, setToken, setUser } from '@/libs/storage'
 
 const userState = {
-  user: null
+  user: getUser()
 }
 
 // getters

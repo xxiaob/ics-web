@@ -20,7 +20,6 @@
 
 <script>
 import { mapState, mapGetters, mapMutations } from 'vuex'
-import { getUser } from '@/libs/storage'
 
 export default {
   name: 'CommonHeader',
@@ -29,17 +28,11 @@ export default {
   },
   data() {
     return {
-      visible: false,
-      menuActive: ''
+      visible: false
     }
   },
-  created() {
-    //设置用户信息
-    const user = getUser()
-
-    if (user) {
-      this.setUser(user)
-    } else {
+  mounted() {
+    if (!this.isLogin) {
       this.$router.push({ name: 'login', query: { callbackUrl: this.$router.history.current.fullPath.split('?')[0] } })
     }
   },
@@ -50,9 +43,7 @@ export default {
     ...mapGetters('user', { isLogin: 'isLogin' })
   },
   methods: {
-    ...mapMutations('user', [
-      'setUser', 'loginOut'
-    ]),
+    ...mapMutations('user', ['loginOut']),
     logout() {
       this.loginOut()
       this.$router.push({ name: 'login' })

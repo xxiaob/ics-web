@@ -246,7 +246,6 @@ $jc-screen-height: 40px;
   box-orient: vertical;
   flex-flow: column;
   z-index: 8;
-  background-color: rgba($color: $jc-screen-bg, $alpha: 0.6);
   transform: translateX(0);
   opacity: 1;
   will-change: transform, opacity;
@@ -268,6 +267,7 @@ $jc-screen-height: 40px;
     width: 100%;
     height: $jc-view-header-height;
     line-height: $jc-view-header-height;
+    margin-bottom: 3px;
     padding: 0 $jc-view-header-height 0 $jc-default-dis;
     @include jc-text-warp();
     background-color: rgba($color: #003583, $alpha: 0.8);
@@ -289,6 +289,7 @@ $jc-screen-height: 40px;
   .jc-view-content {
     position: relative;
     flex: 1;
+    background-color: rgba($color: $jc-screen-bg, $alpha: 0.6);
   }
 }
 /* 右下角消息窗口 */
@@ -314,4 +315,12 @@ $jc-screen-height: 40px;
     opacity: 0.4;
     z-index: 6;
   }
+}
+
+/deep/ .jc-loading-spinner {
+  display: inline-block;
+  width: 42px;
+  height: 42px;
+  background: url(../assets/loading.gif) no-repeat center;
+  background-size: auto 90%;
 }

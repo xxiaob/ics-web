@@ -1,6 +1,7 @@
 <template>
   <div class="jc-view-warp">
     <div class="jc-view-header">{{title}}<i class="iconfont iconchehui1" @click="viewBack"></i></div>
+    <slot></slot>
   </div>
 </template>
 <script>

@@ -1,5 +1,7 @@
 <template>
-  <view-warp title="网格"></view-warp>
+  <view-warp title="网格">
+    <div class="jc-view-content"></div>
+  </view-warp>
 </template>
 <script>
 export default {
