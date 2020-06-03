@@ -19,6 +19,8 @@
 import TreesFilterMixins from '@/mixins/TreesFilterMixins'
 import { organizationList } from '@/api/organization'
 import { JcIcons } from '@/config/JcIconConfig'
+import { areaList } from '@/api/area'
+import { AREAS_TYPE, AREAS_SEARCH_TYPE } from '@/constant/CONST'
 
 export default {
   name: 'ScreenCommandGrid',
@@ -43,7 +45,6 @@ export default {
   methods: {
     async initData() {
       this.loading = true
-
       try {
         const res = await organizationList()
 

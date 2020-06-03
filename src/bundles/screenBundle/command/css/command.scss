@@ -265,6 +265,9 @@ $jc-screen-height: 40px;
 
   /* 搜索框 样式*/
   .jc-filter-input {
+    display: block;
+    width: auto;
+    margin: $jc-default-dis/2 $jc-default-dis;
   }
 
   .jc-view-header {
@@ -295,21 +298,24 @@ $jc-screen-height: 40px;
     position: relative;
     flex: 1;
     overflow: auto;
+    .el-tree {
+      padding: 0 $jc-default-dis;
+    }
   }
   /* 树结构 */
   .custom-tree-node {
     flex: 1;
     display: flex;
-    padding-left: 15px;
-    background: url(/static/areaicons/organization.png) no-repeat left center;
-    background-size: 12px auto;
-    &.jc-user {
-      background-image: url(../assets/user.png);
-    }
     .jc-tree-label {
       flex: 1;
       width: 0;
       font-size: $jc-font-size-small;
+      padding-left: 14px;
+      background: url(/static/areaicons/organization.png) no-repeat left center;
+      background-size: 11px auto;
+      &.jc-user {
+        background-image: url(../assets/user.png);
+      }
     }
     .jc-tree-options {
       width: 50px;

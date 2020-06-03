@@ -3,8 +3,8 @@
     <el-input v-model="filterText" prefix-icon="el-icon-search" class="jc-filter-input" clearable size="mini" placeholder="输入关键字进行过滤"></el-input>
     <div class="jc-view-content" v-loading="loading" element-loading-background="rgba(0, 0, 0, 0)">
       <el-tree ref="tree" :default-expanded-keys="expandedKeys" :data="trees" :show-checkbox="true" :props="props" :filter-node-method="filterNode" node-key="id">
-        <div class="custom-tree-node" slot-scope="{ node,data }" :class="{'jc-user': data.type=='user'}">
-          <div class="jc-tree-label no-select">
+        <div class="custom-tree-node" slot-scope="{ node,data }">
+          <div class="jc-tree-label no-select" :class="{'jc-user': data.type=='user'}">
             <div class="jc-text-warp" v-text="node.label"></div>
           </div>
           <div class="jc-tree-options" v-on:click.stop>
