@@ -1,6 +1,6 @@
 <template>
   <el-dialog :title="'资源设置 | '+options.projectName" :visible.sync="dialogVisible" width="600px" :close-on-click-modal="false" :append-to-body="true" @close="dialogClose">
-    <el-input v-model="filterText" prefix-icon="el-icon-search" class="jc-filter-input" clearable size="mini" placeholder="输入关键字进行过滤"></el-input>
+    <el-input v-model="filterText" prefix-icon="el-icon-search" clearable size="mini" placeholder="输入关键字进行过滤"></el-input>
     <el-tree ref="tree" class="jc-uo-tree" v-loading="treesLoading" :default-expanded-keys="expandedKeys" :data="trees" :show-checkbox="true" :props="props" :filter-node-method="filterNode" node-key="id">
       <div class="custom-tree-node" slot-scope="{ node,data }" :class="{'jc-user': data.type=='user'}">
         <div class="jc-text-warp" v-text="data.label"></div>

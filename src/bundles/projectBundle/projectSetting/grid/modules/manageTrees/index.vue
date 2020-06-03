@@ -1,7 +1,7 @@
 <template>
   <div class="jc-card jc-area-manage" :class="{'jc-area-hide': manageHide}">
     <div class="jc-area-controll" @click="manageHide = !manageHide"><i class="jc-area-icon el-icon-arrow-right"></i></div>
-    <el-input v-model="filterText" prefix-icon="el-icon-search" class="jc-filter-input" clearable size="mini" placeholder="输入关键字进行过滤"></el-input>
+    <el-input v-model="filterText" prefix-icon="el-icon-search" clearable size="mini" placeholder="输入关键字进行过滤"></el-input>
     <div class="jc-tree-warp">
       <el-tree ref="tree" v-if="treeShow" :default-expanded-keys="expandedKeys" :load="loadNode" lazy :props="props" :filter-node-method="filterNode" node-key="id" :expand-on-click-node="false" :highlight-current="true">
         <div class="custom-tree-node" slot-scope="{ node, data }" @click.stop="nodeChange(data)">
