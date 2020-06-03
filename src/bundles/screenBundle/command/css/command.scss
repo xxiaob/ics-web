@@ -139,6 +139,7 @@ $jc-screen-height: 40px;
   transform: translateX(-50%);
   bottom: $jc-default-dis/2;
   .jc-opreate-item {
+    position: relative;
     display: inline-block;
     width: 36px;
     height: 36px;
@@ -196,6 +197,22 @@ $jc-screen-height: 40px;
     background-image: url("../modules/operate/assets/talk.png");
     @extend .jc-opreate-icon;
   }
+  .jc-num-tip {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    color: $jc-color-white;
+    background-color: $jc-color-danger;
+    font-size: $jc-font-size-smaller;
+    text-align: center;
+    height: 16px;
+    line-height: 16px;
+    z-index: 2;
+    border-radius: 8px;
+    padding: 0 4px;
+    transform: scale(0.7);
+    transform-origin: 100% 0;
+  }
 }
 
 .jc-view-space {
@@ -244,14 +261,30 @@ $jc-screen-height: 40px;
     opacity: 0.4;
     z-index: 6;
   }
+
+  $jc-view-header-height: 36px;
   .jc-view-header {
     position: relative;
     width: 100%;
-    height: 36px;
-    line-height: 36px;
-    padding: 0 0 0 $jc-default-dis;
+    height: $jc-view-header-height;
+    line-height: $jc-view-header-height;
+    padding: 0 $jc-view-header-height 0 $jc-default-dis;
     @include jc-text-warp();
     background-color: rgba($color: #003583, $alpha: 0.8);
+    color: $jc-color-white;
+    .iconfont {
+      position: absolute;
+      top: 0;
+      right: 0;
+      text-align: center;
+      width: $jc-view-header-height;
+      height: $jc-view-header-height;
+      opacity: 0.6;
+      cursor: pointer;
+      &:hover {
+        opacity: 1;
+      }
+    }
   }
   .jc-view-content {
     position: relative;

@@ -7,19 +7,20 @@ export default {
   props: ['options'],
   data() {
     return {
-      index: 1
+      visible: true
     }
-  },
-  created() {
-    console.log('ScreenCommandMessage')
   },
   methods: {
 
   },
   activated() {
+    //设置该窗口显示
+    this.visible = true
     console.log('ScreenCommandMessage activated')
   },
   deactivated() {
+    //设置该窗口隐藏,然后开始新消息数量通知
+    this.visible = false
     console.log('ScreenCommandMessage deactivated')
   }
 }
