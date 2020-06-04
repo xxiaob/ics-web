@@ -7,10 +7,9 @@
       <el-form-item prop="name" label="姓名">
         <el-input v-model="form.name" placeholder="请输入姓名"></el-input>
       </el-form-item>
-      <el-form-item prop="overseeResult" label="督查结果">
-        <el-select v-model="form.overseeResult" placeholder="请选择督查结果">
-          <el-option v-for="item in overseeResults" :key="item.id" :label="item.typeName" :value="item.id">
-          </el-option>
+      <el-form-item prop="superviseType" label="督查结果">
+        <el-select v-model="form.superviseType" placeholder="请选择督查结果">
+          <el-option v-for="item in superviseTypes" :key="item.value" :label="item.label" :value="item.value"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item class="jc-tabfilter-btns">
@@ -22,6 +21,8 @@
   </el-card>
 </template>
 <script>
+import { ATTEND_OVERSEE_STATUSES } from '@/constant/Dictionaries'
+
 export default {
   name: 'PeopleOverseeFilter',
   props: {
@@ -32,31 +33,17 @@ export default {
   },
   data() {
     return {
-      overseeResults: [],
+      superviseTypes: ATTEND_OVERSEE_STATUSES.VALUES,
       form: {
         name: '',
         orgId: '',
-        overseeResult: ''
-      },
-      date: null
+        superviseType: ''
+      }
     }
   },
   methods: {
-    changeDate(value) {
-      if (value) {
-        this.form.startDate = value[0]
-        this.form.endDate = value[1]
-      } else {
-        this.form.startDate = ''
-        this.form.endDate = ''
-      }
-    },
     reset() {
       this.$refs.form.resetFields()
-      this.form.startDate = ''
-      this.form.endDate = ''
-      this.date = null
-      this.form.selectType = this.status
     },
     onSubmit() {
       const form = {}

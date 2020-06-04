@@ -146,5 +146,13 @@ export default {
   live: {
     //直播相关
     imAuth: 'user-service/getAuthToken'
+  },
+  attend: {
+    //考勤管理
+    myAttendList: 'task-service/taskAttendance/getPersonal',
+    userAttendList: 'task-service/taskAttendance/getUser',
+    postAttendList: 'task-service/taskAttendance/getPost',
+    userOverseeList: 'task-service/taskSupervise/getUser',
+    postOverseeList: 'task-service/taskSupervise/getPost'
   }
 }

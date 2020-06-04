@@ -77,34 +77,35 @@ export default {
   methods: {
     imMsgCb(onType, data) {
       console.log('vue 数据', onType, data)
-      const { content: { agree, nickname, isExit } } = data
+      const { content: { agree, nickName, isExit } } = data
 
       if (this.timeout) {
         clearTimeout(this.timeout)
       }
       if (agree === '1') {
         this.onCall = true
-        this.$message.success(nickname + '同意接听')
+        this.$message.success(nickName + '同意接听')
         if (this.overseeType) {
-          this.overseeTypeMsg = '正在强制观摩' + nickname
+          this.overseeTypeMsg = '正在强制观摩' + nickName
         } else {
-          this.overseeTypeMsg = '语音通话中'
+          this.overseeTypeMsg = '正在和' + nickName + '语音通话'
         }
       } else if (agree === '0') {
-        this.$message.warning(nickname + '拒绝接听')
-        this.overseeTypeMsg = nickname + '拒绝接听'
+        this.$message.warning(nickName + '拒绝接听')
+        this.overseeTypeMsg = nickName + '拒绝接听'
       }
       if (isExit) {
         this.onCall = false
-        this.$message.warning(nickname + '已经挂断')
+        this.$message.warning(nickName + '已经挂断')
         this.leaveChannel()
+        this.overseeTypeMsg = nickName + '已经退出频道'
       }
     },
     formatFormData() {
       if (this.options) {
         const { overseeType } = this.options
 
-        this.invitUserId = 'lxx123'
+        this.invitUserId = '56037241549488128'
         this.overseeType = overseeType
         if (overseeType) {
           console.log('强制观摩')

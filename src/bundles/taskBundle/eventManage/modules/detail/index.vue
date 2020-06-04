@@ -41,7 +41,7 @@
             <img class="jc-video-play" src="../../../assets/pause.png" alt="" v-show="!audioPlayShows[index]">
           </div>
         </div>
-        <audio ref="audio" :src="audioUrl" style="width:0;height:0" @ended="audioEnded"></audio>
+        <audio v-if="dialogVisible" ref="audio" :src="audioUrl" style="width:0;height:0" @ended="audioEnded"></audio>
       </el-form-item>
     </el-form>
 

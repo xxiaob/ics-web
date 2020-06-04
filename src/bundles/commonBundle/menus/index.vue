@@ -42,7 +42,7 @@
           <i class="jc-menu-icon el-icon-setting"></i>
           <span class="jc-menu-arrow-title" slot="title">考勤管理</span>
         </template>
-        <el-menu-item index="myAttend">我的考勤</el-menu-item>
+        <el-menu-item index="myAttend">个人考勤</el-menu-item>
         <el-menu-item index="peopleAttend">人员考勤</el-menu-item>
         <el-menu-item index="postAttend">岗点考勤</el-menu-item>
         <el-menu-item index="peopleOversee">人员督查</el-menu-item>

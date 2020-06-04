@@ -13,9 +13,9 @@
         <el-date-picker v-if="status===ATTEND_PERIODS.DAY" v-model="date" @change="changeDate" value-format="yyyy-MM-dd HH:mm:ss" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期">
         </el-date-picker>
         <div v-if="status===ATTEND_PERIODS.WEEK">
-          <el-date-picker v-model="form.startDate" value-format="yyyy-MM-dd HH:mm:ss" type="week" format="yyyy 第 WW 周" placeholder="开始周"></el-date-picker>
+          <el-date-picker v-model="form.startTime" value-format="yyyy-MM-dd HH:mm:ss" type="week" format="yyyy 第 WW 周" placeholder="开始周"></el-date-picker>
           <span>-</span>
-          <el-date-picker v-model="form.endDate" value-format="yyyy-MM-dd HH:mm:ss" type="week" format="yyyy 第 WW 周" placeholder="结束周"></el-date-picker>
+          <el-date-picker v-model="form.endTime" value-format="yyyy-MM-dd HH:mm:ss" type="week" format="yyyy 第 WW 周" placeholder="结束周"></el-date-picker>
         </div>
         <el-date-picker v-if="status===ATTEND_PERIODS.MONTH" v-model="date" @change="changeDate" value-format="yyyy-MM-dd HH:mm:ss" type="monthrange" range-separator="-" start-placeholder="开始月" end-placeholder="结束月">
         </el-date-picker>
@@ -47,9 +47,9 @@ export default {
       ATTEND_PERIODS,
       status: ATTEND_PERIODS.DAY,
       form: {
-        selectType: ATTEND_PERIODS.DAY,
-        startDate: '',
-        endDate: '',
+        type: ATTEND_PERIODS.DAY,
+        startTime: '',
+        endTime: '',
         orgId: ''
       },
       date: null
@@ -63,19 +63,19 @@ export default {
     },
     changeDate(value) {
       if (value) {
-        this.form.startDate = value[0]
-        this.form.endDate = value[1]
+        this.form.startTime = value[0]
+        this.form.endTime = value[1]
       } else {
-        this.form.startDate = ''
-        this.form.endDate = ''
+        this.form.startTime = ''
+        this.form.endTime = ''
       }
     },
     reset() {
       this.$refs.form.resetFields()
-      this.form.startDate = ''
-      this.form.endDate = ''
+      this.form.startTime = ''
+      this.form.endTime = ''
       this.date = null
-      this.form.selectType = this.status
+      this.form.type = this.status
     },
     onSubmit() {
       const form = {}

@@ -7,24 +7,23 @@
       </div>
       <el-table :data="list" v-loading="loading" row-key="id" class="jc-table">
         <el-table-column type="index" label="序号" width="50"></el-table-column>
-        <!-- <el-table-column prop="createTime" label="时间" :formatter="formatTime" width="140"></el-table-column> -->
         <el-table-column prop="orgName" label="所属组织"></el-table-column>
-        <el-table-column prop="orgName" label="用户名"></el-table-column>
-        <el-table-column prop="orgName" label="在岗时长(h)"></el-table-column>
-        <el-table-column prop="orgName" label="在岗里程(h)"></el-table-column>
-        <el-table-column prop="orgName" label="触岗次数"></el-table-column>
-        <el-table-column prop="orgName" label="事件上报数"></el-table-column>
-        <el-table-column prop="orgName" label="问题反馈数"></el-table-column>
-        <el-table-column prop="orgName" label="任务完成数"></el-table-column>
+        <el-table-column prop="name" label="用户名"></el-table-column>
+        <el-table-column prop="onguardDuration" label="在岗时长(h)"></el-table-column>
+        <el-table-column prop="journey" label="在岗里程(km)"></el-table-column>
+        <el-table-column prop="inoutCount" label="触岗次数"></el-table-column>
+        <el-table-column prop="eventReportCount" label="事件上报数"></el-table-column>
+        <el-table-column prop="problemFeedbackCount" label="问题反馈数"></el-table-column>
+        <el-table-column prop="taskCompleteCount" label="任务完成数"></el-table-column>
         <el-table-column width="80" label="督查操作">
           <template slot-scope="scope">
             <el-button type="text" size="mini" icon="el-icon-video-camera" @click="manage(scope.row,1)" title="强制观摩"></el-button>
             <el-button type="text" size="mini" icon="el-icon-phone" @click="manage(scope.row,0)" title="语音通话"></el-button>
           </template>
         </el-table-column>
-        <el-table-column prop="orgName" label="督查人"></el-table-column>
-        <el-table-column prop="orgName" label="督查结果"></el-table-column>
-        <el-table-column prop="orgName" label="备注"></el-table-column>
+        <el-table-column prop="superviseUserName" label="督查人"></el-table-column>
+        <el-table-column prop="superviseStatus" label="督查结果"></el-table-column>
+        <el-table-column prop="superviseDesc" label="备注"></el-table-column>
       </el-table>
       <el-pagination @current-change="currentChange" @size-change="sizeChange" :current-page.sync="page.pageNum" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.total" class="text-right jc-mt"></el-pagination>
     </el-card>
@@ -33,7 +32,7 @@
   </div>
 </template>
 <script>
-import { questionList } from '@/api/question'
+import { userOverseeList } from '@/api/attend'
 import { formatDate } from '@/libs/util'
 import PaginationMixins from '@/mixins/PaginationMixins'
 import { organizationList } from '@/api/organization'
@@ -101,7 +100,7 @@ export default {
       if (!this.loading) {
         this.loading = true
         try {
-          const { total, resultList } = await questionList({ ...this.filter, ...this.page })
+          const { total, resultList } = await userOverseeList({ ...this.filter, ...this.page })
 
           this.page.total = total
           this.list = resultList

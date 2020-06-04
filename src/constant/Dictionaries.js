@@ -118,4 +118,21 @@ export const ATTEND_PERIODS = new JcEnum([
   { key: 'WEEK', value: '1', label: '周数据' },
   { key: 'MONTH', value: '2', label: '月数据' }
 ])
+/**
+ * 考勤 - 范围状态
+ */
+export const ATTEND_RANGE_STATUSES = new JcEnum([
+  { key: 'INTO', value: '0', label: '进圈' },
+  { key: 'OUT', value: '1', label: '出圈' },
+  { key: 'ON', value: '2', label: '在岗' },
+  { key: 'LEAVE', value: '3', label: '离岗' }
+])
+/**
+ * 考勤 - 督查结果
+ */
+export const ATTEND_OVERSEE_STATUSES = new JcEnum([
+  { key: 'NO', value: '0', label: '未督查' },
+  { key: 'NORMAL', value: '1', label: '正常' },
+  { key: 'ABNORMAL', value: '2', label: '异常' }
+])
 

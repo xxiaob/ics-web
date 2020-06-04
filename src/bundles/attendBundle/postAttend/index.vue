@@ -7,20 +7,20 @@
       </div>
       <el-table :data="list" v-loading="loading" row-key="id" class="jc-table">
         <el-table-column type="index" label="序号" width="50"></el-table-column>
-        <el-table-column prop="createTime" label="时间" :formatter="formatTime" width="140"></el-table-column>
+        <el-table-column prop="time" label="时间" width="140"></el-table-column>
         <el-table-column prop="orgName" label="所属组织"></el-table-column>
-        <el-table-column prop="orgName" label="岗点名称"></el-table-column>
-        <el-table-column prop="orgName" label="在岗时长(h)"></el-table-column>
-        <el-table-column prop="orgName" label="在岗里程(h)"></el-table-column>
-        <el-table-column prop="orgName" label="触岗次数"></el-table-column>
-        <el-table-column prop="orgName" label="事件上报数"></el-table-column>
+        <el-table-column prop="areaName" label="岗点名称"></el-table-column>
+        <el-table-column prop="onguardDuration" label="在岗时长(h)"></el-table-column>
+        <el-table-column prop="journey" label="在岗里程(km)"></el-table-column>
+        <el-table-column prop="inoutCount" label="触岗次数"></el-table-column>
+        <el-table-column prop="eventReportCount" label="事件上报数"></el-table-column>
       </el-table>
       <el-pagination @current-change="currentChange" @size-change="sizeChange" :current-page.sync="page.pageNum" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.total" class="text-right jc-mt"></el-pagination>
     </el-card>
   </div>
 </template>
 <script>
-import { questionList } from '@/api/question'
+import { postAttendList } from '@/api/attend'
 import { ATTEND_PERIODS } from '@/constant/Dictionaries'
 import { formatDate } from '@/libs/util'
 import PaginationMixins from '@/mixins/PaginationMixins'
@@ -40,7 +40,7 @@ export default {
       list: [],
       loading: false,
       filter: {
-        selectType: ATTEND_PERIODS.DAY
+        type: ATTEND_PERIODS.DAY
       }
     }
   },
@@ -88,7 +88,7 @@ export default {
       if (!this.loading) {
         this.loading = true
         try {
-          const { total, resultList } = await questionList({ ...this.filter, ...this.page })
+          const { total, resultList } = await postAttendList({ ...this.filter, ...this.page })
 
           this.page.total = total
           this.list = resultList

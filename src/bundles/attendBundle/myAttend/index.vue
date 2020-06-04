@@ -1,32 +1,35 @@
 <template>
   <div class="jc-main-container-warp">
-    <tab-filter :orgTree="orgTree" :self="true" @filter="goFilter"></tab-filter>
+    <tab-filter :self="true" @filter="goFilter"></tab-filter>
     <el-card class="jc-table-card jc-mt">
       <div slot="header" class="jc-card-header">
         <div class="jc-card-title">列表内容</div>
       </div>
       <el-table :data="list" v-loading="loading" row-key="id" class="jc-table">
         <el-table-column type="index" label="序号" width="50"></el-table-column>
-        <el-table-column prop="orgName" label="任务名称"></el-table-column>
-        <el-table-column prop="orgName" label="考勤范围"></el-table-column>
-        <el-table-column prop="orgName" label="触岗记录"></el-table-column>
-        <el-table-column prop="createTime" label="时间" :formatter="formatTime" width="140"></el-table-column>
-        <el-table-column prop="orgName" label="打卡照片"></el-table-column>
-        <el-table-column prop="orgName" label="在岗时长(h)"></el-table-column>
-        <el-table-column prop="orgName" label="在岗里程(h)"></el-table-column>
+        <el-table-column prop="taskName" label="任务名称"></el-table-column>
+        <el-table-column prop="areaName" label="考勤范围"></el-table-column>
+        <el-table-column prop="status" label="触岗记录" :formatter="formatStatus"></el-table-column>
+        <el-table-column prop="time" label="时间"></el-table-column>
+        <!-- startTime endTime -->
+        <el-table-column prop="photoUrl" label="打卡照片">
+          <template slot-scope="scope">
+            <!-- scope.row.photoUrl -->
+            <el-image style="width: 100px; height: 80px" :src="scope.row.photoUrl" :preview-src-list="[scope.row.photoUrl]">
+            </el-image>
+          </template>
+        </el-table-column>
+        <el-table-column prop="onguardDuration" label="在岗时长(h)"></el-table-column>
+        <el-table-column prop="journey" label="在岗里程(km)"></el-table-column>
       </el-table>
       <el-pagination @current-change="currentChange" @size-change="sizeChange" :current-page.sync="page.pageNum" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.total" class="text-right jc-mt"></el-pagination>
     </el-card>
   </div>
 </template>
 <script>
-import { questionList } from '@/api/question'
-import { ATTEND_PERIODS } from '@/constant/Dictionaries'
-import { formatDate } from '@/libs/util'
+import { myAttendList } from '@/api/attend'
 import PaginationMixins from '@/mixins/PaginationMixins'
-import { organizationList } from '@/api/organization'
-// import { createNamespacedHelpers } from 'vuex'
-// const { mapState } = createNamespacedHelpers('user')
+import { ATTEND_RANGE_STATUSES } from '@/constant/Dictionaries'
 
 export default {
   name: 'PostAttendIndex',
@@ -36,62 +39,26 @@ export default {
   },
   data() {
     return {
-      orgTree: [],
       list: [],
       loading: false,
-      filter: {
-        selectType: ATTEND_PERIODS.DAY
-      }
+      filter: {}
     }
   },
-  // computed: {
-  //   ...mapState(['user'])
-  // },
   async created() {
-    await this.getOrgTree()
     this.initData()
   },
   methods: {
-    formatTime(row, column, cellValue) {
-      return formatDate(cellValue)
-    },
-    formatOrg(row, column, cellValue) {
-      return this.orgObj[cellValue]
-    },
-    formatOrgTree(child) {
-      let trees = []
-
-      if (child && child.length) {
-        child.forEach(item => {
-          let node = {
-            value: item.orgId,
-            label: item.orgName
-          }
-
-          let children = this.formatOrgTree(item.children)
-
-          if (children && children.length) {
-            node.children = children
-          }
-
-          trees.push(node)
-        })
-      }
-      return trees
-    },
-    async getOrgTree() {
-      const res = await organizationList()
-
-      this.orgTree = this.formatOrgTree(res)
+    formatStatus(row, column, cellValue) {
+      return ATTEND_RANGE_STATUSES.toString(cellValue.toString())
     },
     async initData() {
       if (!this.loading) {
         this.loading = true
         try {
-          const { total, resultList } = await questionList({ ...this.filter, ...this.page })
+          const { total, resultList } = await myAttendList({ ...this.filter, ...this.page })
 
           this.page.total = total
-          this.list = resultList
+          this.list = resultList.map(item=>({ ...item, time: `${item.startTime} ~ ${item.endTime}` }))
           this.loading = false
         } catch (error) {
           console.error(error)
