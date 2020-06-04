@@ -6,6 +6,7 @@ export default {
     return {
       dialogVideoVisible: false,
       dialogVideoUrl: '',
+      audioPlayShows: [],
       audioUrl: ''
     }
   },

@@ -89,7 +89,6 @@ export default {
       imgs: [],
       videos: [],
       audios: [],
-      audioPlayShows: [],
       question: null,
       TaskManageShow: false
     }

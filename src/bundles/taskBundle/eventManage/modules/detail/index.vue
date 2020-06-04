@@ -20,22 +20,39 @@
         <span>{{form.typeName}}</span>
       </el-form-item>
       <el-form-item label="处理前图片">
-        <img v-for="url in form.beforePhotos" :key="url" :src="url" alt="" width="100%">
+        <el-image v-for="url in form.beforePhotos" :key="url" :src="url" :preview-src-list="form.beforePhotos" class="jc-img"></el-image>
       </el-form-item>
       <el-form-item label="处理后图片">
-        <img v-for="url in form.afterPhotos" :key="url" :src="url" alt="" width="100%">
+        <el-image v-for="url in form.afterPhotos" :key="url" :src="url" :preview-src-list="form.afterPhotos" class="jc-img"></el-image>
       </el-form-item>
       <el-form-item label="视频文件">
-        <video v-for="url in form.videoAddrs" :key="url" :src="url" alt="" width="100%" controls></video>
+        <div class="jc-video" v-for="url in form.videoAddrs" :key="url" @click="showVideo(url)">
+          <video :src="url"></video>
+          <div class="hover">
+            <img class="jc-video-play" src="../../../assets/play.png" alt="">
+          </div>
+        </div>
       </el-form-item>
       <el-form-item label="音频文件" prop="audioAddr">
-        <audio v-for="url in form.audioAddrs" :key="url" :src="url" alt="" controls></audio>
+        <div v-for="(url,index) in form.audioAddrs" :key="url" class="jc-audio" @click="playAudio(url,index)">
+          <img class="jc-audio-mike" src="../../../assets/mike.png" alt="">
+          <div class="hover">
+            <img class="jc-video-play" src="../../../assets/play.png" alt="" v-show="audioPlayShows[index]">
+            <img class="jc-video-play" src="../../../assets/pause.png" alt="" v-show="!audioPlayShows[index]">
+          </div>
+        </div>
+        <audio ref="audio" :src="audioUrl" style="width:0;height:0" @ended="audioEnded"></audio>
       </el-form-item>
     </el-form>
+
+    <el-dialog title="视频播放" :visible.sync="dialogVideoVisible" width="800px" :close-on-click-modal="false" :append-to-body="true">
+      <video v-if="dialogVideoVisible" :src="dialogVideoUrl" autoplay controls width="100%"></video>
+    </el-dialog>
   </el-dialog>
 </template>
 <script>
 import { eventManageGet } from '@/api/eventManage'
+import MediaMixins from '../../../mixins/MediaMixins'
 
 export default {
   name: 'EventManageDetail',
@@ -49,6 +66,7 @@ export default {
       default: ()=>{}
     }
   },
+  mixins: [MediaMixins],
   watch: {
     visible(newVal) {
       if (newVal) {
@@ -66,7 +84,8 @@ export default {
   data() {
     return {
       dialogVisible: false,
-      form: {}
+      form: {},
+      audios: []
     }
   },
   created() {
@@ -79,6 +98,8 @@ export default {
       const res = await eventManageGet(this.info.id)
 
       this.form = { ...this.info, ...res }
+      this.audios = this.form.audioAddrs
+      this.audioPlayShows = new Array(this.audios.length).fill(true)
     },
     dialogClose() {
       this.$emit('update:visible', false)
@@ -86,3 +107,6 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+@import "../../../css/media.scss";
+</style>
