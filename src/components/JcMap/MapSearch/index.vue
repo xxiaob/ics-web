@@ -62,14 +62,13 @@ export default {
   &:hover,
   &.jc-active {
     width: 160px;
-    border-radius: 0;
     overflow: visible;
   }
 
   /deep/ .el-select {
     width: 100%;
     .el-input__inner {
-      border: none;
+      border-radius: 18px;
       padding: 0 15px 0 32px;
     }
     .el-select-dropdown {
