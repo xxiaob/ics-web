@@ -171,6 +171,14 @@ $jc-screen-height: 40px;
     &.jc-active {
       background-image: url(../modules/operate/assets/operate-on.png);
     }
+
+    &:hover {
+      .jc-opera-work {
+        transform: translate(0, -50%);
+        opacity: 1;
+        visibility: visible;
+      }
+    }
   }
 
   .jc-opreate-icon {
@@ -245,12 +253,16 @@ $jc-screen-height: 40px;
     position: absolute;
     left: 50px;
     top: 50%;
-    width: 300px;
+    width: 260px;
     height: auto;
     padding: $jc-default-dis/2;
     box-shadow: $jc-box-shadow;
     background-color: $jc-color-white;
-    transform: translate(0, -50%);
+    transform: translate(20px, -50%);
+    visibility: hidden;
+    opacity: 0;
+    transition: all .4s;
+    will-change: transform;
 
     &:before {
       position: absolute;
@@ -266,6 +278,31 @@ $jc-screen-height: 40px;
       border-color: transparent transparent $jc-color-white $jc-color-white;
       transform: rotate(45deg);
       box-shadow: $jc-box-shadow;
+    }
+
+    .jc-work-item {
+      height: 25px;
+      line-height: 25px;
+      width: 49.8%;
+      margin-right: 0;
+
+      .el-checkbox__label {
+        position: absolute;
+        display: block;
+        left: 20px;
+        top: 0;
+        right: 2px;
+        padding-left: 0;
+        height: 25px;
+        line-height: 25px;
+      }
+    }
+
+    .jc-work-content {
+      padding-left: 15px;
+      background: url(/static/areaicons/organization.png) no-repeat left center;
+      background-size: 12px auto;
+      @include jc-text-warp;
     }
   }
 }
