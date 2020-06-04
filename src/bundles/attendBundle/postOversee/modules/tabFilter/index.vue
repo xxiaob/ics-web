@@ -4,16 +4,15 @@
       <el-form-item prop="orgId" label="所属组织" v-if="!self">
         <el-cascader :options="orgTree" v-model="form.orgId" :props="{expandTrigger: 'hover', emitPath: false,checkStrictly:true }" clearable></el-cascader>
       </el-form-item>
-      <el-form-item prop="overseeResult" label="岗点类型">
-        <el-select v-model="form.overseeResult" placeholder="请选择岗点类型">
-          <el-option v-for="item in overseeResults" :key="item.id" :label="item.typeName" :value="item.id">
+      <el-form-item prop="areaTypeId" label="岗点类型">
+        <el-select v-model="form.areaTypeId" placeholder="请选择岗点类型">
+          <el-option v-for="item in areaTypes" :key="item.areaTypeId" :label="item.areaTypeName" :value="item.areaTypeId">
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item prop="overseeResult" label="督查结果">
-        <el-select v-model="form.overseeResult" placeholder="请选择督查结果">
-          <el-option v-for="item in overseeResults" :key="item.id" :label="item.typeName" :value="item.id">
-          </el-option>
+      <el-form-item prop="superviseType" label="督查结果">
+        <el-select v-model="form.superviseType" placeholder="请选择督查结果">
+          <el-option v-for="item in superviseTypes" :key="item.value" :label="item.label" :value="item.value"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item prop="" label="时间">
@@ -29,8 +28,10 @@
   </el-card>
 </template>
 <script>
+import { areaTypeList } from '@/api/areaType'
+import { ATTEND_OVERSEE_STATUSES } from '@/constant/Dictionaries'
 export default {
-  name: 'AttendFilter',
+  name: 'PostOverseeFilter',
   props: {
     self: {
       type: Boolean,
@@ -43,30 +44,38 @@ export default {
   },
   data() {
     return {
-      overseeResults: [],
+      areaTypes: [],
+      superviseTypes: ATTEND_OVERSEE_STATUSES.VALUES,
       form: {
-        overseeResult: '',
-        startDate: '',
-        endDate: '',
+        areaTypeId: '',
+        superviseType: '',
+        startTime: '',
+        endTime: '',
         orgId: ''
       },
       date: null
     }
   },
+  created() {
+    this.getAreaTypeList()
+  },
   methods: {
+    async getAreaTypeList() {
+      this.areaTypes = await areaTypeList({})
+    },
     changeDate(value) {
       if (value) {
-        this.form.startDate = value[0]
-        this.form.endDate = value[1]
+        this.form.startTime = value[0]
+        this.form.endTime = value[1]
       } else {
-        this.form.startDate = ''
-        this.form.endDate = ''
+        this.form.startTime = ''
+        this.form.endTime = ''
       }
     },
     reset() {
       this.$refs.form.resetFields()
-      this.form.startDate = ''
-      this.form.endDate = ''
+      this.form.startTime = ''
+      this.form.endTime = ''
       this.date = null
     },
     onSubmit() {

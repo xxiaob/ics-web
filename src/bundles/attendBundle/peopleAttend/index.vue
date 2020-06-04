@@ -16,7 +16,15 @@
         <el-table-column prop="eventReportCount" label="事件上报数"></el-table-column>
         <el-table-column prop="problemFeedbackCount" label="问题反馈数"></el-table-column>
         <el-table-column prop="taskCompleteCount" label="任务完成数"></el-table-column>
-        <el-table-column prop="superviseTotalCount" label="督查结果"></el-table-column>
+        <el-table-column prop="superviseTotalCount" label="督查结果">
+          <template slot-scope="scope">
+            <span class="jc-abnormal">{{scope.row.superviseNormalCount}}</span>
+            <span>/</span>
+            <span class="jc-normal">{{scope.row.superviseAbnormalCount}}</span>
+            <span>/</span>
+            <span>{{scope.row.superviseTotalCount}}</span>
+          </template>
+        </el-table-column>
         <!-- superviseNormalCount superviseAbnormalCount superviseTotalCount -->
       </el-table>
       <el-pagination @current-change="currentChange" @size-change="sizeChange" :current-page.sync="page.pageNum" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.total" class="text-right jc-mt"></el-pagination>
@@ -110,3 +118,13 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.el-table /deep/ {
+  .jc-abnormal {
+    color: $jc-color-danger;
+  }
+  .jc-normal {
+    color: $jc-color-success;
+  }
+}
+</style>

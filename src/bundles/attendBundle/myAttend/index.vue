@@ -32,7 +32,7 @@ import PaginationMixins from '@/mixins/PaginationMixins'
 import { ATTEND_RANGE_STATUSES } from '@/constant/Dictionaries'
 
 export default {
-  name: 'PostAttendIndex',
+  name: 'MyAttendIndex',
   mixins: [PaginationMixins],
   components: {
     TabFilter: () => import('../peopleAttend/modules/tabFilter')

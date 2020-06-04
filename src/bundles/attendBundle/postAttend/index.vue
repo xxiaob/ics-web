@@ -29,7 +29,7 @@ import { organizationList } from '@/api/organization'
 // const { mapState } = createNamespacedHelpers('user')
 
 export default {
-  name: 'MyAttendIndex',
+  name: 'PostAttendIndex',
   mixins: [PaginationMixins],
   components: {
     TabFilter: () => import('../peopleAttend/modules/tabFilter')

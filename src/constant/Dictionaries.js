@@ -135,4 +135,11 @@ export const ATTEND_OVERSEE_STATUSES = new JcEnum([
   { key: 'NORMAL', value: '1', label: '正常' },
   { key: 'ABNORMAL', value: '2', label: '异常' }
 ])
+/**
+ * 考勤 - 岗点考核
+ */
+export const POST_OVERSEE_RESULTS = new JcEnum([
+  { key: 'NOTSTANDARD', value: '0', label: '未达标' },
+  { key: 'STANDARD', value: '1', label: '达标' }
+])
 
