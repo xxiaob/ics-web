@@ -24,14 +24,14 @@
         <div class="jc-video" v-for="url in videos" :key="url" @click="showVideo(url)">
           <video :src="url"></video>
           <div class="hover">
-            <img class="jc-video-play" src="../../assets/play.png" alt="">
+            <img class="jc-video-play" src="../../../assets/play.png" alt="">
           </div>
         </div>
         <div v-for="(url,index) in audios" :key="url" class="jc-audio" @click="playAudio(url,index)">
-          <img class="jc-audio-mike" src="../../assets/mike.png" alt="">
+          <img class="jc-audio-mike" src="../../../assets/mike.png" alt="">
           <div class="hover">
-            <img class="jc-video-play" src="../../assets/play.png" alt="" v-show="audioPlayShows[index]">
-            <img class="jc-video-play" src="../../assets/pause.png" alt="" v-show="!audioPlayShows[index]">
+            <img class="jc-video-play" src="../../../assets/play.png" alt="" v-show="audioPlayShows[index]">
+            <img class="jc-video-play" src="../../../assets/pause.png" alt="" v-show="!audioPlayShows[index]">
           </div>
         </div>
         <audio ref="audio" :src="audioUrl" style="width:0;height:0" @ended="audioEnded"></audio>
@@ -45,13 +45,14 @@
 
     <task-manage :orgTree="orgTree" :orgId="orgId" :question="question" :visible.sync="TaskManageShow" @save-success="generateTaskSuccess"></task-manage>
 
-    <el-dialog title="视频播放" :visible.sync="dialogVisible" width="800px" :close-on-click-modal="false" :append-to-body="true">
-      <video v-if="dialogVisible" :src="dialogVideoUrl" autoplay controls width="100%"></video>
+    <el-dialog title="视频播放" :visible.sync="dialogVideoVisible" width="800px" :close-on-click-modal="false" :append-to-body="true">
+      <video v-if="dialogVideoVisible" :src="dialogVideoUrl" autoplay controls width="100%"></video>
     </el-dialog>
   </div>
 </template>
 <script>
 import { questionReport } from '@/api/question'
+import MediaMixins from '../../../mixins/MediaMixins'
 
 export default {
   name: 'TaskQuestionProcessDetail',
@@ -77,6 +78,7 @@ export default {
       type: Boolean
     }
   },
+  mixins: [MediaMixins],
   components: {
     TaskManage: () => import('../../../taskProcess/modules/manage')
   },
@@ -89,10 +91,7 @@ export default {
       audios: [],
       audioPlayShows: [],
       question: null,
-      TaskManageShow: false,
-      dialogVisible: false,
-      dialogVideoUrl: '',
-      audioUrl: ''
+      TaskManageShow: false
     }
   },
   computed: {
@@ -114,39 +113,6 @@ export default {
     }
   },
   methods: {
-    //播放视频
-    showVideo(url) {
-      const audio = this.$refs.audio
-
-      if (!audio.paused) {
-        audio.pause()
-        this.audioPlayShows = new Array(this.audios.length).fill(true)
-      }
-
-      this.dialogVideoUrl = url
-      this.dialogVisible = true
-    },
-    //播放音频
-    playAudio(url, index) {
-      this.audioUrl = url
-      setTimeout(()=>{
-        const audio = this.$refs.audio
-        const shows = new Array(this.audios.length).fill(true)
-
-        if (audio.paused) {
-          audio.play()
-          shows[index] = false
-        } else {
-          audio.pause()
-        }
-        this.audioPlayShows = shows
-      })
-    },
-    //监听音频播放结束
-    audioEnded() {
-      this.audioPlayShows = new Array(this.audios.length).fill(true)
-    },
-
     formatType(value) {
       const type = this.types.filter(item=>item.id == value)
 
@@ -255,46 +221,5 @@ export default {
 .jc-detail-footer {
   text-align: center;
 }
-.jc-img,
-.jc-video,
-.jc-audio {
-  width: 130px;
-  height: 110px;
-  float: left;
-  border-radius: 5px;
-  margin-right: 10px;
-  margin-bottom: 10px;
-  border: 1px solid $jc-color-primary;
-  cursor: pointer;
-  position: relative;
-  video {
-    width: 100%;
-    height: 100%;
-  }
-  .jc-audio-mike {
-    position: absolute;
-    left: 48px;
-    top: 32px;
-  }
-  .hover {
-    display: none;
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    top: 0;
-    left: 0;
-    background: rgba($color: #000000, $alpha: 0.2);
-    .jc-video-play {
-      position: absolute;
-      left: 42px;
-      top: 32px;
-    }
-  }
-  &:hover .hover {
-    display: block;
-  }
-}
-.jc-audio {
-  background: $jc-color-primary;
-}
+@import "../../../css/media.scss";
 </style>
