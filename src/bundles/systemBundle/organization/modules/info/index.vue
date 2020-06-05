@@ -55,10 +55,12 @@ export default {
   color: $jc-color-text-regular;
   .jc-detail-item {
     display: inline-block;
+    width: 60%;
     height: 30px;
     line-height: 30px;
+    @include jc-text-warp;
     &:first-child {
-      width: 220px;
+      width: 39%;
     }
   }
 }

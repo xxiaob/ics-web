@@ -111,7 +111,7 @@ export default {
       this.loading = true
       this.$refs.form.validate(valid => {
         if (valid) {
-          roleSave({ ...this.form, resIds: this.$refs.tree.getCheckedKeys() }).then(() => {
+          roleSave({ ...this.form, resIds: [...this.$refs.tree.getCheckedKeys(), ...this.$refs.tree.getHalfCheckedKeys()] }).then(() => {
             this.$message.success('操作成功')
             this.dialogVisible = false
             this.$emit('save-success')
