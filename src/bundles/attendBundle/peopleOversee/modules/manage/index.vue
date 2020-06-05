@@ -103,8 +103,9 @@ export default {
     },
     formatFormData() {
       if (this.options) {
-        const { overseeType } = this.options
+        const { overseeType, userId } = this.options
 
+        console.log(userId)
         this.invitUserId = '56037241549488128'
         this.overseeType = overseeType
         if (overseeType) {

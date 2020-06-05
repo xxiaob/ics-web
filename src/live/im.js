@@ -13,7 +13,7 @@ export class IM {
     this.username = username
     this.nickname = nickname
     console.log(this.username, this.nickname)
-    this.password = '123456'
+    this.password = 'jcuser2020'
     this.debug = debug
     this.JIM = new JMessage({
       // debug: true

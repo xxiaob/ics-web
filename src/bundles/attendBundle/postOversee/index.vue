@@ -16,7 +16,7 @@
         <el-table-column prop="journey" label="在岗里程(km)"></el-table-column>
         <el-table-column prop="inoutCount" label="触岗次数"></el-table-column>
         <el-table-column prop="eventReportCount" label="事件上报数"></el-table-column>
-        <el-table-column prop="postAssess" label="岗点考核" :formatter="formatResult"></el-table-column>
+        <el-table-column prop="postAssess" label="岗点考核"></el-table-column>
         <el-table-column width="80" label="督查操作">
           <template slot-scope="scope">
             <el-button type="text" size="mini" icon="el-icon-video-camera" @click="manage(scope.row,1)" title="强制观摩"></el-button>
