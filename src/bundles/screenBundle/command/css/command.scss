@@ -431,6 +431,43 @@ $jc-screen-height: 40px;
       }
     }
   }
+
+  .jc-user-warp {
+    position: relative;
+    margin: 0 $jc-default-dis;
+
+    .jc-user-header {
+      position: relative;
+      height: 26px;
+      line-height: 26px;
+      border-top: solid 1px $jc-color-primary;
+      color: $jc-color-text-regular;
+
+      .jc-talk-type {
+        float: right;
+        background-color: $jc-color-primary;
+        opacity: .8;
+        cursor: pointer;
+        padding: 0 5px;
+        height: 20px;
+        line-height: 20px;
+        margin-top: 3px;
+        color: $jc-color-white;
+        font-size: $jc-font-size-smaller;
+
+        &:hover,
+        &.jc-active {
+          opacity: 1;
+        }
+      }
+    }
+
+    .jc-user-content {
+      position: relative;
+      height: 150px;
+      overflow: auto;
+    }
+  }
 }
 
 /* 右下角消息窗口 */

@@ -13,7 +13,16 @@
         </div>
       </el-tree>
     </div>
-    <div class="jc-user-warp"></div>
+    <div class="jc-user-warp">
+      <div class="jc-user-header">
+        已选用户
+        <span class="jc-talk-type" :class="{'jc-active': talkType == 'video'}" @click="talkType = 'video'">视频</span>
+        <span class="jc-talk-type" :class="{'jc-active': talkType == 'audio'}" @click="talkType = 'audio'">音频</span>
+      </div>
+      <div class="jc-user-content">
+        <div class="jc-user-item"></div>
+      </div>
+    </div>
   </view-warp>
 </template>
 <script>
@@ -39,7 +48,8 @@ export default {
       trees: [],
       expandedKeys: [],
       props: { children: 'children', label: 'label' },
-      checkKeys: []
+      checkKeys: [],
+      talkType: 'audio'
     }
   },
   created() {
