@@ -60,15 +60,15 @@
           <span class="jc-menu-arrow-title" slot="title">系统设置</span>
         </template>
         <el-menu-item index="systemOrganization">组织管理</el-menu-item>
-        <el-menu-item index="systemAreaType">区域类型</el-menu-item>
-        <el-menu-item index="systemRole">角色管理</el-menu-item>
+        <el-menu-item index="systemGrid">网格设置</el-menu-item>
         <el-menu-item index="systemUser">用户管理</el-menu-item>
+        <el-menu-item index="systemRole">角色管理</el-menu-item>
         <el-menu-item index="systemPosition">职位管理</el-menu-item>
-        <el-menu-item index="systemMenus">菜单管理</el-menu-item>
+        <el-menu-item index="systemAreaType">区域类型</el-menu-item>
+        <el-menu-item index="systemPttGroup">PTT群组</el-menu-item>
         <el-menu-item index="systemDevice">设备管理</el-menu-item>
         <el-menu-item index="systemDeviceUpdate">设备升级</el-menu-item>
-        <el-menu-item index="systemGrid">网格设置</el-menu-item>
-        <el-menu-item index="systemPttGroup">PTT群组</el-menu-item>
+        <el-menu-item index="systemMenus">菜单管理</el-menu-item>
       </el-submenu>
     </el-menu>
   </section>
