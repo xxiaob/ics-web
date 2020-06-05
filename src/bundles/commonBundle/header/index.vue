@@ -8,12 +8,13 @@
           <i class="jc-arrow-icon el-icon-arrow-right"></i>
           <div class="jc-menu-popup">
             <div class="jc-menu-item" @click="visible = true">个人信息</div>
-            <div class="jc-menu-item">修改密码</div>
+            <div class="jc-menu-item" @click="resetPwdVisible = true">修改密码</div>
             <div class="jc-menu-item" @click="logout">退出登录</div>
           </div>
         </div>
       </div>
       <user-detail :userId="user.userId" title="个人信息" :visible.sync="visible"></user-detail>
+      <reset-pwd :visible.sync="resetPwdVisible"></reset-pwd>
     </template>
   </header>
 </template>
@@ -24,11 +25,13 @@ import { mapState, mapGetters, mapMutations } from 'vuex'
 export default {
   name: 'CommonHeader',
   components: {
-    UserDetail: () => import('@/bundles/systemBundle/user/modules/detail')
+    UserDetail: () => import('@/bundles/systemBundle/user/modules/detail'),
+    ResetPwd: () => import('./modules/resetPwd')
   },
   data() {
     return {
-      visible: false
+      visible: false,
+      resetPwdVisible: false
     }
   },
   computed: {

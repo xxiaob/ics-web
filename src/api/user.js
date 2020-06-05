@@ -80,6 +80,13 @@ export function resetUserPwd(userId) {
   return axios.post(API.user.resetUserPwd + `?userId=${userId}`)
 }
 /**
+ * 更新密码
+ * @returns {Object} axios 对象
+ */
+export function updPwd() {
+  return axios.post(API.user.updPwd)
+}
+/**
  * 更新是否为默认接收人
  * @param {object} data
  * @returns {Object} axios 对象
