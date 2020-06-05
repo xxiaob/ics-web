@@ -5,9 +5,7 @@
         <el-input v-model="form.resName" placeholder="请输入菜单名称"></el-input>
       </el-form-item>
       <el-form-item label="上级菜单" prop="pid">
-        <el-select v-model="form.pid" placeholder="请选择">
-          <el-option v-for="item in menus" :key="item.value" :label="item.label" :value="item.value"></el-option>
-        </el-select>
+        <el-cascader v-model="form.pid" :options="menus" filterable :props="{ expandTrigger: 'hover',checkStrictly: true,emitPath: false }"></el-cascader>
       </el-form-item>
       <el-form-item label="菜单图标" prop="icon">
         <el-input v-model="form.icon" placeholder="请输入菜单图标"></el-input>
@@ -30,7 +28,7 @@ import { menusList, menusSave } from '@/api/menus'
 import { getStringRule, getIntegerRule } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
 
-let defaultForm = { resName: '', sort: 0, pid: '', url: '', icon: '' }
+let defaultForm = { resName: '', sort: 1, pid: '', url: '', icon: '' }
 
 export default {
   name: 'SystemMenusManage',
@@ -52,15 +50,14 @@ export default {
       })
     },
     formatMenus(child) {
-      let list = []
+      let trees = []
 
       if (child && child.length) {
         child.forEach(item => {
-          list.push({ value: item.resId, label: item.resName })
-          list = [...list, ...this.formatMenus(item.children)]
+          trees.push({ value: item.resId, label: item.resName, ...(item.children && item.children.length ? { children: this.formatMenus(item.children) } : {}) })
         })
       }
-      return list
+      return trees
     },
     formatFormData() {
       if (this.options) {
