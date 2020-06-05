@@ -21,6 +21,8 @@
 <script>
 import { mapMutations } from 'vuex'
 import { login } from '@/api/auth'
+import md5 from 'md5'
+
 export default {
   name: 'Login',
   components: {
@@ -42,7 +44,7 @@ export default {
       if (this.form.userName && this.form.password) {
         if (!this.loading) {
           this.loading = true
-          login(this.form).then((res) => {
+          login({ userName: this.form.userName, password: md5(this.form.password) }).then((res) => {
             this.setUser(res)
             let goUrl = '/'
 
