@@ -28,7 +28,7 @@
   </el-dialog>
 </template>
 <script>
-import { addUserOversee } from '@/api/attend'
+import { addPostOversee } from '@/api/attend'
 import { getStringRule, NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
 import { ATTEND_OVERSEE_STATUSES } from '@/constant/Dictionaries'
 import FormMixins from '@/mixins/FormMixins'
@@ -104,10 +104,10 @@ export default {
     },
     formatFormData() {
       if (this.options) {
-        const { overseeType, userId, usId, name, orgName } = this.options
+        const { overseeType, defaultUserId, ssId, postName: name, orgName } = this.options
 
         // this.invitUserId = '56037241549488128'
-        this.invitUserId = userId
+        this.invitUserId = defaultUserId
         this.overseeType = overseeType
         if (overseeType) {
           console.log('强制观摩')
@@ -121,7 +121,7 @@ export default {
         this.timeout = setTimeout(()=>{
           this.overseeTypeMsg = '对方不在线'
         }, 30000)
-        return { usId, superviseUserId: this.user.userId, superviseType: '', superviseDesc: '', name, orgName }
+        return { ssId, superviseUserId: this.user.userId, superviseType: '', superviseDesc: '', name, orgName }
       } else {
         return {}
       }
@@ -170,7 +170,7 @@ export default {
       this.loading = true
       this.$refs.form.validate(valid => {
         if (valid) {
-          addUserOversee(this.form).then(() => {
+          addPostOversee(this.form).then(() => {
             this.$message.success('操作成功')
             this.dialogVisible = false
             this.$emit('save-success')

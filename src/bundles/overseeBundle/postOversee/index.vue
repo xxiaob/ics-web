@@ -48,7 +48,7 @@ export default {
   mixins: [PaginationMixins],
   components: {
     TabFilter: () => import('./modules/tabFilter'),
-    JcManage: () => import('../peopleOversee/modules/manage')
+    JcManage: () => import('./modules/manage')
   },
   data() {
     return {

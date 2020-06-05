@@ -47,12 +47,20 @@ export function postOverseeList(data) {
   return axios.post(API.attend.postOverseeList, data)
 }
 /**
- * 添加
+ * 人员督查添加记录
  * @param {object} data
  * @returns {Object} axios 对象
  */
-export function taskAdd(data) {
-  return axios.post(API.task.add, data)
+export function addUserOversee(data) {
+  return axios.post(API.attend.addUserOversee, data)
+}
+/**
+ * 岗点督查添加记录
+ * @param {object} data
+ * @returns {Object} axios 对象
+ */
+export function addPostOversee(data) {
+  return axios.post(API.attend.addPostOversee, data)
 }
 
 /**

@@ -158,6 +158,8 @@ export default {
     exportPeopleAttend: 'task-service/taskDataExport/getUserAttendance',
     exportPostAttend: 'task-service/taskDataExport/getPostAttendance',
     exportUserOversee: 'task-service/taskDataExport/getUserSupervise',
-    exportPostOversee: 'task-service/taskDataExport/getPostSupervise'
+    exportPostOversee: 'task-service/taskDataExport/getPostSupervise',
+    addUserOversee: 'task-service/taskSupervise/addUserSupervise',
+    addPostOversee: 'task-service/taskSupervise/addPostSupervise'
   }
 }
