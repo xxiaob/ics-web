@@ -3,6 +3,7 @@
  */
 import axios from 'axios'
 import API from './API'
+import qs from 'qs'
 
 /*-------------------------------考勤管理------------------------------------ */
 /**
@@ -52,4 +53,40 @@ export function postOverseeList(data) {
  */
 export function taskAdd(data) {
   return axios.post(API.task.add, data)
+}
+
+/**
+ * 我的考勤导出
+ * @param {object} data
+ */
+export function exportMyAttend(data) {
+  window.open(process.env.API_HOST.base + API.attend.exportMyAttend + '?' + qs.stringify(data))
+}
+/**
+ * 人员考勤导出
+ * @param {object} data
+ */
+export function exportPeopleAttend(data) {
+  window.open(process.env.API_HOST.base + API.attend.exportPeopleAttend + '?' + qs.stringify(data))
+}
+/**
+ * 岗点考勤导出
+ * @param {object} data
+ */
+export function exportPostAttend(data) {
+  window.open(process.env.API_HOST.base + API.attend.exportPostAttend + '?' + qs.stringify(data))
+}
+/**
+ * 人员督查导出
+ * @param {object} data
+ */
+export function exportUserOversee(data) {
+  window.open(process.env.API_HOST.base + API.attend.exportUserOversee + '?' + qs.stringify(data))
+}
+/**
+ * 岗点督查导出
+ * @param {object} data
+ */
+export function exportPostOversee(data) {
+  window.open(process.env.API_HOST.base + API.attend.exportPostOversee + '?' + qs.stringify(data))
 }

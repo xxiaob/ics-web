@@ -103,10 +103,11 @@ export default {
     },
     formatFormData() {
       if (this.options) {
-        const { overseeType, userId } = this.options
+        const { overseeType, userId, defaultUserId } = this.options
 
-        console.log(userId)
-        this.invitUserId = '56037241549488128'
+        console.log(userId, defaultUserId)
+        // this.invitUserId = '56037241549488128'
+        this.invitUserId = userId || defaultUserId
         this.overseeType = overseeType
         if (overseeType) {
           console.log('强制观摩')

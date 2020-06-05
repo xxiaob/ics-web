@@ -30,6 +30,7 @@
 <script>
 import { areaTypeList } from '@/api/areaType'
 import { ATTEND_OVERSEE_STATUSES } from '@/constant/Dictionaries'
+import { exportPostOversee } from '@/api/attend'
 export default {
   name: 'PostOverseeFilter',
   props: {
@@ -90,6 +91,7 @@ export default {
     },
     exportData() {
       console.log('exportData')
+      exportPostOversee(this.form)
     }
   }
 }

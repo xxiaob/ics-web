@@ -10,14 +10,14 @@
         <el-cascader :options="orgTree" v-model="form.orgId" :props="{expandTrigger: 'hover', emitPath: false,checkStrictly:true }" clearable></el-cascader>
       </el-form-item>
       <el-form-item prop="" label="时间">
-        <el-date-picker v-if="status===ATTEND_PERIODS.DAY" v-model="date" @change="changeDate" value-format="yyyy-MM-dd HH:mm:ss" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期">
+        <el-date-picker v-if="status===ATTEND_PERIODS.DAY" v-model="date" @change="changeDate" value-format="yyyy-MM-dd" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期">
         </el-date-picker>
         <div v-if="status===ATTEND_PERIODS.WEEK">
-          <el-date-picker v-model="form.startTime" value-format="yyyy-MM-dd HH:mm:ss" type="week" format="yyyy 第 WW 周" placeholder="开始周"></el-date-picker>
+          <el-date-picker v-model="form.startTime" value-format="yyyy-MM-dd" type="week" format="yyyy 第 WW 周" placeholder="开始周"></el-date-picker>
           <span>-</span>
-          <el-date-picker v-model="form.endTime" value-format="yyyy-MM-dd HH:mm:ss" type="week" format="yyyy 第 WW 周" placeholder="结束周"></el-date-picker>
+          <el-date-picker v-model="endWeek" value-format="yyyy-MM-dd HH:mm:ss" type="week" format="yyyy 第 WW 周" placeholder="结束周" @change="changeEndWeek"></el-date-picker>
         </div>
-        <el-date-picker v-if="status===ATTEND_PERIODS.MONTH" v-model="date" @change="changeDate" value-format="yyyy-MM-dd HH:mm:ss" type="monthrange" range-separator="-" start-placeholder="开始月" end-placeholder="结束月">
+        <el-date-picker v-if="status===ATTEND_PERIODS.MONTH" v-model="date" @change="changeDate" value-format="yyyy-MM" type="monthrange" range-separator="-" start-placeholder="开始月" end-placeholder="结束月">
         </el-date-picker>
       </el-form-item>
       <el-form-item class="jc-tabfilter-btns">
@@ -30,10 +30,21 @@
 </template>
 <script>
 import { ATTEND_PERIODS } from '@/constant/Dictionaries'
+import { exportMyAttend, exportPeopleAttend, exportPostAttend } from '@/api/attend'
+import moment from 'moment'
+
 export default {
   name: 'AttendFilter',
   props: {
     self: {
+      type: Boolean,
+      default: false
+    },
+    people: {
+      type: Boolean,
+      default: false
+    },
+    post: {
       type: Boolean,
       default: false
     },
@@ -52,13 +63,14 @@ export default {
         endTime: '',
         orgId: ''
       },
-      date: null
+      date: null,
+      endWeek: null
     }
   },
   methods: {
     changeStatus(value) {
       this.reset()
-      this.form.selectType = value
+      this.form.type = value
       this.onSubmit()
     },
     changeDate(value) {
@@ -69,6 +81,12 @@ export default {
         this.form.startTime = ''
         this.form.endTime = ''
       }
+    },
+    changeEndWeek(v) {
+      const timeStamp = new Date(v).getTime() + 6 * 24 * 60 * 60 * 1000
+      const endTime = moment(new Date(timeStamp)).format('YYYY-MM-DD')
+
+      this.form.endTime = endTime
     },
     reset() {
       this.$refs.form.resetFields()
@@ -89,6 +107,21 @@ export default {
     },
     exportData() {
       console.log('exportData')
+      if (this.self) {
+        exportMyAttend(this.form)
+      }
+      if (this.people) {
+        exportPeopleAttend(this.form)
+      }
+      if (this.post) {
+        exportPostAttend(this.form)
+      }
+    },
+    download(content) {
+      const blob = new Blob([content])
+      const url = URL.createObjectURL(blob)
+
+      console.log(url)
     }
   }
 }

@@ -22,6 +22,7 @@
 </template>
 <script>
 import { ATTEND_OVERSEE_STATUSES } from '@/constant/Dictionaries'
+import { exportUserOversee } from '@/api/attend'
 
 export default {
   name: 'PeopleOverseeFilter',
@@ -57,6 +58,7 @@ export default {
     },
     exportData() {
       console.log('exportData')
+      exportUserOversee(this.form)
     }
   }
 }
