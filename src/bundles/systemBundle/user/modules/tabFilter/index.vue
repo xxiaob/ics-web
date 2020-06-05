@@ -3,6 +3,7 @@
     <el-form ref="form" :inline="true" :model="form" class="jc-tabfilter-form" size="small">
       <el-form-item prop="positionId" label="职位">
         <el-select v-model="form.positionId" placeholder="职位">
+          <el-option label="全部" value=""></el-option>
           <el-option v-for="item in positions" :key="item.positionId" :label="item.positionName" :value="item.positionId"></el-option>
         </el-select>
       </el-form-item>
