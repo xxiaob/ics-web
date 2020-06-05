@@ -70,3 +70,19 @@ export function getUserLanguage() {
 export function setUserLanguage(info) {
   storageSet(STORAGE_KEY.LANG, info)
 }
+
+/**
+ * 获取用户菜单
+ * @returns {String} lan 语言信息
+ */
+export function getUserMenus() {
+  return storageGet(STORAGE_KEY.USER_MENUS)
+}
+
+/**
+ * 保存用户菜单
+ * @param {object} info 语言信息
+ */
+export function setUserMenus(info) {
+  storageSet(STORAGE_KEY.USER_MENUS, info)
+}

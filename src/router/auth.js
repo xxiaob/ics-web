@@ -4,6 +4,7 @@ export default [{
   name: 'login',
   component: () => import('@/bundles/authBundle/login'),
   meta: {
-    title: '登录'
+    title: '登录',
+    ignore: true
   }
 }]

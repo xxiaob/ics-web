@@ -1,80 +1,25 @@
 <template>
   <section>
     <el-menu :default-active="menuActive" @select="menuSelect" :collapse="isCollapse">
-      <el-submenu index="normalCt" class="jc-menu-item">
-        <template slot="title">
-          <i class="jc-menu-icon el-icon-setting"></i>
-          <span class="jc-menu-arrow-title" slot="title">常态管控</span>
-        </template>
-        <el-menu-item index="commandScreen">指挥大屏</el-menu-item>
-        <el-menu-item index="dataScreen">数据大屏</el-menu-item>
-      </el-submenu>
-      <el-submenu index="project" class="jc-menu-item">
-        <template slot="title">
-          <i class="jc-menu-icon el-icon-setting"></i>
-          <span class="jc-menu-arrow-title" slot="title">项目管理</span>
-        </template>
-        <el-menu-item index="emergencySupport">应急保障</el-menu-item>
-        <el-menu-item index="specialControl">专项管控</el-menu-item>
-      </el-submenu>
-      <el-menu-item index="taskEventManage" class="jc-menu-item">
-        <i class="jc-menu-icon el-icon-setting"></i>
-        <span class="jc-menu-arrow-title" slot="title">事件管理</span>
-      </el-menu-item>
-      <el-submenu index="question" class="jc-menu-item">
-        <template slot="title">
-          <i class="jc-menu-icon el-icon-setting"></i>
-          <span class="jc-menu-arrow-title" slot="title">问题管理</span>
-        </template>
-        <el-menu-item index="questionProcess">问题处理</el-menu-item>
-        <el-menu-item index="questionSearch">问题查询</el-menu-item>
-      </el-submenu>
-      <el-submenu index="task" class="jc-menu-item">
-        <template slot="title">
-          <i class="jc-menu-icon el-icon-setting"></i>
-          <span class="jc-menu-arrow-title" slot="title">任务管理</span>
-        </template>
-        <el-menu-item index="taskProcess">任务处理</el-menu-item>
-        <el-menu-item index="taskSearch">任务查询</el-menu-item>
-      </el-submenu>
-      <el-submenu index="attend" class="jc-menu-item">
-        <template slot="title">
-          <i class="jc-menu-icon el-icon-setting"></i>
-          <span class="jc-menu-arrow-title" slot="title">考勤管理</span>
-        </template>
-        <el-menu-item index="myAttend">个人考勤</el-menu-item>
-        <el-menu-item index="peopleAttend">人员考勤</el-menu-item>
-        <el-menu-item index="postAttend">岗点考勤</el-menu-item>
-      </el-submenu>
-      <el-submenu index="oversee" class="jc-menu-item">
-        <template slot="title">
-          <i class="jc-menu-icon el-icon-setting"></i>
-          <span class="jc-menu-arrow-title" slot="title">督查管理</span>
-        </template>
-        <el-menu-item index="peopleOversee">人员督查</el-menu-item>
-        <el-menu-item index="postOversee">岗点督查</el-menu-item>
-      </el-submenu>
-      <el-submenu index="system" class="jc-menu-item">
-        <template slot="title">
-          <i class="jc-menu-icon el-icon-setting"></i>
-          <span class="jc-menu-arrow-title" slot="title">系统设置</span>
-        </template>
-        <el-menu-item index="systemOrganization">组织管理</el-menu-item>
-        <el-menu-item index="systemGrid">网格设置</el-menu-item>
-        <el-menu-item index="systemUser">用户管理</el-menu-item>
-        <el-menu-item index="systemRole">角色管理</el-menu-item>
-        <el-menu-item index="systemPosition">职位管理</el-menu-item>
-        <el-menu-item index="systemAreaType">区域类型</el-menu-item>
-        <el-menu-item index="systemPttGroup">PTT群组</el-menu-item>
-        <el-menu-item index="systemDevice">设备管理</el-menu-item>
-        <el-menu-item index="systemDeviceUpdate">设备升级</el-menu-item>
-        <el-menu-item index="systemMenus">菜单管理</el-menu-item>
-      </el-submenu>
+      <template v-for="menu in menus">
+        <el-submenu :index="menu.index" class="jc-menu-item" :key="menu.id" v-if="menu.children && menu.children.length">
+          <template slot="title">
+            <i class="jc-menu-icon iconfont" :class="menu.icon"></i>
+            <span class="jc-menu-arrow-title" slot="title">{{menu.name}}</span>
+          </template>
+          <el-menu-item v-for="item in menu.children" :index="item.index" :key="item.id">{{item.name}}</el-menu-item>
+        </el-submenu>
+        <el-menu-item :index="menu.index" class="jc-menu-item" :key="menu.id" v-else>
+          <i class="jc-menu-icon iconfont" :class="menu.icon"></i>
+          <span class="jc-menu-arrow-title" slot="title">{{menu.name}}</span>
+        </el-menu-item>
+      </template>
     </el-menu>
   </section>
 </template>
 
 <script>
+import { mapState } from 'vuex'
 export default {
   name: 'CommonMenus',
   props: {
@@ -87,6 +32,9 @@ export default {
     return {
       menuActive: this.$route.name
     }
+  },
+  computed: {
+    ...mapState('user', { menus: state => state.menus })
   },
   watch: {
     '$route'(to) {

@@ -49,10 +49,47 @@ let routerOptions = {
 
 let router = new Router(routerOptions)
 
+//处理菜单权限
+import { getUser, getUserMenus } from '@/libs/storage'
+
+let checkMenu = function (name, menus) {
+  let hasMenu = false
+
+  for (let i = 0; i < menus.length; i++) {
+    if (name == menus[i].index) {
+      hasMenu = true
+    } else {
+      hasMenu = checkMenu(name, menus[i].children || [])
+    }
+    if (hasMenu) {
+      break
+    }
+  }
+  return hasMenu
+}
+
 //设置router 跳转配置
 router.beforeEach((to, from, next) => {
-  setTitle(to.meta.title || 'PC')
-  next()
+  console.log('router.beforeEach', to)
+  if (to.meta.ignore) {
+    setTitle(to.meta.title)
+    next()
+  } else {
+    let user = getUser()
+
+    if (user) {
+      let menus = getUserMenus()
+
+      if (to.name == 'index' || checkMenu(to.name, menus)) {
+        setTitle(to.meta.title)
+        next()
+      } else {
+        next({ name: 'index' })
+      }
+    } else {
+      next({ name: 'login' })
+    }
+  }
 })
 
 export default router

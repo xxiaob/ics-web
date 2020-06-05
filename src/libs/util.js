@@ -3,7 +3,7 @@
  * @param {string} title 标题title
  */
 export function setTitle(title) {
-  window.document.title = title
+  window.document.title = title || 'YangChao'
 }
 
 let localData = {

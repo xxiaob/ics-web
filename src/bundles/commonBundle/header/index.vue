@@ -31,11 +31,6 @@ export default {
       visible: false
     }
   },
-  mounted() {
-    if (!this.isLogin) {
-      this.$router.push({ name: 'login', query: { callbackUrl: this.$router.history.current.fullPath.split('?')[0] } })
-    }
-  },
   computed: {
     ...mapState('user', {
       user: state => state.user
