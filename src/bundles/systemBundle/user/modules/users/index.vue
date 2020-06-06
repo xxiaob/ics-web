@@ -19,12 +19,12 @@
         <el-table-column prop="positionName" label="职位"></el-table-column>
         <el-table-column label="默认接收人">
           <template slot-scope="scope">
-            <el-switch v-model="scope.row.isDefReceiver" active-value="1" inactive-value="0" @change="userStateChange(scope.row,1)"></el-switch>
+            <el-switch v-model="scope.row.isDefUploadReceiver" active-value="1" inactive-value="0" @change="userStateChange(scope.row,1)"></el-switch>
           </template>
         </el-table-column>
         <el-table-column label="默认接警人">
           <template slot-scope="scope">
-            <el-switch v-model="scope.row.isDefUploadReceiver" active-value="1" inactive-value="0" @change="userStateChange(scope.row,2)"></el-switch>
+            <el-switch v-model="scope.row.isDefReceiver" active-value="1" inactive-value="0" @change="userStateChange(scope.row,2)"></el-switch>
           </template>
         </el-table-column>
         <el-table-column prop="createTime" label="创建时间"></el-table-column>
@@ -128,7 +128,7 @@ export default {
       })
     },
     userStateChange(row, type) {
-      let key = type == 1 ? 'isDefReceiver' : 'isDefUploadReceiver'
+      let key = type == 1 ? 'isDefUploadReceiver' : 'isDefReceiver'
 
       let changeName = type == 1 ? '默认接收人' : '默认接警人'
 

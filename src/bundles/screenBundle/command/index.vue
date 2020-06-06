@@ -51,8 +51,10 @@ export default {
   methods: {
     initData() {
       myJcMap.init(this.$refs.myMap).then(() => {
-        this.$refs.mapSearch.initData(myJcMap) //初始化搜索对象
         this.messageComponent = 'CommandMessage'
+        this.$nextTick(() => {
+          this.$refs.mapSearch.initData(myJcMap) //初始化搜索对象
+        })
       })
       this.$EventBus.$on('view-component-change', this.viewComponentChange) //监听 内容窗口改变
       this.$EventBus.$on('view-component-back', this.viewBack) //监听 内容窗口返回
