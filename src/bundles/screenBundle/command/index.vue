@@ -60,6 +60,9 @@ export default {
       this.$EventBus.$on('view-component-back', this.viewBack) //监听 内容窗口返回
       this.$EventBus.$on('message-component-change', this.messageComponentChange) //消息 内容窗口改变
     },
+    getMyJcMap() {
+      return myJcMap//获取地图
+    },
     viewComponentChange(data) {
       //内容窗口改变处理,如果队列中存在,则移除再添加
       for (let i = 0; i < this.viewComponentQueue.length; i++) {

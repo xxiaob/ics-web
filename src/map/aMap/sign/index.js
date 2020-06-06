@@ -98,6 +98,26 @@ class JcMapSign extends JcMapSignBase {
   }
 
   /**
+   * 获取地图对象
+   * @returns {Array} 地图对象
+   */
+  getMapTargets() {
+    let targets = []
+
+    if (this.boundaries && this.boundaries.length) {
+      this.boundaries.forEach(item => {
+        if (item.target) {
+          targets.push(item.target)
+        }
+      })
+    }
+    if (this.marker) {
+      targets.push(...this.marker.getMapTargets())
+    }
+    return targets
+  }
+
+  /**
    * 添加事件监听
    * @param {*} event 事件名称
    * @param {*} cb 回调

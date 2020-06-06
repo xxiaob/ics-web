@@ -59,20 +59,14 @@ class JcMap extends JcMapBase {
 
   /**
    * 地图自适应 显示
-   * @param {Array<JcMapSign>} signs JcMapSign对象数组
+   * @param {Array<JcMapSign | JcMapMarker>} signs 地图对象数组
    */
   fitView(signs) {
     if (signs && signs.length) {
       let targets = []
 
       signs.forEach(sign => {
-        if (sign.boundaries && sign.boundaries.length) {
-          sign.boundaries.forEach(item => {
-            if (item.target) {
-              targets.push(item.target)
-            }
-          })
-        }
+        targets.push(...sign.getMapTargets())
       })
       this.map.setFitView(targets)
     } else {

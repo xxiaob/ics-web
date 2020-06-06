@@ -86,6 +86,11 @@ class JcMapSign {
   }
 
   /**
+   * 获取地图对象
+   */
+  getMapTargets() { }
+
+  /**
    * 添加事件监听
    * @param {*} event 事件名称
    * @param {*} cb 回调

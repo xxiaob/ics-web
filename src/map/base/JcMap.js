@@ -42,7 +42,7 @@ class JcMap {
 
   /**
    * 添加标记
-   * @param {Array<JcMapSign>} signs JcMapSign对象数组
+   * @param {Array<JcMapSign | JcMapMarker>} signs 地图对象数组
    */
   async addSign(signs) {
     if (signs && signs.length) {
@@ -54,7 +54,7 @@ class JcMap {
 
   /**
    * 删除标记
-   * @param {Array<JcMapSign>} signs JcMapSign对象数组，如果signs为空则是清除所有数据
+   * @param {Array<JcMapSign | JcMapMarker>} signs 地图对象数组，如果signs为空则是清除所有数据
    */
   async removeSign(signs) {
     if (signs && signs.length) {

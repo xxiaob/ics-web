@@ -78,6 +78,11 @@ class JcMapMarket {
   getPosition() { }
 
   /**
+   * 获取地图对象
+   */
+  getMapTargets() { }
+
+  /**
    * 日志输出
    */
   console() {

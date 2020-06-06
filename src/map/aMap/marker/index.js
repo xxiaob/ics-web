@@ -73,5 +73,13 @@ class JcMapmarker extends JcMapmarkerBase {
   off(event, ...args) {
     this.marker.off(EventTrans[event] || event, ...args)
   }
+
+  /**
+   * 获取地图对象
+   * @returns {Array} 地图对象
+   */
+  getMapTargets() {
+    return [this.marker]
+  }
 }
 export default JcMapmarker

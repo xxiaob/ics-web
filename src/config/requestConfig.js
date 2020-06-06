@@ -19,7 +19,7 @@ let errorRun = () => {
 axios.interceptors.request.use(function (config) {
   // 这里统一处理请求头配置
   config.headers.token = getToken() // 设置请求用户token
-  config.headers.deviceType = 'web'
+  config.headers.deviceType = 0
   return config
 }, function (error) {
   errorRun()
