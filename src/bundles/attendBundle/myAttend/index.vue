@@ -30,6 +30,8 @@
 import { myAttendList } from '@/api/attend'
 import PaginationMixins from '@/mixins/PaginationMixins'
 import { ATTEND_RANGE_STATUSES } from '@/constant/Dictionaries'
+import { createNamespacedHelpers } from 'vuex'
+const { mapState } = createNamespacedHelpers('user')
 
 export default {
   name: 'MyAttendIndex',
@@ -47,6 +49,9 @@ export default {
   async created() {
     this.initData()
   },
+  computed: {
+    ...mapState(['user'])
+  },
   methods: {
     formatStatus(row, column, cellValue) {
       return ATTEND_RANGE_STATUSES.toString(cellValue.toString())
@@ -55,7 +60,7 @@ export default {
       if (!this.loading) {
         this.loading = true
         try {
-          const { total, resultList } = await myAttendList({ ...this.filter, ...this.page })
+          const { total, resultList } = await myAttendList({ userId: this.user.userId, ...this.filter, ...this.page })
 
           this.page.total = total
           this.list = resultList.map(item=>({ ...item, time: `${item.startTime} ~ ${item.endTime}` }))
