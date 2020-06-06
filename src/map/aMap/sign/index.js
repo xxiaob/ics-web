@@ -38,8 +38,10 @@ class JcMapSign extends JcMapSignBase {
    * 显示中心点和说明
    * @param {Boolean} tipVisible tip是否可见
    */
-  showTip(tipVisible) {
-    this.tipVisible = tipVisible == false ? false : true
+  showTip(tipVisible = null) {
+    if (tipVisible !== null) {
+      this.tipVisible = tipVisible == false ? false : true
+    }
     if (this.tipVisible) {
       if (this.marker) {
         this.marker.show()
@@ -72,14 +74,18 @@ class JcMapSign extends JcMapSignBase {
       this.areaVisible = areaVisible == false ? false : true
     }
 
-    if (this.areaVisible && this.boundaries && this.boundaries.length) {
-      let targets = []
+    if (this.areaVisible) {
+      if (this.boundaries && this.boundaries.length) {
+        let targets = []
 
-      this.boundaries.forEach(item => {
-        item.target = paintingSign(this, item)
-        targets.push(item.target)
-      })
-      this.map.map.add(targets)
+        this.boundaries.forEach(item => {
+          item.target = paintingSign(this, item)
+          targets.push(item.target)
+        })
+        this.map.map.add(targets)
+      }
+    } else {
+      this.hideArea()
     }
   }
 

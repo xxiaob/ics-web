@@ -54,15 +54,13 @@ class JcMap {
 
   /**
    * 删除标记
-   * @param {Array<JcMapSign | JcMapMarker>} signs 地图对象数组，如果signs为空则是清除所有数据
+   * @param {Array<JcMapSign | JcMapMarker>} signs 地图对象数组
    */
   async removeSign(signs) {
     if (signs && signs.length) {
       signs.forEach(item => {
         item.hide()
       })
-    } else {
-      this.clearSign() //清除所有标记
     }
   }
 

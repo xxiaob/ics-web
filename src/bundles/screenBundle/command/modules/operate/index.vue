@@ -109,11 +109,13 @@ export default {
     messageChange(name) {
       this.$EventBus.$emit('message-component-change', { component: name, options: null }) //通知窗口改变
     },
-    areaChange() {
-      //网格显示切换
+    areaChange(areas) {
+      console.log('operate区域切换', areas)
+      this.$EventBus.$emit('show-area-change', areas) //通知网格显示改变
     },
-    wordChange() {
-      //文字显示切换
+    wordChange(words) {
+      console.log('operate文字显示切换', words)
+      this.$EventBus.$emit('show-word-change', words) //通知文字显示改变
     },
     togetherChange() {
       //聚合显示切换

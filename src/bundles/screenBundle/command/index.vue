@@ -20,11 +20,13 @@
 </template>
 <script>
 import { JcMap } from '@/map'
+import OrgMixins from './modules/mixins/orgMixins'
 
 let myJcMap //个人 map 对象
 
 export default {
   name: 'ScreenCommand',
+  mixins: [OrgMixins],
   components: {
     CommandHeader: () => import('./modules/header'), //顶部
     CommandOperate: () => import('./modules/operate'), //功能操作区域
