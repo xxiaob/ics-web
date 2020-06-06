@@ -50,7 +50,7 @@ export default {
       this.$refs.form.validate(valid => {
         if (valid) {
           updPwd({ oldPWD: md5(this.form.oldPWD), newPWD: md5(this.form.newPWD) }).then(() => {
-            this.$message.success('操作成功')
+            this.$message.success('密码修改成功')
             this.dialogVisible = false
             this.$emit('save-success')
             this.loading = false

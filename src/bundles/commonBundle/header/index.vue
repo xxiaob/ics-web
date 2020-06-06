@@ -14,7 +14,7 @@
         </div>
       </div>
       <user-detail :userId="user.userId" title="个人信息" :visible.sync="visible"></user-detail>
-      <reset-pwd :visible.sync="resetPwdVisible"></reset-pwd>
+      <reset-pwd :visible.sync="resetPwdVisible" @save-success="logout"></reset-pwd>
     </template>
   </header>
 </template>
