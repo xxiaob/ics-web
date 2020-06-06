@@ -10,8 +10,13 @@ export default {
       visible: true
     }
   },
+  mounted() {
+    this.initData()
+  },
   methods: {
+    initData() {
 
+    }
   },
   activated() {
     //设置该窗口显示

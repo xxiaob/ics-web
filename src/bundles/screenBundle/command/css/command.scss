@@ -75,6 +75,7 @@ $jc-screen-height: 40px;
   }
 
   .jc-weather {
+    cursor: pointer;
     @extend .jc-header-item;
   }
 

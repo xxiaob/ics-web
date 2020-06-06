@@ -52,6 +52,7 @@ export default {
       } catch (error) {
         console.log(error)
       }
+      return false
     },
     formatOrg(child) {
       if (child && child.length) {
