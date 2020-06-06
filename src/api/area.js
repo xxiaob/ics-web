@@ -73,3 +73,11 @@ export function getOrgInfo(orgId) {
 export function getUsableAdCodeList() {
   return axios.post(API.area.getUsableAdCodeList)
 }
+
+/**
+ * 网格列表
+ * @returns {Object} axios 对象
+ */
+export function areaGridList() {
+  return axios.post(API.area.gridList)
+}

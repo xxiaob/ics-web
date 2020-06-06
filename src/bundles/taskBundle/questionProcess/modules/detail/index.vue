@@ -38,7 +38,8 @@
       </el-form-item>
     </el-form>
     <div class="jc-detail-footer" v-if="form.handle">
-      <el-button @click="toSuperior" :loading="loading" type="primary" size="small" v-if="!firstOrgIds.includes(form.orgId)">反馈至上级</el-button>
+      <el-button @click="toSuperior" :loading="loading" type="primary" size="small">反馈至上级</el-button>
+      <!-- v-if="!firstOrgIds.includes(form.orgId)" -->
       <el-button @click="generateTask" :loading="loading" type="primary" size="small">生成任务</el-button>
       <el-button @click="closeQuestion" :loading="loading" size="small">关闭问题</el-button>
     </div>

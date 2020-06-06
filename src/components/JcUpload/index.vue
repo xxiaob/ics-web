@@ -1,5 +1,5 @@
 <template>
-  <el-upload :action="uploadUrl" :accept="accept" :headers="uploadHeaders" :before-upload="handleBeforeUpload" :on-success="handleSuccess" :on-remove="handleRemove" :file-list="fileList">
+  <el-upload :action="uploadUrl" :accept="accept" :headers="uploadHeaders" :before-upload="handleBeforeUpload" :on-success="handleSuccess" :show-file-list="false">
     <el-button size="small" type="primary" :loading="loading">点击上传</el-button>
   </el-upload>
 </template>
@@ -24,16 +24,6 @@ export default {
       uploadUrl: process.env.API_HOST.base + api.upload,
       uploadHeaders: { token: getToken() },
       loading: false
-    }
-  },
-  computed: {
-    fileList() {
-      let files = []
-
-      if (this.urls && this.urls.length) {
-        files = this.urls.map(url=>({ name: url, url: url }))
-      }
-      return files
     }
   },
   methods: {

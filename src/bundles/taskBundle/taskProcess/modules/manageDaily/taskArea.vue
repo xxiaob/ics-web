@@ -13,6 +13,7 @@
 
 <script>
 import { TASK_AREA_TYPES } from '@/constant/Dictionaries'
+import { areaGridList } from '@/api/area'
 
 export default {
   name: 'TaskProcessManageDailyArea',
@@ -36,6 +37,7 @@ export default {
       orgGrid: [],
       filterText: '',
       filterArr: [],
+      filterArrGrid: [],
       objTree: {}
     }
   },
@@ -48,7 +50,10 @@ export default {
       }
     }
   },
-  created() {
+  async created() {
+    const res = await areaGridList()
+
+    this.orgGrid = this.formatGridTree(res)
     setTimeout(()=>{
       this.filterArr = Object.keys(this.formatTreeToObj(this.orgTree))
     })
@@ -66,6 +71,27 @@ export default {
     }
   },
   methods: {
+    formatGridTree(tree) {
+      let trees = []
+
+      if (tree && tree.length) {
+        tree.forEach(item => {
+          let node = {
+            disabled: item.areaId ? false : true,
+            id: item.areaId || item.orgId,
+            label: item.areaName || item.orgName
+          }
+
+          const children = [...(item.children || []), ...(item.areaChildren || [])]
+
+          if (children && children.length) {
+            node.children = this.formatGridTree(children)
+          }
+          trees.push(node)
+        })
+      }
+      return trees
+    },
     check(checkedNodes, { checkedKeys }) {
       this.$emit('update:selectedAreas', checkedKeys)
     },
@@ -93,18 +119,30 @@ export default {
       }
     },
     changeAreaType(value) {
+      if (value === TASK_AREA_TYPES.ORG) {
+        this.filterArr = Object.keys(this.formatTreeToObj(this.orgTree))
+      } else {
+        this.filterArr = Object.keys(this.formatTreeToObj(this.orgGrid, true))
+        console.log(this.filterArr)
+      }
       this.$emit('update:areaType', value)
       this.$emit('update:selectedAreas', [])
     },
-    formatTreeToObj(child) {
+    formatTreeToObj(child, grid) {
       let objs = {}
 
       if (child && child.length) {
         child.forEach(item => {
           if (item.children && item.children.length) {
-            objs = Object.assign(objs, this.formatTreeToObj(item.children))
+            objs = Object.assign(objs, this.formatTreeToObj(item.children, grid))
           }
-          objs[item.value] = item.label
+          if (grid) {
+            if (item.disabled === false) {
+              objs[item.id] = item.label
+            }
+          } else {
+            objs[item.id] = item.label
+          }
         })
       }
       return objs

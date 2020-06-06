@@ -68,7 +68,8 @@ export default {
     update: 'area-service/area/update',
     del: 'area-service/area/delete',
     getOrgInfo: 'area-service/area/getOrgInfo',
-    getUsableAdCodeList: 'area-service/area/getUsableAdCodeList'
+    getUsableAdCodeList: 'area-service/area/getUsableAdCodeList',
+    gridList: 'area-service/area/getAreaListByOrgId'
   },
   deviceUpdate: {
     //设备升级
