@@ -1,7 +1,7 @@
 <template>
   <div class="jc-screen-header no-select">
     <div class="jc-header-left">
-      <div class="jc-weather">28 ℃</div>
+      <div class="jc-weather"></div>
       <div class="jc-time" v-text="time"></div>
     </div>
     <div class="jc-screen-title">南京市常态管控指挥大屏</div>
@@ -80,7 +80,7 @@ export default {
 
         let result = await myWeather.getWeather(org.areaCode)
 
-        console.log('common')
+        console.log('command-header-weather', result)
       }
     },
     viewChange(name) {
