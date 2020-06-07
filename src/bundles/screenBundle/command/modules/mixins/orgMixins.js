@@ -47,7 +47,9 @@ export default {
 
       if (data && data.length) {
         data.forEach(item => {
-          if (item.orgId != this.org.orgId) {
+          if (item.orgId == this.org.orgId) {
+            this.$EventBus.$emit('org-adcode-change', item)
+          } else {
             areas.push(new JcMapSign({
               id: item.orgId,
               map: myJcMap,

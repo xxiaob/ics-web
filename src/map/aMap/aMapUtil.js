@@ -69,3 +69,28 @@ export function getCenter(boundary) {
   }
   return []
 }
+
+/**
+ * 获取天气
+ * @param {String} city 地区名称
+ */
+export async function getLiveWeather(city) {
+  let map = await initAmap()
+
+  let result = await new Promise(function (resolve, reject) {
+    map.plugin(['AMap.Weather'], function () {
+      let amapWeather = new AMap.Weather()
+
+      amapWeather.getLive(city, function (err, data) {
+        console.log('amap getLiveWeather:', err, data)
+        if (err) {
+          reject('获取天气失败')
+        } else {
+          resolve(data)
+        }
+      })
+    })
+  })
+
+  return result
+}

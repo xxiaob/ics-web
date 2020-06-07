@@ -27,7 +27,7 @@ export default {
   mixins: [TreesFilterMixins],
   props: ['options'],
   components: {
-    ViewWarp: () => import('../commont/viewWarp')
+    ViewWarp: () => import('../common/viewWarp')
   },
   data() {
     return {

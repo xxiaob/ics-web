@@ -19,6 +19,7 @@
 </template>
 <script>
 import moment from 'moment'
+import JcWeather from '@/components/JcWeather'
 import { organizationList } from '@/api/organization'
 
 let weeks = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六']
@@ -39,6 +40,7 @@ export default {
   created() {
     this.timeInterval = setInterval(this.setTime, 1000)
     this.initData()
+    this.$EventBus.$on('org-adcode-change', this.setWeather) //监听需要切换天气
   },
   methods: {
     async initData() {
@@ -72,6 +74,15 @@ export default {
       this.org = { ...orgMap[orgId] }
       this.$EventBus.$emit('org-change', this.org) //使用事件总线进行级别切换通知
     },
+    async setWeather(org) {
+      if (org && org.areaCode) {
+        let myWeather = new JcWeather()
+
+        let result = await myWeather.getWeather(org.areaCode)
+
+        console.log('common')
+      }
+    },
     viewChange(name) {
       this.$EventBus.$emit('view-component-change', { component: name, options: null }) //通知窗口改变
     },
@@ -81,6 +92,8 @@ export default {
   },
   beforeDestroy() {
     clearInterval(this.timeInterval)
+    //去除事件监听
+    this.$EventBus.$off('org-adcode-change', this.setWeather)
   }
 }
 </script>
