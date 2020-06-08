@@ -496,4 +496,41 @@ $jc-screen-height: 40px;
     opacity: 0.4;
     z-index: 6;
   }
+
+  .jc-message-content {
+    position: relative;
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: 100%;
+  }
+
+  .jc-message-item {
+    position: relative;
+    display: flex;
+    height: 40px;
+    line-height: 40px;
+    transform: scaleY(1) translateX(0);
+    opacity: 1;
+    will-change: transform, opacity;
+  }
+
+  /* ------ 消息列表进出场动画 ------- */
+  .jc-list-enter-active,
+  .jc-list-leave-active {
+    transition: transform .6s, opacity .6s;
+  }
+
+  .jc-list-enter,
+  .jc-list-leave-to {
+    opacity: 0;
+    transform: scaleY(0.1) translateX(30px);
+  }
+
+  .jc-list-leave-active {
+    position: absolute;
+  }
+
+  .jc-list-move {
+    transition: transform .6s;
+  }
 }
