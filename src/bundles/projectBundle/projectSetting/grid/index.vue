@@ -115,7 +115,7 @@ $jc-map-header-height: 40px; //map header高度
   overflow: hidden;
   opacity: 0;
   z-index: 1;
-  transform: scale(0.01);
+  transform: scale(0.1);
   transition: all 0.4s;
   &.jc-map-show {
     opacity: 1;
