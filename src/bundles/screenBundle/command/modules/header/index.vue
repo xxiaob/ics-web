@@ -1,7 +1,15 @@
 <template>
   <div class="jc-screen-header no-select">
     <div class="jc-header-left">
-      <div class="jc-weather"></div>
+      <div class="jc-weather" v-if="weather" :class="getWeatherStyle()">
+        <span v-text="weather.temperature + '℃'"></span>
+        <div class="jc-weather-detail">
+          <div class="jc-w-detail" :class="getWeatherStyle()">{{weather.weather}}<br />{{weather.temperature + '℃'}}</div>
+          <div class="jc-weather-item">风向：{{weather.windDirection}}</div>
+          <div class="jc-weather-item">风力：{{weather.windPower}}</div>
+          <div class="jc-weather-item">空气湿度：{{weather.humidity}}</div>
+        </div>
+      </div>
       <div class="jc-time" v-text="time"></div>
     </div>
     <div class="jc-screen-title" v-text="title"></div>
@@ -22,8 +30,18 @@ import moment from 'moment'
 import JcWeather from '@/components/JcWeather'
 import { organizationList } from '@/api/organization'
 import { PROJECT_TYPES } from '@/constant/Dictionaries'
+import { JC_WEATHER } from '@/constant/Dictionaries'
 
-let weeks = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六']
+let weeks = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'] //星期数据
+
+//天气和样式映射
+let weatherStyleMapping = {
+  [JC_WEATHER.SUNNY]: 'jc-weather-sunny',
+  [JC_WEATHER.OVERCAST]: 'jc-weather-overcast',
+  [JC_WEATHER.SMOG]: 'jc-weather-smog',
+  [JC_WEATHER.RAIN]: 'jc-weather-rain',
+  [JC_WEATHER.SNOW]: 'jc-weather-snow'
+}
 
 let orgMap = {} //存储组织id和住址信息的对应关系
 
@@ -32,7 +50,7 @@ export default {
   data() {
     return {
       title: '--',
-      weather: {},
+      weather: null,
       time: '',
       project: null,
       orgs: [], //存储组织树,用于cascader选择器使用
@@ -91,6 +109,9 @@ export default {
       }
       return []
     },
+    getWeatherStyle(type) {
+      return weatherStyleMapping[type || this.weather.type]
+    },
     orgChange(orgId) {
       //行政区域切换
       this.org = { ...orgMap[orgId] }
@@ -100,9 +121,9 @@ export default {
       if (org && org.areaCode) {
         let myWeather = new JcWeather()
 
-        let result = await myWeather.getWeather(org.areaCode)
+        this.weather = await myWeather.getWeather(org.areaCode)
 
-        console.log('command-header-weather', result)
+        console.log('command-header-weather', this.weather)
       }
     },
     viewChange(name) {

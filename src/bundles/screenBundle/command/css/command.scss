@@ -77,6 +77,70 @@ $jc-screen-height: 40px;
   .jc-weather {
     cursor: pointer;
     @extend .jc-header-item;
+    padding-left: 36px;
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-size: 30px 30px;
+
+    .jc-weather-detail {
+      position: absolute;
+      top: $jc-screen-height + $jc-default-dis/2;
+      padding: $jc-default-dis;
+      width: 180px;
+      height: 168px;
+      background: url(../modules/header/assets/weather-bg.png) no-repeat center;
+      background-size: 100% 100%;
+      left: 0;
+      visibility: hidden;
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: opacity .6s, transform .6s;
+      will-change: transform, opacity;
+    }
+
+    &:hover {
+      .jc-weather-detail {
+        visibility: visible;
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .jc-w-detail {
+      padding-left: 50px;
+      background-repeat: no-repeat;
+      background-position: left center;
+      background-size: 40px 40px;
+      line-height: 24px;
+      margin-bottom: $jc-default-dis/2;
+      font-size: $jc-font-size-medium;
+    }
+
+    .jc-weather-item {
+      height: 22px;
+      line-height: 22px;
+      font-size: $jc-font-size-small;
+    }
+  }
+
+  .jc-weather-sunny {
+    background-image: url(../modules/header/assets/sunny.png);
+  }
+
+  .jc-weather-snow {
+    background-image: url(../modules/header/assets/snow.png);
+  }
+
+  .jc-weather-overcast {
+    background-image: url(../modules/header/assets/overcast.png);
+  }
+
+  .jc-weather-smog {
+    background-image: url(../modules/header/assets/smog.png);
+  }
+
+  .jc-weather-rain {
+    background-image: url(../modules/header/assets/rain.png);
   }
 
   .jc-time {

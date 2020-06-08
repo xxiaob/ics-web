@@ -8,7 +8,7 @@
             <div class="jc-text-warp" v-text="data.name"></div>
           </div>
           <div class="jc-tree-options" v-on:click.stop>
-            <el-button type="text" size="small" icon="el-icon-map-location"></el-button>
+            <el-button type="text" size="small" icon="el-icon-map-location" v-if="data.areaId"></el-button>
           </div>
         </div>
       </el-tree>
@@ -21,11 +21,12 @@ import { organizationList } from '@/api/organization'
 import { JcIcons } from '@/config/JcIconConfig'
 import { areaList } from '@/api/area'
 import { AREAS_TYPE, AREAS_SEARCH_TYPE } from '@/constant/CONST'
+import { PROJECT_TYPES } from '@/constant/Dictionaries'
 
 export default {
   name: 'ScreenCommandGrid',
   mixins: [TreesFilterMixins],
-  props: ['options'],
+  props: ['options', 'project'],
   components: {
     ViewWarp: () => import('../common/viewWarp')
   },
@@ -45,19 +46,26 @@ export default {
   methods: {
     async initData() {
       this.loading = true
-      try {
-        const res = await organizationList()
+      //初始化组织,如果是专项,则需要初始化默认组织
+      if (PROJECT_TYPES.EmergencySupport == this.project.projectType) {
+        this.expandedKeys = [this.project.orgId]
+        this.parentNode = [{ id: this.project.orgId, orgId: this.project.orgId, name: this.project.projectName }]
+      } else {
+        try {
+          const res = await organizationList()
 
-        if (res && res.length) {
-          let item = res[0]
+          if (res && res.length) {
+            let item = res[0]
 
-          this.expandedKeys = [item.orgId]
-          this.parentNode = [{ id: item.orgId, pid: item.pid, pName: '--', orgId: item.orgId, name: item.orgName, view: false }]
-          this.formatOrg(item.children, item.orgName)
+            this.expandedKeys = [item.orgId]
+            this.parentNode = [{ id: item.orgId, pid: item.pid, pName: '--', orgId: item.orgId, name: item.orgName }]
+            this.formatOrg(item.children, item.orgName)
+          }
+        } catch (error) {
+          console.log(error)
         }
-      } catch (error) {
-        console.log(error)
       }
+
       this.loading = false
     },
     formatOrg(child, pName = '--') {
@@ -65,7 +73,7 @@ export default {
         let orgs = []
 
         child.forEach(item => {
-          orgs.push({ id: item.orgId, pid: item.pid, pName, orgId: item.orgId, name: item.orgName, view: false })
+          orgs.push({ id: item.orgId, pid: item.pid, pName, orgId: item.orgId, name: item.orgName })
           this.formatOrg(item.children, item.orgName)
         })
         this.orgs[orgs[0].pid] = orgs
@@ -82,7 +90,7 @@ export default {
     async getNodes(node) {
       let result = []
 
-      let params = { searchType: AREAS_SEARCH_TYPE.GRID }
+      let params = { projectId: this.project.projectId, searchType: AREAS_SEARCH_TYPE.GRID }
 
       if (node.level === 0) {
         await this.initData()
@@ -101,7 +109,7 @@ export default {
         console.log('查询的area list：', res)
         if (res && res.length) {
           res.forEach(item => {
-            result.push({ id: item.areaId, pid: item.pid, pName: node.data.name, orgId: item.orgId, areaId: item.areaId, desc: item.desc, areaTypeId: item.areaTypeId, name: item.areaName, icon: item.icon, view: false })
+            result.push({ id: item.areaId, pid: item.pid, pName: node.data.name, orgId: item.orgId, areaId: item.areaId, desc: item.desc, areaTypeId: item.areaTypeId, name: item.areaName, icon: item.icon })
           })
         }
       }
