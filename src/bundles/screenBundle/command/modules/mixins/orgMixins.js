@@ -12,8 +12,8 @@ export default {
   data() {
     return {
       org: null,
-      tipVisible: false,
-      areaVisible: true
+      orgTipVisible: false, //组织是否显示名称
+      orgAreaVisible: true //组织是否显示区域
     }
   },
   created() {
@@ -55,8 +55,8 @@ export default {
               map: myJcMap,
               name: item.areaName,
               center: item.center.split(','),
-              tipVisible: this.tipVisible,
-              areaVisible: this.areaVisible,
+              tipVisible: this.orgTipVisible,
+              areaVisible: this.orgAreaVisible,
               extData: { orgId: item.orgId, adcode: item.areaCode, areaId: item.areaId, areaName: item.areaName },
               boundaries: apiBoundariesFormat(item)
             }))
@@ -72,26 +72,26 @@ export default {
       //组织区域显示
       if ((areas || areas.length).filter(id => id == 'org').length) {
         //如果存在组织区域显示，则显示区域
-        this.areaVisible = true
+        this.orgAreaVisible = true
       } else {
         //不存在则显示
-        this.areaVisible = false
+        this.orgAreaVisible = false
       }
       orgAreas.forEach(item => {
-        item.showArea(this.areaVisible)
+        item.showArea(this.orgAreaVisible)
       })
     },
     orgShowWordChange(words) {
       //组织文字显示
       if ((words || words.length).filter(id => id == 'org').length) {
         //如果存在组织区域显示，则显示文字
-        this.tipVisible = true
+        this.orgTipVisible = true
       } else {
         //不存在则显示
-        this.tipVisible = false
+        this.orgTipVisible = false
       }
       orgAreas.forEach(item => {
-        item.showTip(this.tipVisible)
+        item.showTip(this.orgTipVisible)
       })
     }
   },

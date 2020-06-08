@@ -68,6 +68,8 @@ let checkMenu = function (name, menus) {
   return hasMenu
 }
 
+let excludeRouters = ['index', 'dataProjectScreen', 'commandProjectScreen'] //排除的不需要过滤的路由
+
 //设置router 跳转配置
 router.beforeEach((to, from, next) => {
   console.log('router.beforeEach', to)
@@ -80,7 +82,7 @@ router.beforeEach((to, from, next) => {
     if (user) {
       let menus = getUserMenus()
 
-      if (to.name == 'index' || checkMenu(to.name, menus)) {
+      if (excludeRouters.indexOf(to.name) > -1 || checkMenu(to.name, menus)) {
         setTitle(to.meta.title)
         next()
       } else {
