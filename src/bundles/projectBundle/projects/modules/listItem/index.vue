@@ -5,8 +5,8 @@
       <i class="jc-setting el-icon-setting" @click="$emit('manage')"></i>
     </div>
     <div class="jc-project-screen">
-      <router-link :to="{name: 'commandProjectScreen', params: {projectId: this.item.projectId}}" class="jc-screen jc-screen-command" tag="div">指挥大屏</router-link>
-      <router-link :to="{name: 'dataProjectScreen', params: {projectId: this.item.projectId}}" class="jc-screen jc-screen-data" tag="div">数据大屏</router-link>
+      <router-link :to="{name: 'commandProjectScreen', params: {projectId: this.item.projectId}}" class="jc-screen jc-screen-command" target="_blank">指挥大屏</router-link>
+      <router-link :to="{name: 'dataProjectScreen', params: {projectId: this.item.projectId}}" class="jc-screen jc-screen-data" target="_blank">数据大屏</router-link>
       <!-- <div class="jc-screen jc-screen-command">指挥大屏</div> -->
       <!-- <div class="jc-screen jc-screen-data">数据大屏</div> -->
     </div>

@@ -6,6 +6,8 @@ import { AREAS_TYPE, AREAS_SEARCH_TYPE } from '@/constant/CONST'
 import { apiBoundariesFormat } from '@/libs/apiFormat'
 import { JcMapSign } from '@/map'
 
+let orgData = {} //存储已经请求的组织数据
+
 let orgAreas = [] //组织区域数组
 
 export default {
@@ -27,7 +29,12 @@ export default {
       this.org = org
       console.log('指挥层级切换变化', org)
       try {
-        let res = await areaList({ orgId: this.org.orgId, orgSearchType: AREAS_TYPE.OWN_AND_CHILD, searchType: AREAS_SEARCH_TYPE.ORG })
+        let res = orgData[this.org.orgId]
+
+        if (!(res && res.length)) {
+          res = await areaList({ orgId: this.org.orgId, orgSearchType: AREAS_TYPE.OWN_AND_CHILD, searchType: AREAS_SEARCH_TYPE.ORG })
+          orgData[this.org.orgId] = res
+        }
 
         this.drawOrgSign(res)
       } catch (error) {
@@ -49,7 +56,8 @@ export default {
         data.forEach(item => {
           if (item.orgId == this.org.orgId) {
             this.$EventBus.$emit('org-adcode-change', item)
-          } else {
+          }
+          if (item.orgId != this.org.orgId || data.length == 1) {
             areas.push(new JcMapSign({
               id: item.orgId,
               map: myJcMap,

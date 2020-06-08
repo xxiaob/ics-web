@@ -4,13 +4,13 @@
       <div class="jc-weather"></div>
       <div class="jc-time" v-text="time"></div>
     </div>
-    <div class="jc-screen-title">南京市常态管控指挥大屏</div>
+    <div class="jc-screen-title" v-text="title"></div>
     <div class="jc-header-right">
       <div class="jc-grid" title="网格" @click="viewChange('CommandGrid')"></div>
       <div class="jc-org" title="组织结构" @click="viewChange('CommandOrg')"></div>
       <div class="jc-org-switch">
         <div class="jc-org-text" v-text="org.name"></div>
-        <div class="jc-org-cascader">
+        <div class="jc-org-cascader" v-if="orgs.length">
           <el-cascader-panel ref='myOrgCascader' v-model="org.orgId" :options="orgs" :props="{ checkStrictly: true, emitPath: false }" @change="orgChange"></el-cascader-panel>
         </div>
       </div>
@@ -21,6 +21,7 @@
 import moment from 'moment'
 import JcWeather from '@/components/JcWeather'
 import { organizationList } from '@/api/organization'
+import { PROJECT_TYPES } from '@/constant/Dictionaries'
 
 let weeks = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六']
 
@@ -30,8 +31,10 @@ export default {
   name: 'ScreenCommandHeader',
   data() {
     return {
+      title: '--',
       weather: {},
       time: '',
+      project: null,
       orgs: [], //存储组织树,用于cascader选择器使用
       org: { name: '--', orgId: '' },
       timeInterval: null
@@ -39,8 +42,8 @@ export default {
   },
   created() {
     this.timeInterval = setInterval(this.setTime, 1000)
-    this.initData()
     this.$EventBus.$on('org-adcode-change', this.setWeather) //监听需要切换天气
+    this.$EventBus.$on('command-init-success', this.initSuccess) //监听基础数据初始化完成
   },
   methods: {
     async initData() {
@@ -49,12 +52,31 @@ export default {
 
         this.orgs = this.formatOrg(res)
         if (this.orgs.length) {
-          this.orgChange(this.orgs[0].value)
+          let parentOrg = this.orgs[0]
+
+          this.orgChange(parentOrg.value)
+          //处理标题显示
+          if (PROJECT_TYPES.SpecialControl == this.project.projectType) {
+            this.title = `${this.project.projectName}指挥大屏`
+          } else {
+            this.title = `${parentOrg.label}常态指挥大屏`
+          }
         }
       } catch (error) {
         console.log(error)
       }
       return false
+    },
+    initSuccess(data) {
+      this.project = data
+      //初始化组织,如果是应急，则直接设置，否则去获取组织结构
+      if (PROJECT_TYPES.EmergencySupport == this.project.projectType) {
+        this.title = `${this.project.projectName}指挥大屏`
+        this.org = { name: this.project.projectName, orgId: this.project.orgId }
+        this.$EventBus.$emit('org-change', this.org) //使用事件总线进行级别切换通知
+      } else {
+        this.initData()
+      }
     },
     formatOrg(child) {
       if (child && child.length) {
@@ -94,6 +116,7 @@ export default {
     clearInterval(this.timeInterval)
     //去除事件监听
     this.$EventBus.$off('org-adcode-change', this.setWeather)
+    this.$EventBus.$off('command-init-success', this.initSuccess)
   }
 }
 </script>

@@ -52,7 +52,7 @@ export function projectsSave(data) {
  * @returns {Object} axios 对象
  */
 export function projectGet(projectId) {
-  return axios.post(API.project.get + projectId)
+  return axios.post(API.projects.get + projectId)
 }
 /**
  * 删除

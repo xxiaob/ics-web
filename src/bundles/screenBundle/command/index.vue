@@ -7,19 +7,20 @@
     <div class="jc-view-space" :class="{'jc-message-show': !!messageComponent}">
       <transition name="jc-view">
         <keep-alive>
-          <component :is="viewComponent" :options="viewOptions"></component>
+          <component :is="viewComponent" :options="viewOptions" :project="project"></component>
         </keep-alive>
       </transition>
     </div>
     <transition name="jc-message">
       <keep-alive>
-        <component :is="messageComponent" :options="messageOptions"></component>
+        <component :is="messageComponent" :options="messageOptions" :project="project"></component>
       </keep-alive>
     </transition>
   </section>
 </template>
 <script>
 import { JcMap } from '@/map'
+import { projectGet } from '@/api/projects'
 import OrgMixins from './modules/mixins/orgMixins'
 
 let myJcMap //个人 map 对象
@@ -39,6 +40,7 @@ export default {
   data() {
     return {
       index: 1,
+      project: { projectId: '', projectName: '', orgId: '', projectType: '' },
       messageComponent: '',
       messageOptions: null,
       viewComponent: '',
@@ -51,16 +53,26 @@ export default {
     this.initData()
   },
   methods: {
-    initData() {
-      myJcMap.init(this.$refs.myMap).then(() => {
-        this.messageComponent = 'CommandMessage'
-        this.$nextTick(() => {
-          this.$refs.mapSearch.initData(myJcMap) //初始化搜索对象
-        })
+    async initData() {
+      await myJcMap.init(this.$refs.myMap) //等待地图初始化
+
+      this.messageComponent = 'CommandMessage'
+      this.$nextTick(() => {
+        this.$refs.mapSearch.initData(myJcMap) //初始化搜索对象
       })
+
+      if (this.$route.params.projectId) {
+        //处理项目，如果项目id存在则获取项目详情
+        let { projectId, projectName, orgId, projectType } = await projectGet(this.$route.params.projectId)
+
+        this.project = { projectId, projectName, orgId, projectType }
+      }
+
       this.$EventBus.$on('view-component-change', this.viewComponentChange) //监听 内容窗口改变
       this.$EventBus.$on('view-component-back', this.viewBack) //监听 内容窗口返回
       this.$EventBus.$on('message-component-change', this.messageComponentChange) //消息 内容窗口改变
+
+      this.$EventBus.$emit('command-init-success', this.project) //通知基础数据初始化完成
     },
     getMyJcMap() {
       return myJcMap//获取地图

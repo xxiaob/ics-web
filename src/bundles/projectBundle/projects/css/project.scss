@@ -86,6 +86,7 @@
     .jc-screen {
       position: relative;
       flex: 1;
+      text-decoration: none;
       @include jc-vhcenter;
       background-repeat: no-repeat;
       background-position: center;
