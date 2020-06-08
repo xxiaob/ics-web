@@ -87,9 +87,6 @@ export default {
     return {
       loading: false,
       handle: false,
-      imgs: [],
-      videos: [],
-      audios: [],
       question: null,
       TaskManageShow: false
     }
@@ -117,32 +114,6 @@ export default {
       const type = this.types.filter(item=>item.id == value)
 
       return (type[0] && type[0].typeName) || ''
-    },
-    //根据文件格式 区分url
-    handleUrls(urls) {
-      const imgs = [], videos = [], audios = []
-
-      if (urls && urls.length) {
-        const imgReg = /\.(png|jpg|gif|jpeg|svg)$/,
-          videoReg = /\.(mp4|rm|rmvb|wmv|asf|asx|3gp|mov|m4v|avi|dat|mkv|flv|vob)$/,
-          audioReg = /\.(mp3|cd|wave|aiff|mpeg|mpeg-4|midi|wma|realaudio|vqf|oggvorbis|amr|ape|flac|aac)$/
-
-        urls.forEach(url=>{
-          if (imgReg.test(url)) {
-            imgs.push(url)
-          }
-          if (videoReg.test(url)) {
-            videos.push(url)
-          }
-          if (audioReg.test(url)) {
-            audios.push(url)
-          }
-        })
-      }
-      this.imgs = imgs
-      this.videos = videos
-      this.audios = audios
-      this.audioPlayShows = new Array(this.audios.length).fill(true)
     },
     //反馈至上级
     toSuperior() {

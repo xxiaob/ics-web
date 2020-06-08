@@ -38,11 +38,37 @@
     }
   }
 
-  &:hover .hover {
+  .jc-close {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    display: none;
+  }
+
+  &:hover .hover,
+  &:hover .jc-close {
     display: block;
+  }
+
+  .el-image {
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+
+
   }
 }
 
 .jc-audio {
   background: $jc-color-primary;
+}
+
+/deep/ .el-image-viewer__close {
+  color: #fff;
+  transform: rotate(0deg);
+  transition: transform 0.4s;
+
+  &:hover {
+    transform: rotate(180deg);
+  }
 }
