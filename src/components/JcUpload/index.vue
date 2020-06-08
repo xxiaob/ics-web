@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class="jc-clearboth">
-      <div v-for="url in imgs" :key="url" class="jc-img">
+      <div v-for="url in imgs" :key="url.id" class="jc-img">
         <el-image :src="url" :preview-src-list="imgs"></el-image>
         <img class="jc-close" src="@/bundles/taskBundle/assets/close.png" alt="" @click.stop="handleRemove(url)">
       </div>
