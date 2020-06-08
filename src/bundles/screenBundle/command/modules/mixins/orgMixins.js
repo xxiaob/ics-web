@@ -5,6 +5,7 @@ import { areaList } from '@/api/area'
 import { AREAS_TYPE, AREAS_SEARCH_TYPE } from '@/constant/CONST'
 import { apiBoundariesFormat } from '@/libs/apiFormat'
 import { JcMapSign } from '@/map'
+import { PROJECT_TYPES } from '@/constant/Dictionaries'
 
 let orgData = {} //存储已经请求的组织数据
 
@@ -32,7 +33,12 @@ export default {
         let res = orgData[this.org.orgId]
 
         if (!(res && res.length)) {
-          res = await areaList({ orgId: this.org.orgId, orgSearchType: AREAS_TYPE.OWN_AND_CHILD, searchType: AREAS_SEARCH_TYPE.ORG })
+          if (PROJECT_TYPES.EmergencySupport == this.project.projectType) {
+            res = await areaList({ orgId: this.org.orgId, orgSearchType: AREAS_TYPE.OWN, searchType: AREAS_SEARCH_TYPE.ORG })
+          } else {
+            res = await areaList({ orgId: this.org.orgId, orgSearchType: AREAS_TYPE.OWN_AND_CHILD, searchType: AREAS_SEARCH_TYPE.ORG })
+          }
+
           orgData[this.org.orgId] = res
         }
 

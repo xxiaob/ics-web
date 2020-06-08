@@ -32,7 +32,7 @@ import TreesFilterMixins from '@/mixins/TreesFilterMixins'
 export default {
   name: 'ScreenCommandOrg',
   mixins: [TreesFilterMixins],
-  props: ['options'],
+  props: ['options', 'project'],
   components: {
     ViewWarp: () => import('../common/viewWarp')
   },
