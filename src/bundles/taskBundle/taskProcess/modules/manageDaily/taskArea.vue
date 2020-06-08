@@ -1,8 +1,12 @@
 <template>
   <div>
     <el-radio-group v-model="selfAreaType" size="small" @change="changeAreaType">
-      <el-radio-button v-for="item in areaTypes" :key="item.value" :label="item.value">{{item.label}}</el-radio-button>
+      <el-radio-button v-for="item in TASK_AREA_TYPES.VALUES" :key="item.value" :label="item.value">{{item.label}}</el-radio-button>
     </el-radio-group>
+    <el-select v-model="areaTypeId" clearable placeholder="请选择网格类型" size="small" v-if="selfAreaType===TASK_AREA_TYPES.GRID" @change="areaTypeChange">
+      <el-option v-for="item in gridTypes" :key="item.areaTypeId" :label="item.areaTypeName" :value="item.areaTypeId">
+      </el-option>
+    </el-select>
     <el-input placeholder="输入关键字进行过滤" v-model="filterText" size="small"></el-input>
     <el-button type="" @click="setCheckedKeys" size="mini">全选</el-button>
     <el-button type="" @click="resetChecked" size="mini">清空</el-button>
@@ -14,6 +18,7 @@
 <script>
 import { TASK_AREA_TYPES } from '@/constant/Dictionaries'
 import { areaGridList } from '@/api/area'
+import { areaTypeList } from '@/api/areaType'
 
 export default {
   name: 'TaskProcessManageDailyArea',
@@ -33,12 +38,14 @@ export default {
   data() {
     return {
       selfAreaType: this.areaType,
-      areaTypes: TASK_AREA_TYPES.VALUES,
+      TASK_AREA_TYPES,
       orgGrid: [],
       filterText: '',
       filterArr: [],
       filterArrGrid: [],
-      objTree: {}
+      objTree: {},
+      gridTypes: [],
+      areaTypeId: ''
     }
   },
   computed: {
@@ -54,6 +61,7 @@ export default {
     const res = await areaGridList()
 
     this.orgGrid = this.formatGridTree(res)
+    this.gridTypes = await areaTypeList({})
     setTimeout(()=>{
       this.filterArr = Object.keys(this.formatTreeToObj(this.orgTree))
     })
@@ -78,6 +86,7 @@ export default {
         tree.forEach(item => {
           let node = {
             disabled: item.areaId ? false : true,
+            areaTypeId: item.areaTypeId || '',
             id: item.areaId || item.orgId,
             label: item.areaName || item.orgName
           }
@@ -106,25 +115,46 @@ export default {
     resetChecked() {
       this.$emit('update:selectedAreas', [])
     },
+    areaTypeChange(value) {
+      this.areaTypeId = value
+      this.filterText = ''
+      this.$refs.tree.filter('')
+    },
     filterNode(value, data) {
-      if (!value) {
-        this.filterArr.push(data.value)
-        return true
-      }
-      if (data.label.indexOf(value) !== -1) {
-        this.filterArr.push(data.value)
-        return true
+      if (this.areaTypeId) {
+        // console.log('有 areaTypeId')
+        if (!value && this.areaTypeId === data.areaTypeId) {
+          this.filterArr.push(data.id)
+          return true
+        }
+        if (data.label.indexOf(value) !== -1 && this.areaTypeId === data.areaTypeId) {
+          this.filterArr.push(data.id)
+          return true
+        } else {
+          return false
+        }
       } else {
-        return false
+        // 没有areaTypeId
+        if (!value) {
+          this.filterArr.push(data.id)
+          return true
+        }
+        if (data.label.indexOf(value) !== -1) {
+          this.filterArr.push(data.id)
+          return true
+        } else {
+          return false
+        }
       }
     },
     changeAreaType(value) {
       if (value === TASK_AREA_TYPES.ORG) {
         this.filterArr = Object.keys(this.formatTreeToObj(this.orgTree))
+        this.areaTypeId = ''
       } else {
         this.filterArr = Object.keys(this.formatTreeToObj(this.orgGrid, true))
-        console.log(this.filterArr)
       }
+      this.filterText = ''
       this.$emit('update:areaType', value)
       this.$emit('update:selectedAreas', [])
     },
@@ -157,5 +187,8 @@ export default {
   overflow: auto;
   border: 1px solid #dcdfe6;
   border-radius: 4px;
+}
+.el-select {
+  width: inherit;
 }
 </style>
