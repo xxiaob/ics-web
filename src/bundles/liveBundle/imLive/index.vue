@@ -1,36 +1,24 @@
 <template>
-  <div>
-    <h1>imLive 直播demo</h1>
-    <el-input v-model="channelId" placeholder="房间号"></el-input>
+  <el-dialog title="视频通话" :visible.sync="dialogVisible" width="640px" :close-on-click-modal="false" :append-to-body="true" @close="dialogClose">
+    <div>imLive</div>
     <div>
-      <el-button type="primary" @click="joinChannel" v-if="!inChannel">进入房间</el-button>
       <div v-if="inChannel">
         <el-button @click="exit('1')" v-if="invited">结束聊天</el-button>
         <el-button @click="exit('0')" v-else>退出房间</el-button>
       </div>
-      <el-input v-model="invitUserId" placeholder="邀请用户"></el-input>
-      <el-button type="primary" @click="inviteUser">邀请用户</el-button>
-      <!-- <el-button type="primary" @click="pushs">推流</el-button> -->
     </div>
     <div v-if="invitedButton">
       <el-button type="primary" @click="agree">接受</el-button>
       <el-button @click="refuse">拒绝</el-button>
     </div>
-    <!-- <el-input v-model="username" placeholder="用户名 4-128"></el-input>
-    <el-button type="primary" @click="register">注册</el-button>
-    <el-input v-model="username" placeholder="用户名 4-128"></el-input>
-    <el-button type="primary" @click="login">登录</el-button> -->
     <div class="jc-clearboth">
       <div id="live"></div>
+    </div>
+    <div class="jc-clearboth">
       <div id="tolive"></div>
     </div>
-    <hr>
-    <div>播放器</div>
-    <div>
-      <el-button type="primary" @click="startPlay">播放多个</el-button>
-    </div>
-    <video v-for="(item,index) in playUrls" :key="item" :id="'test'+index" class="video-js vjs-default-skin vjs-big-play-centered"></video>
-  </div>
+  </el-dialog>
+
 </template>
 
 <script>
@@ -41,21 +29,34 @@ const { mapState } = createNamespacedHelpers('user')
 
 
 export default {
-  name: 'liveDemo',
+  name: 'live',
+  props: {
+    visible: {
+      type: Boolean,
+      default: false
+    }
+  },
   data() {
     return {
+      dialogVisible: false,
       channelId: '123456',
       invited: false,
       invitUserId: '',
       invitedButton: false,
       mediaType: '1',
       fromUsername: '',
-      inChannel: false,
-      playUrls: ['https://2021-cn-north-4.cdn-vod.huaweicloud.com/asset/881736f5417582b23993c5323c185ced/292e546ae80f6cd1c7dc010be5d14449.m3u8', 'https://2021-cn-north-4.cdn-vod.huaweicloud.com/asset/49d732a4a95b3794cbb73cab3bf35cc1/6c88e090bc09c70189a456385ad78dff.m3u8', 'http://play.bg365.top/live/lxyada.m3u8']
+      inChannel: false
     }
   },
   computed: {
     ...mapState(['user'])
+  },
+  watch: {
+    visible(newVal) {
+      if (newVal) {
+        this.dialogVisible = newVal
+      }
+    }
   },
   created() {
     this.im = new IM(this.user.userId, this.user.userName)
@@ -67,24 +68,11 @@ export default {
     } else {
       this.live = new Live('live', 'tolive')
     }
+    // setTimeout(()=>{
+    //   this.$emit('update:visible', true)
+    // }, 3000)
   },
   methods: {
-    //华为播放器方法
-    startPlay() {
-      hwplayerloaded(()=>{
-        this.playUrls.forEach((item, key)=>{
-          const player = new HWPlayer('test' + key, {
-            autoplay: true,
-            controls: true,
-            width: 320,
-            height: 240
-          }, ()=> {
-            console.log('播放器已经准备好了', item)
-            player.src(item)
-          })
-        })
-      })
-    },
     imMsgCb(onType, data) {
       console.log('vue 数据', onType, data)
       const { fromUsername, content } = data
@@ -156,12 +144,6 @@ export default {
       })
       this.invitedButton = false
     },
-    register() {
-      this.im.register(this.username, this.nickname)
-    },
-    login() {
-      this.im.login(this.username, this.nickname)
-    },
     //邀请用户加入频道
     inviteUser() {
       this.invited = true
@@ -199,9 +181,8 @@ export default {
       this.im.sendSingleMsg(this.invitUserId, msg)
       this.leaveChannel()
     },
-    //推流
-    pushs() {
-      this.live.publishStreamUrl('lxyad')
+    dialogClose() {
+      this.$emit('update:visible', false)
     }
   }
 }
@@ -219,8 +200,5 @@ export default {
   display: table;
   content: "";
   clear: both;
-}
-.video-js {
-  float: left;
 }
 </style>

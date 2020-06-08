@@ -4,7 +4,7 @@
 export default [{
   path: 'imLive',
   name: 'imLive',
-  component: () => import('@/bundles/liveBundle/imLive'),
+  component: () => import('@/bundles/liveBundle'),
   meta: {
     title: 'imLive'
   }
