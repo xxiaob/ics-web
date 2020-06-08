@@ -1,12 +1,15 @@
 import AgoraRTC from 'agora-rtc-sdk'
+import { getAgoraToken, startRecord } from '@/api/live'
 
 export class Live {
   /**
+   * @param {String} userId 用户id
    * @param {String} localId 本地流播放的容器id
    * @param {String} remoteId 远端流播放的容器id
    * @param {Boolean} debug
   */
-  constructor(localId = 'live', remoteId = 'tolive', debug = true) {
+  constructor(userId, localId = 'live', remoteId = 'tolive', debug = true) {
+    this.userId = userId
     this.debug = debug
     this.localId = localId
     this.remoteId = remoteId
@@ -26,6 +29,13 @@ export class Live {
       uid: null,
       token: 'Your token'
     }
+
+    this.recordParams = {
+      channelName: '',
+      recordingType: 0,
+      recorded: true
+    }
+
     this.init()
     this.on()
   }
@@ -52,6 +62,9 @@ export class Live {
     //本地流已发布
     this.rtc.client.on('stream-published', e => {
       this.console('stream-published 本地流发布', e)
+      if (this.recordParams.recorded) {
+        startRecord(this.recordParams)
+      }
       //是否 需要直播推流
       // if (this.fromUsername) {
       //   this.console('不用推流')
@@ -158,14 +171,22 @@ export class Live {
    * @param {String} channelId 房间ID
    * @param {String} role 角色 主播(host)和观众(audience)
    * @param {Boolean} video 是否开启摄像头
+   * @param {Boolean} recorded 是否录制
   */
-  joinChannel(channelId = '123456', role = 'host', video = true) {
+  async joinChannel(channelId = '123456', role = 'host', video = true, recorded = true) {
+    //设置录制参数
+    this.recordParams.channelName = channelId
+    this.recordParams.recordingType = video ? 1 : 0
+    this.recordParams.recorded = recorded
     // 让用户选择自己的角色是主播（"host"）还是观众（"audience"）。
     // 调用 setClientRole 方法，传入用户选择的角色。
     this.rtc.client.setClientRole(role)
-    this.rtc.client.join(null, channelId, null, uid => {
+    const { channelKey } = await getAgoraToken({ channelName: channelId, userAccount: this.userId + '_web' })
+
+    console.log(channelKey, channelId)
+    this.rtc.client.join(channelKey, channelId, this.userId + '_web', uid => {
       this.console('joinChannel 成功')
-      this.console('this.rtc.client', this.rtc.client)
+      this.console('this.rtc.client', uid, this.rtc.client)
       this.rtc.params.uid = uid
       this.joined = true
       if (role === 'host') {

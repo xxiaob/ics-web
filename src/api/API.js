@@ -147,7 +147,9 @@ export default {
   },
   live: {
     //直播相关
-    imAuth: 'user-service/getAuthToken'
+    imAuth: 'user-service/getAuthToken',
+    agoraToken: 'device-service/recording/getChannelKey',
+    record: 'device-service/recording/startRecording'
   },
   attend: {
     //考勤管理

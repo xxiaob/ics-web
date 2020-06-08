@@ -72,7 +72,7 @@ export default {
     if (this.live) {
       console.log('直播客户端已经初始化')
     } else {
-      this.live = new Live('live', 'tolive')
+      this.live = new Live(this.user.userId, 'live', 'tolive')
     }
   },
   methods: {
