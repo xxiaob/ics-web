@@ -50,6 +50,7 @@ export default {
       } else {
         this.startEdit = false
         this.endMapEditor()
+        myJcMap.clearSign()
       }
     }
   },
