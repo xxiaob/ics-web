@@ -68,7 +68,7 @@ let checkMenu = function (name, menus) {
   return hasMenu
 }
 
-let excludeRouters = ['index', 'dataProjectScreen', 'commandProjectScreen'] //排除的不需要过滤的路由
+let excludeRouters = ['index', 'dataProjectScreen', 'commandProjectScreen', 'imLive'] //排除的不需要过滤的路由
 
 //设置router 跳转配置
 router.beforeEach((to, from, next) => {

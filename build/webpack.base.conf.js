@@ -79,7 +79,7 @@ module.exports = {
     child_process: 'empty'
   },
   externals: {
-    LiveClient: 'LiveClient',
+    // LiveClient: 'LiveClient',//华为直播sdk
     JMessage: 'JMessage'
   }
 }

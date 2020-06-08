@@ -18,8 +18,8 @@ module.exports = {
   globals: {
     process: true,
     '__dirname': true,
-    hwplayerloaded: true, //华为播放器加载成功回调
-    HWPlayer: true, //华为播放器
+    // hwplayerloaded: true, //华为播放器加载成功回调
+    // HWPlayer: true, //华为播放器
   },
   rules: {
     indent: [2, 2], //缩减两个空格
