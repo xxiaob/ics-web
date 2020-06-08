@@ -84,12 +84,12 @@ $jc-screen-height: 40px;
 
     .jc-weather-detail {
       position: absolute;
-      top: $jc-screen-height + $jc-default-dis/2;
+      top: $jc-screen-height;
       padding: $jc-default-dis;
       width: 180px;
       height: 168px;
-      background: url(../modules/header/assets/weather-bg.png) no-repeat center;
-      background-size: 100% 100%;
+      background: url(../modules/header/assets/weather-bg.png) no-repeat center bottom;
+      background-size: 100% 160px;
       left: 0;
       visibility: hidden;
       opacity: 0;

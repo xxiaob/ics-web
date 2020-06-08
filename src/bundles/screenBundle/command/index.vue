@@ -1,9 +1,15 @@
 <template>
   <section class="jc-screen-warp">
+    <!-- 顶部header -->
     <command-header></command-header>
+    <!-- 地图搜索组件 -->
     <map-search ref="mapSearch" class="jc-area-search"></map-search>
+    <!-- 地图对象 -->
     <div class="jc-screen-space" ref="myMap"></div>
+    <!-- 左侧操作组件 -->
     <command-operate></command-operate>
+    <!-- 左下角数据 -->
+    <!-- 右侧信息显示区域动态显示组件 -->
     <div class="jc-view-space" :class="{'jc-message-show': !!messageComponent}">
       <transition name="jc-view">
         <keep-alive>
@@ -11,6 +17,7 @@
         </keep-alive>
       </transition>
     </div>
+    <!-- 右下侧消息显示区域动态显示组件 -->
     <transition name="jc-message">
       <keep-alive>
         <component :is="messageComponent" :options="messageOptions" :project="project"></component>
