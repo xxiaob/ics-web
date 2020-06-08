@@ -39,16 +39,23 @@ export default {
   watch: {
     visible(newVal) {
       if (newVal) {
-        this.initData()
+        if (myJcMap) {
+          this.initData()
+        } else {
+          setTimeout(() => {
+            myJcMap = new JcMap()
+            this.initData()
+          }, 800)
+        }
+      } else {
+        this.startEdit = false
+        this.endMapEditor()
       }
     }
   },
   methods: {
     initData() {
       this.$refs.myManageTree.initData(this.options)
-      if (!myJcMap) {
-        myJcMap = new JcMap()
-      }
       myJcMap.init(this.$refs.myMap).then(() => {
         this.$refs.mapSearch.initData(myJcMap) //初始化搜索对象
       })
