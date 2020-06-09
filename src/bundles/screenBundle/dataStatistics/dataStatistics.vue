@@ -68,7 +68,7 @@ export default {
             axisTick: {
               show: false
             },
-            data: ['雨花', '秦淮', '鼓楼', '玄武', '建邺', '江宁', '溧水', '六合', '高淳']
+            data: ['雨花', '秦淮', '鼓楼', '玄武', '建邺', '江宁', '溧水', '六合', '高淳', '栖霞']
           }
         ],
         yAxis: [
@@ -92,14 +92,14 @@ export default {
             name: '正常',
             type: 'bar',
             stack: '广告',
-            data: [120, 132, 101, 134, 90, 230, 210, 90, 230 ]
+            data: [120, 132, 101, 134, 90, 230, 210, 90, 230, 90 ]
           },
           {
             barCategoryGap: '60%',
             name: '异常',
             type: 'bar',
             stack: '广告',
-            data: [220, 182, 191, 234, 290, 330, 310, 330, 310]
+            data: [220, 182, 191, 234, 290, 330, 310, 330, 310, 90]
           }
         ]
       }
@@ -110,51 +110,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.dataStatistics {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  .title {
-    color: white;
-    border-left: 2px solid rgb(18, 146, 246);
-    padding-left: 10px;
-    margin: 5px 0 10px;
-    height: 20px;
-    line-height: 20px;
-    font-size: 16px;
-
-    .type {
-      float: right;
-      font-size: 12px;
-      margin-left: 10px;
-    }
-
-    .selected {
-      color: #1292f6;
-      font-weight: bold;
-      font-size: 14px;
-    }
-  }
-  .echarts {
-    flex: 1;
-  }
-
-  .dateType {
-    position: absolute;
-    right: 2px;
-    top: 36px;
-    font-size: 12px;
-
-    span {
-      margin-left: 5px;
-    }
-
-    .selected {
-      color: #1292f6;
-      font-weight: bold;
-      font-size: 14px;
-    }
-  }
-}
 </style>

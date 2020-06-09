@@ -49,13 +49,20 @@
         <div class="jc-row-flex1">
           <div class="jc-item-out">
             <div class="jc-item">
-              <JcDataStatistics></JcDataStatistics>
+              <jc-data-statistics class="jc-item-content"></jc-data-statistics>
             </div>
           </div>
         </div>
         <div class="jc-row-flex2">
           <div class="jc-item-out">
-            <div class="jc-item">jc-item</div>
+            <div class="jc-item">
+              <div class="jc-item-1">
+                <jc-count-statistics class="jc-item-content"></jc-count-statistics>
+              </div>
+              <div class="jc-item-2">
+                <jc-count-statistics class="jc-item-content"></jc-count-statistics>
+              </div>
+            </div>
           </div>
         </div>
         <div class="jc-row-flex1">
@@ -82,6 +89,7 @@ export default {
   components: {
     JcHeader: ()=> import('./header'),
     JcDataStatistics: ()=> import('./dataStatistics'),
+    JcCountStatistics: ()=> import('./countStatistics'),
     // CommandHeader: () => import('./modules/header'), //顶部
     MapSearch: () => import('@/components/JcMap/MapSearch') //地图搜索
   },
