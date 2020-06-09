@@ -48,7 +48,9 @@
       <div class="jc-bottom">
         <div class="jc-row-flex1">
           <div class="jc-item-out">
-            <div class="jc-item">jc-item</div>
+            <div class="jc-item">
+              <JcDataStatistics></JcDataStatistics>
+            </div>
           </div>
         </div>
         <div class="jc-row-flex2">
@@ -79,6 +81,7 @@ export default {
   name: 'ScreenDataStatistics',
   components: {
     JcHeader: ()=> import('./header'),
+    JcDataStatistics: ()=> import('./dataStatistics'),
     // CommandHeader: () => import('./modules/header'), //顶部
     MapSearch: () => import('@/components/JcMap/MapSearch') //地图搜索
   },

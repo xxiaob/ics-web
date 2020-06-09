@@ -11,6 +11,7 @@
 import moment from 'moment'
 
 export default {
+  name: 'jcHeader',
   data() {
     return {
       time: moment().format('HH:mm:ss'),
