@@ -1,9 +1,9 @@
 <template>
-  <div class="countStatistics">
+  <div class="typeStatistics">
     <div class="title">
-      <span>事件统计</span>
-      <span class="type">各区网巡总数占比</span>
-      <span class="type selected">各区事件总数占比</span>
+      <span>类型统计</span>
+      <span class="type">网巡问题类型top5</span>
+      <span class="type selected">事件上报类型top5</span>
     </div>
     <!-- <div class="dateType">
       <span>日</span>
@@ -17,7 +17,7 @@
 <script>
 import echarts from 'echarts'
 export default {
-  name: 'countStatistics',
+  name: 'typeStatistics',
   mounted() {
     this.renderEcharts()
 
@@ -45,19 +45,14 @@ export default {
           {
             name: '事件总数',
             type: 'pie',
-            radius: '65%',
+            radius: ['25%', '65%'],
             center: ['50%', '50%'],
             data: [
               { value: 335, name: '雨花' },
               { value: 310, name: '秦淮' },
               { value: 274, name: '鼓楼' },
               { value: 235, name: '玄武' },
-              { value: 400, name: '建邺' },
-              { value: 335, name: '江宁' },
-              { value: 310, name: '溧水' },
-              { value: 274, name: '六合' },
-              { value: 235, name: '高淳' },
-              { value: 400, name: '栖霞' }
+              { value: 400, name: '建邺' }
             ].sort( (a, b)=> b.value - a.value),
             roseType: 'radius',
             // labelLine: {

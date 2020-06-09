@@ -60,7 +60,7 @@
                 <jc-count-statistics class="jc-item-content"></jc-count-statistics>
               </div>
               <div class="jc-item-2">
-                <jc-count-statistics class="jc-item-content"></jc-count-statistics>
+                <jc-type-statistics class="jc-item-content"></jc-type-statistics>
               </div>
             </div>
           </div>
@@ -90,6 +90,7 @@ export default {
     JcHeader: ()=> import('./header'),
     JcDataStatistics: ()=> import('./dataStatistics'),
     JcCountStatistics: ()=> import('./countStatistics'),
+    JcTypeStatistics: ()=> import('./typeStatistics'),
     // CommandHeader: () => import('./modules/header'), //顶部
     MapSearch: () => import('@/components/JcMap/MapSearch') //地图搜索
   },
