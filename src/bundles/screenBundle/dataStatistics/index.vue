@@ -1,8 +1,39 @@
 <template>
   <section class="jc-screen-warp">
     <!-- <command-header></command-header> -->
-    <map-search ref="mapSearch" class="jc-area-search"></map-search>
-    <div class="jc-screen-space" ref="myMap"></div>
+    <header>行政执法系统</header>
+    <div class="jc-container">
+      <div class="jc-top">
+        <div class="jc-row-flex1">
+          <div class="jc-column-flex1">
+            <div class="jc-item-out">
+              <div class="jc-item"></div>
+            </div>
+          </div>
+          <div class="jc-column-flex1">
+            <div class="comp">jc-column-flex1</div>
+          </div>
+        </div>
+        <div class="jc-row-flex2">
+          <!-- <map-search ref="mapSearch" class="jc-area-search"></map-search> -->
+          <div class="jc-screen-space" ref="myMap"></div>
+        </div>
+        <div class="jc-row-flex1">
+          <div class="jc-column-flex1">jc-column-flex1</div>
+          <div class="jc-column-flex1">jc-column-flex1</div>
+        </div>
+        <div class="jc-row-flex1">
+          <div class="jc-column-flex1">jc-column-flex1</div>
+          <div class="jc-column-flex1">jc-column-flex1</div>
+        </div>
+      </div>
+      <div class="jc-bottom">
+        <div class="jc-row-flex1">jc-row-flex1</div>
+        <div class="jc-row-flex2">jc-middle</div>
+        <div class="jc-row-flex1">jc-row-flex1</div>
+        <div class="jc-row-flex1">jc-row-flex1</div>
+      </div>
+    </div>
   </section>
 </template>
 <script>
