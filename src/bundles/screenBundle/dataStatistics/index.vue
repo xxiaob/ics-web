@@ -72,7 +72,9 @@
         </div>
         <div class="jc-row-flex1">
           <div class="jc-item-out">
-            <div class="jc-item">jc-item</div>
+            <div class="jc-item">
+              <jc-intellect class="jc-item-content"></jc-intellect>
+            </div>
           </div>
         </div>
       </div>
@@ -91,6 +93,7 @@ export default {
     JcDataStatistics: ()=> import('./dataStatistics'),
     JcCountStatistics: ()=> import('./countStatistics'),
     JcTypeStatistics: ()=> import('./typeStatistics'),
+    JcIntellect: ()=> import('./intellect'),
     // CommandHeader: () => import('./modules/header'), //顶部
     MapSearch: () => import('@/components/JcMap/MapSearch') //地图搜索
   },
