@@ -28,9 +28,7 @@ export default {
   methods: {
     initData() {
       myJcMap.init(this.$refs.myMap).then(() => {
-        this.$nextTick(() => {
-          this.$refs.mapSearch.initData(myJcMap) //初始化搜索对象
-        })
+        this.$refs.mapSearch.initData(myJcMap) //初始化搜索对象
       })
     },
     getMyJcMap() {
