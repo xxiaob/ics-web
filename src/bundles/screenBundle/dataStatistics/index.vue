@@ -1,37 +1,71 @@
 <template>
   <section class="jc-screen-warp">
     <!-- <command-header></command-header> -->
-    <header>行政执法系统</header>
     <div class="jc-container">
+      <jc-header></jc-header>
       <div class="jc-top">
         <div class="jc-row-flex1">
           <div class="jc-column-flex1">
             <div class="jc-item-out">
-              <div class="jc-item"></div>
+              <div class="jc-item">jc-item</div>
             </div>
           </div>
           <div class="jc-column-flex1">
-            <div class="comp">jc-column-flex1</div>
+            <div class="jc-item-out">
+              <div class="jc-item">jc-item</div>
+            </div>
           </div>
         </div>
         <div class="jc-row-flex2">
-          <!-- <map-search ref="mapSearch" class="jc-area-search"></map-search> -->
+          <map-search ref="mapSearch" class="jc-area-search"></map-search>
           <div class="jc-screen-space" ref="myMap"></div>
         </div>
         <div class="jc-row-flex1">
-          <div class="jc-column-flex1">jc-column-flex1</div>
-          <div class="jc-column-flex1">jc-column-flex1</div>
+          <div class="jc-column-flex1">
+            <div class="jc-item-out">
+              <div class="jc-item">jc-item</div>
+            </div>
+          </div>
+          <div class="jc-column-flex1">
+            <div class="jc-item-out">
+              <div class="jc-item">jc-item</div>
+            </div>
+          </div>
         </div>
         <div class="jc-row-flex1">
-          <div class="jc-column-flex1">jc-column-flex1</div>
-          <div class="jc-column-flex1">jc-column-flex1</div>
+          <div class="jc-column-flex1">
+            <div class="jc-item-out">
+              <div class="jc-item">jc-item</div>
+            </div>
+          </div>
+          <div class="jc-column-flex1">
+            <div class="jc-item-out">
+              <div class="jc-item">jc-item</div>
+            </div>
+          </div>
         </div>
       </div>
       <div class="jc-bottom">
-        <div class="jc-row-flex1">jc-row-flex1</div>
-        <div class="jc-row-flex2">jc-middle</div>
-        <div class="jc-row-flex1">jc-row-flex1</div>
-        <div class="jc-row-flex1">jc-row-flex1</div>
+        <div class="jc-row-flex1">
+          <div class="jc-item-out">
+            <div class="jc-item">jc-item</div>
+          </div>
+        </div>
+        <div class="jc-row-flex2">
+          <div class="jc-item-out">
+            <div class="jc-item">jc-item</div>
+          </div>
+        </div>
+        <div class="jc-row-flex1">
+          <div class="jc-item-out">
+            <div class="jc-item">jc-item</div>
+          </div>
+        </div>
+        <div class="jc-row-flex1">
+          <div class="jc-item-out">
+            <div class="jc-item">jc-item</div>
+          </div>
+        </div>
       </div>
     </div>
   </section>
@@ -44,6 +78,7 @@ let myJcMap //个人 map 对象
 export default {
   name: 'ScreenDataStatistics',
   components: {
+    JcHeader: ()=> import('./header'),
     // CommandHeader: () => import('./modules/header'), //顶部
     MapSearch: () => import('@/components/JcMap/MapSearch') //地图搜索
   },

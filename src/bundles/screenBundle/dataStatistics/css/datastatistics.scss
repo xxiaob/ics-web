@@ -29,6 +29,10 @@
     .jc-column-flex1:first-child {
       margin-bottom: 10px;
     }
+
+    .jc-column-flex1:last-child {
+      margin-bottom: 1px;
+    }
   }
 
   .jc-row-flex2 {
@@ -36,6 +40,7 @@
     position: relative;
     box-sizing: border-box;
     padding: 5px;
+    margin-right: 1px;
   }
 
 }
@@ -43,20 +48,11 @@
 .jc-screen-warp {
   background: url(../assets/bg.jpg) no-repeat;
   background-size: 100% 100%;
-  padding: 0 5px;
+  padding: 0 5px 10px;
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
 
-  header {
-    height: 70px;
-    font-size: 30px;
-    font-weight: bold;
-    text-align: center;
-    font-family: '黑体';
-    line-height: 70px;
-    color: white;
-  }
 
   .jc-container {
     flex: auto;
@@ -94,6 +90,7 @@
         height: 100%;
         border: 1px solid rgba($color: #1292f6, $alpha: 0.3);
         background: rgba($color: #011128, $alpha: 0.7);
+        padding: 10px;
       }
     }
   }
