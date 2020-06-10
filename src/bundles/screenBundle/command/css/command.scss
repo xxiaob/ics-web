@@ -605,17 +605,33 @@ $jc-screen-height: 40px;
         }
       }
     }
-    /*事件，任务 详情*/
-    .jc-detail-warp {
-      display: flex;
-      padding: 0 $jc-default-dis/2;
-      .jc-detail-label {
-        width: 80px;
-        height: 30px;
-        line-height: 30px;
-      }
-      .jc-detail-content {
-        flex: 1;
+  }
+
+  /*事件，任务 详情*/
+  .jc-detail-warp {
+    display: flex;
+    padding: 0 $jc-default-dis/2;
+    .jc-detail-label {
+      width: 80px;
+      padding: $jc-default-dis/2 0;
+      line-height: 20px;
+      color: $jc-color-text-secondary;
+      @include jc-text-warp;
+    }
+    .jc-detail-content {
+      flex: 1;
+      line-height: 20px;
+      padding: $jc-default-dis/2 0;
+      .jc-media-warp {
+        width: 120px;
+        height: 90px;
+        video,
+        img {
+          display: block;
+          width: 100%;
+          height: 100%;
+          object-fit: fill;
+        }
       }
     }
   }

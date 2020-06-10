@@ -1,6 +1,8 @@
 <template>
   <view-warp :title="title">
-
+    <detail-event :options="options" v-if="options.type == 0"></detail-event>
+    <detail-question :options="options" v-else-if="options.type == 1"></detail-question>
+    <detail-task :options="options" v-else-if="options.type == 2"></detail-task>
   </view-warp>
 </template>
 <script>
@@ -10,8 +12,8 @@ export default {
   components: {
     ViewWarp: () => import('../common/viewWarp'),
     DetailEvent: () => import('./modules/event'),
-    DetailTask: () => import('./modules/event'),
-    DetailQuestion: () => import('./modules/event')
+    DetailTask: () => import('./modules/task'),
+    DetailQuestion: () => import('./modules/question')
   },
   computed: {
     title() {
@@ -19,9 +21,6 @@ export default {
 
       return types[this.options.type]
     }
-  },
-  activated() {
-    console.log('ScreenCommandMessageDetail activated')
   }
 }
 </script>
