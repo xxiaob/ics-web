@@ -2,35 +2,45 @@
   <div class="mapLeft">
     <div class="jc-column-flex1">
       <p>
-        <span class="count">25</span>
+        <span class="count">
+          <countTo :startVal='0' :endVal='40' :duration='10000'></countTo>
+        </span>
         <span class="unit">人</span>
       </p>
       <p>在线人数</p>
     </div>
     <div class="jc-column-flex1">
       <p>
-        <span class="count">466</span>
+        <span class="count">
+          <countTo :startVal='0' :endVal='466' :duration='10000'></countTo>
+        </span>
         <span class="unit">km</span>
       </p>
       <p>巡逻里程</p>
     </div>
     <div class="jc-column-flex1">
       <p>
-        <span class="count">139</span>
+        <span class="count">
+          <countTo :startVal='0' :endVal='139' :duration='10000'></countTo>
+        </span>
         <span class="unit">次</span>
       </p>
       <p>上报事件</p>
     </div>
     <div class="jc-column-flex1">
       <p>
-        <span class="count">49</span>
+        <span class="count">
+          <countTo :startVal='0' :endVal='49' :duration='10000'></countTo>
+        </span>
         <span class="unit">件</span>
       </p>
       <p>网巡反馈</p>
     </div>
     <div class="jc-column-flex1">
       <p>
-        <span class="count">19</span>
+        <span class="count">
+          <countTo :startVal='0' :endVal='19' :duration='10000'></countTo>
+        </span>
         <span class="unit">件</span>
       </p>
       <p>AI智能分析</p>
@@ -39,9 +49,10 @@
 </template>
 
 <script>
+import countTo from 'vue-count-to'
 export default {
+  components: { countTo },
   name: 'mapLeft'
-
 }
 </script>
 

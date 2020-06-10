@@ -6,28 +6,36 @@
     <div class="content">
       <div class="jc-row-flex1">
         <p>
-          <span class="count">50</span>
+          <span class="count">
+            <countTo :startVal='0' :endVal='50' :duration='10000'></countTo>
+          </span>
           <span class="unit">件</span>
         </p>
         <p>案件总数</p>
       </div>
       <div class="jc-row-flex1">
         <p>
-          <span class="count">6</span>
+          <span class="count">
+            <countTo :startVal='0' :endVal='6' :duration='10000'></countTo>
+          </span>
           <span class="unit">件</span>
         </p>
         <p>已结案</p>
       </div>
       <div class="jc-row-flex1">
         <p>
-          <span class="count">4</span>
+          <span class="count">
+            <countTo :startVal='0' :endVal='4' :duration='10000'></countTo>
+          </span>
           <span class="unit">件</span>
         </p>
         <p>处理中</p>
       </div>
       <div class="jc-row-flex1">
         <p>
-          <span class="count">80</span>
+          <span class="count">
+            <countTo :startVal='0' :endVal='80' :duration='10000'></countTo>
+          </span>
           <span class="unit">%</span>
         </p>
         <p>结案率</p>
@@ -36,28 +44,36 @@
     <div class="content">
       <div class="jc-row-flex1">
         <p>
-          <span class="count">49</span>
+          <span class="count">
+            <countTo :startVal='0' :endVal='49' :duration='10000'></countTo>
+          </span>
           <span class="unit">件</span>
         </p>
         <p>渣土运输</p>
       </div>
       <div class="jc-row-flex1">
         <p>
-          <span class="count">6</span>
+          <span class="count">
+            <countTo :startVal='0' :endVal='6' :duration='10000'></countTo>
+          </span>
           <span class="unit">件</span>
         </p>
         <p>水务执法</p>
       </div>
       <div class="jc-row-flex1">
         <p>
-          <span class="count">4</span>
+          <span class="count">
+            <countTo :startVal='0' :endVal='4' :duration='10000'></countTo>
+          </span>
           <span class="unit">件</span>
         </p>
         <p>违章建筑</p>
       </div>
       <div class="jc-row-flex1">
         <p>
-          <span class="count">2</span>
+          <span class="count">
+            <countTo :startVal='0' :endVal='2' :duration='10000'></countTo>
+          </span>
           <span class="unit">件</span>
         </p>
         <p>餐饮油烟</p>
@@ -67,9 +83,10 @@
 </template>
 
 <script>
+import countTo from 'vue-count-to'
 export default {
+  components: { countTo },
   name: 'caseSummary'
-
 }
 </script>
 
