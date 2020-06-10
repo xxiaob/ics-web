@@ -6,29 +6,29 @@
     <div class="content">
       <div class="jc-column-flex1">
         <div class="jc-row-flex1">
-          <div class="top">健康小区 9 栋 朝东</div>
+          <div class="top">施工现场</div>
           <div class="img">
-            <video src="./assets/test.mp4" autoplay muted width="100%" height="100%"></video>
+            <video src="/static/videos/1.mp4" autoplay muted width="100%" height="100%"></video>
           </div>
         </div>
         <div class="jc-row-flex1">
-          <div class="top">健康小区 10 栋 朝东</div>
+          <div class="top">鼓楼广场</div>
           <div class="img">
-            <video src="./assets/test.mp4" autoplay muted width="100%" height="100%"></video>
+            <video src="/static/videos/2.mp4" autoplay muted width="100%" height="100%"></video>
           </div>
         </div>
       </div>
       <div class="jc-column-flex1">
         <div class="jc-row-flex1">
-          <div class="top">健康小区 11 栋 朝东</div>
+          <div class="top">水西门大街</div>
           <div class="img">
-            <video src="./assets/test.mp4" autoplay muted width="100%" height="100%"></video>
+            <video src="/static/videos/3.mp4" autoplay muted width="100%" height="100%"></video>
           </div>
         </div>
         <div class="jc-row-flex1">
-          <div class="top">健康小区 12 栋 朝东</div>
+          <div class="top">新街口广场</div>
           <div class="img">
-            <video src="./assets/test.mp4" autoplay muted width="100%" height="100%"></video>
+            <video src="/static/videos/4.mp4" autoplay muted width="100%" height="100%"></video>
           </div>
         </div>
       </div>

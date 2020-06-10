@@ -2,8 +2,8 @@
   <div class="countStatistics">
     <div class="title">
       <span>事件统计</span>
-      <span class="type">各区网巡总数占比</span>
-      <span class="type selected">各区事件总数占比</span>
+      <span class="type" :class="active===0?'selected':''" @click="change(0)">各区网巡总数占比</span>
+      <span class="type" :class="active===1?'selected':''" @click="change(1)">各区事件总数占比</span>
     </div>
     <!-- <div class="dateType">
       <span>日</span>
@@ -18,6 +18,11 @@
 import echarts from 'echarts'
 export default {
   name: 'countStatistics',
+  data() {
+    return {
+      active: 0
+    }
+  },
   mounted() {
     this.renderEcharts()
 
@@ -29,6 +34,32 @@ export default {
     })
   },
   methods: {
+    change(v) {
+      this.active = v
+      this.echartsChange()
+    },
+    echartsChange() {
+      if (this.echarts) {
+        const arr1 = [
+          { value: 335, name: '雨花' },
+          { value: 310, name: '秦淮' },
+          { value: 274, name: '鼓楼' },
+          { value: 235, name: '玄武' },
+          { value: 400, name: '建邺' },
+          { value: 335, name: '江宁' },
+          { value: 310, name: '溧水' },
+          { value: 274, name: '六合' },
+          { value: 235, name: '高淳' },
+          { value: 400, name: '栖霞' }
+        ]
+
+        arr1.forEach(item=>{
+          item.value = Math.round(400 * Math.random())
+        })
+        this.echartsOptions.series[0].data = arr1.sort( (a, b)=> b.value - a.value)
+        this.echarts.setOption(this.echartsOptions)
+      }
+    },
     renderEcharts() {
       this.echarts = echarts.init(this.$refs.echarts)
       this.echartsOptions = {

@@ -6,9 +6,9 @@
       <span class="type selected">事件类型top5</span> -->
     </div>
     <div class="dateType">
-      <span>日</span>
-      <span class="selected">周</span>
-      <span>月</span>
+      <span :class="dateActive===0?'selected':''" @click="dateChange(0)">日</span>
+      <span :class="dateActive===1?'selected':''" @click="dateChange(1)">周</span>
+      <span :class="dateActive===2?'selected':''" @click="dateChange(2)">月</span>
     </div>
     <div class="echarts" ref="echarts"></div>
   </div>
@@ -18,6 +18,11 @@
 import echarts from 'echarts'
 export default {
   name: 'intellect',
+  data() {
+    return {
+      dateActive: 0
+    }
+  },
   mounted() {
     this.renderEcharts()
 
@@ -29,6 +34,27 @@ export default {
     })
   },
   methods: {
+    dateChange(v) {
+      this.dateActive = v
+      this.echartsChange()
+    },
+    echartsChange() {
+      if (this.echarts) {
+        const arr1 = [
+          { value: 335, name: '非机动车乱停放' },
+          { value: 310, name: '机动车乱停放' },
+          { value: 274, name: '渣土车非法上路' },
+          { value: 235, name: '暴露垃圾' },
+          { value: 400, name: '游街商贩' }
+        ]
+
+        arr1.forEach(item=>{
+          item.value = Math.round(400 * Math.random())
+        })
+        this.echartsOptions.series[0].data = arr1.sort( (a, b)=> b.value - a.value)
+        this.echarts.setOption(this.echartsOptions)
+      }
+    },
     renderEcharts() {
       this.echarts = echarts.init(this.$refs.echarts)
       this.echartsOptions = {

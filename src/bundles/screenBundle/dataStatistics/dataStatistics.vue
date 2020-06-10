@@ -2,13 +2,13 @@
   <div class="dataStatistics">
     <div class="title">
       <span>数据统计</span>
-      <span class="type">事件上报</span>
-      <span class="type selected">网巡上报</span>
+      <span class="type" :class="active===0?'selected':''" @click="change(0)">事件上报</span>
+      <span class="type" :class="active===1?'selected':''" @click="change(1)">网巡上报</span>
     </div>
     <div class="dateType">
-      <span>日</span>
-      <span class="selected">周</span>
-      <span>月</span>
+      <span :class="dateActive===0?'selected':''" @click="dateChange(0)">日</span>
+      <span :class="dateActive===1?'selected':''" @click="dateChange(1)">周</span>
+      <span :class="dateActive===2?'selected':''" @click="dateChange(2)">月</span>
     </div>
     <div class="echarts" ref="echarts"></div>
   </div>
@@ -18,6 +18,12 @@
 import echarts from 'echarts'
 export default {
   name: 'dataStatistics',
+  data() {
+    return {
+      active: 0,
+      dateActive: 0
+    }
+  },
   mounted() {
     this.renderEcharts()
 
@@ -29,6 +35,34 @@ export default {
     })
   },
   methods: {
+    change(v) {
+      this.active = v
+      this.echartsChange()
+    },
+    dateChange(v) {
+      this.dateActive = v
+      this.echartsChange()
+    },
+    echartsChange() {
+      if (this.echarts) {
+        const arr1 = new Array(10).fill(0)
+
+        arr1.forEach((value, index)=>{
+          arr1[index] = Math.round(300 * Math.random())
+        })
+        console.log(arr1)
+
+        const arr2 = new Array(10).fill(0)
+
+        arr2.forEach((value, index)=>{
+          arr2[index] = Math.round(300 * Math.random())
+        })
+        console.log(arr2)
+        this.echartsOptions.series[0].data = arr1
+        this.echartsOptions.series[1].data = arr2
+        this.echarts.setOption(this.echartsOptions)
+      }
+    },
     renderEcharts() {
       this.echarts = echarts.init(this.$refs.echarts)
       this.echartsOptions = {
@@ -91,14 +125,14 @@ export default {
             barCategoryGap: '60%',
             name: '正常',
             type: 'bar',
-            stack: '广告',
+            stack: '状态',
             data: [120, 132, 101, 134, 90, 230, 210, 90, 230, 90 ]
           },
           {
             barCategoryGap: '60%',
             name: '异常',
             type: 'bar',
-            stack: '广告',
+            stack: '状态',
             data: [220, 182, 191, 234, 290, 330, 310, 330, 310, 90]
           }
         ]

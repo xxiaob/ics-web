@@ -6,9 +6,9 @@
       <span class="type selected">网巡上报</span> -->
     </div>
     <div class="dateType">
-      <span>日</span>
-      <span class="selected">周</span>
-      <span>月</span>
+      <span :class="dateActive===0?'selected':''" @click="dateChange(0)">日</span>
+      <span :class="dateActive===1?'selected':''" @click="dateChange(1)">周</span>
+      <span :class="dateActive===2?'selected':''" @click="dateChange(2)">月</span>
     </div>
     <div class="echarts" ref="echarts"></div>
   </div>
@@ -18,6 +18,11 @@
 import echarts from 'echarts'
 export default {
   name: 'eventType',
+  data() {
+    return {
+      dateActive: 0
+    }
+  },
   mounted() {
     this.renderEcharts()
 
@@ -29,6 +34,33 @@ export default {
     })
   },
   methods: {
+    dateChange(v) {
+      this.dateActive = v
+      this.echartsChange()
+    },
+    echartsChange() {
+      if (this.echarts) {
+        const arr1 = new Array(10).fill(0)
+
+        arr1.forEach((value, index)=>{
+          arr1[index] = Math.round(50 - 20 * Math.random())
+        })
+        const arr2 = new Array(10).fill(0)
+
+        arr2.forEach((value, index)=>{
+          arr2[index] = Math.round(40 - 20 * Math.random())
+        })
+        const arr3 = new Array(10).fill(0)
+
+        arr3.forEach((value, index)=>{
+          arr3[index] = Math.round(30 - 20 * Math.random())
+        })
+        this.echartsOptions.series[0].data = arr1
+        this.echartsOptions.series[1].data = arr2
+        this.echartsOptions.series[2].data = arr3
+        this.echarts.setOption(this.echartsOptions)
+      }
+    },
     renderEcharts() {
       this.echarts = echarts.init(this.$refs.echarts)
       this.echartsOptions = {
