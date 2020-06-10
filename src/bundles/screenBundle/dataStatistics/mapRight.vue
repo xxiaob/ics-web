@@ -3,37 +3,37 @@
     <div class="jc-column-flex1">
       <p>
         <span class="count">25</span>
-        <span class="unit">人</span>
+        <span class="unit">辆</span>
       </p>
-      <p>在线人数</p>
+      <p>网巡车辆</p>
     </div>
     <div class="jc-column-flex1">
       <p>
-        <span class="count">466</span>
-        <span class="unit">km</span>
+        <span class="count">88</span>
+        <span class="unit">个</span>
       </p>
-      <p>巡逻里程</p>
+      <p>临时摆摊</p>
     </div>
     <div class="jc-column-flex1">
       <p>
-        <span class="count">139</span>
-        <span class="unit">次</span>
+        <span class="count">39</span>
+        <span class="unit">个</span>
       </p>
-      <p>上报事件</p>
+      <p>视频监控</p>
     </div>
     <div class="jc-column-flex1">
       <p>
         <span class="count">49</span>
-        <span class="unit">件</span>
+        <span class="unit">个</span>
       </p>
-      <p>网巡反馈</p>
+      <p>无人机</p>
     </div>
     <div class="jc-column-flex1">
       <p>
         <span class="count">19</span>
-        <span class="unit">件</span>
+        <span class="unit">个</span>
       </p>
-      <p>AI智能分析</p>
+      <p>在建工地</p>
     </div>
   </div>
 </template>

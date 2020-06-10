@@ -5,7 +5,7 @@
     </div>
     <div class="content">
       <table>
-        <tr v-for="first in list" :key="first">
+        <tr v-for="(first,index) in list" :key="index">
           <td v-for="second in first" :key="second">{{second}}</td>
         </tr>
       </table>
