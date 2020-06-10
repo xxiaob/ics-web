@@ -17,29 +17,11 @@
       </div>
     </div>
     <div class="jc-column-flex4">
-      <div class="ic-row-flex1">
-        <div class="jc-column-flex1">周五</div>
-        <div class="jc-column-flex2 jc-weather-sunny"></div>
-        <div class="jc-column-flex1">35℃</div>
-        <div class="jc-column-flex1">阴天</div>
-      </div>
-      <div class="ic-row-flex1">
-        <div class="jc-column-flex1">周五</div>
-        <div class="jc-column-flex2 jc-weather-sunny"></div>
-        <div class="jc-column-flex1">35℃</div>
-        <div class="jc-column-flex1">阴天</div>
-      </div>
-      <div class="ic-row-flex1">
-        <div class="jc-column-flex1">周五</div>
-        <div class="jc-column-flex2 jc-weather-sunny"></div>
-        <div class="jc-column-flex1">35℃</div>
-        <div class="jc-column-flex1">阴天</div>
-      </div>
-      <div class="ic-row-flex1">
-        <div class="jc-column-flex1">周五</div>
-        <div class="jc-column-flex2 jc-weather-sunny"></div>
-        <div class="jc-column-flex1">35℃</div>
-        <div class="jc-column-flex1">阴天</div>
+      <div class="ic-row-flex1" v-for="item in weathers" :key="item.date">
+        <div class="jc-column-flex1">{{weeks[item.week]}}</div>
+        <div class="jc-column-flex2" :class="getWeatherStyle(item.dayType)"></div>
+        <div class="jc-column-flex1">{{item.dayTemp}}℃</div>
+        <div class="jc-column-flex1">{{item.dayWeather}}</div>
       </div>
     </div>
   </div>
@@ -61,7 +43,7 @@ export default {
   data() {
     return {
       weather: {},
-      weathers: {},
+      weathers: [],
       weeks: {
         0: '周日',
         1: '周一',
@@ -77,8 +59,10 @@ export default {
     const myWeather = new JcWeather()
 
     this.weather = await myWeather.getWeather('南京')
-    this.weathers = await myWeather.getForecastWeather('南京')
-    console.log('now weather', this.weather, this.weathers)
+    const { forecasts } = await myWeather.getForecastWeather('南京')
+
+    this.weathers = forecasts
+    // console.log('now weather', this.weather, this.weathers)
   },
   methods: {
     getWeatherStyle(type) {
