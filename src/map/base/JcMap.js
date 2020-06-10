@@ -27,6 +27,16 @@ class JcMap {
   fitView() { }
 
   /**
+   * 设置地图样式
+   */
+  setMapStyle() { }
+
+  /**
+   * 设置地图缩放等级
+   */
+  setZooms() { }
+
+  /**
    * 添加事件监听
    * @param {*} event 事件名称
    * @param {*} cb 回调

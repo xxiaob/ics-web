@@ -4,6 +4,7 @@
 import JcMapBase from '../../base/JcMap'
 import { MapOptions, EventTrans } from '../config'
 import { initAmap } from '../aMapUtil'
+import { mapStyle } from '@/map/mapConst'
 
 class JcMap extends JcMapBase {
   /**
@@ -13,6 +14,7 @@ class JcMap extends JcMapBase {
    */
   constructor(options = {}) {
     super(options)
+    this.zooms = [2, 20]
   }
 
   /**
@@ -25,7 +27,7 @@ class JcMap extends JcMapBase {
       this.console('开始初始化地图...')
       try {
         this.AMap = await initAmap()
-        this.map = new this.AMap.Map(source, MapOptions.mapOptions[this.mapStyle])
+        this.map = new this.AMap.Map(source, { ...MapOptions.mapOptions[this.mapStyle], zooms: this.zooms })
 
         let complete = false //防止map complete事件触发多次
 
@@ -72,6 +74,38 @@ class JcMap extends JcMapBase {
     } else {
       this.map.setFitView()
     }
+  }
+
+  /**
+   * 设置地图样式
+   * @param {String} style 地图样式
+   */
+  setMapStyle(style) {
+    //如果样式没变，则不进行更改
+    if (style == this.mapStyle) {
+      return
+    }
+    this.mapStyle = style
+    this.console('Amap setMapStyle', style)
+    if (style == mapStyle.SATELLITE) {
+      this.map.setLayers([new this.AMap.TileLayer.Satellite({ zooms: this.zooms })])
+    } else {
+      this.map.setMapStyle(MapOptions.mapOptions[this.mapStyle].mapStyle)
+      this.map.setLayers([new this.AMap.createDefaultLayer({ zooms: this.zooms })]) //eslint-disable-line
+    }
+  }
+
+  /**
+   * 设置地图缩放等级
+   * @param {Array} zooms 地图缩放等级
+   */
+  setZooms(zooms) {
+    this.zooms = zooms
+    let layers = this.map.getLayers()
+
+    layers.forEach(layer => {
+      layer.setZooms(zooms)
+    })
   }
 
   /**
