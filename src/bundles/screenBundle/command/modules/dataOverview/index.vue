@@ -100,6 +100,8 @@ $jc-overview-color: #3783fb;
     background: url(./assets/bg.png) no-repeat left bottom;
     background-size: 100% 100%;
     z-index: 5;
+    opacity: 1;
+    transition: opacity 0.4s;
   }
   .jc-overview-contant {
     position: absolute;
@@ -118,6 +120,9 @@ $jc-overview-color: #3783fb;
     height: 160px;
     .jc-overview-contant {
       opacity: 1;
+    }
+    .jc-overview-icon {
+      opacity: 0.2;
     }
   }
   .jc-overview-header {

@@ -44,7 +44,8 @@ export default {
     CommandMessage: () => import('./modules/message'), //任务等消息弹窗
     ImTalk: () => import('./modules/imTalk'), //聊天消息
     CommandOrg: () => import('./modules/org'), //组织架构
-    CommandGrid: () => import('./modules/grid') //网格
+    CommandGrid: () => import('./modules/grid'), //网格
+    MessageDetail: () => import('./modules/messageDetail') //消息详情
   },
   data() {
     return {

@@ -36,7 +36,7 @@ export default {
 
     },
     detail(item) {
-
+      this.$EventBus.$emit('view-component-change', { component: 'MessageDetail', options: item }) //通知窗口改变
     }
   },
   activated() {

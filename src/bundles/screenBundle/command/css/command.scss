@@ -483,6 +483,7 @@ $jc-screen-height: 40px;
     }
   }
 
+  /*中间内容体*/
   .jc-view-content {
     position: relative;
     flex: 1;
@@ -523,6 +524,7 @@ $jc-screen-height: 40px;
     }
   }
 
+  /*用户信息*/
   .jc-user-warp {
     position: relative;
     margin: 0 $jc-default-dis;
@@ -601,6 +603,19 @@ $jc-screen-height: 40px;
         &.jc-guanmo {
           background-image: url(../modules//org/assets/guanmo.png);
         }
+      }
+    }
+    /*事件，任务 详情*/
+    .jc-detail-warp {
+      display: flex;
+      padding: 0 $jc-default-dis/2;
+      .jc-detail-label {
+        width: 80px;
+        height: 30px;
+        line-height: 30px;
+      }
+      .jc-detail-content {
+        flex: 1;
       }
     }
   }
