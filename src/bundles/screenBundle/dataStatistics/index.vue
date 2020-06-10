@@ -44,7 +44,9 @@
           </div>
           <div class="jc-column-flex1">
             <div class="jc-item-out">
-              <div class="jc-item">jc-item</div>
+              <div class="jc-item">
+                <jc-attend class="jc-item-content"></jc-attend>
+              </div>
             </div>
           </div>
         </div>
@@ -103,6 +105,7 @@ export default {
     JcEventType: ()=> import('./eventType'),
     JcMonitor: ()=> import('./monitor'),
     JcRealTimeEvent: ()=> import('./realTimeEvent'),
+    JcAttend: ()=> import('./attend'),
     // CommandHeader: () => import('./modules/header'), //顶部
     MapSearch: () => import('@/components/JcMap/MapSearch') //地图搜索
   },

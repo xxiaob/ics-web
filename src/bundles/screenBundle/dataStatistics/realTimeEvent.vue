@@ -1,5 +1,5 @@
 <template>
-  <div class="monitor">
+  <div class="realTimeEvent">
     <div class="title">
       <span>实时上报事件</span>
     </div>
@@ -39,7 +39,7 @@
 
 <script>
 export default {
-  name: 'monitor'
+  name: 'realTimeEvent'
 }
 </script>
 
