@@ -1,5 +1,5 @@
 <template>
-  <div class="jc-screen-message">asdfasdf</div>
+  <div class="jc-screen-message">这里是聊天区域</div>
 </template>
 <script>
 export default {

@@ -9,6 +9,7 @@
     <!-- 左侧操作组件 -->
     <command-operate></command-operate>
     <!-- 左下角数据 -->
+    <data-overview></data-overview>
     <!-- 右侧信息显示区域动态显示组件 -->
     <div class="jc-view-space" :class="{'jc-message-show': !!messageComponent}">
       <transition name="jc-view">
@@ -39,6 +40,7 @@ export default {
     CommandHeader: () => import('./modules/header'), //顶部
     CommandOperate: () => import('./modules/operate'), //功能操作区域
     MapSearch: () => import('@/components/JcMap/MapSearch'), //地图搜索
+    DataOverview: () => import('./modules/dataOverview'), //左下角的数据预览
     CommandMessage: () => import('./modules/message'), //任务等消息弹窗
     ImTalk: () => import('./modules/imTalk'), //聊天消息
     CommandOrg: () => import('./modules/org'), //组织架构

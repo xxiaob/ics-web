@@ -88,13 +88,14 @@ $jc-screen-height: 40px;
       padding: $jc-default-dis;
       width: 180px;
       height: 168px;
-      background: url(../modules/header/assets/weather-bg.png) no-repeat center bottom;
+      background: url(../modules/header/assets/weather-bg.png) no-repeat center
+        bottom;
       background-size: 100% 160px;
       left: 0;
       visibility: hidden;
       opacity: 0;
       transform: translateY(-10px);
-      transition: opacity .6s, transform .6s;
+      transition: opacity 0.6s, transform 0.6s;
       will-change: transform, opacity;
     }
 
@@ -326,7 +327,7 @@ $jc-screen-height: 40px;
     transform: translate(20px, -50%);
     visibility: hidden;
     opacity: 0;
-    transition: all .4s;
+    transition: all 0.4s;
     will-change: transform;
 
     &:before {
@@ -511,7 +512,7 @@ $jc-screen-height: 40px;
       .jc-talk-type {
         float: right;
         background-color: $jc-color-primary;
-        opacity: .8;
+        opacity: 0.8;
         cursor: pointer;
         padding: 0 5px;
         height: 20px;
@@ -596,21 +597,22 @@ $jc-screen-height: 40px;
     @include jc-text-warp;
 
     &.jc-event {
-      background-image: url('../modules/message/assets/event.png');
+      background-image: url("../modules/message/assets/event.png");
     }
 
     &.jc-question {
-      background-image: url('../modules/message/assets/question.png');
+      background-image: url("../modules/message/assets/question.png");
     }
 
     &.jc-task {
-      background-image: url('../modules/message/assets/task.png');
+      background-image: url("../modules/message/assets/task.png");
     }
   }
 
   .jc-message-user {
     width: 68px;
-    background: url(../modules/message/assets/peportperson.png) no-repeat left center;
+    background: url(../modules/message/assets/peportperson.png) no-repeat left
+      center;
     background-size: 20px 20px;
     padding: 0 $jc-default-dis/2 0 24px;
     @include jc-text-warp;
@@ -619,7 +621,7 @@ $jc-screen-height: 40px;
   /* ------ 消息列表进出场动画 ------- */
   .jc-list-enter-active,
   .jc-list-leave-active {
-    transition: transform .6s, opacity .6s;
+    transition: transform 0.6s, opacity 0.6s;
   }
 
   .jc-list-enter,
@@ -633,6 +635,6 @@ $jc-screen-height: 40px;
   }
 
   .jc-list-move {
-    transition: transform .6s;
+    transition: transform 0.6s;
   }
 }
