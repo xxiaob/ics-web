@@ -1,7 +1,8 @@
 <template>
   <div class="jc-overview" :class="{'jc-active': viewShow}" @click="viewShow = true">
     <div class="jc-overview-contant" v-loading="loading" element-loading-background="rgba(0, 0, 0, 0)">
-      <div class="jc-overview-header jc-title-sign">数据概览</div>
+      <div class="jc-overview-header jc-title-sign">数据概览<div class="jc-close" @click.stop="viewShow = false"><i class="el-icon-close"></i></div>
+      </div>
     </div>
   </div>
 </template>
@@ -29,6 +30,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+$jc-overview-color: #3783fb;
 .jc-overview {
   position: absolute;
   width: 40px;
@@ -53,7 +55,7 @@ export default {
     opacity: 0;
     padding: $jc-default-dis/2;
     background-color: $jc-color-white;
-    transition: opacity 0.4;
+    transition: opacity 0.4s;
   }
   &.jc-active {
     width: 300px;
@@ -63,6 +65,29 @@ export default {
     }
   }
   .jc-overview-header {
+    position: relative;
+    height: 20px;
+    line-height: 20px;
+    .jc-close {
+      display: block;
+      float: right;
+      width: 16px;
+      height: 16px;
+      overflow: hidden;
+      border-radius: 50%;
+      background-color: $jc-overview-color;
+      transform: rotate(0deg);
+      transition: transform 0.4s;
+      color: $jc-color-white;
+      text-align: center;
+
+      .el-icon-close {
+        display: inline-block;
+      }
+      &:hover {
+        transform: rotate(180deg);
+      }
+    }
   }
 }
 </style>

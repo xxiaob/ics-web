@@ -93,6 +93,7 @@
 </template>
 <script>
 import { JcMap } from '@/map'
+import { mapStyle } from '@/map/mapConst'
 
 let myJcMap //个人 map 对象
 
@@ -118,7 +119,7 @@ export default {
     }
   },
   mounted() {
-    myJcMap = new JcMap()
+    myJcMap = new JcMap({ mapStyle: mapStyle.DARK })
     this.initData()
   },
   methods: {
