@@ -165,5 +165,11 @@ export default {
     exportPostOversee: 'task-service/taskDataExport/getPostSupervise',
     addUserOversee: 'task-service/taskSupervise/addUserSupervise',
     addPostOversee: 'task-service/taskSupervise/addPostSupervise'
+  },
+  screen: {
+    //大屏接口
+    command: {
+      getCommandScreenData: 'data-service/largeScreen/getCommandScreenData'
+    }
   }
 }

@@ -20,7 +20,12 @@
         <span class="jc-talk-type" :class="{'jc-active': talkType == 'audio'}" @click="talkType = 'audio'">音频</span>
       </div>
       <div class="jc-user-content">
-        <div class="jc-user-item"></div>
+        <div class="jc-user-item" v-for="user in users" :key="user.userId">{{user.userName}}<i class="el-icon-close"></i></div>
+      </div>
+      <div class="jc-user-footer">
+        <div class="jc-opera-item jc-clear" title="清除"></div>
+        <div class="jc-opera-item jc-command" title="指挥"></div>
+        <div class="jc-opera-item  jc-guanmo" title="观摩"></div>
       </div>
     </div>
   </view-warp>
@@ -44,6 +49,7 @@ export default {
   data() {
     return {
       loading: false,
+      users: [{ userId: 1, userName: 'yangchao' }],
       filterText: '',
       trees: [],
       expandedKeys: [],

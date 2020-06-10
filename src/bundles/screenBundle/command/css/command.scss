@@ -530,8 +530,34 @@ $jc-screen-height: 40px;
 
     .jc-user-content {
       position: relative;
-      height: 150px;
+      height: 120px;
       overflow: auto;
+      .jc-user-item {
+        display: inline-block;
+        padding: 0 $jc-default-dis/2;
+        font-size: $jc-font-size-smaller;
+      }
+    }
+    .jc-user-footer {
+      text-align: right;
+      .jc-opera-item {
+        display: inline-block;
+        cursor: pointer;
+        width: 24px;
+        height: 28px;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: 16px auto;
+        &.jc-clear {
+          background-image: url(../modules//org/assets/clear.png);
+        }
+        &.jc-command {
+          background-image: url(../modules//org/assets/command.png);
+        }
+        &.jc-guanmo {
+          background-image: url(../modules//org/assets/guanmo.png);
+        }
+      }
     }
   }
 }
