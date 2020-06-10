@@ -2,7 +2,7 @@
  * 天气
  */
 import { JC_WEATHER } from '@/constant/Dictionaries'
-import { getLiveWeather } from '@/map/aMap/aMapUtil'
+import { getLiveWeather, getForecastWeather } from '@/map/aMap/aMapUtil'
 
 export default class JcWeather {
   /**
@@ -34,6 +34,30 @@ export default class JcWeather {
         break
       }
     }
+
+    return result
+  }
+
+  /**
+   * 获取天气信息
+   * @param {String} city 地区名称
+   */
+  async getForecastWeather(city) {
+    let result = await getForecastWeather(city)
+
+    delete result.info //删除info字段
+
+    //处理天气归类
+    result.forecasts.forEach(item => {
+      for (let key in this.weatherMapping) {
+        if (this.weatherMapping[key].indexOf(item.dayWeather) > -1) {
+          item.dayType = key
+        }
+        if (this.weatherMapping[key].indexOf(item.nightWeather) > -1) {
+          item.nightType = key
+        }
+      }
+    })
 
     return result
   }
