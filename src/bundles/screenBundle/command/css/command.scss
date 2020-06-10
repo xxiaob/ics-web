@@ -257,6 +257,11 @@ $jc-screen-height: 40px;
     background-size: auto 50%;
   }
 
+  .jc-main {
+    background-image: url("../modules/operate/assets/main.png");
+    @extend .jc-opreate-icon;
+  }
+
   .jc-select {
     background-image: url("../modules/operate/assets/select.png");
     @extend .jc-opreate-icon;

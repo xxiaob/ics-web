@@ -17,6 +17,7 @@ export default {
   name: 'jcMap',
   data() {
     return {
+      // orgTipVisible: true, //组织是否显示名称
       project: {}
     }
   },

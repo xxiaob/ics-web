@@ -1,6 +1,9 @@
 <template>
   <div class="jc-screen-opreate no-select">
     <div class="jc-opreate-item">
+      <router-link :to="{name: 'index'}" class="jc-main" tag="i" title="首页"></router-link>
+    </div>
+    <div class="jc-opreate-item">
       <i class="jc-select" title="框选"></i>
     </div>
     <div class="jc-opreate-item">
