@@ -17,11 +17,15 @@ export default {
     return {
       visible: true,
       index: 3,
-      list: [{ id: 1, type: '1' }, { id: 2, type: '2' }]
+      list: [{ id: 1, type: '1' }, { id: 2, type: '2' }],
+      interval: null
     }
   },
   mounted() {
     this.initData()
+    this.interval = setInterval(() => {
+      this.list.splice(0, 0, { id: this.index++, type: this.index % 3 })
+    }, 1000 * 10)
   },
   methods: {
     initData() {
@@ -49,6 +53,9 @@ export default {
     //设置该窗口隐藏,然后开始新消息数量通知
     this.visible = false
     console.log('ScreenCommandMessage deactivated')
+  },
+  beforeDestroy() {
+    clearInterval(this.interval)
   }
 }
 </script>
