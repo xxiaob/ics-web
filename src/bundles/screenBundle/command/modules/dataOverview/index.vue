@@ -1,5 +1,6 @@
 <template>
-  <div class="jc-overview" :class="{'jc-active': viewShow}" @click="viewShow = true">
+  <div class="jc-overview" :class="{'jc-active': viewShow}">
+    <i class="jc-overview-icon" @click="viewShow = !viewShow"></i>
     <div class="jc-overview-contant" v-loading="loading" element-loading-background="rgba(0, 0, 0, 0)">
       <div class="jc-overview-header jc-title-sign">数据概览
         <div class="jc-close el-icon-close" @click.stop="viewShow = false"></div>
@@ -86,12 +87,20 @@ $jc-overview-color: #3783fb;
   bottom: $jc-default-dis;
   z-index: 8;
   cursor: pointer;
-  background: url(./assets/bg.png) no-repeat left bottom;
-  background-size: 40px;
   overflow: hidden;
   transform: translateZ(0);
   transition: width 0.3s, height 0.3s;
 
+  .jc-overview-icon {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    left: 0;
+    bottom: 0;
+    background: url(./assets/bg.png) no-repeat left bottom;
+    background-size: 100% 100%;
+    z-index: 5;
+  }
   .jc-overview-contant {
     position: absolute;
     left: 0;
