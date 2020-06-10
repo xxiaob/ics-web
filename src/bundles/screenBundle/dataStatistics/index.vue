@@ -7,7 +7,9 @@
         <div class="jc-row-flex1">
           <div class="jc-column-flex1">
             <div class="jc-item-out">
-              <div class="jc-item">jc-item</div>
+              <div class="jc-item">
+                <jc-total-count class="jc-item-content"></jc-total-count>
+              </div>
             </div>
           </div>
           <div class="jc-column-flex1">
@@ -106,6 +108,7 @@ export default {
     JcMonitor: ()=> import('./monitor'),
     JcRealTimeEvent: ()=> import('./realTimeEvent'),
     JcAttend: ()=> import('./attend'),
+    JcTotalCount: ()=> import('./totalCount'),
     // CommandHeader: () => import('./modules/header'), //顶部
     MapSearch: () => import('@/components/JcMap/MapSearch') //地图搜索
   },
