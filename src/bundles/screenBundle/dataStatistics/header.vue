@@ -12,6 +12,7 @@ import moment from 'moment'
 import { projectGet } from '@/api/projects'
 import { PROJECT_TYPES } from '@/constant/Dictionaries'
 import { organizationList } from '@/api/organization'
+const orgMap = {}
 
 export default {
   name: 'jcHeader',
@@ -51,9 +52,12 @@ export default {
     //处理标题显示
     if (PROJECT_TYPES.SpecialControl == this.project.projectType || PROJECT_TYPES.EmergencySupport == this.project.projectType) {
       this.title = `${this.project.projectName}数据大屏`
+      this.org = { name: this.project.projectName, orgId: this.project.orgId }
     } else {
       this.title = `${parentOrg.label}常态数据大屏`
+      this.org = { ...orgMap[parentOrg.value] }
     }
+    this.$EventBus.$emit('org-change', this.org) //使用事件总线进行级别切换通知
   },
   mounted() {
     this.interval = setInterval(() => {
@@ -70,6 +74,7 @@ export default {
         child.forEach(item => {
           orgs.push({ value: item.orgId, label: item.orgName,
             ...(item.children && item.children.length ? { children: this.formatOrg(item.children) } : {}) })
+          orgMap[item.orgId] = { orgId: item.orgId, name: item.orgName }
         })
         return orgs
       }
