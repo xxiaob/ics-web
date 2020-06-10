@@ -67,11 +67,13 @@ export default {
         flex: 1;
         background: url(./assets/monitor1.png) no-repeat;
         background-size: 100% 100%;
+        border: 1px solid #1292f6;
       }
       .img2 {
         flex: 1;
         background: url(./assets/monitor2.png) no-repeat;
         background-size: 100% 100%;
+        border: 1px solid #1292f6;
       }
     }
   }
