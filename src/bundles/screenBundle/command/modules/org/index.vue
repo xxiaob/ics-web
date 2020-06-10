@@ -2,7 +2,7 @@
   <view-warp title="组织架构">
     <el-input v-model="filterText" prefix-icon="el-icon-search" class="jc-filter-input" clearable size="mini" placeholder="输入关键字进行过滤"></el-input>
     <div class="jc-view-content" v-loading="loading" element-loading-background="rgba(0, 0, 0, 0)">
-      <el-tree ref="tree" :default-expanded-keys="expandedKeys" :data="trees" :show-checkbox="true" :props="props" :filter-node-method="filterNode" node-key="id">
+      <el-tree ref="tree" :default-expanded-keys="expandedKeys" :data="trees" :show-checkbox="true" :props="props" @check="checkChange" :filter-node-method="filterNode" node-key="id">
         <div class="custom-tree-node" slot-scope="{ node,data }">
           <div class="jc-tree-label no-select" :class="{'jc-user': data.type=='user'}">
             <div class="jc-text-warp" v-text="node.label"></div>
@@ -20,10 +20,10 @@
         <span class="jc-talk-type" :class="{'jc-active': talkType == 'audio'}" @click="talkType = 'audio'">音频</span>
       </div>
       <div class="jc-user-content">
-        <div class="jc-user-item" v-for="user in users" :key="user.userId">{{user.userName}}<i class="el-icon-close"></i></div>
+        <div class="jc-user-item" v-for="(user,index) in users" :key="user.id">{{user.name}}<i class="el-icon-close" @click="deleteUser(index)"></i></div>
       </div>
       <div class="jc-user-footer">
-        <div class="jc-opera-item jc-clear" title="清除"></div>
+        <div class="jc-opera-item jc-clear" title="清除" @click="clearUsers"></div>
         <div class="jc-opera-item jc-command" title="指挥"></div>
         <div class="jc-opera-item  jc-guanmo" title="观摩"></div>
       </div>
@@ -49,7 +49,7 @@ export default {
   data() {
     return {
       loading: false,
-      users: [{ userId: 1, userName: 'yangchao' }],
+      users: [],
       filterText: '',
       trees: [],
       expandedKeys: [],
@@ -73,6 +73,36 @@ export default {
         console.log(error)
       }
       this.loading = false
+    },
+    deleteUser(index) {
+      this.users.splice(index, 1)//删除用户
+      this.updateTreesChecked() //更新树结构
+    },
+    clearUsers() {
+      this.users = [] //清除用户
+      this.updateTreesChecked() //更新树结构
+    },
+    updateTreesChecked() {
+      //更新树结构
+      let keys = []
+
+      this.users.forEach(item => {
+        keys.push(item.id)
+      })
+      this.$refs.tree.setCheckedKeys(keys)
+    },
+    checkChange(node, data) {
+      console.log('选中的', node, data)
+      let users = []
+
+      if (data.checkedNodes && data.checkedNodes.length) {
+        data.checkedNodes.forEach(item=> {
+          if (item.type == 'user') {
+            users.push({ id: item.id, name: item.label, pid: item.pid })
+          }
+        })
+      }
+      this.users = users
     },
     formatUserOrgTrees(child) {
       let trees = []
