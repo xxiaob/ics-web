@@ -36,7 +36,7 @@ export const MapOptions = {
   mapOptions: {
     [mapStyle.BASE]: { mapStyle: MapStyle[mapStyle.BASE], viewMode: '3D' },
     [mapStyle.DARK]: { mapStyle: MapStyle[mapStyle.DARK], viewMode: '3D' },
-    [mapStyle.SATELLITE]: { viewMode: '3D' }
+    [mapStyle.SATELLITE]: {}
   }
 }
 

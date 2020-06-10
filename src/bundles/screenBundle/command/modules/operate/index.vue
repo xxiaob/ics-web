@@ -50,6 +50,9 @@
     </div>
     <div class="jc-opreate-item">
       <i class="jc-map-switch" title="地图切换"></i>
+      <div class="jc-opera-work jc-oprea-flex">
+        <div class="jc-map-switch-item" v-for="item in maps" :key="item.key" :class="activeStyle == item.value ? `jc-active map-${item.value}` : `map-${item.value}`" @click="switchMap(item.value)"></div>
+      </div>
     </div>
     <div class="jc-opreate-item">
       <i class="jc-message" @click="messageChange('CommandMessage')" title="任务&问题&事件"></i>
@@ -64,12 +67,15 @@
 <script>
 import { areaTypeList } from '@/api/areaType'
 import { JcIcons } from '@/config/JcIconConfig'
+import { mapStyle } from '@/map/mapConst'
 
 export default {
   name: 'ScreenCommandOperate',
   data() {
     return {
       messageVal: 99,
+      activeStyle: mapStyle.BASE,
+      maps: mapStyle.VALUES, //地图样式
       talkVal: 99,
       areaTypes: [], //存储所有 网格类型数组
       areaType: ['org'], //选择显示区域范围的类型
@@ -108,6 +114,11 @@ export default {
     },
     messageChange(name) {
       this.$EventBus.$emit('message-component-change', { component: name, options: null }) //通知窗口改变
+    },
+    switchMap(style) {
+      this.activeStyle = style
+      console.log('operate地图背景切换', style)
+      this.$EventBus.$emit('map-switch-change', style) //地图背景切换
     },
     areaChange(areas) {
       console.log('operate区域切换', areas)

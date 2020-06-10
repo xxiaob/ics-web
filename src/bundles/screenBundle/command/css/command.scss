@@ -329,6 +329,9 @@ $jc-screen-height: 40px;
     opacity: 0;
     transition: all 0.4s;
     will-change: transform;
+    &.jc-oprea-flex {
+      display: flex;
+    }
 
     &:before {
       position: absolute;
@@ -369,6 +372,28 @@ $jc-screen-height: 40px;
       background: url(/static/areaicons/organization.png) no-repeat left center;
       background-size: 12px auto;
       @include jc-text-warp;
+    }
+    .jc-map-switch-item {
+      display: block;
+      flex: 1;
+      height: 50px;
+      margin: 0 $jc-default-dis/2;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 60px 100%;
+      border-radius: 6px;
+      &.jc-active {
+        border: solid 1px $jc-color-primary;
+      }
+      &.map-base {
+        background-image: url("../modules//operate/assets/map-switch-base.png");
+      }
+      &.map-dark {
+        background-image: url("../modules//operate/assets/map-switch-dark.png");
+      }
+      &.map-satellite {
+        background-image: url("../modules//operate/assets/map-switch-satellite.png");
+      }
     }
   }
 }

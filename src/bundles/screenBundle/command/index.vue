@@ -80,6 +80,7 @@ export default {
       this.$EventBus.$on('view-component-change', this.viewComponentChange) //监听 内容窗口改变
       this.$EventBus.$on('view-component-back', this.viewBack) //监听 内容窗口返回
       this.$EventBus.$on('message-component-change', this.messageComponentChange) //消息 内容窗口改变
+      this.$EventBus.$on('map-switch-change', this.mapSwitchChange) //地图背景切换
 
       this.$EventBus.$emit('command-init-success', this.project) //通知基础数据初始化完成
     },
@@ -109,6 +110,9 @@ export default {
       }
       console.log('messageComponentChange', data)
     },
+    mapSwitchChange(mapStyle) {
+      myJcMap.setMapStyle(mapStyle)
+    },
     viewBack() {
       //view 窗口返回,处理队列中历史显示
       let index = this.viewComponentQueue.length - 1
@@ -132,6 +136,7 @@ export default {
     this.$EventBus.$off('view-component-change', this.viewComponentChange)
     this.$EventBus.$off('view-component-back', this.viewBack)
     this.$EventBus.$off('message-component-change', this.messageComponentChange)
+    this.$EventBus.$off('map-switch-change', this.mapSwitchChange) //地图背景切换
   }
 }
 </script>
