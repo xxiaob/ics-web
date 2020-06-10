@@ -23,6 +23,8 @@
         <div class="jc-row-flex2">
           <!-- <map-search ref="mapSearch" class="jc-area-search"></map-search> -->
           <div class="jc-screen-space" ref="myMap"></div>
+          <jc-map-left class="jc-item-content"></jc-map-left>
+          <jc-map-right class="jc-item-content"></jc-map-right>
         </div>
         <div class="jc-row-flex1">
           <div class="jc-column-flex1">
@@ -116,6 +118,8 @@ export default {
     JcTotalCount: ()=> import('./totalCount'),
     JcCaseSummary: ()=> import('./caseSummary'),
     JcWeather: ()=> import('./weather'),
+    JcMapLeft: ()=> import('./mapLeft'),
+    JcMapRight: ()=> import('./mapRight'),
     // CommandHeader: () => import('./modules/header'), //顶部
     MapSearch: () => import('@/components/JcMap/MapSearch') //地图搜索
   },
