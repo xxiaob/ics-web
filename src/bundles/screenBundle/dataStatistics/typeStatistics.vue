@@ -41,16 +41,16 @@ export default {
     echartsChange() {
       if (this.echarts) {
         const arr1 = [
-          { value: 335, name: '雨花' },
-          { value: 310, name: '秦淮' },
-          { value: 274, name: '鼓楼' },
-          { value: 235, name: '玄武' },
-          { value: 400, name: '建邺' },
-          { value: 335, name: '江宁' },
-          { value: 310, name: '溧水' },
-          { value: 274, name: '六合' },
-          { value: 235, name: '高淳' },
-          { value: 400, name: '栖霞' }
+          { value: 335, name: '私搭乱建' },
+          { value: 310, name: '非法小广告' },
+          { value: 274, name: '绿地脏乱' },
+          { value: 235, name: '倚门出摊' },
+          { value: 400, name: '机动车乱停放' },
+          { value: 335, name: '占道广告牌' },
+          { value: 310, name: '道路不洁' },
+          { value: 274, name: '乱倒垃圾' },
+          { value: 235, name: '占道经营' },
+          { value: 400, name: '街头散发广告' }
         ]
 
         arr1.forEach(item=>{
@@ -79,11 +79,11 @@ export default {
             radius: ['25%', '65%'],
             center: ['50%', '50%'],
             data: [
-              { value: 335, name: '雨花' },
-              { value: 310, name: '秦淮' },
-              { value: 274, name: '鼓楼' },
-              { value: 235, name: '玄武' },
-              { value: 400, name: '建邺' }
+              { value: 335, name: '私搭乱建' },
+              { value: 310, name: '非法小广告' },
+              { value: 274, name: '绿地脏乱' },
+              { value: 235, name: '倚门出摊' },
+              { value: 400, name: '机动车乱停放' }
             ].sort( (a, b)=> b.value - a.value),
             roseType: 'radius',
             // labelLine: {
