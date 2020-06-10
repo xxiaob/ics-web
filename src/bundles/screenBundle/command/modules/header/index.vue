@@ -62,8 +62,6 @@ export default {
     this.timeInterval = setInterval(this.setTime, 1000)
     this.$EventBus.$on('org-adcode-change', this.setWeather) //监听需要切换天气
     this.$EventBus.$on('command-init-success', this.initSuccess) //监听基础数据初始化完成
-
-    this.setWeather({ areaCode: '南京' })
   },
   methods: {
     async initData() {
@@ -125,9 +123,7 @@ export default {
 
         this.weather = await myWeather.getWeather(org.areaCode)
 
-        let forecastWeather = await myWeather.getForecastWeather(org.areaCode)
-
-        console.log('command-header-weather', this.weather, forecastWeather)
+        console.log('command-header-weather', this.weather)
       }
     },
     viewChange(name) {
