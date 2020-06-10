@@ -77,18 +77,18 @@ export default {
             type: 'shadow'
           }
         },
-        legend: {
-          x: 'left',
-          data: [ '正常', '异常' ],
-          itemWidth: 12, // 设置宽度
-          itemHeight: 8, // 设置高度
-          itemGap: 20,
-          left: 20,
-          textStyle: {
-            color: 'white',
-            fontSize: 12
-          }
-        },
+        // legend: {
+        //   x: 'left',
+        //   data: [ '正常', '异常' ],
+        //   itemWidth: 12, // 设置宽度
+        //   itemHeight: 8, // 设置高度
+        //   itemGap: 20,
+        //   left: 20,
+        //   textStyle: {
+        //     color: 'white',
+        //     fontSize: 12
+        //   }
+        // },
         grid: {
           top: 35,
           left: 0,

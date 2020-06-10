@@ -1,7 +1,7 @@
 <template>
   <div class="caseSummary">
     <div class="title">
-      <span>立案案件概况</span>
+      <span>渣土专项执法</span>
     </div>
     <div class="content">
       <div class="jc-row-flex1">
@@ -9,36 +9,36 @@
           <span class="count">
             <countTo :startVal='0' :endVal='50' :duration='10000'></countTo>
           </span>
-          <span class="unit">件</span>
+          <span class="unit">方</span>
         </p>
-        <p>案件总数</p>
+        <p>总出土量</p>
       </div>
       <div class="jc-row-flex1">
         <p>
           <span class="count">
             <countTo :startVal='0' :endVal='6' :duration='10000'></countTo>
           </span>
-          <span class="unit">件</span>
+          <span class="unit">辆</span>
         </p>
-        <p>已结案</p>
+        <p>渣土车在线</p>
       </div>
       <div class="jc-row-flex1">
         <p>
           <span class="count">
             <countTo :startVal='0' :endVal='4' :duration='10000'></countTo>
           </span>
-          <span class="unit">件</span>
+          <span class="unit">个</span>
         </p>
-        <p>处理中</p>
+        <p>出土工地数</p>
       </div>
       <div class="jc-row-flex1">
         <p>
           <span class="count">
             <countTo :startVal='0' :endVal='80' :duration='10000'></countTo>
           </span>
-          <span class="unit">%</span>
+          <span class="unit">个</span>
         </p>
-        <p>结案率</p>
+        <p>消纳场数</p>
       </div>
     </div>
     <div class="content">
@@ -49,25 +49,25 @@
           </span>
           <span class="unit">件</span>
         </p>
-        <p>渣土运输</p>
+        <p>检测报警数</p>
       </div>
       <div class="jc-row-flex1">
         <p>
           <span class="count">
             <countTo :startVal='0' :endVal='6' :duration='10000'></countTo>
           </span>
-          <span class="unit">件</span>
+          <span class="unit">个</span>
         </p>
-        <p>水务执法</p>
+        <p>运输公司数</p>
       </div>
       <div class="jc-row-flex1">
         <p>
           <span class="count">
             <countTo :startVal='0' :endVal='4' :duration='10000'></countTo>
           </span>
-          <span class="unit">件</span>
+          <span class="unit">个</span>
         </p>
-        <p>违章建筑</p>
+        <p>卡点</p>
       </div>
       <div class="jc-row-flex1">
         <p>
@@ -76,7 +76,7 @@
           </span>
           <span class="unit">件</span>
         </p>
-        <p>餐饮油烟</p>
+        <p>违法案件</p>
       </div>
     </div>
   </div>
@@ -86,7 +86,7 @@
 import countTo from 'vue-count-to'
 export default {
   components: { countTo },
-  name: 'caseSummary'
+  name: 'slagSummary'
 }
 </script>
 

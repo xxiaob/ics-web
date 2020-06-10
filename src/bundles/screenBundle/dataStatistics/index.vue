@@ -80,7 +80,8 @@
         <div class="jc-row-flex1">
           <div class="jc-item-out">
             <div class="jc-item">
-              <jc-event-type class="jc-item-content"></jc-event-type>
+              <!-- <jc-event-type class="jc-item-content"></jc-event-type> -->
+              <jc-slag-summary class="jc-item-content"></jc-slag-summary>
             </div>
           </div>
         </div>
@@ -114,7 +115,8 @@ export default {
     JcWeather: ()=> import('./weather'),
     JcMapLeft: ()=> import('./mapLeft'),
     JcMapRight: ()=> import('./mapRight'),
-    JcMap: ()=> import('./map')
+    JcMap: ()=> import('./map'),
+    JcSlagSummary: () => import('./slagSummary')
   }
 }
 </script>
