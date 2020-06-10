@@ -9,7 +9,7 @@
     <!-- 左侧操作组件 -->
     <command-operate></command-operate>
     <!-- 左下角数据 -->
-    <data-overview></data-overview>
+    <data-overview :project="project"></data-overview>
     <!-- 右侧信息显示区域动态显示组件 -->
     <div class="jc-view-space" :class="{'jc-message-show': !!messageComponent}">
       <transition name="jc-view">
