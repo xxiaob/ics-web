@@ -39,7 +39,7 @@ export default class JcWeather {
   }
 
   /**
-   * 获取天气信息
+   * 获取查询四天预报天气
    * @param {String} city 地区名称
    */
   async getForecastWeather(city) {
