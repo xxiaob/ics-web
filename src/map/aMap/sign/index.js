@@ -79,8 +79,10 @@ class JcMapSign extends JcMapSignBase {
         let targets = []
 
         this.boundaries.forEach(item => {
-          item.target = paintingSign(this, item)
-          targets.push(item.target)
+          if (item.target === null) {
+            item.target = paintingSign(this, item)
+            targets.push(item.target)
+          }
         })
         this.map.map.add(targets)
       }
