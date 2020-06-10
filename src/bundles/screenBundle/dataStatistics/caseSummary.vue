@@ -90,11 +90,11 @@ export default {
     justify-content: space-around;
 
     .count {
-      font-size: 30px;
+      font-size: 28px;
       color: #51cefc;
     }
     .unit {
-      font-size: 20px;
+      font-size: 16px;
       color: #51cefc;
     }
   }

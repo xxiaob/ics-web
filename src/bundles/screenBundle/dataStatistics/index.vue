@@ -21,7 +21,7 @@
           </div>
         </div>
         <div class="jc-row-flex2">
-          <map-search ref="mapSearch" class="jc-area-search"></map-search>
+          <!-- <map-search ref="mapSearch" class="jc-area-search"></map-search> -->
           <div class="jc-screen-space" ref="myMap"></div>
         </div>
         <div class="jc-row-flex1">
@@ -43,7 +43,9 @@
         <div class="jc-row-flex1">
           <div class="jc-column-flex1">
             <div class="jc-item-out">
-              <div class="jc-item">jc-item</div>
+              <div class="jc-item">
+                <jc-weather class="jc-item-content"></jc-weather>
+              </div>
             </div>
           </div>
           <div class="jc-column-flex1">
@@ -113,6 +115,7 @@ export default {
     JcAttend: ()=> import('./attend'),
     JcTotalCount: ()=> import('./totalCount'),
     JcCaseSummary: ()=> import('./caseSummary'),
+    JcWeather: ()=> import('./weather'),
     // CommandHeader: () => import('./modules/header'), //顶部
     MapSearch: () => import('@/components/JcMap/MapSearch') //地图搜索
   },
@@ -128,7 +131,7 @@ export default {
   methods: {
     initData() {
       myJcMap.init(this.$refs.myMap).then(() => {
-        this.$refs.mapSearch.initData(myJcMap) //初始化搜索对象
+        // this.$refs.mapSearch.initData(myJcMap) //初始化搜索对象
       })
     },
     getMyJcMap() {
