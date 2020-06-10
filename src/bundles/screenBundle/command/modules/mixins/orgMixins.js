@@ -85,11 +85,9 @@ export default {
     orgShowAreaChange(areas) {
       //组织区域显示
       if ((areas || areas.length).filter(id => id == 'org').length) {
-        //如果存在组织区域显示，则显示区域
-        this.orgAreaVisible = true
+        this.orgAreaVisible = true //如果存在组织区域显示，则显示区域
       } else {
-        //不存在则显示
-        this.orgAreaVisible = false
+        this.orgAreaVisible = false //不存在则显示
       }
       orgAreas.forEach(item => {
         item.showArea(this.orgAreaVisible)
