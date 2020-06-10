@@ -8,13 +8,13 @@
         <div class="jc-row-flex1">
           <div class="top">施工现场</div>
           <div class="img">
-            <video src="/static/videos/1.mp4" autoplay muted width="100%" height="100%"></video>
+            <video src="http://218.94.132.110:880/group1/M00/00/00/wKgBZV7gz6mAPDr6A248VDxUDWE012.mp4" autoplay muted width="100%" height="100%"></video>
           </div>
         </div>
         <div class="jc-row-flex1">
           <div class="top">鼓楼广场</div>
           <div class="img">
-            <video src="/static/videos/2.mp4" autoplay muted width="100%" height="100%"></video>
+            <video src="http://218.94.132.110:880/group1/M00/00/00/wKgBZV7g0A2ASRtkBGpZqRFdqhs694.mp4" autoplay muted width="100%" height="100%"></video>
           </div>
         </div>
       </div>
@@ -22,13 +22,13 @@
         <div class="jc-row-flex1">
           <div class="top">水西门大街</div>
           <div class="img">
-            <video src="/static/videos/3.mp4" autoplay muted width="100%" height="100%"></video>
+            <video src="http://218.94.132.110:880/group1/M00/00/00/wKgBZV7g0CeAPujOAkzclemVnas415.mp4" autoplay muted width="100%" height="100%"></video>
           </div>
         </div>
         <div class="jc-row-flex1">
           <div class="top">新街口广场</div>
           <div class="img">
-            <video src="/static/videos/4.mp4" autoplay muted width="100%" height="100%"></video>
+            <video src="http://218.94.132.110:880/group1/M00/00/00/wKgBZV7g0EqACl1ABGwc-DEbYQ8221.mp4" autoplay muted width="100%" height="100%"></video>
           </div>
         </div>
       </div>
