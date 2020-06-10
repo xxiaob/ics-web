@@ -8,23 +8,27 @@
         <div class="jc-row-flex1">
           <div class="top">健康小区 9 栋 朝东</div>
           <div class="img">
+            <video src="./assets/test.mp4" autoplay muted width="100%" height="100%"></video>
           </div>
         </div>
         <div class="jc-row-flex1">
-          <div class="top">健康小区 9 栋 朝东</div>
-          <div class="img2">
+          <div class="top">健康小区 10 栋 朝东</div>
+          <div class="img">
+            <video src="./assets/test.mp4" autoplay muted width="100%" height="100%"></video>
           </div>
         </div>
       </div>
       <div class="jc-column-flex1">
         <div class="jc-row-flex1">
-          <div class="top">健康小区 9 栋 朝东</div>
+          <div class="top">健康小区 11 栋 朝东</div>
           <div class="img">
+            <video src="./assets/test.mp4" autoplay muted width="100%" height="100%"></video>
           </div>
         </div>
         <div class="jc-row-flex1">
-          <div class="top">健康小区 9 栋 朝东</div>
-          <div class="img2">
+          <div class="top">健康小区 12 栋 朝东</div>
+          <div class="img">
+            <video src="./assets/test.mp4" autoplay muted width="100%" height="100%"></video>
           </div>
         </div>
       </div>
@@ -65,15 +69,13 @@ export default {
       }
       .img {
         flex: 1;
-        background: url(./assets/monitor1.png) no-repeat;
-        background-size: 100% 100%;
+        // background: url(./assets/monitor1.png) no-repeat;
+        // background-size: 100% 100%;
         border: 1px solid #1292f6;
-      }
-      .img2 {
-        flex: 1;
-        background: url(./assets/monitor2.png) no-repeat;
-        background-size: 100% 100%;
-        border: 1px solid #1292f6;
+        position: relative;
+        video {
+          position: absolute;
+        }
       }
     }
   }

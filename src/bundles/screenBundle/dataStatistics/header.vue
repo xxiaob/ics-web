@@ -1,6 +1,6 @@
 <template>
   <header>
-    <span class="title">行政执法系统</span>
+    <span class="title">{{title}}</span>
     <span class="time">{{time}}</span>
     <span class="date">{{date}}</span>
     <span class="week">{{weeks[week]}}</span>
@@ -9,11 +9,17 @@
 
 <script>
 import moment from 'moment'
+import { projectGet } from '@/api/projects'
+import { PROJECT_TYPES } from '@/constant/Dictionaries'
+import { organizationList } from '@/api/organization'
 
 export default {
   name: 'jcHeader',
   data() {
     return {
+      title: '--',
+      project: {},
+      orgs: [],
       time: moment().format('HH:mm:ss'),
       date: moment().format('YYYY-MM-DD'),
       week: moment().day(),
@@ -28,12 +34,47 @@ export default {
       }
     }
   },
+  async created() {
+    if (this.$route.params.projectId) {
+      console.log(this.$route.params)
+      //处理项目，如果项目id存在则获取项目详情
+      let { projectId, projectName, orgId, projectType } = await projectGet(this.$route.params.projectId)
+
+      this.project = { projectId, projectName, orgId, projectType }
+    }
+
+    const res = await organizationList()
+
+    this.orgs = this.formatOrg(res)
+    let parentOrg = this.orgs[0]
+
+    //处理标题显示
+    if (PROJECT_TYPES.SpecialControl == this.project.projectType || PROJECT_TYPES.EmergencySupport == this.project.projectType) {
+      this.title = `${this.project.projectName}数据大屏`
+    } else {
+      this.title = `${parentOrg.label}常态数据大屏`
+    }
+  },
   mounted() {
     this.interval = setInterval(() => {
       this.time = moment().format('HH:mm:ss')
       this.date = moment().format('YYYY-MM-DD')
       this.week = moment().day()
     }, 1000)
+  },
+  methods: {
+    formatOrg(child) {
+      if (child && child.length) {
+        let orgs = []
+
+        child.forEach(item => {
+          orgs.push({ value: item.orgId, label: item.orgName,
+            ...(item.children && item.children.length ? { children: this.formatOrg(item.children) } : {}) })
+        })
+        return orgs
+      }
+      return []
+    }
   },
   destroyed() {
     clearInterval(this.interval)
