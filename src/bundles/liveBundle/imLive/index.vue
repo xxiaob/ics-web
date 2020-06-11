@@ -226,6 +226,7 @@ export default {
 
         this.im.sendSingleMsg(this.invitUserId, msg)
         this.leaveChannel()
+        this.dialogVisible = false
         this.$emit('update:visible', false)
         this.$emit('update:params', null)
       }).catch(() => {})
