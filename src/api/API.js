@@ -149,7 +149,7 @@ export default {
     //直播相关
     imAuth: 'user-service/getAuthToken',
     agoraToken: 'device-service/recording/getChannelKey',
-    record: 'device-service/recording/startRecording'
+    record: 'http://119.3.176.213:2005/recording/startRecording'
   },
   attend: {
     //考勤管理

@@ -16,8 +16,8 @@ export default {
     return {
       visible: false,
       params: {
-        users: [1, 2, 3], //用户列表 id
-        inviteType: '2', //'0': '语音'   '1': '视频'   '2': '强制观摩'   '3': '观摩'
+        users: ['56776731599568896'], //用户列表 id
+        inviteType: '1', //'0': '语音'   '1': '视频'   '2': '强制观摩'   '3': '观摩'
         channelId: null //可选  采集观摩需要
       }
     }

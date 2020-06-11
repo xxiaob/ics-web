@@ -185,8 +185,8 @@ export class IM {
       content: JSON.stringify(obj),
       extras: obj
     }).onSuccess((data, msg) => {
-      this.console('sendSingleMsg success data:', data)
-      this.console('sendSingleMsg succes msg:', msg)
+      this.console('sendSingleMsg success data:发送消息成功', data)
+      this.console('sendSingleMsg succes msg:发送消息成功', msg)
     }).onFail((data) => {
       this.console('sendSingleMsg error:', data)
     })
