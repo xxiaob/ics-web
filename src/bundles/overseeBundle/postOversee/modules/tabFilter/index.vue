@@ -34,6 +34,7 @@ import { exportPostOversee } from '@/api/attend'
 export default {
   name: 'PostOverseeFilter',
   props: {
+    userId: String,
     self: {
       type: Boolean,
       default: false
@@ -91,7 +92,7 @@ export default {
     },
     exportData() {
       console.log('exportData')
-      exportPostOversee(this.form)
+      exportPostOversee({ userId: this.userId, ...this.form })
     }
   }
 }
