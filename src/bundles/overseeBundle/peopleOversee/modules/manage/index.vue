@@ -120,6 +120,7 @@ export default {
         }
         this.timeout = setTimeout(()=>{
           this.overseeTypeMsg = '对方不在线'
+          clearTimeout(this.timeout)
         }, 30000)
         return { usId, superviseUserId: this.user.userId, superviseType: '', superviseDesc: '', name, orgName }
       } else {

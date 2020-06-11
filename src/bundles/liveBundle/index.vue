@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-button @click="visible=true" type="primary">打开</el-button>
-    <im-live :visible.sync="visible"></im-live>
+    <im-live :params.sync="params" :visible.sync="visible"></im-live>
   </div>
 </template>
 
@@ -14,7 +14,12 @@ export default {
   },
   data() {
     return {
-      visible: false
+      visible: false,
+      params: {
+        users: [1, 2, 3], //用户列表 id
+        inviteType: '2', //'0': '语音'   '1': '视频'   '2': '强制观摩'   '3': '观摩'
+        channelId: null //可选  采集观摩需要
+      }
     }
   }
 }
