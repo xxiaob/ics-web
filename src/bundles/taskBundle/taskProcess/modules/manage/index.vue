@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="options ? '编辑临时任务' : '新增临时任务'" :visible.sync="dialogVisible" width="900px" :close-on-click-modal="false" :append-to-body="true" @close="dialogClose">
+  <el-dialog :title="options ? '编辑临时任务' : '新增临时任务'" :visible.sync="dialogVisible" width="1000px" :close-on-click-modal="false" :append-to-body="true" @close="dialogClose">
     <el-form ref="form" label-width="80px" :model="form" class="jc-manage-form">
       <div class="jc-clearboth">
         <el-form-item label="下发人" class="jc-left-width40">
@@ -24,8 +24,8 @@
         </el-form-item>
       </div>
       <div class="jc-clearboth">
-        <el-form-item label="任务位置" prop="taskPositionName" :rules="rules.NOT_NULL" class="jc-left-width40">
-          <el-input v-model="form.taskPositionName" placeholder="请输入任务位置"></el-input>
+        <el-form-item label="任务位置" prop="taskPosition" :rules="rules.NOT_NULL" class="jc-left-width40">
+          <el-input v-model="form.taskPosition" placeholder="请输入任务位置"></el-input>
         </el-form-item>
         <el-form-item label="任务来源" prop="taskSource" :rules="rules.SELECT_NOT_NULL" class="jc-left-width60">
           <el-select v-model="form.taskSource" placeholder="选择任务来源" :disabled="taskSourceDisabled">
@@ -33,16 +33,16 @@
           </el-select>
         </el-form-item>
       </div>
-      <el-form-item label="任务指派" prop="taskPosition" :rules="rules.NOT_NULL">
-        <el-input v-model="form.taskPosition" placeholder="请输入任务指派"></el-input>
-      </el-form-item>
-      <el-form-item label="任务人员" prop="orgIds" :rules="rules.SELECT_NOT_NULL">
-        <el-cascader :options="orgTree" v-model="form.orgIds" :props="{expandTrigger: 'hover', emitPath: false, multiple: true ,checkStrictly: true}" clearable placeholder="请选择组织(必填)" :show-all-levels="false" @change="changeOrg" class="jc-left-width50"></el-cascader>
-        <el-select v-model="form.userIds" multiple placeholder="请选择人员(选填)" clearable class="jc-left-width50">
-          <el-option v-for="item in users" :key="item.id" :label="item.name" :value="item.id">
-          </el-option>
-        </el-select>
-      </el-form-item>
+      <div class="jc-clearboth">
+        <div class="jc-left-width50">地图</div>
+        <el-form-item label="任务人员" prop="" :rules="rules.SELECT_NOT_NULL" class="jc-left-width50">
+          <jc-task-people :peopleType.sync="peopleType" :selecteds.sync="peoples" :orgTree="orgTree"></jc-task-people>
+        </el-form-item>
+      </div>
+      <!-- <el-form-item label="任务指派" prop="taskPositionName" :rules="rules.NOT_NULL">
+        <el-input v-model="form.taskPositionName" placeholder="请输入任务指派"></el-input>
+      </el-form-item> -->
+
       <el-form-item label="任务描述" prop="taskDesc" :rules="rules.NOT_NULL">
         <el-input v-model="form.taskDesc" placeholder="请输入任务描述" type="textarea"></el-input>
       </el-form-item>
@@ -59,11 +59,10 @@
 </template>
 <script>
 import { taskSave } from '@/api/task'
-import { userListByOrg } from '@/api/user'
 import { organizationList } from '@/api/organization'
 import { getStringRule, NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
-import { TASK_TYPES, TASK_SOURCES } from '@/constant/Dictionaries'
+import { TASK_TYPES, TASK_SOURCES, TASK_PEOPLE_TYPES } from '@/constant/Dictionaries'
 import { createNamespacedHelpers } from 'vuex'
 const { mapState } = createNamespacedHelpers('user')
 
@@ -96,13 +95,16 @@ export default {
     projectId: String
   },
   components: {
-    upload: () => import('@/components/JcUpload')
+    upload: () => import('@/components/JcUpload'),
+    JcTaskPeople: () => import('./taskPeople')
   },
   computed: {
     ...mapState(['user'])
   },
   data() {
     return {
+      peopleType: TASK_PEOPLE_TYPES.ORG,
+      peoples: [],
       loading: false,
       rules: {
         Len50: getStringRule(1, 50),
@@ -110,9 +112,22 @@ export default {
         NOT_NULL
       },
       orgTree: [],
-      users: [],
       taskSources: JSON.parse(JSON.stringify(TASK_SOURCES.VALUES)),
       taskSourceDisabled: false
+    }
+  },
+  watch: {
+    peoples: {
+      handler(val) {
+        if (this.peopleType === TASK_PEOPLE_TYPES.ORG) {
+          this.form.userIds = []
+          this.form.orgIds = val
+        } else {
+          this.form.userIds = val
+          this.form.orgIds = []
+        }
+      },
+      deep: true
     }
   },
   async created() {
@@ -150,32 +165,6 @@ export default {
         this.taskSources.push({ key: id, value: id, label: problemTitle })
         this.form.taskSource = id
         this.taskSourceDisabled = true
-      }
-    },
-    changeOrg(orgIds) {
-      if (orgIds.length) {
-        this.getUser(orgIds)
-      } else {
-        this.users = []
-      }
-      this.form.userIds = []
-    },
-    async getUser(orgIds) {
-      try {
-        const res = await userListByOrg(orgIds)
-        const users = []
-
-        if (res && res.length) {
-          res.forEach(item=>{
-            users.push({
-              id: item.userId,
-              name: item.userName
-            })
-          })
-        }
-        this.users = users
-      } catch (error) {
-        console.error(error)
       }
     },
     changeDate(value) {
@@ -221,24 +210,23 @@ export default {
         }
 
         if (assignees && assignees.length) {
-          const userIds = [], UserOrgIds = []
+          const userIds = assignees.map(item=>item.userId)
 
-          assignees.forEach(item=>{
-            userIds.push(item.userId)
-            if (!UserOrgIds.includes(item.orgId)) {
-              UserOrgIds.push(item.orgId)
-            }
-          })
-          this.getUser(UserOrgIds)
           form.userIds = userIds
-          form.orgIds = UserOrgIds
+          form.orgIds = []
+          this.peopleType = TASK_PEOPLE_TYPES.PEOPLE
+          this.peoples = userIds
         } else {
-          this.users = []
           form.userIds = []
           form.orgIds = orgIds
+          this.peopleType = TASK_PEOPLE_TYPES.ORG
+          this.peoples = orgIds
         }
         return form
       } else {
+        this.peopleType = TASK_PEOPLE_TYPES.ORG
+        this.peoples = []
+
         return { ...defaultForm, taskSource: questionTaskSource, projectId: this.projectId }
       }
     },

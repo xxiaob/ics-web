@@ -111,6 +111,14 @@ export const TASK_AREA_TYPES = new JcEnum([
 ])
 
 /**
+ * 任务处理 - 任务人员类型
+ */
+export const TASK_PEOPLE_TYPES = new JcEnum([
+  { key: 'ORG', value: '0', label: '组织' },
+  { key: 'PEOPLE', value: '1', label: '人员' }
+])
+
+/**
  * 考勤 - 考勤周期
  */
 export const ATTEND_PERIODS = new JcEnum([
