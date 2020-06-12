@@ -8,7 +8,13 @@ export default {
       dialogVisible: false
     }
   },
-  props: ['options', 'visible'],
+  props: {
+    options: null,
+    visible: {
+      type: Boolean,
+      default: false
+    }
+  },
   computed: {
     isEdit() {
       return this.options !== null

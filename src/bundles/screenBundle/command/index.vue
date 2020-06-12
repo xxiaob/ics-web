@@ -24,18 +24,20 @@
         <component :is="messageComponent" :options="messageOptions" :project="project"></component>
       </keep-alive>
     </transition>
+    <temporary-tasks-manage :projectList="temporaryTaskProject" :projectId="temporaryTaskprojectId" :visible.sync="temporaryTaskVisible" @save-success="temporaryTaskSuccess"></temporary-tasks-manage>
   </section>
 </template>
 <script>
 import { JcMap } from '@/map'
 import { projectGet } from '@/api/projects'
-import OrgMixins from './modules/mixins/orgMixins'
+import OrgMixins from './modules/mixins/orgMixins' //组织显示处理
+import TemporaryTasksMixins from './modules/mixins/temporaryTasksMixins' //临时任务下发
 
 let myJcMap //个人 map 对象
 
 export default {
   name: 'ScreenCommand',
-  mixins: [OrgMixins],
+  mixins: [OrgMixins, TemporaryTasksMixins],
   components: {
     CommandHeader: () => import('./modules/header'), //顶部
     CommandOperate: () => import('./modules/operate'), //功能操作区域
@@ -45,7 +47,8 @@ export default {
     ImTalk: () => import('./modules/imTalk'), //聊天消息
     CommandOrg: () => import('./modules/org'), //组织架构
     CommandGrid: () => import('./modules/grid'), //网格
-    MessageDetail: () => import('./modules/messageDetail') //消息详情
+    MessageDetail: () => import('./modules/messageDetail'), //消息详情
+    TemporaryTasksManage: () => import('@/bundles/taskBundle/taskProcess/modules/manage') //临时任务
   },
   data() {
     return {

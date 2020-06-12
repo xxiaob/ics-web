@@ -49,7 +49,7 @@
       </div>
     </div>
     <div class="jc-opreate-item">
-      <i class="jc-temporary-tasks" title="任务下发"></i>
+      <i class="jc-temporary-tasks" title="任务下发" @click="sendTemporaryTasks"></i>
     </div>
     <div class="jc-opreate-item">
       <i class="jc-map-switch" title="地图切换"></i>
@@ -117,6 +117,9 @@ export default {
     },
     messageChange(name) {
       this.$EventBus.$emit('message-component-change', { component: name, options: null }) //通知窗口改变
+    },
+    sendTemporaryTasks() {
+      this.$EventBus.$emit('send-temporary-tasks') //通知窗口发送临时任务
     },
     switchMap(style) {
       this.activeStyle = style
