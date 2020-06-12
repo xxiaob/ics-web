@@ -1,9 +1,14 @@
 <template>
   <el-dialog :title="options ? '编辑临时任务' : '新增临时任务'" :visible.sync="dialogVisible" width="900px" :close-on-click-modal="false" :append-to-body="true" @close="dialogClose">
     <el-form ref="form" label-width="80px" :model="form" class="jc-manage-form">
-      <el-form-item label="项目名称" prop="projectId" :rules="rules.SELECT_NOT_NULL">
-        <el-cascader v-model="form.projectId" :options="projectList" :props="{expandTrigger:'hover',emitPath:false}"></el-cascader>
-      </el-form-item>
+      <div class="jc-clearboth">
+        <el-form-item label="下发人" class="jc-left-width40">
+          <span>{{user.userName}}</span>
+        </el-form-item>
+        <el-form-item label="项目名称" prop="projectId" :rules="rules.SELECT_NOT_NULL" class="jc-left-width60">
+          <el-cascader v-model="form.projectId" :options="projectList" :props="{expandTrigger:'hover',emitPath:false}"></el-cascader>
+        </el-form-item>
+      </div>
       <!-- <div class="jc-clearboth">
         <el-form-item label="项目类型" prop="projectType" :rules="rules.NOT_NULL" class="jc-left-width40">
           <el-input v-model="form.projectType" placeholder="请输入项目类型"></el-input>
@@ -41,6 +46,9 @@
       <el-form-item label="任务描述" prop="taskDesc" :rules="rules.NOT_NULL">
         <el-input v-model="form.taskDesc" placeholder="请输入任务描述" type="textarea"></el-input>
       </el-form-item>
+      <el-form-item label="附件" prop="uploadFilePaths" :rules="[{required: true, message: '请上传文件'}]">
+        <upload :show="dialogVisible" :urls.sync="form.uploadFilePaths" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg,video/*,audio/*"></upload>
+      </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="dialogVisible = false">取 消</el-button>
@@ -70,7 +78,8 @@ const defaultForm = {
   taskPositionName: '',
   orgIds: [],
   userIds: [],
-  date: null
+  date: null,
+  uploadFilePaths: []
 }
 
 export default {
@@ -84,9 +93,12 @@ export default {
     projectList: {
       type: Array
     },
-    orgId: {
-      type: String
+    user: {
+      type: Object
     }
+  },
+  components: {
+    upload: () => import('@/components/JcUpload')
   },
   data() {
     return {
@@ -160,7 +172,7 @@ export default {
 
       if (this.options) {
         // console.log(this.options)
-        const { taskId, orgIds, assignees, detailViewVO: { businessKey, projectId, taskDesc, taskName, endDate, startDate }, taskDetailVO: { taskPosition, taskPositionName, taskSource } } = this.options
+        const { taskId, orgIds, assignees, detailViewVO: { businessKey, projectId, taskDesc, taskName, endDate, startDate }, taskDetailVO: { taskPosition, taskPositionName, taskSource, uploadFilePaths } } = this.options
 
 
         const form = {
@@ -175,7 +187,8 @@ export default {
           taskDesc,
           taskPosition,
           taskPositionName,
-          date: [startDate, endDate]
+          date: [startDate, endDate],
+          uploadFilePaths
         }
 
         if (assignees && assignees.length) {
@@ -225,7 +238,7 @@ export default {
         optType: TASK_TYPES.TEMPORARY,
         orgIds,
         userIds,
-        taskPO: { orgId: this.orgId, ...this.form },
+        taskPO: { orgId: this.user.orgId, ...this.form },
         temporaryTaskPO: this.form
       }
 
