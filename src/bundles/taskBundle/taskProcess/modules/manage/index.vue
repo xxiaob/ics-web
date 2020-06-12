@@ -161,7 +161,7 @@ export default {
     formatFormData() {
       let questionTaskSource = ''
 
-      if (this.question) {
+      if (this.question) { // bug 避免重复push
         this.taskSources.push(this.question)
         questionTaskSource = this.question.value
         this.taskSourceDisabled = true
