@@ -16,7 +16,7 @@ export function apiBoundariesFormat(boundaries = {}) {
   //处理圆形
   if (boundaries.withRadiusReqs && boundaries.withRadiusReqs.length) {
     boundaries.withRadiusReqs.forEach(item => {
-      result.push({ type: MAP_SIGN_TYPE.Circle, center: [item.lng, item.lat], radius: item.radius })
+      result.push({ type: MAP_SIGN_TYPE.Circle, center: [item.n, item.a], radius: item.r })
     })
   }
 
@@ -27,7 +27,7 @@ export function apiBoundariesFormat(boundaries = {}) {
         let resultItem = { type: MAP_SIGN_TYPE.Polygon, path: [] }
 
         for (let i = 0; i < item.withSequenceReqs.length; i++) {
-          resultItem.path.push([item.withSequenceReqs[i].lng, item.withSequenceReqs[i].lat])
+          resultItem.path.push([item.withSequenceReqs[i].n, item.withSequenceReqs[i].a])
         }
         result.push(resultItem)
       }
@@ -38,10 +38,10 @@ export function apiBoundariesFormat(boundaries = {}) {
   if (boundaries.withExtWidthReqs && boundaries.withExtWidthReqs.length) {
     boundaries.withExtWidthReqs.forEach(item => {
       if (item.withExtWidthReqs && item.withExtWidthReqs.length) {
-        let resultItem = { type: MAP_SIGN_TYPE.Polyline, path: [], extWidth: item.withExtWidthReqs[0].extWidth }
+        let resultItem = { type: MAP_SIGN_TYPE.Polyline, path: [], extWidth: item.withExtWidthReqs[0].e }
 
         for (let i = 0; i < item.withExtWidthReqs.length; i++) {
-          resultItem.path.push([item.withExtWidthReqs[i].lng, item.withExtWidthReqs[i].lat])
+          resultItem.path.push([item.withExtWidthReqs[i].n, item.withExtWidthReqs[i].a])
         }
         result.push(resultItem)
       }

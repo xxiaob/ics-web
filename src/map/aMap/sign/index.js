@@ -2,11 +2,11 @@
  * 高德地图标记
  */
 import JcMapSignBase from '../../base/JcMapSign'
-import { EventTrans } from '../config'
+import { MAP_SIGN_TYPE } from '@/constant/CONST'
+import { EventTrans, PolygonStyle, CircleStyle, PolylineStyle } from '../config'
 import { paintingSign } from '../aMapUtil'
 import { JcMapMarker } from '../index'
 import { getColors } from '../config'
-
 class JcMapSign extends JcMapSignBase {
   /**
    * 构造
@@ -131,7 +131,13 @@ class JcMapSign extends JcMapSignBase {
    * @param {*} cb 回调
    */
   on(event, cb, ...args) {
-    this.map.on(EventTrans[event] || event, cb, ...args)
+    if (this.boundaries && this.boundaries.length) {
+      this.boundaries.forEach(item => {
+        if (item.target) {
+          item.target.on(EventTrans[event] || event, cb, ...args)
+        }
+      })
+    }
   }
 
   /**
@@ -140,7 +146,36 @@ class JcMapSign extends JcMapSignBase {
    * @param {*} cb 回调
    */
   off(event, ...args) {
-    this.map.off(EventTrans[event] || event, ...args)
+    if (this.boundaries && this.boundaries.length) {
+      this.boundaries.forEach(item => {
+        if (item.target) {
+          item.target.off(EventTrans[event] || event, ...args)
+        }
+      })
+    }
+  }
+
+  /**
+   * 设置样式为active 样式
+   * @param {Boolean} active true
+   */
+  signActive(active = true) {
+    if (this.boundaries && this.boundaries.length) {
+      this.boundaries.forEach(item => {
+        if (item.target) {
+          let activeStyle = {}
+
+          if (MAP_SIGN_TYPE.Polygon == item.type) {
+            activeStyle = PolygonStyle[this.mapStyle || this.map.mapStyle] //显示矩形
+          } else if (MAP_SIGN_TYPE.Circle == item.type) {
+            activeStyle = CircleStyle[this.mapStyle || this.map.mapStyle] //显示圆形
+          } else if (MAP_SIGN_TYPE.Polyline == item.type) {
+            activeStyle = PolylineStyle[this.mapStyle || this.map.mapStyle] //显示矩形
+          }
+          item.target.setOptions(active ? activeStyle.active : activeStyle.normal)
+        }
+      })
+    }
   }
 }
 
