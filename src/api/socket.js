@@ -1,22 +1,16 @@
 /**
  * ws socket连接
  */
+import API from './API'
+
 const baseUrl = process.env.API_HOST.ws /*eslint-disable-line*/
-import mySocket from '@/libs/mySocket'
+import JcSocket from '@/libs/JcSocket'
 
 /**
  * 实时价格更新
- * @returns {Object} Client 对象
+ * @returns {Object} JcSocket 对象
  */
-export function realpriceClient() {
-  return mySocket.client(baseUrl + 'realprice')
+export function screenMapSocket() {
+  return new JcSocket(baseUrl + API.screen.command.screenMap)
 }
 
-/**
- * 回测策略更新
- * @param { Long } strategyId 回测策略id
- * @returns {Object} Client 对象
- */
-export function backTestClient(strategyId) {
-  return mySocket.client(baseUrl + 'backtest/' + strategyId)
-}

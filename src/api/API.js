@@ -170,7 +170,8 @@ export default {
   screen: {
     //大屏接口
     command: {
-      getCommandScreenData: 'data-service/largeScreen/getCommandScreenData'
+      getCommandScreenData: 'data-service/largeScreen/getCommandScreenData',
+      screenMap: 'message-service/icsServer/screenMap' //大屏推送接口
     }
   }
 }
