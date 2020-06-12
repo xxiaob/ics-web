@@ -36,6 +36,7 @@ import moment from 'moment'
 export default {
   name: 'AttendFilter',
   props: {
+    userId: String,
     self: {
       type: Boolean,
       default: false
@@ -108,13 +109,13 @@ export default {
     exportData() {
       console.log('exportData')
       if (this.self) {
-        exportMyAttend(this.form)
+        exportMyAttend({ userId: this.userId, ...this.form })
       }
       if (this.people) {
-        exportPeopleAttend(this.form)
+        exportPeopleAttend({ userId: this.userId, ...this.form })
       }
       if (this.post) {
-        exportPostAttend(this.form)
+        exportPostAttend({ userId: this.userId, ...this.form })
       }
     },
     download(content) {

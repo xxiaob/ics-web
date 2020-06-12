@@ -27,6 +27,7 @@ import { exportUserOversee } from '@/api/attend'
 export default {
   name: 'PeopleOverseeFilter',
   props: {
+    userId: String,
     orgTree: {
       type: Array,
       default: ()=>[]
@@ -58,7 +59,7 @@ export default {
     },
     exportData() {
       console.log('exportData')
-      exportUserOversee(this.form)
+      exportUserOversee({ userId: this.userId, ...this.form })
     }
   }
 }

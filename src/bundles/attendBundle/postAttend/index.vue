@@ -1,6 +1,6 @@
 <template>
   <div class="jc-main-container-warp">
-    <tab-filter :post="true" :orgTree="orgTree" @filter="goFilter"></tab-filter>
+    <tab-filter :userId="user.userId" :post="true" :orgTree="orgTree" @filter="goFilter"></tab-filter>
     <el-card class="jc-table-card jc-mt">
       <div slot="header" class="jc-card-header">
         <div class="jc-card-title">列表内容</div>
@@ -25,8 +25,8 @@ import { ATTEND_PERIODS } from '@/constant/Dictionaries'
 import { formatDate } from '@/libs/util'
 import PaginationMixins from '@/mixins/PaginationMixins'
 import { organizationList } from '@/api/organization'
-// import { createNamespacedHelpers } from 'vuex'
-// const { mapState } = createNamespacedHelpers('user')
+import { createNamespacedHelpers } from 'vuex'
+const { mapState } = createNamespacedHelpers('user')
 
 export default {
   name: 'PostAttendIndex',
@@ -44,9 +44,9 @@ export default {
       }
     }
   },
-  // computed: {
-  //   ...mapState(['user'])
-  // },
+  computed: {
+    ...mapState(['user'])
+  },
   async created() {
     await this.getOrgTree()
     this.initData()

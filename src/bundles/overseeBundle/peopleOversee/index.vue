@@ -1,6 +1,6 @@
 <template>
   <div class="jc-main-container-warp">
-    <tab-filter :orgTree="orgTree" @filter="goFilter"></tab-filter>
+    <tab-filter :userId="user.userId" :orgTree="orgTree" @filter="goFilter"></tab-filter>
     <el-card class="jc-table-card jc-mt">
       <div slot="header" class="jc-card-header">
         <div class="jc-card-title">列表内容</div>

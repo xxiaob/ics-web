@@ -84,7 +84,7 @@ export default {
     if (this.live) {
       console.log('直播客户端已经初始化')
     } else {
-      this.live = new Live('live', 'tolive')
+      this.live = new Live(this.user.userId, 'live', 'tolive')
     }
     // setTimeout(()=>{
     //   this.$emit('update:visible', true)
@@ -183,7 +183,6 @@ export default {
       //循环给用户发消息
       users.forEach(item=>{
         this.invitUserId = item
-        console.log(this.invitUserId, 'this.invitUserId')
         this.inviteOneUser(inviteType, mediaType)
       })
       //加入频道
@@ -193,6 +192,8 @@ export default {
     },
     //邀请单个用户加入频道
     inviteOneUser(inviteType, mediaType) {
+      console.log(this.invitUserId, 'this.invitUserId')
+
       const content = this.params.inviteType === '3' ? 'observation' : ''
       const msg = {
         content,
@@ -225,6 +226,7 @@ export default {
 
         this.im.sendSingleMsg(this.invitUserId, msg)
         this.leaveChannel()
+        this.dialogVisible = false
         this.$emit('update:visible', false)
         this.$emit('update:params', null)
       }).catch(() => {})
