@@ -3,7 +3,7 @@ export default {
   auth: {
     //用户鉴权域
     login: 'user-service/login'
-    // login: 'http://119.3.176.213:8001/user-service/login'
+    // login: 'user-service/login'
   },
   menus: {
     //菜单管理
@@ -149,8 +149,8 @@ export default {
   live: {
     //直播相关
     imAuth: 'user-service/getAuthToken',
-    agoraToken: 'http://119.3.176.213:8001/device-service/recording/getChannelKey',
-    record: 'http://119.3.176.213:8001/device-service/recording/startRecording'
+    agoraToken: 'device-service/recording/getChannelKey',
+    record: 'device-service/recording/startRecording'
   },
   attend: {
     //考勤管理
