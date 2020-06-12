@@ -43,5 +43,7 @@ export const MAP_EDIT_TYPE = {
 export const MAP_EVENT = {
   CLICK: 'click', //单击
   DBCLICK: 'dblclick', //双击
-  ZOOMEND: 'zoomend' //缩放结束时触发
+  ZOOMEND: 'zoomend', //缩放结束时触发
+  MOURSEOVER: 'mouseover', //鼠标经过
+  MOURSEOUT: 'mouseout' //鼠标移出
 }

@@ -2,7 +2,7 @@
  * 地图组织处理
  */
 import { areaList } from '@/api/area'
-import { AREAS_TYPE, AREAS_SEARCH_TYPE } from '@/constant/CONST'
+import { AREAS_TYPE, AREAS_SEARCH_TYPE, MAP_EVENT } from '@/constant/CONST'
 import { apiBoundariesFormat } from '@/libs/apiFormat'
 import { JcMapSign } from '@/map'
 import { PROJECT_TYPES } from '@/constant/Dictionaries'
@@ -61,10 +61,10 @@ export default {
       if (data && data.length) {
         data.forEach(item => {
           if (item.orgId == this.org.orgId) {
-            this.$EventBus.$emit('org-adcode-change', item)
+            this.$EventBus.$emit('org-adcode-change', { areaId: item.areaId, areaCode: item.areaCode, areaTypeName: item.areaTypeName })
           }
           if (item.orgId != this.org.orgId || data.length == 1) {
-            areas.push(new JcMapSign({
+            let mapSign = new JcMapSign({
               id: item.orgId,
               map: myJcMap,
               name: item.areaName,
@@ -73,7 +73,10 @@ export default {
               areaVisible: this.orgAreaVisible,
               extData: { orgId: item.orgId, adcode: item.areaCode, areaId: item.areaId, areaName: item.areaName },
               boundaries: apiBoundariesFormat(item)
-            }))
+            })
+
+            this.addListener(mapSign) //添加监听
+            areas.push(mapSign)
           }
         })
       }
@@ -81,6 +84,15 @@ export default {
 
       myJcMap.addSign(orgAreas)
       myJcMap.fitView()
+    },
+    addListener(mapSign) {
+      //增加鼠标事件
+      mapSign.on(MAP_EVENT.MOURSEOVER, () => {
+        mapSign.signActive(true)
+      })
+      mapSign.on(MAP_EVENT.MOURSEOUT, () => {
+        mapSign.signActive(false)
+      })
     },
     orgShowAreaChange(areas) {
       //组织区域显示

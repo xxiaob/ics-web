@@ -109,8 +109,13 @@ class JcMapSign {
    * @param {String} style
    */
   setStyle(style) {
-    this.style = style
+    this.mapStyle = style
   }
+
+  /**
+   * 设置样式为active 样式
+   */
+  signActive() { }
 
   /**
    * 日志输出

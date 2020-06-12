@@ -123,7 +123,7 @@ export default {
 
         this.weather = await myWeather.getWeather(org.areaCode)
 
-        console.log('command-header-weather', this.weather)
+        console.log('command-header-weather', this.weather, org)
       }
     },
     viewChange(name) {
