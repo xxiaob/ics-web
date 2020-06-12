@@ -6,7 +6,7 @@
           <span>{{user.userName}}</span>
         </el-form-item>
         <el-form-item label="项目名称" prop="projectId" :rules="rules.SELECT_NOT_NULL" class="jc-left-width60">
-          <el-cascader v-model="form.projectId" :options="projectList" :props="{expandTrigger:'hover',emitPath:false}"></el-cascader>
+          <el-cascader v-model="form.projectId" :options="projectList" :props="{expandTrigger:'hover',emitPath:false}" :disabled="!!projectId"></el-cascader>
         </el-form-item>
       </div>
       <!-- <div class="jc-clearboth">
@@ -60,9 +60,12 @@
 <script>
 import { taskSave } from '@/api/task'
 import { userListByOrg } from '@/api/user'
+import { organizationList } from '@/api/organization'
 import { getStringRule, NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
 import { TASK_TYPES, TASK_SOURCES } from '@/constant/Dictionaries'
+import { createNamespacedHelpers } from 'vuex'
+const { mapState } = createNamespacedHelpers('user')
 
 const defaultForm = {
   businessKey: '',
@@ -87,18 +90,16 @@ export default {
   mixins: [FormMixins],
   props: {
     question: {},
-    orgTree: {
-      type: Array
-    },
     projectList: {
       type: Array
     },
-    user: {
-      type: Object
-    }
+    projectId: String
   },
   components: {
     upload: () => import('@/components/JcUpload')
+  },
+  computed: {
+    ...mapState(['user'])
   },
   data() {
     return {
@@ -108,12 +109,40 @@ export default {
         SELECT_NOT_NULL,
         NOT_NULL
       },
+      orgTree: [],
       users: [],
       taskSources: JSON.parse(JSON.stringify(TASK_SOURCES.VALUES)),
       taskSourceDisabled: false
     }
   },
+  async created() {
+    const res = await organizationList()
+
+    this.orgTree = this.formatOrgTree(res)
+  },
   methods: {
+    formatOrgTree(child) {
+      let trees = []
+
+      if (child && child.length) {
+        child.forEach(item => {
+          let node = {
+            id: item.orgId,
+            value: item.orgId,
+            label: item.orgName
+          }
+
+          let children = this.formatOrgTree(item.children)
+
+          if (children && children.length) {
+            node.children = children
+          }
+
+          trees.push(node)
+        })
+      }
+      return trees
+    },
     formatQuestionForm() {
       const { id, problemTitle } = this.$route.query
 
@@ -161,8 +190,8 @@ export default {
     formatFormData() {
       let questionTaskSource = ''
 
-      if (this.question) { // bug 避免重复push
-        this.taskSources.push(this.question)
+      if (this.question) {
+        this.taskSources.push(this.question) // bug 避免重复push  - 判断是否存在
         questionTaskSource = this.question.value
         this.taskSourceDisabled = true
       } else {
