@@ -17,7 +17,7 @@
         <el-input v-model="form.desc" placeholder="请输入事件描述" type="textarea"></el-input>
       </el-form-item>
       <el-form-item label="事件类型" prop="eventType" :rules="rules.SELECT_NOT_NULL">
-        <el-select v-model="form.eventType" filterable remote reserve-keyword placeholder="请输入关键词" :remote-method="remoteMethod" :loading="loading">
+        <el-select v-model="form.eventType" filterable placeholder="请选择事件类型">
           <el-option v-for="item in eventTypes" :key="item.id" :label="item.typeName" :value="item.id">
           </el-option>
         </el-select>

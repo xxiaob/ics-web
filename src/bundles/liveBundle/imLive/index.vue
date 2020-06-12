@@ -53,7 +53,8 @@ export default {
       invitUserId: '', //邀请用户的id
       invitedButton: false, //接听按钮显示
       mediaType: '1',
-      fromUsername: '' //哪个用户主动发消息过来
+      fromUsername: '', //哪个用户主动发消息过来
+      observation: false
     }
   },
   computed: {

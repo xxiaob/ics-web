@@ -14,6 +14,7 @@
         <el-table-column prop="typeName" label="事件类型"></el-table-column>
         <el-table-column prop="reportUserName" label="上报人"></el-table-column>
         <el-table-column prop="orgId" label="所属组织" :formatter="formatOrg"></el-table-column>
+        <el-table-column prop="positionName" label="上报地点" show-overflow-tooltip></el-table-column>
         <el-table-column prop="desc" label="事件描述" show-overflow-tooltip></el-table-column>
         <el-table-column prop="createTime" label="创建时间" :formatter="formatTime"></el-table-column>
         <el-table-column width="100" label="操作">
@@ -132,6 +133,7 @@ export default {
               list.push({
                 createTime: item.createTime,
                 desc: item.desc,
+                positionName: item.positionName,
                 eventTitle: item.eventTitle,
                 eventNumber: item.eventNumber,
                 eventType: item.eventType,
