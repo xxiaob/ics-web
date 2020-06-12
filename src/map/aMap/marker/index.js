@@ -14,8 +14,15 @@ class JcMapmarker extends JcMapmarkerBase {
     //处理标记显示
     this.marker = new this.map.AMap.Marker({
       ...markerOptions[this.mapStyle || this.map.mapStyle],
+      zIndex: 10,
       position: this.position,
       draggable: this.draggable
+    })
+    this.marker.on('mouseover', function (event) {
+      event.target.setzIndex(12)
+    })
+    this.marker.on('mouseout', function (event) {
+      event.target.setzIndex(10)
     })
     this.show()
   }
