@@ -239,7 +239,7 @@ export default {
         }
         return form
       } else {
-        return { ...defaultForm, taskSource: questionTaskSource }
+        return { ...defaultForm, taskSource: questionTaskSource, projectId: this.projectId }
       }
     },
     onSubmit(ifStart) {
