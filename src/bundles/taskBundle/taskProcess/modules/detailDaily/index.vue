@@ -173,7 +173,7 @@ export default {
     },
     filterTimePos(value) {
       if (value) {
-        const times = value.map(item=>`${formatDate(item.startTime)} - ${formatDate(item.endTime)}`)
+        const times = value.map(item=>`${item.startTime} - ${item.endTime}`)
 
         return times.join('\n')
       } else {
