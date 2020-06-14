@@ -119,3 +119,29 @@ export async function getForecastWeather(city) {
 
   return result
 }
+
+
+/**
+ * 逆地理编码查询
+ * @param {String} position 坐标地址
+ */
+export async function getAddressByPosition(position) {
+  let map = await initAmap()
+
+  let result = await new Promise(function (resolve, reject) {
+    map.plugin(['AMap.Geocoder'], function () {
+      let amapWeather = new AMap.Geocoder({ radius: 1000 })
+
+      amapWeather.getAddress(position, function (status, res) {
+        console.log('amap getAddressByPosition:', status, res)
+        if (status === 'complete' && res.info === 'OK') {
+          resolve(res.regeocode.formattedAddress)
+        } else {
+          reject('获取逆地理编码失败')
+        }
+      })
+    })
+  })
+
+  return result
+}

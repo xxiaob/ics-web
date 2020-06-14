@@ -42,8 +42,10 @@ export const MAP_EDIT_TYPE = {
 /** 地图事件 字典 */
 export const MAP_EVENT = {
   CLICK: 'click', //单击
+  RIGHTCLICK: 'rightclick', //右键点击
   DBCLICK: 'dblclick', //双击
   ZOOMEND: 'zoomend', //缩放结束时触发
   MOURSEOVER: 'mouseover', //鼠标经过
-  MOURSEOUT: 'mouseout' //鼠标移出
+  MOURSEOUT: 'mouseout', //鼠标移出
+  DRAGEND: 'dragend' //移动结束
 }

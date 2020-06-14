@@ -16,16 +16,18 @@ export default {
   },
   data() {
     return {
-      editor: null
+      editor: null,
+      editorVal: ''
     }
   },
   watch: {
     value(newVal) {
-      let html = this.editor.txt.html()
-
-      if (html != newVal) {
+      if (this.editorVal != newVal) {
         this.editor.txt.html(newVal)
       }
+    },
+    editorVal() {
+      this.$emit('change', this.editorVal)
     }
   },
   mounted() {
@@ -51,7 +53,7 @@ export default {
             }
           }
           this.editor.customConfig.onchange = (html) => {
-            this.$emit('change', html)
+            this.editorVal = html
           }
           this.editor.create()
         } else {

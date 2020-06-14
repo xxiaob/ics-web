@@ -1,29 +1,42 @@
 <template>
   <div class="jc-map-warp">
-    <map-search ref="mapSearch" class="jc-area-search" @search-change="searchChange"></map-search>
+    <map-search ref="mapSearch" class="jc-area-search"></map-search>
     <div class="jc-marker-map" ref="myMap"></div>
   </div>
 </template>
 <script>
 import { JcMap, JcMapMarker } from '@/map'
 import { markerStyle } from '@/map/mapConst'
-
 import { MAP_EVENT } from '@/constant/CONST'
 import MapSearch from '@/components/JcMap/MapSearch'
+import { getAddressByPosition } from '@/map/aMap/aMapUtil'
+
 export default {
   name: 'MapUserMarker',
   model: { prop: 'value', event: 'change' },
-  props: { value: { type: String, default: '' } },
+  props: { value: { type: Object, default: {} } },
   components: { MapSearch },
   data() {
     return {
       myJcMap: null,
-      myMarker: null
+      myMarker: null,
+      address: { position: '', name: '' }
     }
   },
   mounted() {
     this.myJcMap = new JcMap()
     this.initData()
+  },
+  watch: {
+    value(newVal) {
+      if (newVal && newVal.position != this.address.position && newVal.name != this.address.name) {
+        this.showMarker(newVal.position.split(','), name)
+        this.myMarker.fitView()
+      }
+    },
+    address() {
+      this.$emit('change', this.address)
+    }
   },
   methods: {
     async initData() {
@@ -32,22 +45,23 @@ export default {
       this.$refs.mapSearch.initData(this.myJcMap) //初始化搜索对象
 
       //添加监听
-      this.myJcMap.on(MAP_EVENT.CLICK, (data) => {
+      this.myJcMap.on(MAP_EVENT.RIGHTCLICK, (data) => {
         console.log('地图点击了', data)
+        let center = [data.lnglat.lng, data.lnglat.lat]
+
+        getAddressByPosition(data.lnglat).then(name => {
+          this.showMarker(center, name)
+          this.address = { position: center.join(','), name }
+        })
       })
     },
     showMarker(center, name) {
       if (this.myMarker) {
         this.myMarker.name = name
-        this.myMarker.setPosition(center)
+        this.myMarker.show(center)
       } else {
-        this.myMarker = new JcMapMarker({ map: this.myJcMap, name, icon: '/static/mapIcons/temporarytasks.gif', position: center, mapStyle: markerStyle.TEMPORARY_TASKS, draggable: true })
+        this.myMarker = new JcMapMarker({ map: this.myJcMap, name, icon: '/static/mapIcons/temporarytasks.gif', position: center, mapStyle: markerStyle.TEMPORARY_TASKS })
       }
-    },
-    searchChange(data) {
-      //搜索改变
-      console.log('搜索地址改变：', data)
-      this.showMarker(data.center, data.name)
     }
   },
   beforeDestroy() {

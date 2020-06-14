@@ -78,6 +78,15 @@ class JcMapMarket {
   getPosition() { }
 
   /**
+   * 地图自适应 显示
+   */
+  fitView() {
+    if (this.map) {
+      this.map.fitView([this])
+    }
+  }
+
+  /**
    * 获取地图对象
    */
   getMapTargets() { }
