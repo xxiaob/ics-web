@@ -7,10 +7,7 @@ import { uploadFile } from '@/api/upload'
 
 export default {
   name: 'JcRichEditor',
-  model: {
-    prop: 'value',
-    event: 'change'
-  },
+  model: { prop: 'value', event: 'change' },
   props: {
     value: {
       type: String,

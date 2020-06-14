@@ -11,3 +11,10 @@ export const mapStyle = new JcEnum([
   { key: 'DARK', value: 'dark', label: '深夜黑' },
   { key: 'SATELLITE', value: 'satellite', label: '卫星图' }
 ])
+
+/**
+ * 点标记样式
+ */
+export const markerStyle = new JcEnum([
+  { key: 'TEMPORARY_TASKS', value: 'temporarytasks', label: '临时任务' }
+])

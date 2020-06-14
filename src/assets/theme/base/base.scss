@@ -203,12 +203,12 @@ input::-webkit-input-placeholder {
     }
 
     .el-form-item__content {
-      & > .el-range-editor {
+      &>.el-range-editor {
         width: 280px;
       }
 
-      & > .el-input,
-      & > .el-select {
+      &>.el-input,
+      &>.el-select {
         width: 160px;
       }
     }
@@ -264,7 +264,7 @@ input::-webkit-input-placeholder {
 }
 
 .jc-table {
-  .el-button + .el-button {
+  .el-button+.el-button {
     margin-left: 0;
   }
 
@@ -285,6 +285,7 @@ input::-webkit-input-placeholder {
 }
 
 .jc-manage-form {
+
   .el-select,
   .el-cascader,
   .el-date-editor {
@@ -318,15 +319,19 @@ input::-webkit-input-placeholder {
 }
 
 /* 地图 样式设置 */
-.jc-market-content {
+.jc-marker-content {
   position: relative;
   padding-top: 20px;
   width: 18px;
   height: 54px;
   text-align: center;
+
+  &.jc-market-center {
+    width: 32px;
+  }
 }
 
-.jc-market-title {
+.jc-marker-title {
   position: absolute;
   top: 0;
   left: 50%;
@@ -347,7 +352,7 @@ input::-webkit-input-placeholder {
   word-break: break-all;
 }
 
-.jc-market-icon {
-  width: 18px;
+.jc-marker-icon {
+  width: 100%;
   object-fit: contain;
 }

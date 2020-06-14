@@ -5,7 +5,7 @@
 /**
   * 默认market icon
   */
-export const defaultMarketIcon = '/static/areaicons/default.png'
+export const defaultMarkerIcon = '/static/areaicons/default.png'
 
 /**
   * 图标icon

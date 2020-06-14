@@ -9,8 +9,6 @@
 <script>
 import { JcMapSearch } from '@/map'
 
-let myJcSearch //搜索对象
-
 export default {
   name: 'JcMapSearch',
   data() {
@@ -18,18 +16,19 @@ export default {
       value: '',
       visible: false,
       loading: false,
-      list: []
+      list: [],
+      myJcSearch: null //搜索对象
     }
   },
   methods: {
     initData(map) {
       this.list = []
       this.value = ''
-      myJcSearch = new JcMapSearch({ map })
+      this.myJcSearch = new JcMapSearch({ map })
     },
     search(query) {
       this.loading = true
-      myJcSearch.search(query).then(res => {
+      this.myJcSearch.search(query).then(res => {
         this.list = res
         this.loading = false
       }).catch(() => {
@@ -38,8 +37,9 @@ export default {
     },
     selectChange(item) {
       if (item.center && item.center.length) {
-        myJcSearch.fitView(item.center)
+        this.myJcSearch.fitView(item.center)
       }
+      this.$emit('search-change', this.value)
     },
     visibleChange(visible) {
       this.visible = visible
@@ -72,6 +72,8 @@ export default {
       padding: 0 15px 0 32px;
     }
     .el-select-dropdown {
+      position: absolute !important;
+      top: 32px !important;
       left: 0 !important;
     }
   }

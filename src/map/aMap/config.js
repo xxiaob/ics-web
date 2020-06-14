@@ -1,7 +1,7 @@
 /**
  * 高德地图配置数据
  */
-import { mapStyle } from '@/map/mapConst'
+import { mapStyle, markerStyle } from '@/map/mapConst'
 
 //事件转换
 export const EventTrans = {}
@@ -148,7 +148,7 @@ export const SearchOptions = {
   }
 }
 
-import { defaultMarker } from './marker/template'
+import { defaultMarker, centerMarker } from './marker/template'
 //market配置参数
 export const markerOptions = {
   [mapStyle.BASE]: {
@@ -168,5 +168,11 @@ export const markerOptions = {
       anchor: [-9, -54]
     },
     getContent: defaultMarker
+  },
+  [markerStyle.TEMPORARY_TASKS]: {
+    base: {
+      anchor: [-15, -15]
+    },
+    getContent: centerMarker
   }
 }

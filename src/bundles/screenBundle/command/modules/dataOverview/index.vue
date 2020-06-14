@@ -50,7 +50,7 @@ export default {
       this.org = org
       this.loading = true
       try {
-        let result = await getCommandScreenData({ orgId: this.org.orgId, projectId: this.project.projectId })
+        let result = await getCommandScreenData({ orgId: this.org.orgId, projectId: this.project.projectId || this.$route.params.projectId })
 
         let list = []
 
