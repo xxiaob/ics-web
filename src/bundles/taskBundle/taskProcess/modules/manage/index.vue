@@ -226,8 +226,10 @@ export default {
       } else {
         this.peopleType = TASK_PEOPLE_TYPES.ORG
         this.peoples = []
+        const beginTime = new Date().getTime()
+        const endTime = beginTime + 2 * 60 * 60 * 1000
 
-        return { ...defaultForm, taskSource: questionTaskSource, projectId: this.projectId }
+        return { ...defaultForm, taskSource: questionTaskSource, projectId: this.projectId, beginTime, endTime, date: [beginTime, endTime] }
       }
     },
     onSubmit(ifStart) {
