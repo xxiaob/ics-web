@@ -18,7 +18,6 @@ class JcMapEditor extends JcMapEditorBase {
   constructor(options = {}) {
     super(options)
 
-    this.colorStyle = getColors()
     //增加鼠标绘制工具
     this.mousetool = new this.map.AMap.MouseTool(this.map.map)
     this.mousetool.on('draw', (e) => {
@@ -79,6 +78,7 @@ class JcMapEditor extends JcMapEditorBase {
   initEditor() {
     this.map.map.setStatus({ doubleClickZoom: false }) //设置禁止双击缩放
     if (this.sign) {
+      this.colorStyle = this.sign.colorStyle
       //添加点标记
       this.showMarker(this.sign.center)
       //绘画已有数据
@@ -89,7 +89,7 @@ class JcMapEditor extends JcMapEditorBase {
       if (this.sign.boundaries && this.sign.boundaries.length) {
         this.sign.boundaries.forEach(item => {
           this.console(item)
-          let target = paintingSign(new JcMapSign({ map: this.map, active: true }), item)
+          let target = paintingSign(new JcMapSign({ map: this.map, active: true, colorStyle: this.colorStyle }), item)
 
           boundaries.push({ id: this.idIndex++, type: item.type, target })
           overlays.push(target)
@@ -99,6 +99,8 @@ class JcMapEditor extends JcMapEditorBase {
       this.boundaries = boundaries
       this.map.map.add(overlays)
       this.refreshListener()
+    } else {
+      this.colorStyle = getColors()
     }
     //处理需要吸附的多边形
     let subPolygon = []

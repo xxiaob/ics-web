@@ -14,7 +14,7 @@ class JcMapSign extends JcMapSignBase {
    */
   constructor(options) {
     super(options)
-    this.colorStyle = getColors()
+    this.colorStyle = options.colorStyle || getColors()
   }
 
   /**
