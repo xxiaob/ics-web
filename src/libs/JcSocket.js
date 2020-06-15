@@ -24,7 +24,7 @@ export default class JcSocket {
       if (data) {
         data = JSON.parse(data)
       }
-      callback(data.resData)
+      callback(data)
     }
     this.ws.onclose = this.reconnect
   }
@@ -34,6 +34,7 @@ export default class JcSocket {
    */
   disconnect() {
     if (this.ws) {
+      this.ws.onclose = null
       this.ws.close()
     }
   }
