@@ -105,3 +105,12 @@ export function getOrgUserList(data) {
 
   return axios.post(API.user.getOrgUserList, { orgId: user ? user.orgId : '', ...data })
 }
+
+/**
+ * 根据项目id查询所有组织和用户
+ * @param {object} data
+ * @returns {Object} axios 对象
+ */
+export function getOrgUserListByProject(data) {
+  return axios.post(API.user.getOrgUserListByProject, data)
+}

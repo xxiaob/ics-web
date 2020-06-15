@@ -31,7 +31,7 @@
   </view-warp>
 </template>
 <script>
-import { getOrgUserList } from '@/api/user'
+import { getOrgUserListByProject } from '@/api/user'
 import TreesFilterMixins from '@/mixins/TreesFilterMixins'
 
 export default {
@@ -65,7 +65,7 @@ export default {
     async initData() {
       this.loading = true
       try {
-        const orgsAndUsers = await getOrgUserList()
+        const orgsAndUsers = await getOrgUserListByProject({ projectId: this.project.projectId })
 
         this.trees = this.formatUserOrgTrees(orgsAndUsers)//处理组织和用户
         this.expandedKeys = this.trees.length ? [this.trees[0].id] : [] //设置第一级默认展开

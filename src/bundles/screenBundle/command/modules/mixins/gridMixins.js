@@ -6,83 +6,56 @@ import { AREAS_TYPE, AREAS_SEARCH_TYPE } from '@/constant/CONST'
 import { apiBoundariesFormat } from '@/libs/apiFormat'
 import { JcMapSign } from '@/map'
 import { PROJECT_TYPES } from '@/constant/Dictionaries'
+import { getElasticMarker } from '@/map/aMap/aMapUtil'
 
 let gridData = {} //存储已经请求的组织数据
 
-let gridAreas = [] //网格区域数组
+let gridAreas = {} //网格区域数组
+
+let ElasticMarker //存储 ElasticMarker
 
 export default {
   data() {
     return {
-      org: null,
-      areaTipVisible: true, //组织是否显示名称
-      areaAreaVisible: true //组织是否显示区域
+      gridOrg: null,
+      areaTipVisibles: {}, //网格区域对应类型是否显示名称
+      areaAreaVisible: {} //网格区域对应类型是否显示区域
     }
   },
   created() {
     this.$EventBus.$on('org-change', this.areaMap) //监听行级别切换
-    this.$EventBus.$on('show-area-change', this.orgShowAreaChange) //监听区域显示切换
-    this.$EventBus.$on('show-word-change', this.orgShowWordChange) //监听文字显示切换
+    this.$EventBus.$on('show-area-change', this.gridShowAreaChange) //监听区域显示切换
+    this.$EventBus.$on('show-word-change', this.gridShowWordChange) //监听文字显示切换
   },
   methods: {
     async areaMap(org) {
+      ElasticMarker = await getElasticMarker() //获取 ElasticMarker 对象
       //处理地图
-      this.org = org
+      this.gridOrg = org
       console.log('指挥层级切换变化', org)
       try {
-        let res = gridData[this.org.orgId]
+        let res = gridData[this.gridOrg.orgId]
 
         if (!(res && res.length)) {
-          if (PROJECT_TYPES.EmergencySupport == this.project.projectType) {
-            res = await areaList({ orgId: this.org.orgId, orgSearchType: AREAS_TYPE.OWN, searchType: AREAS_SEARCH_TYPE.ORG })
-          } else {
-            res = await areaList({ orgId: this.org.orgId, orgSearchType: AREAS_TYPE.OWN_AND_CHILD, searchType: AREAS_SEARCH_TYPE.ORG })
-          }
+          res = await areaList({ orgId: this.gridOrg.orgId, projectId: this.project.projectId, orgSearchType: AREAS_TYPE.OWN_AND_CHILD, searchType: AREAS_SEARCH_TYPE.GRID })
 
-          gridData[this.org.orgId] = res
+          gridData[this.gridOrg.orgId] = res
         }
 
-        // this.drawOrgSign(res)
+        this.drawGrids(res)
       } catch (error) {
         console.log(error)
       }
     },
     /**
-     * 绘画组织区域信息
+     * 绘制网格信息
      * @param {Array} data 组织区域数据
      */
-    drawOrgSign(data) {
-      let myJcMap = this.getMyJcMap() //获取地图对象
-
-      myJcMap.removeSign(orgAreas) //清除之前的区域显示
-
-      let areas = []
-
-      if (data && data.length) {
-        data.forEach(item => {
-          if (item.orgId == this.org.orgId) {
-            this.$EventBus.$emit('org-adcode-change', item)
-          }
-          if (item.orgId != this.org.orgId || data.length == 1) {
-            areas.push(new JcMapSign({
-              id: item.orgId,
-              map: myJcMap,
-              name: item.areaName,
-              center: item.center.split(','),
-              tipVisible: this.orgTipVisible,
-              areaVisible: this.orgAreaVisible,
-              extData: { orgId: item.orgId, adcode: item.areaCode, areaId: item.areaId, areaName: item.areaName },
-              boundaries: apiBoundariesFormat(item)
-            }))
-          }
-        })
-      }
-      orgAreas = areas
-
-      myJcMap.addSign(orgAreas)
-      myJcMap.fitView()
+    drawGrids(data) {
+      console.log('网格信息', data)
+      // myJcMap.fitView()
     },
-    orgShowAreaChange(areas) {
+    gridShowAreaChange(areas) {
       //组织区域显示
       if ((areas || areas.length).filter(id => id == 'org').length) {
         //如果存在组织区域显示，则显示区域
@@ -91,22 +64,22 @@ export default {
         //不存在则显示
         this.orgAreaVisible = false
       }
-      orgAreas.forEach(item => {
-        item.showArea(this.orgAreaVisible)
-      })
+      // orgAreas.forEach(item => {
+      //   item.showArea(this.orgAreaVisible)
+      // })
     },
-    orgShowWordChange(words) {
+    gridShowWordChange(words) {
       //组织文字显示
-      if ((words || words.length).filter(id => id == 'org').length) {
-        //如果存在组织区域显示，则显示文字
-        this.orgTipVisible = true
-      } else {
-        //不存在则显示
-        this.orgTipVisible = false
-      }
-      orgAreas.forEach(item => {
-        item.showTip(this.orgTipVisible)
-      })
+      // if ((words || words.length).filter(id => id == 'org').length) {
+      //   //如果存在组织区域显示，则显示文字
+      //   this.orgTipVisible = true
+      // } else {
+      //   //不存在则显示
+      //   this.orgTipVisible = false
+      // }
+      // orgAreas.forEach(item => {
+      //   item.showTip(this.orgTipVisible)
+      // })
     }
   },
   beforeDestroy() {
