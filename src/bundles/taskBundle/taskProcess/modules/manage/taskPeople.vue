@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="">
+    <div class="jc-left-width60">
       <el-radio-group v-model="selfPeopleType" size="small" @change="changePeopleType">
         <el-radio-button v-for="item in TASK_PEOPLE_TYPES.VALUES" :key="item.value" :label="item.value">{{item.label}}</el-radio-button>
       </el-radio-group>
@@ -9,7 +9,14 @@
       <el-button type="" @click="resetChecked" size="mini">清空</el-button>
       <el-tree ref="tree" :data="tree" show-checkbox node-key="id" :check-strictly="true" :filter-node-method="filterNode" default-expand-all @check="check" :default-checked-keys="selecteds"></el-tree>
     </div>
-    <div class="jc-left-width40"></div>
+    <div class="jc-left-width40">
+      <div>已选人员</div>
+      <div class="jc-selected">
+        <el-tag v-for="tag in checkedNodes" :key="tag.id" closable size="small" @close="handleCloseTag(tag)">
+          {{tag.label}}
+        </el-tag>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -39,7 +46,8 @@ export default {
       orgPeople: [],
       filterText: '',
       filterArr: [],
-      filterArrPeople: []
+      filterArrPeople: [],
+      checkedNodes: []
     }
   },
   computed: {
@@ -68,8 +76,12 @@ export default {
       this.$refs.tree.filter(val)
     },
     selecteds: {
+      immediate: true,
       handler(val) {
-        this.$refs.tree.setCheckedKeys(val)
+        this.$nextTick(()=>{
+          this.$refs.tree.setCheckedKeys(val)
+          this.checkedNodes = this.$refs.tree.getCheckedNodes()
+        })
       },
       deep: true
     }
@@ -96,7 +108,14 @@ export default {
       }
       return trees
     },
-    check(checkedNodes, { checkedKeys }) {
+    handleCloseTag(tag) {
+      const selecteds = this.selecteds.slice(0)
+      const index = selecteds.indexOf(tag.id)
+
+      selecteds.splice(index, 1)
+      this.$emit('update:selecteds', selecteds)
+    },
+    check(checkedNode, { checkedKeys }) {
       this.$emit('update:selecteds', checkedKeys)
     },
     setCheckedKeys() {
@@ -165,9 +184,22 @@ export default {
 .jc-left-width60 {
   width: 60%;
   float: left;
+  box-sizing: border-box;
 }
 .jc-left-width40 {
   width: 40%;
   float: left;
+  box-sizing: border-box;
+}
+.jc-selected {
+  margin: 0 10px;
+  border: 1px solid #dcdfe6;
+  height: 280px;
+  overflow: auto;
+  line-height: normal;
+
+  .el-tag {
+    margin: 2px;
+  }
 }
 </style>

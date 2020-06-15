@@ -100,7 +100,6 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.jc-clearboth::before,
 .jc-clearboth::after {
   display: table;
   content: "";
