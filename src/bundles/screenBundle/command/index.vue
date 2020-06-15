@@ -25,7 +25,6 @@
       </keep-alive>
     </transition>
     <temporary-tasks-manage :projectList="temporaryTaskProject" :projectId="temporaryTaskprojectId" :visible.sync="temporaryTaskVisible" @save-success="temporaryTaskSuccess"></temporary-tasks-manage>
-    <temporary-tasks></temporary-tasks>
   </section>
 </template>
 <script>
@@ -49,8 +48,7 @@ export default {
     CommandOrg: () => import('./modules/org'), //组织架构
     CommandGrid: () => import('./modules/grid'), //网格
     MessageDetail: () => import('./modules/messageDetail'), //消息详情
-    TemporaryTasksManage: () => import('@/bundles/taskBundle/taskProcess/modules/manage'), //临时任务
-    TemporaryTasks: () => import('./modules/temporaryTasks') //临时任务demo
+    TemporaryTasksManage: () => import('@/bundles/taskBundle/taskProcess/modules/manage') //临时任务
   },
   data() {
     return {
