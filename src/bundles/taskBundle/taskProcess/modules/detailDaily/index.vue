@@ -52,7 +52,8 @@
           </el-form-item>
         </el-form-item>
         <el-form-item label="任务描述：">
-          {{form.taskDesc}}
+          <!-- {{form.taskDesc}} -->
+          <div v-html="form.taskDesc"></div>
         </el-form-item>
       </el-form>
     </el-card>

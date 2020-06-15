@@ -51,7 +51,8 @@
           </el-form-item>
         </div>
         <el-form-item label="任务描述：">
-          {{form.taskDesc}}
+          <div v-html="form.taskDesc"></div>
+          <!-- {{form.taskDesc}} -->
         </el-form-item>
         <el-form-item label="附件：">
           <el-image v-for="url in imgs" :key="url" :src="url" :preview-src-list="imgs" class="jc-img"></el-image>

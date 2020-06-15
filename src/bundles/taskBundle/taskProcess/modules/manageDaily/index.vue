@@ -24,8 +24,8 @@
         <el-button icon="el-icon-close" circle size="mini" title="增加" @click="delTime"></el-button>
         <el-button icon="el-icon-plus" circle size="mini" title="删除" @click="addTime"></el-button>
       </el-form-item>
-      <el-form-item label="在岗时长" prop="workTime" :rules="rules.num">
-        <el-input v-model.number="form.workTime" type="number" placeholder="请输入在岗时长(单位小时)"></el-input>
+      <el-form-item label="在岗时长" prop="workTime" :rules="rules.NOT_NULL">
+        <el-input v-model="form.workTime" placeholder="请输入在岗时长(单位小时)"></el-input>
       </el-form-item>
       <el-form-item label="在岗人数" prop="workPeopleNbr" :rules="rules.num">
         <el-input v-model.number="form.workPeopleNbr" type="number" placeholder="请输入在岗人数"></el-input>
@@ -34,7 +34,8 @@
         <jc-task-people :peopleType.sync="peopleType" :selecteds.sync="peoples" :orgTree="orgTree"></jc-task-people>
       </el-form-item>
       <el-form-item label="任务描述" prop="taskDesc" :rules="rules.NOT_NULL">
-        <el-input v-model="form.taskDesc" placeholder="请输入任务描述" type="textarea"></el-input>
+        <!-- <el-input v-model="form.taskDesc" placeholder="请输入任务描述" type="textarea"></el-input> -->
+        <jc-editor v-model="form.taskDesc"></jc-editor>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -88,7 +89,8 @@ export default {
   },
   components: {
     JcTaskArea: () => import('./taskArea'),
-    JcTaskPeople: () => import('../manage/taskPeople')
+    JcTaskPeople: () => import('../manage/taskPeople'),
+    JcEditor: () => import('@/components/JcForm/JcEditor')
   },
   data() {
     return {
@@ -237,5 +239,11 @@ export default {
 .jc-left-width50 {
   width: 50%;
   float: left;
+}
+.jc-myeditor {
+  height: 200px;
+  /deep/ .w-e-text-container {
+    height: 160px !important;
+  }
 }
 </style>
