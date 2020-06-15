@@ -9,27 +9,28 @@
   </div>
 </template>
 <script>
+
+
 export default {
   name: 'ScreenCommandMessage',
-  props: ['options'],
+  props: ['options', 'project'],
   data() {
     return {
       visible: true,
       index: 1,
       maxLength: 20, //最大数量
       list: [],
-      style: { 0: 'jc-event', 1: 'jc-question', 2: 'jc-task' },
-      interval: null
+      style: { 0: 'jc-event', 1: 'jc-question', 2: 'jc-task' }
     }
   },
   mounted() {
-    this.initData()
-    this.interval = setInterval(() => {
-      this.list.splice(0, 0, { id: this.index++, type: this.index % 3 })
-      if (this.list.length > this.maxLength) {
-        this.list.splice(this.maxLength, this.list.length - this.maxLength)
-      }
-    }, 1000 * 10)
+    this.$EventBus.$on('org-change', this.initData) //监听行级别切换
+    // this.interval = setInterval(() => {
+    //   this.list.splice(0, 0, { id: this.index++, type: this.index % 3 })
+    //   if (this.list.length > this.maxLength) {
+    //     this.list.splice(this.maxLength, this.list.length - this.maxLength)
+    //   }
+    // }, 1000 * 10)
   },
   methods: {
     initData() {
@@ -48,9 +49,6 @@ export default {
     //设置该窗口隐藏,然后开始新消息数量通知
     this.visible = false
     console.log('ScreenCommandMessage deactivated')
-  },
-  beforeDestroy() {
-    clearInterval(this.interval)
   }
 }
 </script>

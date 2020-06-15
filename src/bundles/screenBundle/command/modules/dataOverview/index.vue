@@ -15,8 +15,8 @@
       <div class="jc-content-warp">
         <div class="jc-content" v-for="item in list" :key="item.orgId">
           <div class="jc-content-item" v-text="item.orgName"></div>
-          <div class="jc-content-item jc-num">{{item.online || '--'}}<span class="jc-unit">人</span></div>
-          <div class="jc-content-item jc-num">{{item.patrolMileage || '--'}}<span class="jc-unit">KM</span></div>
+          <div class="jc-content-item jc-num">{{item.online || 0}}<span class="jc-unit">人</span></div>
+          <div class="jc-content-item jc-num">{{item.patrolMileage || 0}}<span class="jc-unit">KM</span></div>
           <div class="jc-content-item jc-num">{{item.eventNbr}}<span class="jc-unit">件</span></div>
           <div class="jc-content-item jc-num">{{item.problemNbr}}<span class="jc-unit">件</span></div>
         </div>
@@ -35,6 +35,7 @@ export default {
       viewShow: true,
       loading: false,
       list: [],
+      orgUsers: {},
       org: null,
       interval: null
     }
@@ -42,6 +43,7 @@ export default {
   created() {
     this.$EventBus.$on('org-change', this.initData) //监听行级别切换
     this.interval = setInterval(this.initData, 1000 * 60 * 5) //五分钟进行数据轮询
+    this.$EventBus.$on('data-overview-change', this.dataChange) //监听组织人员在线人数变更
   },
   methods: {
     async initData(org) {
@@ -64,11 +66,32 @@ export default {
             }
           })
         }
-        this.list = list
+        this.list = this.formatUserList(list)
       } catch (error) {
         console.log(error)
       }
       this.loading = false
+    },
+    dataChange(orgUsers) {
+      let users = {}
+
+      if (orgUsers && orgUsers.length) {
+        orgUsers.forEach(item => {
+          users[item.orgId] = item.users
+        })
+      }
+      this.orgUsers = users
+      this.formatUserList(this.list)
+    },
+    formatUserList(orgs) {
+      let list = []
+
+      if (orgs && orgs.length) {
+        orgs.forEach(item => {
+          list.push({ ...item, online: this.orgUsers[item.orgId] })
+        })
+      }
+      return list
     }
   },
   beforeDestroy() {

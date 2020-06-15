@@ -8,7 +8,7 @@
             <div class="jc-text-warp" v-text="data.name"></div>
           </div>
           <div class="jc-tree-options" v-on:click.stop>
-            <el-button type="text" size="small" icon="el-icon-map-location" v-if="data.areaId"></el-button>
+            <el-button type="text" size="small" icon="el-icon-map-location"></el-button>
           </div>
         </div>
       </el-tree>

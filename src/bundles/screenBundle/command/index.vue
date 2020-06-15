@@ -32,12 +32,13 @@ import { JcMap } from '@/map'
 import { projectGet } from '@/api/projects'
 import OrgMixins from './modules/mixins/orgMixins' //组织显示处理
 import TemporaryTasksMixins from './modules/mixins/temporaryTasksMixins' //临时任务下发
+import ScreenMapSocketMixins from './modules/mixins/screenMapSocketMixins' //大屏socket 连接
 
 let myJcMap //个人 map 对象
 
 export default {
   name: 'ScreenCommand',
-  mixins: [OrgMixins, TemporaryTasksMixins],
+  mixins: [OrgMixins, TemporaryTasksMixins, ScreenMapSocketMixins],
   components: {
     CommandHeader: () => import('./modules/header'), //顶部
     CommandOperate: () => import('./modules/operate'), //功能操作区域
