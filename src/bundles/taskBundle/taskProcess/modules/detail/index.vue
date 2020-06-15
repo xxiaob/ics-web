@@ -54,7 +54,6 @@
           {{form.taskDesc}}
         </el-form-item>
         <el-form-item label="附件：">
-          <!-- {{form.uploadFilePaths}} -->
           <el-image v-for="url in imgs" :key="url" :src="url" :preview-src-list="imgs" class="jc-img"></el-image>
           <div class="jc-video" v-for="url in videos" :key="url" @click="showVideo(url)">
             <video :src="url"></video>

@@ -25,7 +25,8 @@
       </div>
       <div class="jc-clearboth">
         <el-form-item label="任务位置" prop="taskPosition" :rules="rules.NOT_NULL" class="jc-left-width40">
-          <el-input v-model="form.taskPosition" placeholder="请输入任务位置"></el-input>
+          <el-input v-model="form.taskPosition" placeholder="请点击地图选择任务位置" style="display:none"></el-input>
+          <el-input v-model="form.taskPositionName" placeholder="请输入任务位置"></el-input>
         </el-form-item>
         <el-form-item label="任务来源" prop="taskSource" :rules="rules.SELECT_NOT_NULL" class="jc-left-width60">
           <el-select v-model="form.taskSource" placeholder="选择任务来源" :disabled="taskSourceDisabled">
@@ -34,8 +35,13 @@
         </el-form-item>
       </div>
       <div class="jc-clearboth">
-        <div class="jc-left-width50">地图</div>
-        <el-form-item label="任务人员" prop="" :rules="rules.SELECT_NOT_NULL" class="jc-left-width50">
+        <div class="jc-left-width40">
+          <div style="color:red">右键点击地图选中位置</div>
+          <div class="jc-map">
+            <map-user-marker v-model="position"></map-user-marker>
+          </div>
+        </div>
+        <el-form-item label="任务人员" prop="" :rules="rules.SELECT_NOT_NULL" class="jc-left-width60">
           <jc-task-people :peopleType.sync="peopleType" :selecteds.sync="peoples" :orgTree="orgTree"></jc-task-people>
         </el-form-item>
       </div>
@@ -96,7 +102,8 @@ export default {
   },
   components: {
     upload: () => import('@/components/JcUpload'),
-    JcTaskPeople: () => import('./taskPeople')
+    JcTaskPeople: () => import('./taskPeople'),
+    MapUserMarker: () => import('@/components/JcMap/MapUserMarker')
   },
   computed: {
     ...mapState(['user'])
@@ -113,7 +120,8 @@ export default {
       },
       orgTree: [],
       taskSources: JSON.parse(JSON.stringify(TASK_SOURCES.VALUES)),
-      taskSourceDisabled: false
+      taskSourceDisabled: false,
+      position: {}
     }
   },
   watch: {
@@ -126,6 +134,13 @@ export default {
           this.form.userIds = val
           this.form.orgIds = []
         }
+      },
+      deep: true
+    },
+    position: {
+      handler(val) {
+        this.form.taskPosition = val.position
+        this.form.taskPositionName = val.name
       },
       deep: true
     }
@@ -192,7 +207,7 @@ export default {
         // console.log(this.options)
         const { taskId, orgIds, assignees, detailViewVO: { businessKey, projectId, taskDesc, taskName, endDate, startDate }, taskDetailVO: { taskPosition, taskPositionName, taskSource, uploadFilePaths } } = this.options
 
-
+        this.position = { position: taskPosition, name: taskPositionName }
         const form = {
           businessKey,
           taskId,
@@ -292,5 +307,8 @@ export default {
   content: "";
   display: table;
   clear: both;
+}
+.jc-map {
+  height: 300px;
 }
 </style>

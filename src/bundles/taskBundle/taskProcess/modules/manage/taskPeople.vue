@@ -1,12 +1,15 @@
 <template>
   <div>
-    <el-radio-group v-model="selfPeopleType" size="small" @change="changePeopleType">
-      <el-radio-button v-for="item in TASK_PEOPLE_TYPES.VALUES" :key="item.value" :label="item.value">{{item.label}}</el-radio-button>
-    </el-radio-group>
-    <el-input placeholder="输入关键字进行过滤" v-model="filterText" size="small"></el-input>
-    <el-button type="" @click="setCheckedKeys" size="mini">全选</el-button>
-    <el-button type="" @click="resetChecked" size="mini">清空</el-button>
-    <el-tree ref="tree" :data="tree" show-checkbox node-key="id" :check-strictly="true" :filter-node-method="filterNode" default-expand-all @check="check" :default-checked-keys="selecteds"></el-tree>
+    <div class="">
+      <el-radio-group v-model="selfPeopleType" size="small" @change="changePeopleType">
+        <el-radio-button v-for="item in TASK_PEOPLE_TYPES.VALUES" :key="item.value" :label="item.value">{{item.label}}</el-radio-button>
+      </el-radio-group>
+      <el-input placeholder="输入关键字进行过滤" v-model="filterText" size="small"></el-input>
+      <el-button type="" @click="setCheckedKeys" size="mini">全选</el-button>
+      <el-button type="" @click="resetChecked" size="mini">清空</el-button>
+      <el-tree ref="tree" :data="tree" show-checkbox node-key="id" :check-strictly="true" :filter-node-method="filterNode" default-expand-all @check="check" :default-checked-keys="selecteds"></el-tree>
+    </div>
+    <div class="jc-left-width40"></div>
   </div>
 </template>
 
@@ -158,5 +161,13 @@ export default {
 }
 .el-select {
   width: inherit;
+}
+.jc-left-width60 {
+  width: 60%;
+  float: left;
+}
+.jc-left-width40 {
+  width: 40%;
+  float: left;
 }
 </style>
