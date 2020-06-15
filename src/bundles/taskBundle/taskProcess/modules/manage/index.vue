@@ -50,7 +50,8 @@
       </el-form-item> -->
 
       <el-form-item label="任务描述" prop="taskDesc" :rules="rules.NOT_NULL">
-        <el-input v-model="form.taskDesc" placeholder="请输入任务描述" type="textarea"></el-input>
+        <!-- <el-input v-model="form.taskDesc" placeholder="请输入任务描述" type="textarea"></el-input> -->
+        <jc-editor v-model="form.taskDesc"></jc-editor>
       </el-form-item>
       <el-form-item label="附件" prop="uploadFilePaths" :rules="[{required: true, message: '请上传文件'}]">
         <upload :show="dialogVisible" :urls.sync="form.uploadFilePaths" accept="*"></upload>
@@ -103,7 +104,8 @@ export default {
   components: {
     upload: () => import('@/components/JcUpload'),
     JcTaskPeople: () => import('./taskPeople'),
-    MapUserMarker: () => import('@/components/JcMap/MapUserMarker')
+    MapUserMarker: () => import('@/components/JcMap/MapUserMarker'),
+    JcEditor: () => import('@/components/JcForm/JcEditor')
   },
   computed: {
     ...mapState(['user'])
@@ -310,5 +312,11 @@ export default {
 }
 .jc-map {
   height: 300px;
+}
+.jc-myeditor {
+  height: 200px;
+  /deep/ .w-e-text-container {
+    height: 160px !important;
+  }
 }
 </style>
