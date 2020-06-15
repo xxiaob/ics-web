@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="options ? '编辑日常任务' : '新增日常任务'" :visible.sync="dialogVisible" width="600px" :close-on-click-modal="false" :append-to-body="true" @close="dialogClose">
+  <el-dialog :title="options ? '编辑日常任务' : '新增日常任务'" :visible.sync="dialogVisible" width="600px" :close-on-click-modal="false" :append-to-body="true" @close="dialogClose" top="1vh">
     <el-form ref="form" label-width="80px" :model="form" class="jc-manage-form">
       <!-- <el-form-item label="项目类型" prop="projectType" :rules="rules.NOT_NULL">
         <el-input v-model="form.projectType" placeholder="请输入项目类型"></el-input>

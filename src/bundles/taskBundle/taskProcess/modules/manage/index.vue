@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="options ? '编辑临时任务' : '新增临时任务'" :visible.sync="dialogVisible" width="1000px" :close-on-click-modal="false" :append-to-body="true" @close="dialogClose">
+  <el-dialog :title="options ? '编辑临时任务' : '新增临时任务'" :visible.sync="dialogVisible" width="1000px" :close-on-click-modal="false" :append-to-body="true" @close="dialogClose" top="1vh">
     <el-form ref="form" label-width="80px" :model="form" class="jc-manage-form">
       <div class="jc-clearboth">
         <el-form-item label="下发人" class="jc-left-width40">

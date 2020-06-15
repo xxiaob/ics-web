@@ -1,17 +1,26 @@
 <template>
   <div>
-    <el-radio-group v-model="selfAreaType" size="small" @change="changeAreaType">
-      <el-radio-button v-for="item in TASK_AREA_TYPES.VALUES" :key="item.value" :label="item.value">{{item.label}}</el-radio-button>
-    </el-radio-group>
-    <el-select v-model="areaTypeId" clearable placeholder="请选择网格类型" size="small" v-if="selfAreaType===TASK_AREA_TYPES.GRID" @change="areaTypeChange">
-      <el-option v-for="item in gridTypes" :key="item.areaTypeId" :label="item.areaTypeName" :value="item.areaTypeId">
-      </el-option>
-    </el-select>
-    <el-input placeholder="输入关键字进行过滤" v-model="filterText" size="small"></el-input>
-    <el-button type="" @click="setCheckedKeys" size="mini">全选</el-button>
-    <el-button type="" @click="resetChecked" size="mini">清空</el-button>
-    <!-- <el-button type="primary" @click="getCheckedKeys" size="mini">获取选中节点</el-button> -->
-    <el-tree ref="tree" :data="tree" show-checkbox node-key="id" :check-strictly="true" :filter-node-method="filterNode" default-expand-all @check="check" :default-checked-keys="selectedAreas"></el-tree>
+    <div class="jc-left-width60">
+      <el-radio-group v-model="selfAreaType" size="small" @change="changeAreaType">
+        <el-radio-button v-for="item in TASK_AREA_TYPES.VALUES" :key="item.value" :label="item.value">{{item.label}}</el-radio-button>
+      </el-radio-group>
+      <el-select v-model="areaTypeId" clearable placeholder="请选择网格类型" size="small" v-if="selfAreaType===TASK_AREA_TYPES.GRID" @change="areaTypeChange">
+        <el-option v-for="item in gridTypes" :key="item.areaTypeId" :label="item.areaTypeName" :value="item.areaTypeId">
+        </el-option>
+      </el-select>
+      <el-input placeholder="输入关键字进行过滤" v-model="filterText" size="small"></el-input>
+      <el-button type="" @click="setCheckedKeys" size="mini">全选</el-button>
+      <el-button type="" @click="resetChecked" size="mini">清空</el-button>
+      <el-tree ref="tree" :data="tree" show-checkbox node-key="id" :check-strictly="true" :filter-node-method="filterNode" default-expand-all @check="check" :default-checked-keys="selectedAreas"></el-tree>
+    </div>
+    <div class="jc-left-width40">
+      <div>已选区域</div>
+      <div class="jc-selected">
+        <el-tag v-for="tag in checkedNodes" :key="tag.id" closable size="small" @close="handleCloseTag(tag)">
+          {{tag.label}}
+        </el-tag>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -45,7 +54,8 @@ export default {
       filterArrGrid: [],
       objTree: {},
       gridTypes: [],
-      areaTypeId: ''
+      areaTypeId: '',
+      checkedNodes: []
     }
   },
   computed: {
@@ -72,8 +82,12 @@ export default {
       this.$refs.tree.filter(val)
     },
     selectedAreas: {
+      immediate: true,
       handler(val) {
-        this.$refs.tree.setCheckedKeys(val)
+        this.$nextTick(()=>{
+          this.$refs.tree.setCheckedKeys(val)
+          this.checkedNodes = this.$refs.tree.getCheckedNodes()
+        })
       },
       deep: true
     }
@@ -103,6 +117,13 @@ export default {
     },
     check(checkedNodes, { checkedKeys }) {
       this.$emit('update:selectedAreas', checkedKeys)
+    },
+    handleCloseTag(tag) {
+      const selecteds = this.selectedAreas.slice(0)
+      const index = selecteds.indexOf(tag.id)
+
+      selecteds.splice(index, 1)
+      this.$emit('update:selectedAreas', selecteds)
     },
     // getCheckedKeys() {
     //   this.$emit('update:selectedAreas', this.$refs.tree.getCheckedKeys())
@@ -190,5 +211,26 @@ export default {
 }
 .el-select {
   width: inherit;
+}
+.jc-left-width60 {
+  width: 60%;
+  float: left;
+  box-sizing: border-box;
+}
+.jc-left-width40 {
+  width: 40%;
+  float: left;
+  box-sizing: border-box;
+}
+.jc-selected {
+  margin: 0 10px;
+  border: 1px solid #dcdfe6;
+  height: 280px;
+  overflow: auto;
+  line-height: normal;
+
+  .el-tag {
+    margin: 2px;
+  }
 }
 </style>
