@@ -53,6 +53,27 @@
         <el-form-item label="任务描述：">
           {{form.taskDesc}}
         </el-form-item>
+        <el-form-item label="附件：">
+          <!-- {{form.uploadFilePaths}} -->
+          <el-image v-for="url in imgs" :key="url" :src="url" :preview-src-list="imgs" class="jc-img"></el-image>
+          <div class="jc-video" v-for="url in videos" :key="url" @click="showVideo(url)">
+            <video :src="url"></video>
+            <div class="hover">
+              <img class="jc-video-play" src="../../../assets/play.png" alt="">
+            </div>
+          </div>
+          <div v-for="(url,index) in audios" :key="url" class="jc-audio" @click="playAudio(url,index)">
+            <img class="jc-audio-mike" src="../../../assets/mike.png" alt="">
+            <div class="hover">
+              <img class="jc-video-play" src="../../../assets/play.png" alt="" v-show="audioPlayShows[index]">
+              <img class="jc-video-play" src="../../../assets/pause.png" alt="" v-show="!audioPlayShows[index]">
+            </div>
+          </div>
+          <audio v-if="detailShow" ref="audio" :src="audioUrl" style="width:0;height:0" @ended="audioEnded"></audio>
+          <a class="jc-other" v-for="url in others" :key="url" :href="url" download="" title="点击下载">
+            <img class="jc-other-down" src="../../../assets/down.png" alt="">
+          </a>
+        </el-form-item>
       </el-form>
     </el-card>
     <el-card class="jc-table-card jc-mt">
@@ -105,10 +126,13 @@ import { userListByOrg } from '@/api/user'
 import { NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
 import { formatDate } from '@/libs/util'
 import { TASK_SOURCES, TASK_STATES } from '@/constant/Dictionaries'
+import MediaMixins from '../../../mixins/MediaMixins'
 
 export default {
   name: 'TaskProcessDetail',
+  mixins: [MediaMixins],
   props: {
+    detailShow: false,
     info: {
       type: Object,
       default: ()=>{}
@@ -146,6 +170,14 @@ export default {
         userIds: [],
         eventIds: []
       }
+    }
+  },
+  watch: {
+    form: {
+      handler(newValue) {
+        this.handleUrls(newValue.taskDetailVO.uploadFilePaths)
+      },
+      deep: true
     }
   },
   computed: {
@@ -283,6 +315,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+@import "../../../css/media.scss";
 .el-form /deep/ .el-form-item {
   margin-bottom: 0;
 }

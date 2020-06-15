@@ -10,7 +10,8 @@ export default {
       audioUrl: '',
       imgs: [],
       videos: [],
-      audios: []
+      audios: [],
+      others: []
     }
   },
   methods: {
@@ -22,7 +23,7 @@ export default {
         audio.pause()
       }
 
-      const imgs = [], videos = [], audios = []
+      const imgs = [], videos = [], audios = [], others = []
 
       if (urls && urls.length) {
         const imgReg = /\.(png|jpg|gif|jpeg|svg)$/,
@@ -32,18 +33,19 @@ export default {
         urls.forEach(url => {
           if (imgReg.test(url)) {
             imgs.push(url)
-          }
-          if (videoReg.test(url)) {
+          } else if (videoReg.test(url)) {
             videos.push(url)
-          }
-          if (audioReg.test(url)) {
+          } else if (audioReg.test(url)) {
             audios.push(url)
+          } else {
+            others.push(url)
           }
         })
       }
       this.imgs = imgs
       this.videos = videos
       this.audios = audios
+      this.others = others
       this.audioPlayShows = new Array(this.audios.length).fill(true)
     },
     //播放视频

@@ -47,7 +47,7 @@
         <el-input v-model="form.taskDesc" placeholder="请输入任务描述" type="textarea"></el-input>
       </el-form-item>
       <el-form-item label="附件" prop="uploadFilePaths" :rules="[{required: true, message: '请上传文件'}]">
-        <upload :show="dialogVisible" :urls.sync="form.uploadFilePaths" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg,video/*,audio/*"></upload>
+        <upload :show="dialogVisible" :urls.sync="form.uploadFilePaths" accept="*"></upload>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">

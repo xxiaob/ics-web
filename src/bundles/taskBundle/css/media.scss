@@ -1,6 +1,7 @@
 .jc-img,
 .jc-video,
-.jc-audio {
+.jc-audio,
+.jc-other {
   width: 130px;
   height: 110px;
   float: left;
@@ -16,7 +17,8 @@
     height: 100%;
   }
 
-  .jc-audio-mike {
+  .jc-audio-mike,
+  .jc-other-down {
     position: absolute;
     left: 48px;
     top: 32px;
@@ -59,7 +61,8 @@
   }
 }
 
-.jc-audio {
+.jc-audio,
+.jc-other {
   background: $jc-color-primary;
 }
 
