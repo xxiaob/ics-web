@@ -55,7 +55,7 @@ export default {
       })
     },
     valueChange() {
-      if (this.value && this.value.position != this.address.position && this.value.name != this.address.name) {
+      if (this.value && this.value.position && this.value.position != this.address.position && this.value.name != this.address.name) {
         this.showMarker(this.value.position.split(','), name)
         this.myMarker.fitView()
       }
