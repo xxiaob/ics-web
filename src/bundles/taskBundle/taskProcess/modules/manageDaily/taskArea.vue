@@ -4,7 +4,7 @@
       <el-radio-group v-model="selfAreaType" size="small" @change="changeAreaType">
         <el-radio-button v-for="item in TASK_AREA_TYPES.VALUES" :key="item.value" :label="item.value">{{item.label}}</el-radio-button>
       </el-radio-group>
-      <el-select v-model="areaTypeId" clearable placeholder="请选择网格类型" size="small" v-if="selfAreaType===TASK_AREA_TYPES.GRID" @change="areaTypeChange">
+      <el-select class="jc-area-type-select" v-model="areaTypeId" clearable placeholder="网格类型" size="small" v-if="selfAreaType===TASK_AREA_TYPES.GRID" @change="areaTypeChange">
         <el-option v-for="item in gridTypes" :key="item.areaTypeId" :label="item.areaTypeName" :value="item.areaTypeId">
         </el-option>
       </el-select>
@@ -13,7 +13,7 @@
       <el-button type="" @click="resetChecked" size="mini">清空</el-button>
       <el-tree ref="tree" :data="tree" show-checkbox node-key="id" :check-strictly="true" :filter-node-method="filterNode" default-expand-all @check="check" :default-checked-keys="selectedAreas"></el-tree>
     </div>
-    <div class="jc-left-width40">
+    <div class="jc-left-width40 jc-selected-box">
       <div>已选区域</div>
       <div class="jc-selected">
         <el-tag v-for="tag in checkedNodes" :key="tag.id" closable size="small" @close="handleCloseTag(tag)">
@@ -209,8 +209,9 @@ export default {
   border: 1px solid #dcdfe6;
   border-radius: 4px;
 }
-.el-select {
-  width: inherit;
+.jc-area-type-select {
+  width: 105px;
+  float: right;
 }
 .jc-left-width60 {
   width: 60%;
@@ -220,10 +221,13 @@ export default {
 .jc-left-width40 {
   width: 40%;
   float: left;
+}
+.jc-selected-box {
   box-sizing: border-box;
+  padding: 0 10px;
 }
 .jc-selected {
-  margin: 0 10px;
+  // margin: 0 10px;
   border: 1px solid #dcdfe6;
   height: 280px;
   overflow: auto;

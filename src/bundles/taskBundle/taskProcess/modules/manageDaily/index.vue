@@ -10,7 +10,7 @@
       <el-form-item label="任务区域" prop="assigneeAreaPOS" :rules="rules.NOT_NULL" class="jc-left-width50">
         <jc-task-area :areaType.sync="form.workAreaType" :selectedAreas.sync="form.assigneeAreaPOS" :orgTree="orgTree"></jc-task-area>
       </el-form-item>
-      <el-form-item label="任务人员" prop="" :rules="rules.SELECT_NOT_NULL" class="jc-left-width50">
+      <el-form-item label="任务人员" :prop="peopleProps[peopleType]" :rules="rules.SELECT_NOT_NULL" class="jc-left-width50">
         <jc-task-people :peopleType.sync="peopleType" :selecteds.sync="peoples" :orgTree="orgTree"></jc-task-people>
       </el-form-item>
       <div label="任务要求" class="jc-left-width50">
@@ -94,6 +94,10 @@ export default {
     return {
       peopleType: TASK_PEOPLE_TYPES.ORG,
       peoples: [],
+      peopleProps: {
+        [TASK_PEOPLE_TYPES.ORG]: 'orgIds',
+        [TASK_PEOPLE_TYPES.PEOPLE]: 'userIds'
+      },
       loading: false,
       rules: {
         Len50: getStringRule(1, 50),

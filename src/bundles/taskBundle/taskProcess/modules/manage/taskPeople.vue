@@ -9,7 +9,7 @@
       <el-button type="" @click="resetChecked" size="mini">清空</el-button>
       <el-tree ref="tree" :data="tree" show-checkbox node-key="id" :check-strictly="true" :filter-node-method="filterNode" default-expand-all @check="check" :default-checked-keys="selecteds"></el-tree>
     </div>
-    <div class="jc-left-width40">
+    <div class="jc-left-width40 jc-selected-box">
       <div>已选人员</div>
       <div class="jc-selected">
         <el-tag v-for="tag in checkedNodes" :key="tag.id" closable size="small" @close="handleCloseTag(tag)">
@@ -189,10 +189,13 @@ export default {
 .jc-left-width40 {
   width: 40%;
   float: left;
+}
+.jc-selected-box {
   box-sizing: border-box;
+  padding: 0 10px;
 }
 .jc-selected {
-  margin: 0 10px;
+  // margin: 0 10px;
   border: 1px solid #dcdfe6;
   height: 280px;
   overflow: auto;

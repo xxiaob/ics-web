@@ -36,7 +36,7 @@
             <map-user-marker v-model="position"></map-user-marker>
           </div>
         </div>
-        <el-form-item label="任务人员" prop="" :rules="rules.SELECT_NOT_NULL" class="jc-left-width50">
+        <el-form-item label="任务人员" :prop="peopleProps[peopleType]" :rules="rules.SELECT_NOT_NULL" class="jc-left-width50">
           <jc-task-people :peopleType.sync="peopleType" :selecteds.sync="peoples" :orgTree="orgTree"></jc-task-people>
         </el-form-item>
       </div>
@@ -110,6 +110,10 @@ export default {
   data() {
     return {
       peopleType: TASK_PEOPLE_TYPES.ORG,
+      peopleProps: {
+        [TASK_PEOPLE_TYPES.ORG]: 'orgIds',
+        [TASK_PEOPLE_TYPES.PEOPLE]: 'userIds'
+      },
       peoples: [],
       loading: false,
       rules: {
