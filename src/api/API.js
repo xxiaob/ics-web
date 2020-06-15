@@ -50,6 +50,7 @@ export default {
     resetUserPwd: 'user-service/user/resetUserPwd',
     updateOrgReceiver: 'user-service/user/updOrgReceiver',
     getOrgUserList: 'user-service/user/getOrgUserList',
+    getOrgUserListByProject: 'user-service/user/getOrgUserListByProject',
     updPwd: 'user-service/user/updPwd'
   },
   areaType: {

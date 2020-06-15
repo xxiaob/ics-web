@@ -145,3 +145,18 @@ export async function getAddressByPosition(position) {
 
   return result
 }
+
+/**
+ * 逆地理编码查询
+ */
+export async function getElasticMarker() {
+  let map = await initAmap()
+
+  let result = await new Promise(function (resolve) {
+    map.plugin(['AMap.ElasticMarker'], function () {
+      resolve(AMap.ElasticMarker)
+    })
+  })
+
+  return result
+}
