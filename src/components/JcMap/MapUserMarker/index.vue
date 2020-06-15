@@ -28,11 +28,8 @@ export default {
     this.initData()
   },
   watch: {
-    value(newVal) {
-      if (newVal && newVal.position != this.address.position && newVal.name != this.address.name) {
-        this.showMarker(newVal.position.split(','), name)
-        this.myMarker.fitView()
-      }
+    value() {
+      this.valueChange() //监听传入值变化
     },
     address() {
       this.$emit('change', this.address)
@@ -44,6 +41,8 @@ export default {
 
       this.$refs.mapSearch.initData(this.myJcMap) //初始化搜索对象
 
+      this.valueChange() //初始化基础数据
+
       //添加监听
       this.myJcMap.on(MAP_EVENT.RIGHTCLICK, (data) => {
         console.log('地图点击了', data)
@@ -54,6 +53,12 @@ export default {
           this.address = { position: center.join(','), name }
         })
       })
+    },
+    valueChange() {
+      if (this.value && this.value.position && this.value.position != this.address.position && this.value.name != this.address.name) {
+        this.showMarker(this.value.position.split(','), name)
+        this.myMarker.fitView()
+      }
     },
     showMarker(center, name) {
       if (this.myMarker) {

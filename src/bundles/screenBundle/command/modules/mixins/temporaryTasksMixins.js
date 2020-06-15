@@ -26,7 +26,7 @@ export default {
   methods: {
     sendTemporaryTasks() {
       //发送临时任务
-      // this.temporaryTaskVisible = true
+      this.temporaryTaskVisible = true
     },
     temporaryTaskSuccess() {
       //临时任务发送成功
