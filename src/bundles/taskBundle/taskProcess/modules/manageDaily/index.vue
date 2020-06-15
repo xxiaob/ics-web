@@ -30,12 +30,8 @@
       <el-form-item label="在岗人数" prop="workPeopleNbr" :rules="rules.num">
         <el-input v-model.number="form.workPeopleNbr" type="number" placeholder="请输入在岗人数"></el-input>
       </el-form-item>
-      <el-form-item label="任务人员" prop="orgIds" :rules="rules.SELECT_NOT_NULL">
-        <el-cascader :options="orgTree" v-model="form.orgIds" :props="{expandTrigger: 'hover', emitPath: false, multiple: true ,checkStrictly: true}" clearable placeholder="请选择组织(必填)" :show-all-levels="false" @change="changeOrg" class="jc-left-width50"></el-cascader>
-        <el-select v-model="form.userIds" multiple placeholder="请选择人员(选填)" clearable class="jc-left-width50">
-          <el-option v-for="item in users" :key="item.id" :label="item.name" :value="item.id">
-          </el-option>
-        </el-select>
+      <el-form-item label="任务人员" prop="" :rules="rules.SELECT_NOT_NULL">
+        <jc-task-people :peopleType.sync="peopleType" :selecteds.sync="peoples" :orgTree="orgTree"></jc-task-people>
       </el-form-item>
       <el-form-item label="任务描述" prop="taskDesc" :rules="rules.NOT_NULL">
         <el-input v-model="form.taskDesc" placeholder="请输入任务描述" type="textarea"></el-input>
@@ -50,10 +46,10 @@
 </template>
 <script>
 import { taskSave } from '@/api/task'
-import { userListByOrg } from '@/api/user'
+// import { userListByOrg } from '@/api/user'
 import { getStringRule, getNumberRule, NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
-import { TASK_TYPES, TASK_AREA_TYPES } from '@/constant/Dictionaries'
+import { TASK_TYPES, TASK_AREA_TYPES, TASK_PEOPLE_TYPES } from '@/constant/Dictionaries'
 
 const defaultForm = {
   workAreaType: TASK_AREA_TYPES.ORG,
@@ -91,10 +87,13 @@ export default {
     }
   },
   components: {
-    JcTaskArea: () => import('./taskArea')
+    JcTaskArea: () => import('./taskArea'),
+    JcTaskPeople: () => import('../manage/taskPeople')
   },
   data() {
     return {
+      peopleType: TASK_PEOPLE_TYPES.ORG,
+      peoples: [],
       loading: false,
       rules: {
         Len50: getStringRule(1, 50),
@@ -104,6 +103,20 @@ export default {
       },
       users: [],
       taskTimes: [null]
+    }
+  },
+  watch: {
+    peoples: {
+      handler(val) {
+        if (this.peopleType === TASK_PEOPLE_TYPES.ORG) {
+          this.form.userIds = []
+          this.form.orgIds = val
+        } else {
+          this.form.userIds = val
+          this.form.orgIds = []
+        }
+      },
+      deep: true
     }
   },
   methods: {
@@ -118,32 +131,6 @@ export default {
     },
     addTime() {
       this.taskTimes.push(null)
-    },
-    changeOrg(orgIds) {
-      if (orgIds.length) {
-        this.getUser(orgIds)
-      } else {
-        this.users = []
-      }
-      this.form.userIds = []
-    },
-    async getUser(orgIds) {
-      try {
-        const res = await userListByOrg(orgIds)
-        const users = []
-
-        if (res && res.length) {
-          res.forEach(item=>{
-            users.push({
-              id: item.userId,
-              name: item.userName
-            })
-          })
-        }
-        this.users = users
-      } catch (error) {
-        console.error(error)
-      }
     },
     changeDate(value) {
       if (value) {
@@ -173,24 +160,22 @@ export default {
         }
         this.taskTimes = times
         if (assignees && assignees.length) {
-          const userIds = [], UserOrgIds = []
+          const userIds = assignees.map(item=>item.userId)
 
-          assignees.forEach(item=>{
-            userIds.push(item.userId)
-            if (!UserOrgIds.includes(item.orgId)) {
-              UserOrgIds.push(item.orgId)
-            }
-          })
-          this.getUser(UserOrgIds)
           form.userIds = userIds
-          form.orgIds = UserOrgIds
+          form.orgIds = []
+          this.peopleType = TASK_PEOPLE_TYPES.PEOPLE
+          this.peoples = userIds
         } else {
-          this.users = []
           form.userIds = []
           form.orgIds = orgIds
+          this.peopleType = TASK_PEOPLE_TYPES.ORG
+          this.peoples = orgIds
         }
         return form
       } else {
+        this.peopleType = TASK_PEOPLE_TYPES.ORG
+        this.peoples = []
         return { ...defaultForm }
       }
     },
