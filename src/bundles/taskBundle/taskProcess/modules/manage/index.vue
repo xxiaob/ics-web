@@ -1,61 +1,58 @@
 <template>
-  <el-dialog :title="options ? '编辑临时任务' : '新增临时任务'" :visible.sync="dialogVisible" width="1000px" :close-on-click-modal="false" :append-to-body="true" @close="dialogClose" top="1vh">
+  <el-dialog :title="options ? '编辑临时任务' : '新增临时任务'" :visible.sync="dialogVisible" width="1100px" :close-on-click-modal="false" :append-to-body="true" @close="dialogClose" top="1vh">
     <el-form ref="form" label-width="80px" :model="form" class="jc-manage-form">
       <div class="jc-clearboth">
-        <el-form-item label="下发人" class="jc-left-width40">
+        <el-form-item label="下发人" class="jc-left-width50">
           <span>{{user.userName}}</span>
         </el-form-item>
-        <el-form-item label="项目名称" prop="projectId" :rules="rules.SELECT_NOT_NULL" class="jc-left-width60">
+        <el-form-item label="项目名称" prop="projectId" :rules="rules.SELECT_NOT_NULL" class="jc-left-width50">
           <el-cascader v-model="form.projectId" :options="projectList" :props="{expandTrigger:'hover',emitPath:false}" :disabled="!!projectId"></el-cascader>
         </el-form-item>
       </div>
-      <!-- <div class="jc-clearboth">
-        <el-form-item label="项目类型" prop="projectType" :rules="rules.NOT_NULL" class="jc-left-width40">
-          <el-input v-model="form.projectType" placeholder="请输入项目类型"></el-input>
-        </el-form-item>
-      </div> -->
       <div class="jc-clearboth">
-        <el-form-item label="任务名称" prop="taskName" :rules="rules.Len50" class="jc-left-width40">
+        <el-form-item label="任务名称" prop="taskName" :rules="rules.Len50" class="jc-left-width50">
           <el-input v-model="form.taskName" placeholder="请输入任务名称"></el-input>
         </el-form-item>
-        <el-form-item label="任务时间" prop="date" :rules="rules.NOT_NULL" class="jc-left-width60">
+        <el-form-item label="任务时间" prop="date" :rules="rules.NOT_NULL" class="jc-left-width50">
           <el-date-picker style="width:100%" v-model="form.date" @change="changeDate" value-format="timestamp" type="datetimerange" range-separator="-" start-placeholder="开始时间" end-placeholder="结束时间">
           </el-date-picker>
         </el-form-item>
       </div>
       <div class="jc-clearboth">
-        <el-form-item label="任务位置" prop="taskPosition" :rules="rules.NOT_NULL" class="jc-left-width40">
+        <el-form-item label="任务位置" prop="taskPosition" :rules="rules.NOT_NULL" class="jc-left-width50">
           <el-input v-model="form.taskPosition" placeholder="请点击地图选择任务位置" style="display:none"></el-input>
           <el-input v-model="form.taskPositionName" placeholder="请输入任务位置"></el-input>
         </el-form-item>
-        <el-form-item label="任务来源" prop="taskSource" :rules="rules.SELECT_NOT_NULL" class="jc-left-width60">
+        <el-form-item label="任务来源" prop="taskSource" :rules="rules.SELECT_NOT_NULL" class="jc-left-width50">
           <el-select v-model="form.taskSource" placeholder="选择任务来源" :disabled="taskSourceDisabled">
             <el-option v-for="item in taskSources" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
         </el-form-item>
       </div>
       <div class="jc-clearboth">
-        <div class="jc-left-width40">
+        <div class="jc-left-width50">
           <div style="color:red">右键点击地图选中位置</div>
           <div class="jc-map">
             <map-user-marker v-model="position"></map-user-marker>
           </div>
         </div>
-        <el-form-item label="任务人员" prop="" :rules="rules.SELECT_NOT_NULL" class="jc-left-width60">
+        <el-form-item label="任务人员" prop="" :rules="rules.SELECT_NOT_NULL" class="jc-left-width50">
           <jc-task-people :peopleType.sync="peopleType" :selecteds.sync="peoples" :orgTree="orgTree"></jc-task-people>
         </el-form-item>
       </div>
       <!-- <el-form-item label="任务指派" prop="taskPositionName" :rules="rules.NOT_NULL">
         <el-input v-model="form.taskPositionName" placeholder="请输入任务指派"></el-input>
       </el-form-item> -->
+      <div class="jc-clearboth">
+        <el-form-item label="任务描述" prop="taskDesc" :rules="rules.NOT_NULL" class="jc-left-width50">
+          <!-- <el-input v-model="form.taskDesc" placeholder="请输入任务描述" type="textarea"></el-input> -->
+          <jc-editor v-model="form.taskDesc"></jc-editor>
+        </el-form-item>
+        <el-form-item label="附件" prop="uploadFilePaths" :rules="[{required: true, message: '请上传文件'}]" class="jc-left-width50">
+          <upload :show="dialogVisible" :urls.sync="form.uploadFilePaths" accept="*"></upload>
+        </el-form-item>
+      </div>
 
-      <el-form-item label="任务描述" prop="taskDesc" :rules="rules.NOT_NULL">
-        <!-- <el-input v-model="form.taskDesc" placeholder="请输入任务描述" type="textarea"></el-input> -->
-        <jc-editor v-model="form.taskDesc"></jc-editor>
-      </el-form-item>
-      <el-form-item label="附件" prop="uploadFilePaths" :rules="[{required: true, message: '请上传文件'}]">
-        <upload :show="dialogVisible" :urls.sync="form.uploadFilePaths" accept="*"></upload>
-      </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="dialogVisible = false">取 消</el-button>
