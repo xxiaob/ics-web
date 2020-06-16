@@ -123,7 +123,6 @@ export default {
       if (data.type == 1) {
         this.messageVal = data.num
       } else if (data.type == 2) {
-        this.messageVal = 0
         this.messageChange('CommandMessage')
       }
     },
@@ -133,6 +132,9 @@ export default {
       return `background-image: url(${useIcon.icon || ''});`
     },
     messageChange(name) {
+      if (name == 'CommandMessage') {
+        this.messageVal = 0
+      }
       this.$EventBus.$emit('message-component-change', { component: name, options: null }) //通知窗口改变
     },
     sendTemporaryTasks() {
