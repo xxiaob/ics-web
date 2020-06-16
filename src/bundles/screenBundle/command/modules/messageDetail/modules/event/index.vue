@@ -1,38 +1,124 @@
 <template>
   <div class="jc-view-content" v-loading="loading" element-loading-background="rgba(0, 0, 0, 0)">
-    <div class="jc-detail-warp" v-for="(item,index) in list" :key="index">
-      <div class="jc-detail-label" v-text="item.title"></div>
-      <div class="jc-detail-content" v-if="item.name" v-text="item.name"></div>
-      <div class="jc-detail-content" v-else>
-        <div class="jc-media-warp">
-          <video v-if="item.type == 'video'" :src="item.url" @click="showVideo(item.url)"></video>
-          <img v-if="item.type == 'img'" :src="item.url">
+    <div class="jc-detail-warp">
+      <div class="jc-detail-label">事件ID</div>
+      <div class="jc-detail-content">{{form.eventNumber}}</div>
+    </div>
+    <div class="jc-detail-warp">
+      <div class="jc-detail-label">上报人</div>
+      <div class="jc-detail-content">{{form.reportUserName}}</div>
+    </div>
+    <div class="jc-detail-warp">
+      <div class="jc-detail-label">所属组织</div>
+      <div class="jc-detail-content">{{form.orgName}}</div>
+    </div>
+    <div class="jc-detail-warp">
+      <div class="jc-detail-label">事件标题</div>
+      <div class="jc-detail-content">{{form.eventTitle}}</div>
+    </div>
+    <div class="jc-detail-warp">
+      <div class="jc-detail-label">事件描述</div>
+      <div class="jc-detail-content">{{form.desc}}</div>
+    </div>
+    <div class="jc-detail-warp">
+      <div class="jc-detail-label">上报地点</div>
+      <div class="jc-detail-content">{{form.positionName}}</div>
+    </div>
+    <div class="jc-detail-warp">
+      <div class="jc-detail-label">事件类型</div>
+      <div class="jc-detail-content">{{form.typeName}}</div>
+    </div>
+    <div class="jc-detail-warp">
+      <div class="jc-detail-label">处理前图片</div>
+      <div class="jc-detail-content">
+        <el-image v-for="url in form.beforePhotos" :key="url" :src="url" :preview-src-list="form.beforePhotos" class="jc-img"></el-image>
+      </div>
+    </div>
+    <div class="jc-detail-warp">
+      <div class="jc-detail-label">处理后图片</div>
+      <div class="jc-detail-content">
+        <el-image v-for="url in form.afterPhotos" :key="url" :src="url" :preview-src-list="form.afterPhotos" class="jc-img"></el-image>
+      </div>
+    </div>
+    <div class="jc-detail-warp">
+      <div class="jc-detail-label">视频文件</div>
+      <div class="jc-detail-content">
+        <div class="jc-video" v-for="url in form.videoAddrs" :key="url" @click="showVideo(url)">
+          <video :src="url"></video>
+          <div class="hover">
+            <img class="jc-video-play" src="@/bundles/taskBundle/assets/play.png" alt="">
+          </div>
         </div>
       </div>
     </div>
-    <el-dialog title="视频播放" :visible.sync="visible" width="800px" :close-on-click-modal="false" :append-to-body="true">
-      <video v-if="visible" :src="videlUrl" autoplay controls width="100%"></video>
+    <div class="jc-detail-warp">
+      <div class="jc-detail-label">音频文件</div>
+      <div class="jc-detail-content">
+        <div v-for="(url,index) in form.audioAddrs" :key="url" class="jc-audio" @click="playAudio(url,index)">
+          <img class="jc-audio-mike" src="@/bundles/taskBundle/assets/mike.png" alt="">
+          <div class="hover">
+            <img class="jc-video-play" src="@/bundles/taskBundle/assets/play.png" alt="" v-show="audioPlayShows[index]">
+            <img class="jc-video-play" src="@/bundles/taskBundle/assets/pause.png" alt="" v-show="!audioPlayShows[index]">
+          </div>
+        </div>
+        <audio ref="audio" :src="audioUrl" style="width:0;height:0" @ended="audioEnded"></audio>
+      </div>
+    </div>
+
+    <el-dialog title="视频播放" :visible.sync="dialogVideoVisible" width="800px" :close-on-click-modal="false" :append-to-body="true">
+      <video v-if="dialogVideoVisible" :src="dialogVideoUrl" autoplay controls width="100%"></video>
     </el-dialog>
   </div>
 </template>
 <script>
+import { eventManageGet } from '@/api/eventManage'
+import MediaMixins from '@/bundles/taskBundle/mixins/MediaMixins'
+
 export default {
   name: 'ScreenCommandMessageDetailEvent',
-  props: ['options'],
+  props: {
+    info: {
+      type: Object,
+      default: ()=>{}
+    }
+  },
+  mixins: [MediaMixins],
   data() {
     return {
-      loading: false,
-      visible: false,
-      videlUrl: '',
-      list: [{ title: '事件ID', name: 'E20200610183842p3RLcB' }, { title: '上报人', name: '麒麟街道管理员' }, { title: '所属组织', name: '麒麟街道' },
-        { title: '事件标题', name: '暴露垃圾' }, { title: '事件描述', name: '2020年6月10日。秀园路溧水永阳幼儿园门前发现暴露垃圾，现已处理完毕。' }, { title: '事件类型', name: '暴露垃圾' }, { title: '处理前图片', type: 'img', url: 'http://218.94.132.110:880/group1/M00/00/00/wKgBZV7guByAARiLAATLPYbRkDE74.JPEG' }, { title: '处理后图片', type: 'img', url: 'http://218.94.132.110:880/group1/M00/00/00/wKgBZV7guCKAF--qAASbG5R0Ij444.JPEG' }, { title: '视频文件', type: 'video', url: 'http://218.94.132.110:880/group1/M00/00/00/wKgBZV7guC-AbG-UAGKoBhXrbCs695.mp4' }, { title: '音频文件' }]
+      form: {},
+      loading: false
+    }
+  },
+  watch: {
+    info: {
+      deep: true,
+      handler() {
+        this.getDetail()
+      }
+    }
+  },
+  created() {
+    if (this.info && this.info.id) {
+      this.getDetail()
     }
   },
   methods: {
-    showVideo(url) {
-      this.videlUrl = url
-      this.visible = true
+    async getDetail() {
+      if (!this.loading) {
+        this.loading = true
+        const res = await eventManageGet(this.info.id)
+
+        this.form = { ...this.info, ...res }
+        this.audios = this.form.audioAddrs
+        this.audioPlayShows = new Array(this.audios.length).fill(true)
+        this.loading = false
+      } else {
+        this.getDetail()
+      }
     }
   }
 }
 </script>
+<style lang="scss" scoped>
+@import "@/bundles/taskBundle/css/media.scss";
+</style>
