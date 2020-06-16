@@ -20,11 +20,18 @@ export default {
       notReadNum: 0,
       maxLength: 20, //最大数量
       list: [],
+      index: 0,
       style: { [MESSAGE_TYPE.EVENT]: 'jc-event', [MESSAGE_TYPE.QUESTION]: 'jc-question', [MESSAGE_TYPE.TASK]: 'jc-task', [MESSAGE_TYPE.TEMPORARY]: 'jc-task' }
     }
   },
   created() {
     this.$EventBus.$on('screen-message-change', this.initData) //监听行级别切换
+    this.interval = setInterval(() => {
+      this.list.splice(0, 0, { id: this.index++, type: '1', title: '测试' })
+      if (this.list.length > this.maxLength) {
+        this.list.splice(this.maxLength, this.list.length - this.maxLength)
+      }
+    }, 1000 * 3)
   },
   methods: {
     initData(data) {

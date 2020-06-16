@@ -49,6 +49,7 @@
       <el-button @click="generateTask" :loading="loading" type="primary" size="small">生成任务</el-button>
       <el-button @click="closeQuestion" :loading="loading" size="small">关闭问题</el-button>
     </div>
+    <task-manage :question="question" :visible.sync="TaskManageShow" @save-success="generateTaskSuccess"></task-manage>
   </div>
 </template>
 <script>
@@ -64,6 +65,9 @@ export default {
     }
   },
   mixins: [MediaMixins],
+  components: {
+    TaskManage: () => import('@/bundles/taskBundle/taskProcess/modules/manage')
+  },
   data() {
     return {
       loading: false,
@@ -164,8 +168,8 @@ export default {
         await questionReport({ businessKey, taskId, ...form })
         this.$message.success('操作成功')
         this.loading = false
-        this.$emit('save-success')
-        this.$emit('update:detailShow', false)
+        // this.$emit('save-success')
+        this.$EventBus.$emit('view-component-back')
       } catch (error) {
         this.loading = false
         console.error(error)
