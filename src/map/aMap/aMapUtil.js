@@ -135,7 +135,10 @@ export async function getAddressByPosition(position) {
       amapWeather.getAddress(position, function (status, res) {
         console.log('amap getAddressByPosition:', status, res)
         if (status === 'complete' && res.info === 'OK') {
-          resolve(res.regeocode.formattedAddress)
+          // resolve(res.regeocode.formattedAddress)
+          let address = res.regeocode.addressComponent
+
+          resolve(address.district + address.township + address.street + address.streetNumber)
         } else {
           reject('获取逆地理编码失败')
         }
@@ -147,14 +150,14 @@ export async function getAddressByPosition(position) {
 }
 
 /**
- * 逆地理编码查询
+ * 获取点聚合对象
  */
-export async function getElasticMarker() {
+export async function getMarkerCluster() {
   let map = await initAmap()
 
   let result = await new Promise(function (resolve) {
-    map.plugin(['AMap.ElasticMarker'], function () {
-      resolve(AMap.ElasticMarker)
+    map.plugin(['AMap.MarkerCluster'], function () {
+      resolve(AMap.MarkerCluster)
     })
   })
 

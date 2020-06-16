@@ -23,12 +23,42 @@ export function apiBoundariesFormat(boundaries = {}) {
   //处理矩形
   if (boundaries.withoutRadiusReqs && boundaries.withoutRadiusReqs.length) {
     boundaries.withoutRadiusReqs.forEach(item => {
-      if (item.withSequenceReqs && item.withSequenceReqs.length) {
+      if (item.areaInCoordinates && item.areaInCoordinates.length &&
+        item.areaInCoordinates[0].areaInOutCoordinates && item.areaInCoordinates[0].areaInOutCoordinates.length) {
         let resultItem = { type: MAP_SIGN_TYPE.Polygon, path: [] }
 
-        for (let i = 0; i < item.withSequenceReqs.length; i++) {
-          resultItem.path.push([item.withSequenceReqs[i].n, item.withSequenceReqs[i].a])
+        //处理外部区域
+        let outPath = []
+
+        let areaInCoordinates = item.areaInCoordinates[0].areaInOutCoordinates
+
+        for (let i = 0; i < areaInCoordinates.length; i++) {
+          outPath.push([areaInCoordinates[i].n, areaInCoordinates[i].a])
         }
+        //处理内部区域
+        if (item.areaOutCoordinates && item.areaOutCoordinates.length) {
+          let inPaths = []
+
+          for (let i = 0; i < item.areaOutCoordinates.length; i++) {
+            let inPath = []
+
+            let areaInOutCoordinates = item.areaOutCoordinates[i].areaInOutCoordinates
+
+            for (let j = 0; j < areaInOutCoordinates.length; j++) {
+              inPath.push([areaInOutCoordinates[j].n, areaInOutCoordinates[j].a])
+            }
+            inPaths.push(inPath)
+          }
+          if (inPaths.length > 1) {
+            //处理多个洞的场景
+            resultItem.path = [outPath, inPaths]
+          } else {
+            resultItem.path = [outPath, inPaths[0]]
+          }
+        } else {
+          resultItem.path = outPath
+        }
+
         result.push(resultItem)
       }
     })
