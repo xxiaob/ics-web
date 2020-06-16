@@ -37,7 +37,7 @@ export default {
           this.$EventBus.$emit('map-user-change', data.orgUsers) //通知用户改变
         } else if (data.type == 3) {
           //数据类型为问题，任务消息
-          this.$EventBus.$emit('map-user-change', data.orgUsers) //通知任务事件
+          this.$EventBus.$emit('screen-message-change', data) //通知任务事件
         } else if (data.type == 4) {
           //数据类型为一键采集 数据
 

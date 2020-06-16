@@ -76,10 +76,10 @@ export default {
   name: 'ScreenCommandOperate',
   data() {
     return {
-      messageVal: 99,
+      messageVal: 0,
       activeStyle: mapStyle.BASE,
       maps: mapStyle.VALUES, //地图样式
-      talkVal: 99,
+      talkVal: 0,
       areaTypes: [], //存储所有 网格类型数组
       areaType: ['org'], //选择显示区域范围的类型
       wordType: [], //存储选择显示文字的网格类型
@@ -89,6 +89,7 @@ export default {
   },
   created() {
     this.initData() //初始化基础数据
+    this.$EventBus.$on('message-num-change', this.messageNumChange) //监听通知消息
   },
   computed: {
     controlAreaTypes() {
@@ -116,6 +117,14 @@ export default {
         this.togetherType = allCheckIds
       } catch (error) {
         console.log(error)
+      }
+    },
+    messageNumChange(data) {
+      if (data == 1) {
+        this.messageVal = data.num
+      } else if (data == 2) {
+        this.messageVal = 0
+        this.messageChange('CommandMessage')
       }
     },
     getIconStyle(icon) {
