@@ -25,12 +25,12 @@ export default {
   },
   mounted() {
     this.$EventBus.$on('org-change', this.initData) //监听行级别切换
-    // this.interval = setInterval(() => {
-    //   this.list.splice(0, 0, { id: this.index++, type: this.index % 3 })
-    //   if (this.list.length > this.maxLength) {
-    //     this.list.splice(this.maxLength, this.list.length - this.maxLength)
-    //   }
-    // }, 1000 * 10)
+    this.interval = setInterval(() => {
+      this.list.splice(0, 0, { id: this.index++, type: this.index % 3 })
+      if (this.list.length > this.maxLength) {
+        this.list.splice(this.maxLength, this.list.length - this.maxLength)
+      }
+    }, 1000 * 10)
   },
   methods: {
     initData() {

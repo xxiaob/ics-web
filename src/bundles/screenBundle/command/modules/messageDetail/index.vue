@@ -1,6 +1,6 @@
 <template>
   <view-warp :title="title">
-    <detail-event :options="options" v-if="options.type == 0"></detail-event>
+    <detail-event :info="{id:'60313843976372224'}" v-if="options.type == 0"></detail-event>
     <detail-question :options="options" v-else-if="options.type == 1"></detail-question>
     <detail-task :options="options" v-else-if="options.type == 2"></detail-task>
   </view-warp>
