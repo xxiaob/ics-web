@@ -5,21 +5,23 @@ import { areaList } from '@/api/area'
 import { AREAS_TYPE, AREAS_SEARCH_TYPE } from '@/constant/CONST'
 import { apiBoundariesFormat } from '@/libs/apiFormat'
 import { JcMapSign } from '@/map'
-import { PROJECT_TYPES } from '@/constant/Dictionaries'
-import { getElasticMarker } from '@/map/aMap/aMapUtil'
+import { getMarkerCluster } from '@/map/aMap/aMapUtil'
+import { JcIcons } from '@/config/JcIconConfig'
 
 let gridData = {} //存储已经请求的组织数据
 
-let gridAreas = {} //网格区域数组
+let gridAreas = {} //网格区域数组，例如数据： {'caichang': {markerCluster: MarkerCluster, signs: {'59242618223067136': {}}}}
 
-let ElasticMarker //存储 ElasticMarker
+let MarkerCluster //存储 MarkerCluster
 
 export default {
   data() {
     return {
       gridOrg: null,
+      areaTipVisible: true, //默认值
+      areaAreaVisible: false, //默认值
       areaTipVisibles: {}, //网格区域对应类型是否显示名称
-      areaAreaVisible: {} //网格区域对应类型是否显示区域
+      areaAreaVisibles: {} //网格区域对应类型是否显示区域
     }
   },
   created() {
@@ -29,7 +31,7 @@ export default {
   },
   methods: {
     async areaMap(org) {
-      ElasticMarker = await getElasticMarker() //获取 ElasticMarker 对象
+      MarkerCluster = await getMarkerCluster() //获取 MarkerCluster 对象
       //处理地图
       this.gridOrg = org
       console.log('指挥层级切换变化', org)
@@ -42,24 +44,76 @@ export default {
           gridData[this.gridOrg.orgId] = res
         }
 
-        this.drawGrids(res)
+        this.formatGrids(res)
       } catch (error) {
         console.log(error)
       }
     },
     /**
-     * 绘制网格信息
+     * 转换网格数据
      * @param {Array} data 组织区域数据
      */
-    drawGrids(data) {
+    formatGrids(data) {
       this.clearGrids() //清除所有数据
+
+      let myJcMap = this.getMyJcMap() //获取地图对象
+
       console.log('网格信息', data)
       if (data && data.length) {
         data.forEach(item => {
+          let gridTypeMap = gridAreas[item.areaTypeId] || { icon: item.icon, signs: {}, lnglats: [] }
 
+          gridTypeMap.signs[item.areaId] = {
+            areaId: item.areaId, areaName: item.areaName, center: item.center, icon: item.icon, sign: new JcMapSign({
+              id: item.orgId,
+              map: myJcMap,
+              name: item.areaName,
+              center: item.center.split(','),
+              tipVisible: false,
+              areaVisible: false,
+              boundaries: apiBoundariesFormat(item)
+            })
+          }
+
+          gridTypeMap.lnglats.push({ lnglat: item.center.split(',') })
+
+          gridAreas[item.areaTypeId] = gridTypeMap
         })
       }
-      // myJcMap.fitView()
+      console.log('绘制网格-处理之后的数据', gridAreas)
+      this.drawGrids() //绘画网格数据
+    },
+    /**
+     * 绘画网格数据
+     */
+    drawGrids() {
+      let myJcMap = this.getMyJcMap() //获取地图对象
+
+      let mapGridTypes = []
+
+      for (let type in gridAreas) {
+        mapGridTypes.push(type)
+        let gridTypeMap = gridAreas[type]
+
+        gridTypeMap.markerCluster = new MarkerCluster(myJcMap.map, gridTypeMap.lnglats, {
+          gridSize: 120,
+          renderClusterMarker: this.renderClusterMarker,
+          renderMarker: this.renderMarker
+        })
+        gridTypeMap.markerCluster.on('click', this.markerClusterClick)
+      }
+      this.$EventBus.$emit('map-grid-types-change', mapGridTypes) //通知地图存在类型
+    },
+    renderClusterMarker(context) {
+      console.log('绘制网格-聚合绘制', context)
+      return 'aaa'
+    },
+    renderMarker(context) {
+      console.log('绘制网格-单点绘制', context)
+      return 'bbb'
+    },
+    markerClusterClick(data) {
+      console.log('绘制网格-点击', data)
     },
     clearGrids() {
       //清除所有数据

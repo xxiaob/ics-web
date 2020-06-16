@@ -61,10 +61,10 @@
       <i class="jc-message" @click="messageChange('CommandMessage')" title="任务&问题&事件"></i>
       <span class="jc-num-tip" v-if="messageVal > 0" v-text="messageVal < 100 ? messageVal : '99'"></span>
     </div>
-    <div class="jc-opreate-item">
+    <!-- <div class="jc-opreate-item">
       <i class="jc-talk" @click="messageChange('ImTalk')" title="聊天消息"></i>
       <span class="jc-num-tip" v-if="talkVal > 0" v-text="talkVal < 100 ? talkVal : '99'"></span>
-    </div>
+    </div> -->
   </div>
 </template>
 <script>
@@ -90,11 +90,12 @@ export default {
   created() {
     this.initData() //初始化基础数据
     this.$EventBus.$on('message-num-change', this.messageNumChange) //监听通知消息
+    this.$EventBus.$on('map-grid-types-change', this.mapGridTypesChange) //监听 地图存在类型
   },
   computed: {
     controlAreaTypes() {
       return this.areaTypes.filter(item => {
-        return this.mapGridTypes.indexOf(item.icon) > -1
+        return this.mapGridTypes.indexOf(item.id) > -1
       })
     }
   },
@@ -120,11 +121,15 @@ export default {
       }
     },
     messageNumChange(data) {
+      //消息数据变化
       if (data.type == 1) {
         this.messageVal = data.num
       } else if (data.type == 2) {
         this.messageChange('CommandMessage')
       }
+    },
+    mapGridTypesChange(data) {
+      this.mapGridTypes = [...data]//地图存在网格类型变化
     },
     getIconStyle(icon) {
       let useIcon = JcIcons[icon] || {}
@@ -156,6 +161,11 @@ export default {
     togetherChange() {
       //聚合显示切换
     }
+  },
+  beforeDestroy() {
+    //去除事件监听
+    this.$EventBus.$off('message-num-change', this.messageNumChange)
+    this.$EventBus.$off('map-grid-types-change', this.mapGridTypesChange)
   }
 }
 </script>
