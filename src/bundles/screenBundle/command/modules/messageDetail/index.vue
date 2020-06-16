@@ -3,7 +3,7 @@
     <detail-event :info="{id:'60313843976372224'}" v-if="options.type == MESSAGE_TYPE.EVENT"></detail-event>
     <detail-question :info="{id:'57905680299851776'}" v-else-if="options.type == MESSAGE_TYPE.QUESTION"></detail-question>
     <detail-task :info="{id:'60757469189636096'}" v-else-if="options.type == MESSAGE_TYPE.TASK"></detail-task>
-    <detail-temporary :info="options" v-else-if="options.type == MESSAGE_TYPE.TEMPORARY"></detail-temporary>
+    <detail-temporary :info="{id:'59330345757048832'}" v-else-if="options.type == MESSAGE_TYPE.TEMPORARY"></detail-temporary>
   </view-warp>
 </template>
 <script>
