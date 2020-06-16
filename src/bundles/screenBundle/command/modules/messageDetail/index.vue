@@ -1,11 +1,13 @@
 <template>
   <view-warp :title="title">
-    <detail-event :info="{id:'60313843976372224'}" v-if="options.type == 0"></detail-event>
-    <detail-question :options="options" v-else-if="options.type == 1"></detail-question>
-    <detail-task :options="options" v-else-if="options.type == 2"></detail-task>
+    <detail-event :info="{id:'60313843976372224'}" v-if="options.type == MESSAGE_TYPE.EVENT"></detail-event>
+    <detail-question :options="options" v-else-if="options.type == MESSAGE_TYPE.QUESTION"></detail-question>
+    <detail-task :options="options" v-else-if="options.type == MESSAGE_TYPE.TASK"></detail-task>
+    <detail-task :options="options" v-else-if="options.type == MESSAGE_TYPE.TEMPORARY"></detail-task>
   </view-warp>
 </template>
 <script>
+import { MESSAGE_TYPE } from '@/constant/Dictionaries'
 export default {
   name: 'ScreenCommandMessageDetail',
   props: ['options'],
@@ -15,11 +17,14 @@ export default {
     DetailTask: () => import('./modules/task'),
     DetailQuestion: () => import('./modules/question')
   },
+  data() {
+    return {
+      MESSAGE_TYPE
+    }
+  },
   computed: {
     title() {
-      let types = { 0: '事件详情', 1: '问题详情', 2: '任务详情' }
-
-      return types[this.options.type]
+      return MESSAGE_TYPE.toString(this.options.type)
     }
   }
 }

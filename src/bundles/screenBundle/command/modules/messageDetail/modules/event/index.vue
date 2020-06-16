@@ -119,6 +119,7 @@ export default {
   }
 }
 </script>
+
 <style lang="scss" scoped>
 @import "@/bundles/taskBundle/css/media.scss";
 </style>
