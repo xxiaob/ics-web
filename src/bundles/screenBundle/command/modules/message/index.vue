@@ -30,7 +30,6 @@ export default {
     initData(data) {
       let message = data.messageDTO
 
-      console.log('收到问题-----------------------------')
       /**
        * 如果当前窗口隐藏，接收到的消息是事件则通知未读数据变化，如果是其他则弹出显示
        */

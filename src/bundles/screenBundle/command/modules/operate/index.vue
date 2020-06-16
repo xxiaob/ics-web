@@ -120,9 +120,9 @@ export default {
       }
     },
     messageNumChange(data) {
-      if (data == 1) {
+      if (data.type == 1) {
         this.messageVal = data.num
-      } else if (data == 2) {
+      } else if (data.type == 2) {
         this.messageVal = 0
         this.messageChange('CommandMessage')
       }
