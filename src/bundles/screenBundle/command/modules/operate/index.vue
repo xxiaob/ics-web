@@ -115,6 +115,7 @@ export default {
           })
         }
         this.areaTypes = areaTypes
+        this.wordType = allCheckIds
         this.togetherType = allCheckIds
       } catch (error) {
         console.log(error)
@@ -158,8 +159,9 @@ export default {
       console.log('operate文字显示切换', words)
       this.$EventBus.$emit('show-word-change', words) //通知文字显示改变
     },
-    togetherChange() {
+    togetherChange(togethers) {
       //聚合显示切换
+      this.$EventBus.$emit('show-together-change', togethers) //通知聚合显示改变
     }
   },
   beforeDestroy() {
