@@ -76,7 +76,7 @@
     </div>
     <el-dialog :title="taskForm.ifUpload?'流转任务':'添加备注'" :visible.sync="dialogVisibleHandle" :close-on-click-modal="false" width="600px" append-to-body>
       <el-form ref="taskForm" label-width="80px" :model="taskForm" class="jc-manage-form">
-        <el-form-item label="任务人员" prop="orgIds" :rules="rules.SELECT_NOT_NULL" v-if="taskForm.ifUpload">
+        <el-form-item label="任务人员" prop="orgIds" :rules="rules.SELECT_NOT_NULL" v-if="taskForm.ifUpload" class="jc-mb">
           <el-cascader :options="orgTree" v-model="taskForm.orgIds" :props="{expandTrigger: 'hover', emitPath: false, multiple: true ,checkStrictly: true}" clearable placeholder="请选择组织(必填)" :show-all-levels="false" @change="changeOrg" class="jc-left-width50"></el-cascader>
           <el-select v-model="taskForm.userIds" multiple placeholder="请选择人员(选填)" clearable class="jc-left-width50">
             <el-option v-for="item in users" :key="item.id" :label="item.name" :value="item.id">
@@ -293,6 +293,9 @@ export default {
 <style lang="scss" scoped>
 .el-form /deep/ .el-form-item {
   margin-bottom: 0;
+}
+.jc-mb {
+  margin-bottom: 22px !important;
 }
 .el-card /deep/ .el-card__header {
   border: none;

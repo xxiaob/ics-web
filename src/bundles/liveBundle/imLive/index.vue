@@ -94,14 +94,14 @@ export default {
   methods: {
     imMsgCb(onType, data) {
       console.log('vue 数据', onType, data)
-      const { fromUsername, content: { channelId, msgType, agree, nickName, isExit, inviteType, mediaType } } = data
+      const { fromUsername, content: { channelId, msgType, agree, nickName, isExit, inviteType, mediaType, content } } = data
 
       this.fromUsername = fromUsername
       if (msgType === '1') {
         console.log('邀请视频')
         if (isExit) {
           //退出房间消息
-          this.exitHandel(isExit)
+          this.exitHandel({ nickName, isExit })
         } else if (inviteType || agree) {
           //邀请消息
           if (this.invited) {
@@ -109,7 +109,12 @@ export default {
           } else {
             this.$emit('update:visible', true)
             this.$emit('update:params', null)
-            this.msg = nickName + '邀请你' + this.inviteTypes[inviteType][0]
+
+            if (inviteType === '0') {
+              let msg = content === 'help' ? '一键求助' : (mediaType === '0' ? '语音' : '视频')
+
+              this.msg = nickName + '邀请你' + msg
+            }
             this.invitedHandelMsg({ channelId, mediaType, inviteType })
           }
         }
@@ -117,7 +122,7 @@ export default {
         console.log('普通消息')
       }
     },
-    exitHandel(nickName, isExit) {
+    exitHandel({ nickName, isExit }) {
       this.$message.warning(nickName + '已经挂断')
       if (isExit === '1') {
         console.log('结束视频')
@@ -131,6 +136,7 @@ export default {
       } else {
         this.$message.warning(nickName + '拒绝接听')
       }
+      this.msg = ''
     },
     //我是被邀请方，处理回来的信息
     invitedHandelMsg({ channelId, mediaType, inviteType }) {
@@ -162,6 +168,7 @@ export default {
     agree() {
       this.joinChannel()
       this.invitedButton = false
+      this.msg = ''
     },
     //拒绝加入频道
     refuse() {
@@ -171,6 +178,7 @@ export default {
         agree: '0' // "0":拒绝邀请, "1":接受邀请
       })
       this.invitedButton = false
+      this.msg = ''
     },
     //邀请所有用户加入频道
     //强制观摩 '2' , '1' , 'audience'
