@@ -123,6 +123,7 @@ export default {
           gridTypeMap.markerCluster.setMap(null)
         }
 
+        //地图区域显示控制
         let showSign = this.areaAreaVisibles.indexOf(type) > -1
 
         for (let key in gridTypeMap.signs) {
