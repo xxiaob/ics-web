@@ -64,9 +64,10 @@
 <script>
 import { taskSave } from '@/api/task'
 import { organizationList } from '@/api/organization'
+import { projectsList } from '@/api/projects'
 import { getStringRule, NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
-import { TASK_TYPES, TASK_SOURCES, TASK_PEOPLE_TYPES } from '@/constant/Dictionaries'
+import { TASK_TYPES, TASK_SOURCES, TASK_PEOPLE_TYPES, PROJECT_TYPES } from '@/constant/Dictionaries'
 import { createNamespacedHelpers } from 'vuex'
 const { mapState } = createNamespacedHelpers('user')
 
@@ -93,9 +94,9 @@ export default {
   mixins: [FormMixins],
   props: {
     question: {},
-    projectList: {
-      type: Array
-    },
+    // projectList: {
+    //   type: Array
+    // },
     projectId: String
   },
   components: {
@@ -109,6 +110,7 @@ export default {
   },
   data() {
     return {
+      projectList: [],
       peopleType: TASK_PEOPLE_TYPES.ORG,
       peopleProps: {
         [TASK_PEOPLE_TYPES.ORG]: 'orgIds',
@@ -152,8 +154,36 @@ export default {
     const res = await organizationList()
 
     this.orgTree = this.formatOrgTree(res)
+    await this.formatProjectList()
   },
   methods: {
+    async  formatProjectList() {
+      this.EmergencySupport = await this.getProjectList(PROJECT_TYPES.EmergencySupport)
+      this.SpecialControl = await this.getProjectList(PROJECT_TYPES.SpecialControl)
+
+      this.projectListArr = [...PROJECT_TYPES.VALUES]
+      if (this.EmergencySupport) {
+        this.projectListArr = [...this.projectListArr, ...this.EmergencySupport]
+      }
+      if (this.SpecialControl) {
+        this.projectListArr = [...this.projectListArr, ...this.SpecialControl]
+      }
+
+      this.projectList = PROJECT_TYPES.VALUES.map(item=>{
+        const { value, label, key } = item
+
+        return { value, label, children: this[key] || null }
+      })
+    },
+    async getProjectList(projectType) {
+      const res = await projectsList({ projectType })
+
+      if (res && res.length) {
+        return res.map(item=>({ value: item.projectId, label: item.projectName }))
+      } else {
+        return null
+      }
+    },
     formatOrgTree(child) {
       let trees = []
 
