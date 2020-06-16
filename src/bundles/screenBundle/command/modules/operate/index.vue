@@ -13,7 +13,7 @@
           <el-checkbox class="jc-work-item" label="org">
             <div class="jc-work-content">组织</div>
           </el-checkbox>
-          <el-checkbox class="jc-work-item" v-for="item in areaTypes" :label="item.id" :key="item.id">
+          <el-checkbox class="jc-work-item" v-for="item in controlAreaTypes" :label="item.id" :key="item.id">
             <div class="jc-work-content" :style="getIconStyle(item.icon)">{{item.name}}</div>
           </el-checkbox>
         </el-checkbox-group>
@@ -29,7 +29,7 @@
           <el-checkbox class="jc-work-item" label="org">
             <div class="jc-work-content">组织</div>
           </el-checkbox>
-          <el-checkbox class="jc-work-item" v-for="item in areaTypes" :label="item.id" :key="item.id">
+          <el-checkbox class="jc-work-item" v-for="item in controlAreaTypes" :label="item.id" :key="item.id">
             <div class="jc-work-content" :style="getIconStyle(item.icon)">{{item.name}}</div>
           </el-checkbox>
         </el-checkbox-group>
@@ -42,7 +42,7 @@
           <el-checkbox class="jc-work-item" label="user">
             <div class="jc-work-content">人员</div>
           </el-checkbox>
-          <el-checkbox class="jc-work-item" v-for="item in areaTypes" :label="item.id" :key="item.id">
+          <el-checkbox class="jc-work-item" v-for="item in controlAreaTypes" :label="item.id" :key="item.id">
             <div class="jc-work-content" :style="getIconStyle(item.icon)">{{item.name}}</div>
           </el-checkbox>
         </el-checkbox-group>
@@ -83,11 +83,19 @@ export default {
       areaTypes: [], //存储所有 网格类型数组
       areaType: ['org'], //选择显示区域范围的类型
       wordType: [], //存储选择显示文字的网格类型
-      togetherType: [] //存储自动聚合的类型
+      togetherType: [], //存储自动聚合的类型
+      mapGridTypes: [] //地图存在的类型
     }
   },
   created() {
     this.initData() //初始化基础数据
+  },
+  computed: {
+    controlAreaTypes() {
+      return this.areaTypes.filter(item => {
+        return this.mapGridTypes.indexOf(item.icon) > -1
+      })
+    }
   },
   methods: {
     async initData() {

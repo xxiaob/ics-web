@@ -52,8 +52,17 @@ export default {
      * @param {Array} data 组织区域数据
      */
     drawGrids(data) {
+      this.clearGrids() //清除所有数据
       console.log('网格信息', data)
+      if (data && data.length) {
+        data.forEach(item => {
+
+        })
+      }
       // myJcMap.fitView()
+    },
+    clearGrids() {
+      //清除所有数据
     },
     gridShowAreaChange(areas) {
       //组织区域显示

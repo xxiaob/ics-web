@@ -61,6 +61,7 @@ export default {
       if (data && data.length) {
         data.forEach(item => {
           if (item.orgId == this.org.orgId) {
+            //如果相同的组织信息，则通知组织adcode
             this.$EventBus.$emit('org-adcode-change', { areaId: item.areaId, areaCode: item.areaCode, areaTypeName: item.areaTypeName })
           }
           if (item.orgId != this.org.orgId || data.length == 1) {
