@@ -27,7 +27,7 @@ export default {
   created() {
     this.$EventBus.$on('screen-message-change', this.initData) //监听行级别切换
     this.interval = setInterval(() => {
-      this.list.splice(0, 0, { id: this.index++, type: '1', title: '测试' })
+      this.list.splice(0, 0, { id: this.index++, type: '0', title: '测试' })
       if (this.list.length > this.maxLength) {
         this.list.splice(this.maxLength, this.list.length - this.maxLength)
       }
