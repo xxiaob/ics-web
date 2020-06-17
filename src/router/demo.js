@@ -26,7 +26,7 @@ export default [{
 }, {
   path: 'datascreendemo',
   name: 'DataScreenDemo',
-  component: () => import('@/bundles/liveBundle/agoraLive'),
+  component: () => import('@/bundles/demoBundle/dataScreenDemo'),
   meta: {
     title: '数据大屏',
     ignore: true
