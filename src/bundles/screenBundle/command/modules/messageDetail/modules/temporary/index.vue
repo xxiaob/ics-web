@@ -1,106 +1,106 @@
 <template>
-  <div class="jc-temporary">
-    <div class="jc-view-content" v-loading="loading" element-loading-background="rgba(0, 0, 0, 0)">
-      <div class="jc-detail-warp">
-        <div class="jc-detail-label">任务名称</div>
-        <div class="jc-detail-content">{{form.taskName}}</div>
-      </div>
-      <div class="jc-detail-warp">
-        <div class="jc-detail-label">任务名称</div>
-        <div class="jc-detail-content">{{form.taskName}}</div>
-      </div>
-      <div class="jc-detail-warp">
-        <div class="jc-detail-label">任务名称</div>
-        <div class="jc-detail-content">{{form.taskName}}</div>
-      </div>
-      <div class="jc-detail-warp">
-        <div class="jc-detail-label">任务名称</div>
-        <div class="jc-detail-content">{{form.taskName}}</div>
-      </div>
-      <div class="jc-detail-warp">
-        <div class="jc-detail-label">任务名称</div>
-        <div class="jc-detail-content">{{form.taskName}}</div>
-      </div>
-      <div class="jc-detail-warp">
-        <div class="jc-detail-label">任务名称</div>
-        <div class="jc-detail-content">{{form.taskName}}</div>
-      </div>
-      <div class="jc-detail-warp">
-        <div class="jc-detail-label">创建时间</div>
-        <div class="jc-detail-content">{{form.createTime|filterTime}}</div>
-      </div>
-      <div class="jc-detail-warp">
-        <div class="jc-detail-label">项目名称</div>
-        <div class="jc-detail-content">{{formatProject}}</div>
-      </div>
-      <div class="jc-detail-warp">
-        <div class="jc-detail-label">任务时间</div>
-        <div class="jc-detail-content">{{form.startDate|filterTime}} - {{form.endDate|filterTime}}</div>
-      </div>
-      <div class="jc-detail-warp">
-        <div class="jc-detail-label">任务类型</div>
-        <div class="jc-detail-content">临时任务</div>
-      </div>
-      <div class="jc-detail-warp">
-        <div class="jc-detail-label">任务状态</div>
-        <div class="jc-detail-content">{{form.taskStatusName}}</div>
-      </div>
-      <div class="jc-detail-warp">
-        <div class="jc-detail-label">任务来源</div>
-        <div class="jc-detail-content">{{taskSourceName}}</div>
-      </div>
-      <div class="jc-detail-warp">
-        <div class="jc-detail-label">下发组织</div>
-        <div class="jc-detail-content">{{form.startOrg}}</div>
-      </div>
-      <div class="jc-detail-warp">
-        <div class="jc-detail-label">下发人</div>
-        <div class="jc-detail-content">{{form.startUser}}</div>
-      </div>
-      <div class="jc-detail-warp">
-        <div class="jc-detail-label">任务位置</div>
-        <div class="jc-detail-content">{{form.taskPositionName}}</div>
-      </div>
-      <div class="jc-detail-warp">
-        <div class="jc-detail-label">任务人员</div>
-        <div class="jc-detail-content">{{formatUsers}}</div>
-      </div>
-      <div class="jc-detail-warp">
-        <div class="jc-detail-label">任务描述</div>
-        <div class="jc-detail-content">
-          <div v-html="form.taskDesc"></div>
+  <div class="jc-view-content">
+    <div class="jc-temporary">
+      <div class="jc-view-content" v-loading="loading" element-loading-background="rgba(0, 0, 0, 0)">
+        <div class="jc-detail-warp">
+          <div class="jc-detail-label">任务名称</div>
+          <div class="jc-detail-content">{{form.taskName}}</div>
+        </div>
+        <div class="jc-detail-warp">
+          <div class="jc-detail-label">任务名称</div>
+          <div class="jc-detail-content">{{form.taskName}}</div>
+        </div>
+        <div class="jc-detail-warp">
+          <div class="jc-detail-label">任务名称</div>
+          <div class="jc-detail-content">{{form.taskName}}</div>
+        </div>
+        <div class="jc-detail-warp">
+          <div class="jc-detail-label">任务名称</div>
+          <div class="jc-detail-content">{{form.taskName}}</div>
+        </div>
+        <div class="jc-detail-warp">
+          <div class="jc-detail-label">任务名称</div>
+          <div class="jc-detail-content">{{form.taskName}}</div>
+        </div>
+        <div class="jc-detail-warp">
+          <div class="jc-detail-label">任务名称</div>
+          <div class="jc-detail-content">{{form.taskName}}</div>
+        </div>
+        <div class="jc-detail-warp">
+          <div class="jc-detail-label">创建时间</div>
+          <div class="jc-detail-content">{{form.createTime|filterTime}}</div>
+        </div>
+        <div class="jc-detail-warp">
+          <div class="jc-detail-label">项目名称</div>
+          <div class="jc-detail-content">{{formatProject}}</div>
+        </div>
+        <div class="jc-detail-warp">
+          <div class="jc-detail-label">任务时间</div>
+          <div class="jc-detail-content">{{form.startDate|filterTime}} - {{form.endDate|filterTime}}</div>
+        </div>
+        <div class="jc-detail-warp">
+          <div class="jc-detail-label">任务类型</div>
+          <div class="jc-detail-content">临时任务</div>
+        </div>
+        <div class="jc-detail-warp">
+          <div class="jc-detail-label">任务状态</div>
+          <div class="jc-detail-content">{{form.taskStatusName}}</div>
+        </div>
+        <div class="jc-detail-warp">
+          <div class="jc-detail-label">任务来源</div>
+          <div class="jc-detail-content">{{taskSourceName}}</div>
+        </div>
+        <div class="jc-detail-warp">
+          <div class="jc-detail-label">下发组织</div>
+          <div class="jc-detail-content">{{form.startOrg}}</div>
+        </div>
+        <div class="jc-detail-warp">
+          <div class="jc-detail-label">下发人</div>
+          <div class="jc-detail-content">{{form.startUser}}</div>
+        </div>
+        <div class="jc-detail-warp">
+          <div class="jc-detail-label">任务位置</div>
+          <div class="jc-detail-content">{{form.taskPositionName}}</div>
+        </div>
+        <div class="jc-detail-warp">
+          <div class="jc-detail-label">任务人员</div>
+          <div class="jc-detail-content">{{formatUsers}}</div>
+        </div>
+        <div class="jc-detail-warp">
+          <div class="jc-detail-label">任务描述</div>
+          <div class="jc-detail-content">
+            <div v-html="form.taskDesc"></div>
+          </div>
+        </div>
+        <div class="jc-detail-warp">
+          <div class="jc-detail-label">附件</div>
+          <div class="jc-detail-content">
+            <el-image v-for="url in imgs" :key="url" :src="url" :preview-src-list="imgs" class="jc-img"></el-image>
+            <div class="jc-video" v-for="url in videos" :key="url" @click="showVideo(url)">
+              <video :src="url"></video>
+              <div class="hover">
+                <img class="jc-video-play" src="@/bundles/taskBundle/assets/play.png" alt="">
+              </div>
+            </div>
+            <div v-for="(url,index) in audios" :key="url" class="jc-audio" @click="playAudio(url,index)">
+              <img class="jc-audio-mike" src="@/bundles/taskBundle/assets/mike.png" alt="">
+              <div class="hover">
+                <img class="jc-video-play" src="@/bundles/taskBundle/assets/play.png" alt="" v-show="audioPlayShows[index]">
+                <img class="jc-video-play" src="@/bundles/taskBundle/assets/pause.png" alt="" v-show="!audioPlayShows[index]">
+              </div>
+            </div>
+            <audio ref="audio" :src="audioUrl" style="width:0;height:0" @ended="audioEnded"></audio>
+            <a class="jc-other" v-for="url in others" :key="url" :href="url" download="" title="点击下载">
+              <img class="jc-other-down" src="@/bundles/taskBundle/assets/down.png" alt="">
+            </a>
+          </div>
         </div>
       </div>
-      <div class="jc-detail-warp">
-        <div class="jc-detail-label">附件</div>
-        <div class="jc-detail-content">
-          <el-image v-for="url in imgs" :key="url" :src="url" :preview-src-list="imgs" class="jc-img"></el-image>
-          <div class="jc-video" v-for="url in videos" :key="url" @click="showVideo(url)">
-            <video :src="url"></video>
-            <div class="hover">
-              <img class="jc-video-play" src="@/bundles/taskBundle/assets/play.png" alt="">
-            </div>
-          </div>
-          <div v-for="(url,index) in audios" :key="url" class="jc-audio" @click="playAudio(url,index)">
-            <img class="jc-audio-mike" src="@/bundles/taskBundle/assets/mike.png" alt="">
-            <div class="hover">
-              <img class="jc-video-play" src="@/bundles/taskBundle/assets/play.png" alt="" v-show="audioPlayShows[index]">
-              <img class="jc-video-play" src="@/bundles/taskBundle/assets/pause.png" alt="" v-show="!audioPlayShows[index]">
-            </div>
-          </div>
-          <audio ref="audio" :src="audioUrl" style="width:0;height:0" @ended="audioEnded"></audio>
-          <a class="jc-other" v-for="url in others" :key="url" :href="url" download="" title="点击下载">
-            <img class="jc-other-down" src="@/bundles/taskBundle/assets/down.png" alt="">
-          </a>
-        </div>
+      <div class="jc-footer">
+        <el-button @click="handleTask(true)" size="small" type="primary">流转任务</el-button>
+        <el-button @click="handleTask(false)" size="small">结束任务</el-button>
       </div>
     </div>
-
-    <div class="jc-footer">
-      <el-button @click="handleTask(true)" size="small" type="primary">流转任务</el-button>
-      <el-button @click="handleTask(false)" size="small">结束任务</el-button>
-    </div>
-
   </div>
 
 </template>
@@ -261,8 +261,9 @@ export default {
 
 <style lang="scss" scoped>
 .jc-temporary {
-  flex: 1;
   display: flex;
+  position: relative;
+  height: 100%;
   flex-direction: column;
 }
 .jc-footer {

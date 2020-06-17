@@ -1,8 +1,6 @@
 /**
  * 用户信息混入
  */
-import { areaList } from '@/api/area'
-import { AREAS_TYPE, AREAS_SEARCH_TYPE } from '@/constant/CONST'
 import { apiBoundariesFormat } from '@/libs/apiFormat'
 import { JcMapSign } from '@/map'
 import { getMarkerCluster } from '@/map/aMap/aMapUtil'
@@ -19,34 +17,18 @@ export default {
     return {
       userOrg: null,
       userTipVisible: false, //用户是否显示
-      userAreaVisible: true //组织是否显示区域
+      togetherVisible: true //用户是否聚合
     }
   },
   created() {
-    // this.$EventBus.$on('org-change', this.userMap) //监听行级别切换
-    this.$EventBus.$on('show-area-change', this.userShowAreaChange) //监听区域显示切换
+    this.$EventBus.$on('map-user-change', this.userMap) //监听行级别切换
     this.$EventBus.$on('show-word-change', this.userShowWordChange) //监听文字显示切换
     this.$EventBus.$on('show-together-change', this.userTogetherChange) //监听聚合显示改变
   },
   methods: {
-    async areaMap(org) {
+    async areaMap() {
       MarkerCluster = await getMarkerCluster() //获取 MarkerCluster 对象
-      //处理地图
-      this.userOrg = org
-      console.log('指挥层级切换变化', org)
-      try {
-        let res = userData[this.userOrg.orgId]
-
-        if (!(res && res.length)) {
-          res = await areaList({ orgId: this.userOrg.orgId, projectId: this.project.projectId, orgSearchType: AREAS_TYPE.OWN_AND_CHILD, searchType: AREAS_SEARCH_TYPE.user })
-
-          userData[this.userOrg.orgId] = res
-        }
-
-        this.formatusers(res)
-      } catch (error) {
-        console.log(error)
-      }
+      //处理用户信息
     },
     /**
      * 转换网格数据
@@ -85,7 +67,7 @@ export default {
     /**
      * 绘画网格数据
      */
-    drawusers() {
+    drawUsers() {
       let mapuserTypes = []
 
       for (let type in userAreas) {
@@ -171,13 +153,8 @@ export default {
 
       myJcMap.map.setFitView(context.marker)
     },
-    clearusers() {
+    clearUsers() {
       //清除所有数据
-    },
-    userShowAreaChange(areas) {
-      //组织区域显示
-      this.areaAreaVisibles = [...areas]
-      this.fitusers()
     },
     userShowWordChange(words) {
       //组织文字显示
@@ -193,8 +170,7 @@ export default {
   },
   beforeDestroy() {
     //去除事件监听
-    this.$EventBus.$off('org-change', this.userMap)
-    this.$EventBus.$off('show-area-change', this.orgShowAreaChange)
+    this.$EventBus.$off('map-user-change', this.userMap)
     this.$EventBus.$off('show-word-change', this.orgShowWordChange)
     this.$EventBus.$off('show-together-change', this.userTogetherChange)
   }
