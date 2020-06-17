@@ -49,12 +49,7 @@ export function apiBoundariesFormat(boundaries = {}) {
             }
             inPaths.push(inPath)
           }
-          if (inPaths.length > 1) {
-            //处理多个洞的场景
-            resultItem.path = [outPath, inPaths]
-          } else {
-            resultItem.path = [outPath, inPaths[0]]
-          }
+          resultItem.path = [outPath, ...inPaths]
         } else {
           resultItem.path = outPath
         }

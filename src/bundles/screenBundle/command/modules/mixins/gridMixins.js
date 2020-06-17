@@ -18,16 +18,16 @@ export default {
   data() {
     return {
       gridOrg: null,
-      areaTipVisible: true, //默认值
-      areaAreaVisible: false, //默认值
-      areaTipVisibles: {}, //网格区域对应类型是否显示名称
-      areaAreaVisibles: {} //网格区域对应类型是否显示区域
+      areaTipVisibles: [], //网格区域对应类型是否显示名称
+      areaAreaVisibles: [], //网格区域对应类型是否显示区域
+      togetherVisibles: [] //网格区域对应类型是否聚合显示区域
     }
   },
   created() {
     this.$EventBus.$on('org-change', this.areaMap) //监听行级别切换
     this.$EventBus.$on('show-area-change', this.gridShowAreaChange) //监听区域显示切换
     this.$EventBus.$on('show-word-change', this.gridShowWordChange) //监听文字显示切换
+    this.$EventBus.$on('show-together-change', this.gridTogetherChange) //监听聚合显示改变
   },
   methods: {
     async areaMap(org) {
@@ -63,8 +63,8 @@ export default {
         data.forEach(item => {
           let gridTypeMap = gridAreas[item.areaTypeId] || { icon: item.icon, signs: {}, lnglats: [] }
 
-          gridTypeMap.signs[item.areaId] = {
-            areaId: item.areaId, areaName: item.areaName, center: item.center, icon: item.icon, sign: new JcMapSign({
+          gridTypeMap.signs[item.center] = {
+            areaId: item.areaId, areaName: item.areaName, areaTypeId: item.areaTypeId, center: item.center, icon: item.icon, sign: new JcMapSign({
               id: item.orgId,
               map: myJcMap,
               name: item.areaName,
@@ -87,62 +87,109 @@ export default {
      * 绘画网格数据
      */
     drawGrids() {
-      let myJcMap = this.getMyJcMap() //获取地图对象
-
       let mapGridTypes = []
 
       for (let type in gridAreas) {
         mapGridTypes.push(type)
         let gridTypeMap = gridAreas[type]
 
-        gridTypeMap.markerCluster = new MarkerCluster(myJcMap.map, gridTypeMap.lnglats, {
-          gridSize: 120,
-          renderClusterMarker: this.renderClusterMarker,
-          renderMarker: this.renderMarker
-        })
+        gridTypeMap.markerCluster = this.getMarkerCluster(gridTypeMap)
         gridTypeMap.markerCluster.on('click', this.markerClusterClick)
       }
+      this.areaTipVisibles = mapGridTypes
+      this.togetherVisibles = mapGridTypes
       this.$EventBus.$emit('map-grid-types-change', mapGridTypes) //通知地图存在类型
+      this.fitGrids() //画出网格
     },
-    renderClusterMarker(context) {
+    fitGrids() {
+      let myJcMap = this.getMyJcMap() //获取地图对象
+
+      for (let type in gridAreas) {
+        let gridTypeMap = gridAreas[type]
+
+        //处理聚合是否显示
+        if (this.areaTipVisibles.indexOf(type) > -1) {
+          gridTypeMap.markerCluster.setMap(myJcMap.map)
+
+          //处理是否进行聚合
+          if (this.togetherVisibles.indexOf(type) > -1) {
+            gridTypeMap.markerCluster.setMaxZoom(18)
+          } else {
+            gridTypeMap.markerCluster.setMaxZoom(0)
+          }
+          //处理是否显示标题
+          gridTypeMap.markerCluster.setGridSize(120)
+        } else {
+          gridTypeMap.markerCluster.setMap(null)
+        }
+
+        //地图区域显示控制
+        let showSign = this.areaAreaVisibles.indexOf(type) > -1
+
+        for (let key in gridTypeMap.signs) {
+          if (showSign) {
+            gridTypeMap.signs[key].sign.areaVisible = true
+            gridTypeMap.signs[key].sign.setMap(myJcMap)
+          } else {
+            gridTypeMap.signs[key].sign.setMap(null)
+          }
+        }
+      }
+    },
+    getMarkerCluster(gridTypeMap) {
+      return new MarkerCluster(null, gridTypeMap.lnglats, {
+        gridSize: 120,
+        renderClusterMarker: (context) => {
+          this.renderClusterMarker(gridTypeMap, context)
+        },
+        renderMarker: (context) => {
+          this.renderMarker(gridTypeMap, context)
+        }
+      })
+    },
+    renderClusterMarker(gridTypeMap, context) {
       console.log('绘制网格-聚合绘制', context)
-      return 'aaa'
+      context.marker.setAnchor('center')
+      context.marker.setContent(`<div class="jc-cluster-content" style="background-image: url(${JcIcons[gridTypeMap.icon].cluster});">${context.count}</div>`)
     },
-    renderMarker(context) {
+    renderMarker(gridTypeMap, context) {
       console.log('绘制网格-单点绘制', context)
-      return 'bbb'
+      let key = context.data[0].lnglat.lng + ',' + context.data[0].lnglat.lat
+
+      let signItem = gridTypeMap.signs[key]
+
+      let content = '<div class="jc-marker-content">'
+
+      if (this.areaTipVisibles.indexOf(signItem.areaTypeId) > -1) {
+        content += `<div class="jc-marker-title">${signItem.areaName}</div>`
+      }
+      content += `<img src=${JcIcons[signItem.icon].icon} class="jc-marker-icon"/></div>`
+      context.marker.setContent(content)
     },
-    markerClusterClick(data) {
-      console.log('绘制网格-点击', data)
+    markerClusterClick(context) {
+      console.log('绘制网格-点击', context)
+      let myJcMap = this.getMyJcMap() //获取地图对象
+
+      myJcMap.map.setFitView(context.marker)
     },
     clearGrids() {
       //清除所有数据
     },
     gridShowAreaChange(areas) {
       //组织区域显示
-      if ((areas || areas.length).filter(id => id == 'org').length) {
-        //如果存在组织区域显示，则显示区域
-        this.orgAreaVisible = true
-      } else {
-        //不存在则显示
-        this.orgAreaVisible = false
-      }
-      // orgAreas.forEach(item => {
-      //   item.showArea(this.orgAreaVisible)
-      // })
+      this.areaAreaVisibles = [...areas]
+      this.fitGrids()
     },
     gridShowWordChange(words) {
       //组织文字显示
-      // if ((words || words.length).filter(id => id == 'org').length) {
-      //   //如果存在组织区域显示，则显示文字
-      //   this.orgTipVisible = true
-      // } else {
-      //   //不存在则显示
-      //   this.orgTipVisible = false
-      // }
-      // orgAreas.forEach(item => {
-      //   item.showTip(this.orgTipVisible)
-      // })
+      this.areaTipVisibles = [...words]
+
+      this.fitGrids()
+    },
+    gridTogetherChange(togethers) {
+      //聚合显示控制
+      this.togetherVisibles = [...togethers]
+      this.fitGrids()
     }
   },
   beforeDestroy() {
@@ -150,5 +197,6 @@ export default {
     this.$EventBus.$off('org-change', this.orgMap)
     this.$EventBus.$off('show-area-change', this.orgShowAreaChange)
     this.$EventBus.$off('show-word-change', this.orgShowWordChange)
+    this.$EventBus.$off('show-together-change', this.gridTogetherChange)
   }
 }
