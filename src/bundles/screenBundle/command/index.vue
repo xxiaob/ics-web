@@ -24,7 +24,10 @@
         <component :is="messageComponent" :options="messageOptions" :project="project"></component>
       </keep-alive>
     </transition>
+    <!-- 临时任务下发 -->
     <temporary-tasks-manage :projectList="temporaryTaskProject" :projectId="temporaryTaskprojectId" :visible.sync="temporaryTaskVisible" @save-success="temporaryTaskSuccess"></temporary-tasks-manage>
+    <!-- 音视频处理 -->
+    <media-live></media-live>
   </section>
 </template>
 <script>
@@ -51,7 +54,8 @@ export default {
     CommandOrg: () => import('./modules/org'), //组织架构
     CommandGrid: () => import('./modules/grid'), //网格
     MessageDetail: () => import('./modules/messageDetail'), //消息详情
-    TemporaryTasksManage: () => import('@/bundles/taskBundle/taskProcess/modules/manage') //临时任务
+    TemporaryTasksManage: () => import('@/bundles/taskBundle/taskProcess/modules/manage'), //临时任务
+    MediaLive: () => import('./modules/mediaLive') //音视频
   },
   data() {
     return {

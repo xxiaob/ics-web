@@ -24,8 +24,8 @@
       </div>
       <div class="jc-user-footer">
         <div class="jc-opera-item jc-clear" title="清除" @click="clearUsers"></div>
-        <div class="jc-opera-item jc-command" title="指挥"></div>
-        <div class="jc-opera-item  jc-guanmo" title="观摩"></div>
+        <div class="jc-opera-item jc-command" title="指挥" @click="goMeeting"></div>
+        <!-- <div class="jc-opera-item  jc-guanmo" title="观摩"></div> -->
       </div>
     </div>
   </view-warp>
@@ -55,7 +55,7 @@ export default {
       expandedKeys: [],
       props: { children: 'children', label: 'label' },
       checkKeys: [],
-      talkType: 'audio'
+      talkType: 'video'
     }
   },
   created() {
@@ -123,6 +123,18 @@ export default {
         })
       }
       return trees
+    },
+    goMeeting() {
+      //去进行会议
+      if (this.users.length) {
+        if (this.users.length > 17) {
+          this.$message.error('最多支持17人')
+        } else {
+          this.$EventBus.$emit('screen-media-live', { users: this.users, type: this.talkType == 'video' ? '1' : '0' })
+        }
+      } else {
+        this.$message.error('请选择人员')
+      }
     }
   }
 }
