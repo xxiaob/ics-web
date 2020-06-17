@@ -44,7 +44,7 @@ export default {
           }
         }
       } else if (data.type == 4) {
-        //是否再一键采集中
+        //是否再一键采集中，如果正在一键采集则显示状态，结束采集则恢复状态
         let hasUser = false
 
         for (let i = 0; i < this.gatherUserIds.length; i++) {
