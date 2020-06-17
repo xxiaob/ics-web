@@ -3,8 +3,8 @@
     <div class="jc-opreate-item">
       <router-link :to="{name: 'index'}" class="jc-main" tag="i" title="首页"></router-link>
     </div>
-    <div class="jc-opreate-item">
-      <i class="jc-select" title="框选"></i>
+    <div class="jc-opreate-item" :class="{'jc-active': isSelect}">
+      <i class="jc-select" title="框选" @click="userSelect"></i>
     </div>
     <div class="jc-opreate-item">
       <i class="jc-show-area" title="显示区域"></i>
@@ -80,6 +80,7 @@ export default {
       activeStyle: mapStyle.BASE,
       maps: mapStyle.VALUES, //地图样式
       talkVal: 0,
+      isSelect: false,
       areaTypes: [], //存储所有 网格类型数组
       areaType: ['org'], //选择显示区域范围的类型
       wordType: [], //存储选择显示文字的网格类型
@@ -120,6 +121,11 @@ export default {
       } catch (error) {
         console.log(error)
       }
+    },
+    userSelect() {
+      //框选控制
+      this.isSelect = !this.isSelect
+      this.$EventBus.$emit('screen-use-select', { isSelect: this.isSelect }) //通知开始或停止框选
     },
     messageNumChange(data) {
       //消息数据变化

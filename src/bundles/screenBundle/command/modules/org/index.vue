@@ -44,6 +44,9 @@ export default {
   watch: {
     filterText(val) {
       this.filter(val)
+    },
+    options() {
+      this.initOptionsUsers() //初始化传入的用户
     }
   },
   data() {
@@ -69,6 +72,8 @@ export default {
 
         this.trees = this.formatUserOrgTrees(orgsAndUsers)//处理组织和用户
         this.expandedKeys = this.trees.length ? [this.trees[0].id] : [] //设置第一级默认展开
+
+        this.initOptionsUsers() //初始化传入的用户
       } catch (error) {
         console.log(error)
       }
@@ -82,6 +87,16 @@ export default {
       this.users = [] //清除用户
       this.updateTreesChecked() //更新树结构
     },
+    initOptionsUsers() {
+      if (this.options && this.options.length) {
+        let checkKeys = this.$refs.tree.getCheckedKeys()
+
+        this.$refs.tree.setCheckedKeys([...checkKeys, ...this.options])
+        this.$nextTick(() => {
+          this.checkChange() //去设置用户
+        })
+      }
+    },
     updateTreesChecked() {
       //更新树结构
       let keys = []
@@ -91,12 +106,14 @@ export default {
       })
       this.$refs.tree.setCheckedKeys(keys)
     },
-    checkChange(node, data) {
-      console.log('选中的', node, data)
+    checkChange() {
+      let selectNodes = this.$refs.tree.getCheckedNodes()
+
+      console.log('选中的', selectNodes)
       let users = []
 
-      if (data.checkedNodes && data.checkedNodes.length) {
-        data.checkedNodes.forEach(item=> {
+      if (selectNodes && selectNodes.length) {
+        selectNodes.forEach(item=> {
           if (item.type == 'user') {
             users.push({ id: item.id, name: item.label, pid: item.pid })
           }

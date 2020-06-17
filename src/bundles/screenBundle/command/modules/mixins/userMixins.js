@@ -1,28 +1,71 @@
 /**
  * 用户信息混入
  */
-import { getMarkerCluster } from '@/map/aMap/aMapUtil'
+import { getMarkerCluster, getMouseTool } from '@/map/aMap/aMapUtil'
 import { JcUserIcons } from '@/config/JcIconConfig'
 
 let usersData = null //存储用户信息
 
 let MarkerCluster //存储 MarkerCluster
 
+let MouseTool = null //存储 MouseTool对象
+
 export default {
   data() {
     return {
       userOrg: null,
+      userMouseTool: null,
       gatherUserIds: [], //正在采集的用户id 数组
       userTipVisible: true, //用户是否显示
       togetherVisible: true //用户是否聚合
     }
   },
   created() {
-    this.$EventBus.$on('map-user-change', this.userMap) //监听行级别切换
+    this.$EventBus.$on('map-user-change', this.userMap) //监听用户改变
     this.$EventBus.$on('show-word-change', this.userShowWordChange) //监听文字显示切换
     this.$EventBus.$on('show-together-change', this.userTogetherChange) //监听聚合显示改变
+    this.$EventBus.$on('screen-use-select', this.userSelect) //监听框选用户
   },
   methods: {
+    async userSelect(data) {
+      //用户框选
+      let myJcMap = this.getMyJcMap() //获取地图对象
+
+      if (myJcMap) {
+        if (data.isSelect) {
+          //如果开始框选，先判断对象是否存在，如果不存在则创建
+          if (!this.userMouseTool) {
+            MouseTool = MouseTool || await getMouseTool()
+            this.userMouseTool = new MouseTool(myJcMap.map)
+            this.userMouseTool.on('draw', (e) => {
+              let rectEl = e.obj
+
+              //处理判断在绘图矩形内的用户
+              let usedIds = []
+
+              for (let key in usersData.users) {
+                let item = usersData.users[key]
+
+                if (rectEl.contains(item.center)) {
+                  usedIds.push(item.userId)
+                }
+              }
+              rectEl.setMap(null)
+              if (usedIds.length) {
+                this.$EventBus.$emit('view-component-change', { component: 'CommandOrg', options: usedIds }) //通知窗口改变
+              }
+              console.log('框选的用户：', usedIds)
+            })
+          }
+          this.userMouseTool.rectangle({ strokeWeight: 1, strokeColor: '#fc005b', fillOpacity: 0, strokeStyle: 'dashed' })
+        } else if (this.userMouseTool) {
+          //如果结束框选，且工具存在则关闭
+          this.userMouseTool.close(true)
+        }
+      } else {
+        this.$message.error('地图初始化中，请稍后')
+      }
+    },
     async userMap(data) {
       MarkerCluster = await getMarkerCluster() //获取 MarkerCluster 对象
 
@@ -65,7 +108,7 @@ export default {
         data.users.forEach(item => {
           let center = [item.lng, item.lat]
 
-          usersData.users[center.join(',')] = item
+          usersData.users[center.join(',')] = { ...item, center }
           usersData.lnglats.push({ lnglat: center, userId: item.userId })
         })
       }
@@ -157,5 +200,6 @@ export default {
     this.$EventBus.$off('map-user-change', this.userMap)
     this.$EventBus.$off('show-word-change', this.orgShowWordChange)
     this.$EventBus.$off('show-together-change', this.userTogetherChange)
+    this.$EventBus.$off('screen-use-select', this.userSelect)
   }
 }
