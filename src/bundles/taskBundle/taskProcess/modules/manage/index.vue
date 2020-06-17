@@ -33,7 +33,7 @@
         <div class="jc-left-width50">
           <div style="color:red">右键点击地图选中位置</div>
           <div class="jc-map">
-            <map-user-marker v-model="position"></map-user-marker>
+            <map-user-marker v-model="position" @user-change="userChange"></map-user-marker>
           </div>
         </div>
         <el-form-item label="任务人员" :prop="peopleProps[peopleType]" :rules="rules.SELECT_NOT_NULL" class="jc-left-width50">
@@ -157,6 +157,10 @@ export default {
     await this.formatProjectList()
   },
   methods: {
+    userChange(val) {
+      this.peoples = val
+      this.peopleType = TASK_PEOPLE_TYPES.PEOPLE
+    },
     async  formatProjectList() {
       this.EmergencySupport = await this.getProjectList(PROJECT_TYPES.EmergencySupport)
       this.SpecialControl = await this.getProjectList(PROJECT_TYPES.SpecialControl)
