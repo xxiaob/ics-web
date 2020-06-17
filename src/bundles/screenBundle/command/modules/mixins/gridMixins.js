@@ -94,7 +94,7 @@ export default {
         let gridTypeMap = gridAreas[type]
 
         gridTypeMap.markerCluster = this.getMarkerCluster(gridTypeMap)
-        gridTypeMap.markerCluster.on('click', this.markerClusterClick)
+        gridTypeMap.markerCluster.on('click', this.markerGridClusterClick)
       }
       this.areaTipVisibles = mapGridTypes
       this.togetherVisibles = mapGridTypes
@@ -140,19 +140,19 @@ export default {
       return new MarkerCluster(null, gridTypeMap.lnglats, {
         gridSize: 120,
         renderClusterMarker: (context) => {
-          this.renderClusterMarker(gridTypeMap, context)
+          this.renderGridClusterMarker(gridTypeMap, context)
         },
         renderMarker: (context) => {
-          this.renderMarker(gridTypeMap, context)
+          this.renderGridMarker(gridTypeMap, context)
         }
       })
     },
-    renderClusterMarker(gridTypeMap, context) {
+    renderGridClusterMarker(gridTypeMap, context) {
       console.log('绘制网格-聚合绘制', context)
       context.marker.setAnchor('center')
       context.marker.setContent(`<div class="jc-cluster-content" style="background-image: url(${JcIcons[gridTypeMap.icon].cluster});">${context.count}</div>`)
     },
-    renderMarker(gridTypeMap, context) {
+    renderGridMarker(gridTypeMap, context) {
       console.log('绘制网格-单点绘制', context)
       let key = context.data[0].lnglat.lng + ',' + context.data[0].lnglat.lat
 
@@ -166,14 +166,25 @@ export default {
       content += `<img src=${JcIcons[signItem.icon].icon} class="jc-marker-icon"/></div>`
       context.marker.setContent(content)
     },
-    markerClusterClick(context) {
+    markerGridClusterClick(context) {
       console.log('绘制网格-点击', context)
       let myJcMap = this.getMyJcMap() //获取地图对象
 
-      myJcMap.map.setFitView(context.marker)
+      // myJcMap.map.setFitView(context.marker)
     },
     clearGrids() {
       //清除所有数据
+      for (let type in gridAreas) {
+        let gridTypeMap = gridAreas[type]
+
+        //清除聚合
+        gridTypeMap.markerCluster.setMap(null)
+        //清除sign 显示
+        for (let key in gridTypeMap.signs) {
+          gridTypeMap.signs[key].sign.setMap(null)
+        }
+      }
+      gridAreas = {}
     },
     gridShowAreaChange(areas) {
       //组织区域显示

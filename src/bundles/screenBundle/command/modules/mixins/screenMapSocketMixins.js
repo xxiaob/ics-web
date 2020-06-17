@@ -28,10 +28,11 @@ export default {
          */
         if (data.type == 0) {
           //数据类型为用户信息变更
-          this.$EventBus.$emit('map-user-change', { type: 2, users: data }) //通知用户改变
+          this.$EventBus.$emit('map-user-change', { type: 2, users: data.locations }) //通知用户上线
         } else if (data.type == 1) {
           //数据类型为组织人员信息变更
           this.$EventBus.$emit('data-overview-change', data.orgUsers) //通知组织人员在线人数变更
+          this.$EventBus.$emit('map-user-change', { type: 3, users: data.offlineUserId }) //通知用户离线
         } else if (data.type == 2) {
           //数据类型为第一次连接的数据
           this.$EventBus.$emit('data-overview-change', data.orgUsers) //通知组织人员在线人数变更
