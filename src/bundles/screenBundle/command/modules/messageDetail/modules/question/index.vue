@@ -191,6 +191,7 @@ export default {
   flex: 1;
   display: flex;
   flex-direction: column;
+  overflow: auto;
 }
 .jc-footer {
   text-align: center;

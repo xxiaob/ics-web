@@ -1,114 +1,116 @@
 <template>
-  <div class="jc-view-content">
-    <div class="jc-temporary">
-      <div class="jc-view-content" v-loading="loading" element-loading-background="rgba(0, 0, 0, 0)">
-        <div class="jc-detail-warp">
-          <div class="jc-detail-label">任务名称</div>
-          <div class="jc-detail-content">{{form.taskName}}</div>
-        </div>
-        <div class="jc-detail-warp">
-          <div class="jc-detail-label">任务名称</div>
-          <div class="jc-detail-content">{{form.taskName}}</div>
-        </div>
-        <div class="jc-detail-warp">
-          <div class="jc-detail-label">任务名称</div>
-          <div class="jc-detail-content">{{form.taskName}}</div>
-        </div>
-        <div class="jc-detail-warp">
-          <div class="jc-detail-label">任务名称</div>
-          <div class="jc-detail-content">{{form.taskName}}</div>
-        </div>
-        <div class="jc-detail-warp">
-          <div class="jc-detail-label">任务名称</div>
-          <div class="jc-detail-content">{{form.taskName}}</div>
-        </div>
-        <div class="jc-detail-warp">
-          <div class="jc-detail-label">任务名称</div>
-          <div class="jc-detail-content">{{form.taskName}}</div>
-        </div>
-        <div class="jc-detail-warp">
-          <div class="jc-detail-label">创建时间</div>
-          <div class="jc-detail-content">{{form.createTime|filterTime}}</div>
-        </div>
-        <div class="jc-detail-warp">
-          <div class="jc-detail-label">项目名称</div>
-          <div class="jc-detail-content">{{formatProject}}</div>
-        </div>
-        <div class="jc-detail-warp">
-          <div class="jc-detail-label">任务时间</div>
-          <div class="jc-detail-content">{{form.startDate|filterTime}} - {{form.endDate|filterTime}}</div>
-        </div>
-        <div class="jc-detail-warp">
-          <div class="jc-detail-label">任务类型</div>
-          <div class="jc-detail-content">临时任务</div>
-        </div>
-        <div class="jc-detail-warp">
-          <div class="jc-detail-label">任务状态</div>
-          <div class="jc-detail-content">{{form.taskStatusName}}</div>
-        </div>
-        <div class="jc-detail-warp">
-          <div class="jc-detail-label">任务来源</div>
-          <div class="jc-detail-content">{{taskSourceName}}</div>
-        </div>
-        <div class="jc-detail-warp">
-          <div class="jc-detail-label">下发组织</div>
-          <div class="jc-detail-content">{{form.startOrg}}</div>
-        </div>
-        <div class="jc-detail-warp">
-          <div class="jc-detail-label">下发人</div>
-          <div class="jc-detail-content">{{form.startUser}}</div>
-        </div>
-        <div class="jc-detail-warp">
-          <div class="jc-detail-label">任务位置</div>
-          <div class="jc-detail-content">{{form.taskPositionName}}</div>
-        </div>
-        <div class="jc-detail-warp">
-          <div class="jc-detail-label">任务人员</div>
-          <div class="jc-detail-content">{{formatUsers}}</div>
-        </div>
-        <div class="jc-detail-warp">
-          <div class="jc-detail-label">任务描述</div>
-          <div class="jc-detail-content">
-            <div v-html="form.taskDesc"></div>
-          </div>
-        </div>
-        <div class="jc-detail-warp">
-          <div class="jc-detail-label">附件</div>
-          <div class="jc-detail-content">
-            <el-image v-for="url in imgs" :key="url" :src="url" :preview-src-list="imgs" class="jc-img"></el-image>
-            <div class="jc-video" v-for="url in videos" :key="url" @click="showVideo(url)">
-              <video :src="url"></video>
-              <div class="hover">
-                <img class="jc-video-play" src="@/bundles/taskBundle/assets/play.png" alt="">
-              </div>
-            </div>
-            <div v-for="(url,index) in audios" :key="url" class="jc-audio" @click="playAudio(url,index)">
-              <img class="jc-audio-mike" src="@/bundles/taskBundle/assets/mike.png" alt="">
-              <div class="hover">
-                <img class="jc-video-play" src="@/bundles/taskBundle/assets/play.png" alt="" v-show="audioPlayShows[index]">
-                <img class="jc-video-play" src="@/bundles/taskBundle/assets/pause.png" alt="" v-show="!audioPlayShows[index]">
-              </div>
-            </div>
-            <audio ref="audio" :src="audioUrl" style="width:0;height:0" @ended="audioEnded"></audio>
-            <a class="jc-other" v-for="url in others" :key="url" :href="url" download="" title="点击下载">
-              <img class="jc-other-down" src="@/bundles/taskBundle/assets/down.png" alt="">
-            </a>
-          </div>
+  <div class="jc-temporary">
+    <div class="jc-view-content" v-loading="loading" element-loading-background="rgba(0, 0, 0, 0)">
+      <div class="jc-detail-warp">
+        <div class="jc-detail-label">任务名称</div>
+        <div class="jc-detail-content">{{form.taskName}}</div>
+      </div>
+      <div class="jc-detail-warp">
+        <div class="jc-detail-label">创建时间</div>
+        <div class="jc-detail-content">{{form.createTime|filterTime}}</div>
+      </div>
+      <div class="jc-detail-warp">
+        <div class="jc-detail-label">项目名称</div>
+        <div class="jc-detail-content">{{formatProject}}</div>
+      </div>
+      <div class="jc-detail-warp">
+        <div class="jc-detail-label">任务时间</div>
+        <div class="jc-detail-content">{{form.startDate|filterTime}} - {{form.endDate|filterTime}}</div>
+      </div>
+      <div class="jc-detail-warp">
+        <div class="jc-detail-label">任务类型</div>
+        <div class="jc-detail-content">临时任务</div>
+      </div>
+      <div class="jc-detail-warp">
+        <div class="jc-detail-label">任务状态</div>
+        <div class="jc-detail-content">{{form.taskStatusName}}</div>
+      </div>
+      <div class="jc-detail-warp">
+        <div class="jc-detail-label">任务来源</div>
+        <div class="jc-detail-content">{{taskSourceName}}</div>
+      </div>
+      <div class="jc-detail-warp">
+        <div class="jc-detail-label">下发组织</div>
+        <div class="jc-detail-content">{{form.startOrg}}</div>
+      </div>
+      <div class="jc-detail-warp">
+        <div class="jc-detail-label">下发人</div>
+        <div class="jc-detail-content">{{form.startUser}}</div>
+      </div>
+      <div class="jc-detail-warp">
+        <div class="jc-detail-label">任务位置</div>
+        <div class="jc-detail-content">{{form.taskPositionName}}</div>
+      </div>
+      <div class="jc-detail-warp">
+        <div class="jc-detail-label">任务人员</div>
+        <div class="jc-detail-content">{{formatUsers}}</div>
+      </div>
+      <div class="jc-detail-warp">
+        <div class="jc-detail-label">任务描述</div>
+        <div class="jc-detail-content">
+          <div v-html="form.taskDesc"></div>
         </div>
       </div>
-      <div class="jc-footer">
-        <el-button @click="handleTask(true)" size="small" type="primary">流转任务</el-button>
-        <el-button @click="handleTask(false)" size="small">结束任务</el-button>
+      <div class="jc-detail-warp">
+        <div class="jc-detail-label">附件</div>
+        <div class="jc-detail-content">
+          <el-image v-for="url in imgs" :key="url" :src="url" :preview-src-list="imgs" class="jc-img"></el-image>
+          <div class="jc-video" v-for="url in videos" :key="url" @click="showVideo(url)">
+            <video :src="url"></video>
+            <div class="hover">
+              <img class="jc-video-play" src="@/bundles/taskBundle/assets/play.png" alt="">
+            </div>
+          </div>
+          <div v-for="(url,index) in audios" :key="url" class="jc-audio" @click="playAudio(url,index)">
+            <img class="jc-audio-mike" src="@/bundles/taskBundle/assets/mike.png" alt="">
+            <div class="hover">
+              <img class="jc-video-play" src="@/bundles/taskBundle/assets/play.png" alt="" v-show="audioPlayShows[index]">
+              <img class="jc-video-play" src="@/bundles/taskBundle/assets/pause.png" alt="" v-show="!audioPlayShows[index]">
+            </div>
+          </div>
+          <audio ref="audio" :src="audioUrl" style="width:0;height:0" @ended="audioEnded"></audio>
+          <a class="jc-other" v-for="url in others" :key="url" :href="url" download="" title="点击下载">
+            <img class="jc-other-down" src="@/bundles/taskBundle/assets/down.png" alt="">
+          </a>
+        </div>
       </div>
     </div>
+
+    <div class="jc-footer">
+      <el-button @click="handleTask(true)" size="small" type="primary">流转任务</el-button>
+      <el-button @click="handleTask(false)" size="small">结束任务</el-button>
+    </div>
+
+    <el-dialog :title="taskForm.ifUpload?'流转任务':'结束任务'" :visible.sync="dialogVisibleHandle" :close-on-click-modal="false" width="600px" append-to-body>
+      <el-form ref="taskForm" label-width="80px" :model="taskForm" class="jc-manage-form">
+        <el-form-item label="任务人员" :prop="peopleProps[peopleType]" :rules="rules.SELECT_NOT_NULL" v-if="taskForm.ifUpload" class="jc-mb">
+          <jc-task-people :peopleType.sync="peopleType" :selecteds.sync="peoples" :orgTree="orgTree"></jc-task-people>
+        </el-form-item>
+        <el-form-item label="事件" prop="eventIds" :rules="rules.SELECT_NOT_NULL" v-if="!taskForm.ifUpload" class="jc-mb">
+          <el-select v-model="taskForm.eventIds" multiple clearable filterable placeholder="请选择事件">
+            <el-option v-for="item in events" :key="item.id" :label="item.title" :value="item.id">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="备注" prop="remark" :rules="rules.NOT_NULL">
+          <el-input v-model="taskForm.remark" placeholder="请输入备注" type="textarea"></el-input>
+        </el-form-item>
+      </el-form>
+      <span slot="footer" class="dialog-footer">
+        <el-button @click="dialogVisibleHandle = false">取 消</el-button>
+        <el-button type="primary" @click="onSubmitTask">确 定</el-button>
+      </span>
+    </el-dialog>
+
   </div>
 
 </template>
 <script>
-import { taskGet } from '@/api/task'
+import { taskGet, taskFinish } from '@/api/task'
+import { eventManageSelectList } from '@/api/eventManage'
 import { projectsList } from '@/api/projects'
 import { organizationList } from '@/api/organization'
-import { PROJECT_TYPES, TASK_SOURCES } from '@/constant/Dictionaries'
+import { PROJECT_TYPES, TASK_SOURCES, TASK_PEOPLE_TYPES } from '@/constant/Dictionaries'
 import { formatDate } from '@/libs/util'
 import { NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
 import moment from 'moment'
@@ -128,8 +130,17 @@ export default {
   },
   data() {
     return {
+      peopleType: TASK_PEOPLE_TYPES.ORG,
+      peopleProps: {
+        [TASK_PEOPLE_TYPES.ORG]: 'orgIds',
+        [TASK_PEOPLE_TYPES.PEOPLE]: 'userIds'
+      },
+      peoples: [],
+      dialogVisibleHandle: false,
+      events: [],
       loading: false,
       form: {},
+      orgTree: [],
       orgObj: {},
       projectListArr: [],
       rules: {
@@ -140,11 +151,24 @@ export default {
         ifUpload: false,
         remark: '',
         orgIds: [],
-        userIds: []
+        userIds: [],
+        eventIds: []
       }
     }
   },
   watch: {
+    peoples: {
+      handler(val) {
+        if (this.peopleType === TASK_PEOPLE_TYPES.ORG) {
+          this.taskForm.userIds = []
+          this.taskForm.orgIds = val
+        } else {
+          this.taskForm.userIds = val
+          this.taskForm.orgIds = []
+        }
+      },
+      deep: true
+    },
     info: {
       deep: true,
       handler() {
@@ -155,9 +179,11 @@ export default {
   async created() {
     const res = await organizationList()
 
+    this.orgTree = this.formatOrgTree(res)
     this.orgObj = this.formatOrgTreeToObj(res)
 
     await this.formatProjectList()
+    await this.remoteMethod('')
 
     if (this.info && this.info.id) {
       this.getDetail()
@@ -208,6 +234,38 @@ export default {
     }
   },
   methods: {
+    async remoteMethod(query) {
+      this.loading = true
+      try {
+        this.events = await eventManageSelectList(query)
+        this.loading = false
+      } catch (error) {
+        console.error(error)
+        this.loading = false
+      }
+    },
+    formatOrgTree(child) {
+      let trees = []
+
+      if (child && child.length) {
+        child.forEach(item => {
+          let node = {
+            id: item.orgId,
+            value: item.orgId,
+            label: item.orgName
+          }
+
+          let children = this.formatOrgTree(item.children)
+
+          if (children && children.length) {
+            node.children = children
+          }
+
+          trees.push(node)
+        })
+      }
+      return trees
+    },
     formatOrgTreeToObj(child) {
       let objs = {}
 
@@ -253,6 +311,56 @@ export default {
       } else {
         this.getDetail()
       }
+    },
+    handleTask(ifUpload) {
+      if (this.$refs.taskForm) {
+        this.$refs.taskForm.resetFields()
+      }
+      this.taskForm.userIds = []
+      this.taskForm.orgIds = []
+      this.taskForm.ifUpload = ifUpload
+      this.dialogVisibleHandle = true
+    },
+    onSubmitTask() {
+      this.loading = true
+      this.$refs.taskForm.validate(valid => {
+        if (valid) {
+          this.nextTo()
+        } else {
+          this.loading = false
+        }
+      })
+    },
+    //流转
+    async nextTo() {
+      const { businessKey, taskId } = this.form
+      const { ifUpload, remark, userIds, orgIds, eventIds } = this.taskForm
+      const form = {
+        ifUpload, // true 流转  false 完成
+        businessKey,
+        taskId,
+        remark,
+        eventIds
+      }
+
+      if (ifUpload) { // 流转带上组织id 或者 用户id
+        if (userIds.length) {
+          form.assignees = userIds
+        } else {
+          form.orgIds = orgIds
+        }
+      }
+      console.log(form)
+      try {
+        await taskFinish(form)
+        this.$message.success('操作成功')
+        this.dialogVisibleHandle = false
+        this.loading = false
+        this.$EventBus.$emit('view-component-back')
+      } catch (e) {
+        this.loading = false
+        console.error(e)
+      }
     }
   }
 
@@ -261,10 +369,10 @@ export default {
 
 <style lang="scss" scoped>
 .jc-temporary {
+  flex: 1;
   display: flex;
-  position: relative;
-  height: 100%;
   flex-direction: column;
+  overflow: auto;
 }
 .jc-footer {
   text-align: center;
