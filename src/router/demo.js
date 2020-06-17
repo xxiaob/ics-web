@@ -6,7 +6,8 @@ export default [{
   name: 'imLive',
   component: () => import('@/bundles/liveBundle'),
   meta: {
-    title: 'imLive'
+    title: 'imLive',
+    ignore: true
   }
 }, {
   path: 'jim',
@@ -21,5 +22,13 @@ export default [{
   component: () => import('@/bundles/liveBundle/agoraLive'),
   meta: {
     title: 'agoraLive'
+  }
+}, {
+  path: 'datascreendemo',
+  name: 'DataScreenDemo',
+  component: () => import('@/bundles/liveBundle/agoraLive'),
+  meta: {
+    title: '数据大屏',
+    ignore: true
   }
 }]

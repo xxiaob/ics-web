@@ -20,13 +20,15 @@ export default [{
   name: 'commandProjectScreen',
   component: () => import('@/bundles/screenBundle/command'),
   meta: {
-    title: '信息指挥大屏'
+    title: '信息指挥大屏',
+    ignore: true
   }
 }, {
   path: 'screen/datastatistics/:projectId',
   name: 'dataProjectScreen',
   component: () => import('@/bundles/screenBundle/dataStatistics'),
   meta: {
-    title: '数据联动大屏'
+    title: '数据联动大屏',
+    ignore: true
   }
 }]
