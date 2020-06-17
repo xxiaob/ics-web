@@ -95,15 +95,11 @@
     </div>
     <el-dialog :title="taskForm.ifUpload?'流转任务':'结束任务'" :visible.sync="dialogVisibleHandle" :close-on-click-modal="false" width="600px" append-to-body>
       <el-form ref="taskForm" label-width="80px" :model="taskForm" class="jc-manage-form">
-        <el-form-item label="任务人员" prop="orgIds" :rules="rules.SELECT_NOT_NULL" v-if="taskForm.ifUpload" class="jc-mb">
-          <el-cascader :options="orgTree" v-model="taskForm.orgIds" :props="{expandTrigger: 'hover', emitPath: false, multiple: true ,checkStrictly: true}" clearable placeholder="请选择组织(必填)" :show-all-levels="false" @change="changeOrg" class="jc-left-width50"></el-cascader>
-          <el-select v-model="taskForm.userIds" multiple placeholder="请选择人员(选填)" clearable class="jc-left-width50">
-            <el-option v-for="item in users" :key="item.id" :label="item.name" :value="item.id">
-            </el-option>
-          </el-select>
+        <el-form-item label="任务人员" :prop="peopleProps[peopleType]" :rules="rules.SELECT_NOT_NULL" v-if="taskForm.ifUpload" class="jc-mb">
+          <jc-task-people :peopleType.sync="peopleType" :selecteds.sync="peoples" :orgTree="orgTree"></jc-task-people>
         </el-form-item>
         <el-form-item label="事件" prop="eventIds" :rules="rules.SELECT_NOT_NULL" v-if="!taskForm.ifUpload" class="jc-mb">
-          <el-select v-model="taskForm.eventIds" multiple filterable remote reserve-keyword placeholder="请输入关键词" :remote-method="remoteMethod" :loading="loading">
+          <el-select v-model="taskForm.eventIds" multiple clearable filterable placeholder="请选择事件">
             <el-option v-for="item in events" :key="item.id" :label="item.title" :value="item.id">
             </el-option>
           </el-select>
@@ -122,10 +118,9 @@
 <script>
 import { taskFinish } from '@/api/task'
 import { eventManageSelectList } from '@/api/eventManage'
-import { userListByOrg } from '@/api/user'
 import { NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
 import { formatDate } from '@/libs/util'
-import { TASK_SOURCES, TASK_STATES } from '@/constant/Dictionaries'
+import { TASK_SOURCES, TASK_STATES, TASK_PEOPLE_TYPES } from '@/constant/Dictionaries'
 import MediaMixins from '../../../mixins/MediaMixins'
 
 export default {
@@ -149,10 +144,17 @@ export default {
   },
   components: {
     JcEventList: () => import('./eventList'),
-    JcForwardList: () => import('./forwardList')
+    JcForwardList: () => import('./forwardList'),
+    JcTaskPeople: () => import('../manage/taskPeople')
   },
   data() {
     return {
+      peopleType: TASK_PEOPLE_TYPES.ORG,
+      peopleProps: {
+        [TASK_PEOPLE_TYPES.ORG]: 'orgIds',
+        [TASK_PEOPLE_TYPES.PEOPLE]: 'userIds'
+      },
+      peoples: [],
       TASK_STATES,
       loading: false,
       dialogVisibleHandle: false,
@@ -173,6 +175,18 @@ export default {
     }
   },
   watch: {
+    peoples: {
+      handler(val) {
+        if (this.peopleType === TASK_PEOPLE_TYPES.ORG) {
+          this.taskForm.userIds = []
+          this.taskForm.orgIds = val
+        } else {
+          this.taskForm.userIds = val
+          this.taskForm.orgIds = []
+        }
+      },
+      deep: true
+    },
     form: {
       handler(newValue) {
         this.handleUrls(newValue.taskDetailVO.uploadFilePaths)
@@ -223,32 +237,6 @@ export default {
     this.remoteMethod('')
   },
   methods: {
-    changeOrg(orgIds) {
-      if (orgIds.length) {
-        this.getUser(orgIds)
-      } else {
-        this.users = []
-      }
-      this.taskForm.userIds = []
-    },
-    async getUser(orgIds) {
-      try {
-        const res = await userListByOrg(orgIds)
-        const users = []
-
-        if (res && res.length) {
-          res.forEach(item=>{
-            users.push({
-              id: item.userId,
-              name: item.userName
-            })
-          })
-        }
-        this.users = users
-      } catch (error) {
-        console.error(error)
-      }
-    },
     async remoteMethod(query) {
       this.loading = true
       try {
@@ -264,6 +252,7 @@ export default {
         this.$refs.taskForm.resetFields()
       }
       this.taskForm.userIds = []
+      this.taskForm.orgIds = []
       this.taskForm.ifUpload = ifUpload
       this.dialogVisibleHandle = true
     },
