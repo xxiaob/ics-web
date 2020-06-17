@@ -204,6 +204,7 @@ export default {
     }
   },
   beforeDestroy() {
+    this.clearGrids() //清除基础数据
     //去除事件监听
     this.$EventBus.$off('org-change', this.areaMap)
     this.$EventBus.$off('show-area-change', this.gridShowAreaChange)

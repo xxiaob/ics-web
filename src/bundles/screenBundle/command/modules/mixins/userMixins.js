@@ -196,6 +196,7 @@ export default {
     }
   },
   beforeDestroy() {
+    this.clearUsers() //清除基础数据
     //去除事件监听
     this.$EventBus.$off('map-user-change', this.userMap)
     this.$EventBus.$off('show-word-change', this.orgShowWordChange)
