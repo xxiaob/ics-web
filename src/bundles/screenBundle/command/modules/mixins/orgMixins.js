@@ -96,25 +96,13 @@ export default {
       })
     },
     orgShowAreaChange(areas) {
-      //组织区域显示
-      if ((areas || areas.length).filter(id => id == 'org').length) {
-        this.orgAreaVisible = true //如果存在组织区域显示，则显示区域
-      } else {
-        this.orgAreaVisible = false //不存在则显示
-      }
+      this.orgAreaVisible = areas.indexOf('org') > -1 //如果存在组织区域显示，则显示区域，否则不显示
       orgAreas.forEach(item => {
         item.showArea(this.orgAreaVisible)
       })
     },
     orgShowWordChange(words) {
-      //组织文字显示
-      if ((words || words.length).filter(id => id == 'org').length) {
-        //如果存在组织区域显示，则显示文字
-        this.orgTipVisible = true
-      } else {
-        //不存在则显示
-        this.orgTipVisible = false
-      }
+      this.orgTipVisible = words.indexOf('org') > -1 //如果存在组织区域显示，则显示文字，否则不显示
       orgAreas.forEach(item => {
         item.showTip(this.orgTipVisible)
       })

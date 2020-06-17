@@ -51,7 +51,8 @@ export default {
     updateOrgReceiver: 'user-service/user/updOrgReceiver',
     getOrgUserList: 'user-service/user/getOrgUserList',
     getOrgUserListByProject: 'user-service/user/getOrgUserListByProject',
-    updPwd: 'user-service/user/updPwd'
+    updPwd: 'user-service/user/updPwd',
+    getUsersByPosition: 'message-srv/message/getUsersByPosition'
   },
   areaType: {
     //区域类型管理

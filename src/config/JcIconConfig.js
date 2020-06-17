@@ -32,7 +32,7 @@ export const JcIcons = {
  * 用户图标
  */
 export const JcUserIcons = {
-  cluster: '', //聚合图标
-  online: '', //在线图标
-  gather: '' //采集图标
+  cluster: '/static/mapIcons/usercluster.png', //聚合图标
+  online: '/static/mapIcons/useronline.png', //在线图标
+  gather: '/static/mapIcons/usergather.png' //采集图标
 }

@@ -163,3 +163,18 @@ export async function getMarkerCluster() {
 
   return result
 }
+
+/**
+ * 获取鼠标聚合工具
+ */
+export async function getMouseTool() {
+  let map = await initAmap()
+
+  let result = await new Promise(function (resolve) {
+    map.plugin(['AMap.MouseTool'], function () {
+      resolve(AMap.MouseTool)
+    })
+  })
+
+  return result
+}

@@ -365,7 +365,6 @@ input::-webkit-input-placeholder {
   background-position: center;
   background-repeat: no-repeat;
   background-size: 100% 100%;
-  font-size: $jc-font-size-smaller;
   @include jc-text-warp;
   color: $jc-color-white;
 }
