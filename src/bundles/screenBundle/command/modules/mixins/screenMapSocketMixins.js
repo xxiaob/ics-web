@@ -32,7 +32,7 @@ export default {
         } else if (data.type == 1) {
           //数据类型为组织人员信息变更
           this.$EventBus.$emit('data-overview-change', data.orgUsers) //通知组织人员在线人数变更
-          this.$EventBus.$emit('map-user-change', { type: 3, users: data.offlineUserId }) //通知用户离线
+          this.$EventBus.$emit('map-user-change', { type: 3, offUserId: data.offlineUserId }) //通知用户离线
         } else if (data.type == 2) {
           //数据类型为第一次连接的数据
           this.$EventBus.$emit('data-overview-change', data.orgUsers) //通知组织人员在线人数变更
@@ -42,7 +42,7 @@ export default {
           this.$EventBus.$emit('screen-message-change', data) //通知任务事件
         } else if (data.type == 4) {
           //数据类型为一键采集 数据
-
+          this.$EventBus.$emit('map-user-change', { type: 4, collectUser: data.collectUser }) //通知用户进入一键采集
         }
       })
     }

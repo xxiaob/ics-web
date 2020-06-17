@@ -19,6 +19,7 @@ import { MAP_EVENT } from '@/constant/CONST'
 import MapSearch from '@/components/JcMap/MapSearch'
 import { getAddressByPosition, getMouseTool } from '@/map/aMap/aMapUtil'
 import { getUsersByPosition } from '@/api/user'
+import { JcUserIcons } from '@/config/JcIconConfig'
 
 let MouseTool = null //存储 MouseTool对象
 
@@ -34,6 +35,7 @@ export default {
       distence: '500',
       userSelect: false,
       mousetool: null,
+      users: [],
       address: { position: '', name: '' }
     }
   },
@@ -82,10 +84,27 @@ export default {
         return
       }
       try {
+        //清除之前的用户显示之后去获取新的用户
+        this.users.forEach(item => {
+          item.marker.hide()
+        })
         let center = position.split(',')
 
         let results = await getUsersByPosition({ distance: this.distence, lat: center[1], lon: center[0] })
 
+        let users = []
+
+        if (results && results.length) {
+          results.forEach(item => {
+            let userPosition = []
+
+            let marker = new JcMapMarker({ map: this.myJcMap, name: item.userName, icon: JcUserIcons.online, position: userPosition })
+
+            users.push({ userId: item.userId, userName: item.userId, center: userPosition, marker })
+          })
+        }
+        this.users = users
+        this.myJcMap.fitView()
         console.log('距离' + this.distence + 'm内的用户：', results)
       } catch (error) {
         console.log(error)
@@ -101,7 +120,6 @@ export default {
         this.userSelectChange(false)
       } else if (this.value.position != this.address.position && this.value.name != this.address.name) {
         this.showMarker(this.value.position.split(','), name)
-        this.myMarker.fitView()
         this.distence = '500'
         this.userSelect = false
       }

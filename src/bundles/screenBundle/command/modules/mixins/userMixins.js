@@ -4,7 +4,7 @@
 import { getMarkerCluster } from '@/map/aMap/aMapUtil'
 import { JcUserIcons } from '@/config/JcIconConfig'
 
-let usersData = null //存储用户信息 例如数据： {markerCluster: MarkerCluster, signs: {'59242618223067136': {}}}
+let usersData = null //存储用户信息
 
 let MarkerCluster //存储 MarkerCluster
 
@@ -12,6 +12,7 @@ export default {
   data() {
     return {
       userOrg: null,
+      gatherUserIds: [], //正在采集的用户id 数组
       userTipVisible: true, //用户是否显示
       togetherVisible: true //用户是否聚合
     }
@@ -24,18 +25,48 @@ export default {
   methods: {
     async userMap(data) {
       MarkerCluster = await getMarkerCluster() //获取 MarkerCluster 对象
-      //如果是重新初始化，则清除之前的用户显示
+
       if (data.type == 1) {
+        //如果是重新初始化，则清除之前的用户显示
         this.clearUsers()
+      } else if (data.type == 3) {
+        //如果是用户离线，则从用户列表里删除
+        for (let key in usersData.users) {
+          if (usersData.users[key].userId == data.offUserId) {
+            delete usersData.users[key]
+            break
+          }
+        }
+        for (let i = 0; i < data.lnglats.length; i++) {
+          if (data.lnglats[i].userId == data.offUserId) {
+            data.lnglats.splice(i, 1)
+            break
+          }
+        }
+      } else if (data.type == 4) {
+        //是否再一键采集中
+        let hasUser = false
+
+        for (let i = 0; i < this.gatherUserIds.length; i++) {
+          if (this.gatherUserIds[i] == data.collectUser.userId) {
+            hasUser = true
+            if (data.collectUser.off) {
+              this.gatherUserIds.splice(i, 1)
+            }
+            break
+          }
+        }
+        if (!data.collectUser.off && !hasUser) {
+          this.gatherUserIds.push(data.collectUser.userId)
+        }
       }
-      usersData = usersData || { markerCluster: null, users: {}, lnglats: [] }
       //处理用户信息
       if (data.users && data.users.length) {
         data.users.forEach(item => {
           let center = [item.lng, item.lat]
 
           usersData.users[center.join(',')] = item
-          usersData.lnglats.push({ lnglat: center })
+          usersData.lnglats.push({ lnglat: center, userId: item.userId })
         })
       }
       if (usersData.markerCluster) {
@@ -67,7 +98,7 @@ export default {
         } else {
           usersData.markerCluster.setMaxZoom(0)
         }
-        //处理是否显示标题
+        //处理是否显示标题，以及状态
         usersData.markerCluster.setGridSize(120)
       } else {
         usersData.markerCluster.setMap(null)
@@ -90,7 +121,12 @@ export default {
       if (this.userTipVisible) {
         content += `<div class="jc-marker-title">${userItem.userName}</div>`
       }
-      content += `<img src=${JcUserIcons.online} class="jc-marker-icon"/></div>`
+      if (this.gatherUserIds.indexOf(userItem.userId) > -1) {
+        content += `<img src=${JcUserIcons.gather} class="jc-marker-icon"/></div>`
+      } else {
+        content += `<img src=${JcUserIcons.online} class="jc-marker-icon"/></div>`
+      }
+
       context.marker.setzIndex(20)
       context.marker.setContent(content)
     },
@@ -105,7 +141,7 @@ export default {
       if (usersData && usersData.markerCluster) {
         usersData.markerCluster.setMap(null)
       }
-      usersData = null
+      usersData = { markerCluster: null, users: {}, lnglats: [] }
     },
     userShowWordChange(words) {
       this.userTipVisible = words.indexOf('user') > -1 //如果存在用户显示，则显示用户，否则不显示
