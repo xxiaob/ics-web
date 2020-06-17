@@ -59,7 +59,21 @@ export default {
 
       this.mousetool = new MouseTool(this.myJcMap.map)
       this.mousetool.on('draw', (e) => {
-        console.log(e)
+        let rectEl = e.obj
+
+        //处理判断在绘图矩形内的用户
+        let usedIds = []
+
+        this.users.forEach(item => {
+          if (rectEl.contains(item.center)) {
+            usedIds.push(item.userId)
+          }
+        })
+        rectEl.setMap(null)
+        if (usedIds.length) {
+          this.$emit('user-change', usedIds)
+        }
+        console.log('框选的用户：', usedIds)
       })
       this.$refs.mapSearch.initData(this.myJcMap) //初始化搜索对象
 
@@ -96,7 +110,7 @@ export default {
 
         if (results && results.length) {
           results.forEach(item => {
-            let userPosition = []
+            let userPosition = item.location
 
             let marker = new JcMapMarker({ map: this.myJcMap, name: item.userName, icon: JcUserIcons.online, position: userPosition })
 
