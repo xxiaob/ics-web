@@ -92,7 +92,14 @@ export default {
       }
     },
     valueChange() {
-      if (this.value && this.value.position && this.value.position != this.address.position && this.value.name != this.address.name) {
+      if (!(this.value && this.value.position)) {
+        this.distence = '500'
+        this.userSelect = false
+        if (this.myMarker) {
+          this.myMarker.hide()
+        }
+        this.userSelectChange(false)
+      } else if (this.value.position != this.address.position && this.value.name != this.address.name) {
         this.showMarker(this.value.position.split(','), name)
         this.myMarker.fitView()
         this.distence = '500'

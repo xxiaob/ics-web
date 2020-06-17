@@ -272,6 +272,7 @@ export default {
         }
         return form
       } else {
+        this.position = {}
         this.peopleType = TASK_PEOPLE_TYPES.ORG
         this.peoples = []
         const beginTime = new Date().getTime()
