@@ -27,3 +27,12 @@ export const JcIcons = {
   zhatu: { name: '渣土', icon: '/static/areaicons/zhatu.png', cluster: '/static/areaicons/cluster3.png' },
   zhatukakou: { name: '渣土卡口', icon: '/static/areaicons/zhatukakou.png', cluster: '/static/areaicons/cluster3.png' }
 }
+
+/**
+ * 用户图标
+ */
+export const JcUserIcons = {
+  cluster: '', //聚合图标
+  online: '', //在线图标
+  gather: '' //采集图标
+}

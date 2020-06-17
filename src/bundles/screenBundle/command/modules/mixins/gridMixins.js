@@ -194,9 +194,9 @@ export default {
   },
   beforeDestroy() {
     //去除事件监听
-    this.$EventBus.$off('org-change', this.orgMap)
-    this.$EventBus.$off('show-area-change', this.orgShowAreaChange)
-    this.$EventBus.$off('show-word-change', this.orgShowWordChange)
+    this.$EventBus.$off('org-change', this.areaMap)
+    this.$EventBus.$off('show-area-change', this.gridShowAreaChange)
+    this.$EventBus.$off('show-word-change', this.gridShowWordChange)
     this.$EventBus.$off('show-together-change', this.gridTogetherChange)
   }
 }
