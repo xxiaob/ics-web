@@ -10,11 +10,11 @@ let MarkerCluster //存储 MarkerCluster
 
 let MouseTool = null //存储 MouseTool对象
 
+let userMouseTool //用户鼠标操作
+
 export default {
   data() {
     return {
-      userOrg: null,
-      userMouseTool: null,
       gatherUserIds: [], //正在采集的用户id 数组
       userTipVisible: true, //用户是否显示
       togetherVisible: true //用户是否聚合
@@ -34,22 +34,25 @@ export default {
       if (myJcMap) {
         if (data.isSelect) {
           //如果开始框选，先判断对象是否存在，如果不存在则创建
-          if (!this.userMouseTool) {
+          if (!userMouseTool) {
             MouseTool = MouseTool || await getMouseTool()
-            this.userMouseTool = new MouseTool(myJcMap.map)
-            this.userMouseTool.on('draw', (e) => {
+            userMouseTool = new MouseTool(myJcMap.map)
+            userMouseTool.on('draw', (e) => {
               let rectEl = e.obj
 
               //处理判断在绘图矩形内的用户
               let usedIds = []
 
-              for (let key in usersData.users) {
-                let item = usersData.users[key]
+              if (usersData && usersData.users) {
+                for (let key in usersData.users) {
+                  let item = usersData.users[key]
 
-                if (rectEl.contains(item.center)) {
-                  usedIds.push(item.userId)
+                  if (rectEl.contains(item.center)) {
+                    usedIds.push(item.userId)
+                  }
                 }
               }
+
               rectEl.setMap(null)
               if (usedIds.length) {
                 this.$EventBus.$emit('view-component-change', { component: 'CommandOrg', options: usedIds }) //通知窗口改变
@@ -57,10 +60,10 @@ export default {
               console.log('框选的用户：', usedIds)
             })
           }
-          this.userMouseTool.rectangle({ strokeWeight: 1, strokeColor: '#fc005b', fillOpacity: 0, strokeStyle: 'dashed' })
-        } else if (this.userMouseTool) {
+          userMouseTool.rectangle({ strokeWeight: 1, strokeColor: '#fc005b', fillOpacity: 0, strokeStyle: 'dashed' })
+        } else if (userMouseTool) {
           //如果结束框选，且工具存在则关闭
-          this.userMouseTool.close(true)
+          userMouseTool.close(true)
         }
       } else {
         this.$message.error('地图初始化中，请稍后')
@@ -197,6 +200,7 @@ export default {
   },
   beforeDestroy() {
     this.clearUsers() //清除基础数据
+    userMouseTool = null
     //去除事件监听
     this.$EventBus.$off('map-user-change', this.userMap)
     this.$EventBus.$off('show-word-change', this.orgShowWordChange)
