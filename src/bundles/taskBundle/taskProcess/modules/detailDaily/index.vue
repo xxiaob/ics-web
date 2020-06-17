@@ -76,12 +76,8 @@
     </div>
     <el-dialog :title="taskForm.ifUpload?'流转任务':'添加备注'" :visible.sync="dialogVisibleHandle" :close-on-click-modal="false" width="600px" append-to-body>
       <el-form ref="taskForm" label-width="80px" :model="taskForm" class="jc-manage-form">
-        <el-form-item label="任务人员" prop="orgIds" :rules="rules.SELECT_NOT_NULL" v-if="taskForm.ifUpload" class="jc-mb">
-          <el-cascader :options="orgTree" v-model="taskForm.orgIds" :props="{expandTrigger: 'hover', emitPath: false, multiple: true ,checkStrictly: true}" clearable placeholder="请选择组织(必填)" :show-all-levels="false" @change="changeOrg" class="jc-left-width50"></el-cascader>
-          <el-select v-model="taskForm.userIds" multiple placeholder="请选择人员(选填)" clearable class="jc-left-width50">
-            <el-option v-for="item in users" :key="item.id" :label="item.name" :value="item.id">
-            </el-option>
-          </el-select>
+        <el-form-item label="任务人员" :prop="peopleProps[peopleType]" :rules="rules.SELECT_NOT_NULL" v-if="taskForm.ifUpload" class="jc-mb">
+          <jc-task-people :peopleType.sync="peopleType" :selecteds.sync="peoples" :orgTree="orgTree"></jc-task-people>
         </el-form-item>
         <el-form-item label="备注" prop="remark" :rules="rules.NOT_NULL">
           <el-input v-model="taskForm.remark" placeholder="请输入备注" type="textarea"></el-input>
@@ -96,10 +92,10 @@
 </template>
 <script>
 import { taskFinish, taskAddRemark } from '@/api/task'
-import { userListByOrg } from '@/api/user'
 import { NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
 import { formatDate } from '@/libs/util'
 import moment from 'moment'
+import { TASK_PEOPLE_TYPES } from '@/constant/Dictionaries'
 
 export default {
   name: 'TaskProcessDetailDaily',
@@ -120,10 +116,17 @@ export default {
   },
   components: {
     JcRemarkList: () => import('./remarkList'),
-    JcForwardList: () => import('../detail/forwardList')
+    JcForwardList: () => import('../detail/forwardList'),
+    JcTaskPeople: () => import('../manage/taskPeople')
   },
   data() {
     return {
+      peopleType: TASK_PEOPLE_TYPES.ORG,
+      peoples: [],
+      peopleProps: {
+        [TASK_PEOPLE_TYPES.ORG]: 'orgIds',
+        [TASK_PEOPLE_TYPES.PEOPLE]: 'userIds'
+      },
       loading: false,
       dialogVisibleHandle: false,
       events: [],
@@ -182,38 +185,27 @@ export default {
       }
     }
   },
-  methods: {
-    changeOrg(orgIds) {
-      if (orgIds.length) {
-        this.getUser(orgIds)
-      } else {
-        this.users = []
-      }
-      this.taskForm.userIds = []
-    },
-    async getUser(orgIds) {
-      try {
-        const res = await userListByOrg(orgIds)
-        const users = []
-
-        if (res && res.length) {
-          res.forEach(item=>{
-            users.push({
-              id: item.userId,
-              name: item.userName
-            })
-          })
+  watch: {
+    peoples: {
+      handler(val) {
+        if (this.peopleType === TASK_PEOPLE_TYPES.ORG) {
+          this.taskForm.userIds = []
+          this.taskForm.orgIds = val
+        } else {
+          this.taskForm.userIds = val
+          this.taskForm.orgIds = []
         }
-        this.users = users
-      } catch (error) {
-        console.error(error)
-      }
-    },
+      },
+      deep: true
+    }
+  },
+  methods: {
     handleTask(ifUpload) {
       if (this.$refs.taskForm) {
         this.$refs.taskForm.resetFields()
       }
       this.taskForm.userIds = []
+      this.taskForm.orgIds = []
       this.taskForm.ifUpload = ifUpload
       this.dialogVisibleHandle = true
     },
