@@ -158,8 +158,12 @@ export default {
   },
   methods: {
     userChange(val) {
-      this.peoples = val
-      this.peopleType = TASK_PEOPLE_TYPES.PEOPLE
+      if (this.peopleType === TASK_PEOPLE_TYPES.ORG) {
+        this.peoples = val
+        this.peopleType = TASK_PEOPLE_TYPES.PEOPLE
+      } else {
+        this.peoples = [...new Set([...this.peoples, ...val])]
+      }
     },
     async  formatProjectList() {
       this.EmergencySupport = await this.getProjectList(PROJECT_TYPES.EmergencySupport)
