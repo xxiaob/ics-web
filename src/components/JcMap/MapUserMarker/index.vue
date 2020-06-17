@@ -1,11 +1,11 @@
 <template>
   <div class="jc-map-warp">
     <map-search ref="mapSearch" class="jc-area-search"></map-search>
-    <div class="jc-select-warp" title="是否开启框选">
+    <div class="jc-select-warp" :title="userSelect?'关闭框选':'开启框选'">
       <el-switch v-model="userSelect" @change="userSelectChange"></el-switch>
     </div>
     <div class="jc-marker-map" ref="myMap"></div>
-    <el-radio-group v-model="distence" size="mini" class="jc-distence-warp">
+    <el-radio-group v-model="distence" size="mini" class="jc-distence-warp" @change="getUsers">
       <el-radio-button label="500">500m</el-radio-button>
       <el-radio-button label="2000">2000m</el-radio-button>
       <el-radio-button label="5000">5000m</el-radio-button>
@@ -33,6 +33,7 @@ export default {
       myMarker: null,
       distence: '500',
       userSelect: false,
+      mousetool: null,
       address: { position: '', name: '' }
     }
   },
@@ -53,6 +54,11 @@ export default {
       await this.myJcMap.init(this.$refs.myMap) //等待地图初始化
 
       MouseTool = await getMouseTool()
+
+      this.mousetool = new MouseTool(this.myJcMap.map)
+      this.mousetool.on('draw', (e) => {
+        console.log(e)
+      })
       this.$refs.mapSearch.initData(this.myJcMap) //初始化搜索对象
 
       this.valueChange() //初始化基础数据
@@ -68,16 +74,37 @@ export default {
         })
       })
     },
+    async getUsers() {
+      //获取用户信息
+      let position = this.address.position || (this.value ? this.value.position : '')
+
+      if (!position) {
+        return
+      }
+      try {
+        let center = position.split(',')
+
+        let results = await getUsersByPosition({ distance: this.distence, lat: center[1], lon: center[0] })
+
+        console.log('距离' + this.distence + 'm内的用户：', results)
+      } catch (error) {
+        console.log(error)
+      }
+    },
     valueChange() {
-      this.distence = '500'
       if (this.value && this.value.position && this.value.position != this.address.position && this.value.name != this.address.name) {
         this.showMarker(this.value.position.split(','), name)
         this.myMarker.fitView()
+        this.distence = '500'
+        this.userSelect = false
       }
+      this.getUsers() //去获取用户
     },
     userSelectChange(isSelect) {
       if (isSelect) {
-
+        this.mousetool.rectangle({ strokeWeight: 1, strokeColor: '#fc005b', fillOpacity: 0, strokeStyle: 'dashed' })
+      } else {
+        this.mousetool.close(true)
       }
     },
     showMarker(center, name) {
