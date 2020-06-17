@@ -1,56 +1,63 @@
 <template>
-  <div class="jc-view-content" v-loading="loading" element-loading-background="rgba(0, 0, 0, 0)">
-    <div class="jc-detail-warp">
-      <div class="jc-detail-label">问题ID</div>
-      <div class="jc-detail-content">{{form.id}}</div>
-    </div>
-    <div class="jc-detail-warp">
-      <div class="jc-detail-label">上报人</div>
-      <div class="jc-detail-content">{{form.userName}}</div>
-    </div>
-    <div class="jc-detail-warp">
-      <div class="jc-detail-label">所属组织</div>
-      <div class="jc-detail-content">{{form.orgName}}</div>
-    </div>
-    <div class="jc-detail-warp">
-      <div class="jc-detail-label">问题标题</div>
-      <div class="jc-detail-content">{{form.problemTitle}}</div>
-    </div>
-    <div class="jc-detail-warp">
-      <div class="jc-detail-label">问题描述</div>
-      <div class="jc-detail-content">{{form.problemDesc}}</div>
-    </div>
-    <div class="jc-detail-warp">
-      <div class="jc-detail-label">问题类型</div>
-      <div class="jc-detail-content">{{formatType(form.problemType)}}</div>
-    </div>
-    <div class="jc-detail-warp">
-      <div class="jc-detail-label">附件</div>
-      <div class="jc-detail-content">
-        <el-image v-for="url in imgs" :key="url" :src="url" :preview-src-list="imgs" class="jc-img"></el-image>
-        <div class="jc-video" v-for="url in videos" :key="url" @click="showVideo(url)">
-          <video :src="url"></video>
-          <div class="hover">
-            <img class="jc-video-play" src="@/bundles/taskBundle/assets/play.png" alt="">
+  <div class="jc-question">
+
+    <div class="jc-view-content" v-loading="loading" element-loading-background="rgba(0, 0, 0, 0)">
+      <div class="jc-detail-warp">
+        <div class="jc-detail-label">问题ID</div>
+        <div class="jc-detail-content">{{form.id}}</div>
+      </div>
+      <div class="jc-detail-warp">
+        <div class="jc-detail-label">上报人</div>
+        <div class="jc-detail-content">{{form.userName}}</div>
+      </div>
+      <div class="jc-detail-warp">
+        <div class="jc-detail-label">所属组织</div>
+        <div class="jc-detail-content">{{form.orgName}}</div>
+      </div>
+      <div class="jc-detail-warp">
+        <div class="jc-detail-label">问题标题</div>
+        <div class="jc-detail-content">{{form.problemTitle}}</div>
+      </div>
+      <div class="jc-detail-warp">
+        <div class="jc-detail-label">问题描述</div>
+        <div class="jc-detail-content">{{form.problemDesc}}</div>
+      </div>
+      <div class="jc-detail-warp">
+        <div class="jc-detail-label">问题类型</div>
+        <div class="jc-detail-content">{{formatType(form.problemType)}}</div>
+      </div>
+      <div class="jc-detail-warp">
+        <div class="jc-detail-label">附件</div>
+        <div class="jc-detail-content">
+          <el-image v-for="url in imgs" :key="url" :src="url" :preview-src-list="imgs" class="jc-img"></el-image>
+          <div class="jc-video" v-for="url in videos" :key="url" @click="showVideo(url)">
+            <video :src="url"></video>
+            <div class="hover">
+              <img class="jc-video-play" src="@/bundles/taskBundle/assets/play.png" alt="">
+            </div>
           </div>
-        </div>
-        <div v-for="(url,index) in audios" :key="url" class="jc-audio" @click="playAudio(url,index)">
-          <img class="jc-audio-mike" src="@/bundles/taskBundle/assets/mike.png" alt="">
-          <div class="hover">
-            <img class="jc-video-play" src="@/bundles/taskBundle/assets/play.png" alt="" v-show="audioPlayShows[index]">
-            <img class="jc-video-play" src="@/bundles/taskBundle/assets/pause.png" alt="" v-show="!audioPlayShows[index]">
+          <div v-for="(url,index) in audios" :key="url" class="jc-audio" @click="playAudio(url,index)">
+            <img class="jc-audio-mike" src="@/bundles/taskBundle/assets/mike.png" alt="">
+            <div class="hover">
+              <img class="jc-video-play" src="@/bundles/taskBundle/assets/play.png" alt="" v-show="audioPlayShows[index]">
+              <img class="jc-video-play" src="@/bundles/taskBundle/assets/pause.png" alt="" v-show="!audioPlayShows[index]">
+            </div>
           </div>
+          <audio ref="audio" :src="audioUrl" style="width:0;height:0" @ended="audioEnded"></audio>
         </div>
-        <audio ref="audio" :src="audioUrl" style="width:0;height:0" @ended="audioEnded"></audio>
       </div>
     </div>
-    <div class="jc-detail-warp">
+
+    <div class="jc-footer">
       <el-button @click="toSuperior" :loading="loading" type="primary" size="small">反馈至上级</el-button>
       <el-button @click="generateTask" :loading="loading" type="primary" size="small">生成任务</el-button>
       <el-button @click="closeQuestion" :loading="loading" size="small">关闭问题</el-button>
     </div>
+
     <task-manage :question="question" :visible.sync="TaskManageShow" @save-success="generateTaskSuccess"></task-manage>
+
   </div>
+
 </template>
 <script>
 import { questionReport, questionGet, questionTypeList } from '@/api/question'
@@ -180,5 +187,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.jc-question {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.jc-footer {
+  text-align: center;
+  padding: 10px 0;
+}
 @import "@/bundles/taskBundle/css/media.scss";
 </style>

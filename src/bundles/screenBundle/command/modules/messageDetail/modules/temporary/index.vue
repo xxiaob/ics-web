@@ -18,7 +18,7 @@
     </div>
     <div class="jc-detail-warp">
       <div class="jc-detail-label">任务类型</div>
-      <div class="jc-detail-content">{{form.taskTypeName}}</div>
+      <div class="jc-detail-content">临时任务</div>
     </div>
     <div class="jc-detail-warp">
       <div class="jc-detail-label">任务状态</div>

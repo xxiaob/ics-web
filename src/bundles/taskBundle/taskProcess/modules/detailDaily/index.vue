@@ -129,8 +129,6 @@ export default {
       },
       loading: false,
       dialogVisibleHandle: false,
-      events: [],
-      users: [],
       handle: false,
       rules: {
         SELECT_NOT_NULL,
