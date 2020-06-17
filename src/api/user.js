@@ -114,3 +114,12 @@ export function getOrgUserList(data) {
 export function getOrgUserListByProject(data) {
   return axios.post(API.user.getOrgUserListByProject, data)
 }
+
+/**
+ * 根据距离坐标获取附近的人员
+ * @param {object} data 参数
+ * @returns {Object} axios 对象
+ */
+export function getUsersByPosition(data) {
+  return axios.post(API.user.getUsersByPosition, data)
+}
