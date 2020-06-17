@@ -29,7 +29,7 @@ export default {
   },
   computed: {
     title() {
-      return MESSAGE_TYPE.toString(this.options.type)
+      return MESSAGE_TYPE.toString(this.options.type) + '详情'
     }
   }
 }
