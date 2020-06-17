@@ -49,7 +49,7 @@ export default {
         }
       }
 
-      this.list.splice(0, 0, { id: message.businessKey, type: message.messageType, title: message.titleName, userName: message.userName })
+      this.list.splice(0, 0, { id: message.businessKey, type: message.messageType + '', title: message.titleName, userName: message.userName })
       //处理列表只显示最大数量的事件问题
       if (this.list.length > this.maxLength) {
         this.list.splice(this.maxLength, this.list.length - this.maxLength)
