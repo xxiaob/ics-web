@@ -1,19 +1,18 @@
 <template>
-  <el-dialog class="imLive" title="视频通话" :visible.sync="dialogVisible" width="640px" :close-on-click-modal="false" :append-to-body="true" :close-on-press-escape="false" :show-close="false">
-    <h2 class="title">{{msg}}</h2>
-
-    <div v-if="invitedButton">
-      <el-button type="primary" @click="agree">接受</el-button>
-      <el-button type="danger" @click="refuse">拒绝</el-button>
+  <el-dialog class="imLive" title="视频通话" :visible.sync="dialogVisible" width="840px" :close-on-click-modal="false" :append-to-body="true" :close-on-press-escape="false" :show-close="false">
+    <div class="content" v-show="contentShow">
+      <div id="tolive">
+        <div id="live" v-show="myShow"></div>
+      </div>
     </div>
-    <div class="jc-clearboth">
-      <div id="live"></div>
-    </div>
-    <div class="jc-clearboth">
-      <div id="tolive"></div>
-    </div>
+    <h3 class="title">{{msg}}</h3>
     <div slot="footer" class="dialog-footer">
-      <el-button type="danger" @click="exit">结束</el-button>
+      <span class="invitedButton" v-if="invitedButton">
+        <img class="gif" src="./assets/help.gif" alt="" width="50">
+        <img class="btn" src="./assets/answer.png" alt="" width="50" @click="agree" title="接听">
+        <img class="btn" src="./assets/hangup.png" alt="" width="50" @click="refuse" title="挂断">
+      </span>
+      <img src="./assets/hangup.png" alt="" width="50" @click="exit" v-show="contentShow" title="挂断">
     </div>
   </el-dialog>
 
@@ -39,8 +38,10 @@ export default {
   },
   data() {
     return {
-      msg: '音视频聊天',
+      msg: '音视频通话',
       dialogVisible: false,
+      contentShow: false,
+      myShow: false,
       channelId: '',
       invited: false, //我是邀请方
       //邀请类型
@@ -102,21 +103,20 @@ export default {
         if (isExit) {
           //退出房间消息
           this.exitHandel({ nickName, isExit })
-        } else if (inviteType || agree) {
-          //邀请消息
-          if (this.invited) {
-            this.inviteHandelMsg( agree, nickName)
-          } else {
-            this.$emit('update:visible', true)
-            this.$emit('update:params', null)
+        } else if ( agree) {
+          //邀请消息 我是邀请方
+          this.inviteHandelMsg( agree, nickName)
+        } else if (inviteType) {
+          //我是被邀请方
+          this.$emit('update:visible', true)
+          this.$emit('update:params', null)
 
-            if (inviteType === '0') {
-              let msg = content === 'help' ? '一键求助' : (mediaType === '0' ? '语音' : '视频')
+          if (inviteType === '0') {
+            let msg = content === 'help' ? '一键求助' : (mediaType === '0' ? '语音' : '视频')
 
-              this.msg = nickName + '邀请你' + msg
-            }
-            this.invitedHandelMsg({ channelId, mediaType, inviteType })
+            this.msg = nickName + '邀请你' + msg
           }
+          this.invitedHandelMsg({ channelId, mediaType, inviteType })
         }
       } else {
         console.log('普通消息')
@@ -154,6 +154,7 @@ export default {
       this.im.sendSingleMsg(this.fromUsername, {
         msgType: '1',
         channelId: this.channelId,
+        nickName: this.user.userName,
         agree: '1' // "0":拒绝邀请, "1":接受邀请,
       })
 
@@ -161,6 +162,8 @@ export default {
 
       //加入频道
       if (!this.live.joined) {
+        this.contentShow = true
+        this.myShow = true
         this.live.joinChannel(this.channelId, 'host', video, this.invited)
       }
     },
@@ -174,11 +177,12 @@ export default {
     refuse() {
       this.im.sendSingleMsg(this.fromUsername, {
         msgType: '1',
+        nickName: this.user.userName,
         channelId: this.channelId,
         agree: '0' // "0":拒绝邀请, "1":接受邀请
       })
       this.invitedButton = false
-      this.msg = ''
+      this.leaveChannel()
     },
     //邀请所有用户加入频道
     //强制观摩 '2' , '1' , 'audience'
@@ -196,6 +200,12 @@ export default {
       })
       //加入频道
       if (!this.live.joined) {
+        this.contentShow = true
+        if (role === 'host') {
+          this.myShow = true
+        } else {
+          this.myShow = false
+        }
         this.live.joinChannel(this.channelId, role, video, this.invited)
       }
     },
@@ -218,10 +228,17 @@ export default {
     },
     //离开频道
     async leaveChannel() {
-      await this.live.leaveChannel()
-      this.msg = '视频通话结束'
+      if (this.live.joined) {
+        await this.live.leaveChannel()
+      }
+      this.msg = ''
       this.invited = false
       this.fromUsername = ''
+      this.contentShow = false
+      this.myShow = false
+      this.dialogVisible = false
+      this.$emit('update:visible', false)
+      this.$emit('update:params', null)
     },
     //结束按钮操作
     exit() {
@@ -230,14 +247,18 @@ export default {
         const msg = {
           msgType: '1',
           channelId: this.channelId,
+          nickName: this.user.userName,
           isExit
         }
 
-        this.im.sendSingleMsg(this.invitUserId, msg)
+        if (this.invited) {
+          this.params.users.forEach(item=>{
+            this.im.sendSingleMsg(item, msg)
+          })
+        } else {
+          this.im.sendSingleMsg(this.fromUsername, msg)
+        }
         this.leaveChannel()
-        this.dialogVisible = false
-        this.$emit('update:visible', false)
-        this.$emit('update:params', null)
       }).catch(() => {})
     }
   }
@@ -248,12 +269,55 @@ export default {
 .title {
   text-align: center;
 }
-#live,
-#tolive {
-  width: 300px;
-  height: 200px;
-  float: left;
+.content {
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
 }
+#tolive {
+  display: flex;
+  float: left;
+  box-sizing: border-box;
+  /deep/ div {
+    margin: 5px;
+    // border: 1px solid #cccccc;
+    height: 150px !important;
+    width: 200px !important;
+    float: left;
+  }
+}
+#live {
+  width: 200px;
+  height: 150px;
+  float: left;
+  box-sizing: border-box;
+  /deep/ div {
+    margin: 0 !important;
+  }
+}
+
+.dialog-footer {
+  text-align: center;
+  img {
+    cursor: pointer;
+    margin: 0 20px;
+  }
+  .invitedButton {
+    display: inline-block;
+    .btn {
+      display: none;
+    }
+    &:hover {
+      .btn {
+        display: inline;
+      }
+      .gif {
+        display: none;
+      }
+    }
+  }
+}
+
 .jc-clearboth::before,
 .jc-clearboth::after {
   display: table;

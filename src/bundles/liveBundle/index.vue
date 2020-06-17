@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-button @click="test" type="primary">打开</el-button>
+    <el-button @click="start" type="primary">打开</el-button>
     <im-live :params.sync="params" :visible.sync="visible"></im-live>
   </div>
 </template>
@@ -15,18 +15,14 @@ export default {
   data() {
     return {
       visible: false,
-      params: {
-        users: ['56776731599568896'], //用户列表 id
-        inviteType: '1', //'0': '语音'   '1': '视频'   '2': '强制观摩'   '3': '观摩'
-        channelId: null //可选  采集观摩需要
-      }
+      params: null
     }
   },
   methods: {
-    test() {
+    start() {
       this.params = {
-        users: ['56776731599568896'], //用户列表 id
-        inviteType: '3', //'0': '语音'   '1': '视频'   '2': '强制观摩'   '3': '观摩'
+        users: ['56776731599568896', '56783818509516800', '56783679036325888'], //用户列表 id
+        inviteType: '1', //'0': '语音'   '1': '视频'   '2': '强制观摩'   '3': '观摩'
         channelId: null //可选  采集观摩需要
       }
       this.visible = true
