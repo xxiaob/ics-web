@@ -47,6 +47,7 @@ export default {
           orgData[orgId] = res
         }
 
+        //处理层级切换问题
         if (this.zoomOrgs[orgId]) {
           this.zoomOrgs[orgId].zoom = null
         } else {
