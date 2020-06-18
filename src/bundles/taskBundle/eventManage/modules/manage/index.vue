@@ -13,14 +13,15 @@
       <el-form-item label="事件标题" prop="eventTitle" :rules="rules.Len50">
         <el-input v-model="form.eventTitle" placeholder="请输入事事件标题"></el-input>
       </el-form-item>
-      <el-form-item label="事件描述" prop="desc" :rules="rules.NOT_NULL">
-        <el-input v-model="form.desc" placeholder="请输入事件描述" type="textarea"></el-input>
-      </el-form-item>
       <el-form-item label="事件类型" prop="eventType" :rules="rules.SELECT_NOT_NULL">
         <el-select v-model="form.eventType" filterable placeholder="请选择事件类型">
           <el-option v-for="item in eventTypes" :key="item.id" :label="item.typeName" :value="item.id">
           </el-option>
         </el-select>
+      </el-form-item>
+      <el-form-item label="事件描述" prop="desc" :rules="rules.NOT_NULL">
+        <!-- <el-input v-model="form.desc" placeholder="请输入事件描述" type="textarea"></el-input> -->
+        <jc-editor v-model="form.desc"></jc-editor>
       </el-form-item>
       <el-form-item label="处理前图片" prop="beforePhoto" :rules="[{required: true, message: '请上传文件'}]">
         <upload :show="dialogVisible" :urls.sync="form.beforePhoto" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg"></upload>
@@ -69,7 +70,8 @@ export default {
     }
   },
   components: {
-    upload: () => import('@/components/JcUpload')
+    upload: () => import('@/components/JcUpload'),
+    JcEditor: () => import('@/components/JcForm/JcEditor')
   },
   data() {
     return {
@@ -86,6 +88,7 @@ export default {
     this.remoteMethod('')
   },
   methods: {
+    //获取事件类型
     async remoteMethod(query) {
       this.loading = true
       try {
@@ -105,7 +108,8 @@ export default {
           desc: this.options.desc,
           eventTitle: this.options.eventTitle,
           eventNumber: this.options.eventNumber,
-          eventType: this.options.eventType.toString(),
+          eventType: this.options.eventType,
+          // eventType: this.options.eventType.toString(),
           id: this.options.id,
           orgId: this.options.orgId,
           reportUserName: this.options.reportUserName,
@@ -135,3 +139,11 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.jc-myeditor {
+  height: 200px;
+  /deep/ .w-e-text-container {
+    height: 160px !important;
+  }
+}
+</style>

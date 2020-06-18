@@ -13,14 +13,15 @@
       <el-form-item label="事件标题：">
         <span>{{form.eventTitle}}</span>
       </el-form-item>
-      <el-form-item label="事件描述：">
-        <span>{{form.desc}}</span>
-      </el-form-item>
       <el-form-item label="上报地点：">
         <span>{{form.positionName}}</span>
       </el-form-item>
       <el-form-item label="事件类型：">
         <span>{{form.typeName}}</span>
+      </el-form-item>
+      <el-form-item label="事件描述：">
+        <!-- <span>{{form.desc}}</span> -->
+        <div v-html="form.desc"></div>
       </el-form-item>
       <el-form-item label="处理前图片：">
         <el-image v-for="url in form.beforePhotos" :key="url" :src="url" :preview-src-list="form.beforePhotos" class="jc-img"></el-image>

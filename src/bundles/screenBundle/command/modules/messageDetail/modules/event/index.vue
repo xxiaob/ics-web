@@ -17,16 +17,18 @@
       <div class="jc-detail-content">{{form.eventTitle}}</div>
     </div>
     <div class="jc-detail-warp">
-      <div class="jc-detail-label">事件描述</div>
-      <div class="jc-detail-content">{{form.desc}}</div>
-    </div>
-    <div class="jc-detail-warp">
       <div class="jc-detail-label">上报地点</div>
       <div class="jc-detail-content">{{form.positionName}}</div>
     </div>
     <div class="jc-detail-warp">
       <div class="jc-detail-label">事件类型</div>
       <div class="jc-detail-content">{{form.typeName}}</div>
+    </div>
+    <div class="jc-detail-warp">
+      <div class="jc-detail-label">事件描述</div>
+      <div class="jc-detail-content">
+        <div v-html="form.desc"></div>
+      </div>
     </div>
     <div class="jc-detail-warp">
       <div class="jc-detail-label">处理前图片</div>
