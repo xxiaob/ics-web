@@ -93,7 +93,7 @@ export default {
         mapGridTypes.push(type)
         let gridTypeMap = gridAreas[type]
 
-        gridTypeMap.markerCluster = this.getMarkerCluster(gridTypeMap)
+        gridTypeMap.markerCluster = this.getGridMarkerCluster(gridTypeMap)
         gridTypeMap.markerCluster.on('click', this.markerGridClusterClick)
       }
       this.areaTipVisibles = mapGridTypes
@@ -136,7 +136,7 @@ export default {
         }
       }
     },
-    getMarkerCluster(gridTypeMap) {
+    getGridMarkerCluster(gridTypeMap) {
       return new MarkerCluster(null, gridTypeMap.lnglats, {
         gridSize: 120,
         renderClusterMarker: (context) => {
