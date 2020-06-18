@@ -7,10 +7,12 @@
       <el-form-item label="任务名称" prop="taskName" :rules="rules.Len50" class="jc-left-width50">
         <el-input v-model="form.taskName" placeholder="请输入任务名称"></el-input>
       </el-form-item>
-      <el-form-item label="任务区域" prop="assigneeAreaPOS" :rules="rules.NOT_NULL" class="jc-left-width50">
+      <!-- assigneeAreaPOS -->
+      <el-form-item label="任务区域" prop="" :rules="rules.NOT_NULL" class="jc-left-width50">
         <jc-task-area :areaType.sync="form.workAreaType" :selectedAreas.sync="form.assigneeAreaPOS" :orgTree="orgTree"></jc-task-area>
       </el-form-item>
-      <el-form-item label="任务人员" :prop="peopleProps[peopleType]" :rules="rules.SELECT_NOT_NULL" class="jc-left-width50">
+      <!-- peopleProps[peopleType] -->
+      <el-form-item label="任务人员" prop="" :rules="rules.SELECT_NOT_NULL" class="jc-left-width50">
         <jc-task-people :peopleType.sync="peopleType" :selecteds.sync="peoples" :orgTree="orgTree"></jc-task-people>
       </el-form-item>
       <div label="任务要求" class="jc-left-width50">
@@ -18,7 +20,8 @@
           <el-date-picker v-model="form.date" @change="changeDate" value-format="timestamp" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期">
           </el-date-picker>
         </el-form-item>
-        <el-form-item label="在岗时间" prop="taskTimePOS" :rules="rules.SELECT_NOT_NULL">
+        <!-- taskTimePOS -->
+        <el-form-item label="在岗时间" prop="" :rules="rules.SELECT_NOT_NULL">
           <!-- <el-date-picker style="width: 300px;" v-for="(item,index) in taskTimes" v-model="taskTimes[index]" :key="index" value-format="HH:mm:ss" format="HH:mm:ss" type="datetimerange" range-separator="-" start-placeholder="开始时间" end-placeholder="结束时间">
           </el-date-picker> -->
           <el-time-picker style="width: 300px;" v-for="(item,index) in taskTimes" v-model="taskTimes[index]" :key="index" value-format="HH:mm:ss" is-range arrow-control range-separator="-" start-placeholder="开始时间" end-placeholder="结束时间" placeholder="选择时间范围">

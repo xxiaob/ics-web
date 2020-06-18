@@ -36,7 +36,8 @@
             <map-user-marker v-model="position" @user-change="userChange"></map-user-marker>
           </div>
         </div>
-        <el-form-item label="任务人员" :prop="peopleProps[peopleType]" :rules="rules.SELECT_NOT_NULL" class="jc-left-width50">
+        <!-- peopleProps[peopleType] -->
+        <el-form-item label="任务人员" prop="" :rules="rules.SELECT_NOT_NULL" class="jc-left-width50">
           <jc-task-people :peopleType.sync="peopleType" :selecteds.sync="peoples" :orgTree="orgTree"></jc-task-people>
         </el-form-item>
       </div>
@@ -48,7 +49,7 @@
           <!-- <el-input v-model="form.taskDesc" placeholder="请输入任务描述" type="textarea"></el-input> -->
           <jc-editor v-model="form.taskDesc"></jc-editor>
         </el-form-item>
-        <el-form-item label="附件" prop="uploadFilePaths" :rules="[{required: true, message: '请上传文件'}]" class="jc-left-width50">
+        <el-form-item label="附件" class="jc-left-width50">
           <upload :show="dialogVisible" :urls.sync="form.uploadFilePaths" accept="*"></upload>
         </el-form-item>
       </div>
@@ -287,6 +288,10 @@ export default {
         this.peoples = []
         const beginTime = new Date().getTime()
         const endTime = beginTime + 2 * 60 * 60 * 1000
+
+        // const project = this.projectListArr.filter(item=>item.value == this.projectId)
+        // console.log(project)
+        // const newProjectId = (project[0] && project[0].value) || PROJECT_TYPES.NORMAL
 
         return { ...defaultForm, taskSource: questionTaskSource, projectId: this.projectId, beginTime, endTime, date: [beginTime, endTime] }
       }

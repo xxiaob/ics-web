@@ -45,7 +45,7 @@
       <el-button @click="closeQuestion" :loading="loading" size="small">关闭问题</el-button>
     </div>
 
-    <task-manage :orgTree="orgTree" :user="user" :question="question" :visible.sync="TaskManageShow" @save-success="generateTaskSuccess"></task-manage>
+    <task-manage :projectId="form.projectId=='1'?'0':form.projectId" :orgTree="orgTree" :user="user" :question="question" :visible.sync="TaskManageShow" @save-success="generateTaskSuccess"></task-manage>
 
     <el-dialog title="视频播放" :visible.sync="dialogVideoVisible" width="800px" :close-on-click-modal="false" :append-to-body="true">
       <video v-if="dialogVideoVisible" :src="dialogVideoUrl" autoplay controls width="100%"></video>
