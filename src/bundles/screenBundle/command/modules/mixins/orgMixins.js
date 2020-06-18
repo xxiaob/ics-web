@@ -32,6 +32,12 @@ export default {
       this.org = org
       console.log('指挥层级切换变化', org)
       this.orgChangeMap(this.org.orgId)
+
+      //添加地图缩放监听
+      let myJcMap = this.getMyJcMap() //获取地图对象
+
+      myJcMap.off(MAP_EVENT.ZOOMEND, this.mapZoom)
+      myJcMap.on(MAP_EVENT.ZOOMEND, this.mapZoom)
     },
     async orgChangeMap(orgId) {
       try {
@@ -71,8 +77,6 @@ export default {
 
       myJcMap.removeSign(orgAreas) //清除之前的区域显示
 
-      this.addMapZoomListener(myJcMap) //添加地图缩放监听
-
       let areas = []
 
       if (data && data.length) {
@@ -103,7 +107,7 @@ export default {
       myJcMap.addSign(orgAreas)
       myJcMap.fitView(orgAreas)
       orgAreas.forEach(item => {
-        this.addListener(item) //添加监听
+        this.addMapSignListener(item) //添加监听
       })
 
       //设置定时恢复，避免因为层级没有变动导致滚轮缩放无法恢复
@@ -111,25 +115,29 @@ export default {
         myJcMap.map.setStatus({ scrollWheel: true }) //设置启用滚轮缩放
       }, 3000)
     },
-    addMapZoomListener(myJcMap) {
-      myJcMap.off(MAP_EVENT.ZOOMEND)
-      myJcMap.on(MAP_EVENT.ZOOMEND, () => {
-        let item = this.zoomOrgs[this.nowOrgId]
+    mapZoom() {
+      //地图缩放处理
+      let item = this.zoomOrgs[this.nowOrgId]
 
-        let zoom = myJcMap.map.getZoom()
+      if (!item) {
+        return
+      }
 
-        if (item.zoom) {
-          if (item.zoom > zoom && item.pid) {
-            this.orgChangeMap(item.pid)
-          }
-        } else {
-          item.zoom = zoom
-          myJcMap.map.setStatus({ scrollWheel: true }) //设置启用滚轮缩放
+      let myJcMap = this.getMyJcMap() //获取地图对象
+
+      let zoom = myJcMap.map.getZoom()
+
+      if (item.zoom) {
+        if (item.zoom > zoom && item.pid) {
+          this.orgChangeMap(item.pid)
         }
-        console.log(zoom)
-      })
+      } else {
+        item.zoom = zoom
+        myJcMap.map.setStatus({ scrollWheel: true }) //设置启用滚轮缩放
+      }
+      console.log(zoom)
     },
-    addListener(mapSign) {
+    addMapSignListener(mapSign) {
       //增加鼠标事件
       mapSign.off(MAP_EVENT.MOURSEOVER)
       mapSign.on(MAP_EVENT.MOURSEOVER, () => {

@@ -158,7 +158,7 @@ export default {
     },
     renderUserMarker(context) {
       console.log('绘制用户-单点绘制', context)
-      let key = context.data[0].lnglat.lng + ',' + context.data[0].lnglat.lat
+      let key = parseFloat(context.data[0].lnglat.lng).toFixed(6) + ',' + parseFloat(context.data[0].lnglat.lat).toFixed(6)
 
       let userItem = usersData.users[key]
 
