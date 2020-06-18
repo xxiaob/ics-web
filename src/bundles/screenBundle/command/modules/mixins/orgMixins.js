@@ -15,6 +15,8 @@ export default {
   data() {
     return {
       org: null,
+      zoomOrgs: {},
+      nowOrgId: null,
       orgTipVisible: false, //组织是否显示名称
       orgAreaVisible: true //组织是否显示区域
     }
@@ -25,21 +27,30 @@ export default {
     this.$EventBus.$on('show-word-change', this.orgShowWordChange) //监听文字显示切换
   },
   methods: {
-    async orgMap(org) {
+    orgMap(org) {
       //处理地图
       this.org = org
       console.log('指挥层级切换变化', org)
+      this.orgChangeMap(this.org.orgId)
+    },
+    async orgChangeMap(orgId) {
       try {
-        let res = orgData[this.org.orgId]
+        let res = orgData[orgId]
 
         if (!(res && res.length)) {
           if (PROJECT_TYPES.EmergencySupport == this.project.projectType) {
-            res = await areaList({ orgId: this.org.orgId, orgSearchType: AREAS_TYPE.OWN, searchType: AREAS_SEARCH_TYPE.ORG })
+            res = await areaList({ orgId, orgSearchType: AREAS_TYPE.OWN, searchType: AREAS_SEARCH_TYPE.ORG })
           } else {
-            res = await areaList({ orgId: this.org.orgId, orgSearchType: AREAS_TYPE.OWN_AND_CHILD, searchType: AREAS_SEARCH_TYPE.ORG })
+            res = await areaList({ orgId, orgSearchType: AREAS_TYPE.OWN_AND_CHILD, searchType: AREAS_SEARCH_TYPE.ORG })
           }
 
-          orgData[this.org.orgId] = res
+          orgData[orgId] = res
+        }
+
+        //处理判断，如果是第一层级 或存在子集，则进行层级切换，否则不进行层级切换
+        if (orgId == this.org.orgId || res.length > 1) {
+          this.zoomOrgs[orgId] = { pid: orgId == this.org.orgId ? null : this.nowOrgId, orgId }//设置层级属性
+          this.nowOrgId = orgId
         }
 
         this.drawOrgSign(res)
@@ -54,7 +65,11 @@ export default {
     drawOrgSign(data) {
       let myJcMap = this.getMyJcMap() //获取地图对象
 
+      myJcMap.map.setStatus({ scrollWheel: false }) //设置禁止滚轮缩放
+
       myJcMap.removeSign(orgAreas) //清除之前的区域显示
+
+      this.addMapZoomListener(myJcMap) //添加地图缩放监听
 
       let areas = []
 
@@ -64,7 +79,8 @@ export default {
             //如果相同的组织信息，则通知组织adcode
             this.$EventBus.$emit('org-adcode-change', { areaId: item.areaId, areaCode: item.areaCode, areaTypeName: item.areaTypeName })
           }
-          if (item.orgId != this.org.orgId || data.length == 1) {
+          //如果绘图时子集不存在，则绘图自己的边界
+          if (item.orgId != this.nowOrgId || data.length == 1) {
             let mapSign = new JcMapSign({
               id: item.orgId,
               map: myJcMap,
@@ -76,7 +92,6 @@ export default {
               boundaries: apiBoundariesFormat(item)
             })
 
-            this.addListener(mapSign) //添加监听
             areas.push(mapSign)
           }
         })
@@ -84,15 +99,51 @@ export default {
       orgAreas = areas
 
       myJcMap.addSign(orgAreas)
-      myJcMap.fitView()
+      myJcMap.fitView(orgAreas)
+      orgAreas.forEach(item => {
+        this.addListener(item) //添加监听
+      })
+
+      //设置定时恢复，避免因为层级没有变动导致滚轮缩放无法恢复
+      setTimeout(() => {
+        myJcMap.map.setStatus({ scrollWheel: true }) //设置启用滚轮缩放
+      }, 3000)
+    },
+    addMapZoomListener(myJcMap) {
+      myJcMap.off(MAP_EVENT.ZOOMEND)
+      myJcMap.on(MAP_EVENT.ZOOMEND, () => {
+        let item = this.zoomOrgs[this.nowOrgId]
+
+        let zoom = myJcMap.map.getZoom()
+
+        if (item.zoom) {
+          if (item.zoom > zoom && item.pid) {
+            this.orgChangeMap(item.pid)
+          }
+        } else {
+          item.zoom = zoom
+          myJcMap.map.setStatus({ scrollWheel: true }) //设置启用滚轮缩放
+        }
+        console.log(zoom)
+      })
     },
     addListener(mapSign) {
       //增加鼠标事件
+      mapSign.off(MAP_EVENT.MOURSEOVER)
       mapSign.on(MAP_EVENT.MOURSEOVER, () => {
+        mapSign.map.map.setStatus({ doubleClickZoom: false }) //设置禁止双击缩放
         mapSign.signActive(true)
       })
+      mapSign.off(MAP_EVENT.MOURSEOUT)
       mapSign.on(MAP_EVENT.MOURSEOUT, () => {
+        mapSign.map.map.setStatus({ doubleClickZoom: true }) //设置禁止双击缩放
         mapSign.signActive(false)
+      })
+      mapSign.off(MAP_EVENT.DBCLICK)
+      mapSign.on(MAP_EVENT.DBCLICK, () => {
+        if (mapSign.extData.orgId != this.nowOrgId) {
+          this.orgChangeMap(mapSign.extData.orgId)
+        }
       })
     },
     orgShowAreaChange(areas) {
