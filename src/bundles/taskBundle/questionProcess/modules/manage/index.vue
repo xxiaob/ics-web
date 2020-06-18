@@ -63,20 +63,7 @@ export default {
       }
     }
   },
-  created() {
-    this.remoteMethod('')
-  },
   methods: {
-    async remoteMethod(query) {
-      this.loading = true
-      try {
-        // this.eventTypes = await eventManageTypeList(query)
-        this.loading = false
-      } catch (error) {
-        console.error(error)
-        this.loading = false
-      }
-    },
     formatFormData() {
       if (this.options) {
         const { id, taskId, orgId, userName, problemDesc, problemTitle, problemType, uploadFilePaths } = this.options

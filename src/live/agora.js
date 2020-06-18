@@ -181,7 +181,9 @@ export class Live {
     // 让用户选择自己的角色是主播（"host"）还是观众（"audience"）。
     // 调用 setClientRole 方法，传入用户选择的角色。
     this.rtc.client.setClientRole(role)
-    const { channelKey } = await getAgoraToken({ channelName: channelId, userAccount: this.userId + '_web' })
+
+    const law = video ? '_law_Video' : '_law_Audio'
+    const { channelKey } = await getAgoraToken({ channelName: channelId, userAccount: this.userId + '_web' + law })
 
     console.log(channelKey, channelId)
     this.rtc.client.join(channelKey, channelId, this.userId + '_web', uid => {
