@@ -47,11 +47,12 @@ export default {
           orgData[orgId] = res
         }
 
-        //处理加载最后一层一直是自己的场景
-        if (orgAreas.length != 1 || res.length != 1 || (orgAreas[0].extData.orgId != res[0].orgId)) {
+        if (this.zoomOrgs[orgId]) {
+          this.zoomOrgs[orgId].zoom = null
+        } else {
           this.zoomOrgs[orgId] = { pid: orgId == this.org.orgId ? null : this.nowOrgId, orgId }//设置层级属性
-          this.nowOrgId = orgId
         }
+        this.nowOrgId = orgId
 
         this.drawOrgSign(res)
       } catch (error) {
