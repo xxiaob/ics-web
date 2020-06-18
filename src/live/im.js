@@ -1,5 +1,5 @@
 import '../../static/jimsdk/jmessage-sdk-web.2.6.0.min.js'
-import md5 from 'md5'
+// import md5 from 'md5'
 import JMessage from 'JMessage'
 import { getImAuth } from '@/api/live'
 
@@ -30,17 +30,17 @@ export class IM {
    * @param {String} authToken.signature  签名
   */
   async init() {
-    const secret = 'a5ae26950b615d60056d50ab',
-      appkey = 'e11ba843b514674bfe2fa130',
-      randomStr = 'dsadadwqeq213123edwqeq2131',
-      timestamp = new Date().getTime(),
-      signature = md5(`appkey=${appkey}&timestamp=${timestamp}&random_str=${randomStr}&key=${secret}`)
+    // const secret = 'a5ae26950b615d60056d50ab',
+    //   appkey = 'e11ba843b514674bfe2fa130',
+    //   randomStr = 'dsadadwqeq213123edwqeq2131',
+    //   timestamp = new Date().getTime(),
+    //   signature = md5(`appkey=${appkey}&timestamp=${timestamp}&random_str=${randomStr}&key=${secret}`)
 
     if (this.isInit()) {
       this.console('已经初始化')
     } else {
-      // const authToken = await getImAuth()
-      const authToken = { appkey, random_str: randomStr, timestamp, signature }
+      const authToken = await getImAuth()
+      // const authToken = { appkey, random_str: randomStr, timestamp, signature }
 
       this.JIM.init({ ...authToken }).onSuccess(data => {
         this.console('init success', data)
