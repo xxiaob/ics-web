@@ -53,19 +53,19 @@ let router = new Router(routerOptions)
 import { getUser, getUserMenus } from '@/libs/storage'
 
 let checkMenu = function (name, menus) {
-  let hasMenu = false
+  let menu = null
 
   for (let i = 0; i < menus.length; i++) {
     if (name == menus[i].index) {
-      hasMenu = true
+      menu = menus[i]
     } else {
-      hasMenu = checkMenu(name, menus[i].children || [])
+      menu = checkMenu(name, menus[i].children || [])
     }
-    if (hasMenu) {
+    if (menu) {
       break
     }
   }
-  return hasMenu
+  return menu
 }
 
 /**
@@ -87,8 +87,10 @@ router.beforeEach((to, from, next) => {
     let menus = getUserMenus()
 
     if (user && menus) {
-      if (excludeRouters.indexOf(to.name) > -1 || checkMenu(to.name, menus)) {
-        setTitle(to.meta.title)
+      let menu = checkMenu(to.name, menus)
+
+      if (menu || excludeRouters.indexOf(to.name) > -1) {
+        setTitle(menu ? menu.name : to.meta.title)
         next()
       } else {
         next({ name: 'index' })
