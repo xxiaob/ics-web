@@ -120,7 +120,7 @@ import { taskFinish } from '@/api/task'
 import { eventManageSelectList } from '@/api/eventManage'
 import { NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
 import { formatDate } from '@/libs/util'
-import { TASK_SOURCES, TASK_STATES, TASK_PEOPLE_TYPES } from '@/constant/Dictionaries'
+import { TASK_SOURCES, TASK_STATES, TASK_PEOPLE_TYPES, PROJECT_TYPES } from '@/constant/Dictionaries'
 import MediaMixins from '../../../mixins/MediaMixins'
 
 export default {
@@ -224,7 +224,7 @@ export default {
     formatProject() {
       const project = this.projectListArr.filter(item=>item.value == this.form.projectId)
 
-      return (project[0] && project[0].label) || ''
+      return (project[0] && project[0].label) || PROJECT_TYPES.toString(PROJECT_TYPES.NORMAL)
     }
   },
   filters: {

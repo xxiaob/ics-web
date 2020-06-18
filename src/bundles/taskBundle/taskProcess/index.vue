@@ -37,9 +37,9 @@
 
     <jc-detail :orgTree="orgTree" :projectListArr="projectListArr" :orgObj="orgObj" :info="info" :detailShow.sync="detailShow" v-show="detailShow" @save-success="initData"></jc-detail>
 
-    <jc-manage :orgTree="orgTree" :projectList="projectList" :user="user" :options="info" :visible.sync="visible" @save-success="initData"></jc-manage>
+    <jc-manage :orgTree="orgTree" :projectList="projectList" :projectListArr="projectListArr" :user="user" :options="info" :visible.sync="visible" @save-success="initData"></jc-manage>
 
-    <jc-manage-daily :orgTree="orgTree" :projectList="projectList" :orgObj="orgObj" :orgId="orgId" :options="dailyInfo" :visible.sync="visibleDaily" @save-success="initData"></jc-manage-daily>
+    <jc-manage-daily :orgTree="orgTree" :projectList="projectList" :projectListArr="projectListArr" :orgObj="orgObj" :orgId="orgId" :options="dailyInfo" :visible.sync="visibleDaily" @save-success="initData"></jc-manage-daily>
 
     <jc-detail-daily :orgTree="orgTree" :projectListArr="projectListArr" :orgObj="orgObj" :info="dailyInfo" :dailyDetailShow.sync="dailyDetailShow" v-show="dailyDetailShow" @save-success="initData"></jc-detail-daily>
 
@@ -102,13 +102,14 @@ export default {
     formatProject(row, column, cellValue) {
       const project = this.projectListArr.filter(item=>item.value == cellValue)
 
-      return (project[0] && project[0].label) || ''
+      return (project[0] && project[0].label) || PROJECT_TYPES.toString(PROJECT_TYPES.NORMAL)
     },
     async  formatProjectList() {
       this.EmergencySupport = await this.getProjectList(PROJECT_TYPES.EmergencySupport)
       this.SpecialControl = await this.getProjectList(PROJECT_TYPES.SpecialControl)
 
-      this.projectListArr = [...PROJECT_TYPES.VALUES]
+      // this.projectListArr = [...PROJECT_TYPES.VALUES]
+      this.projectListArr = []
       if (this.EmergencySupport) {
         this.projectListArr = [...this.projectListArr, ...this.EmergencySupport]
       }

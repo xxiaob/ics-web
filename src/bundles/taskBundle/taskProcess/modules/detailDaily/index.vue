@@ -95,7 +95,7 @@ import { taskFinish, taskAddRemark } from '@/api/task'
 import { NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
 import { formatDate } from '@/libs/util'
 import moment from 'moment'
-import { TASK_PEOPLE_TYPES } from '@/constant/Dictionaries'
+import { TASK_PEOPLE_TYPES, PROJECT_TYPES } from '@/constant/Dictionaries'
 
 export default {
   name: 'TaskProcessDetailDaily',
@@ -166,7 +166,7 @@ export default {
     formatProject() {
       const project = this.projectListArr.filter(item=>item.value == this.form.projectId)
 
-      return (project[0] && project[0].label) || ''
+      return (project[0] && project[0].label) || PROJECT_TYPES.toString(PROJECT_TYPES.NORMAL)
     }
   },
   filters: {

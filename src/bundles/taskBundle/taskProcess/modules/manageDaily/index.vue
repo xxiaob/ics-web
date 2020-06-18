@@ -51,7 +51,7 @@ import { taskSave } from '@/api/task'
 // import { userListByOrg } from '@/api/user'
 import { getStringRule, getNumberRule, NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
-import { TASK_TYPES, TASK_AREA_TYPES, TASK_PEOPLE_TYPES } from '@/constant/Dictionaries'
+import { TASK_TYPES, TASK_AREA_TYPES, TASK_PEOPLE_TYPES, PROJECT_TYPES } from '@/constant/Dictionaries'
 
 const defaultForm = {
   workAreaType: TASK_AREA_TYPES.ORG,
@@ -78,6 +78,9 @@ export default {
       type: Object
     },
     projectList: {
+      type: Array
+    },
+    projectListArr: {
       type: Array
     },
     orgTree: {
@@ -151,8 +154,10 @@ export default {
       if (this.options) {
         const { orgIds, assignees, detailViewVO: { businessKey, projectId, taskDesc, taskName, endDate, startDate }, taskTimePOS, workPeopleNbr, workTime, workAreaType, assigneeAreaPOS } = this.options
 
+        const project = this.projectListArr.filter(item=>item.value == projectId)
+        const newProjectId = (project[0] && project[0].value) || PROJECT_TYPES.NORMAL
 
-        const form = { businessKey, projectId, taskName, beginTime: startDate, endTime: endDate, taskDesc, date: [startDate, endDate], taskTimePOS, workPeopleNbr, workTime, workAreaType,
+        const form = { businessKey, projectId: newProjectId, taskName, beginTime: startDate, endTime: endDate, taskDesc, date: [startDate, endDate], taskTimePOS, workPeopleNbr, workTime, workAreaType,
           assigneeAreaPOS: assigneeAreaPOS.map(item=>item.areaId) }
 
         const times = []

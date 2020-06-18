@@ -175,7 +175,7 @@ export default {
     formatProject() {
       const project = this.projectListArr.filter(item=>item.value == this.form.projectId)
 
-      return (project[0] && project[0].label) || ''
+      return (project[0] && project[0].label) || PROJECT_TYPES.toString(PROJECT_TYPES.NORMAL)
     }
   },
   filters: {
@@ -235,7 +235,8 @@ export default {
       this.EmergencySupport = await this.getProjectList(PROJECT_TYPES.EmergencySupport)
       this.SpecialControl = await this.getProjectList(PROJECT_TYPES.SpecialControl)
 
-      this.projectListArr = [...PROJECT_TYPES.VALUES]
+      // this.projectListArr = [...PROJECT_TYPES.VALUES]
+      this.projectListArr = []
       if (this.EmergencySupport) {
         this.projectListArr = [...this.projectListArr, ...this.EmergencySupport]
       }

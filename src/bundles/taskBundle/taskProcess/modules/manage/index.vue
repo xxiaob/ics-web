@@ -94,9 +94,6 @@ export default {
   mixins: [FormMixins],
   props: {
     question: {},
-    // projectList: {
-    //   type: Array
-    // },
     projectId: String
   },
   components: {
@@ -110,6 +107,7 @@ export default {
   },
   data() {
     return {
+      projectListArr: [],
       projectList: [],
       peopleType: TASK_PEOPLE_TYPES.ORG,
       peopleProps: {
@@ -169,7 +167,8 @@ export default {
       this.EmergencySupport = await this.getProjectList(PROJECT_TYPES.EmergencySupport)
       this.SpecialControl = await this.getProjectList(PROJECT_TYPES.SpecialControl)
 
-      this.projectListArr = [...PROJECT_TYPES.VALUES]
+      // this.projectListArr = [...PROJECT_TYPES.VALUES]
+      this.projectListArr = []
       if (this.EmergencySupport) {
         this.projectListArr = [...this.projectListArr, ...this.EmergencySupport]
       }
@@ -248,11 +247,14 @@ export default {
         // console.log(this.options)
         const { taskId, orgIds, assignees, detailViewVO: { businessKey, projectId, taskDesc, taskName, endDate, startDate }, taskDetailVO: { taskPosition, taskPositionName, taskSource, uploadFilePaths } } = this.options
 
+        const project = this.projectListArr.filter(item=>item.value == projectId)
+        const newProjectId = (project[0] && project[0].value) || PROJECT_TYPES.NORMAL
+
         this.position = { position: taskPosition, name: taskPositionName }
         const form = {
           businessKey,
           taskId,
-          projectId,
+          projectId: newProjectId,
           // projectType: projectId,
           taskName,
           taskSource,
