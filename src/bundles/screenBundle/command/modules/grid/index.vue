@@ -8,7 +8,7 @@
             <div class="jc-text-warp" v-text="data.name"></div>
           </div>
           <div class="jc-tree-options" v-on:click.stop>
-            <el-button type="text" size="small" icon="el-icon-map-location"></el-button>
+            <el-button type="text" size="small" icon="el-icon-map-location" @click="goLocation(data)"></el-button>
           </div>
         </div>
       </el-tree>
@@ -134,6 +134,10 @@ export default {
         node.isLeaf = false
       })
       return false
+    },
+    goLocation(data) {
+      //去定位
+      console.log('screen-grid-location-data', data)
     }
   }
 }
