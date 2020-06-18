@@ -23,6 +23,8 @@ import { JcUserIcons } from '@/config/JcIconConfig'
 
 let MouseTool = null //存储 MouseTool对象
 
+let myJcMap = null
+
 let mousetool = null
 
 export default {
@@ -32,7 +34,6 @@ export default {
   components: { MapSearch },
   data() {
     return {
-      myJcMap: null,
       myMarker: null,
       distence: '500',
       userSelect: false,
@@ -41,7 +42,7 @@ export default {
     }
   },
   mounted() {
-    this.myJcMap = new JcMap()
+    myJcMap = new JcMap()
     this.initData()
   },
   watch: {
@@ -54,11 +55,11 @@ export default {
   },
   methods: {
     async initData() {
-      await this.myJcMap.init(this.$refs.myMap) //等待地图初始化
+      await myJcMap.init(this.$refs.myMap) //等待地图初始化
 
       MouseTool = await getMouseTool()
 
-      mousetool = new MouseTool(this.myJcMap.map)
+      mousetool = new MouseTool(myJcMap.map)
       mousetool.on('draw', (e) => {
         console.log('MapUserMarker Draw', e)
         let rectEl = e.obj
@@ -71,18 +72,18 @@ export default {
             usedIds.push(item.userId)
           }
         })
-        rectEl.setMap(null)
+        myJcMap.map.remove(myJcMap.map.getAllOverlays('rectangle'))
         if (usedIds.length) {
           this.$emit('user-change', usedIds)
         }
         console.log('框选的用户：', usedIds)
       })
-      this.$refs.mapSearch.initData(this.myJcMap) //初始化搜索对象
+      this.$refs.mapSearch.initData(myJcMap) //初始化搜索对象
 
       this.valueChange() //初始化基础数据
 
       //添加监听
-      this.myJcMap.on(MAP_EVENT.RIGHTCLICK, (data) => {
+      myJcMap.on(MAP_EVENT.RIGHTCLICK, (data) => {
         console.log('地图点击了', data)
         let center = [data.lnglat.lng, data.lnglat.lat]
 
@@ -90,12 +91,6 @@ export default {
           this.showMarker(center, name)
           this.address = { position: center.join(','), name }
         })
-      })
-      //添加鼠标移出地图
-      this.myJcMap.on(MAP_EVENT.MOURSEOUT, (e) => {
-        console.log('MapUserMarker Draw MOURSEOUT', e)
-        mousetool.close(true)
-        // this.userSelectChange(this.userSelect)
       })
     },
     async getUsers() {
@@ -120,13 +115,13 @@ export default {
           results.forEach(item => {
             let userPosition = item.location
 
-            let marker = new JcMapMarker({ map: this.myJcMap, name: item.userName, icon: JcUserIcons.online, position: userPosition })
+            let marker = new JcMapMarker({ map: myJcMap, name: item.userName, icon: JcUserIcons.online, position: userPosition })
 
             users.push({ userId: item.userId, userName: item.userId, center: userPosition, marker })
           })
         }
         this.users = users
-        this.myJcMap.fitView()
+        myJcMap.fitView()
         console.log('距离' + this.distence + 'm内的用户：', results)
       } catch (error) {
         console.log(error)
@@ -159,13 +154,14 @@ export default {
         this.myMarker.name = name
         this.myMarker.show(center)
       } else {
-        this.myMarker = new JcMapMarker({ map: this.myJcMap, name, icon: '/static/mapIcons/temporarytasks.gif', position: center, mapStyle: markerStyle.TEMPORARY_TASKS })
+        this.myMarker = new JcMapMarker({ map: myJcMap, name, icon: '/static/mapIcons/temporarytasks.gif', position: center, mapStyle: markerStyle.TEMPORARY_TASKS })
       }
     }
   },
   beforeDestroy() {
+    myJcMap = null
     mousetool = null
-    this.myJcMap.destroy()
+    myJcMap.destroy()
   }
 }
 </script>
