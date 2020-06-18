@@ -149,7 +149,11 @@ class JcMapSign extends JcMapSignBase {
     if (this.boundaries && this.boundaries.length) {
       this.boundaries.forEach(item => {
         if (item.target) {
-          item.target.off(EventTrans[event] || event, ...args)
+          if (args && args.length) {
+            item.target.off(EventTrans[event] || event, ...args)
+          } else {
+            item.target.clearEvents(EventTrans[event] || event)
+          }
         }
       })
     }
