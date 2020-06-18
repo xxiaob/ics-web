@@ -56,6 +56,9 @@ export default {
         //处理层级切换问题
         if (this.zoomOrgs[orgId]) {
           this.zoomOrgs[orgId].zoom = null
+          if (orgId == this.org.orgId) {
+            this.zoomOrgs[orgId].pid = null
+          }
         } else {
           this.zoomOrgs[orgId] = { pid: orgId == this.org.orgId ? null : this.nowOrgId, orgId }//设置层级属性
         }
