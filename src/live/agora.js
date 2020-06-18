@@ -182,8 +182,8 @@ export class Live {
     // 调用 setClientRole 方法，传入用户选择的角色。
     this.rtc.client.setClientRole(role)
 
-    const law = video ? '_law_Video' : '_law_Audio'
-    const userAccount = this.userId + '_web' + law
+    const recordingType = video ? '_Video' : '_Audio'
+    const userAccount = this.userId + '_web' + recordingType
     const { channelKey } = await getAgoraToken({ channelName: channelId, userAccount })
 
     this.console('获取token成功', channelKey, channelId)
