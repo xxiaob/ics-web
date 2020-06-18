@@ -131,6 +131,7 @@ export default {
       if (!(this.value && this.value.position)) {
         this.distence = '500'
         this.userSelect = false
+        myJcMap.map.remove(myJcMap.map.getAllOverlays('rectangle'))
         if (this.myMarker) {
           this.myMarker.hide()
         }
@@ -139,6 +140,7 @@ export default {
         this.showMarker(this.value.position.split(','), name)
         this.distence = '500'
         this.userSelect = false
+        myJcMap.map.remove(myJcMap.map.getAllOverlays('rectangle'))
       }
       this.getUsers() //去获取用户
     },
