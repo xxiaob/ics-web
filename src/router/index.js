@@ -36,8 +36,7 @@ let routerOptions = {
       name: 'index',
       component: () => import('@/bundles/indexBundle'),
       meta: {
-        title: '首页',
-        ignore: true
+        title: '首页'
       }
     }, ...systemRouter, ...taskRouter, ...projectRouter, ...attendRouter, ...overseeRouter]
   }, {
@@ -69,7 +68,12 @@ let checkMenu = function (name, menus) {
   return hasMenu
 }
 
-let excludeRouters = [] //排除的不需要过滤的路由
+/**
+ * 排除需要登录，且不需要过滤的路由
+ * 如果不需要登录就可以访问的，请在metia中设置 ignore 为true
+ * meta: { title: '登录', ignore: true }
+ */
+let excludeRouters = ['index', 'commandProjectScreen', 'dataProjectScreen']
 
 //设置router 跳转配置
 router.beforeEach((to, from, next) => {
@@ -80,9 +84,9 @@ router.beforeEach((to, from, next) => {
   } else {
     let user = getUser()
 
-    if (user) {
-      let menus = getUserMenus()
+    let menus = getUserMenus()
 
+    if (user && menus) {
       if (excludeRouters.indexOf(to.name) > -1 || checkMenu(to.name, menus)) {
         setTitle(to.meta.title)
         next()
