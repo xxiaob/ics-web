@@ -111,8 +111,21 @@ export default {
         data.users.forEach(item => {
           let center = [parseFloat(item.lng).toFixed(6), parseFloat(item.lat).toFixed(6)]
 
+          //查找该用户使用已经存在，如果存在则更新，否则进行添加
+          let hasUser = false
+
+          for (let i = 0; i < usersData.lnglats.length; i++) {
+            if (usersData.lnglats[i].userId == item.userId) {
+              hasUser = true
+              delete usersData.users[usersData.lnglats[i].key]
+              usersData.lnglats[i].lnglat = center
+              break
+            }
+          }
           usersData.users[center.join(',')] = { ...item, center }
-          usersData.lnglats.push({ lnglat: center, userId: item.userId })
+          if (!hasUser) {
+            usersData.lnglats.push({ lnglat: center, key: center.join(','), userId: item.userId })
+          }
         })
       }
       if (usersData.markerCluster) {

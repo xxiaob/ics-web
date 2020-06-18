@@ -72,7 +72,11 @@ export default {
       }
       this.loading = false
     },
-    dataChange(orgUsers) {
+    async dataChange(orgUsers) {
+      //如果数据不存在，则进行获取
+      if (this.list.length < 1) {
+        await this.initData()
+      }
       let users = {}
 
       if (orgUsers && orgUsers.length) {

@@ -8,7 +8,7 @@
             <div class="jc-text-warp" v-text="node.label"></div>
           </div>
           <div class="jc-tree-options" v-on:click.stop>
-            <el-button type="text" size="small" icon="el-icon-map-location"></el-button>
+            <el-button type="text" size="small" icon="el-icon-map-location" @click="goLocation(data)"></el-button>
           </div>
         </div>
       </el-tree>
@@ -140,6 +140,10 @@ export default {
         })
       }
       return trees
+    },
+    goLocation(data) {
+      //去定位
+      console.log('screen-org-location-data', data)
     },
     goMeeting() {
       //去进行会议
