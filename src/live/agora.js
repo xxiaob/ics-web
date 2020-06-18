@@ -186,7 +186,7 @@ export class Live {
     const userAccount = this.userId + '_web' + law
     const { channelKey } = await getAgoraToken({ channelName: channelId, userAccount })
 
-    console.log(channelKey, channelId)
+    this.console('获取token成功', channelKey, channelId)
     this.rtc.client.join(channelKey, channelId, userAccount, uid => {
       this.console('joinChannel 成功')
       this.console('this.rtc.client', uid, this.rtc.client)
