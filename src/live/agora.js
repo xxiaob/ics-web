@@ -183,10 +183,11 @@ export class Live {
     this.rtc.client.setClientRole(role)
 
     const law = video ? '_law_Video' : '_law_Audio'
-    const { channelKey } = await getAgoraToken({ channelName: channelId, userAccount: this.userId + '_web' + law })
+    const userAccount = this.userId + '_web' + law
+    const { channelKey } = await getAgoraToken({ channelName: channelId, userAccount })
 
     console.log(channelKey, channelId)
-    this.rtc.client.join(channelKey, channelId, this.userId + '_web', uid => {
+    this.rtc.client.join(channelKey, channelId, userAccount, uid => {
       this.console('joinChannel 成功')
       this.console('this.rtc.client', uid, this.rtc.client)
       this.rtc.params.uid = uid
