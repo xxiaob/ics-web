@@ -2,10 +2,10 @@
   <el-card class="jc-tabfilter-card">
     <el-form ref="form" :inline="true" :model="form" class="jc-tabfilter-form" size="small">
       <el-form-item prop="orgId" label="所属组织">
-        <el-cascader :options="orgTree" v-model="form.orgId" :props="{expandTrigger: 'hover', checkStrictly: true,emitPath: false }" clearable></el-cascader>
+        <el-cascader :options="orgTree" v-model="form.orgId" :props="{expandTrigger: 'hover', checkStrictly: true,emitPath: false }" clearable @change="orgChange" ref="orgCascader"></el-cascader>
       </el-form-item>
       <el-form-item prop="eventType" label="事件类型">
-        <el-select v-model="form.eventType" filterable remote reserve-keyword placeholder="请输入关键词" :remote-method="remoteMethod" :loading="loading">
+        <el-select v-model="form.eventType" filterable placeholder="请选择事件类型">
           <el-option v-for="item in eventTypes" :key="item.id" :label="item.typeName" :value="item.id">
           </el-option>
         </el-select>
@@ -51,6 +51,9 @@ export default {
     this.remoteMethod('')
   },
   methods: {
+    orgChange() {
+      this.$refs.orgCascader.dropDownVisible = false //级联选择器 选择任意一级后隐藏下拉框
+    },
     async remoteMethod(query) {
       this.loading = true
       try {
