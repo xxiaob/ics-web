@@ -13,11 +13,12 @@
       <el-form-item label="问题标题">
         <span>{{form.problemTitle}}</span>
       </el-form-item>
-      <el-form-item label="问题描述">
-        <span>{{form.problemDesc}}</span>
-      </el-form-item>
       <el-form-item label="问题类型">
         <span>{{formatType(form.problemType)}}</span>
+      </el-form-item>
+      <el-form-item label="问题描述">
+        <!-- <span>{{form.problemDesc}}</span> -->
+        <div v-html="form.problemDesc"></div>
       </el-form-item>
       <el-form-item label="附件">
         <el-image v-for="url in imgs" :key="url" :src="url" :preview-src-list="imgs" class="jc-img"></el-image>

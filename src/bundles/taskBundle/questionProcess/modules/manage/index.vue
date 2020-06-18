@@ -4,14 +4,15 @@
       <el-form-item label="问题标题" prop="problemTitle" :rules="rules.Len50">
         <el-input v-model="form.problemTitle" placeholder="请输入问题标题"></el-input>
       </el-form-item>
-      <el-form-item label="问题描述" prop="problemDesc" :rules="rules.NOT_NULL">
-        <el-input v-model="form.problemDesc" placeholder="请输入问题描述" type="textarea"></el-input>
-      </el-form-item>
       <el-form-item label="问题类型" prop="problemType" :rules="rules.SELECT_NOT_NULL">
         <el-select v-model="form.problemType" placeholder="选择问题类型">
           <el-option v-for="item in types" :key="item.id" :label="item.typeName" :value="item.id">
           </el-option>
         </el-select>
+      </el-form-item>
+      <el-form-item label="问题描述" prop="problemDesc" :rules="rules.NOT_NULL">
+        <!-- <el-input v-model="form.problemDesc" placeholder="请输入问题描述" type="textarea"></el-input> -->
+        <jc-editor v-model="form.problemDesc"></jc-editor>
       </el-form-item>
       <el-form-item label="附件" prop="uploadFilePaths" :rules="[{required: true, message: '请上传文件'}]">
         <upload :show="dialogVisible" :urls.sync="form.uploadFilePaths" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg,video/*,audio/*"></upload>
@@ -51,7 +52,8 @@ export default {
     }
   },
   components: {
-    upload: () => import('@/components/JcUpload')
+    upload: () => import('@/components/JcUpload'),
+    JcEditor: () => import('@/components/JcForm/JcEditor')
   },
   data() {
     return {
@@ -103,3 +105,11 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.jc-myeditor {
+  height: 200px;
+  /deep/ .w-e-text-container {
+    height: 160px !important;
+  }
+}
+</style>

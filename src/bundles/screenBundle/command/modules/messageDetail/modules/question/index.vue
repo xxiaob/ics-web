@@ -19,12 +19,14 @@
         <div class="jc-detail-content">{{form.problemTitle}}</div>
       </div>
       <div class="jc-detail-warp">
-        <div class="jc-detail-label">问题描述</div>
-        <div class="jc-detail-content">{{form.problemDesc}}</div>
-      </div>
-      <div class="jc-detail-warp">
         <div class="jc-detail-label">问题类型</div>
         <div class="jc-detail-content">{{formatType(form.problemType)}}</div>
+      </div>
+      <div class="jc-detail-warp">
+        <div class="jc-detail-label">问题描述</div>
+        <div class="jc-detail-content">
+          <div v-html="form.problemDesc"></div>
+        </div>
       </div>
       <div class="jc-detail-warp">
         <div class="jc-detail-label">附件</div>
