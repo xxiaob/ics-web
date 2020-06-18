@@ -65,6 +65,7 @@ export default {
     this.orgPeople = this.formatPeopleTree(res)
     setTimeout(()=>{
       this.filterArr = Object.keys(this.formatTreeToObj(this.orgTree))
+      this.checkedNodes = this.$refs.tree.getCheckedNodes()
     })
   },
   watch: {
