@@ -109,7 +109,7 @@ export default {
       //处理用户信息
       if (data.users && data.users.length) {
         data.users.forEach(item => {
-          let center = [item.lng, item.lat]
+          let center = [parseFloat(item.lng).toFixed(6), parseFloat(item.lat).toFixed(6)]
 
           usersData.users[center.join(',')] = { ...item, center }
           usersData.lnglats.push({ lnglat: center, userId: item.userId })

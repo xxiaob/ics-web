@@ -47,11 +47,13 @@ export default {
           orgData[orgId] = res
         }
 
-        //处理判断，如果是第一层级 或存在子集，则进行层级切换，否则不进行层级切换
-        if (orgId == this.org.orgId || res.length > 1) {
+        //处理层级切换问题
+        if (this.zoomOrgs[orgId]) {
+          this.zoomOrgs[orgId].zoom = null
+        } else {
           this.zoomOrgs[orgId] = { pid: orgId == this.org.orgId ? null : this.nowOrgId, orgId }//设置层级属性
-          this.nowOrgId = orgId
         }
+        this.nowOrgId = orgId
 
         this.drawOrgSign(res)
       } catch (error) {

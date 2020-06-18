@@ -123,7 +123,11 @@ class JcMap extends JcMapBase {
    * @param {*} cb 回调
    */
   off(event, ...args) {
-    this.map.off(EventTrans[event] || event, ...args)
+    if (args && args.length) {
+      this.map.off(EventTrans[event] || event, ...args)
+    } else {
+      this.map.clearEvents(EventTrans[event] || event)
+    }
   }
 
   /**
