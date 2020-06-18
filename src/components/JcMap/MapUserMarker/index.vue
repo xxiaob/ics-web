@@ -23,6 +23,8 @@ import { JcUserIcons } from '@/config/JcIconConfig'
 
 let MouseTool = null //存储 MouseTool对象
 
+let mousetool = null
+
 export default {
   name: 'MapUserMarker',
   model: { prop: 'value', event: 'change' },
@@ -34,7 +36,6 @@ export default {
       myMarker: null,
       distence: '500',
       userSelect: false,
-      mousetool: null,
       users: [],
       address: { position: '', name: '' }
     }
@@ -57,8 +58,9 @@ export default {
 
       MouseTool = await getMouseTool()
 
-      this.mousetool = new MouseTool(this.myJcMap.map)
-      this.mousetool.on('draw', (e) => {
+      mousetool = new MouseTool(this.myJcMap.map)
+      mousetool.on('draw', (e) => {
+        console.log('MapUserMarker Draw', e)
         let rectEl = e.obj
 
         //处理判断在绘图矩形内的用户
@@ -88,6 +90,12 @@ export default {
           this.showMarker(center, name)
           this.address = { position: center.join(','), name }
         })
+      })
+      //添加鼠标移出地图
+      this.myJcMap.on(MAP_EVENT.MOURSEOUT, (e) => {
+        console.log('MapUserMarker Draw MOURSEOUT', e)
+        mousetool.close(true)
+        // this.userSelectChange(this.userSelect)
       })
     },
     async getUsers() {
@@ -141,9 +149,9 @@ export default {
     },
     userSelectChange(isSelect) {
       if (isSelect) {
-        this.mousetool.rectangle({ strokeWeight: 1, strokeColor: '#fc005b', fillOpacity: 0, strokeStyle: 'dashed' })
+        mousetool.rectangle({ strokeWeight: 1, strokeColor: '#fc005b', fillOpacity: 0, strokeStyle: 'dashed' })
       } else {
-        this.mousetool.close(true)
+        mousetool.close(true)
       }
     },
     showMarker(center, name) {
@@ -156,6 +164,7 @@ export default {
     }
   },
   beforeDestroy() {
+    mousetool = null
     this.myJcMap.destroy()
   }
 }

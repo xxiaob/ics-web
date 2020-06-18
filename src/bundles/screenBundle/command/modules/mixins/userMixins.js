@@ -83,9 +83,9 @@ export default {
             break
           }
         }
-        for (let i = 0; i < data.lnglats.length; i++) {
-          if (data.lnglats[i].userId == data.offUserId) {
-            data.lnglats.splice(i, 1)
+        for (let i = 0; i < usersData.lnglats.length; i++) {
+          if (usersData.lnglats[i].userId == data.offUserId) {
+            usersData.lnglats.splice(i, 1)
             break
           }
         }
