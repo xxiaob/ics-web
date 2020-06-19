@@ -293,7 +293,7 @@ export default {
 
         let newProjectId = this.projectId
 
-        if (this.projectId && this.projectListArr.length) {
+        if (this.projectId && this.projectListArr && this.projectListArr.length) {
           const project = this.projectListArr.filter(item=>item.value == this.projectId)
 
           newProjectId = (project[0] && project[0].value) || PROJECT_TYPES.NORMAL
