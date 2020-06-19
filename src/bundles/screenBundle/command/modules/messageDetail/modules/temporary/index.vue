@@ -379,5 +379,9 @@ export default {
   text-align: center;
   padding: 10px 0;
 }
+.el-textarea /deep/ textarea {
+  font-family: "微软雅黑", "Microsoft Yahei", "Helvetica Naue", Helvetica,
+    sans-serif !important;
+}
 @import "@/bundles/taskBundle/css/media.scss";
 </style>
