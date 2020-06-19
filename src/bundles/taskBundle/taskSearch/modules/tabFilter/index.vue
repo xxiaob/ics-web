@@ -5,7 +5,7 @@
         <el-cascader v-model="form.projectId" :options="projectList" :props="{expandTrigger:'hover',emitPath:false}"></el-cascader>
       </el-form-item>
       <el-form-item prop="orgId" label="所属组织">
-        <el-cascader :options="orgTree" v-model="form.orgId" :props="{expandTrigger: 'hover', emitPath: false }" clearable></el-cascader>
+        <el-cascader :options="orgTree" v-model="form.orgId" :props="{expandTrigger: 'hover', emitPath: false,checkStrictly:true }" clearable @change="orgChange" ref="orgCascader"></el-cascader>
       </el-form-item>
       <el-form-item prop="state" label="任务状态">
         <el-select v-model="form.state" placeholder="选择任务状态">
@@ -55,6 +55,9 @@ export default {
     }
   },
   methods: {
+    orgChange() {
+      this.$refs.orgCascader.dropDownVisible = false //级联选择器 选择任意一级后隐藏下拉框
+    },
     changeDate(value) {
       if (value) {
         this.form.startDate = value[0]
