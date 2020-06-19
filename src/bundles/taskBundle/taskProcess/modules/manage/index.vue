@@ -291,11 +291,14 @@ export default {
         const beginTime = new Date().getTime()
         const endTime = beginTime + 2 * 60 * 60 * 1000
 
-        // const project = this.projectListArr.filter(item=>item.value == this.projectId)
-        // console.log(project)
-        // const newProjectId = (project[0] && project[0].value) || PROJECT_TYPES.NORMAL
+        let newProjectId = this.projectId
 
-        return { ...defaultForm, taskSource: questionTaskSource, projectId: this.projectId, beginTime, endTime, date: [beginTime, endTime] }
+        if (this.projectId && this.projectListArr.length) {
+          const project = this.projectListArr.filter(item=>item.value == this.projectId)
+
+          newProjectId = (project[0] && project[0].value) || PROJECT_TYPES.NORMAL
+        }
+        return { ...defaultForm, taskSource: questionTaskSource, projectId: newProjectId, beginTime, endTime, date: [beginTime, endTime] }
       }
     },
     onSubmit(ifStart) {
