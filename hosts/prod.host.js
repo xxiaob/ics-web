@@ -1,3 +1,4 @@
 module.exports = {
-  base: '"http://retail.miniclouds.cn:5012/app-agw/"'
+  base: '"https://api.bg365.top/"',
+  ws: '"wss://api.bg365.top/"'
 }
