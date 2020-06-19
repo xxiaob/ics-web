@@ -94,7 +94,9 @@ export default {
   name: 'TaskProcessManage',
   mixins: [FormMixins],
   props: {
-    question: {},
+    question: {
+      required: false
+    },
     projectId: String
   },
   components: {
@@ -327,7 +329,9 @@ export default {
 
       try {
         await taskSave(form)
-        this.$message.success('操作成功')
+        if (!this.question) {
+          this.$message.success('操作成功')
+        }
         this.dialogVisible = false
         this.$emit('save-success')
         this.loading = false
