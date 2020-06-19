@@ -311,4 +311,8 @@ export default {
   display: table;
   clear: both;
 }
+.el-textarea /deep/ textarea {
+  font-family: "微软雅黑", "Microsoft Yahei", "Helvetica Naue", Helvetica,
+    sans-serif !important;
+}
 </style>
