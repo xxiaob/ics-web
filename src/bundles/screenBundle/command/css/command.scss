@@ -1,0 +1,747 @@
+.jc-screen-warp,
+.jc-screen-space {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+  overflow: hidden;
+  transform: translateZ(0);
+}
+
+/*基础参数定义*/
+$jc-right-content-width: 300px; //右侧内容区域宽度
+$jc-right-message-height: 150px; //右侧底部内容高度
+
+/* 大屏header */
+$jc-screen-height: 40px;
+
+/deep/ .jc-screen-header {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: $jc-screen-height;
+  z-index: 99;
+  background: url(../modules/header/assets/head-title-bg.png) no-repeat center;
+  background-size: 100% 100%;
+
+  .jc-screen-title {
+    position: relative;
+    margin: 0 auto;
+    width: 585px;
+    height: 60px;
+    background: url(../modules/header/assets/head-bg.png) no-repeat center;
+    background-size: 100% 100%;
+    font-size: 28px;
+    color: $jc-color-white;
+    text-align: center;
+    line-height: 54px;
+    letter-spacing: 1px;
+
+    &:after {
+      position: absolute;
+      content: "";
+      left: 20%;
+      right: 20%;
+      height: 3px;
+      bottom: 4px;
+      border-radius: 2px;
+      background-color: $jc-color-white;
+    }
+  }
+
+  .jc-header-left {
+    position: absolute;
+    top: 0;
+    left: $jc-default-dis;
+    height: $jc-screen-height;
+    z-index: 1;
+  }
+
+  .jc-header-right {
+    position: absolute;
+    top: 0;
+    right: $jc-default-dis;
+    height: $jc-screen-height;
+    z-index: 1;
+  }
+
+  .jc-header-item {
+    display: inline-block;
+    color: #ffffff;
+    height: $jc-screen-height;
+    line-height: $jc-screen-height;
+    vertical-align: middle;
+  }
+
+  .jc-weather {
+    cursor: pointer;
+    @extend .jc-header-item;
+    padding-left: 36px;
+    background-repeat: no-repeat;
+    background-position: left center;
+    background-size: 30px 30px;
+
+    .jc-weather-detail {
+      position: absolute;
+      top: $jc-screen-height;
+      padding: $jc-default-dis;
+      width: 180px;
+      height: 168px;
+      background: url(../modules/header/assets/weather-bg.png) no-repeat center
+        bottom;
+      background-size: 100% 160px;
+      left: 0;
+      visibility: hidden;
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: opacity 0.6s, transform 0.6s;
+      will-change: transform, opacity;
+    }
+
+    &:hover {
+      .jc-weather-detail {
+        visibility: visible;
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .jc-w-detail {
+      padding-left: 50px;
+      background-repeat: no-repeat;
+      background-position: left center;
+      background-size: 40px 40px;
+      line-height: 24px;
+      margin-bottom: $jc-default-dis/2;
+      font-size: $jc-font-size-medium;
+    }
+
+    .jc-weather-item {
+      height: 22px;
+      line-height: 22px;
+      font-size: $jc-font-size-small;
+    }
+  }
+
+  .jc-weather-sunny {
+    background-image: url(../modules/header/assets/sunny.png);
+  }
+
+  .jc-weather-snow {
+    background-image: url(../modules/header/assets/snow.png);
+  }
+
+  .jc-weather-overcast {
+    background-image: url(../modules/header/assets/overcast.png);
+  }
+
+  .jc-weather-smog {
+    background-image: url(../modules/header/assets/smog.png);
+  }
+
+  .jc-weather-rain {
+    background-image: url(../modules/header/assets/rain.png);
+  }
+
+  .jc-time {
+    padding: 0 $jc-default-dis/2;
+    @extend .jc-header-item;
+  }
+
+  .jc-grid {
+    cursor: pointer;
+    background: url(../modules/header/assets/grid.png) no-repeat center;
+    background-size: 16px auto;
+    width: $jc-screen-height;
+    opacity: 0.7;
+    @extend .jc-header-item;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  .jc-org {
+    cursor: pointer;
+    background: url(../modules/header/assets/org.png) no-repeat center;
+    background-size: 18px auto;
+    width: $jc-screen-height;
+    opacity: 0.7;
+    @extend .jc-header-item;
+
+    &:hover {
+      opacity: 1;
+    }
+  }
+
+  .jc-org-switch {
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    height: $jc-screen-height;
+    margin-left: $jc-default-dis;
+
+    .jc-org-text {
+      display: table;
+      cursor: pointer;
+      height: $jc-screen-height * 0.6;
+      padding: 0 $jc-default-dis;
+      margin-top: $jc-screen-height * 0.2;
+      border-radius: 4px;
+      border: solid 1px rgba(255, 255, 255, 0.28);
+      color: #ffffff;
+    }
+
+    .jc-org-cascader {
+      position: absolute;
+      top: $jc-screen-height + 5px;
+      right: 0;
+      height: 0;
+      overflow: hidden;
+      background-color: $jc-color-white;
+      transition: height 0.4s;
+      will-change: height;
+    }
+
+    &:hover {
+      .jc-org-cascader {
+        height: 202px;
+      }
+    }
+  }
+}
+
+/* 大屏操作区域 */
+/deep/ .jc-screen-opreate {
+  position: absolute;
+  top: 40%;
+  left: $jc-default-dis;
+  z-index: 6;
+  transform: translateY(-50%);
+
+  .jc-opreate-item {
+    position: relative;
+    width: 36px;
+    height: 36px;
+    background: url(../modules/operate/assets/operate-bg.png) no-repeat center;
+    background-size: 100% 100%;
+    margin-top: $jc-default-dis/2;
+    cursor: pointer;
+
+    &:first-child {
+      margin-top: 0;
+    }
+
+    &:hover,
+    &.jc-active {
+      background-image: url(../modules/operate/assets/operate-on.png);
+    }
+
+    &:hover {
+      .jc-opera-work {
+        transform: translate(0, -50%);
+        opacity: 1;
+        visibility: visible;
+      }
+    }
+  }
+
+  .jc-opreate-icon {
+    position: relative;
+    display: block;
+    width: 100%;
+    height: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: auto 50%;
+  }
+
+  .jc-main {
+    background-image: url("../modules/operate/assets/main.png");
+    @extend .jc-opreate-icon;
+  }
+
+  .jc-select {
+    background-image: url("../modules/operate/assets/select.png");
+    @extend .jc-opreate-icon;
+  }
+
+  .jc-together {
+    background-image: url("../modules/operate/assets/together.png");
+    @extend .jc-opreate-icon;
+  }
+
+  .jc-show-area {
+    background-image: url("../modules/operate/assets/show-area.png");
+    @extend .jc-opreate-icon;
+  }
+
+  .jc-show-word {
+    background-image: url("../modules/operate/assets/show-word.png");
+    @extend .jc-opreate-icon;
+  }
+
+  .jc-temporary-tasks {
+    background-image: url("../modules/operate/assets/temporary-tasks.png");
+    @extend .jc-opreate-icon;
+  }
+
+  .jc-map-switch {
+    background-image: url("../modules/operate/assets/map-switch.png");
+    @extend .jc-opreate-icon;
+  }
+
+  .jc-message {
+    background-image: url("../modules/operate/assets/message.png");
+    @extend .jc-opreate-icon;
+  }
+
+  .jc-talk {
+    background-image: url("../modules/operate/assets/talk.png");
+    @extend .jc-opreate-icon;
+  }
+
+  .jc-num-tip {
+    position: absolute;
+    top: 4px;
+    right: 4px;
+    color: $jc-color-white;
+    background-color: $jc-color-danger;
+    font-size: $jc-font-size-smaller;
+    text-align: center;
+    height: 16px;
+    line-height: 16px;
+    z-index: 2;
+    border-radius: 8px;
+    padding: 0 4px;
+    transform: scale(0.7);
+    transform-origin: 100% 0;
+  }
+
+  /*显示面板区域*/
+  .jc-opera-work {
+    position: absolute;
+    left: 50px;
+    top: 50%;
+    width: 260px;
+    height: auto;
+    padding: $jc-default-dis/2;
+    box-shadow: $jc-box-shadow;
+    background-color: $jc-color-white;
+    transform: translate(20px, -50%);
+    visibility: hidden;
+    opacity: 0;
+    transition: all 0.4s;
+    will-change: transform;
+    &.jc-oprea-flex {
+      display: flex;
+    }
+
+    &:before {
+      position: absolute;
+      content: "";
+      left: -6px;
+      top: 0;
+      bottom: 0;
+      margin: auto 0;
+      width: 0;
+      height: 0;
+      border-width: 6px;
+      border-style: solid;
+      border-color: transparent transparent $jc-color-white $jc-color-white;
+      transform: rotate(45deg);
+      box-shadow: $jc-box-shadow;
+    }
+
+    .jc-work-item {
+      height: 25px;
+      line-height: 25px;
+      width: 49.8%;
+      margin-right: 0;
+
+      .el-checkbox__label {
+        position: absolute;
+        display: block;
+        left: 20px;
+        top: 0;
+        right: 2px;
+        padding-left: 0;
+        height: 25px;
+        line-height: 25px;
+      }
+    }
+
+    .jc-work-content {
+      padding-left: 15px;
+      background: url(/static/areaicons/organization.png) no-repeat left center;
+      background-size: 12px auto;
+      @include jc-text-warp;
+    }
+    .jc-map-switch-item {
+      display: block;
+      flex: 1;
+      height: 50px;
+      margin: 0 $jc-default-dis/2;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: 60px 100%;
+      border-radius: 6px;
+      &.jc-active {
+        border: solid 1px $jc-color-primary;
+      }
+      &.map-base {
+        background-image: url("../modules//operate/assets/map-switch-base.png");
+      }
+      &.map-dark {
+        background-image: url("../modules//operate/assets/map-switch-dark.png");
+      }
+      &.map-satellite {
+        background-image: url("../modules//operate/assets/map-switch-satellite.png");
+      }
+    }
+  }
+}
+
+.jc-view-space {
+  position: absolute;
+  width: 0;
+  top: $jc-screen-height + $jc-default-dis;
+  right: $jc-default-dis;
+  bottom: $jc-default-dis/2;
+}
+
+.jc-view-space {
+  position: absolute;
+  width: 0;
+  top: $jc-screen-height + $jc-default-dis;
+  bottom: $jc-default-dis/2;
+  transition: bottom 0.4s;
+
+  &.jc-message-show {
+    bottom: $jc-right-message-height + $jc-default-dis * 1;
+  }
+}
+
+/* 右侧内容区域 */
+/deep/ .jc-view-warp {
+  position: absolute;
+  width: $jc-right-content-width;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  display: flex;
+  box-orient: vertical;
+  flex-flow: column;
+  z-index: 8;
+  background-color: $jc-color-white;
+  transform: translateX(0);
+  opacity: 1;
+  box-shadow: $jc-box-shadow;
+  will-change: transform, opacity;
+
+  &.jc-view-enter-active,
+  &.jc-view-leave-active {
+    transition: transform 0.5s, opacity 0.5s;
+  }
+
+  &.jc-view-enter,
+  &.jc-view-leave-to {
+    transform: translateX(120%);
+    opacity: 0.4;
+    z-index: 6;
+  }
+
+  $jc-view-header-height: 36px;
+
+  /* 搜索框 样式*/
+  .jc-filter-input {
+    display: block;
+    width: auto;
+    margin: $jc-default-dis/2 $jc-default-dis;
+  }
+
+  .jc-view-header {
+    position: relative;
+    width: 100%;
+    height: $jc-view-header-height;
+    line-height: $jc-view-header-height;
+    padding: 0 $jc-view-header-height 0 $jc-default-dis;
+    @include jc-text-warp();
+    background-color: $jc-color-primary;
+    color: $jc-color-white;
+
+    .iconfont {
+      position: absolute;
+      top: 0;
+      right: 0;
+      text-align: center;
+      color: $jc-color-white;
+      width: $jc-view-header-height;
+      height: $jc-view-header-height;
+      opacity: 0.8;
+      cursor: pointer;
+
+      &:hover {
+        opacity: 1;
+      }
+    }
+  }
+
+  /*中间内容体*/
+  .jc-view-content {
+    position: relative;
+    flex: 1;
+    overflow: auto;
+
+    .el-tree {
+      padding: 0 $jc-default-dis;
+    }
+  }
+
+  /* 树结构 */
+  .custom-tree-node {
+    flex: 1;
+    display: flex;
+
+    .jc-tree-label {
+      flex: 1;
+      width: 0;
+      font-size: $jc-font-size-small;
+      padding-left: 14px;
+      background: url(/static/areaicons/organization.png) no-repeat left center;
+      background-size: 11px auto;
+
+      &.jc-user {
+        background-image: url(../assets/user.png);
+      }
+    }
+
+    .jc-tree-options {
+      width: 50px;
+      padding-top: 2px;
+
+      .el-button {
+        padding: 0;
+        margin-left: 2px;
+        float: right;
+      }
+    }
+  }
+
+  /*用户信息*/
+  .jc-user-warp {
+    position: relative;
+    margin: 0 $jc-default-dis;
+
+    .jc-user-header {
+      position: relative;
+      height: 26px;
+      line-height: 26px;
+      border-top: solid 1px $jc-color-primary;
+      color: $jc-color-text-regular;
+
+      .jc-talk-type {
+        float: right;
+        background-color: $jc-color-primary;
+        opacity: 0.8;
+        cursor: pointer;
+        padding: 0 5px;
+        height: 20px;
+        line-height: 20px;
+        margin-top: 3px;
+        color: $jc-color-white;
+        font-size: $jc-font-size-smaller;
+
+        &:hover,
+        &.jc-active {
+          opacity: 1;
+        }
+      }
+    }
+
+    .jc-user-content {
+      position: relative;
+      height: 120px;
+      overflow: auto;
+      .jc-user-item {
+        position: relative;
+        cursor: pointer;
+        display: inline-block;
+        color: $jc-color-white;
+        width: 68px;
+        padding: 4px $jc-default-dis/2;
+        margin-right: $jc-default-dis/2;
+        font-size: $jc-font-size-smaller;
+        background-color: rgba($color: $jc-color-primary, $alpha: 0.8);
+        @include jc-text-warp;
+        border-radius: 2px;
+        .el-icon-close {
+          position: absolute;
+          top: 2px;
+          right: 2px;
+          transform: rotate(0deg);
+          transition: transform 0.4s;
+          font-size: $jc-font-size-smaller;
+          &:hover {
+            transform: rotate(180deg);
+          }
+        }
+      }
+    }
+    .jc-user-footer {
+      text-align: right;
+      .jc-opera-item {
+        display: inline-block;
+        cursor: pointer;
+        width: 24px;
+        height: 28px;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: 16px auto;
+        &.jc-clear {
+          background-image: url(../modules//org/assets/clear.png);
+        }
+        &.jc-command {
+          background-image: url(../modules//org/assets/command.png);
+        }
+        &.jc-guanmo {
+          background-image: url(../modules//org/assets/guanmo.png);
+        }
+      }
+    }
+  }
+
+  /*事件，任务 详情*/
+  .jc-detail-warp {
+    display: flex;
+    padding: 0 $jc-default-dis/2;
+    .jc-detail-label {
+      width: 80px;
+      padding: $jc-default-dis/2 0;
+      line-height: 20px;
+      color: $jc-color-text-secondary;
+      @include jc-text-warp;
+    }
+    .jc-detail-content {
+      flex: 1;
+      line-height: 20px;
+      padding: $jc-default-dis/2 0;
+      .jc-media-warp {
+        width: 120px;
+        height: 90px;
+        cursor: pointer;
+        video,
+        img {
+          display: block;
+          width: 100%;
+          height: 100%;
+          object-fit: fill;
+        }
+      }
+    }
+  }
+}
+
+/* 右下角消息窗口 */
+/deep/ .jc-screen-message {
+  position: absolute;
+  width: $jc-right-content-width;
+  height: $jc-right-message-height;
+  right: $jc-default-dis;
+  z-index: 8;
+  bottom: $jc-default-dis/2;
+  background-color: $jc-color-white;
+  transform: translateY(0);
+  opacity: 1;
+  box-shadow: $jc-box-shadow;
+  will-change: transform, opacity;
+
+  &.jc-message-enter-active,
+  &.jc-message-leave-active {
+    transition: transform 0.4s, opacity 0.4s;
+  }
+
+  &.jc-message-enter,
+  &.jc-message-leave-to {
+    transform: translateY(120%);
+    opacity: 0.4;
+    z-index: 6;
+  }
+
+  .jc-message-content {
+    position: relative;
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: 100%;
+  }
+
+  .jc-message-item {
+    position: relative;
+    width: 100%;
+    display: flex;
+    height: 28px;
+    line-height: 28px;
+    cursor: pointer;
+    transform: translateX(0);
+    opacity: 1;
+    will-change: transform, opacity;
+    font-size: $jc-font-size-smaller;
+    color: $jc-color-text-secondary;
+
+    &:hover {
+      color: $jc-color-text-regular;
+    }
+  }
+
+  .jc-message-title {
+    width: 0;
+    flex: 1;
+    padding: 0 $jc-default-dis/2 0 24px + $jc-default-dis/2;
+    background-position: $jc-default-dis/2 center;
+    background-repeat: no-repeat;
+    background-size: 20px auto;
+    @include jc-text-warp;
+
+    &.jc-event {
+      background-image: url("../modules/message/assets/event.png");
+    }
+
+    &.jc-question {
+      background-image: url("../modules/message/assets/question.png");
+    }
+
+    &.jc-task {
+      background-image: url("../modules/message/assets/task.png");
+    }
+  }
+
+  .jc-message-user {
+    width: 68px;
+    background: url(../modules/message/assets/peportperson.png) no-repeat left
+      center;
+    background-size: 20px 20px;
+    padding: 0 $jc-default-dis/2 0 24px;
+    @include jc-text-warp;
+  }
+
+  /* ------ 消息列表进出场动画 ------- */
+  .jc-list-enter-active,
+  .jc-list-leave-active {
+    transition: transform 0.6s, opacity 0.6s;
+  }
+
+  .jc-list-enter,
+  .jc-list-leave-to {
+    opacity: 0;
+    transform: translateX(30px);
+  }
+
+  .jc-list-leave-active {
+    position: absolute;
+  }
+
+  .jc-list-move {
+    transition: transform 0.6s;
+  }
+}

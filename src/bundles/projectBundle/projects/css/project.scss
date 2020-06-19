@@ -1,0 +1,261 @@
+.jc-projects-warp {
+  position: relative;
+  width: 100%;
+  height: 100%;
+}
+
+.jc-main-container-warp {
+  z-index: 4;
+}
+
+/deep/ .jc-project-item {
+  position: relative;
+  margin: 0 auto $jc-default-dis auto;
+  width: 90%;
+  padding-top: 75%;
+  background-color: #dee9fc;
+  border-radius: 10px;
+  overflow: hidden;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-position: center;
+
+  &.jc-project-es {
+    background-image: url(../assets/es.png);
+  }
+
+  &.jc-project-sc {
+    background-image: url(../assets/sc.png);
+  }
+
+  .jc-hover-style {
+    cursor: pointer;
+    color: rgba($color: $jc-color-white, $alpha: 0.8);
+
+    &:hover {
+      color: rgba($color: $jc-color-white, $alpha: 1);
+    }
+  }
+
+  .jc-title-warp {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 30px;
+    line-height: 30px;
+    padding-left: $jc-default-dis/2;
+    background-color: rgba($color: $jc-color-black, $alpha: 0.3);
+    display: flex;
+    z-index: 10;
+  }
+
+  .jc-title {
+    flex: 1;
+    width: 0;
+    @extend .jc-hover-style;
+    @include jc-text-warp(1);
+  }
+
+  .jc-setting {
+    display: block;
+    width: 34px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    transform: rotate(0);
+    transition: transform 0.4s;
+    @extend .jc-hover-style;
+
+    &:hover {
+      transform: rotate(360deg);
+    }
+  }
+
+  .jc-project-screen {
+    position: absolute;
+    top: 28%;
+    left: 0;
+    right: 0;
+    padding: 0 $jc-default-dis;
+    height: 34%;
+    display: flex;
+    z-index: 8;
+    overflow: hidden;
+
+    .jc-screen {
+      position: relative;
+      flex: 1;
+      text-decoration: none;
+      @include jc-vhcenter;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: auto 100%;
+      @extend .jc-hover-style;
+      transition: transform 0.3s;
+      will-change: transform;
+
+      &.jc-screen-command {
+        background-image: url(../assets/command-bg.png);
+        transform: translateX(-120%);
+
+        &:hover {
+          background-image: url(../assets/command-on.png);
+        }
+      }
+
+      &.jc-screen-data {
+        background-image: url(../assets/data-bg.png);
+        transform: translateX(120%);
+
+        &:hover {
+          background-image: url(../assets/data-on.png);
+        }
+      }
+    }
+  }
+
+  .jc-project-footer {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10;
+    padding: $jc-default-dis/2 $jc-default-dis/2;
+    background-color: rgba($color: $jc-color-black, $alpha: 0);
+    transition: background-color 0.4s;
+
+    .iconfont {
+      padding-right: 4px;
+      font-size: $jc-font-size-smaller;
+    }
+
+    .jc-project-info {
+      position: relative;
+      background-repeat: no-repeat;
+      background-size: auto 100%;
+      background-position: center right;
+      opacity: 1;
+      transform: scale(1);
+      transition: opacity 0.3s, transform 0.3s;
+      z-index: 3;
+
+      .jc-info-item {
+        height: 20px;
+        line-height: 20px;
+        padding-right: 30px;
+        font-size: $jc-font-size-smaller;
+        @extend .jc-hover-style;
+        @include jc-text-warp();
+      }
+
+      &.jc-not-start {
+        background-image: url(../assets/not-start.png);
+      }
+
+      &.jc-running {
+        background-image: url(../assets/running.png);
+      }
+
+      &.jc-finished {
+        background-image: url(../assets/finished.png);
+      }
+    }
+
+    .jc-project-opera {
+      position: absolute;
+      top: $jc-default-dis/2;
+      left: $jc-default-dis/2;
+      right: $jc-default-dis/2;
+      bottom: $jc-default-dis/2;
+      text-align: center;
+      z-index: 1;
+
+      .jc-opera-item {
+        display: inline-block;
+        width: 38%;
+        font-size: $jc-font-size-smaller;
+        height: 20px;
+        line-height: 20px;
+
+        @extend .jc-hover-style;
+        transform: translateY(60px);
+        will-change: transform;
+      }
+    }
+  }
+
+  &:hover {
+    box-shadow: $jc-box-shadow;
+
+    .jc-project-screen {
+      .jc-screen {
+        transform: translateX(0);
+      }
+    }
+
+    &.jc-project-es,
+    &.jc-project-sc {
+      background-image: url(../assets/item-hover.png);
+    }
+
+    .jc-project-footer {
+      background-color: rgba($color: $jc-color-black, $alpha: 0.2);
+    }
+
+    .jc-project-info {
+      opacity: 0;
+      transform: scale(1.2);
+    }
+
+    .jc-project-opera {
+      z-index: 8;
+
+      .jc-opera-item {
+        transform: translateY(0);
+        transition: transform 0.4s;
+
+        &.first {
+          transition-delay: 0.2s;
+        }
+
+        &.second {
+          transition-delay: 0.35s;
+        }
+
+        &.three {
+          transition-delay: 0.5s;
+        }
+
+        &.four {
+          transition-delay: 0.65s;
+        }
+      }
+    }
+  }
+}
+
+.jc-item-add {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  padding-top: 70px;
+  width: 100px;
+  height: 100px;
+  line-height: 30px;
+  text-align: center;
+  color: $jc-color-primary;
+  font-size: $jc-font-size-medium;
+  letter-spacing: 2px;
+  cursor: pointer;
+  background: url(../assets/add.png) no-repeat top center;
+  background-size: 60px auto;
+  opacity: 0.8;
+
+  &:hover {
+    opacity: 1;
+  }
+}

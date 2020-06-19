@@ -1,0 +1,223 @@
+/**
+ * 用户信息混入
+ */
+import { getMarkerCluster, getMouseTool } from '@/map/aMap/aMapUtil'
+import { JcUserIcons } from '@/config/JcIconConfig'
+
+let usersData = null //存储用户信息
+
+let MarkerCluster //存储 MarkerCluster
+
+let MouseTool = null //存储 MouseTool对象
+
+let userMouseTool //用户鼠标操作
+
+export default {
+  data() {
+    return {
+      gatherUserIds: [], //正在采集的用户id 数组
+      userTipVisible: true, //用户是否显示
+      togetherVisible: true //用户是否聚合
+    }
+  },
+  created() {
+    this.$EventBus.$on('map-user-change', this.userMap) //监听用户改变
+    this.$EventBus.$on('show-word-change', this.userShowWordChange) //监听文字显示切换
+    this.$EventBus.$on('show-together-change', this.userTogetherChange) //监听聚合显示改变
+    this.$EventBus.$on('screen-use-select', this.userSelect) //监听框选用户
+  },
+  methods: {
+    async userSelect(data) {
+      //用户框选
+      let myJcMap = this.getMyJcMap() //获取地图对象
+
+      if (myJcMap) {
+        if (data.isSelect) {
+          //如果开始框选，先判断对象是否存在，如果不存在则创建
+          if (!userMouseTool) {
+            MouseTool = MouseTool || await getMouseTool()
+            userMouseTool = new MouseTool(myJcMap.map)
+            userMouseTool.on('draw', (e) => {
+              let rectEl = e.obj
+
+              //处理判断在绘图矩形内的用户
+              let usedIds = []
+
+              if (usersData && usersData.users) {
+                for (let key in usersData.users) {
+                  let item = usersData.users[key]
+
+                  if (rectEl.contains(item.center)) {
+                    usedIds.push(item.userId)
+                  }
+                }
+              }
+
+              rectEl.setMap(null)
+              if (usedIds.length) {
+                this.$EventBus.$emit('view-component-change', { component: 'CommandOrg', options: usedIds }) //通知窗口改变
+              }
+              console.log('框选的用户：', usedIds)
+            })
+          }
+          userMouseTool.rectangle({ strokeWeight: 1, strokeColor: '#fc005b', fillOpacity: 0, strokeStyle: 'dashed' })
+        } else if (userMouseTool) {
+          //如果结束框选，且工具存在则关闭
+          userMouseTool.close(true)
+        }
+      } else {
+        this.$message.error('地图初始化中，请稍后')
+      }
+    },
+    async userMap(data) {
+      MarkerCluster = await getMarkerCluster() //获取 MarkerCluster 对象
+
+      if (data.type == 1) {
+        //如果是重新初始化，则清除之前的用户显示
+        this.clearUsers()
+      } else if (data.type == 3) {
+        //如果是用户离线，则从用户列表里删除
+        for (let key in usersData.users) {
+          if (usersData.users[key].userId == data.offUserId) {
+            delete usersData.users[key]
+            break
+          }
+        }
+        for (let i = 0; i < usersData.lnglats.length; i++) {
+          if (usersData.lnglats[i].userId == data.offUserId) {
+            usersData.lnglats.splice(i, 1)
+            break
+          }
+        }
+      } else if (data.type == 4) {
+        //是否再一键采集中，如果正在一键采集则显示状态，结束采集则恢复状态
+        let hasUser = false
+
+        for (let i = 0; i < this.gatherUserIds.length; i++) {
+          if (this.gatherUserIds[i] == data.collectUser.userId) {
+            hasUser = true
+            if (data.collectUser.off) {
+              this.gatherUserIds.splice(i, 1)
+            }
+            break
+          }
+        }
+        if (!data.collectUser.off && !hasUser) {
+          this.gatherUserIds.push(data.collectUser.userId)
+        }
+      }
+      //处理用户信息
+      if (data.users && data.users.length) {
+        data.users.forEach(item => {
+          let center = [parseFloat(item.lng).toFixed(6), parseFloat(item.lat).toFixed(6)]
+
+          //查找该用户使用已经存在，如果存在则更新，否则进行添加
+          let hasUser = false
+
+          for (let i = 0; i < usersData.lnglats.length; i++) {
+            if (usersData.lnglats[i].userId == item.userId) {
+              hasUser = true
+              delete usersData.users[usersData.lnglats[i].key]
+              usersData.lnglats[i].lnglat = center
+              break
+            }
+          }
+          usersData.users[center.join(',')] = { ...item, center }
+          if (!hasUser) {
+            usersData.lnglats.push({ lnglat: center, key: center.join(','), userId: item.userId })
+          }
+        })
+      }
+      if (usersData.markerCluster) {
+        //如果已经存在，则去调整数据显示
+        usersData.markerCluster.setData(usersData.lnglats)
+      } else {
+        usersData.markerCluster = new MarkerCluster(null, usersData.lnglats, {
+          userSize: 60,
+          renderClusterMarker: this.renderUserClusterMarker,
+          renderMarker: this.renderUserMarker
+        })
+        usersData.markerCluster.on('click', this.markerUserClusterClick)
+      }
+      this.fitUsers() //控制用户显示
+    },
+    fitUsers() {
+      if (!usersData.markerCluster) {
+        return
+      }
+      let myJcMap = this.getMyJcMap() //获取地图对象
+
+      //处理用户是否显示
+      if (this.userTipVisible) {
+        usersData.markerCluster.setMap(myJcMap.map)
+
+        //处理是否进行聚合
+        if (this.togetherVisible) {
+          usersData.markerCluster.setMaxZoom(18)
+        } else {
+          usersData.markerCluster.setMaxZoom(0)
+        }
+        //处理是否显示标题，以及状态
+        usersData.markerCluster.setGridSize(120)
+      } else {
+        usersData.markerCluster.setMap(null)
+      }
+    },
+    renderUserClusterMarker(context) {
+      console.log('绘制用户-聚合绘制', context)
+      context.marker.setAnchor('center')
+      context.marker.setzIndex(20)
+      context.marker.setContent(`<div class="jc-cluster-content" style="background-image: url(${JcUserIcons.cluster});">${context.count}</div>`)
+    },
+    renderUserMarker(context) {
+      console.log('绘制用户-单点绘制', context)
+      let key = parseFloat(context.data[0].lnglat.lng).toFixed(6) + ',' + parseFloat(context.data[0].lnglat.lat).toFixed(6)
+
+      let userItem = usersData.users[key]
+
+      let content = '<div class="jc-marker-content">'
+
+      if (this.userTipVisible) {
+        content += `<div class="jc-marker-title">${userItem.userName}</div>`
+      }
+      if (this.gatherUserIds.indexOf(userItem.userId) > -1) {
+        content += `<img src=${JcUserIcons.gather} class="jc-marker-icon"/></div>`
+      } else {
+        content += `<img src=${JcUserIcons.online} class="jc-marker-icon"/></div>`
+      }
+
+      context.marker.setzIndex(20)
+      context.marker.setContent(content)
+    },
+    markerUserClusterClick(context) {
+      console.log('绘制用户-点击', context)
+      let myJcMap = this.getMyJcMap() //获取地图对象
+
+      // myJcMap.map.setFitView(context.clusterData)
+    },
+    clearUsers() {
+      //清除所有数据
+      if (usersData && usersData.markerCluster) {
+        usersData.markerCluster.setMap(null)
+      }
+      usersData = { markerCluster: null, users: {}, lnglats: [] }
+    },
+    userShowWordChange(words) {
+      this.userTipVisible = words.indexOf('user') > -1 //如果存在用户显示，则显示用户，否则不显示
+      this.fitUsers()
+    },
+    userTogetherChange(togethers) {
+      this.togetherVisible = togethers.indexOf('user') > -1 //如果存在用户聚合，则聚合用户，否则不显示
+      this.fitUsers()
+    }
+  },
+  beforeDestroy() {
+    this.clearUsers() //清除基础数据
+    userMouseTool = null
+    //去除事件监听
+    this.$EventBus.$off('map-user-change', this.userMap)
+    this.$EventBus.$off('show-word-change', this.orgShowWordChange)
+    this.$EventBus.$off('show-together-change', this.userTogetherChange)
+    this.$EventBus.$off('screen-use-select', this.userSelect)
+  }
+}

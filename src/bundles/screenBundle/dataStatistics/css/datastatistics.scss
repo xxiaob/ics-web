@@ -1,0 +1,160 @@
+.jc-screen-warp,
+.jc-screen-space {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+  overflow: hidden;
+  transform: translateZ(0);
+  font-family: "微软雅黑";
+  color: white;
+}
+
+@mixin jc-row-flex {
+  display: flex;
+  flex-direction: row;
+
+  .jc-row-flex1 {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
+    padding: 5px;
+
+    .jc-column-flex1 {
+      flex: 1;
+      box-sizing: border-box;
+    }
+
+    .jc-column-flex1:first-child {
+      margin-bottom: 10px;
+    }
+
+    .jc-column-flex1:last-child {
+      margin-bottom: 1px;
+    }
+  }
+
+  .jc-row-flex2 {
+    flex: 2;
+    position: relative;
+    box-sizing: border-box;
+    padding: 5px;
+    // margin-right: 1px;
+  }
+}
+
+.jc-screen-warp {
+  background: url(../assets/bg.jpg) no-repeat;
+  background-size: 100% 100%;
+  padding: 0 5px 10px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+
+  .jc-container {
+    flex: auto;
+    display: flex;
+    flex-direction: column;
+
+    .jc-top {
+      flex: 2;
+      @include jc-row-flex;
+    }
+
+    .jc-bottom {
+      flex: 1;
+      @include jc-row-flex;
+    }
+
+    .jc-item-out {
+      width: 100%;
+      height: 100%;
+      box-sizing: border-box;
+      padding: 5px 10px;
+      background: linear-gradient(#1292f6, #1292f6) left top,
+        linear-gradient(#1292f6, #1292f6) left top,
+        linear-gradient(#1292f6, #1292f6) right top,
+        linear-gradient(#1292f6, #1292f6) right top,
+        linear-gradient(#1292f6, #1292f6) left bottom,
+        linear-gradient(#1292f6, #1292f6) left bottom,
+        linear-gradient(#1292f6, #1292f6) right bottom,
+        linear-gradient(#1292f6, #1292f6) right bottom;
+      background-repeat: no-repeat;
+      background-size: 1px 100%, 10% 1px;
+
+      .jc-item {
+        width: 100%;
+        height: 100%;
+        border: 1px solid rgba($color: #1292f6, $alpha: 0.3);
+        background: rgba($color: #011128, $alpha: 0.7);
+        padding: 10px;
+
+        .jc-item-1,
+        .jc-item-2 {
+          width: 50%;
+          height: 100%;
+          float: left;
+          box-sizing: border-box;
+        }
+        .jc-item-1 {
+          padding-right: 2%;
+        }
+        .jc-item-2 {
+          padding-left: 2%;
+        }
+      }
+    }
+  }
+}
+
+//子组件的样式
+/deep/ .jc-item-content {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  .title {
+    color: white;
+    border-left: 2px solid rgb(18, 146, 246);
+    padding-left: 10px;
+    margin: 5px 0 10px;
+    height: 20px;
+    line-height: 20px;
+    font-size: 16px;
+
+    .type {
+      float: right;
+      font-size: 12px;
+      margin-left: 10px;
+      cursor: pointer;
+    }
+
+    .selected {
+      color: #1292f6;
+      font-weight: bold;
+      font-size: 14px;
+    }
+  }
+  .echarts {
+    flex: 1;
+  }
+
+  .dateType {
+    position: absolute;
+    right: 2px;
+    top: 36px;
+    font-size: 12px;
+    z-index: 10;
+    span {
+      margin-left: 5px;
+      cursor: pointer;
+    }
+
+    .selected {
+      color: #1292f6;
+      font-weight: bold;
+      font-size: 14px;
+    }
+  }
+}

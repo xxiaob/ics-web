@@ -1,0 +1,77 @@
+.jc-img,
+.jc-video,
+.jc-audio,
+.jc-other {
+  width: 130px;
+  height: 110px;
+  float: left;
+  border-radius: 5px;
+  margin-right: 10px;
+  margin-bottom: 10px;
+  border: 1px solid $jc-color-primary;
+  cursor: pointer;
+  position: relative;
+
+  video {
+    width: 100%;
+    height: 100%;
+  }
+
+  .jc-audio-mike,
+  .jc-other-down {
+    position: absolute;
+    left: 48px;
+    top: 32px;
+  }
+
+  .hover {
+    display: none;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: rgba($color: #000000, $alpha: 0.2);
+
+    .jc-video-play {
+      position: absolute;
+      left: 42px;
+      top: 32px;
+    }
+  }
+
+  .jc-close {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    display: none;
+  }
+
+  &:hover .hover,
+  &:hover .jc-close {
+    display: block;
+  }
+
+  .el-image {
+    width: 100%;
+    height: 100%;
+    border-radius: 5px;
+
+
+  }
+}
+
+.jc-audio,
+.jc-other {
+  background: $jc-color-primary;
+}
+
+/deep/ .el-image-viewer__close {
+  color: #fff;
+  transform: rotate(0deg);
+  transition: transform 0.4s;
+
+  &:hover {
+    transform: rotate(180deg);
+  }
+}

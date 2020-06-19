@@ -1,0 +1,114 @@
+<template>
+  <el-dialog :title="title" :visible.sync="dialogVisible" width="600px" :append-to-body="true" :close-on-click-modal="false" @close="dialogClose">
+    <div class="text-center">
+      <div class="jc-mb">
+        <el-avatar :srcSet="user.photo ? user.photo : '/static/images/user-header.png'" :size="50">{{user.userName}}</el-avatar>
+      </div>
+      <div class="jc-user-content">
+        <div class="jc-info-item">
+          <label class="jc-info-label">用户名称：</label>
+          <div class="jc-info-content" v-text="user.userName"></div>
+        </div>
+        <div class="jc-info-item">
+          <label class="jc-info-label">登录账号：</label>
+          <div class="jc-info-content" v-text="user.account"></div>
+        </div>
+        <div class="jc-info-item">
+          <label class="jc-info-label">手机号：</label>
+          <div class="jc-info-content" v-text="user.phone"></div>
+        </div>
+        <div class="jc-info-item">
+          <label class="jc-info-label">执法证号：</label>
+          <div class="jc-info-content" v-text="user.lawNbr || '--'"></div>
+        </div>
+        <div class="jc-info-item">
+          <label class="jc-info-label">胸牌号：</label>
+          <div class="jc-info-content" v-text="user.chestNbr || '--'"></div>
+        </div>
+        <div class="jc-info-item">
+          <label class="jc-info-label">职位：</label>
+          <div class="jc-info-content" v-text="user.positionName"></div>
+        </div>
+        <div class="jc-info-item">
+          <label class="jc-info-label">所属组织：</label>
+          <div class="jc-info-content" v-text="user.orgName"></div>
+        </div>
+        <div class="jc-info-item">
+          <label class="jc-info-label">角色：</label>
+          <div class="jc-info-content" v-text="userRoles"></div>
+        </div>
+      </div>
+    </div>
+  </el-dialog>
+</template>
+<script>
+import { userGet } from '@/api/user'
+import FormMixins from '@/mixins/FormMixins'
+
+export default {
+  name: 'SystemUserDetail',
+  mixins: [FormMixins],
+  props: {
+    userId: String,
+    title: {
+      type: String,
+      default: '用户详情'
+    }
+  },
+  data() {
+    return {
+      user: {}
+    }
+  },
+  computed: {
+    userRoles() {
+      if (this.user.roles && this.user.roles.length) {
+        let rolesName = []
+
+        this.user.roles.forEach(item => {
+          rolesName.push(item.roleName)
+        })
+        return rolesName.join('，')
+      }
+      return '--'
+    }
+  },
+  methods: {
+    async initData() {
+      try {
+        this.user = await userGet({ userId: this.userId })
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    formatFormData() {
+      return {}
+    }
+  }
+}
+</script>
+<style lang="scss" scoped>
+$jc-info-item-height: 20px;
+.jc-user-content {
+  display: inline-block;
+  text-align: left;
+}
+.jc-info-item {
+  position: relative;
+  padding-left: 85px;
+  margin-bottom: 10px;
+  .jc-info-label {
+    position: absolute;
+    text-align: right;
+    width: 85px;
+    line-height: $jc-info-item-height;
+    top: 0;
+    left: 0;
+    color: $jc-color-text-secondary;
+  }
+  .jc-info-content {
+    min-height: $jc-info-item-height;
+    line-height: $jc-info-item-height;
+  }
+}
+</style>

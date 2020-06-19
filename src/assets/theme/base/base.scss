@@ -1,0 +1,371 @@
+@import "./font/iconfont.css"; //引入图标库字体
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  outline: 0;
+  -webkit-tap-highlight-color: transparent;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  font-size: $jc-font-size-base;
+  color: $jc-color-text-primary;
+  background-color: $jc-bg-color;
+  font-family: "微软雅黑", "Microsoft Yahei", "Helvetica Naue", Helvetica,
+    sans-serif;
+}
+
+/*重写滚动条样式 for webkit浏览器*/
+/*滚动条整体部分，可以设置宽度啥的*/
+::-webkit-scrollbar {
+  width: 4px;
+  height: 6px;
+}
+
+/*滚动条两端的按钮*/
+::-webkit-scrollbar-button {
+  width: 0px;
+  height: 0px;
+}
+
+/*外层轨道*/
+::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.5);
+  border: solid 1px #121212;
+  box-shadow: 0px 0px 3px #121212 inset;
+  border-radius: 8px;
+}
+
+/*内层滚动槽*/
+::-webkit-scrollbar-track-piece {
+  background-color: #fff;
+}
+
+/*滚动的滑块*/
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.3);
+  border-radius: 8px;
+}
+
+/*滚动的滑块,鼠标放上时*/
+::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.5);
+}
+
+/*禁止选中*/
+.no-select {
+  -webkit-user-select: none;
+  /* Chrome all / Safari all */
+  -moz-user-select: none;
+  /* Firefox all */
+  -ms-user-select: none;
+  /* IE 10+ */
+  -o-user-select: none;
+  user-select: none;
+}
+
+/*修改输入框显示*/
+input::-webkit-input-placeholder {
+  color: $jc-color-text-placeholder;
+  font-size: $jc-font-size-smaller;
+}
+
+//字体样式
+.jc-link {
+  color: $jc-color-primary;
+}
+
+//常用样式和边距
+.jc-pl {
+  padding-left: $jc-default-dis;
+}
+
+.jc-pr {
+  padding-right: $jc-default-dis;
+}
+
+.jc-pt {
+  padding-top: $jc-default-dis;
+}
+
+.jc-pb {
+  padding-bottom: $jc-default-dis;
+}
+
+.jc-pv {
+  padding-top: $jc-default-dis;
+  padding-bottom: $jc-default-dis;
+}
+
+.jc-ph {
+  padding-left: $jc-default-dis;
+  padding-right: $jc-default-dis;
+}
+
+.jc-ml {
+  margin-left: $jc-default-dis;
+}
+
+.jc-mr {
+  margin-right: $jc-default-dis;
+}
+
+.jc-mt {
+  margin-top: $jc-default-dis;
+}
+
+.jc-mb {
+  margin-bottom: $jc-default-dis;
+}
+
+.jc-mv {
+  margin-top: $jc-default-dis;
+  margin-bottom: $jc-default-dis;
+}
+
+.jc-mh {
+  margin-left: $jc-default-dis;
+  margin-right: $jc-default-dis;
+}
+
+/*控制 display*/
+.d-n,
+[v-cloak] {
+  display: none !important;
+}
+
+.d-ib {
+  display: inline-block !important;
+}
+
+.d-b {
+  display: block !important;
+}
+
+//字体控制
+.text-left {
+  text-align: left !important;
+}
+
+.text-center {
+  text-align: center !important;
+}
+
+.text-right {
+  text-align: right !important;
+}
+
+/*清除浮动*/
+.jc-clearfix:after {
+  content: "\20";
+  display: block;
+  height: 0;
+  clear: both;
+}
+
+.jc-clearfix {
+  *zoom: 1;
+}
+
+/*------ 重写弹出 menu样式 ----------*/
+.el-menu--popup {
+  .el-menu-item {
+    height: $jc-menu-height;
+    line-height: $jc-menu-height;
+  }
+}
+
+/*超出隐藏控制*/
+.jc-text-warp {
+  @include jc-text-warp();
+}
+
+/* 默认card 样式*/
+.jc-card {
+  background-color: $jc-color-white;
+  box-shadow: $jc-box-shadow;
+  border-radius: $jc-border-radius-base;
+}
+
+/*--------- 定义顶部filter 样式 --------------*/
+.jc-tabfilter-card {
+  .el-card__body {
+    padding-bottom: 0;
+  }
+
+  .jc-tabfilter-form {
+    .el-form-item {
+      margin-bottom: $jc-default-dis;
+    }
+
+    .el-form-item__content {
+      &>.el-range-editor {
+        width: 350px;
+      }
+
+      &>.el-input,
+      &>.el-cascader,
+      &>.el-select {
+        width: 160px;
+      }
+    }
+  }
+
+  .jc-tabfilter-btns {
+    float: right;
+    margin-right: 0;
+  }
+}
+
+.jc-title-sign {
+  position: relative;
+  text-indent: $jc-default-dis/2;
+
+  &:before {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto 0;
+    content: "";
+    display: block;
+    width: 3px;
+    height: 14px;
+    border-radius: 2px;
+    background-color: $jc-color-primary;
+  }
+}
+
+.jc-card-title {
+  height: 20px;
+  line-height: 20px;
+  font-weight: $jc-font-weight-primary;
+  @extend .jc-title-sign;
+}
+
+/*---------- table样式 --------*/
+.jc-card-header {
+  position: relative;
+}
+
+.jc-button-group {
+  position: absolute;
+  right: 0;
+  top: -6px;
+}
+
+.jc-table-card {
+  .el-card__body {
+    padding-top: 0;
+  }
+}
+
+.jc-table {
+  .el-button+.el-button {
+    margin-left: 0;
+  }
+
+  tr th:first-child,
+  tr td:first-child {
+    .cell {
+      padding: 0 $jc-default-dis/2;
+    }
+  }
+
+  .cell {
+    font-size: $jc-font-size-smaller;
+
+    .el-button {
+      font-size: $jc-font-size-base;
+    }
+  }
+}
+
+.jc-manage-form {
+
+  .el-select,
+  .el-cascader,
+  .el-date-editor {
+    width: 100%;
+  }
+}
+
+/* 修改dialog */
+.el-dialog__header {
+  position: relative;
+  border-bottom: solid 1px $jc-color-line-primary;
+  padding: $jc-default-dis/2 $jc-default-dis;
+
+  .el-dialog__headerbtn {
+    top: 50%;
+    transform: translateY(-50%);
+
+    .el-dialog__close {
+      transform: rotate(0deg);
+      transition: transform 0.4s;
+
+      &:hover {
+        transform: rotate(180deg);
+      }
+    }
+  }
+}
+
+.el-dialog__body {
+  padding: $jc-default-dis;
+}
+
+/* 地图 样式设置 */
+.jc-marker-content {
+  position: relative;
+  padding-top: 20px;
+  width: 18px;
+  height: 54px;
+  text-align: center;
+
+  &.jc-market-center {
+    width: 32px;
+  }
+}
+
+.jc-marker-title {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  color: $jc-marker-color;
+  padding: 0 $jc-default-dis/2;
+  font-size: $jc-font-size-smaller;
+  background-color: $jc-marker-bg;
+  border: solid 1px $jc-marker-color;
+  border-radius: 2px;
+  max-width: 100px;
+  transform: translateX(-50%);
+  text-align: center;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  overflow: hidden;
+  word-wrap: break-word;
+  word-break: break-all;
+}
+
+.jc-marker-icon {
+  width: 100%;
+  object-fit: contain;
+}
+
+.jc-cluster-content {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  line-height: 40px;
+  text-align: center;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  @include jc-text-warp;
+  color: $jc-color-white;
+}
