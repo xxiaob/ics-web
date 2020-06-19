@@ -85,7 +85,7 @@ export default {
         })
       }
       this.orgUsers = users
-      this.formatUserList(this.list)
+      this.list = this.formatUserList(this.list)
     },
     formatUserList(orgs) {
       let list = []
