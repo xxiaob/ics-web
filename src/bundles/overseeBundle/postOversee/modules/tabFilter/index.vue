@@ -2,7 +2,7 @@
   <el-card class="jc-tabfilter-card">
     <el-form ref="form" :inline="true" :model="form" class="jc-tabfilter-form" size="small">
       <el-form-item prop="orgId" label="所属组织" v-if="!self">
-        <el-cascader :options="orgTree" v-model="form.orgId" :props="{expandTrigger: 'hover', emitPath: false,checkStrictly:true }" clearable></el-cascader>
+        <el-cascader :options="orgTree" v-model="form.orgId" :props="{expandTrigger: 'hover', emitPath: false,checkStrictly:true }" clearable @change="orgChange" ref="orgCascader"></el-cascader>
       </el-form-item>
       <el-form-item prop="areaTypeId" label="岗点类型">
         <el-select v-model="form.areaTypeId" placeholder="请选择岗点类型">
@@ -62,6 +62,9 @@ export default {
     this.getAreaTypeList()
   },
   methods: {
+    orgChange() {
+      this.$refs.orgCascader.dropDownVisible = false //级联选择器 选择任意一级后隐藏下拉框
+    },
     async getAreaTypeList() {
       this.areaTypes = await areaTypeList({})
     },

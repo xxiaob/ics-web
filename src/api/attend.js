@@ -15,6 +15,14 @@ export function myAttendList(data) {
   return axios.post(API.attend.myAttendList, data)
 }
 /**
+ * 到岗查询列表
+ * @param {object} data
+ * @returns {Object} axios 对象
+ */
+export function inPostList(data) {
+  return axios.post(API.attend.inPostList, data)
+}
+/**
  * 人员考勤列表
  * @param {object} data
  * @returns {Object} axios 对象
@@ -97,4 +105,11 @@ export function exportUserOversee(data) {
  */
 export function exportPostOversee(data) {
   window.open(process.env.API_HOST.base + API.attend.exportPostOversee + '?' + qs.stringify(data))
+}
+/**
+ * 到岗查询导出
+ * @param {object} data
+ */
+export function exportInPostAttend(data) {
+  window.open(process.env.API_HOST.base + API.attend.exportInPostAttend + '?' + qs.stringify(data))
 }

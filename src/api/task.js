@@ -14,6 +14,14 @@ export function taskList(data) {
   return axios.post(API.task.list, data)
 }
 /**
+ * 岗点列表
+ * @param {object} data
+ * @returns {Object} axios 对象
+ */
+export function postArea(data) {
+  return axios.post(API.task.postArea, data)
+}
+/**
  * 添加
  * @param {object} data
  * @returns {Object} axios 对象

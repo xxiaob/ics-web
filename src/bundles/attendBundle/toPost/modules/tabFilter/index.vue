@@ -1,15 +1,16 @@
 <template>
   <el-card class="jc-tabfilter-card">
     <el-form ref="form" :inline="true" :model="form" class="jc-tabfilter-form" size="small">
+      <el-form-item prop="" label="时间">
+        <el-date-picker v-model="date" @change="changeDate" value-format="yyyy-MM-dd" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期">
+        </el-date-picker>
+      </el-form-item>
       <el-form-item prop="orgId" label="所属组织">
         <el-cascader :options="orgTree" v-model="form.orgId" :props="{expandTrigger: 'hover', emitPath: false,checkStrictly:true }" clearable @change="orgChange" ref="orgCascader"></el-cascader>
       </el-form-item>
-      <el-form-item prop="name" label="姓名">
-        <el-input v-model="form.name" placeholder="请输入姓名"></el-input>
-      </el-form-item>
-      <el-form-item prop="superviseType" label="督查结果">
-        <el-select v-model="form.superviseType" placeholder="请选择督查结果">
-          <el-option v-for="item in superviseTypes" :key="item.value" :label="item.label" :value="item.value"></el-option>
+      <el-form-item prop="postAreaId" label="岗点名称">
+        <el-select v-model="form.postAreaId" placeholder="请选择岗点名称">
+          <el-option v-for="item in postAreas" :key="item.areaId" :label="item.areaName" :value="item.areaId"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item class="jc-tabfilter-btns">
@@ -21,11 +22,12 @@
   </el-card>
 </template>
 <script>
-import { ATTEND_OVERSEE_STATUSES } from '@/constant/Dictionaries'
-import { exportUserOversee } from '@/api/attend'
+import { exportInPostAttend } from '@/api/attend'
+import { postArea } from '@/api/task'
+// import moment from 'moment'
 
 export default {
-  name: 'PeopleOverseeFilter',
+  name: 'ToPostIndexFilter',
   props: {
     userId: String,
     orgTree: {
@@ -35,20 +37,41 @@ export default {
   },
   data() {
     return {
-      superviseTypes: ATTEND_OVERSEE_STATUSES.VALUES,
+      postAreas: [],
       form: {
-        name: '',
+        userId: this.userId,
+        startTime: '',
+        endTime: '',
         orgId: '',
-        superviseType: ''
-      }
+        postAreaId: ''
+      },
+      date: null
     }
   },
   methods: {
-    orgChange() {
+    async orgChange(orgId) {
       this.$refs.orgCascader.dropDownVisible = false //级联选择器 选择任意一级后隐藏下拉框
+
+      if (orgId) {
+        this.postAreas = await postArea({ orgId })
+      } else {
+        this.postAreas = []
+      }
+    },
+    changeDate(value) {
+      if (value) {
+        this.form.startTime = value[0]
+        this.form.endTime = value[1]
+      } else {
+        this.form.startTime = ''
+        this.form.endTime = ''
+      }
     },
     reset() {
       this.$refs.form.resetFields()
+      this.form.startTime = ''
+      this.form.endTime = ''
+      this.date = null
     },
     onSubmit() {
       const form = {}
@@ -62,7 +85,7 @@ export default {
     },
     exportData() {
       console.log('exportData')
-      exportUserOversee({ userId: this.userId, ...this.form })
+      exportInPostAttend(this.form)
     }
   }
 }

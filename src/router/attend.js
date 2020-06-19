@@ -20,4 +20,11 @@ export default [{
   meta: {
     title: '考勤管理-岗点考勤'
   }
+}, {
+  path: 'attend/toPost',
+  name: 'toPost',
+  component: () => import('@/bundles/attendBundle/toPost'),
+  meta: {
+    title: '考勤管理-到岗查询'
+  }
 }]

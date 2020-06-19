@@ -114,7 +114,8 @@ export default {
     getDaily: 'task-service/task/getDailyTask',
     addRemark: 'task-service/task/addTaskRemark',
     listRemark: 'task-service/task/remarkSelect',
-    listRecord: 'task-service/task/getTaskRecord'
+    listRecord: 'task-service/task/getTaskRecord',
+    postArea: 'task-service/task/getTaskPostArea'
   },
   question: {
     //问题管理
@@ -159,11 +160,13 @@ export default {
     myAttendList: 'task-service/taskAttendance/getPersonal',
     userAttendList: 'task-service/taskAttendance/getUser',
     postAttendList: 'task-service/taskAttendance/getPost',
+    inPostList: 'task-service/taskAttendance/getInPost',
     userOverseeList: 'task-service/taskSupervise/getUser',
     postOverseeList: 'task-service/taskSupervise/getPost',
     exportMyAttend: 'task-service/taskDataExport/getPersonalAttendance',
     exportPeopleAttend: 'task-service/taskDataExport/getUserAttendance',
     exportPostAttend: 'task-service/taskDataExport/getPostAttendance',
+    exportInPostAttend: 'task-service/taskDataExport/getInPostSupervise',
     exportUserOversee: 'task-service/taskDataExport/getUserSupervise',
     exportPostOversee: 'task-service/taskDataExport/getPostSupervise',
     addUserOversee: 'task-service/taskSupervise/addUserSupervise',
