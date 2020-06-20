@@ -59,6 +59,7 @@ export default {
     }
   },
   created() {
+    console.log('screen-command-header-created')
     this.timeInterval = setInterval(this.setTime, 1000)
     this.$EventBus.$on('org-adcode-change', this.setWeather) //监听需要切换天气
     this.$EventBus.$on('command-init-success', this.initSuccess) //监听基础数据初始化完成
@@ -86,6 +87,7 @@ export default {
       return false
     },
     initSuccess(data) {
+      console.log('header-command-init-success', data)
       this.project = data
       //初始化组织,如果是应急，则直接设置，否则去获取组织结构
       if (PROJECT_TYPES.EmergencySupport == this.project.projectType) {
