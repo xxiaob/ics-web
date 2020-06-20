@@ -188,7 +188,9 @@ export default {
     },
     form: {
       handler(newValue) {
-        this.handleUrls(newValue.taskDetailVO.uploadFilePaths)
+        if (newValue.taskDetailVO && newValue.taskDetailVO.uploadFilePaths) {
+          this.handleUrls(newValue.taskDetailVO.uploadFilePaths)
+        }
       },
       deep: true
     }
