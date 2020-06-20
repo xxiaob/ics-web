@@ -363,7 +363,8 @@ class JcMapEditor extends JcMapEditorBase {
       })
     }
     if (this.marker) {
-      this.marker.hide()
+      this.marker.setMap(null)
+      this.marker = null
     }
     this.map.map.setDefaultCursor('default')
     this.map.map.setStatus({ doubleClickZoom: true }) //恢复地图双击缩放

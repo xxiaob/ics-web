@@ -170,7 +170,9 @@ export default {
       console.log('绘制网格-点击', context)
       let myJcMap = this.getMyJcMap() //获取地图对象
 
-      // myJcMap.map.setFitView(context.marker)
+      window.myContext = context
+      window.myJcMap = myJcMap
+      // myJcMap.map.setFitView(context.cluster)
     },
     clearGrids() {
       //清除所有数据

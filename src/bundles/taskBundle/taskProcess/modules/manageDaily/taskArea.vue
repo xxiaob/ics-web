@@ -11,7 +11,7 @@
       <el-input placeholder="输入关键字进行过滤" v-model="filterText" size="small"></el-input>
       <el-button type="" @click="setCheckedKeys" size="mini">全选</el-button>
       <el-button type="" @click="resetChecked" size="mini">清空</el-button>
-      <el-tree ref="tree" :data="tree" show-checkbox node-key="id" :check-strictly="true" :filter-node-method="filterNode" default-expand-all @check="check" :default-checked-keys="selectedAreas"></el-tree>
+      <el-tree ref="tree" :data="tree" show-checkbox node-key="id" :check-strictly="true" :filter-node-method="filterNode" @check="check" :default-expanded-keys="tree.map(item=>item.id)" :default-checked-keys="selectedAreas"></el-tree>
     </div>
     <div class="jc-left-width40 jc-selected-box">
       <div>已选区域</div>

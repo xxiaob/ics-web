@@ -38,6 +38,7 @@ import TemporaryTasksMixins from './modules/mixins/temporaryTasksMixins' //临�
 import ScreenMapSocketMixins from './modules/mixins/screenMapSocketMixins' //大屏socket 连接
 import GridMixins from './modules/mixins/gridMixins' //网格处理
 import UserMixins from './modules/mixins/userMixins.js' //用户处理
+import CommandHeader from './modules/header'//顶部
 
 let myJcMap //个人 map 对象
 
@@ -45,7 +46,7 @@ export default {
   name: 'ScreenCommand',
   mixins: [OrgMixins, GridMixins, UserMixins, TemporaryTasksMixins, ScreenMapSocketMixins],
   components: {
-    CommandHeader: () => import('./modules/header'), //顶部
+    CommandHeader,
     CommandOperate: () => import('./modules/operate'), //功能操作区域
     MapSearch: () => import('@/components/JcMap/MapSearch'), //地图搜索
     DataOverview: () => import('./modules/dataOverview'), //左下角的数据预览
@@ -76,11 +77,6 @@ export default {
     async initData() {
       await myJcMap.init(this.$refs.myMap) //等待地图初始化
 
-      this.messageComponent = 'CommandMessage'
-      this.$nextTick(() => {
-        this.$refs.mapSearch.initData(myJcMap) //初始化搜索对象
-      })
-
       if (this.$route.params.projectId) {
         //处理项目，如果项目id存在则获取项目详情
         let { projectId, projectName, orgId, projectType } = await projectGet(this.$route.params.projectId)
@@ -93,6 +89,12 @@ export default {
       this.$EventBus.$on('message-component-change', this.messageComponentChange) //消息 内容窗口改变
       this.$EventBus.$on('map-switch-change', this.mapSwitchChange) //地图背景切换
 
+      this.messageComponent = 'CommandMessage'
+      this.$nextTick(() => {
+        this.$refs.mapSearch.initData(myJcMap) //初始化搜索对象
+      })
+
+      console.log('emit-command-init-success')
       this.$EventBus.$emit('command-init-success', this.project) //通知基础数据初始化完成
     },
     getMyJcMap() {
