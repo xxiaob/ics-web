@@ -81,3 +81,12 @@ export function getUsableAdCodeList() {
 export function areaGridList() {
   return axios.post(API.area.gridList)
 }
+
+/**
+ * 根据组织获取绑定区域的areacode,返回的至少是区级areaCode
+ * @param {String} orgId
+ * @returns {Object} axios 对象
+ */
+export function getAreaCodeByOrgId(orgId) {
+  return axios.post(API.area.getAreaCodeByOrgId, { orgId })
+}

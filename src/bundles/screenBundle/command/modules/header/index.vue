@@ -31,6 +31,7 @@ import JcWeather from '@/components/JcWeather'
 import { organizationList } from '@/api/organization'
 import { PROJECT_TYPES } from '@/constant/Dictionaries'
 import { JC_WEATHER } from '@/constant/Dictionaries'
+import { getAreaCodeByOrgId } from '@/api/area'
 
 let weeks = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'] //星期数据
 
@@ -61,7 +62,7 @@ export default {
   created() {
     console.log('screen-command-header-created')
     this.timeInterval = setInterval(this.setTime, 1000)
-    this.$EventBus.$on('org-adcode-change', this.setWeather) //监听需要切换天气
+    this.$EventBus.$on('org-change', this.setWeather) //监听需要切换天气
     this.$EventBus.$on('command-init-success', this.initSuccess) //监听基础数据初始化完成
   },
   methods: {
@@ -120,12 +121,17 @@ export default {
       this.$EventBus.$emit('org-change', this.org) //使用事件总线进行级别切换通知
     },
     async setWeather(org) {
-      if (org && org.areaCode) {
+      try {
+        let result = await getAreaCodeByOrgId(org.orgId)
+
+        console.log('header-setWeather', result)
         let myWeather = new JcWeather()
 
-        this.weather = await myWeather.getWeather(org.areaCode)
+        this.weather = await myWeather.getWeather(result.areaCode)
 
         console.log('command-header-weather', this.weather, org)
+      } catch (error) {
+        console.log(error)
       }
     },
     viewChange(name) {
@@ -138,7 +144,7 @@ export default {
   beforeDestroy() {
     clearInterval(this.timeInterval)
     //去除事件监听
-    this.$EventBus.$off('org-adcode-change', this.setWeather)
+    this.$EventBus.$off('org-change', this.setWeather)
     this.$EventBus.$off('command-init-success', this.initSuccess)
   }
 }
