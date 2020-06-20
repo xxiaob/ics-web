@@ -84,10 +84,6 @@ export default {
 
       if (data && data.length) {
         data.forEach(item => {
-          if (item.orgId == this.org.orgId) {
-            //如果相同的组织信息，则通知组织adcode
-            this.$EventBus.$emit('org-adcode-change', { areaId: item.areaId, areaCode: item.areaCode, areaTypeName: item.areaTypeName })
-          }
           //如果绘图时子集不存在，则绘图自己的边界
           if (item.orgId != this.nowOrgId || data.length == 1) {
             let mapSign = new JcMapSign({
