@@ -21,7 +21,8 @@
       <div class="jc-clearboth">
         <el-form-item label="任务位置" prop="taskPosition" :rules="rules.NOT_NULL" class="jc-left-width50">
           <el-input v-model="form.taskPosition" placeholder="请点击地图选择任务位置" style="display:none"></el-input>
-          <el-input v-model="form.taskPositionName" placeholder="请输入任务位置"></el-input>
+          <!-- <el-input v-model="form.taskPositionName" placeholder="请输入任务位置" disabled=""></el-input> -->
+          <span>{{form.taskPositionName}}</span>
         </el-form-item>
         <el-form-item label="任务来源" prop="taskSource" :rules="rules.SELECT_NOT_NULL" class="jc-left-width50">
           <el-select v-model="form.taskSource" placeholder="选择任务来源" :disabled="taskSourceDisabled">
