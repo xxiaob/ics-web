@@ -16,7 +16,7 @@ export default {
   methods: {
     nodeChange(data) {
       console.log('用户管理，树节点change：', data)
-      this.$refs.myUsers.initData(data.orgId)
+      this.$refs.myUsers.initData(data)
     }
   }
 }

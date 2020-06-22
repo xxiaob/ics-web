@@ -89,7 +89,7 @@ router.beforeEach((to, from, next) => {
     if (user && menus) {
       let menu = checkMenu(to.name, menus)
 
-      if (menu || excludeRouters.indexOf(to.name) > -1) {
+      if (menu || excludeRouters.includes(to.name)) {
         setTitle(menu ? menu.name : to.meta.title)
         next()
       } else {

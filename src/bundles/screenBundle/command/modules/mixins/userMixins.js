@@ -91,18 +91,12 @@ export default {
         }
       } else if (data.type == 4) {
         //是否再一键采集中，如果正在一键采集则显示状态，结束采集则恢复状态
-        let hasUser = false
+        let index = this.gatherUserIds.indexOf(data.collectUser.userId)
 
-        for (let i = 0; i < this.gatherUserIds.length; i++) {
-          if (this.gatherUserIds[i] == data.collectUser.userId) {
-            hasUser = true
-            if (data.collectUser.off) {
-              this.gatherUserIds.splice(i, 1)
-            }
-            break
-          }
+        if (data.collectUser.off && index > -1) {
+          this.gatherUserIds.splice(index, 1)
         }
-        if (!data.collectUser.off && !hasUser) {
+        if (!data.collectUser.off && index < 0) {
           this.gatherUserIds.push(data.collectUser.userId)
         }
       }
@@ -112,20 +106,15 @@ export default {
           let center = [parseFloat(item.lng).toFixed(6), parseFloat(item.lat).toFixed(6)]
 
           //查找该用户使用已经存在，如果存在则更新，否则进行添加
-          let hasUser = false
+          let lnglat = usersData.lnglats.find(user => user.userId == item.userId)
 
-          for (let i = 0; i < usersData.lnglats.length; i++) {
-            if (usersData.lnglats[i].userId == item.userId) {
-              hasUser = true
-              delete usersData.users[usersData.lnglats[i].key]
-              usersData.lnglats[i].lnglat = center
-              break
-            }
-          }
-          usersData.users[center.join(',')] = { ...item, center }
-          if (!hasUser) {
+          if (lnglat) {
+            delete usersData.users[lnglat.key]
+            lnglat.lnglat = center
+          } else {
             usersData.lnglats.push({ lnglat: center, key: center.join(','), userId: item.userId })
           }
+          usersData.users[center.join(',')] = { ...item, center }
         })
       }
       if (usersData.markerCluster) {
@@ -180,7 +169,7 @@ export default {
       if (this.userTipVisible) {
         content += `<div class="jc-marker-title">${userItem.userName}</div>`
       }
-      if (this.gatherUserIds.indexOf(userItem.userId) > -1) {
+      if (this.gatherUserIds.includes(userItem.userId)) {
         content += `<img src=${JcUserIcons.gather} class="jc-marker-icon"/></div>`
       } else {
         content += `<img src=${JcUserIcons.online} class="jc-marker-icon"/></div>`
@@ -193,7 +182,13 @@ export default {
       console.log('绘制用户-点击', context)
       let myJcMap = this.getMyJcMap() //获取地图对象
 
-      // myJcMap.map.setFitView(context.clusterData)
+      //处理数据，如果是单个则去通知显示详情，是多个的聚合，则定位到显示
+      if (context.clusterData.length > 1) {
+        myJcMap.map.setBounds(this.getAmapBundles(context.clusterData))
+      } else {
+        //获取信息去通知显示详情
+
+      }
     },
     clearUsers() {
       //清除所有数据
@@ -203,11 +198,11 @@ export default {
       usersData = { markerCluster: null, users: {}, lnglats: [] }
     },
     userShowWordChange(words) {
-      this.userTipVisible = words.indexOf('user') > -1 //如果存在用户显示，则显示用户，否则不显示
+      this.userTipVisible = words.includes('user') //如果存在用户显示，则显示用户，否则不显示
       this.fitUsers()
     },
     userTogetherChange(togethers) {
-      this.togetherVisible = togethers.indexOf('user') > -1 //如果存在用户聚合，则聚合用户，否则不显示
+      this.togetherVisible = togethers.includes('user') //如果存在用户聚合，则聚合用户，否则不显示
       this.fitUsers()
     }
   },

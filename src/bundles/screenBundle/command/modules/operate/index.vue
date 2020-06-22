@@ -96,7 +96,7 @@ export default {
   computed: {
     controlAreaTypes() {
       return this.areaTypes.filter(item => {
-        return this.mapGridTypes.indexOf(item.id) > -1
+        return this.mapGridTypes.includes(item.id)
       })
     }
   },

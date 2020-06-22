@@ -93,9 +93,9 @@ export default {
     getDeviceStatusClass(loginType) {
       if (loginType) {
         return {
-          pc: loginType.indexOf(LOGIN_DEVICE_TYPES.PC) > -1,
-          mobile: loginType.indexOf(LOGIN_DEVICE_TYPES.MOBILE) > -1,
-          law: loginType.indexOf(LOGIN_DEVICE_TYPES.LAW) > -1
+          pc: loginType.includes(LOGIN_DEVICE_TYPES.PC),
+          mobile: loginType.includes(LOGIN_DEVICE_TYPES.MOBILE),
+          law: loginType.includes(LOGIN_DEVICE_TYPES.LAW)
         }
       }
       return { pc: '', mobile: '', law: '' }
