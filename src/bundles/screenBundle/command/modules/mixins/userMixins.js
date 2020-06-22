@@ -181,6 +181,14 @@ export default {
     markerUserClusterClick(context) {
       console.log('绘制用户-点击', context)
       let myJcMap = this.getMyJcMap() //获取地图对象
+
+      //处理数据，如果是单个则去通知显示详情，是多个的聚合，则定位到显示
+      if (context.clusterData.length > 1) {
+        myJcMap.map.setBounds(this.getAmapBundles(context.clusterData))
+      } else {
+        //获取信息去通知显示详情
+
+      }
     },
     clearUsers() {
       //清除所有数据

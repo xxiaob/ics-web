@@ -100,6 +100,29 @@ export default {
     getMyJcMap() {
       return myJcMap//获取地图
     },
+    getAmapBundles(clusterData) {
+      //获取缩放边界
+      let maxRund = 1.00004, minRund = 0.99996 //设置边距
+
+      let lnglats = { lng: { max: null, min: null }, lat: { max: null, min: null } }
+
+      clusterData.forEach(item => {
+        if (!lnglats.lng.max || item.lnglat.lng > lnglats.lng.max) {
+          lnglats.lng.max = item.lnglat.lng
+        }
+        if (!lnglats.lng.min || item.lnglat.lng < lnglats.lng.min) {
+          lnglats.lng.min = item.lnglat.lng
+        }
+        if (!lnglats.lat.max || item.lnglat.lat > lnglats.lat.max) {
+          lnglats.lat.max = item.lnglat.lat
+        }
+        if (!lnglats.lat.min || item.lnglat.lat < lnglats.lat.min) {
+          lnglats.lat.min = item.lnglat.lat
+        }
+      })
+
+      return new myJcMap.AMap.Bounds([lnglats.lng.min * minRund, lnglats.lat.min * minRund], [lnglats.lng.max * maxRund, lnglats.lat.max * maxRund])
+    },
     viewComponentChange(data) {
       //内容窗口改变处理,如果队列中存在,则移除再添加
       for (let i = 0; i < this.viewComponentQueue.length; i++) {
