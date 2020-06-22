@@ -33,7 +33,8 @@ export class Live {
     this.recordParams = {
       channelName: '',
       recordingType: 0,
-      recorded: true
+      recorded: true,
+      userId: ''
     }
 
     this.init()
@@ -184,6 +185,8 @@ export class Live {
 
     const recordingType = video ? '_Video' : '_Audio'
     const userAccount = this.userId + '_web' + recordingType
+
+    this.recordParams.userId = userAccount
     const { channelKey } = await getAgoraToken({ channelName: channelId, userAccount })
 
     this.console('获取token成功', channelKey, channelId)
