@@ -2,19 +2,19 @@
   <el-dialog :title="options ? '编辑用户':'新增用户'" :visible.sync="dialogVisible" width="600px" :append-to-body="true" :close-on-click-modal="false" @close="dialogClose">
     <el-form ref="form" label-width="85px" :model="form" class="jc-manage-form">
       <el-form-item label="用户名称" prop="userName" :rules="rules.Len50">
-        <el-input v-model="form.userName" placeholder="请输入用户名称"></el-input>
+        <el-input v-model.trim="form.userName" placeholder="请输入用户名称"></el-input>
       </el-form-item>
       <el-form-item label="登录账号" prop="account" :rules="rules.Len50">
-        <el-input v-model="form.account" placeholder="请输入登录账号"></el-input>
+        <el-input v-model="form.account" placeholder="请输入登录账号" @input="accountChange"></el-input>
       </el-form-item>
       <el-form-item label="手机号" prop="phone" :rules="rules.Tel">
-        <el-input v-model="form.phone" placeholder="请输入手机号"></el-input>
+        <el-input v-model.trim="form.phone" placeholder="请输入手机号"></el-input>
       </el-form-item>
       <el-form-item label="执法证号" prop="lawNbr">
-        <el-input v-model="form.lawNbr" placeholder="请输入执法证号"></el-input>
+        <el-input v-model.trim="form.lawNbr" placeholder="请输入执法证号"></el-input>
       </el-form-item>
       <el-form-item label="胸牌号" prop="chestNbr">
-        <el-input v-model="form.chestNbr" placeholder="请输入胸牌号"></el-input>
+        <el-input v-model.trim="form.chestNbr" placeholder="请输入胸牌号"></el-input>
       </el-form-item>
       <el-form-item label="职位" prop="positionId" :rules="rules.SELECT_NOT_NULL">
         <el-select v-model="form.positionId" placeholder="职位">
@@ -111,6 +111,12 @@ export default {
         }
         this.roles = list
       })
+    },
+    accountChange() {
+      //账号输入处理
+      if (this.form.account) {
+        this.form.account = this.form.account.replace(/\s*/g, '').replace(/[`~!@#$^&*()=|{}':;'.,'\\。，、？%+_]/g, '').replace(/[\u4e00-\u9fa5]/g, '')
+      }
     },
     formatFormData() {
       if (this.options) {

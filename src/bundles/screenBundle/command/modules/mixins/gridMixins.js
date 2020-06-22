@@ -172,6 +172,7 @@ export default {
 
       window.myContext = context
       window.myJcMap = myJcMap
+
       // myJcMap.map.setFitView(context.cluster)
     },
     clearGrids() {
