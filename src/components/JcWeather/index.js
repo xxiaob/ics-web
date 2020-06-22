@@ -29,7 +29,7 @@ export default class JcWeather {
 
     //处理天气归类
     for (let key in this.weatherMapping) {
-      if (this.weatherMapping[key].indexOf(result.weather) > -1) {
+      if (this.weatherMapping[key].includes(result.weather)) {
         result.type = key
         break
       }
@@ -50,10 +50,10 @@ export default class JcWeather {
     //处理天气归类
     result.forecasts.forEach(item => {
       for (let key in this.weatherMapping) {
-        if (this.weatherMapping[key].indexOf(item.dayWeather) > -1) {
+        if (this.weatherMapping[key].includes(item.dayWeather)) {
           item.dayType = key
         }
-        if (this.weatherMapping[key].indexOf(item.nightWeather) > -1) {
+        if (this.weatherMapping[key].includes(item.nightWeather)) {
           item.nightType = key
         }
       }

@@ -19,10 +19,7 @@ export default {
       loading: false,
       trees: [],
       expandedKeys: [],
-      props: {
-        children: 'children',
-        label: 'label'
-      }
+      props: { children: 'children', label: 'label' }
     }
   },
   created() {
@@ -40,7 +37,7 @@ export default {
 
               this.expandedKeys = [orgId]
               this.$refs.tree.setCurrentKey(orgId)
-              this.$emit('node-change', { orgId: orgId, type: 'manage' })
+              this.$emit('node-change', { orgId: orgId, orgName: this.trees[0].label, type: 'manage' })
             })
           }
           this.loading = false
@@ -73,7 +70,7 @@ export default {
       return trees
     },
     nodeClick(data) {
-      this.$emit('node-change', { orgId: data.orgId, type: 'node-click' })
+      this.$emit('node-change', { orgId: data.orgId, orgName: data.label, type: 'node-click' })
     }
   }
 }

@@ -39,7 +39,7 @@
       </el-table>
       <el-pagination @current-change="currentChange" @size-change="sizeChange" :current-page.sync="page.pageNum" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.total" class="text-right jc-mt"></el-pagination>
     </el-card>
-    <jc-manage :options="info" :orgId="orgId" :visible.sync="visible" @save-success="initData"></jc-manage>
+    <jc-manage :options="info" :orgId="org.orgId" :visible.sync="visible" @save-success="initData"></jc-manage>
     <user-detail :userId="userId" :visible.sync="detailVisible"></user-detail>
   </div>
 </template>
@@ -64,19 +64,19 @@ export default {
       detailVisible: false,
       info: null,
       userId: null,
-      orgId: '',
+      org: {},
       ids: [],
       filter: { }
     }
   },
   methods: {
-    initData(orgId) {
-      if (orgId) {
-        this.orgId = orgId
+    initData(org) {
+      if (org) {
+        this.org = org
       }
       if (!this.loading) {
         this.loading = true
-        userList({ ...this.filter, ...this.page, orgId: this.orgId }).then(res => {
+        userList({ ...this.filter, ...this.page, orgId: this.org.orgId }).then(res => {
           this.page.total = res.total
 
           let list = []
@@ -134,7 +134,7 @@ export default {
 
       let tip = row[key] == 1 ? '设置' : '取消'
 
-      this.$confirm(`确认${tip}该用户为当前组织的${changeName}`, '提示', { type: 'warning', dangerouslyUseHTMLString: true }).then(() => {
+      this.$confirm(`确认${tip}用户  <span class="jc-link">${row.userName}</span> 为组织 <span class="jc-link">${this.org.orgName}</span> 的${changeName}`, '提示', { type: 'warning', dangerouslyUseHTMLString: true }).then(() => {
         updateOrgReceiver({ userId: row.userId, orgId: this.orgId, isDefReceiver: row.isDefReceiver, isDefUploadReceiver: row.isDefUploadReceiver }).then(() => {
           this.$message.success('设置成功')
         }).catch(() => {
