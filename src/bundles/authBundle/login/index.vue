@@ -48,7 +48,7 @@ export default {
             this.setUser(res)
             let goUrl = '/'
 
-            if (this.$route.query.callbackUrl && this.$route.query.callbackUrl.indexOf('login') < 0) {
+            if (this.$route.query.callbackUrl && !this.$route.query.callbackUrl.includes('login')) {
               goUrl = this.$route.query.callbackUrl
             }
             this.$router.push(goUrl)

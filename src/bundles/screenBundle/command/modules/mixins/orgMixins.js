@@ -156,13 +156,13 @@ export default {
       })
     },
     orgShowAreaChange(areas) {
-      this.orgAreaVisible = areas.indexOf('org') > -1 //如果存在组织区域显示，则显示区域，否则不显示
+      this.orgAreaVisible = areas.includes('org') //如果存在组织区域显示，则显示区域，否则不显示
       orgAreas.forEach(item => {
         item.showArea(this.orgAreaVisible)
       })
     },
     orgShowWordChange(words) {
-      this.orgTipVisible = words.indexOf('org') > -1 //如果存在组织区域显示，则显示文字，否则不显示
+      this.orgTipVisible = words.includes('org') //如果存在组织区域显示，则显示文字，否则不显示
       orgAreas.forEach(item => {
         item.showTip(this.orgTipVisible)
       })

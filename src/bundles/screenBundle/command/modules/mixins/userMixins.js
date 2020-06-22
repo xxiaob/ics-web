@@ -180,7 +180,7 @@ export default {
       if (this.userTipVisible) {
         content += `<div class="jc-marker-title">${userItem.userName}</div>`
       }
-      if (this.gatherUserIds.indexOf(userItem.userId) > -1) {
+      if (this.gatherUserIds.includes(userItem.userId)) {
         content += `<img src=${JcUserIcons.gather} class="jc-marker-icon"/></div>`
       } else {
         content += `<img src=${JcUserIcons.online} class="jc-marker-icon"/></div>`
@@ -203,11 +203,11 @@ export default {
       usersData = { markerCluster: null, users: {}, lnglats: [] }
     },
     userShowWordChange(words) {
-      this.userTipVisible = words.indexOf('user') > -1 //如果存在用户显示，则显示用户，否则不显示
+      this.userTipVisible = words.includes('user') //如果存在用户显示，则显示用户，否则不显示
       this.fitUsers()
     },
     userTogetherChange(togethers) {
-      this.togetherVisible = togethers.indexOf('user') > -1 //如果存在用户聚合，则聚合用户，否则不显示
+      this.togetherVisible = togethers.includes('user') //如果存在用户聚合，则聚合用户，否则不显示
       this.fitUsers()
     }
   },

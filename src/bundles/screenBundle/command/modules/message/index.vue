@@ -25,7 +25,7 @@ export default {
     }
   },
   created() {
-    this.$EventBus.$on('screen-message-change', this.initData) //监听行级别切换
+    this.$EventBus.$on('screen-message-change', this.initData) //监听消息
     // this.interval = setInterval(() => {
     //   this.list.splice(0, 0, { id: this.index++, type: '3', title: '测试' })
     //   if (this.list.length > this.maxLength) {

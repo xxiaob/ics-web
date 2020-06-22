@@ -108,11 +108,11 @@ export default {
         let gridTypeMap = gridAreas[type]
 
         //处理聚合是否显示
-        if (this.areaTipVisibles.indexOf(type) > -1) {
+        if (this.areaTipVisibles.includes(type)) {
           gridTypeMap.markerCluster.setMap(myJcMap.map)
 
           //处理是否进行聚合
-          if (this.togetherVisibles.indexOf(type) > -1) {
+          if (this.togetherVisibles.includes(type)) {
             gridTypeMap.markerCluster.setMaxZoom(18)
           } else {
             gridTypeMap.markerCluster.setMaxZoom(0)
@@ -124,7 +124,7 @@ export default {
         }
 
         //地图区域显示控制
-        let showSign = this.areaAreaVisibles.indexOf(type) > -1
+        let showSign = this.areaAreaVisibles.includes(type)
 
         for (let key in gridTypeMap.signs) {
           if (showSign) {
@@ -160,7 +160,7 @@ export default {
 
       let content = '<div class="jc-marker-content">'
 
-      if (this.areaTipVisibles.indexOf(signItem.areaTypeId) > -1) {
+      if (this.areaTipVisibles.includes(signItem.areaTypeId)) {
         content += `<div class="jc-marker-title">${signItem.areaName}</div>`
       }
       content += `<img src=${JcIcons[signItem.icon].icon} class="jc-marker-icon"/></div>`
@@ -170,10 +170,30 @@ export default {
       console.log('绘制网格-点击', context)
       let myJcMap = this.getMyJcMap() //获取地图对象
 
-      window.myContext = context
       window.myJcMap = myJcMap
+      //处理数据，如果是单个则去通知显示详情，是多个的聚合，则定位到显示
+      if (context.clusterData.length > 0) {
+        let lnglats = { lng: { max: null, min: null }, lat: { max: null, min: null } }
 
-      // myJcMap.map.setFitView(context.cluster)
+        context.clusterData.forEach(item => {
+          if (!lnglats.lng.max || item.lnglat.lng > lnglats.lng.max) {
+            lnglats.lng.max = item.lnglat.lng
+          }
+          if (!lnglats.lng.min || item.lnglat.lng < lnglats.lng.min) {
+            lnglats.lng.min = item.lnglat.lng
+          }
+          if (!lnglats.lat.max || item.lnglat.lat > lnglats.lat.max) {
+            lnglats.lat.max = item.lnglat.lat
+          }
+          if (!lnglats.lat.min || item.lnglat.lat < lnglats.lat.min) {
+            lnglats.lat.min = item.lnglat.lat
+          }
+        })
+        console.log('获取边界', lnglats)
+        myJcMap.map.setBounds(new myJcMap.AMap.Bounds([lnglats.lng.min, lnglats.lat.min], [lnglats.lng.max, lnglats.lat.max]))
+      } else {
+        //获取信息去通知显示详情
+      }
     },
     clearGrids() {
       //清除所有数据

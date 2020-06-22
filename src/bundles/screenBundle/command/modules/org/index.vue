@@ -152,6 +152,7 @@ export default {
           this.$message.error('最多支持17人')
         } else {
           this.$EventBus.$emit('screen-media-live', { users: this.users, type: this.talkType == 'video' ? '1' : '0' })
+          this.clearUsers() //清空用户
         }
       } else {
         this.$message.error('请选择人员')
