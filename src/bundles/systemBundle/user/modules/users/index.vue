@@ -135,7 +135,7 @@ export default {
       let tip = row[key] == 1 ? '设置' : '取消'
 
       this.$confirm(`确认${tip}用户  <span class="jc-link">${row.userName}</span> 为组织 <span class="jc-link">${this.org.orgName}</span> 的${changeName}`, '提示', { type: 'warning', dangerouslyUseHTMLString: true }).then(() => {
-        updateOrgReceiver({ userId: row.userId, orgId: this.orgId, isDefReceiver: row.isDefReceiver, isDefUploadReceiver: row.isDefUploadReceiver }).then(() => {
+        updateOrgReceiver({ userId: row.userId, orgId: this.org.orgId, isDefReceiver: row.isDefReceiver, isDefUploadReceiver: row.isDefUploadReceiver }).then(() => {
           this.$message.success('设置成功')
         }).catch(() => {
           row[key] = row[key] == 1 ? '0' : '1'
@@ -157,7 +157,7 @@ export default {
     },
     manage(row) {
       if (row) {
-        userGet({ userId: row.userId, orgId: this.orgId }).then(res => {
+        userGet({ userId: row.userId, orgId: this.org.orgId }).then(res => {
           if (res.roles && res.roles.length) {
             let roleIds = []
 

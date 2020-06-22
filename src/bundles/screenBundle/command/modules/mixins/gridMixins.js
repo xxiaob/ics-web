@@ -170,9 +170,10 @@ export default {
       console.log('绘制网格-点击', context)
       let myJcMap = this.getMyJcMap() //获取地图对象
 
-      window.myJcMap = myJcMap
+      let maxRund = 1.00004, minRund = 0.99996 //设置边距
+
       //处理数据，如果是单个则去通知显示详情，是多个的聚合，则定位到显示
-      if (context.clusterData.length > 0) {
+      if (context.clusterData.length > 1) {
         let lnglats = { lng: { max: null, min: null }, lat: { max: null, min: null } }
 
         context.clusterData.forEach(item => {
@@ -190,9 +191,10 @@ export default {
           }
         })
         console.log('获取边界', lnglats)
-        myJcMap.map.setBounds(new myJcMap.AMap.Bounds([lnglats.lng.min, lnglats.lat.min], [lnglats.lng.max, lnglats.lat.max]))
+        myJcMap.map.setBounds(new myJcMap.AMap.Bounds([lnglats.lng.min * minRund, lnglats.lat.min * minRund], [lnglats.lng.max * maxRund, lnglats.lat.max * maxRund]))
       } else {
         //获取信息去通知显示详情
+
       }
     },
     clearGrids() {

@@ -91,18 +91,12 @@ export default {
         }
       } else if (data.type == 4) {
         //是否再一键采集中，如果正在一键采集则显示状态，结束采集则恢复状态
-        let hasUser = false
+        let index = this.gatherUserIds.indexOf(data.collectUser.userId)
 
-        for (let i = 0; i < this.gatherUserIds.length; i++) {
-          if (this.gatherUserIds[i] == data.collectUser.userId) {
-            hasUser = true
-            if (data.collectUser.off) {
-              this.gatherUserIds.splice(i, 1)
-            }
-            break
-          }
+        if (data.collectUser.off && index > -1) {
+          this.gatherUserIds.splice(index, 1)
         }
-        if (!data.collectUser.off && !hasUser) {
+        if (!data.collectUser.off && index < 0) {
           this.gatherUserIds.push(data.collectUser.userId)
         }
       }
@@ -112,20 +106,15 @@ export default {
           let center = [parseFloat(item.lng).toFixed(6), parseFloat(item.lat).toFixed(6)]
 
           //查找该用户使用已经存在，如果存在则更新，否则进行添加
-          let hasUser = false
+          let lnglat = usersData.lnglats.find(user => user.userId == item.userId)
 
-          for (let i = 0; i < usersData.lnglats.length; i++) {
-            if (usersData.lnglats[i].userId == item.userId) {
-              hasUser = true
-              delete usersData.users[usersData.lnglats[i].key]
-              usersData.lnglats[i].lnglat = center
-              break
-            }
-          }
-          usersData.users[center.join(',')] = { ...item, center }
-          if (!hasUser) {
+          if (lnglat) {
+            delete usersData.users[lnglat.key]
+            lnglat.lnglat = center
+          } else {
             usersData.lnglats.push({ lnglat: center, key: center.join(','), userId: item.userId })
           }
+          usersData.users[center.join(',')] = { ...item, center }
         })
       }
       if (usersData.markerCluster) {
@@ -192,8 +181,6 @@ export default {
     markerUserClusterClick(context) {
       console.log('绘制用户-点击', context)
       let myJcMap = this.getMyJcMap() //获取地图对象
-
-      // myJcMap.map.setFitView(context.clusterData)
     },
     clearUsers() {
       //清除所有数据
