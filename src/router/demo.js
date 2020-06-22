@@ -10,6 +10,14 @@ export default [{
     ignore: true
   }
 }, {
+  path: 'foreign',
+  name: 'foreign',
+  component: () => import('@/bundles/liveBundle/imLive/foreign'),
+  meta: {
+    title: '强制观摩',
+    ignore: true
+  }
+}, {
   path: 'jim',
   name: 'jim',
   component: () => import('@/bundles/liveBundle/jim'),
