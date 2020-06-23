@@ -5,6 +5,7 @@
 <script>
 import { IM } from '@/live/im'
 import { Live } from '@/live/agora'
+import { setToken } from '@/libs/storage'
 
 export default {
   name: 'foreign',
@@ -21,6 +22,12 @@ export default {
   },
   created() {
     console.log('this.$route', this.$route.query)
+    const { token, userId, userName } = this.$route.query
+
+    this.user = {
+      userId, userName
+    }
+    setToken(token)
     this.im = new IM(this.user.userId, this.user.userName)
     this.im.on(this.imMsgCb)
   },

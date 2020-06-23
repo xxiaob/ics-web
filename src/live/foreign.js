@@ -1,6 +1,6 @@
 export class Foreign {
   constructor(playerId, token, userId, userName) {
-    this.domain = 'http://localhost:8010/foreign'
+    this.domain = 'https://www.bg365.top/foreign'
 
     const player = document.getElementById(playerId)
 
