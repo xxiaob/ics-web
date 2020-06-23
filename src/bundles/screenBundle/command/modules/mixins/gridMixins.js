@@ -94,7 +94,9 @@ export default {
         let gridTypeMap = gridAreas[type]
 
         gridTypeMap.markerCluster = this.getGridMarkerCluster(gridTypeMap)
-        gridTypeMap.markerCluster.on('click', this.markerGridClusterClick)
+        gridTypeMap.markerCluster.on('click', (context) => {
+          this.markerGridClusterClick(gridTypeMap, context)
+        })
       }
       this.areaTipVisibles = mapGridTypes
       this.togetherVisibles = mapGridTypes
@@ -166,7 +168,7 @@ export default {
       content += `<img src=${JcIcons[signItem.icon].icon} class="jc-marker-icon"/></div>`
       context.marker.setContent(content)
     },
-    markerGridClusterClick(context) {
+    markerGridClusterClick(gridTypeMap, context) {
       console.log('绘制网格-点击', context)
       let myJcMap = this.getMyJcMap() //获取地图对象
 
@@ -175,7 +177,11 @@ export default {
         myJcMap.map.setBounds(this.getAmapBundles(context.clusterData))
       } else {
         //获取信息去通知显示详情
+        let key = context.lnglat.lng + ',' + context.lnglat.lat
 
+        let signItem = gridTypeMap.signs[key]
+
+        this.$EventBus.$emit('view-component-change', { component: 'GridDetail', options: { areaId: signItem.areaId, areaName: signItem.areaName, areaTypeId: signItem.areaTypeId, center: signItem.center, icon: signItem.icon } }) //通知窗口改变
       }
     },
     clearGrids() {
