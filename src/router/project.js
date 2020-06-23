@@ -19,4 +19,12 @@ export default [{
     title: '项目管理-专项管控'
   },
   props: { projectType: PROJECT_TYPES.SpecialControl }
+}, {
+  path: 'project/muckSpecial',
+  name: 'muckSpecial',
+  component: () => import('@/bundles/projectBundle/muckSpecial'),
+  meta: {
+    title: '项目管理-渣土专项',
+    ignore: true
+  }
 }]
