@@ -88,8 +88,7 @@ $jc-screen-height: 40px;
       padding: $jc-default-dis;
       width: 180px;
       height: 168px;
-      background: url(../modules/header/assets/weather-bg.png) no-repeat center
-        bottom;
+      background: url(../modules/header/assets/weather-bg.png) no-repeat center bottom;
       background-size: 100% 160px;
       left: 0;
       visibility: hidden;
@@ -334,6 +333,7 @@ $jc-screen-height: 40px;
     opacity: 0;
     transition: all 0.4s;
     will-change: transform;
+
     &.jc-oprea-flex {
       display: flex;
     }
@@ -378,6 +378,7 @@ $jc-screen-height: 40px;
       background-size: 12px auto;
       @include jc-text-warp;
     }
+
     .jc-map-switch-item {
       display: block;
       flex: 1;
@@ -387,15 +388,19 @@ $jc-screen-height: 40px;
       background-position: center;
       background-size: 60px 100%;
       border-radius: 6px;
+
       &.jc-active {
         border: solid 1px $jc-color-primary;
       }
+
       &.map-base {
         background-image: url("../modules//operate/assets/map-switch-base.png");
       }
+
       &.map-dark {
         background-image: url("../modules//operate/assets/map-switch-dark.png");
       }
+
       &.map-satellite {
         background-image: url("../modules//operate/assets/map-switch-satellite.png");
       }
@@ -564,6 +569,7 @@ $jc-screen-height: 40px;
       position: relative;
       height: 120px;
       overflow: auto;
+
       .jc-user-item {
         position: relative;
         cursor: pointer;
@@ -576,6 +582,7 @@ $jc-screen-height: 40px;
         background-color: rgba($color: $jc-color-primary, $alpha: 0.8);
         @include jc-text-warp;
         border-radius: 2px;
+
         .el-icon-close {
           position: absolute;
           top: 2px;
@@ -583,14 +590,17 @@ $jc-screen-height: 40px;
           transform: rotate(0deg);
           transition: transform 0.4s;
           font-size: $jc-font-size-smaller;
+
           &:hover {
             transform: rotate(180deg);
           }
         }
       }
     }
+
     .jc-user-footer {
       text-align: right;
+
       .jc-opera-item {
         display: inline-block;
         cursor: pointer;
@@ -599,12 +609,15 @@ $jc-screen-height: 40px;
         background-position: center;
         background-repeat: no-repeat;
         background-size: 16px auto;
+
         &.jc-clear {
           background-image: url(../modules//org/assets/clear.png);
         }
+
         &.jc-command {
           background-image: url(../modules//org/assets/command.png);
         }
+
         &.jc-guanmo {
           background-image: url(../modules//org/assets/guanmo.png);
         }
@@ -616,6 +629,7 @@ $jc-screen-height: 40px;
   .jc-detail-warp {
     display: flex;
     padding: 0 $jc-default-dis/2;
+
     .jc-detail-label {
       width: 80px;
       padding: $jc-default-dis/2 0;
@@ -623,14 +637,17 @@ $jc-screen-height: 40px;
       color: $jc-color-text-secondary;
       @include jc-text-warp;
     }
+
     .jc-detail-content {
       flex: 1;
       line-height: 20px;
       padding: $jc-default-dis/2 0;
+
       .jc-media-warp {
         width: 120px;
         height: 90px;
         cursor: pointer;
+
         video,
         img {
           display: block;
@@ -718,8 +735,7 @@ $jc-screen-height: 40px;
 
   .jc-message-user {
     width: 68px;
-    background: url(../modules/message/assets/peportperson.png) no-repeat left
-      center;
+    background: url(../modules/message/assets/peportperson.png) no-repeat left center;
     background-size: 20px 20px;
     padding: 0 $jc-default-dis/2 0 24px;
     @include jc-text-warp;
