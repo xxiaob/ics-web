@@ -3,10 +3,7 @@
     <el-button @click="start" type="primary">开始观摩</el-button>
     <el-button @click="stop">结束观摩</el-button>
     <!-- <im-live :params.sync="params" :visible.sync="visible"></im-live> -->
-    <div id="test">
-
-    </div>
-    <!-- <iframe v-show="showIframe" :src="src" frameborder="0"></iframe> -->
+    <div id="test"></div>
   </div>
 </template>
 
@@ -23,13 +20,11 @@ export default {
   data() {
     return {
       visible: false,
-      params: null,
-      showIframe: false,
-      src: 'http://localhost:8010/foreign'
+      params: null
     }
   },
   mounted() {
-    this.test = new Foreign('test', '19edf5bad1604f89a6a38fbeb07174f1', '3213123', '李向玉')
+    this.test = new Foreign('test', '488a5c2f1f2d435ca76e609007eff1e4', '3213123', '李向玉')
   },
   methods: {
     start() {

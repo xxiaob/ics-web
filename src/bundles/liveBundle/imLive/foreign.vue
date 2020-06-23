@@ -61,9 +61,9 @@ export default {
       if (this.timeout) {
         clearTimeout(this.timeout)
       }
-      // if (this.loading) {
-      //   this.loading.close()
-      // }
+      if (this.loading) {
+        this.loading.close()
+      }
 
       if (agree === '1') {
         this.onCall = true
@@ -85,7 +85,7 @@ export default {
         }
       }, 30000)
 
-      // this.loading = this.$loading({ text: '正在发起强制观摩...' })
+      this.loading = this.$loading({ text: '正在发起强制观摩...' })
 
       this.channelId = new Date().getTime().toString()
       const msg = {
