@@ -28,7 +28,7 @@ import FormMixins from '@/mixins/FormMixins'
 let defaultForm = { groupName: '', addUserIds: [] }
 
 export default {
-  name: 'SystemPttGroupManage',
+  name: 'SystemPttGroupUserManage',
   mixins: [FormMixins],
   data() {
     return {
