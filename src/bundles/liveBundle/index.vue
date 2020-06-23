@@ -29,7 +29,7 @@ export default {
     }
   },
   mounted() {
-    this.test = new Foreign('test', 'eqwe123', '3213123', '李向玉')
+    this.test = new Foreign('test', '19edf5bad1604f89a6a38fbeb07174f1', '3213123', '李向玉')
   },
   methods: {
     start() {
