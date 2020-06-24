@@ -34,6 +34,7 @@
           <el-table-column prop="userName" label="用户名称"></el-table-column>
           <el-table-column width="100" label="操作">
             <template slot-scope="scope">
+              <el-button type="text" size="mini" icon="el-icon-view" @click="seeCode(scope.row)" title="查看二维码"></el-button>
               <el-button type="text" size="mini" icon="el-icon-delete" @click="del(scope.row)" title="删除"></el-button>
             </template>
           </el-table-column>
@@ -46,12 +47,17 @@
     <jc-manage :options="info" :visible.sync="visible" @save-success="getGroups"></jc-manage>
 
     <jc-user-manage :groupId="activeGroupId" :visible.sync="userVisible" @save-success="initData"></jc-user-manage>
+
+    <el-dialog title="二维码" :visible.sync="codeVisible" width="300px" :close-on-click-modal="false" :append-to-body="true" top="30vh">
+      <img :src="codeUrl" width="100%" />
+    </el-dialog>
   </div>
 </template>
 <script>
 import { pttGroupList, pttGroupDel, getUserList, userDel } from '@/api/pttGroup'
 import { formatDate } from '@/libs/util'
 import PaginationMixins from '@/mixins/PaginationMixins'
+import QRCode from 'qrcode'
 
 export default {
   name: 'SystemPttGroupIndex',
@@ -63,6 +69,8 @@ export default {
   },
   data() {
     return {
+      codeUrl: '',
+      codeVisible: false,
       activeGroupId: '',
       list: [],
       userList: [],
@@ -140,6 +148,15 @@ export default {
       this.$confirm('确认删除该用户', '提示', { type: 'warning' }).then(() => {
         this.remove([row.channelUserId])
       }).catch(() => {})
+    },
+    //生成二维码
+    async seeCode(row) {
+      // console.log(row.code)
+      this.codeUrl = await QRCode.toDataURL(row.code, {
+        width: 256,
+        height: 256
+      })
+      this.codeVisible = true
     },
     removeAll() {
       if (this.ids.length) {
