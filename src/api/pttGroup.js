@@ -62,3 +62,11 @@ export function pttGroupDel(groupId) {
 export function userDel(data) {
   return axios.post(API.pttGroup.userDel, data)
 }
+/**
+ * 添加用户
+ * @param {object} data
+ * @returns {Object} axios 对象
+ */
+export function userAdd(data) {
+  return axios.post(API.pttGroup.userAdd, data)
+}

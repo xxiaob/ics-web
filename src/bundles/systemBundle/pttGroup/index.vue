@@ -23,7 +23,7 @@
         <div slot="header" class="jc-card-header">
           <div class="jc-card-title">用户列表</div>
           <div class="jc-button-group">
-            <el-button type="primary" icon="el-icon-plus" size="small" @click="manage(null)">添加用户</el-button>
+            <el-button type="primary" icon="el-icon-plus" size="small" @click="userVisible=true">添加用户</el-button>
             <el-button type="danger" icon="el-icon-delete" size="small" @click="removeAll">删除用户</el-button>
           </div>
         </div>
@@ -44,6 +44,8 @@
     </div>
 
     <jc-manage :options="info" :visible.sync="visible" @save-success="getGroups"></jc-manage>
+
+    <jc-user-manage :groupId="activeGroupId" :visible.sync="userVisible" @save-success="initData"></jc-user-manage>
   </div>
 </template>
 <script>
@@ -56,7 +58,8 @@ export default {
   mixins: [PaginationMixins],
   components: {
     TabFilter: () => import('./modules/tabFilter'),
-    JcManage: () => import('./modules/manage')
+    JcManage: () => import('./modules/manage'),
+    JcUserManage: () => import('./modules/userManage')
   },
   data() {
     return {
@@ -65,6 +68,7 @@ export default {
       userList: [],
       loading: false,
       visible: false,
+      userVisible: false,
       info: null,
       ids: [],
       filter: {}
