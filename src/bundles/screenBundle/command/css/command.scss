@@ -641,8 +641,14 @@ $jc-screen-height: 40px;
 
     .jc-detail-content {
       flex: 1;
+      width: 0;
       line-height: 20px;
+      word-break: break-all;
       padding: $jc-default-dis/2 0;
+
+      img {
+        max-width: 100%;
+      }
 
       .jc-media-warp {
         width: 120px;
