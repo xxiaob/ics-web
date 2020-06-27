@@ -72,7 +72,7 @@ export default {
             usedIds.push(item.userId)
           }
         })
-        myJcMap.map.remove(myJcMap.map.getAllOverlays('rectangle'))
+        myJcMap.map.remove(myJcMap.map.getAllOverlays('rectangle')) //清除框选的框
         if (usedIds.length) {
           this.$emit('user-change', usedIds)
         }
