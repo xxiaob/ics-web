@@ -21,9 +21,20 @@
 <script>
 export default {
   name: 'ScreenCommandGridDetailBaseInfo',
+  props: ['options', 'project'],
   data() {
     return {
       loading: false
+    }
+  },
+  watch: {
+    options() {
+      this.initData()
+    }
+  },
+  methods: {
+    initData() {
+
     }
   }
 }

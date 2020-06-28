@@ -88,8 +88,7 @@ $jc-screen-height: 40px;
       padding: $jc-default-dis;
       width: 180px;
       height: 168px;
-      background: url(../modules/header/assets/weather-bg.png) no-repeat center
-        bottom;
+      background: url(../modules/header/assets/weather-bg.png) no-repeat center bottom;
       background-size: 100% 160px;
       left: 0;
       visibility: hidden;
@@ -742,8 +741,7 @@ $jc-screen-height: 40px;
 
   .jc-message-user {
     width: 68px;
-    background: url(../modules/message/assets/peportperson.png) no-repeat left
-      center;
+    background: url(../modules/message/assets/peportperson.png) no-repeat left center;
     background-size: 20px 20px;
     padding: 0 $jc-default-dis/2 0 24px;
     @include jc-text-warp;
