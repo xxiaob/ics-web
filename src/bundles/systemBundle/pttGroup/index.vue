@@ -29,7 +29,7 @@
         </div>
         <el-table :data="userList" v-loading="loading" row-key="id" class="jc-table" @selection-change="tableSelect">
           <el-table-column type="selection" width="40"></el-table-column>
-          <el-table-column type="index" label="序号" width="50"></el-table-column>
+          <el-table-column type="index" :index="indexMethod" label="序号" width="50"></el-table-column>
           <el-table-column prop="orgName" label="组织名称"></el-table-column>
           <el-table-column prop="userName" label="用户名称"></el-table-column>
           <el-table-column width="100" label="操作">

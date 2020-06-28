@@ -11,7 +11,7 @@
       </div>
       <el-table :data="list" v-loading="loading" row-key="id" class="jc-table" @selection-change="tableSelect" :cell-class-name="cellClass">
         <el-table-column type="selection" width="40"></el-table-column>
-        <el-table-column type="index" label="序号" width="50"></el-table-column>
+        <el-table-column type="index" :index="indexMethod" label="序号" width="50"></el-table-column>
         <el-table-column prop="pkgName" label="应用名称"></el-table-column>
         <el-table-column prop="deviceType" label="设备类型" :formatter="formatDeviceType"></el-table-column>
         <el-table-column prop="version" label="版本号"></el-table-column>

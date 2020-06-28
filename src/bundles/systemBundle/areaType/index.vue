@@ -11,7 +11,7 @@
       </div>
       <el-table :data="list" v-loading="loading" row-key="areaTypeId" class="jc-table" @selection-change="tableSelect">
         <el-table-column type="selection" width="40"></el-table-column>
-        <el-table-column type="index" label="序号" width="50"></el-table-column>
+        <el-table-column type="index" :index="indexMethod" label="序号" width="50"></el-table-column>
         <el-table-column prop="icon" label="区域类型图标">
           <template slot-scope="scope">
             <i class="jc-area-icon" :style="getIconStyle(scope.row.icon)"></i>

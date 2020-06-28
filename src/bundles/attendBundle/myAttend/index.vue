@@ -6,7 +6,7 @@
         <div class="jc-card-title">列表内容</div>
       </div>
       <el-table :data="list" v-loading="loading" row-key="id" class="jc-table">
-        <el-table-column type="index" label="序号" width="50"></el-table-column>
+        <el-table-column type="index" :index="indexMethod" label="序号" width="50"></el-table-column>
         <el-table-column prop="taskName" label="任务名称"></el-table-column>
         <el-table-column prop="areaName" label="考勤范围"></el-table-column>
         <el-table-column prop="status" label="触岗记录" :formatter="formatStatus"></el-table-column>

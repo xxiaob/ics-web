@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-table :data="list" v-loading="loading" row-key="id" class="jc-table" size="mini">
-      <el-table-column type="index" label="序号" width="50"></el-table-column>
+      <el-table-column type="index" :index="indexMethod" label="序号" width="50"></el-table-column>
       <el-table-column prop="userName" label="用户名" width="120"></el-table-column>
       <el-table-column prop="text" label="备注" show-overflow-tooltip></el-table-column>
       <el-table-column prop="createTime" label="创建时间" :formatter="formatTime" width="140"></el-table-column>
