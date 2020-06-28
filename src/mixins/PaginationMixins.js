@@ -12,8 +12,12 @@ export default {
     }
   },
   methods: {
-    //页面切换
+    indexMethod(index) {
+      //处理序号
+      return this.page.pageSize * this.page.pageNum + index - 9
+    },
     currentChange(index) {
+      //页面切换
       this.page.pageNum = index > 0 ? index : 1
       this.initData()
     },

@@ -9,7 +9,7 @@
         </div>
       </div>
       <el-table :data="list" v-loading="loading" row-key="id" class="jc-table">
-        <el-table-column type="index" label="序号" width="50"></el-table-column>
+        <el-table-column type="index" :index="indexMethod" label="序号" width="50"></el-table-column>
         <el-table-column prop="eventTitle" label="事件标题"></el-table-column>
         <el-table-column prop="typeName" label="事件类型"></el-table-column>
         <el-table-column prop="reportUserName" label="上报人"></el-table-column>

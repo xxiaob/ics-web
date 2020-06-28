@@ -11,7 +11,7 @@
       </div>
       <el-table :data="list" v-loading="loading" row-key="userId" class="jc-table" @selection-change="tableSelect">
         <el-table-column type="selection" width="40"></el-table-column>
-        <el-table-column type="index" label="序号" width="50"></el-table-column>
+        <el-table-column type="index" :index="indexMethod" label="序号" width="50"></el-table-column>
         <el-table-column prop="userName" label="用户名称"></el-table-column>
         <el-table-column prop="account" label="登录账号"></el-table-column>
         <el-table-column prop="phone" label="手机号"></el-table-column>

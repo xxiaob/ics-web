@@ -20,7 +20,7 @@ export default {
       notReadNum: 0,
       maxLength: 20, //最大数量
       list: [],
-      // index: 0,
+      index: 0,
       style: { [MESSAGE_TYPE.EVENT]: 'jc-event', [MESSAGE_TYPE.QUESTION]: 'jc-question', [MESSAGE_TYPE.TASK]: 'jc-task', [MESSAGE_TYPE.TEMPORARY]: 'jc-task' }
     }
   },

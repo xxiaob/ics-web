@@ -53,7 +53,7 @@ export default {
                 }
               }
 
-              rectEl.setMap(null)
+              myJcMap.map.remove(myJcMap.map.getAllOverlays('rectangle')) //清除框选的框
               if (usedIds.length) {
                 this.$EventBus.$emit('view-component-change', { component: 'CommandOrg', options: usedIds }) //通知窗口改变
               }

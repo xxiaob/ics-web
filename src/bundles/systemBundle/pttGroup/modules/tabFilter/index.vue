@@ -8,7 +8,7 @@
         <el-input v-model="form.userName" placeholder="请输入用户名称"></el-input>
       </el-form-item>
       <el-form-item class="jc-tabfilter-btns">
-        <el-button type="primary" @click="onSubmit">查询</el-button>
+        <el-button type="primary" @click="onSubmit">查询群组</el-button>
         <el-button @click="reset">重置</el-button>
       </el-form-item>
     </el-form>
@@ -35,3 +35,8 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.jc-tabfilter-card {
+  height: 75px;
+}
+</style>

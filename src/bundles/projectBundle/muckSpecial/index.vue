@@ -12,6 +12,7 @@ export default {
 .jc-muck-warp {
   display: block;
   border: none;
+  padding: $jc-default-dis;
   width: 100%;
   height: 100%;
 }

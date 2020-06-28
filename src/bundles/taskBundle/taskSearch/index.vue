@@ -8,7 +8,7 @@
           <div class="jc-card-title">列表内容</div>
         </div>
         <el-table :data="list" v-loading="loading" row-key="id" class="jc-table">
-          <el-table-column type="index" label="序号" width="50"></el-table-column>
+          <el-table-column type="index" :index="indexMethod" label="序号" width="50"></el-table-column>
           <!-- <el-table-column prop="projectType" label="项目类型"></el-table-column> -->
           <el-table-column prop="projectId" label="项目名称" :formatter="formatProject"></el-table-column>
           <el-table-column prop="taskTypeName" label="任务类型"></el-table-column>

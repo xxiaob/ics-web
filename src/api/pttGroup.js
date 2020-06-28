@@ -14,6 +14,14 @@ export function pttGroupList(data) {
   return axios.post(API.pttGroup.list, data)
 }
 /**
+ * 根据 groupId 查询用户列表
+ * @param {Object} data
+ * @returns {Object} axios 对象
+ */
+export function getUserList(data) {
+  return axios.post(API.pttGroup.userList, data)
+}
+/**
  * 添加
  * @param {object} data
  * @returns {Object} axios 对象
@@ -40,9 +48,25 @@ export function pttGroupSave(data) {
 }
 /**
  * 删除
- * @param {Array} groupId
+ * @param {String} groupId
  * @returns {Object} axios 对象
  */
 export function pttGroupDel(groupId) {
   return axios.post(API.pttGroup.del, { groupId })
+}
+/**
+ * 删除用户
+ * @param {object} data
+ * @returns {Object} axios 对象
+ */
+export function userDel(data) {
+  return axios.post(API.pttGroup.userDel, data)
+}
+/**
+ * 添加用户
+ * @param {object} data
+ * @returns {Object} axios 对象
+ */
+export function userAdd(data) {
+  return axios.post(API.pttGroup.userAdd, data)
 }

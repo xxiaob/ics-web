@@ -132,9 +132,12 @@ export default {
   pttGroup: {
     //PTT群组
     add: 'user-service/userGroup/addGroup',
-    list: 'user-service/userGroup/selectGroupByPage',
+    list: 'user-service/userGroup/selectGroup',
     update: 'user-service/userGroup/updateGroup',
-    del: 'user-service/userGroup/deleteGroup'
+    del: 'user-service/userGroup/deleteGroup',
+    userList: 'user-service/userGroup/getGroupUser',
+    userDel: 'user-service/userGroup/delGroupUser',
+    userAdd: 'user-service/userGroup/addGroupUser'
   },
   projects: {
     //项目管理

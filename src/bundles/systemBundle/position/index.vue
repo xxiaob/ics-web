@@ -11,7 +11,7 @@
       </div>
       <el-table :data="list" v-loading="loading" row-key="positionId" class="jc-table" @selection-change="tableSelect">
         <el-table-column type="selection" width="40"></el-table-column>
-        <el-table-column type="index" label="序号" width="50"></el-table-column>
+        <el-table-column type="index" :index="indexMethod" label="序号" width="50"></el-table-column>
         <el-table-column prop="positionName" label="职位名称"></el-table-column>
         <el-table-column label="电脑端">
           <template slot-scope="scope">

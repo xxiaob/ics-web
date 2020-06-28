@@ -6,7 +6,7 @@
         <div class="jc-card-title">列表内容</div>
       </div>
       <el-table :data="list" v-loading="loading" row-key="id" class="jc-table">
-        <el-table-column type="index" label="序号" width="50"></el-table-column>
+        <el-table-column type="index" :index="indexMethod" label="序号" width="50"></el-table-column>
         <el-table-column prop="recordTime" label="时间" width="140"></el-table-column>
         <el-table-column prop="orgName" label="所属组织"></el-table-column>
         <el-table-column prop="areaName" label="岗点名称"></el-table-column>
