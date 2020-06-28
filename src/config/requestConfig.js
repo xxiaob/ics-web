@@ -19,6 +19,7 @@ let errorRun = () => {
 axios.interceptors.request.use(function (config) {
   // 这里统一处理请求头配置
   config.headers.token = getToken() // 设置请求用户token
+  config.headers['Content-Security-Policy'] = 'upgrade-insecure-requests'
   config.headers.deviceType = 1
   return config
 }, function (error) {
