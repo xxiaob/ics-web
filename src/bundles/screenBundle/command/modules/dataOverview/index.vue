@@ -14,7 +14,7 @@
       </div>
       <div class="jc-content-warp">
         <div class="jc-content" v-for="item in list" :key="item.orgId">
-          <div class="jc-content-item" v-text="item.orgName"></div>
+          <div class="jc-content-item" v-text="item.orgName" :title="item.orgName"></div>
           <div class="jc-content-item jc-num">{{item.online || 0}}<span class="jc-unit">人</span></div>
           <div class="jc-content-item jc-num">{{item.patrolMileage || 0}}<span class="jc-unit">KM</span></div>
           <div class="jc-content-item jc-num">{{item.eventNbr}}<span class="jc-unit">件</span></div>
@@ -187,6 +187,9 @@ $jc-overview-color: #3783fb;
   display: flex;
   height: 30px;
   line-height: 30px;
+  &:nth-child(odd) {
+    background-color: rgba($color: #6879f2, $alpha: 0.05);
+  }
 }
 .jc-content-item {
   text-align: center;
