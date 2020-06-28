@@ -1,20 +1,34 @@
 <template>
-  <el-dialog class="imLive" title="视频通话" :visible.sync="dialogVisible" width="840px" :close-on-click-modal="false" :append-to-body="true" :close-on-press-escape="false" :show-close="false">
-    <div class="content" v-show="contentShow">
-      <div id="tolive">
-        <div id="live" v-show="myShow"></div>
+  <!-- <el-dialog class="imLive" title="视频通话" :visible.sync="dialogVisible" width="840px" :close-on-click-modal="false" :append-to-body="true" :close-on-press-escape="false" :show-close="false">
+  </el-dialog> -->
+  <div class="imLive" v-show="dialogVisible">
+
+    <transition name="fade">
+      <div class="content" v-show="contentShow">
+        <div class="title">
+          <span>视频通话</span>
+          <span class="exit" @click="exit">挂断</span>
+        </div>
+        <div class="tolive">
+          <div id="tolive">
+            <div id="live" v-show="myShow"></div>
+          </div>
+        </div>
       </div>
-    </div>
-    <h3 class="title">{{msg}}</h3>
-    <div slot="footer" class="dialog-footer">
-      <span class="invitedButton" v-if="invitedButton">
-        <img class="gif" src="./assets/help.gif" alt="" width="50">
-        <img class="btn" src="./assets/answer.png" alt="" width="50" @click="agree" title="接听">
-        <img class="btn" src="./assets/hangup.png" alt="" width="50" @click="refuse" title="挂断">
-      </span>
-      <img src="./assets/hangup.png" alt="" width="50" @click="exit" v-show="contentShow" title="挂断">
-    </div>
-  </el-dialog>
+    </transition>
+
+    <transition name="fade">
+      <div class="dialog-footer" v-if="invitedButton">
+        <span class="invitedButton">
+          <img class="gif" src="./assets/help.gif" alt="" width="50">
+          <img class="btn" src="./assets/answer.png" alt="" width="50" @click="agree" title="接听">
+          <img class="btn" src="./assets/hangup.png" alt="" width="50" @click="refuse" title="挂断">
+        </span>
+        <h3 class="title">{{msg}}</h3>
+      </div>
+    </transition>
+
+  </div>
 
 </template>
 
@@ -71,6 +85,7 @@ export default {
           //设置频道id
           this.channelId = channelId ? channelId : new Date().getTime().toString()
           this.msg = '正在发起' + this.inviteTypes[inviteType][0]
+          this.$message.info('正在发起' + this.inviteTypes[inviteType][0])
           this.inviteAllUsers(...this.inviteTypes[inviteType][1], users)
         } else {
           console.log('我是接收方')
@@ -88,9 +103,6 @@ export default {
     } else {
       this.live = new Live(this.user.userId, 'live', 'tolive')
     }
-    // setTimeout(()=>{
-    //   this.$emit('update:visible', true)
-    // }, 3000)
   },
   methods: {
     imMsgCb(onType, data) {
@@ -236,9 +248,11 @@ export default {
       this.fromUsername = ''
       this.contentShow = false
       this.myShow = false
-      this.dialogVisible = false
       this.$emit('update:visible', false)
       this.$emit('update:params', null)
+      setTimeout(()=>{
+        this.dialogVisible = false
+      }, 600)
     },
     //结束按钮操作
     exit() {
@@ -266,13 +280,59 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.title {
-  text-align: center;
+.fade-enter-active,
+.fade-leave-active {
+  transition: transform 0.6s, opacity 0.6s;
 }
+
+.fade-enter,
+.fade-leave-to {
+  opacity: 0;
+  transform: translateY(200%);
+}
+
 .content {
-  width: 100%;
+  width: 840px;
+
+  background-color: white;
+  position: fixed;
+  z-index: 9999;
+  bottom: 200px;
+  left: 50%;
+  margin-left: -420px;
+  border-radius: 3px;
+  box-shadow: 0 0 5px 0px #cccccc;
+  padding: 10px;
+  .title {
+    position: relative;
+    padding: 5px 10px;
+  }
+  .title:before {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    margin: auto 0;
+    content: "";
+    display: block;
+    width: 3px;
+    height: 14px;
+    border-radius: 2px;
+    background-color: #409eff;
+  }
+  .exit {
+    float: right;
+    background: red;
+    color: white;
+    padding: 2px 10px;
+    border-radius: 3px;
+    cursor: pointer;
+  }
+}
+.tolive {
   overflow-x: auto;
   overflow-y: hidden;
+  height: 160px;
 }
 #tolive {
   display: flex;
@@ -297,7 +357,14 @@ export default {
 }
 
 .dialog-footer {
+  position: fixed;
+  z-index: 9999;
   text-align: center;
+  width: 100%;
+  bottom: 100px;
+  .title {
+    text-align: center;
+  }
   img {
     cursor: pointer;
     margin: 0 20px;

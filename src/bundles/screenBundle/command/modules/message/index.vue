@@ -33,6 +33,11 @@ export default {
     //   }
     // }, 1000 * 3)
   },
+  mounted() {
+    this.$nextTick(() => {
+      this.$EventBus.$emit('message-component-change', { component: 'CommandMessage', options: null }) //通知窗口改变
+    })
+  },
   methods: {
     initData(data) {
       let message = data.messageDTO
