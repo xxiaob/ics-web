@@ -1,5 +1,5 @@
 <template>
-  <ul class="jc-ul">
+  <!-- <ul class="jc-ul">
     <li v-for="item in list" :key="item.id">
       <span>{{item.createTime|filterTime}}</span>
       <span>{{item.creatorId}}</span>
@@ -7,7 +7,17 @@
       <span v-show="item.eventData">至</span>
       <template v-show="item.eventData">{{item|filterEventData}}</template>
     </li>
-  </ul>
+  </ul> -->
+  <el-timeline>
+    <el-timeline-item v-for="item in list" :key="item.id" :timestamp="item.createTime|filterTime" placement="top">
+      <div>
+        <span>{{item.creatorId}}</span>
+        <span>{{item.eventType|filterType}}</span>
+        <span v-show="item.eventData">至</span>
+        <template v-show="item.eventData">{{item|filterEventData}}</template>
+      </div>
+    </el-timeline-item>
+  </el-timeline>
 </template>
 
 <script>
@@ -43,7 +53,7 @@ export default {
         let res = jsonData.assignees
 
         if (jsonData.remark) {
-          res += ('　备注　' + jsonData.remark)
+          res += ('　\n备注　' + jsonData.remark)
         }
         return res
       }

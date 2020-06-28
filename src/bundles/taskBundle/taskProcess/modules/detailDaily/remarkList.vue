@@ -1,10 +1,10 @@
 <template>
   <div>
     <el-table :data="list" v-loading="loading" row-key="id" class="jc-table" size="mini">
-      <el-table-column type="index" :index="indexMethod" label="序号" width="50"></el-table-column>
-      <el-table-column prop="userName" label="用户名" width="120"></el-table-column>
+      <el-table-column type="index" :index="indexMethod" label="序号" width="50" v-if="!small"></el-table-column>
+      <el-table-column prop="userName" label="用户名" width="80"></el-table-column>
       <el-table-column prop="text" label="备注" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="createTime" label="创建时间" :formatter="formatTime" width="140"></el-table-column>
+      <el-table-column prop="createTime" label="创建时间" :formatter="formatTime" width="140" v-if="!small"></el-table-column>
     </el-table>
     <el-pagination @current-change="currentChange" @size-change="sizeChange" :current-page.sync="page.pageNum" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.total" class="text-right jc-mt"></el-pagination>
   </div>
@@ -19,6 +19,7 @@ export default {
   name: 'TaskProcessDetailDailyRemark',
   mixins: [PaginationMixins],
   props: {
+    small: false,
     taskId: {
       type: String,
       default: ''

@@ -1,6 +1,12 @@
 <template>
   <div class="jc-task">
-    <div class="jc-view-content" v-loading="loading" element-loading-background="rgba(0, 0, 0, 0)">
+    <div class="jc-header">
+      <div :class="{activate:activate==='1'}" @click="changeActivate('1')">基础信息</div>
+      <div :class="{activate:activate==='2'}" @click="changeActivate('2')">流转记录</div>
+      <div :class="{activate:activate==='3'}" @click="changeActivate('3')">备注</div>
+    </div>
+
+    <div v-show="activate==='1'" class="jc-view-content" v-loading="loading" element-loading-background="rgba(0, 0, 0, 0)">
       <div class="jc-detail-warp">
         <div class="jc-detail-label">任务名称</div>
         <div class="jc-detail-content">{{form.taskName}}</div>
@@ -56,7 +62,12 @@
         </div>
       </div>
     </div>
-
+    <div v-show="activate==='2'" class="jc-view-content jc-forward" v-loading="loading" element-loading-background="rgba(0, 0, 0, 0)">
+      <jc-forward-list :taskId="form.businessKey" ref="forward"></jc-forward-list>
+    </div>
+    <div v-show="activate==='3'" class="jc-view-content jc-remark" v-loading="loading" element-loading-background="rgba(0, 0, 0, 0)">
+      <jc-remark-list :taskId="form.businessKey" ref="remark" :small="true"></jc-remark-list>
+    </div>
     <div class="jc-footer">
       <el-button @click="handleTask(true)" size="small" type="primary">流转任务</el-button>
       <el-button @click="handleTask(false)" size="small" type="primary">添加备注</el-button>
@@ -98,10 +109,13 @@ export default {
     }
   },
   components: {
-    JcTaskPeople: () => import('@/bundles/taskBundle/taskProcess/modules/manage/taskPeople')
+    JcTaskPeople: () => import('@/bundles/taskBundle/taskProcess/modules/manage/taskPeople'),
+    JcForwardList: () => import('@/bundles/taskBundle/taskProcess/modules/detail/forwardList'),
+    JcRemarkList: () => import('@/bundles/taskBundle/taskProcess/modules/detailDaily/remarkList')
   },
   data() {
     return {
+      activate: '1',
       peopleType: TASK_PEOPLE_TYPES.ORG,
       peoples: [],
       peopleProps: {
@@ -196,6 +210,9 @@ export default {
     }
   },
   methods: {
+    changeActivate(val) {
+      this.activate = val
+    },
     formatOrgTree(child) {
       let trees = []
 
@@ -352,6 +369,28 @@ export default {
 .jc-footer {
   text-align: center;
   padding: 10px 0;
+}
+.jc-header {
+  display: flex;
+  padding: 5px 0;
+  border-bottom: 1px solid #cccccc;
+  & > div {
+    flex: 1;
+    line-height: 24px;
+    text-align: center;
+    cursor: pointer;
+  }
+  & > div:not(:last-child) {
+    border-right: 1px solid #cccccc;
+  }
+  .activate {
+    color: $jc-color-primary;
+  }
+}
+
+.jc-forward,
+.jc-remark {
+  padding: 10px;
 }
 .el-textarea /deep/ textarea {
   font-family: "微软雅黑", "Microsoft Yahei", "Helvetica Naue", Helvetica,
