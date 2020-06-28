@@ -24,7 +24,7 @@
         <el-form-item label="在岗时间" prop="" :rules="rules.SELECT_NOT_NULL">
           <!-- <el-date-picker style="width: 300px;" v-for="(item,index) in taskTimes" v-model="taskTimes[index]" :key="index" value-format="HH:mm:ss" format="HH:mm:ss" type="datetimerange" range-separator="-" start-placeholder="开始时间" end-placeholder="结束时间">
           </el-date-picker> -->
-          <el-time-picker style="width: 300px;" v-for="(item,index) in taskTimes" v-model="taskTimes[index]" :key="index" value-format="HH:mm:ss" is-range arrow-control range-separator="-" start-placeholder="开始时间" end-placeholder="结束时间" placeholder="选择时间范围">
+          <el-time-picker style="width: 300px;" v-for="(item,index) in taskTimes" v-model="taskTimes[index]" :key="index" value-format="HH:mm:ss" is-range range-separator="-" start-placeholder="开始时间" end-placeholder="结束时间" placeholder="选择时间范围">
           </el-time-picker>
           <el-button icon="el-icon-close" circle size="mini" title="增加" @click="delTime"></el-button>
           <el-button icon="el-icon-plus" circle size="mini" title="删除" @click="addTime"></el-button>

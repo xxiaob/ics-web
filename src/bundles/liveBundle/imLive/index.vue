@@ -11,7 +11,10 @@
         </div>
         <div class="tolive">
           <div id="tolive">
-            <div id="live" v-show="myShow"></div>
+            <div id="live" v-show="myShow" class="live"></div>
+            <template v-if="params&&params.users">
+              <div class="live" v-for="user in params.users" :key="user" :id="user"></div>
+            </template>
           </div>
         </div>
       </div>
@@ -338,7 +341,7 @@ export default {
   display: flex;
   float: left;
   box-sizing: border-box;
-  /deep/ div {
+  .live {
     margin: 5px;
     // border: 1px solid #cccccc;
     height: 150px !important;
@@ -346,15 +349,15 @@ export default {
     float: left;
   }
 }
-#live {
-  width: 200px;
-  height: 150px;
-  float: left;
-  box-sizing: border-box;
-  /deep/ div {
-    margin: 0 !important;
-  }
-}
+// #live {
+//   width: 200px;
+//   height: 150px;
+//   float: left;
+//   box-sizing: border-box;
+//   /deep/ div {
+//     margin: 0 !important;
+//   }
+// }
 
 .dialog-footer {
   position: fixed;

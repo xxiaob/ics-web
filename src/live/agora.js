@@ -102,9 +102,13 @@ export class Live {
 
     //监听订阅事件 并播放远端流
     this.rtc.client.on('stream-subscribed', e => {
-      this.console('stream-subscribed 订阅远端流成功', e)
+      this.console('stream-subscribed 订阅远端流成功', e, e.stream.streamId)
       //接下来可以选择在本地播放远端流
-      e.stream.play(this.remoteId)
+      const remoteId = e.stream.streamId.split('_')[0]
+
+      this.console('remoteId', remoteId)
+      // e.stream.play(this.remoteId)
+      e.stream.play(remoteId)
     })
 
     //监听远端流移除
