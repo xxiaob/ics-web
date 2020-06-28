@@ -12,7 +12,6 @@
         <div class="tolive">
           <div id="tolive">
             <div id="live" v-show="myShow"></div>
-            <div id="12"></div>
           </div>
         </div>
       </div>
