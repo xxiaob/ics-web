@@ -1,13 +1,13 @@
 <template>
   <div>
     <el-table :data="list" v-loading="loading" row-key="id" class="jc-table" size="mini">
-      <el-table-column type="index" :index="indexMethod" label="序号" width="50"></el-table-column>
-      <el-table-column prop="eventTitle" label="事件标题"></el-table-column>
-      <el-table-column prop="typeName" label="事件类型"></el-table-column>
-      <el-table-column prop="reportUserName" label="上报人"></el-table-column>
-      <el-table-column prop="orgName" label="所属组织"></el-table-column>
+      <el-table-column type="index" label="序号" width="50" v-if="!small"></el-table-column>
+      <el-table-column prop="eventTitle" label="事件标题" show-overflow-tooltip></el-table-column>
+      <el-table-column prop="typeName" label="事件类型" v-if="!small"></el-table-column>
+      <el-table-column prop="reportUserName" label="上报人" v-if="!small"></el-table-column>
+      <el-table-column prop="orgName" label="所属组织" v-if="!small"></el-table-column>
       <el-table-column prop="desc" label="事件描述" show-overflow-tooltip></el-table-column>
-      <el-table-column prop="createTime" label="创建时间" :formatter="formatTime"></el-table-column>
+      <el-table-column prop="createTime" label="创建时间" :formatter="formatTime" v-if="!small"></el-table-column>
     </el-table>
   </div>
 </template>
@@ -19,6 +19,7 @@ import { formatDate } from '@/libs/util'
 export default {
   name: 'TaskProcessDetailEvent',
   props: {
+    small: false,
     taskId: {
       type: String,
       default: ''

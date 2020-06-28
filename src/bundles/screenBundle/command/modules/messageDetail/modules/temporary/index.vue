@@ -1,6 +1,12 @@
 <template>
   <div class="jc-temporary">
-    <div class="jc-view-content" v-loading="loading" element-loading-background="rgba(0, 0, 0, 0)">
+    <div class="jc-header">
+      <div :class="{activate:activate==='1'}" @click="changeActivate('1')">基础信息</div>
+      <div :class="{activate:activate==='2'}" @click="changeActivate('2')">流转记录</div>
+      <div :class="{activate:activate==='3'}" @click="changeActivate('3')">关联事件</div>
+    </div>
+
+    <div v-show="activate==='1'" class="jc-view-content" v-loading="loading" element-loading-background="rgba(0, 0, 0, 0)">
       <div class="jc-detail-warp">
         <div class="jc-detail-label">任务名称</div>
         <div class="jc-detail-content">{{form.taskName}}</div>
@@ -75,7 +81,12 @@
         </div>
       </div>
     </div>
-
+    <div v-show="activate==='2'" class="jc-view-content jc-forward" v-loading="loading" element-loading-background="rgba(0, 0, 0, 0)">
+      <jc-forward-list :taskId="form.businessKey" ref="forward"></jc-forward-list>
+    </div>
+    <div v-show="activate==='3'" class="jc-view-content jc-event" v-loading="loading" element-loading-background="rgba(0, 0, 0, 0)">
+      <jc-event-list :taskId="form.businessKey" :small="true"></jc-event-list>
+    </div>
     <div class="jc-footer">
       <el-button @click="handleTask(true)" size="small" type="primary">流转任务</el-button>
       <el-button @click="handleTask(false)" size="small">结束任务</el-button>
@@ -126,10 +137,13 @@ export default {
   },
   mixins: [MediaMixins],
   components: {
-    JcTaskPeople: () => import('@/bundles/taskBundle/taskProcess/modules/manage/taskPeople')
+    JcTaskPeople: () => import('@/bundles/taskBundle/taskProcess/modules/manage/taskPeople'),
+    JcForwardList: () => import('@/bundles/taskBundle/taskProcess/modules/detail/forwardList'),
+    JcEventList: () => import('@/bundles/taskBundle/taskProcess/modules/detail/eventList')
   },
   data() {
     return {
+      activate: '1',
       peopleType: TASK_PEOPLE_TYPES.ORG,
       peopleProps: {
         [TASK_PEOPLE_TYPES.ORG]: 'orgIds',
@@ -234,6 +248,9 @@ export default {
     }
   },
   methods: {
+    changeActivate(val) {
+      this.activate = val
+    },
     async remoteMethod(query) {
       this.loading = true
       try {
@@ -378,6 +395,28 @@ export default {
 .jc-footer {
   text-align: center;
   padding: 10px 0;
+}
+.jc-header {
+  display: flex;
+  padding: 5px 0;
+  border-bottom: 1px solid #cccccc;
+  & > div {
+    flex: 1;
+    line-height: 24px;
+    text-align: center;
+    cursor: pointer;
+  }
+  & > div:not(:last-child) {
+    border-right: 1px solid #cccccc;
+  }
+  .activate {
+    color: $jc-color-primary;
+  }
+}
+
+.jc-forward,
+.jc-event {
+  padding: 10px;
 }
 .el-textarea /deep/ textarea {
   font-family: "微软雅黑", "Microsoft Yahei", "Helvetica Naue", Helvetica,

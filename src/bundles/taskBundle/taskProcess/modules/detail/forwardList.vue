@@ -53,7 +53,7 @@ export default {
         let res = jsonData.assignees
 
         if (jsonData.remark) {
-          res += ('　\n备注　' + jsonData.remark)
+          res += ('　备注　' + jsonData.remark)
         }
         return res
       }

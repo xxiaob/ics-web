@@ -26,12 +26,12 @@ export default {
   },
   created() {
     this.$EventBus.$on('screen-message-change', this.initData) //监听消息
-    this.interval = setInterval(() => {
-      this.list.splice(0, 0, { id: this.index++, type: '0', title: '测试' })
-      if (this.list.length > this.maxLength) {
-        this.list.splice(this.maxLength, this.list.length - this.maxLength)
-      }
-    }, 1000 * 3)
+    // this.interval = setInterval(() => {
+    //   this.list.splice(0, 0, { id: this.index++, type: '3', title: '测试' })
+    //   if (this.list.length > this.maxLength) {
+    //     this.list.splice(this.maxLength, this.list.length - this.maxLength)
+    //   }
+    // }, 1000 * 3)
   },
   methods: {
     initData(data) {
