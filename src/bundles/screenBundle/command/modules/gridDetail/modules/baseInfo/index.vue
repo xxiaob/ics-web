@@ -2,29 +2,32 @@
   <div class="jc-view-content" v-loading="loading" element-loading-background="rgba(0, 0, 0, 0)">
     <div class="jc-detail-warp">
       <div class="jc-detail-label">所属组织</div>
-      <div class="jc-detail-content">南京市</div>
+      <div class="jc-detail-content" v-text="detail.orgName || '--'"></div>
     </div>
     <div class="jc-detail-warp">
       <div class="jc-detail-label">网格名称</div>
-      <div class="jc-detail-content">南京市</div>
+      <div class="jc-detail-content" v-text="detail.areaName || '--'"></div>
     </div>
     <div class="jc-detail-warp">
       <div class="jc-detail-label">网格类型</div>
-      <div class="jc-detail-content">南京市</div>
+      <div class="jc-detail-content" v-text="detail.areaTypeName || '--'"></div>
     </div>
     <div class="jc-detail-warp">
       <div class="jc-detail-label">网格类型</div>
-      <div class="jc-detail-content">描述</div>
+      <div class="jc-detail-content" v-html="detail.desc"></div>
     </div>
   </div>
 </template>
 <script>
+import { getAreaInfoById } from '@/api/area'
+
 export default {
   name: 'ScreenCommandGridDetailBaseInfo',
   props: ['options', 'project'],
   data() {
     return {
-      loading: false
+      loading: false,
+      detail: {}
     }
   },
   watch: {
@@ -32,9 +35,19 @@ export default {
       this.initData()
     }
   },
+  created() {
+    this.initData()
+  },
   methods: {
-    initData() {
-
+    async initData() {
+      this.loading = true
+      this.detail = {}
+      try {
+        this.detail = await getAreaInfoById(this.options.areaId)
+      } catch (error) {
+        console.log(error)
+      }
+      this.loading = false
     }
   }
 }

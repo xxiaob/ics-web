@@ -70,6 +70,7 @@ export default {
     list: 'area-service/area/list',
     update: 'area-service/area/update',
     del: 'area-service/area/delete',
+    getAreaInfoById: 'area-service/area/getAreaInfoById', //根据id查询区域信息
     getOrgInfo: 'area-service/area/getOrgInfo',
     getUsableAdCodeList: 'area-service/area/getUsableAdCodeList',
     gridList: 'area-service/area/getAreaListByOrgId',
@@ -180,7 +181,8 @@ export default {
     //大屏接口
     command: {
       getCommandScreenData: 'data-service/largeScreen/getCommandScreenData',
-      screenMap: 'message-service/icsServer/screenMap' //大屏推送接口
+      screenMap: 'message-service/icsServer/screenMap', //大屏推送接口
+      getScreenData: 'taskScreen/getScreenData'
     }
   }
 }

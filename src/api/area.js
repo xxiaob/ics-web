@@ -90,3 +90,12 @@ export function areaGridList() {
 export function getAreaCodeByOrgId(orgId) {
   return axios.post(API.area.getAreaCodeByOrgId, { orgId })
 }
+
+/**
+ * 根据id查询区域信息
+ * @param {String} areaId
+ * @returns {Object} axios 对象
+ */
+export function getAreaInfoById(areaId) {
+  return axios.post(API.area.getAreaInfoById + '?areaId=' + areaId)
+}

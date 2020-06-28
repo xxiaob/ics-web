@@ -23,6 +23,7 @@ export default {
   },
   created() {
     this.$EventBus.$on('org-change', this.orgMap) //监听行级别切换
+    this.$EventBus.$on('screen-org-location', this.orgLocation) //监听组织定位
     this.$EventBus.$on('show-area-change', this.orgShowAreaChange) //监听区域显示切换
     this.$EventBus.$on('show-word-change', this.orgShowWordChange) //监听文字显示切换
   },
@@ -154,6 +155,9 @@ export default {
           this.orgChangeMap(mapSign.extData.orgId)
         }
       })
+    },
+    orgLocation(data) {
+      //组织定位
     },
     orgShowAreaChange(areas) {
       this.orgAreaVisible = areas.includes('org') //如果存在组织区域显示，则显示区域，否则不显示

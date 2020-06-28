@@ -45,28 +45,28 @@ export const PolygonStyle = {
   [mapStyle.BASE]: {
     base: {
       strokeWeight: 1,
-      fillOpacity: 0.08,
+      fillOpacity: 0.16,
       strokeStyle: 'dashed'
     },
-    normal: { fillOpacity: 0.08 },
+    normal: { fillOpacity: 0.16 },
     active: { fillOpacity: 0.32 }
   },
   [mapStyle.DARK]: {
     base: {
       strokeWeight: 1,
-      fillOpacity: 0.08,
+      fillOpacity: 0.16,
       strokeStyle: 'dashed'
     },
-    normal: { fillOpacity: 0.08 },
+    normal: { fillOpacity: 0.16 },
     active: { fillOpacity: 0.32 }
   },
   [mapStyle.SATELLITE]: {
     base: {
       strokeWeight: 1,
-      fillOpacity: 0.08,
+      fillOpacity: 0.16,
       strokeStyle: 'dashed'
     },
-    normal: { fillOpacity: 0.08 },
+    normal: { fillOpacity: 0.16 },
     active: { fillOpacity: 0.32 }
   }
 }
@@ -76,28 +76,28 @@ export const CircleStyle = {
   [mapStyle.BASE]: {
     base: {
       strokeWeight: 1,
-      fillOpacity: 0.08,
+      fillOpacity: 0.16,
       strokeStyle: 'dashed'
     },
-    normal: { fillOpacity: 0.08 },
+    normal: { fillOpacity: 0.16 },
     active: { fillOpacity: 0.32 }
   },
   [mapStyle.DARK]: {
     base: {
       strokeWeight: 1,
-      fillOpacity: 0.08,
+      fillOpacity: 0.16,
       strokeStyle: 'dashed'
     },
-    normal: { fillOpacity: 0.08 },
+    normal: { fillOpacity: 0.16 },
     active: { fillOpacity: 0.32 }
   },
   [mapStyle.SATELLITE]: {
     base: {
       strokeWeight: 1,
-      fillOpacity: 0.08,
+      fillOpacity: 0.16,
       strokeStyle: 'dashed'
     },
-    normal: { fillOpacity: 0.08 },
+    normal: { fillOpacity: 0.16 },
     active: { fillOpacity: 0.32 }
   }
 }
@@ -111,7 +111,7 @@ export const PolylineStyle = {
       lineJoin: 'round',
       lineCap: 'round'
     },
-    normal: { fillOpacity: 0.08 },
+    normal: { fillOpacity: 0.16 },
     active: { fillOpacity: 0.32 }
   },
   [mapStyle.DARK]: {
@@ -121,7 +121,7 @@ export const PolylineStyle = {
       lineJoin: 'round',
       lineCap: 'round'
     },
-    normal: { fillOpacity: 0.08 },
+    normal: { fillOpacity: 0.16 },
     active: { fillOpacity: 0.32 }
   },
   [mapStyle.SATELLITE]: {
@@ -131,7 +131,7 @@ export const PolylineStyle = {
       lineJoin: 'round',
       lineCap: 'round'
     },
-    normal: { fillOpacity: 0.08 },
+    normal: { fillOpacity: 0.16 },
     active: { fillOpacity: 0.32 }
   }
 

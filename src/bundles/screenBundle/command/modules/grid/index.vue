@@ -138,6 +138,11 @@ export default {
     goLocation(data) {
       //去定位
       console.log('screen-grid-location-data', data)
+      if (data.areaId) {
+        this.$EventBus.$emit('screen-grid-location', data) //通知网格定位
+      } else {
+        this.$EventBus.$emit('screen-org-location', data) //通知组织定位
+      }
     }
   }
 }
