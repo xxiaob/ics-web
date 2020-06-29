@@ -1,5 +1,5 @@
 <template>
-  <view-warp :title="options.areaName">
+  <view-warp :title="options.areaName + '-详情'">
     <view-tabs v-model="tabComponent" :options="tabs"></view-tabs>
     <keep-alive>
       <component :is="tabComponent" :options="options" :project="project"></component>
@@ -14,13 +14,13 @@ export default {
     ViewWarp: () => import('../common/viewWarp'),
     ViewTabs: () => import('../common/viewTabs'),
     BaseInfo: () => import('./modules/baseInfo'), //基础信息
-    GridTask: () => import('./modules/task'), //任务
+    GridTask: () => import('./modules/task'), //任务 问题 事件
     WorkCheck: () =>import('./modules/workCheck') //考勤
   },
   data() {
     return {
       tabComponent: 'BaseInfo',
-      tabs: [{ label: '基础信息', value: 'BaseInfo' }, { label: '任务', value: 'GridTask' }, { label: '考勤', value: 'WorkCheck' }]
+      tabs: [{ label: '基础信息', value: 'BaseInfo' }, { label: '综合', value: 'GridTask' }, { label: '考勤', value: 'WorkCheck' }]
     }
   }
 }

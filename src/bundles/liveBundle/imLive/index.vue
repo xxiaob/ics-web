@@ -1,26 +1,55 @@
 <template>
   <!-- <el-dialog class="imLive" title="视频通话" :visible.sync="dialogVisible" width="840px" :close-on-click-modal="false" :append-to-body="true" :close-on-press-escape="false" :show-close="false">
   </el-dialog> -->
-  <div class="imLive" v-show="dialogVisible">
+  <!-- v-show="dialogVisible" -->
+  <div class="imLive">
 
-    <transition name="fade">
-      <div class="content" v-show="contentShow">
+    <transition-group name="fade">
+      <div key="1" class="content" :class="{'full-content':contentSize==='2'}" v-show="contentShow&&contentSize!=='0'">
         <div class="title">
           <span>视频通话</span>
-          <span class="exit" @click="exit">挂断</span>
+          <div class="right">
+            <span class="exit" @click="exit" title="挂断">挂断</span>
+            <span title="投屏">
+              <img src="./assets/bigScreen1.png" alt="" width="20">
+              <img src="./assets/bigScreen2.png" alt="" width="20">
+            </span>
+            <span title="全屏" v-show="contentSize==='1'" @click="changeSize('2')">
+              <img src="./assets/full1.png" alt="" width="20">
+              <img src="./assets/full2.png" alt="" width="20">
+            </span>
+            <span title="取消全屏" v-show="contentSize==='2'" @click="changeSize('1')">
+              <img src="./assets/closeFull1.png" alt="" width="20">
+              <img src="./assets/closeFull2.png" alt="" width="20">
+            </span>
+            <span title="缩小" @click="changeSize('0')" v-show="contentSize==='1'">
+              <img src="./assets/narrow1.png" alt="" width="20">
+              <img src="./assets/narrow2.png" alt="" width="20">
+            </span>
+          </div>
         </div>
         <div class="live-out">
           <div class="live-in">
-            <div id="live" v-show="myShow" class="live" :class="{audio:inviteType==='0'}">
+            <div id="live" v-show="myShow" class="live" :class="{audio:inviteType==='0','big-live':bigLiveId===user.userId}" @click="checkBigLive(user.userId)">
               <div class="userName">{{user.userName}}</div>
             </div>
-            <div class="live" :class="{audio:inviteType==='0'}" v-for="user in users" :key="user.userId" :id="user.userId">
+            <!-- <div class="live"></div> -->
+            <div class="live" @click="checkBigLive(user.userId)" :class="{audio:inviteType==='0','big-live':bigLiveId===user.userId}" v-for="user in users" :key="user.userId" :id="user.userId">
               <div class="userName">{{user.userName}}</div>
             </div>
           </div>
         </div>
       </div>
-    </transition>
+
+      <div key="2" class="content-small" v-show="contentShow&&contentSize==='0'">
+        <span class="exit" @click="exit" title="挂断">挂断</span>
+        <span class="count">{{users.length+1}} 人</span>
+        <span title="放大" @click="changeSize('1')">
+          <img src="./assets/enlarge1.png" alt="" width="20">
+          <img src="./assets/enlarge2.png" alt="" width="20">
+        </span>
+      </div>
+    </transition-group>
 
     <transition name="fade">
       <div class="call-box" v-if="invitedButton">
@@ -57,6 +86,8 @@ export default {
   },
   data() {
     return {
+      bigLiveId: '',
+      contentSize: '1',
       users: [],
       msg: '音视频通话',
       dialogVisible: false,
@@ -86,6 +117,8 @@ export default {
     visible(newVal) {
       if (newVal) {
         this.dialogVisible = newVal
+        this.bigLiveId = this.user.userId
+        this.contentSize = '1'
         if (this.params) {
           const { inviteType, users, channelId } = this.params
 
@@ -114,6 +147,12 @@ export default {
     }
   },
   methods: {
+    checkBigLive(val) {
+      this.bigLiveId = val
+    },
+    changeSize(val) {
+      this.contentSize = val
+    },
     imMsgCb(onType, data) {
       console.log('vue 数据', onType, data)
       const { fromUsername, content: { channelId, msgType, agree, nickName, isExit, inviteType, mediaType, content, users } } = data
@@ -315,13 +354,53 @@ export default {
   transform: translateY(200%);
 }
 
+//小窗口
+.content-small {
+  background-color: white;
+  width: 200px;
+  position: fixed;
+  z-index: 9999;
+  bottom: 200px;
+  right: 50px;
+  border-radius: 3px;
+  box-shadow: 0 0 5px 0px #cccccc;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-around;
+  & > span {
+    cursor: pointer;
+    // float: left;
+    // margin-left: 10px;
+
+    & > img:last-child {
+      display: none;
+    }
+    &:hover > img:last-child {
+      display: inline;
+    }
+    &:hover > img:first-child {
+      display: none;
+    }
+  }
+  .count {
+    line-height: 24px;
+    cursor: inherit;
+  }
+  .exit {
+    background: red;
+    color: white;
+    padding: 1.5px 10px;
+    border-radius: 3px;
+  }
+}
+
 //视频弹框样式
 .content {
   width: 840px;
 
   background-color: white;
   position: fixed;
-  z-index: 9999;
+  z-index: 999;
   bottom: 200px;
   left: 50%;
   margin-left: -420px;
@@ -345,13 +424,29 @@ export default {
     border-radius: 2px;
     background-color: #409eff;
   }
-  .exit {
+  .right {
     float: right;
+    & > span {
+      cursor: pointer;
+      float: left;
+      margin-left: 10px;
+
+      & > img:last-child {
+        display: none;
+      }
+      &:hover > img:last-child {
+        display: inline;
+      }
+      &:hover > img:first-child {
+        display: none;
+      }
+    }
+  }
+  .exit {
     background: red;
     color: white;
-    padding: 2px 10px;
+    padding: 1.5px 10px;
     border-radius: 3px;
-    cursor: pointer;
   }
 }
 
@@ -368,9 +463,9 @@ export default {
   box-sizing: border-box;
   .live {
     margin: 5px;
-    // border: 1px solid #cccccc;
-    height: 150px !important;
-    width: 200px !important;
+    border: 1px solid #cccccc;
+    height: 150px;
+    width: 200px;
     float: left;
     position: relative;
     background-color: #000000;
@@ -387,6 +482,42 @@ export default {
   .audio {
     background: url(./assets/audio.png) no-repeat;
     background-size: 100% 100%;
+  }
+}
+
+//大窗口
+.full-content {
+  width: 640px;
+  top: 76px;
+  right: 320px;
+  margin-left: 0;
+  left: inherit;
+  bottom: inherit;
+
+  .live-out {
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: 340px;
+
+    .live-in {
+      width: 210px;
+      // height: 100%;
+      display: block;
+      float: right;
+
+      .live {
+        cursor: pointer;
+        float: none;
+      }
+
+      .big-live {
+        width: 400px;
+        height: 340px;
+        position: absolute;
+        left: 5px;
+        top: 39px;
+      }
+    }
   }
 }
 

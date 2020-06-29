@@ -13,7 +13,7 @@
       <div class="jc-detail-content" v-text="detail.areaTypeName || '--'"></div>
     </div>
     <div class="jc-detail-warp">
-      <div class="jc-detail-label">网格类型</div>
+      <div class="jc-detail-label">描述</div>
       <div class="jc-detail-content" v-html="detail.desc"></div>
     </div>
   </div>

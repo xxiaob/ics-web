@@ -5,7 +5,7 @@
 </template>
 <script>
 export default {
-  name: 'ScreenCommandGridDetailWorkCheck',
+  name: 'ScreenCommandUserDetailWorkCheck',
   props: ['options', 'project'],
   components: {
     ViewEmpty: () =>import('@/bundles/screenBundle/command/modules/common/viewEmpty')

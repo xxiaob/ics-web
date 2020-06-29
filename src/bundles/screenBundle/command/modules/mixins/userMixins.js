@@ -187,7 +187,16 @@ export default {
         myJcMap.map.setBounds(this.getAmapBundles(context.clusterData))
       } else {
         //获取信息去通知显示详情
+        let key = parseFloat(context.data[0].lnglat.lng).toFixed(6) + ',' + parseFloat(context.data[0].lnglat.lat).toFixed(6)
 
+        let userItem = usersData.users[key]
+
+        this.$EventBus.$emit('view-component-change', {
+          component: 'UserDetail', options: {
+            userId: userItem.userId, userName: userItem.userName,
+            center: userItem.center
+          }
+        }) //通知窗口改变
       }
     },
     clearUsers() {

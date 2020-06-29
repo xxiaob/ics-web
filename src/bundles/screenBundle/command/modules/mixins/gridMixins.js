@@ -39,7 +39,10 @@ export default {
         let res = gridData[this.gridOrg.orgId]
 
         if (!(res && res.length)) {
-          res = await areaList({ orgId: this.gridOrg.orgId, projectId: this.project.projectId, orgSearchType: AREAS_TYPE.OWN_AND_BRO, searchType: AREAS_SEARCH_TYPE.GRID })
+          res = await areaList({
+            orgId: this.gridOrg.orgId, projectId: this.project.projectId,
+            orgSearchType: AREAS_TYPE.OWN_AND_BRO, searchType: AREAS_SEARCH_TYPE.SCREEN
+          })
 
           gridData[this.gridOrg.orgId] = res
         }

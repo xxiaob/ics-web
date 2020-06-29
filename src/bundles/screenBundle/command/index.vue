@@ -56,6 +56,7 @@ export default {
     CommandGrid: () => import('./modules/grid'), //网格
     MessageDetail: () => import('./modules/messageDetail'), //消息详情
     GridDetail: () => import('./modules/gridDetail'), //网格详情
+    UserDetail: () => import('./modules/userDetail'), //用户详情
     TemporaryTasksManage: () => import('@/bundles/taskBundle/taskProcess/modules/manage'), //临时任务
     MediaLive: () => import('./modules/mediaLive') //音视频
   },
