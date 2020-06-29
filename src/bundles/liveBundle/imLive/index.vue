@@ -120,6 +120,7 @@ export default {
         this.dialogVisible = newVal
         this.bigLiveId = this.user.userId
         this.contentSize = '1'
+        this.showNormal = false
         if (this.params) {
           const { inviteType, users, channelId } = this.params
 
@@ -365,8 +366,9 @@ export default {
   width: 200px;
   position: fixed;
   z-index: 9999;
-  bottom: 200px;
-  right: 50px;
+  bottom: $jc-default-dis;
+  left: 50%;
+  margin-left: -100px;
   border-radius: 3px;
   box-shadow: 0 0 5px 0px #cccccc;
   padding: 10px 20px;
@@ -402,11 +404,10 @@ export default {
 //视频弹框样式
 .content {
   width: 840px;
-
   background-color: white;
   position: fixed;
   z-index: 999;
-  bottom: 200px;
+  bottom: $jc-default-dis;
   left: 50%;
   margin-left: -420px;
   border-radius: 3px;
@@ -491,46 +492,33 @@ export default {
 }
 
 .full-animation {
-  animation: to-full 0.4s linear;
+  animation: to-full 0.6s linear;
 }
 @keyframes to-full {
   0% {
-    bottom: 200px;
-    left: 50%;
-    margin-left: -420px;
-    width: 840px;
+    bottom: $jc-default-dis;
     top: inherit;
-    right: inherit;
   }
   25% {
     bottom: 300px;
   }
   50% {
     bottom: 400px;
-    width: 740px;
   }
   75% {
     bottom: 500px;
   }
   100% {
-    width: 640px;
     top: 76px;
-    right: 320px;
-    margin-left: 0;
-    left: inherit;
     bottom: inherit;
   }
 }
 .normal-animation {
-  animation: to-normal 0.4s linear;
+  animation: to-normal 0.6s linear;
 }
 @keyframes to-normal {
   0% {
-    width: 640px;
     top: 76px;
-    right: 320px;
-    margin-left: 0;
-    left: inherit;
     bottom: inherit;
   }
   25% {
@@ -538,34 +526,29 @@ export default {
   }
   50% {
     bottom: 400px;
-    width: 740px;
   }
   75% {
     bottom: 300px;
   }
   100% {
-    bottom: 200px;
-    left: 50%;
-    margin-left: -420px;
-    width: 840px;
+    bottom: $jc-default-dis;
     top: inherit;
-    right: inherit;
   }
 }
 
 //大窗口
 .full-content {
-  width: 640px;
+  // width: 640px;
   top: 76px;
   right: 320px;
-  margin-left: 0;
-  left: inherit;
+  // margin-left: 0;
+  // left: inherit;
   bottom: inherit;
 
   .live-out {
     overflow-x: hidden;
     overflow-y: auto;
-    height: 340px;
+    height: 440px;
 
     .live-in {
       width: 210px;
@@ -579,8 +562,8 @@ export default {
       }
 
       .big-live {
-        width: 400px;
-        height: 340px;
+        width: 600px;
+        height: 440px;
         position: absolute;
         left: 5px;
         top: 39px;
@@ -595,7 +578,7 @@ export default {
   z-index: 9999;
   text-align: center;
   width: 100%;
-  bottom: 100px;
+  bottom: $jc-default-dis;
   .title {
     text-align: center;
   }
