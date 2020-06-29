@@ -474,7 +474,8 @@ export default {
     width: 200px;
     float: left;
     position: relative;
-    background-color: #000000;
+    background: url(./assets/video.png) no-repeat;
+    background-size: 100% 100%;
 
     .userName {
       padding: 2px 10px;
@@ -496,17 +497,17 @@ export default {
 }
 @keyframes to-full {
   0% {
-    bottom: $jc-default-dis;
-    top: inherit;
+    bottom: inherit;
+    top: 700px;
   }
   25% {
-    bottom: 300px;
+    top: 600px;
   }
   50% {
-    bottom: 400px;
+    top: 400px;
   }
   75% {
-    bottom: 500px;
+    top: 200px;
   }
   100% {
     top: 76px;
@@ -518,17 +519,17 @@ export default {
 }
 @keyframes to-normal {
   0% {
-    top: 76px;
-    bottom: inherit;
-  }
-  25% {
-    bottom: 500px;
-  }
-  50% {
+    top: inherit;
     bottom: 400px;
   }
-  75% {
+  25% {
     bottom: 300px;
+  }
+  50% {
+    bottom: 200px;
+  }
+  75% {
+    bottom: 100px;
   }
   100% {
     bottom: $jc-default-dis;

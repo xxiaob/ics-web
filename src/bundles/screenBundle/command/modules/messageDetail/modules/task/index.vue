@@ -273,10 +273,15 @@ export default {
     async getDetail() {
       if (!this.loading) {
         this.loading = true
-        const res = await taskGetDaily(this.info.id)
+        try {
+          const res = await taskGetDaily(this.info.id)
 
-        this.form = { ...this.info, ...res, ...res.detailViewVO, ...res.taskDetailVO }
-        this.loading = false
+          this.form = { ...this.info, ...res, ...res.detailViewVO, ...res.taskDetailVO }
+          this.loading = false
+        } catch (error) {
+          this.form = { ...this.info }
+          this.loading = false
+        }
       } else {
         this.getDetail()
       }

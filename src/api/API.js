@@ -158,7 +158,8 @@ export default {
     //直播相关
     imAuth: 'user-service/getAuthToken',
     agoraToken: 'device-service/recording/getChannelKey',
-    record: 'device-service/recording/startRecording'
+    record: 'device-service/recording/startRecording',
+    endRecord: 'device-service/recording/endRecording'
   },
   attend: {
     //考勤管理
@@ -182,7 +183,8 @@ export default {
     command: {
       getCommandScreenData: 'data-service/largeScreen/getCommandScreenData',
       screenMap: 'message-service/icsServer/screenMap', //大屏推送接口
-      getScreenData: 'task-service/taskScreen/getScreenData'
+      getScreenData: 'task-service/taskScreen/getScreenData',
+      getTaskPostLine: 'task-service/taskAttendance/getTaskPostLine'
     }
   }
 }

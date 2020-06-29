@@ -108,12 +108,17 @@ export default {
     async getDetail() {
       if (!this.loading) {
         this.loading = true
-        const res = await eventManageGet(this.info.id)
+        try {
+          const res = await eventManageGet(this.info.id)
 
-        this.form = { ...this.info, ...res }
-        this.audios = this.form.audioAddrs
-        this.audioPlayShows = new Array(this.audios.length).fill(true)
-        this.loading = false
+          this.form = { ...this.info, ...res }
+          this.audios = this.form.audioAddrs
+          this.audioPlayShows = new Array(this.audios.length).fill(true)
+          this.loading = false
+        } catch (error) {
+          this.form = { ...this.info }
+          this.loading = false
+        }
       } else {
         this.getDetail()
       }

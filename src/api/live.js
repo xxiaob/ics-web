@@ -28,3 +28,11 @@ export function getAgoraToken(data) {
 export function startRecord(data) {
   return axios.post(API.live.record, data)
 }
+/**
+ * 结束录制
+ * @param {Object} data
+ * @returns {Object} axios 对象
+ */
+export function endRecord(data) {
+  return axios.post(API.live.endRecord, data)
+}
