@@ -31,19 +31,19 @@ let routerOptions = {
     name: 'basePage',
     redirect: { name: 'index' },
     component: () => import('@/bundles/commonBundle/pageContent/basePage'),
-    children: [{
-      path: 'index',
-      name: 'index',
-      component: () => import('@/bundles/indexBundle'),
-      meta: {
-        title: '首页'
-      }
-    }, ...systemRouter, ...taskRouter, ...projectRouter, ...attendRouter, ...overseeRouter]
+    children: [...systemRouter, ...taskRouter, ...projectRouter, ...attendRouter, ...overseeRouter]
   }, {
     path: '/',
     name: 'fullPage',
     component: () => import('@/bundles/commonBundle/pageContent/fullPage'),
-    children: [...demoRouter, ...authRouter, ...screenRouter]
+    children: [{
+      path: 'index',
+      name: 'index',
+      component: () => import('@/bundles/indexBundle/welcome'),
+      meta: {
+        title: '首页'
+      }
+    }, ...demoRouter, ...authRouter, ...screenRouter]
   }]
 }
 
