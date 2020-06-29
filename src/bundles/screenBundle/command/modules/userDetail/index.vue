@@ -4,6 +4,14 @@
     <keep-alive>
       <component :is="tabComponent" :options="options" :project="project"></component>
     </keep-alive>
+    <div class="jc-user-detail-footer">
+      <div class="jc-user-detail-item jc-audio" title="对讲" @click="goMediaLive(0)"></div>
+      <div class="jc-user-detail-item jc-command" title="指挥" @click="goMediaLive(1)"></div>
+      <div class="jc-user-detail-item jc-video" title="观摩" @click="goMediaLive(3)"></div>
+      <div class="jc-user-detail-item jc-force-video" title="强制观摩" @click="goMediaLive(2)"></div>
+      <div class="jc-user-detail-item jc-trajectory" title="轨迹"></div>
+      <div class="jc-user-detail-item jc-screen" title="投屏"></div>
+    </div>
   </view-warp>
 </template>
 <script>
@@ -22,6 +30,62 @@ export default {
       tabComponent: 'BaseInfo',
       tabs: [{ label: '基础信息', value: 'BaseInfo' }, { label: '综合', value: 'UserTask' }, { label: '考勤', value: 'WorkCheck' }]
     }
+  },
+  methods: {
+    goMediaLive(type) {
+      this.$EventBus.$emit('screen-media-live', { users: [{ id: this.options.userId, name: this.options.userName }], type })
+    }
   }
 }
 </script>
+<style lang="scss" scoped>
+.jc-user-detail-footer {
+  position: relative;
+  height: 40px;
+  display: flex;
+  .jc-user-detail-item {
+    position: relative;
+    flex: 1;
+    cursor: pointer;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: auto 50%;
+    &.jc-audio {
+      background-image: url(./assets/audio.png);
+      &:hover {
+        background-image: url(./assets/audio-on.png);
+      }
+    }
+    &.jc-command {
+      background-image: url(./assets/command.png);
+      &:hover {
+        background-image: url(./assets/command-on.png);
+      }
+    }
+    &.jc-video {
+      background-image: url(./assets/video.png);
+      &:hover {
+        background-image: url(./assets/video-on.png);
+      }
+    }
+    &.jc-force-video {
+      background-image: url(./assets/force-video.png);
+      &:hover {
+        background-image: url(./assets/force-video-on.png);
+      }
+    }
+    &.jc-trajectory {
+      background-image: url(./assets/trajectory.png);
+      &:hover {
+        background-image: url(./assets/trajectory-on.png);
+      }
+    }
+    &.jc-screen {
+      background-image: url(./assets/screen.png);
+      &:hover {
+        background-image: url(./assets/screen-on.png);
+      }
+    }
+  }
+}
+</style>
