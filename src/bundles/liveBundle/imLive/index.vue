@@ -335,7 +335,7 @@ export default {
 
         if (this.invited) {
           this.params.users.forEach(item=>{
-            this.im.sendSingleMsg(item, msg)
+            this.im.sendSingleMsg(item.userId, msg)
           })
         } else {
           this.im.sendSingleMsg(this.fromUsername, msg)
