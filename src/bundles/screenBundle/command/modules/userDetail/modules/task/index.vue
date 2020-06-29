@@ -21,7 +21,7 @@ import { MESSAGE_TYPE } from '@/constant/Dictionaries'
 import { formatDate } from '@/libs/util'
 
 export default {
-  name: 'ScreenCommandGridDetailTask',
+  name: 'ScreenCommandUserDetailTask',
   props: ['options', 'project'],
   components: {
     ViewEmpty: () =>import('@/bundles/screenBundle/command/modules/common/viewEmpty')
@@ -49,7 +49,7 @@ export default {
       try {
         let list = []
 
-        let result = await getScreenData({ areaId: this.options.areaId, projectId: this.project.projectId })
+        let result = await getScreenData({ userId: this.options.userId, projectId: this.project.projectId })
 
         if (result.tasks && result.tasks.length) {
           //处理任务

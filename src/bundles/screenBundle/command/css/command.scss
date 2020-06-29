@@ -462,7 +462,7 @@ $jc-screen-height: 56px;
     height: $jc-view-header-height;
     line-height: $jc-view-header-height;
     padding: 0 $jc-view-header-height 0 $jc-default-dis;
-    @include jc-text-warp();
+    @include jc-text-warp;
     background-color: #142c79;
     color: $jc-color-white;
 
