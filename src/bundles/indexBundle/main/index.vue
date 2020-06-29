@@ -30,7 +30,7 @@
 
 <script>
 export default {
-  name: 'Index'
+  name: 'IndexMain'
 }
 </script>
 <style lang="scss" scoped>

@@ -3,7 +3,7 @@
     <!-- 顶部header -->
     <command-header></command-header>
     <!-- 地图搜索组件 -->
-    <map-search ref="mapSearch" class="jc-area-search"></map-search>
+    <map-search ref="mapSearch" class="jc-screen-search"></map-search>
     <!-- 地图对象 -->
     <div class="jc-screen-space" ref="myMap"></div>
     <!-- 左侧操作组件 -->

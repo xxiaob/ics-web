@@ -27,4 +27,12 @@ export default [{
     title: '项目管理-渣土专项',
     ignore: true
   }
+}, {
+  path: 'project/intelligenceControl',
+  name: 'intelligenceControl',
+  component: () => import('@/bundles/projectBundle/intelligenceControl'),
+  meta: {
+    title: '项目管理-智慧控围',
+    ignore: true
+  }
 }]

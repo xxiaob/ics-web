@@ -16,3 +16,16 @@ import qs from 'qs'
 export function getCommandScreenData(data) {
   return axios.post(API.screen.command.getCommandScreenData + '?' + qs.stringify(data))
 }
+
+/**
+ *
+根据用户和网格查询任务域数据
+ * @param {object} data
+ * @param { String } data.orgId 组织id
+ * @param { String } data.areaId 网格id
+ * @param { String } data.projectId 项目id
+ * @returns {Object} axios 对象
+ */
+export function getScreenData(data) {
+  return axios.post(API.screen.command.getScreenData, data)
+}

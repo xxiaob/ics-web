@@ -11,6 +11,7 @@
         </div>
       </div>
       <div class="jc-time" v-text="time"></div>
+      <div class="jc-date" v-text="dateTime"></div>
     </div>
     <div class="jc-screen-title" v-text="title"></div>
     <div class="jc-header-right">
@@ -33,7 +34,7 @@ import { PROJECT_TYPES } from '@/constant/Dictionaries'
 import { JC_WEATHER } from '@/constant/Dictionaries'
 import { getAreaCodeByOrgId } from '@/api/area'
 
-let weeks = ['星期日', '星期一', '星期二', '星期三', '星期四', '星期五', '星期六'] //星期数据
+let weeks = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'] //周数据
 
 //天气和样式映射
 let weatherStyleMapping = {
@@ -53,6 +54,7 @@ export default {
       title: '--',
       weather: null,
       time: '',
+      dateTime: '',
       project: null,
       orgs: [], //存储组织树,用于cascader选择器使用
       org: { name: '--', orgId: '' },
@@ -138,7 +140,8 @@ export default {
       this.$EventBus.$emit('view-component-change', { component: name, options: null }) //通知窗口改变
     },
     setTime() {
-      this.time = moment().format(`YYYY年MM月DD日 ${weeks[moment().day()]} HH:mm:ss`)
+      this.dateTime = moment().format(`YYYY年MM月DD日 ${weeks[moment().day()]}`)
+      this.time = moment().format('HH:mm:ss')
     }
   },
   beforeDestroy() {

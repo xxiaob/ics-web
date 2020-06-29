@@ -9,16 +9,19 @@
           <span>视频通话</span>
           <span class="exit" @click="exit">挂断</span>
         </div>
-        <div class="tolive">
-          <div id="tolive">
-            <div id="live" v-show="myShow"></div>
+        <div class="live-out">
+          <div class="live-in">
+            <div id="live" v-show="myShow" class="live"></div>
+            <template v-if="params&&params.users">
+              <div class="live" v-for="user in params.users" :key="user" :id="user"></div>
+            </template>
           </div>
         </div>
       </div>
     </transition>
 
     <transition name="fade">
-      <div class="dialog-footer" v-if="invitedButton">
+      <div class="call-box" v-if="invitedButton">
         <span class="invitedButton">
           <img class="gif" src="./assets/help.gif" alt="" width="50">
           <img class="btn" src="./assets/answer.png" alt="" width="50" @click="agree" title="接听">
@@ -280,6 +283,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+//弹框过度样式
 .fade-enter-active,
 .fade-leave-active {
   transition: transform 0.6s, opacity 0.6s;
@@ -291,6 +295,7 @@ export default {
   transform: translateY(200%);
 }
 
+//视频弹框样式
 .content {
   width: 840px;
 
@@ -329,16 +334,19 @@ export default {
     cursor: pointer;
   }
 }
-.tolive {
+
+//视频窗口样式
+.live-out {
   overflow-x: auto;
   overflow-y: hidden;
   height: 160px;
 }
-#tolive {
+
+.live-in {
   display: flex;
   float: left;
   box-sizing: border-box;
-  /deep/ div {
+  .live {
     margin: 5px;
     // border: 1px solid #cccccc;
     height: 150px !important;
@@ -346,17 +354,9 @@ export default {
     float: left;
   }
 }
-#live {
-  width: 200px;
-  height: 150px;
-  float: left;
-  box-sizing: border-box;
-  /deep/ div {
-    margin: 0 !important;
-  }
-}
 
-.dialog-footer {
+//来电弹框样式
+.call-box {
   position: fixed;
   z-index: 9999;
   text-align: center;
@@ -383,12 +383,5 @@ export default {
       }
     }
   }
-}
-
-.jc-clearboth::before,
-.jc-clearboth::after {
-  display: table;
-  content: "";
-  clear: both;
 }
 </style>
