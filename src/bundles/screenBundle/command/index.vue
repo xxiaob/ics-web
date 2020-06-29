@@ -66,8 +66,8 @@ export default {
       project: { projectId: '', projectName: '', orgId: '', projectType: '' },
       messageComponent: '',
       messageOptions: null,
-      viewComponent: '',
-      viewOptions: null,
+      viewComponent: 'UserDetail',
+      viewOptions: { userId: '56776731599568896', userName: '李孝贤江宁' },
       viewComponentQueue: []
     }
   },

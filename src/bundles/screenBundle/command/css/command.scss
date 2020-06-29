@@ -668,38 +668,63 @@ $jc-screen-height: 56px;
     position: relative;
     padding: 0 $jc-default-dis/2;
 
+    .jc-node-icon {
+      left: -6px;
+      content: '';
+      width: 12px;
+      height: 12px;
+      background: url(../assets/node.png) no-repeat center $jc-color-white;
+      background-size: 100% 100%;
+    }
+
     .jc-node {
       position: relative;
-      padding-left: 75px + $jc-default-dis/2;
+      padding-left: 70px + $jc-default-dis/2;
+
+      &:last-child {
+        .jc-node-content {
+          border-left: none;
+        }
+      }
     }
 
     .jc-node-times {
       position: absolute;
       left: 0;
       top: 0;
-      width: 75px;
+      width: 70px;
       text-align: right;
       color: $jc-color-info;
-      font-size: $jc-font-size-small;
-      line-height: 20px;
+      font-size: $jc-font-size-smaller;
+      line-height: 16px;
     }
 
     .jc-node-content {
       position: relative;
       padding: 0 0 $jc-default-dis/2 $jc-default-dis/2;
       min-height: 60px;
-      line-height: 20px;
+      line-height: 18px;
       border-left: solid 1px #96b7ff;
+      font-size: $jc-font-size-small;
 
       &:before {
         position: absolute;
         top: 0;
-        left: -6px;
-        content: '';
-        width: 12px;
-        height: 12px;
-        background: url(../assets/node.png) no-repeat center $jc-color-white;
-        background-size: 100% 100%;
+        @extend .jc-node-icon;
+      }
+
+      .jc-node-success {
+        position: relative;
+
+        &:after {
+          content: '';
+          display: inline-block;
+          width: 16px;
+          height: 16px;
+          background: url(../assets/success.png) no-repeat center;
+          background-size: auto 80%;
+          vertical-align: middle;
+        }
       }
     }
   }

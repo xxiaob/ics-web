@@ -39,3 +39,14 @@ export function getScreenData(data) {
 export function getTaskPostLine(data) {
   return axios.post(API.screen.command.getTaskPostLine, data)
 }
+
+/**
+ * 个人考勤事件流水
+ * @param {object} data
+ * @param { String } data.userId 用户id
+ * @param { String } data.projectId 项目id
+ * @returns {Object} axios 对象
+ */
+export function getTaskPersonalLine(data) {
+  return axios.post(API.screen.command.getTaskPersonalLine, data)
+}
