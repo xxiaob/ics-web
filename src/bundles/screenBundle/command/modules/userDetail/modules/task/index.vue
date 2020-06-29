@@ -1,5 +1,5 @@
 <template>
-  <div class="jc-view-content">
+  <div class="jc-view-content" v-loading="loading" element-loading-background="rgba(0, 0, 0, 0)">
     <div class="jc-task-item" v-for="item in list" :key="item.id" :class="style[item.type]" @click="detail(item)">
       <div class="jc-info-title" v-text="item.title"></div>
       <div class="jc-info-item">组织：{{item.orgName}}</div>

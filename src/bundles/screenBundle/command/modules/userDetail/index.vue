@@ -1,5 +1,5 @@
 <template>
-  <view-warp :title="options.userName + '-详情'">
+  <view-warp :title="options.userName">
     <view-tabs v-model="tabComponent" :options="tabs"></view-tabs>
     <keep-alive>
       <component :is="tabComponent" :options="options" :project="project"></component>

@@ -662,6 +662,47 @@ $jc-screen-height: 56px;
       }
     }
   }
+
+  /* 流水结构*/
+  .jc-node-warp {
+    position: relative;
+    padding: 0 $jc-default-dis/2;
+
+    .jc-node {
+      position: relative;
+      padding-left: 75px + $jc-default-dis/2;
+    }
+
+    .jc-node-times {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 75px;
+      text-align: right;
+      color: $jc-color-info;
+      font-size: $jc-font-size-small;
+      line-height: 20px;
+    }
+
+    .jc-node-content {
+      position: relative;
+      padding: 0 0 $jc-default-dis/2 $jc-default-dis/2;
+      min-height: 60px;
+      line-height: 20px;
+      border-left: solid 1px #96b7ff;
+
+      &:before {
+        position: absolute;
+        top: 0;
+        left: -6px;
+        content: '';
+        width: 12px;
+        height: 12px;
+        background: url(../assets/node.png) no-repeat center $jc-color-white;
+        background-size: 100% 100%;
+      }
+    }
+  }
 }
 
 /* 右下角消息窗口 */

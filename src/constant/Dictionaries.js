@@ -171,3 +171,11 @@ export const MESSAGE_TYPE = new JcEnum([
   { key: 'EVENT', value: '2', label: '事件' },
   { key: 'TEMPORARY', value: '3', label: '临时任务' }
 ])
+
+/** 用户在岗 考勤状态 */
+export const USER_GRID_STATUS = new JcEnum([
+  { key: 'INCIRCLE', value: '0', label: '进圈' },
+  { key: 'OUTCIRCLE', value: '1', label: '出圈' },
+  { key: 'INGUARD', value: '2', label: '在岗' },
+  { key: 'OUTGUARD', value: '3', label: '离岗' }
+])

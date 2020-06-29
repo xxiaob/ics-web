@@ -182,7 +182,8 @@ export default {
     command: {
       getCommandScreenData: 'data-service/largeScreen/getCommandScreenData',
       screenMap: 'message-service/icsServer/screenMap', //大屏推送接口
-      getScreenData: 'task-service/taskScreen/getScreenData'
+      getScreenData: 'task-service/taskScreen/getScreenData',
+      getTaskPostLine: 'task-service/taskAttendance/getTaskPostLine'
     }
   }
 }
