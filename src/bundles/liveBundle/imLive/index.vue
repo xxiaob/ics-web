@@ -11,10 +11,12 @@
         </div>
         <div class="live-out">
           <div class="live-in">
-            <div id="live" v-show="myShow" class="live"></div>
-            <template v-if="params&&params.users">
-              <div class="live" v-for="user in params.users" :key="user" :id="user"></div>
-            </template>
+            <div id="live" v-show="myShow" class="live">
+              <div class="userName">{{user.userName}}</div>
+            </div>
+            <div class="live" v-for="user in users" :key="user.userId" :id="user.userId">
+              <div class="userName">{{user.userName}}</div>
+            </div>
           </div>
         </div>
       </div>
@@ -55,6 +57,7 @@ export default {
   },
   data() {
     return {
+      users: [],
       msg: '音视频通话',
       dialogVisible: false,
       contentShow: false,
@@ -85,6 +88,7 @@ export default {
         if (this.params) {
           const { inviteType, users, channelId } = this.params
 
+          this.users = users
           //设置频道id
           this.channelId = channelId ? channelId : new Date().getTime().toString()
           this.msg = '正在发起' + this.inviteTypes[inviteType][0]
@@ -110,7 +114,7 @@ export default {
   methods: {
     imMsgCb(onType, data) {
       console.log('vue 数据', onType, data)
-      const { fromUsername, content: { channelId, msgType, agree, nickName, isExit, inviteType, mediaType, content } } = data
+      const { fromUsername, content: { channelId, msgType, agree, nickName, isExit, inviteType, mediaType, content, users } } = data
 
       this.fromUsername = fromUsername
       if (msgType === '1') {
@@ -125,7 +129,18 @@ export default {
           //我是被邀请方
           this.$emit('update:visible', true)
           this.$emit('update:params', null)
-
+          this.users = [{
+            userId: fromUsername,
+            userName: nickName
+          }]
+          if (users) {
+            console.log('邀请的所有users', users)
+            users.forEach(item=>{
+              if (item.userId !== this.user.userId) {
+                this.users.push(item)
+              }
+            })
+          }
           if (inviteType === '0') {
             let msg = content === 'help' ? '一键求助' : (mediaType === '0' ? '语音' : '视频')
 
@@ -210,7 +225,7 @@ export default {
 
       //循环给用户发消息
       users.forEach(item=>{
-        this.invitUserId = item
+        this.invitUserId = item.userId
         this.inviteOneUser(inviteType, mediaType)
       })
       //加入频道
@@ -236,7 +251,8 @@ export default {
         channelId: this.channelId,
         inviteDevice: '3', //"0":pc端, "1":移动端, "2":执法仪 , "3":全部
         inviteType, //"0":正常,"1":强拉 2":强制观摩(拉执法仪)
-        mediaType //"0":音频,"1":视频
+        mediaType, //"0":音频,"1":视频,
+        users: this.users
       }
 
       this.im.sendSingleMsg(this.invitUserId, msg)
@@ -251,6 +267,7 @@ export default {
       this.fromUsername = ''
       this.contentShow = false
       this.myShow = false
+      this.users = []
       this.$emit('update:visible', false)
       this.$emit('update:params', null)
       setTimeout(()=>{
@@ -352,6 +369,21 @@ export default {
     height: 150px !important;
     width: 200px !important;
     float: left;
+    position: relative;
+    background-color: #000000;
+
+    .userName {
+      padding: 2px 10px;
+      background: rgba($color: #000000, $alpha: 0.2);
+      color: white;
+      width: 100%;
+      position: absolute;
+      z-index: 100;
+    }
+  }
+  .audio {
+    background: url(./assets/audio.png) no-repeat;
+    background-size: 100% 100%;
   }
 }
 
