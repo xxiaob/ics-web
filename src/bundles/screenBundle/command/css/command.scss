@@ -15,6 +15,12 @@ $jc-right-message-height: 150px; //右侧底部内容高度
 /* 大屏header */
 $jc-screen-height: 56px;
 
+.jc-screen-search {
+  &.jc-map-search {
+    top: $jc-screen-height + $jc-default-dis;
+  }
+}
+
 /deep/ .jc-screen-header {
   position: absolute;
   top: 0;
