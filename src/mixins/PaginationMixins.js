@@ -14,7 +14,7 @@ export default {
   methods: {
     indexMethod(index) {
       //处理序号
-      return this.page.pageSize * this.page.pageNum + index - 9
+      return this.page.pageSize * (this.page.pageNum - 1) + index + 1
     },
     currentChange(index) {
       //页面切换
