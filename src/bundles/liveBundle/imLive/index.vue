@@ -5,7 +5,7 @@
   <div class="imLive">
 
     <transition-group name="fade">
-      <div key="1" class="content" :class="{'full-content':contentSize==='2'}" v-show="contentShow&&contentSize!=='0'">
+      <div key="1" class="content" :class="{'full-content':contentSize==='2','full-animation':contentSize==='2','normal-animation':showNormal}" v-show="contentShow&&contentSize!=='0'">
         <div class="title">
           <span>视频通话</span>
           <div class="right">
@@ -86,6 +86,7 @@ export default {
   },
   data() {
     return {
+      showNormal: false,
       bigLiveId: '',
       contentSize: '1',
       users: [],
@@ -119,6 +120,7 @@ export default {
         this.dialogVisible = newVal
         this.bigLiveId = this.user.userId
         this.contentSize = '1'
+        this.showNormal = false
         if (this.params) {
           const { inviteType, users, channelId } = this.params
 
@@ -148,9 +150,13 @@ export default {
   },
   methods: {
     checkBigLive(val) {
-      this.bigLiveId = val
+      if (this.contentSize === '2') {
+        this.bigLiveId = val
+      }
     },
     changeSize(val) {
+      this.bigLiveId = this.user.userId
+      this.showNormal = (val === '1' && this.contentSize === '2') ? true : false
       this.contentSize = val
     },
     imMsgCb(onType, data) {
@@ -360,8 +366,9 @@ export default {
   width: 200px;
   position: fixed;
   z-index: 9999;
-  bottom: 200px;
-  right: 50px;
+  bottom: $jc-default-dis;
+  left: 50%;
+  margin-left: -100px;
   border-radius: 3px;
   box-shadow: 0 0 5px 0px #cccccc;
   padding: 10px 20px;
@@ -397,11 +404,10 @@ export default {
 //视频弹框样式
 .content {
   width: 840px;
-
   background-color: white;
   position: fixed;
   z-index: 999;
-  bottom: 200px;
+  bottom: $jc-default-dis;
   left: 50%;
   margin-left: -420px;
   border-radius: 3px;
@@ -463,7 +469,7 @@ export default {
   box-sizing: border-box;
   .live {
     margin: 5px;
-    border: 1px solid #cccccc;
+    // border: 1px solid #cccccc;
     height: 150px;
     width: 200px;
     float: left;
@@ -485,19 +491,64 @@ export default {
   }
 }
 
+.full-animation {
+  animation: to-full 0.6s linear;
+}
+@keyframes to-full {
+  0% {
+    bottom: $jc-default-dis;
+    top: inherit;
+  }
+  25% {
+    bottom: 300px;
+  }
+  50% {
+    bottom: 400px;
+  }
+  75% {
+    bottom: 500px;
+  }
+  100% {
+    top: 76px;
+    bottom: inherit;
+  }
+}
+.normal-animation {
+  animation: to-normal 0.6s linear;
+}
+@keyframes to-normal {
+  0% {
+    top: 76px;
+    bottom: inherit;
+  }
+  25% {
+    bottom: 500px;
+  }
+  50% {
+    bottom: 400px;
+  }
+  75% {
+    bottom: 300px;
+  }
+  100% {
+    bottom: $jc-default-dis;
+    top: inherit;
+  }
+}
+
 //大窗口
 .full-content {
-  width: 640px;
+  // width: 640px;
   top: 76px;
   right: 320px;
-  margin-left: 0;
-  left: inherit;
+  // margin-left: 0;
+  // left: inherit;
   bottom: inherit;
 
   .live-out {
     overflow-x: hidden;
     overflow-y: auto;
-    height: 340px;
+    height: 440px;
 
     .live-in {
       width: 210px;
@@ -511,8 +562,8 @@ export default {
       }
 
       .big-live {
-        width: 400px;
-        height: 340px;
+        width: 600px;
+        height: 440px;
         position: absolute;
         left: 5px;
         top: 39px;
@@ -527,7 +578,7 @@ export default {
   z-index: 9999;
   text-align: center;
   width: 100%;
-  bottom: 100px;
+  bottom: $jc-default-dis;
   .title {
     text-align: center;
   }
