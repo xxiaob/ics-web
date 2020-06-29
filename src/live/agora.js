@@ -1,5 +1,5 @@
 import AgoraRTC from 'agora-rtc-sdk'
-import { getAgoraToken, startRecord } from '@/api/live'
+import { getAgoraToken, startRecord, endRecord } from '@/api/live'
 
 export class Live {
   /**
@@ -235,6 +235,9 @@ export class Live {
 
   //离开房间
   leaveChannel() {
+    if (this.recordParams.recorded) {
+      endRecord(this.recordParams)
+    }
     this.rtc.client.leave(() => {
       this.console('leaveChannel 离开房间 成功')
       this.joined = false
