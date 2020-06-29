@@ -1,6 +1,6 @@
 <template>
   <header class="jc-header">
-    <img src="/static/images/header-logo.png" class="jc-header-logo" />
+    <img src="/static/images/header-logo.png" class="jc-header-logo" @click="$router.push({name: 'index'})" />
     <template v-if="isLogin">
       <div class="jc-header-menus">
         <div class="jc-user-warp">
@@ -58,6 +58,7 @@ export default {
   @include jc-header-style;
 }
 .jc-header-logo {
+  cursor: pointer;
   width: auto;
   height: 100%;
 }
