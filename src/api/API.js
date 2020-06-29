@@ -158,7 +158,8 @@ export default {
     //直播相关
     imAuth: 'user-service/getAuthToken',
     agoraToken: 'device-service/recording/getChannelKey',
-    record: 'device-service/recording/startRecording'
+    record: 'device-service/recording/startRecording',
+    endRecord: 'device-service/recording/endRecording'
   },
   attend: {
     //考勤管理
