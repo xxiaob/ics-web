@@ -146,7 +146,7 @@
         padding-right: 30px;
         font-size: $jc-font-size-smaller;
         @extend .jc-hover-style;
-        @include jc-text-warp();
+        @include jc-text-warp;
       }
 
       &.jc-not-start {
