@@ -23,7 +23,8 @@ export const AREAS_TYPE = {
 /** 区域查询 类型 type*/
 export const AREAS_SEARCH_TYPE = {
   ORG: 1, //组织
-  GRID: 2 //网格
+  GRID: 2, //网格
+  SCREEN: 3 //指挥大屏
 }
 
 /** 地图类型 type*/

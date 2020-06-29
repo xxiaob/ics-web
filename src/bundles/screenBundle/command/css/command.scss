@@ -8,6 +8,8 @@
   transform: translateZ(0);
 }
 
+$jc-screen-color: #142c79; //大屏颜色
+
 /*基础参数定义*/
 $jc-right-content-width: 300px; //右侧内容区域宽度
 $jc-right-message-height: 150px; //右侧底部内容高度
@@ -28,7 +30,7 @@ $jc-screen-height: 56px;
   right: 0;
   height: $jc-screen-height;
   z-index: 99;
-  background-color: #142c79;
+  background-color: $jc-screen-color;
 
   .jc-screen-title {
     position: relative;
@@ -463,7 +465,7 @@ $jc-screen-height: 56px;
     line-height: $jc-view-header-height;
     padding: 0 $jc-view-header-height 0 $jc-default-dis;
     @include jc-text-warp;
-    background-color: #142c79;
+    background-color: $jc-screen-color;
     color: $jc-color-white;
 
     .iconfont {
@@ -538,19 +540,21 @@ $jc-screen-height: 56px;
 
       .jc-talk-type {
         float: right;
-        background-color: $jc-color-primary;
         opacity: 0.8;
         cursor: pointer;
-        padding: 0 5px;
+        padding: 0 6px;
         height: 20px;
-        line-height: 20px;
+        line-height: 16px;
         margin-top: 3px;
-        color: $jc-color-white;
+        color: $jc-screen-color;
         font-size: $jc-font-size-smaller;
+        border: solid 2px $jc-screen-color;
 
         &:hover,
         &.jc-active {
           opacity: 1;
+          color: $jc-color-white;
+          background-color: $jc-screen-color;
         }
       }
     }
@@ -601,15 +605,19 @@ $jc-screen-height: 56px;
         background-size: 16px auto;
 
         &.jc-clear {
-          background-image: url(../modules//org/assets/clear.png);
+          background-image: url(../modules/org/assets/clear.png);
+
+          &:hover {
+            background-image: url(../modules/org/assets/clear-on.png);
+          }
         }
 
         &.jc-command {
-          background-image: url(../modules//org/assets/command.png);
-        }
+          background-image: url(../modules/org/assets/command.png);
 
-        &.jc-guanmo {
-          background-image: url(../modules//org/assets/guanmo.png);
+          &:hover {
+            background-image: url(../modules/org/assets/command-on.png);
+          }
         }
       }
     }
