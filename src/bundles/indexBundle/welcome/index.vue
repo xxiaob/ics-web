@@ -36,10 +36,10 @@ export default {
   max-width: 1600px;
   margin: 0 auto;
   bottom: 80px;
-  padding-top: 80px;
+  padding: 120px 0 0 0;
   display: flex;
   background: url(./assets/head.png) no-repeat top center;
-  background-size: auto 60px;
+  background-size: auto 66px;
 }
 .jc-welcome-item {
   position: relative;

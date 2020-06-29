@@ -22,14 +22,14 @@ export default {
         if (data.users.length > 17) {
           this.$message.error('最多支持17人')
         } else {
-          let userIds = []
+          let users = []
 
           data.users.forEach(item => {
-            userIds.push(item.id)
+            users.push({ userId: item.id, userName: item.name })
           })
 
           this.params = {
-            users: userIds, //用户列表 id
+            users, //用户列表
             inviteType: data.type, //'0': '语音'   '1': '视频'   '2': '强制观摩'   '3': '观摩'
             channelId: null //可选  采集观摩需要
           }

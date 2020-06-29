@@ -9,7 +9,7 @@ export const EventTrans = {}
 //颜色数组
 let colorIndex = 0
 
-export const Colors = ['#0183ff', '#fc005b', '#00b746', '#ff9600', '#ab00b5']
+export const Colors = ['#0183ff', '#fc005b', '#00b746', '#a68de1', '#ab00b5', '#2ec5cb', '#d56016']
 
 //获取随机颜色
 export function getColors() {

@@ -181,7 +181,7 @@ export class Live {
   async joinChannel(channelId = '123456', role = 'host', video = true, recorded = true) {
     //设置录制参数
     this.recordParams.channelName = channelId
-    this.recordParams.recordingType = video ? 1 : 0
+    this.recordParams.recordingType = video ? 1 : 0 //录制类型  0对讲  1视频  2采集
     this.recordParams.recorded = recorded
     // 让用户选择自己的角色是主播（"host"）还是观众（"audience"）。
     // 调用 setClientRole 方法，传入用户选择的角色。
