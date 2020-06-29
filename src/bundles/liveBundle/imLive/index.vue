@@ -11,10 +11,10 @@
         </div>
         <div class="live-out">
           <div class="live-in">
-            <div id="live" v-show="myShow" class="live">
+            <div id="live" v-show="myShow" class="live" :class="{audio:inviteType==='0'}">
               <div class="userName">{{user.userName}}</div>
             </div>
-            <div class="live" v-for="user in users" :key="user.userId" :id="user.userId">
+            <div class="live" :class="{audio:inviteType==='0'}" v-for="user in users" :key="user.userId" :id="user.userId">
               <div class="userName">{{user.userName}}</div>
             </div>
           </div>
@@ -71,6 +71,7 @@ export default {
         '2': ['强制观摩', ['2', '1', 'audience']],
         '3': ['观摩', ['0', '1', 'audience']]
       },
+      inviteType: '',
       invitUserId: '', //邀请用户的id
       invitedButton: false, //接听按钮显示
       mediaType: '1',
@@ -89,6 +90,7 @@ export default {
           const { inviteType, users, channelId } = this.params
 
           this.users = users
+          this.inviteType = inviteType
           //设置频道id
           this.channelId = channelId ? channelId : new Date().getTime().toString()
           this.msg = '正在发起' + this.inviteTypes[inviteType][0]
@@ -141,6 +143,7 @@ export default {
               }
             })
           }
+          this.inviteType = mediaType
           if (inviteType === '0') {
             let msg = content === 'help' ? '一键求助' : (mediaType === '0' ? '语音' : '视频')
 
