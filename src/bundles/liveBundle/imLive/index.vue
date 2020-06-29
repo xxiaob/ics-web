@@ -5,7 +5,7 @@
   <div class="imLive">
 
     <transition-group name="fade">
-      <div key="1" class="content" :class="{'full-content':contentSize==='2'}" v-show="contentShow&&contentSize!=='0'">
+      <div key="1" class="content" :class="{'full-content':contentSize==='2','full-animation':contentSize==='2','normal-animation':showNormal}" v-show="contentShow&&contentSize!=='0'">
         <div class="title">
           <span>视频通话</span>
           <div class="right">
@@ -86,6 +86,7 @@ export default {
   },
   data() {
     return {
+      showNormal: false,
       bigLiveId: '',
       contentSize: '1',
       users: [],
@@ -148,9 +149,13 @@ export default {
   },
   methods: {
     checkBigLive(val) {
-      this.bigLiveId = val
+      if (this.contentSize === '2') {
+        this.bigLiveId = val
+      }
     },
     changeSize(val) {
+      this.bigLiveId = this.user.userId
+      this.showNormal = (val === '1' && this.contentSize === '2') ? true : false
       this.contentSize = val
     },
     imMsgCb(onType, data) {
@@ -463,7 +468,7 @@ export default {
   box-sizing: border-box;
   .live {
     margin: 5px;
-    border: 1px solid #cccccc;
+    // border: 1px solid #cccccc;
     height: 150px;
     width: 200px;
     float: left;
@@ -482,6 +487,69 @@ export default {
   .audio {
     background: url(./assets/audio.png) no-repeat;
     background-size: 100% 100%;
+  }
+}
+
+.full-animation {
+  animation: to-full 0.4s linear;
+}
+@keyframes to-full {
+  0% {
+    bottom: 200px;
+    left: 50%;
+    margin-left: -420px;
+    width: 840px;
+    top: inherit;
+    right: inherit;
+  }
+  25% {
+    bottom: 300px;
+  }
+  50% {
+    bottom: 400px;
+    width: 740px;
+  }
+  75% {
+    bottom: 500px;
+  }
+  100% {
+    width: 640px;
+    top: 76px;
+    right: 320px;
+    margin-left: 0;
+    left: inherit;
+    bottom: inherit;
+  }
+}
+.normal-animation {
+  animation: to-normal 0.4s linear;
+}
+@keyframes to-normal {
+  0% {
+    width: 640px;
+    top: 76px;
+    right: 320px;
+    margin-left: 0;
+    left: inherit;
+    bottom: inherit;
+  }
+  25% {
+    bottom: 500px;
+  }
+  50% {
+    bottom: 400px;
+    width: 740px;
+  }
+  75% {
+    bottom: 300px;
+  }
+  100% {
+    bottom: 200px;
+    left: 50%;
+    margin-left: -420px;
+    width: 840px;
+    top: inherit;
+    right: inherit;
   }
 }
 
