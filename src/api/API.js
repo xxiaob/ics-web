@@ -184,7 +184,9 @@ export default {
       getCommandScreenData: 'data-service/largeScreen/getCommandScreenData',
       screenMap: 'message-service/icsServer/screenMap', //大屏推送接口
       getScreenData: 'task-service/taskScreen/getScreenData',
-      getTaskPostLine: 'task-service/taskAttendance/getTaskPostLine'
+      getTaskPostLine: 'task-service/taskAttendance/getTaskPostLine', //岗点考勤事件流水
+      getTaskPersonalLine: 'task-service/taskAttendance/getTaskPersonalLine' //个人考勤事件流水
+
     }
   }
 }

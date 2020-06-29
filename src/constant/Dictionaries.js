@@ -176,6 +176,6 @@ export const MESSAGE_TYPE = new JcEnum([
 export const USER_GRID_STATUS = new JcEnum([
   { key: 'INCIRCLE', value: '0', label: '进圈' },
   { key: 'OUTCIRCLE', value: '1', label: '出圈' },
-  { key: 'INGUARD', value: '2', label: '在岗' },
+  { key: 'INGUARD', value: '2', label: '进岗' },
   { key: 'OUTGUARD', value: '3', label: '离岗' }
 ])

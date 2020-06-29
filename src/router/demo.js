@@ -39,4 +39,12 @@ export default [{
     title: '数据大屏',
     ignore: true
   }
+}, {
+  path: 'datascreenfulldemo',
+  name: 'DataScreenFullDemo',
+  component: () => import('@/bundles/demoBundle/dataScreenFullDemo'),
+  meta: {
+    title: '数据大屏',
+    ignore: true
+  }
 }]
