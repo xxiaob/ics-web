@@ -5,7 +5,7 @@
     <transition-group name="fade">
       <div key="1" class="content" :class="{'full-content':contentSize==='2','full-animation':contentSize==='2','normal-animation':showNormal,observe:inviteType==='2'||inviteType==='3'}" v-show="contentShow&&contentSize!=='0'">
         <div class="title">
-          <span>视频通话</span>
+          <span>{{title}}</span>
           <div class="right">
             <span class="exit" @click="exit" title="挂断">挂断</span>
             <span title="投屏" v-show="inviteType!='2'&&inviteType!='3'">
@@ -83,6 +83,7 @@ export default {
   },
   data() {
     return {
+      title: '视频',
       showNormal: false, //大弹框到中等弹框的过渡类
       bigLiveId: '', //大视频的id
       contentSize: '1', //弹框大小
@@ -126,8 +127,11 @@ export default {
           this.inviteType = inviteType
           //设置频道id
           this.channelId = channelId ? channelId : new Date().getTime().toString()
-          this.msg = '正在发起' + this.inviteTypes[inviteType][0]
-          this.$message.info('正在发起' + this.inviteTypes[inviteType][0])
+          const type = this.inviteTypes[inviteType][0]
+
+          this.msg = '正在发起' + type
+          this.$message.info('正在发起' + type)
+          this.title = type
           this.inviteAllUsers(...this.inviteTypes[inviteType][1], users)
         } else {
           console.log('我是接收方')
@@ -190,6 +194,7 @@ export default {
             })
           }
           this.inviteType = mediaType
+          this.title = mediaType === '0' ? '语音' : '视频'
           if (inviteType === '0') {
             let msg = content === 'help' ? '一键求助' : (mediaType === '0' ? '语音' : '视频')
 
