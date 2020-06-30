@@ -35,15 +35,13 @@ export default {
       viewShow: true,
       loading: false,
       list: [],
-      orgUsers: {},
       org: null,
       interval: null
     }
   },
   created() {
     this.$EventBus.$on('org-change', this.initData) //监听行级别切换
-    this.interval = setInterval(this.initData, 1000 * 60 * 5) //五分钟进行数据轮询
-    this.$EventBus.$on('data-overview-change', this.dataChange) //监听组织人员在线人数变更
+    this.interval = setInterval(this.initData, 1000 * 60 * 0.5) //定时进行数据轮询
   },
   methods: {
     async initData(org) {
@@ -66,36 +64,11 @@ export default {
             }
           })
         }
-        this.list = this.formatUserList(list)
+        this.list = list
       } catch (error) {
         console.log(error)
       }
       this.loading = false
-    },
-    async dataChange(orgUsers) {
-      //如果数据不存在，则进行获取
-      if (this.list.length < 1) {
-        await this.initData()
-      }
-      let users = {}
-
-      if (orgUsers && orgUsers.length) {
-        orgUsers.forEach(item => {
-          users[item.orgId] = item.users
-        })
-      }
-      this.orgUsers = users
-      this.list = this.formatUserList(this.list)
-    },
-    formatUserList(orgs) {
-      let list = []
-
-      if (orgs && orgs.length) {
-        orgs.forEach(item => {
-          list.push({ ...item, online: this.orgUsers[item.orgId] })
-        })
-      }
-      return list
     }
   },
   beforeDestroy() {
