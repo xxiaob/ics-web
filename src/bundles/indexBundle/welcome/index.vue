@@ -5,7 +5,7 @@
       <router-link :to="{name: 'specialControl'}" tag="div" class="jc-welcome-item jc-icon1"></router-link>
       <div class="jc-welcome-item jc-icon2"></div>
       <div class="jc-welcome-item jc-icon3"></div>
-      <router-link :to="{name: 'muckSpecial'}" tag="div" class="jc-welcome-item jc-icon4"></router-link>
+      <a href="http://36.153.138.122:10002/eUrbanMIS/openconstructionwithoutlogin.htm?userName=%E5%9F%8E%E7%AE%A1%E5%B1%80%E6%89%A7%E6%B3%95&password=12345678#MontiorMgr" target="_blank" class="jc-welcome-item jc-icon4"></a>
       <router-link :to="{name: 'intelligenceControl'}" tag="div" class="jc-welcome-item jc-icon5"></router-link>
     </div>
   </div>

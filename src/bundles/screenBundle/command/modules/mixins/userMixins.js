@@ -103,7 +103,7 @@ export default {
       //处理用户信息
       if (data.users && data.users.length) {
         data.users.forEach(item => {
-          let center = [parseFloat(item.lng).toFixed(6), parseFloat(item.lat).toFixed(6)]
+          let center = [parseFloat(item.lng).toFixed(9), parseFloat(item.lat).toFixed(9)]
 
           //查找该用户使用已经存在，如果存在则更新，否则进行添加
           let lnglat = usersData.lnglats.find(user => user.userId == item.userId)
@@ -160,7 +160,7 @@ export default {
     },
     renderUserMarker(context) {
       console.log('绘制用户-单点绘制', context)
-      let key = parseFloat(context.data[0].lnglat.lng).toFixed(6) + ',' + parseFloat(context.data[0].lnglat.lat).toFixed(6)
+      let key = parseFloat(context.data[0].lnglat.lng).toFixed(9) + ',' + parseFloat(context.data[0].lnglat.lat).toFixed(9)
 
       let userItem = usersData.users[key]
 
@@ -187,7 +187,7 @@ export default {
         myJcMap.map.setBounds(this.getAmapBundles(context.clusterData))
       } else {
         //获取信息去通知显示详情
-        let key = parseFloat(context.lnglat.lng).toFixed(6) + ',' + parseFloat(context.lnglat.lat).toFixed(6)
+        let key = parseFloat(context.lnglat.lng).toFixed(9) + ',' + parseFloat(context.lnglat.lat).toFixed(9)
 
         let userItem = usersData.users[key]
 

@@ -104,7 +104,7 @@ export default {
     },
     getAmapBundles(clusterData) {
       //获取缩放边界
-      let maxRund = 1.00004, minRund = 0.99996 //设置边距
+      let maxRund = 1.00002, minRund = 0.99998 //设置边距
 
       let lnglats = { lng: { max: null, min: null }, lat: { max: null, min: null } }
 
