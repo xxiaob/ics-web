@@ -148,13 +148,30 @@
       }
 
       .big-live {
+        animation: big-live-to-full 0.3s linear;
+
         width: 600px;
         height: 440px;
         position: absolute;
         left: 5px;
         top: 39px;
+        z-index: 999;
       }
     }
+  }
+}
+
+@keyframes big-live-to-full {
+  0% {
+    height: 150px;
+    width: 200px;
+    left: 600px;
+  }
+
+  100% {
+    width: 600px;
+    height: 440px;
+    left: 5px;
   }
 }
 

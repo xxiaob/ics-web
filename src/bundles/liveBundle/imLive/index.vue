@@ -32,10 +32,6 @@
             <div id="live" v-show="myShow" class="live" :class="{audio:inviteType==='0','big-live':bigLiveId===user.userId}" @click="checkBigLive(user.userId)">
               <div class="userName">{{user.userName}}</div>
             </div>
-            <div class="live"></div>
-            <div class="live"></div>
-            <div class="live"></div>
-            <div class="live"></div>
             <div class="live" @click="checkBigLive(user.userId)" :class="{audio:inviteType==='0','big-live':bigLiveId===user.userId}" v-for="user in users" :key="user.userId" :id="user.userId">
               <div class="userName">{{user.userName}}</div>
             </div>
