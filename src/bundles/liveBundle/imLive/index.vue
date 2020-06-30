@@ -5,24 +5,24 @@
   <div class="imLive">
 
     <transition-group name="fade">
-      <div key="1" class="content" :class="{'full-content':contentSize==='2','full-animation':contentSize==='2','normal-animation':showNormal}" v-show="contentShow&&contentSize!=='0'">
+      <div key="1" class="content" :class="{'full-content':contentSize==='2','full-animation':contentSize==='2','normal-animation':showNormal,observe:inviteType==='2'||inviteType==='3'}" v-show="contentShow&&contentSize!=='0'">
         <div class="title">
           <span>视频通话</span>
           <div class="right">
             <span class="exit" @click="exit" title="挂断">挂断</span>
-            <span title="投屏">
+            <span title="投屏" v-show="inviteType!='2'&&inviteType!='3'">
               <img src="./assets/bigScreen1.png" alt="" width="20">
               <img src="./assets/bigScreen2.png" alt="" width="20">
             </span>
-            <span title="全屏" v-show="contentSize==='1'" @click="changeSize('2')">
+            <span title="全屏" v-show="contentSize==='1'&&(inviteType!='2'&&inviteType!='3')" @click="changeSize('2')">
               <img src="./assets/full1.png" alt="" width="20">
               <img src="./assets/full2.png" alt="" width="20">
             </span>
-            <span title="取消全屏" v-show="contentSize==='2'" @click="changeSize('1')">
+            <span title="取消全屏" v-show="contentSize==='2'&&(inviteType!='2'&&inviteType!='3')" @click="changeSize('1')">
               <img src="./assets/closeFull1.png" alt="" width="20">
               <img src="./assets/closeFull2.png" alt="" width="20">
             </span>
-            <span title="缩小" @click="changeSize('0')" v-show="contentSize==='1'">
+            <span title="缩小" @click="changeSize('0')" v-show="contentSize==='1'&&(inviteType!='2'&&inviteType!='3')">
               <img src="./assets/narrow1.png" alt="" width="20">
               <img src="./assets/narrow2.png" alt="" width="20">
             </span>
@@ -492,6 +492,7 @@ export default {
   }
 }
 
+//放大过渡动画
 .full-animation {
   animation: to-full 0.6s linear;
 }
@@ -570,6 +571,21 @@ export default {
         top: 39px;
       }
     }
+  }
+}
+
+//观摩窗口
+.observe {
+  width: 630px;
+  margin-left: -315px;
+  top: 76px;
+  bottom: inherit;
+  .live-out {
+    height: 440px;
+  }
+  .live {
+    width: 600px;
+    height: 440px;
   }
 }
 
