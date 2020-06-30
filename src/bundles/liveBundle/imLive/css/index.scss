@@ -122,8 +122,8 @@
 
 //大窗口
 .full-content {
-  top: 76px;
-  bottom: inherit;
+  bottom: 50%;
+  margin-bottom: -250px;
 
   .live-out {
     overflow-x: hidden;
@@ -199,25 +199,12 @@
 
 @keyframes to-full {
   0% {
-    bottom: inherit;
-    top: 700px;
-  }
-
-  25% {
-    top: 600px;
-  }
-
-  50% {
-    top: 400px;
-  }
-
-  75% {
-    top: 200px;
+    bottom: $jc-default-dis;
   }
 
   100% {
-    top: 76px;
-    bottom: inherit;
+    bottom: 50%;
+    margin-bottom: -250px;
   }
 }
 
