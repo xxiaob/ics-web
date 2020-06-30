@@ -64,23 +64,25 @@ export default {
       console.log('网格信息', data)
       if (data && data.length) {
         data.forEach(item => {
-          let gridTypeMap = gridAreas[item.areaTypeId] || { icon: item.icon, signs: {}, lnglats: [] }
+          if (item.center) {
+            let gridTypeMap = gridAreas[item.areaTypeId] || { icon: item.icon, signs: {}, lnglats: [] }
 
-          gridTypeMap.signs[item.center] = {
-            areaId: item.areaId, areaName: item.areaName, areaTypeId: item.areaTypeId, center: item.center, icon: item.icon, sign: new JcMapSign({
-              id: item.orgId,
-              map: myJcMap,
-              name: item.areaName,
-              center: item.center.split(','),
-              tipVisible: false,
-              areaVisible: false,
-              boundaries: apiBoundariesFormat(item)
-            })
+            gridTypeMap.signs[item.center] = {
+              areaId: item.areaId, areaName: item.areaName, areaTypeId: item.areaTypeId, center: item.center, icon: item.icon, sign: new JcMapSign({
+                id: item.orgId,
+                map: myJcMap,
+                name: item.areaName,
+                center: item.center.split(','),
+                tipVisible: false,
+                areaVisible: false,
+                boundaries: apiBoundariesFormat(item)
+              })
+            }
+
+            gridTypeMap.lnglats.push({ lnglat: item.center.split(',') })
+
+            gridAreas[item.areaTypeId] = gridTypeMap
           }
-
-          gridTypeMap.lnglats.push({ lnglat: item.center.split(',') })
-
-          gridAreas[item.areaTypeId] = gridTypeMap
         })
       }
       console.log('绘制网格-处理之后的数据', gridAreas)

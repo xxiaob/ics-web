@@ -14,8 +14,8 @@
     </div>
     <div class="jc-detail-warp">
       <div class="jc-detail-label">描述</div>
-      <div class="jc-detail-content" v-html="detail.desc"></div>
     </div>
+    <div class="jc-edit-content" v-html="detail.desc"></div>
   </div>
 </template>
 <script>

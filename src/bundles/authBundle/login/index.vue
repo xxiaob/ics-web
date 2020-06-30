@@ -85,7 +85,7 @@ export default {
   right: 0;
   height: 110px;
   z-index: 9;
-  background: url(./assets/login-logo.png) no-repeat;
+  background: url(/static/images/login-logo.png) no-repeat;
   background-position: 60px center;
   border-bottom: solid 1px #253270;
 }

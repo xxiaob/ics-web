@@ -31,12 +31,13 @@ export default {
     start() {
       this.params = {
         users: [{
-          userId: '56776731599568896',
-          userName: 'lxx'
-        }, {
           userId: '56785471337922560',
           userName: '李孝贤南京'
         } ], //用户列表 id , '56783818509516800', '56783679036325888'
+        // {
+        //   userId: '56776731599568896',
+        //   userName: 'lxx'
+        // },
         inviteType: '1', //'0': '语音'   '1': '视频'   '2': '强制观摩'   '3': '观摩'
         channelId: null //可选  采集观摩需要
       }

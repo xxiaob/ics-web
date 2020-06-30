@@ -5,10 +5,10 @@
       <component :is="tabComponent" :options="options" :project="project"></component>
     </keep-alive>
     <div class="jc-user-detail-footer">
-      <div class="jc-user-detail-item jc-audio" title="对讲" @click="goMediaLive(0)"></div>
-      <div class="jc-user-detail-item jc-command" title="指挥" @click="goMediaLive(1)"></div>
-      <div class="jc-user-detail-item jc-video" title="观摩" @click="goMediaLive(3)"></div>
-      <div class="jc-user-detail-item jc-force-video" title="强制观摩" @click="goMediaLive(2)"></div>
+      <div class="jc-user-detail-item jc-audio" title="对讲" @click="goMediaLive('0')"></div>
+      <div class="jc-user-detail-item jc-command" title="指挥" @click="goMediaLive('1')"></div>
+      <div class="jc-user-detail-item jc-video" title="观摩" @click="goMediaLive('3')"></div>
+      <div class="jc-user-detail-item jc-force-video" title="强制观摩" @click="goMediaLive('2')"></div>
       <div class="jc-user-detail-item jc-trajectory" title="轨迹"></div>
       <div class="jc-user-detail-item jc-screen" title="投屏"></div>
     </div>

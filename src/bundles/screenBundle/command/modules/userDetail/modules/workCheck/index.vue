@@ -1,15 +1,17 @@
 <template>
-  <div class="jc-view-content">
-    <div class="jc-node-warp" v-if="list.length">
-      <div class="jc-node" v-for="(item,index) in list" :key="index">
-        <div class="jc-node-times">{{item.time}}<br />{{item.date}}</div>
-        <div class="jc-node-content">
-          <div>{{item.userName + ' ' + item.typeName}}</div>
-          <div v-if="outTypes.includes(item.type)">{{`在岗时长${item.duration}H，巡逻里程${item.distence}KM，上报事件数${item.reportEvent}件`}}</div>
-          <template v-if="inTypes.includes(item.type) && item.url">
-            <div class="jc-node-success">打卡成功</div>
-            <el-image :src="item.url" :preview-src-list="[item.url]"></el-image>
-          </template>
+  <div class="jc-view-content" v-loading="loading" element-loading-background="rgba(0, 0, 0, 0)">
+    <div class="jc-pt" v-if="list.length">
+      <div class="jc-node-warp">
+        <div class="jc-node" v-for="(item,index) in list" :key="index">
+          <div class="jc-node-times">{{item.time}}<br />{{item.date}}</div>
+          <div class="jc-node-content">
+            <div>{{item.userName + ' ' + item.typeName}}</div>
+            <div v-if="outTypes.includes(item.type)">{{`在岗时长${item.duration}H，巡逻里程${item.distence}KM，上报事件数${item.reportEvent}件`}}</div>
+            <template v-if="inTypes.includes(item.type) && item.url">
+              <div class="jc-node-success">打卡成功</div>
+              <el-image :src="item.url" :preview-src-list="[item.url]"></el-image>
+            </template>
+          </div>
         </div>
       </div>
     </div>
@@ -68,8 +70,3 @@ export default {
   }
 }
 </script>
-<style lang="scss" scoped>
-.jc-view-content {
-  padding-top: $jc-default-dis/2;
-}
-</style>

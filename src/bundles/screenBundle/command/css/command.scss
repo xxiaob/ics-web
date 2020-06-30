@@ -629,7 +629,7 @@ $jc-screen-height: 56px;
     padding: 0 $jc-default-dis/2;
 
     .jc-detail-label {
-      width: 80px;
+      width: 76px;
       padding: $jc-default-dis/2 0;
       line-height: 20px;
       color: $jc-color-text-secondary;
@@ -660,6 +660,15 @@ $jc-screen-height: 56px;
           object-fit: fill;
         }
       }
+    }
+  }
+
+  .jc-edit-content {
+    position: relative;
+    padding: 0 $jc-default-dis/2;
+
+    img {
+      max-width: 100%;
     }
   }
 

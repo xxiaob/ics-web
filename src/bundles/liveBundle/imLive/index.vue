@@ -1,28 +1,26 @@
 <template>
-  <!-- <el-dialog class="imLive" title="视频通话" :visible.sync="dialogVisible" width="840px" :close-on-click-modal="false" :append-to-body="true" :close-on-press-escape="false" :show-close="false">
-  </el-dialog> -->
   <!-- v-show="dialogVisible" -->
   <div class="imLive">
 
     <transition-group name="fade">
-      <div key="1" class="content" :class="{'full-content':contentSize==='2','full-animation':contentSize==='2','normal-animation':showNormal}" v-show="contentShow&&contentSize!=='0'">
+      <div key="1" class="content" :class="{'full-content':contentSize==='2','full-animation':contentSize==='2','normal-animation':showNormal,observe:inviteType==='2'||inviteType==='3'}" v-show="contentShow&&contentSize!=='0'">
         <div class="title">
           <span>视频通话</span>
           <div class="right">
             <span class="exit" @click="exit" title="挂断">挂断</span>
-            <span title="投屏">
+            <span title="投屏" v-show="inviteType!='2'&&inviteType!='3'">
               <img src="./assets/bigScreen1.png" alt="" width="20">
               <img src="./assets/bigScreen2.png" alt="" width="20">
             </span>
-            <span title="全屏" v-show="contentSize==='1'" @click="changeSize('2')">
+            <span title="全屏" v-show="contentSize==='1'&&(inviteType!='2'&&inviteType!='3')" @click="changeSize('2')">
               <img src="./assets/full1.png" alt="" width="20">
               <img src="./assets/full2.png" alt="" width="20">
             </span>
-            <span title="取消全屏" v-show="contentSize==='2'" @click="changeSize('1')">
+            <span title="取消全屏" v-show="contentSize==='2'&&(inviteType!='2'&&inviteType!='3')" @click="changeSize('1')">
               <img src="./assets/closeFull1.png" alt="" width="20">
               <img src="./assets/closeFull2.png" alt="" width="20">
             </span>
-            <span title="缩小" @click="changeSize('0')" v-show="contentSize==='1'">
+            <span title="缩小" @click="changeSize('0')" v-show="contentSize==='1'&&(inviteType!='2'&&inviteType!='3')">
               <img src="./assets/narrow1.png" alt="" width="20">
               <img src="./assets/narrow2.png" alt="" width="20">
             </span>
@@ -72,7 +70,6 @@ import { Live } from '@/live/agora'
 import { createNamespacedHelpers } from 'vuex'
 const { mapState } = createNamespacedHelpers('user')
 
-
 export default {
   name: 'imLive',
   props: {
@@ -86,10 +83,10 @@ export default {
   },
   data() {
     return {
-      showNormal: false,
-      bigLiveId: '',
-      contentSize: '1',
-      users: [],
+      showNormal: false, //大弹框到中等弹框的过渡类
+      bigLiveId: '', //大视频的id
+      contentSize: '1', //弹框大小
+      users: [], //通话中的用户列表(除了自己)
       msg: '音视频通话',
       dialogVisible: false,
       contentShow: false,
@@ -115,6 +112,7 @@ export default {
     ...mapState(['user'])
   },
   watch: {
+    //通过监听visible来发起音视频
     visible(newVal) {
       if (newVal) {
         this.dialogVisible = newVal
@@ -149,16 +147,19 @@ export default {
     }
   },
   methods: {
+    //切换小视频为大视频
     checkBigLive(val) {
       if (this.contentSize === '2') {
         this.bigLiveId = val
       }
     },
+    //改变弹框大小
     changeSize(val) {
       this.bigLiveId = this.user.userId
       this.showNormal = (val === '1' && this.contentSize === '2') ? true : false
       this.contentSize = val
     },
+    //im 实时数据回调
     imMsgCb(onType, data) {
       console.log('vue 数据', onType, data)
       const { fromUsername, content: { channelId, msgType, agree, nickName, isExit, inviteType, mediaType, content, users } } = data
@@ -335,7 +336,7 @@ export default {
 
         if (this.invited) {
           this.params.users.forEach(item=>{
-            this.im.sendSingleMsg(item, msg)
+            this.im.sendSingleMsg(item.userId, msg)
           })
         } else {
           this.im.sendSingleMsg(this.fromUsername, msg)
@@ -348,258 +349,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-//弹框过度样式
-.fade-enter-active,
-.fade-leave-active {
-  transition: transform 0.6s, opacity 0.6s;
-}
-
-.fade-enter,
-.fade-leave-to {
-  opacity: 0;
-  transform: translateY(200%);
-}
-
-//小窗口
-.content-small {
-  background-color: white;
-  width: 200px;
-  position: fixed;
-  z-index: 9999;
-  bottom: $jc-default-dis;
-  left: 50%;
-  margin-left: -100px;
-  border-radius: 3px;
-  box-shadow: 0 0 5px 0px #cccccc;
-  padding: 10px 20px;
-  display: flex;
-  justify-content: space-around;
-  & > span {
-    cursor: pointer;
-    // float: left;
-    // margin-left: 10px;
-
-    & > img:last-child {
-      display: none;
-    }
-    &:hover > img:last-child {
-      display: inline;
-    }
-    &:hover > img:first-child {
-      display: none;
-    }
-  }
-  .count {
-    line-height: 24px;
-    cursor: inherit;
-  }
-  .exit {
-    background: red;
-    color: white;
-    padding: 1.5px 10px;
-    border-radius: 3px;
-  }
-}
-
-//视频弹框样式
-.content {
-  width: 840px;
-  background-color: white;
-  position: fixed;
-  z-index: 999;
-  bottom: $jc-default-dis;
-  left: 50%;
-  margin-left: -420px;
-  border-radius: 3px;
-  box-shadow: 0 0 5px 0px #cccccc;
-  padding: 10px;
-  .title {
-    position: relative;
-    padding: 5px 10px;
-  }
-  .title:before {
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    margin: auto 0;
-    content: "";
-    display: block;
-    width: 3px;
-    height: 14px;
-    border-radius: 2px;
-    background-color: #409eff;
-  }
-  .right {
-    float: right;
-    & > span {
-      cursor: pointer;
-      float: left;
-      margin-left: 10px;
-
-      & > img:last-child {
-        display: none;
-      }
-      &:hover > img:last-child {
-        display: inline;
-      }
-      &:hover > img:first-child {
-        display: none;
-      }
-    }
-  }
-  .exit {
-    background: red;
-    color: white;
-    padding: 1.5px 10px;
-    border-radius: 3px;
-  }
-}
-
-//视频窗口样式
-.live-out {
-  overflow-x: auto;
-  overflow-y: hidden;
-  height: 160px;
-}
-
-.live-in {
-  display: flex;
-  float: left;
-  box-sizing: border-box;
-  .live {
-    margin: 5px;
-    // border: 1px solid #cccccc;
-    height: 150px;
-    width: 200px;
-    float: left;
-    position: relative;
-    background: url(./assets/video.png) no-repeat;
-    background-size: 100% 100%;
-
-    .userName {
-      padding: 2px 10px;
-      background: rgba($color: #000000, $alpha: 0.2);
-      color: white;
-      width: 100%;
-      position: absolute;
-      z-index: 100;
-    }
-  }
-  .audio {
-    background: url(./assets/audio.png) no-repeat;
-    background-size: 100% 100%;
-  }
-}
-
-.full-animation {
-  animation: to-full 0.6s linear;
-}
-@keyframes to-full {
-  0% {
-    bottom: inherit;
-    top: 700px;
-  }
-  25% {
-    top: 600px;
-  }
-  50% {
-    top: 400px;
-  }
-  75% {
-    top: 200px;
-  }
-  100% {
-    top: 76px;
-    bottom: inherit;
-  }
-}
-.normal-animation {
-  animation: to-normal 0.6s linear;
-}
-@keyframes to-normal {
-  0% {
-    top: inherit;
-    bottom: 400px;
-  }
-  25% {
-    bottom: 300px;
-  }
-  50% {
-    bottom: 200px;
-  }
-  75% {
-    bottom: 100px;
-  }
-  100% {
-    bottom: $jc-default-dis;
-    top: inherit;
-  }
-}
-
-//大窗口
-.full-content {
-  // width: 640px;
-  top: 76px;
-  right: 320px;
-  // margin-left: 0;
-  // left: inherit;
-  bottom: inherit;
-
-  .live-out {
-    overflow-x: hidden;
-    overflow-y: auto;
-    height: 440px;
-
-    .live-in {
-      width: 210px;
-      // height: 100%;
-      display: block;
-      float: right;
-
-      .live {
-        cursor: pointer;
-        float: none;
-      }
-
-      .big-live {
-        width: 600px;
-        height: 440px;
-        position: absolute;
-        left: 5px;
-        top: 39px;
-      }
-    }
-  }
-}
-
-//来电弹框样式
-.call-box {
-  position: fixed;
-  z-index: 9999;
-  text-align: center;
-  width: 100%;
-  bottom: $jc-default-dis;
-  .title {
-    text-align: center;
-  }
-  img {
-    cursor: pointer;
-    margin: 0 20px;
-  }
-  .invitedButton {
-    display: inline-block;
-    .btn {
-      display: none;
-    }
-    &:hover {
-      .btn {
-        display: inline;
-      }
-      .gif {
-        display: none;
-      }
-    }
-  }
-}
+@import "./css/index.scss";
 </style>

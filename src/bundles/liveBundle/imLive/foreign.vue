@@ -8,7 +8,7 @@ import { Live } from '@/live/agora'
 import { setToken } from '@/libs/storage'
 
 export default {
-  name: 'foreign',
+  name: 'foreign', //对外的 强制观摩 音视频
   data() {
     return {
       user: {

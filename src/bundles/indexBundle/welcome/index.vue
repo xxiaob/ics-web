@@ -38,7 +38,7 @@ export default {
   bottom: 80px;
   padding: 120px 0 0 0;
   display: flex;
-  background: url(./assets/head.png) no-repeat top center;
+  background: url(/static/images/index-logo.png) no-repeat top center;
   background-size: auto 66px;
 }
 .jc-welcome-item {
