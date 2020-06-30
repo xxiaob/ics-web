@@ -202,7 +202,9 @@ export default {
       }
     },
     exitHandel({ nickName, isExit }) {
-      this.$message.warning(nickName + '已经挂断')
+      if (this.live.joined) {
+        this.$message.warning(nickName + '已经挂断')
+      }
       if (isExit === '1') {
         console.log('结束视频')
         this.leaveChannel()
@@ -210,10 +212,12 @@ export default {
     },
     //邀请方处理回来的信息
     inviteHandelMsg( agree, nickName) {
-      if (agree === '1') {
-        this.$message.success(nickName + '同意接听')
-      } else {
-        this.$message.warning(nickName + '拒绝接听')
+      if (this.live.joined) {
+        if (agree === '1') {
+          this.$message.success(nickName + '同意接听')
+        } else {
+          this.$message.warning(nickName + '拒绝接听')
+        }
       }
       this.msg = ''
     },
