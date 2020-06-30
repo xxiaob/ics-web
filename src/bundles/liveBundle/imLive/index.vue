@@ -27,11 +27,15 @@
           </div>
         </div>
         <div class="live-out">
+          <div class="big-box"></div>
           <div class="live-in">
             <div id="live" v-show="myShow" class="live" :class="{audio:inviteType==='0','big-live':bigLiveId===user.userId}" @click="checkBigLive(user.userId)">
               <div class="userName">{{user.userName}}</div>
             </div>
-            <!-- <div class="live"></div> -->
+            <div class="live"></div>
+            <div class="live"></div>
+            <div class="live"></div>
+            <div class="live"></div>
             <div class="live" @click="checkBigLive(user.userId)" :class="{audio:inviteType==='0','big-live':bigLiveId===user.userId}" v-for="user in users" :key="user.userId" :id="user.userId">
               <div class="userName">{{user.userName}}</div>
             </div>
@@ -116,7 +120,7 @@ export default {
     visible(newVal) {
       if (newVal) {
         this.dialogVisible = newVal
-        this.bigLiveId = this.user.userId
+        this.bigLiveId = ''
         this.contentSize = '1'
         this.showNormal = false
         if (this.params) {
@@ -155,7 +159,7 @@ export default {
     },
     //改变弹框大小
     changeSize(val) {
-      this.bigLiveId = this.user.userId
+      this.bigLiveId = ''
       this.showNormal = (val === '1' && this.contentSize === '2') ? true : false
       this.contentSize = val
     },

@@ -121,7 +121,7 @@ export class IM {
     //聊天消息实时监听
     this.JIM.onMsgReceive(data => {
       this.console('onMsgReceive 实时数据:', data)
-      const { from_username: fromUsername, content: { msg_body: { text, extras } } } = data.messages[0]
+      const { from_username: fromUsername, content: { msg_body: { text } } } = data.messages[0]// text, extras
 
       cb('onMsgReceive', { fromUsername, content: JSON.parse(text) })
     })
