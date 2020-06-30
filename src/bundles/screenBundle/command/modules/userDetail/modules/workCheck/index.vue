@@ -1,5 +1,5 @@
 <template>
-  <div class="jc-view-content">
+  <div class="jc-view-content" v-loading="loading" element-loading-background="rgba(0, 0, 0, 0)">
     <div class="jc-pt" v-if="list.length">
       <div class="jc-node-warp">
         <div class="jc-node" v-for="(item,index) in list" :key="index">
