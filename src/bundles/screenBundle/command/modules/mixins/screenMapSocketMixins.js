@@ -31,13 +31,11 @@ export default {
           this.$EventBus.$emit('map-user-change', { type: 2, users: data.locations }) //通知用户上线
         } else if (data.type == 1) {
           //数据类型为组织人员信息变更
-          this.$EventBus.$emit('data-overview-change', data.orgUsers) //通知组织人员在线人数变更
           if (data.offlineUserId) {
             this.$EventBus.$emit('map-user-change', { type: 3, offUserId: data.offlineUserId }) //通知用户离线
           }
         } else if (data.type == 2) {
           //数据类型为第一次连接的数据
-          this.$EventBus.$emit('data-overview-change', data.orgUsers) //通知组织人员在线人数变更
           this.$EventBus.$emit('map-user-change', { type: 1, users: data.locations }) //通知用户初始化
         } else if (data.type == 3) {
           //数据类型为问题，任务消息

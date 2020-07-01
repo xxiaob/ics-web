@@ -9,7 +9,7 @@
         <el-table-column type="index" :index="indexMethod" label="序号" width="50"></el-table-column>
         <el-table-column prop="taskName" label="任务名称"></el-table-column>
         <el-table-column prop="areaName" label="考勤范围"></el-table-column>
-        <el-table-column prop="status" label="触岗记录" :formatter="formatStatus"></el-table-column>
+        <el-table-column prop="status" label="触岗记录"></el-table-column>
         <el-table-column prop="time" label="时间"></el-table-column>
         <!-- startTime endTime -->
         <el-table-column prop="photoUrl" label="打卡照片">

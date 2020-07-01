@@ -20,14 +20,6 @@ export default [{
   },
   props: { projectType: PROJECT_TYPES.SpecialControl }
 }, {
-  path: 'project/muckSpecial',
-  name: 'muckSpecial',
-  component: () => import('@/bundles/projectBundle/muckSpecial'),
-  meta: {
-    title: '项目管理-渣土专项',
-    ignore: true
-  }
-}, {
   path: 'project/intelligenceControl',
   name: 'intelligenceControl',
   component: () => import('@/bundles/projectBundle/intelligenceControl'),

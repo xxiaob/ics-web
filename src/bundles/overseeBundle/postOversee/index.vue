@@ -24,7 +24,7 @@
           </template>
         </el-table-column>
         <el-table-column prop="superviseUserName" label="督查人"></el-table-column>
-        <el-table-column prop="superviseStatus" label="督查结果"></el-table-column>
+        <el-table-column prop="superviseStatus" label="督查结果" :formatter="formatResult"></el-table-column>
         <el-table-column prop="superviseDesc" label="备注"></el-table-column>
       </el-table>
       <el-pagination @current-change="currentChange" @size-change="sizeChange" :current-page.sync="page.pageNum" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.total" class="text-right jc-mt"></el-pagination>

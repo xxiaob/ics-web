@@ -22,7 +22,7 @@
           </template>
         </el-table-column>
         <el-table-column prop="superviseUserName" label="督查人"></el-table-column>
-        <el-table-column prop="superviseStatus" label="督查结果"></el-table-column>
+        <el-table-column prop="superviseStatus" label="督查结果" :formatter="formatResult"></el-table-column>
         <el-table-column prop="superviseDesc" label="备注"></el-table-column>
       </el-table>
       <el-pagination @current-change="currentChange" @size-change="sizeChange" :current-page.sync="page.pageNum" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.total" class="text-right jc-mt"></el-pagination>
@@ -36,6 +36,7 @@ import { userOverseeList } from '@/api/attend'
 import { formatDate } from '@/libs/util'
 import PaginationMixins from '@/mixins/PaginationMixins'
 import { organizationList } from '@/api/organization'
+import { POST_OVERSEE_RESULTS } from '@/constant/Dictionaries'
 import { createNamespacedHelpers } from 'vuex'
 const { mapState } = createNamespacedHelpers('user')
 
@@ -64,6 +65,9 @@ export default {
     this.initData()
   },
   methods: {
+    formatResult(row, column, cellValue) {
+      return POST_OVERSEE_RESULTS.toString(cellValue.toString())
+    },
     formatTime(row, column, cellValue) {
       return formatDate(cellValue)
     },

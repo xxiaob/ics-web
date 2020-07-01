@@ -7,53 +7,7 @@
 .fade-enter,
 .fade-leave-to {
   opacity: 0;
-  transform: translateY(200%);
-}
-
-//小窗口
-.content-small {
-  background-color: white;
-  width: 200px;
-  position: fixed;
-  z-index: 9999;
-  bottom: $jc-default-dis;
-  left: 50%;
-  margin-left: -100px;
-  border-radius: 3px;
-  box-shadow: 0 0 5px 0px #cccccc;
-  padding: 10px 20px;
-  display: flex;
-  justify-content: space-around;
-
-  &>span {
-    cursor: pointer;
-    // float: left;
-    // margin-left: 10px;
-
-    &>img:last-child {
-      display: none;
-    }
-
-    &:hover>img:last-child {
-      display: inline;
-    }
-
-    &:hover>img:first-child {
-      display: none;
-    }
-  }
-
-  .count {
-    line-height: 24px;
-    cursor: inherit;
-  }
-
-  .exit {
-    background: red;
-    color: white;
-    padding: 1.5px 10px;
-    border-radius: 3px;
-  }
+  transform: translateY(200%) translateZ(0);
 }
 
 //视频弹框样式
@@ -71,13 +25,13 @@
 
   .title {
     position: relative;
-    padding: 5px 10px;
+    padding: 5px 10px 10px;
   }
 
   .title:before {
     position: absolute;
     top: 0;
-    bottom: 0;
+    bottom: 5px;
     left: 0;
     margin: auto 0;
     content: "";
@@ -122,20 +76,29 @@
 .live-out {
   overflow-x: auto;
   overflow-y: hidden;
-  height: 160px;
+  height: 150px;
+}
+
+.big-box {
+  width: 0;
+  height: 0;
+  display: inline-block;
+  background: url(./assets/video.png) no-repeat;
+  background-size: 100% 100%;
 }
 
 .live-in {
-  display: flex;
-  float: left;
   box-sizing: border-box;
+  white-space: nowrap;
+  // display: inline-block;
+  width: 100%;
+  float: right;
 
   .live {
-    margin: 5px;
+    display: inline-block;
     // border: 1px solid #cccccc;
     height: 150px;
     width: 200px;
-    float: left;
     position: relative;
     background: url(./assets/video.png) no-repeat;
     background-size: 100% 100%;
@@ -156,37 +119,149 @@
   }
 }
 
+//大窗口
+.full-content {
+  bottom: 50%;
+  margin-bottom: -250px;
+
+  .live-out {
+    overflow-x: hidden;
+    overflow-y: auto;
+    height: 440px;
+
+    .big-box {
+      width: 600px;
+      height: 440px;
+      position: absolute;
+      left: 10px;
+      top: 44px;
+    }
+
+    .live-in {
+      width: 210px;
+      white-space: normal;
+
+      .live {
+        display: block;
+        margin-bottom: 5px;
+        cursor: pointer;
+      }
+
+      .big-live {
+        animation: big-live-to-full 0.3s linear;
+
+        width: 600px;
+        height: 440px;
+        position: absolute;
+        left: 10px;
+        top: 44px;
+        z-index: 999;
+      }
+    }
+  }
+}
+
+@keyframes big-live-to-full {
+  0% {
+    height: 150px;
+    width: 200px;
+    left: 600px;
+  }
+
+  100% {
+    width: 600px;
+    height: 440px;
+    left: 5px;
+  }
+}
+
 //放大过渡动画
 .full-animation {
-  animation: to-full 0.6s linear;
+  animation: to-full 0.4s linear;
+
+  .big-box {
+    animation: big-box-to-full 0.4s linear;
+  }
+
+  .live-in {
+    animation: live-in-to-full 0.4s linear;
+  }
+}
+
+@keyframes live-in-to-full {
+  0% {
+    width: 100%;
+  }
+
+  100% {
+    width: 210px;
+    white-space: normal;
+  }
+}
+
+@keyframes big-box-to-full {
+  0% {
+    width: 0;
+    height: 0;
+  }
+
+  100% {
+    width: 600px;
+    height: 440px;
+    position: absolute;
+    left: 10px;
+    top: 44px;
+  }
 }
 
 @keyframes to-full {
   0% {
-    bottom: inherit;
-    top: 700px;
-  }
-
-  25% {
-    top: 600px;
-  }
-
-  50% {
-    top: 400px;
-  }
-
-  75% {
-    top: 200px;
+    bottom: $jc-default-dis;
   }
 
   100% {
-    top: 76px;
-    bottom: inherit;
+    bottom: 50%;
+    margin-bottom: -250px;
   }
 }
 
 .normal-animation {
-  animation: to-normal 0.6s linear;
+  animation: to-normal 0.4s linear;
+
+  .big-box {
+    animation: big-box-to-normal 0.4s linear;
+  }
+
+  .live-in {
+    animation: live-in-to-normal 0.4s linear;
+  }
+}
+
+@keyframes live-in-to-normal {
+  0% {
+    width: 210px;
+    white-space: normal;
+  }
+
+  100% {
+    width: 100%;
+    white-space: nowrap;
+  }
+}
+
+@keyframes big-box-to-normal {
+  0% {
+    width: 600px;
+    height: 440px;
+    position: absolute;
+    left: 10px;
+    top: 44px;
+  }
+
+  100% {
+    width: 0;
+    height: 150px;
+  }
 }
 
 @keyframes to-normal {
@@ -213,48 +288,56 @@
   }
 }
 
-//大窗口
-.full-content {
-  // width: 640px;
-  top: 76px;
-  right: 320px;
-  // margin-left: 0;
-  // left: inherit;
-  bottom: inherit;
+//小窗口
+.content-small {
+  background-color: white;
+  width: 200px;
+  position: fixed;
+  z-index: 9999;
+  bottom: $jc-default-dis;
+  left: 50%;
+  margin-left: -100px;
+  border-radius: 3px;
+  box-shadow: 0 0 5px 0px #cccccc;
+  padding: 10px 20px;
+  display: flex;
+  justify-content: space-around;
 
-  .live-out {
-    overflow-x: hidden;
-    overflow-y: auto;
-    height: 440px;
+  &>span {
+    cursor: pointer;
 
-    .live-in {
-      width: 210px;
-      // height: 100%;
-      display: block;
-      float: right;
-
-      .live {
-        cursor: pointer;
-        float: none;
-      }
-
-      .big-live {
-        width: 600px;
-        height: 440px;
-        position: absolute;
-        left: 5px;
-        top: 39px;
-      }
+    &>img:last-child {
+      display: none;
     }
+
+    &:hover>img:last-child {
+      display: inline;
+    }
+
+    &:hover>img:first-child {
+      display: none;
+    }
+  }
+
+  .count {
+    line-height: 24px;
+    cursor: inherit;
+  }
+
+  .exit {
+    background: red;
+    color: white;
+    padding: 1.5px 10px;
+    border-radius: 3px;
   }
 }
 
 //观摩窗口
 .observe {
-  width: 630px;
-  margin-left: -315px;
-  top: 76px;
-  bottom: inherit;
+  width: 620px;
+  margin-left: -310px;
+  bottom: 50%;
+  margin-bottom: -250px;
 
   .live-out {
     height: 440px;

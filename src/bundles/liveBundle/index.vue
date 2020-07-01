@@ -38,7 +38,7 @@ export default {
         //   userId: '56776731599568896',
         //   userName: 'lxx'
         // },
-        inviteType: '1', //'0': '语音'   '1': '视频'   '2': '强制观摩'   '3': '观摩'
+        inviteType: '3', //'0': '语音'   '1': '视频'   '2': '强制观摩'   '3': '观摩'
         channelId: null //可选  采集观摩需要
       }
       this.visible = true

@@ -5,7 +5,7 @@
     <transition-group name="fade">
       <div key="1" class="content" :class="{'full-content':contentSize==='2','full-animation':contentSize==='2','normal-animation':showNormal,observe:inviteType==='2'||inviteType==='3'}" v-show="contentShow&&contentSize!=='0'">
         <div class="title">
-          <span>视频通话</span>
+          <span>{{title}}</span>
           <div class="right">
             <span class="exit" @click="exit" title="挂断">挂断</span>
             <span title="投屏" v-show="inviteType!='2'&&inviteType!='3'">
@@ -27,11 +27,11 @@
           </div>
         </div>
         <div class="live-out">
+          <div class="big-box"></div>
           <div class="live-in">
             <div id="live" v-show="myShow" class="live" :class="{audio:inviteType==='0','big-live':bigLiveId===user.userId}" @click="checkBigLive(user.userId)">
               <div class="userName">{{user.userName}}</div>
             </div>
-            <!-- <div class="live"></div> -->
             <div class="live" @click="checkBigLive(user.userId)" :class="{audio:inviteType==='0','big-live':bigLiveId===user.userId}" v-for="user in users" :key="user.userId" :id="user.userId">
               <div class="userName">{{user.userName}}</div>
             </div>
@@ -83,6 +83,7 @@ export default {
   },
   data() {
     return {
+      title: '视频',
       showNormal: false, //大弹框到中等弹框的过渡类
       bigLiveId: '', //大视频的id
       contentSize: '1', //弹框大小
@@ -116,7 +117,7 @@ export default {
     visible(newVal) {
       if (newVal) {
         this.dialogVisible = newVal
-        this.bigLiveId = this.user.userId
+        this.bigLiveId = ''
         this.contentSize = '1'
         this.showNormal = false
         if (this.params) {
@@ -126,8 +127,11 @@ export default {
           this.inviteType = inviteType
           //设置频道id
           this.channelId = channelId ? channelId : new Date().getTime().toString()
-          this.msg = '正在发起' + this.inviteTypes[inviteType][0]
-          this.$message.info('正在发起' + this.inviteTypes[inviteType][0])
+          const type = this.inviteTypes[inviteType][0]
+
+          this.msg = '正在发起' + type
+          this.$message.info('正在发起' + type)
+          this.title = type
           this.inviteAllUsers(...this.inviteTypes[inviteType][1], users)
         } else {
           console.log('我是接收方')
@@ -155,7 +159,7 @@ export default {
     },
     //改变弹框大小
     changeSize(val) {
-      this.bigLiveId = this.user.userId
+      this.bigLiveId = ''
       this.showNormal = (val === '1' && this.contentSize === '2') ? true : false
       this.contentSize = val
     },
@@ -190,6 +194,7 @@ export default {
             })
           }
           this.inviteType = mediaType
+          this.title = mediaType === '0' ? '语音' : '视频'
           if (inviteType === '0') {
             let msg = content === 'help' ? '一键求助' : (mediaType === '0' ? '语音' : '视频')
 
@@ -202,7 +207,9 @@ export default {
       }
     },
     exitHandel({ nickName, isExit }) {
-      this.$message.warning(nickName + '已经挂断')
+      if (this.live.joined) {
+        this.$message.warning(nickName + '已经挂断')
+      }
       if (isExit === '1') {
         console.log('结束视频')
         this.leaveChannel()
@@ -210,10 +217,12 @@ export default {
     },
     //邀请方处理回来的信息
     inviteHandelMsg( agree, nickName) {
-      if (agree === '1') {
-        this.$message.success(nickName + '同意接听')
-      } else {
-        this.$message.warning(nickName + '拒绝接听')
+      if (this.live.joined) {
+        if (agree === '1') {
+          this.$message.success(nickName + '同意接听')
+        } else {
+          this.$message.warning(nickName + '拒绝接听')
+        }
       }
       this.msg = ''
     },
