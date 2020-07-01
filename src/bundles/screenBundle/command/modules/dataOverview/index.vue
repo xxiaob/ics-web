@@ -45,10 +45,12 @@ export default {
   },
   methods: {
     async initData(org) {
-      if (!org) {
+      if (org) {
+        this.org = org
+      }
+      if (!this.org) {
         return
       }
-      this.org = org
       this.loading = true
       try {
         let result = await getCommandScreenData({ orgId: this.org.orgId, projectId: this.project.projectId || this.$route.params.projectId || '' })
