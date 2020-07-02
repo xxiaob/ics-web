@@ -16,7 +16,7 @@
         <jc-task-people :peopleType.sync="peopleType" :selecteds.sync="peoples" :orgTree="orgTree"></jc-task-people>
       </el-form-item>
       <div label="任务要求" class="jc-left-width50">
-        <el-form-item label="任务周期" prop="date" :rules="rules.SELECT_NOT_NULL">
+        <el-form-item label="任务时间" prop="date" :rules="rules.SELECT_NOT_NULL">
           <el-date-picker v-model="form.date" @change="changeDate" value-format="timestamp" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期">
           </el-date-picker>
         </el-form-item>

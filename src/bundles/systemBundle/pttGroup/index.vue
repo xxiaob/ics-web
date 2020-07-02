@@ -93,10 +93,12 @@ export default {
       }
     },
     async initData() {
+      this.loading = true
       const { total, resultList } = await getUserList({ groupId: this.activeGroupId, ...this.page })
 
       this.page.total = total
       this.userList = resultList
+      this.loading = false
     },
     formatTime(row, column, cellValue) {
       return formatDate(cellValue)
@@ -107,19 +109,19 @@ export default {
       return users.join('、')
     },
     async getGroups() {
-      if (!this.loading) {
-        this.loading = true
-        try {
-          this.list = await pttGroupList({ ...this.filter })
+      // if (!this.loading) {
+      // }
+      this.loading = true
+      try {
+        this.list = await pttGroupList({ ...this.filter })
 
-          this.loading = false
-          if (this.list.length) {
-            this.changeGroup(this.list[0].groupId)
-          }
-        } catch (error) {
-          console.error(error)
-          this.loading = false
+        this.loading = false
+        if (this.list.length) {
+          this.changeGroup(this.list[0].groupId)
         }
+      } catch (error) {
+        console.error(error)
+        this.loading = false
       }
     },
     goFilter(filter) {
