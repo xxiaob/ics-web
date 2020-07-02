@@ -28,6 +28,8 @@
     <temporary-tasks-manage :projectList="temporaryTaskProject" :projectId="temporaryTaskprojectId" :visible.sync="temporaryTaskVisible" @save-success="temporaryTaskSuccess"></temporary-tasks-manage>
     <!-- 音视频处理 -->
     <media-live></media-live>
+    <!-- 人员轨迹处理 -->
+    <user-trajectory></user-trajectory>
   </section>
 </template>
 <script>
@@ -59,7 +61,8 @@ export default {
     GridDetail: () => import('./modules/gridDetail'), //网格详情
     UserDetail: () => import('./modules/userDetail'), //用户详情
     TemporaryTasksManage: () => import('@/bundles/taskBundle/taskProcess/modules/manage'), //临时任务
-    MediaLive: () => import('./modules/mediaLive') //音视频
+    MediaLive: () => import('./modules/mediaLive'), //音视频
+    UserTrajectory: () => import('./modules/trajectory') //人员轨迹
   },
   data() {
     return {
