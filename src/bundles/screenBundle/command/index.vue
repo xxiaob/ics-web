@@ -39,6 +39,7 @@ import ScreenMapSocketMixins from './modules/mixins/screenMapSocketMixins' //大
 import GridMixins from './modules/mixins/gridMixins' //网格处理
 import UserMixins from './modules/mixins/userMixins.js' //用户处理
 import CommandHeader from './modules/header'//顶部
+import CommandMessage from './modules/message'//任务等消息弹窗
 
 let myJcMap //个人 map 对象
 
@@ -50,7 +51,7 @@ export default {
     CommandOperate: () => import('./modules/operate'), //功能操作区域
     MapSearch: () => import('@/components/JcMap/MapSearch'), //地图搜索
     DataOverview: () => import('./modules/dataOverview'), //左下角的数据预览
-    CommandMessage: () => import('./modules/message'), //任务等消息弹窗
+    CommandMessage, //任务等消息弹窗
     ImTalk: () => import('./modules/imTalk'), //聊天消息
     CommandOrg: () => import('./modules/org'), //组织架构
     CommandGrid: () => import('./modules/grid'), //网格

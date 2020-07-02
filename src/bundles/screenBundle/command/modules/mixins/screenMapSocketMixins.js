@@ -37,6 +37,7 @@ export default {
         } else if (data.type == 2) {
           //数据类型为第一次连接的数据
           this.$EventBus.$emit('map-user-change', { type: 1, users: data.locations }) //通知用户初始化
+          this.$EventBus.$emit('screen-message-init', data.tasks) //通知消息初始化
         } else if (data.type == 3) {
           //数据类型为问题，任务消息
           this.$EventBus.$emit('screen-message-change', data) //通知任务事件

@@ -25,6 +25,7 @@ export default {
     }
   },
   created() {
+    this.$EventBus.$on('screen-message-init', this.messageInit) //监听消息 初始化
     this.$EventBus.$on('screen-message-change', this.initData) //监听消息
     // this.interval = setInterval(() => {
     //   this.list.splice(0, 0, { id: this.index++, type: '3', title: '测试' })
@@ -60,6 +61,17 @@ export default {
         this.list.splice(this.maxLength, this.list.length - this.maxLength)
       }
     },
+    messageInit(data) {
+      console.log('screen-message-init', data)
+      if (data && data.length) {
+        let list = []
+
+        data.forEach(item => {
+          list.push( { id: item.businessKey, type: MESSAGE_TYPE.TEMPORARY, title: item.taskName, userName: item.startUser })
+        })
+        this.list = list
+      }
+    },
     detail(item) {
       this.$EventBus.$emit('view-component-change', { component: 'MessageDetail', options: item }) //通知窗口改变
     }
@@ -78,6 +90,7 @@ export default {
   beforeDestroy() {
     //去除监听
     this.$EventBus.$off('screen-message-change', this.initData)
+    this.$EventBus.$off('screen-message-init', this.messageInit)
   }
 }
 </script>
