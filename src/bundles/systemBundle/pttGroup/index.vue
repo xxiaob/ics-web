@@ -157,7 +157,7 @@ export default {
       const res = await userCode(row.userId)
 
       console.log(res)
-      this.codeUrl = await QRCode.toDataURL(JSON.stringify(res), {
+      this.codeUrl = await QRCode.toDataURL(res.code, {
         width: 256,
         height: 256
       })
