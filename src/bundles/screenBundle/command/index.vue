@@ -28,6 +28,8 @@
     <temporary-tasks-manage :projectList="temporaryTaskProject" :projectId="temporaryTaskprojectId" :visible.sync="temporaryTaskVisible" @save-success="temporaryTaskSuccess"></temporary-tasks-manage>
     <!-- 音视频处理 -->
     <media-live></media-live>
+    <!-- 人员轨迹处理 -->
+    <user-trajectory></user-trajectory>
   </section>
 </template>
 <script>
@@ -39,6 +41,7 @@ import ScreenMapSocketMixins from './modules/mixins/screenMapSocketMixins' //大
 import GridMixins from './modules/mixins/gridMixins' //网格处理
 import UserMixins from './modules/mixins/userMixins.js' //用户处理
 import CommandHeader from './modules/header'//顶部
+import CommandMessage from './modules/message'//任务等消息弹窗
 
 let myJcMap //个人 map 对象
 
@@ -50,7 +53,7 @@ export default {
     CommandOperate: () => import('./modules/operate'), //功能操作区域
     MapSearch: () => import('@/components/JcMap/MapSearch'), //地图搜索
     DataOverview: () => import('./modules/dataOverview'), //左下角的数据预览
-    CommandMessage: () => import('./modules/message'), //任务等消息弹窗
+    CommandMessage, //任务等消息弹窗
     ImTalk: () => import('./modules/imTalk'), //聊天消息
     CommandOrg: () => import('./modules/org'), //组织架构
     CommandGrid: () => import('./modules/grid'), //网格
@@ -58,7 +61,8 @@ export default {
     GridDetail: () => import('./modules/gridDetail'), //网格详情
     UserDetail: () => import('./modules/userDetail'), //用户详情
     TemporaryTasksManage: () => import('@/bundles/taskBundle/taskProcess/modules/manage'), //临时任务
-    MediaLive: () => import('./modules/mediaLive') //音视频
+    MediaLive: () => import('./modules/mediaLive'), //音视频
+    UserTrajectory: () => import('./modules/trajectory') //人员轨迹
   },
   data() {
     return {

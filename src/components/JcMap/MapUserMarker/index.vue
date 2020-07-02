@@ -161,9 +161,9 @@ export default {
     }
   },
   beforeDestroy() {
+    myJcMap.destroy()
     myJcMap = null
     mousetool = null
-    myJcMap.destroy()
   }
 }
 </script>

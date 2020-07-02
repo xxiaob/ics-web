@@ -34,7 +34,7 @@
           <el-table-column prop="userName" label="用户名称"></el-table-column>
           <el-table-column width="100" label="操作">
             <template slot-scope="scope">
-              <el-button type="text" size="mini" icon="el-icon-view" @click="seeCode(scope.row)" title="查看二维码"></el-button>
+              <el-button :loading="loading" type="text" size="mini" icon="el-icon-view" @click="seeCode(scope.row)" title="查看二维码"></el-button>
               <el-button type="text" size="mini" icon="el-icon-delete" @click="del(scope.row)" title="删除"></el-button>
             </template>
           </el-table-column>
@@ -54,7 +54,7 @@
   </div>
 </template>
 <script>
-import { pttGroupList, pttGroupDel, getUserList, userDel } from '@/api/pttGroup'
+import { pttGroupList, pttGroupDel, getUserList, userDel, userCode } from '@/api/pttGroup'
 import { formatDate } from '@/libs/util'
 import PaginationMixins from '@/mixins/PaginationMixins'
 import QRCode from 'qrcode'
@@ -93,10 +93,12 @@ export default {
       }
     },
     async initData() {
+      this.loading = true
       const { total, resultList } = await getUserList({ groupId: this.activeGroupId, ...this.page })
 
       this.page.total = total
       this.userList = resultList
+      this.loading = false
     },
     formatTime(row, column, cellValue) {
       return formatDate(cellValue)
@@ -107,19 +109,19 @@ export default {
       return users.join('、')
     },
     async getGroups() {
-      if (!this.loading) {
-        this.loading = true
-        try {
-          this.list = await pttGroupList({ ...this.filter })
+      // if (!this.loading) {
+      // }
+      this.loading = true
+      try {
+        this.list = await pttGroupList({ ...this.filter })
 
-          this.loading = false
-          if (this.list.length) {
-            this.changeGroup(this.list[0].groupId)
-          }
-        } catch (error) {
-          console.error(error)
-          this.loading = false
+        this.loading = false
+        if (this.list.length) {
+          this.changeGroup(this.list[0].groupId)
         }
+      } catch (error) {
+        console.error(error)
+        this.loading = false
       }
     },
     goFilter(filter) {
@@ -151,11 +153,15 @@ export default {
     },
     //生成二维码
     async seeCode(row) {
-      // console.log(row.code)
-      this.codeUrl = await QRCode.toDataURL(row.code, {
+      this.loading = true
+      const res = await userCode(row.userId)
+
+      console.log(res)
+      this.codeUrl = await QRCode.toDataURL(res.code, {
         width: 256,
         height: 256
       })
+      this.loading = false
       this.codeVisible = true
     },
     removeAll() {

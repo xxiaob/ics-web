@@ -31,14 +31,15 @@ export default {
     start() {
       this.params = {
         users: [{
-          userId: '56785471337922560',
-          userName: '李孝贤南京'
+          userId: '56776731599568896',
+          userName: '李孝贤'
         } ], //用户列表 id , '56783818509516800', '56783679036325888'
         // {
         //   userId: '56776731599568896',
         //   userName: 'lxx'
         // },
-        inviteType: '3', //'0': '语音'   '1': '视频'   '2': '强制观摩'   '3': '观摩'
+        //'0': '多人语音'   '1': '多人视频'   '2': '强制观摩'   '3': '观摩'  '4': '双人语音'  '5': '双人视频'
+        inviteType: '1',
         channelId: null //可选  采集观摩需要
       }
       this.visible = true

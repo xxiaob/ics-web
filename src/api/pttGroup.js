@@ -70,3 +70,11 @@ export function userDel(data) {
 export function userAdd(data) {
   return axios.post(API.pttGroup.userAdd, data)
 }
+/**
+ * 获取用户二维码信息
+ * @param {String} id
+ * @returns {Object} axios 对象
+ */
+export function userCode(id) {
+  return axios.post(API.pttGroup.userCode + '?userId=' + id)
+}
