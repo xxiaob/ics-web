@@ -196,29 +196,29 @@ input::-webkit-input-placeholder {
   .el-card__body {
     padding-bottom: 0;
   }
+}
 
-  .jc-tabfilter-form {
-    .el-form-item {
-      margin-bottom: $jc-default-dis;
-    }
-
-    .el-form-item__content {
-      &>.el-range-editor {
-        width: 350px;
-      }
-
-      &>.el-input,
-      &>.el-cascader,
-      &>.el-select {
-        width: 160px;
-      }
-    }
+.jc-tabfilter-form {
+  .el-form-item {
+    margin-bottom: $jc-default-dis;
   }
 
-  .jc-tabfilter-btns {
-    float: right;
-    margin-right: 0;
+  .el-form-item__content {
+    &>.el-range-editor {
+      width: 350px;
+    }
+
+    &>.el-input,
+    &>.el-cascader,
+    &>.el-select {
+      width: 160px;
+    }
   }
+}
+
+.jc-tabfilter-btns {
+  float: right;
+  margin-right: 0;
 }
 
 .jc-title-sign {
