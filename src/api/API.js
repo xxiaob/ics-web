@@ -138,7 +138,8 @@ export default {
     del: 'user-service/userGroup/deleteGroup',
     userList: 'user-service/userGroup/getGroupUser',
     userDel: 'user-service/userGroup/delGroupUser',
-    userAdd: 'user-service/userGroup/addGroupUser'
+    userAdd: 'user-service/userGroup/addGroupUser',
+    userCode: 'user-service/userGroup/getUserCode'
   },
   projects: {
     //项目管理
