@@ -29,10 +29,10 @@
         <div class="live-out">
           <div class="big-box"></div>
           <div class="live-in">
-            <div id="live" v-show="myShow" class="live" :class="{audio:inviteType==='0','big-live':bigLiveId===user.userId}" @click="checkBigLive(user.userId)">
+            <div id="live" v-show="myShow" class="live" :class="{audio:inviteType==='0'||inviteType==='4','big-live':bigLiveId===user.userId}" @click="checkBigLive(user.userId)">
               <div class="userName">{{user.userName}}</div>
             </div>
-            <div class="live" @click="checkBigLive(user.userId)" :class="{audio:inviteType==='0','big-live':bigLiveId===user.userId}" v-for="user in users" :key="user.userId" :id="user.userId">
+            <div class="live" @click="checkBigLive(user.userId)" :class="{audio:inviteType==='0'||inviteType==='4','big-live':bigLiveId===user.userId}" v-for="user in users" :key="user.userId" :id="user.userId">
               <div class="userName">{{user.userName}}</div>
             </div>
           </div>
@@ -135,6 +135,12 @@ export default {
           this.$message.info('正在发起' + type)
           this.title = type
           this.inviteAllUsers(...this.inviteTypes[inviteType][1], users)
+          if (this.inviteType === '4' || this.inviteType === '5' || this.inviteType === '3' || this.inviteType === '2') {
+            this.timeout = setTimeout(()=>{
+              this.$message.info('对方未接听')
+              this.confirmExit()
+            }, 30000)
+          }
         } else {
           console.log('我是接收方')
         }
@@ -170,6 +176,9 @@ export default {
       console.log('vue 数据', onType, data)
       const { fromUsername, content: { channelId, msgType, agree, nickName, isExit, inviteType, mediaType, content, users } } = data
 
+      if (this.timeout) {
+        clearTimeout(this.timeout)
+      }
       this.fromUsername = fromUsername
       if (msgType === '1') {
         console.log('邀请视频')
@@ -195,7 +204,11 @@ export default {
               }
             })
           }
-          this.inviteType = mediaType
+          if (content === 'double') {
+            this.inviteType = mediaType === '0' ? '4' : '5'
+          } else {
+            this.inviteType = mediaType
+          }
           this.title = mediaType === '0' ? '语音' : '视频'
           if (inviteType === '0') {
             let msg = content === 'help' ? '一键求助' : (mediaType === '0' ? '语音' : '视频')
@@ -212,7 +225,7 @@ export default {
       if (this.live.joined) {
         this.$message.warning(nickName + '已经挂断')
       }
-      if (isExit === '1') {
+      if (isExit === '1' || (this.inviteType === '4' || this.inviteType === '5')) {
         console.log('结束视频')
         this.leaveChannel()
       }
@@ -224,6 +237,9 @@ export default {
           this.$message.success(nickName + '同意接听')
         } else {
           this.$message.warning(nickName + '拒绝接听')
+          if (this.inviteType === '4' || this.inviteType === '5' || this.inviteType === '3') {
+            this.leaveChannel()
+          }
         }
       }
       this.msg = ''
@@ -302,8 +318,16 @@ export default {
     //邀请单个用户加入频道
     inviteOneUser(inviteType, mediaType) {
       console.log(this.invitUserId, 'this.invitUserId')
+      const contents = {
+        '0': 'meet',
+        '1': 'meet',
+        '2': '',
+        '3': 'observation',
+        '4': 'double',
+        '5': 'double'
+      }
 
-      const content = this.params.inviteType === '3' ? 'observation' : ''
+      const content = contents[this.inviteType] || ''
       const msg = {
         content,
         msgType: '1',
@@ -319,11 +343,15 @@ export default {
     },
     //离开频道
     async leaveChannel() {
+      if (this.timeout) {
+        clearTimeout(this.timeout)
+      }
       if (this.live.joined) {
         await this.live.leaveChannel()
       }
       this.msg = ''
       this.invited = false
+      this.invitedButton = false
       this.fromUsername = ''
       this.contentShow = false
       this.myShow = false
@@ -337,23 +365,27 @@ export default {
     //结束按钮操作
     exit() {
       this.$confirm('确认退出房间', '提示', { type: 'warning' }).then( () => {
-        const isExit = this.invited ? '1' : '0'
-        const msg = {
-          msgType: '1',
-          channelId: this.channelId,
-          nickName: this.user.userName,
-          isExit
-        }
-
-        if (this.invited) {
-          this.params.users.forEach(item=>{
-            this.im.sendSingleMsg(item.userId, msg)
-          })
-        } else {
-          this.im.sendSingleMsg(this.fromUsername, msg)
-        }
-        this.leaveChannel()
+        this.confirmExit()
       }).catch(() => {})
+    },
+    confirmExit() {
+      // console.log('rtc.remoteStreams', this.live.rtc.remoteStreams)
+      const isExit = (this.invited || this.inviteType === '4' || this.inviteType === '5') ? '1' : '0'
+      const msg = {
+        msgType: '1',
+        channelId: this.channelId,
+        nickName: this.user.userName,
+        isExit
+      }
+
+      if (this.invited) {
+        this.params.users.forEach(item=>{
+          this.im.sendSingleMsg(item.userId, msg)
+        })
+      } else {
+        this.im.sendSingleMsg(this.fromUsername, msg)
+      }
+      this.leaveChannel()
     }
   }
 }
