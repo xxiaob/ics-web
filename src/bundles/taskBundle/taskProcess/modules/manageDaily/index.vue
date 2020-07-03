@@ -15,6 +15,12 @@
       <el-form-item label="任务人员" prop="" :rules="rules.SELECT_NOT_NULL" class="jc-left-width50">
         <jc-task-people :peopleType.sync="peopleType" :selecteds.sync="peoples" :orgTree="orgTree"></jc-task-people>
       </el-form-item>
+      <!-- <el-form-item label="任务频率" prop="taskName" :rules="rules.Len50" class="jc-left-width50">
+        <el-input v-model="form.taskName" placeholder=""></el-input>
+      </el-form-item>
+      <el-form-item label="准点到岗" prop="taskName" :rules="rules.Len50" class="jc-left-width50">
+        <el-input v-model="form.taskName" placeholder=""></el-input>
+      </el-form-item> -->
       <div label="任务要求" class="jc-left-width50">
         <el-form-item label="任务时间" prop="date" :rules="rules.SELECT_NOT_NULL">
           <el-date-picker v-model="form.date" @change="changeDate" value-format="timestamp" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期">
@@ -57,7 +63,7 @@ import FormMixins from '@/mixins/FormMixins'
 import { TASK_TYPES, TASK_AREA_TYPES, TASK_PEOPLE_TYPES, PROJECT_TYPES } from '@/constant/Dictionaries'
 
 const defaultForm = {
-  workAreaType: TASK_AREA_TYPES.ORG,
+  workAreaType: TASK_AREA_TYPES.GRID,
   assigneeAreaPOS: [],
   businessKey: '',
   projectId: '',
@@ -100,7 +106,7 @@ export default {
   },
   data() {
     return {
-      peopleType: TASK_PEOPLE_TYPES.ORG,
+      peopleType: TASK_PEOPLE_TYPES.PEOPLE,
       peoples: [],
       peopleProps: {
         [TASK_PEOPLE_TYPES.ORG]: 'orgIds',
@@ -188,9 +194,9 @@ export default {
         }
         return form
       } else {
-        this.peopleType = TASK_PEOPLE_TYPES.ORG
+        this.peopleType = TASK_PEOPLE_TYPES.PEOPLE
         this.peoples = []
-        return { ...defaultForm }
+        return { ...defaultForm, projectId: PROJECT_TYPES.NORMAL }
       }
     },
     onSubmit(ifStart) {

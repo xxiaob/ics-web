@@ -1,10 +1,10 @@
 <template>
   <div>
     <div class="jc-left-width60">
-      <el-radio-group v-model="selfAreaType" size="small" @change="changeAreaType">
+      <!-- <el-radio-group v-model="selfAreaType" size="small" @change="changeAreaType">
         <el-radio-button v-for="item in TASK_AREA_TYPES.VALUES" :key="item.value" :label="item.value">{{item.label}}</el-radio-button>
-      </el-radio-group>
-      <el-select class="jc-area-type-select" v-model="areaTypeId" clearable placeholder="网格类型" size="small" v-if="selfAreaType===TASK_AREA_TYPES.GRID" @change="areaTypeChange">
+      </el-radio-group> -->
+      <el-select v-model="areaTypeId" clearable placeholder="网格类型" size="small" v-if="selfAreaType===TASK_AREA_TYPES.GRID" @change="areaTypeChange">
         <el-option v-for="item in gridTypes" :key="item.areaTypeId" :label="item.areaTypeName" :value="item.areaTypeId">
         </el-option>
       </el-select>
@@ -38,7 +38,7 @@ export default {
     },
     areaType: {
       type: String,
-      default: TASK_AREA_TYPES.ORG
+      default: TASK_AREA_TYPES.GRID
     },
     orgTree: {
       type: Array
@@ -210,10 +210,10 @@ export default {
   border: 1px solid #dcdfe6;
   border-radius: 4px;
 }
-.jc-area-type-select {
-  width: 105px;
-  float: right;
-}
+// .jc-area-type-select {
+//   width: 105px;
+//   float: right;
+// }
 .jc-left-width60 {
   width: 60%;
   float: left;

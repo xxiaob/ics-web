@@ -33,7 +33,7 @@ export default {
     },
     peopleType: {
       type: String,
-      default: TASK_PEOPLE_TYPES.ORG
+      default: TASK_PEOPLE_TYPES.PEOPLE
     },
     orgTree: {
       type: Array

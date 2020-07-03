@@ -113,7 +113,7 @@ export default {
     return {
       projectListArr: [],
       projectList: [],
-      peopleType: TASK_PEOPLE_TYPES.ORG,
+      peopleType: TASK_PEOPLE_TYPES.PEOPLE,
       peopleProps: {
         [TASK_PEOPLE_TYPES.ORG]: 'orgIds',
         [TASK_PEOPLE_TYPES.PEOPLE]: 'userIds'
@@ -287,7 +287,7 @@ export default {
         return form
       } else {
         this.position = {}
-        this.peopleType = TASK_PEOPLE_TYPES.ORG
+        this.peopleType = TASK_PEOPLE_TYPES.PEOPLE
         this.peoples = []
         const beginTime = new Date().getTime()
         const endTime = beginTime + 2 * 60 * 60 * 1000
@@ -298,6 +298,8 @@ export default {
           const project = this.projectListArr.filter(item=>item.value == this.projectId)
 
           newProjectId = (project[0] && project[0].value) || PROJECT_TYPES.NORMAL
+        } else {
+          newProjectId = PROJECT_TYPES.NORMAL
         }
         return { ...defaultForm, taskSource: questionTaskSource, projectId: newProjectId, beginTime, endTime, date: [beginTime, endTime] }
       }
