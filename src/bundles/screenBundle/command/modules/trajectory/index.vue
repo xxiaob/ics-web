@@ -57,7 +57,9 @@ export default {
     }
   },
   beforeDestroy() {
-    myJcMap.destroy()
+    if (myJcMap) {
+      myJcMap.destroy()
+    }
     this.$EventBus.$off('screen-user-trajectory', this.initData)
   }
 }

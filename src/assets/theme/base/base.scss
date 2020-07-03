@@ -369,3 +369,14 @@ input::-webkit-input-placeholder {
   @include jc-text-warp;
   color: $jc-color-white;
 }
+
+/* 重写图片预览 功能图片的样式 */
+.el-image-viewer__close {
+  color: #fff;
+  transform: rotate(0deg);
+  transition: transform 0.4s;
+
+  &:hover {
+    transform: rotate(180deg);
+  }
+}
