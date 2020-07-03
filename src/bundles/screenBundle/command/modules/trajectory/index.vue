@@ -14,6 +14,7 @@
 <script>
 import { NOT_NULL } from '@/libs/rules'
 import { JcMap, JcMapMarker } from '@/map'
+import { initMoveAnimation } from '@/map/aMap/aMapUtil'
 
 let myJcMap = null
 
@@ -23,19 +24,22 @@ export default {
     return {
       form: { date: '' },
       loading: false,
-      visible: false,
+      visible: true,
       user: { userId: '--', userName: '--' },
       rules: { NOT_NULL }
     }
   },
   created() {
     this.$EventBus.$on('screen-user-trajectory', this.initData) //监听显示人员轨迹
+    setTimeout(this.initData, 1000 * 5)
   },
   methods: {
     async initData() {
       if (!myJcMap) {
         myJcMap = new JcMap()
+        await initMoveAnimation() //加载动画组件
         await myJcMap.init(this.$refs.myMap) //等待地图初始化
+        myJcMap.map.setPitch(45)
       }
     },
     onSubmit() {
