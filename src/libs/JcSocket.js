@@ -15,18 +15,29 @@ export default class JcSocket {
    * @param {Function} callback
    */
   connect(callback) {
+    this.callback = callback
     this.disconnect()
-    this.ws = new WebSocket(this.url)
 
-    this.ws.onmessage = function (evt) {
-      let data = evt.data
+    try {
+      this.ws = new WebSocket(this.url)
 
-      if (data) {
-        data = JSON.parse(data)
+      this.ws.onmessage = function (evt) {
+        let data = evt.data
+
+        if (data) {
+          data = JSON.parse(data)
+        }
+        this.callback(data)
       }
-      callback(data)
+      this.ws.onclose = () => {
+        // this.reconnect()
+      }
+      this.ws.onerror = () => {
+        // this.reconnect()
+      }
+    } catch (error) {
+      console.log(error)
     }
-    this.ws.onclose = this.reconnect
   }
 
   /**
@@ -36,6 +47,7 @@ export default class JcSocket {
     if (this.ws) {
       this.ws.onclose = null
       this.ws.close()
+      this.ws = null
     }
   }
 
@@ -53,6 +65,6 @@ export default class JcSocket {
    * 重新连接
    */
   reconnect() {
-    this.connect()
+    this.connect(this.callback)
   }
 }

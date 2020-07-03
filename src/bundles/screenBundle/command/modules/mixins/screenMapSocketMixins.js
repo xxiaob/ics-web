@@ -51,6 +51,7 @@ export default {
   beforeDestroy() {
     if (this.screenSocket) {
       this.screenSocket.disconnect() //如果已经存在，则断开连接
+      this.screenSocket = null
     }
     //去除监听
     this.$EventBus.$off('org-change', this.initScreenMapSocket)
