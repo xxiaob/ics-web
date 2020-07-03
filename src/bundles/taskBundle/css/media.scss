@@ -65,13 +65,3 @@
 .jc-other {
   background: $jc-color-primary;
 }
-
-/deep/ .el-image-viewer__close {
-  color: #fff;
-  transform: rotate(0deg);
-  transition: transform 0.4s;
-
-  &:hover {
-    transform: rotate(180deg);
-  }
-}
