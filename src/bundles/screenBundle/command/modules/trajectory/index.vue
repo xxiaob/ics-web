@@ -23,7 +23,7 @@ export default {
     return {
       form: { date: '' },
       loading: false,
-      visible: true,
+      visible: false,
       user: { userId: '--', userName: '--' },
       rules: { NOT_NULL }
     }
