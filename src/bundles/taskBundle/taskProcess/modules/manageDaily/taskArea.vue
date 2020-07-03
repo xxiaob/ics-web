@@ -73,7 +73,8 @@ export default {
     this.orgGrid = this.formatGridTree(res)
     this.gridTypes = await areaTypeList({})
     setTimeout(()=>{
-      this.filterArr = Object.keys(this.formatTreeToObj(this.orgTree))
+      // this.filterArr = Object.keys(this.formatTreeToObj(this.orgTree))
+      this.filterArr = Object.keys(this.formatTreeToObj(this.orgGrid, true))
       this.checkedNodes = this.$refs.tree.getCheckedNodes()
     })
   },
