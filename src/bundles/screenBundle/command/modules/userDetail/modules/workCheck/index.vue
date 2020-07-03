@@ -5,7 +5,7 @@
         <div class="jc-node" v-for="(item,index) in list" :key="index">
           <div class="jc-node-times">{{item.time}}<br />{{item.date}}</div>
           <div class="jc-node-content">
-            <div>{{item.userName + ' ' + item.typeName}}</div>
+            <div>{{item.userName + ' ' + item.typeName + ' ' + item.areaName}}</div>
             <div v-if="outTypes.includes(item.type)">{{`在岗时长${item.duration}H，巡逻里程${item.distence}KM，上报事件数${item.reportEvent}件`}}</div>
             <template v-if="inTypes.includes(item.type) && item.url">
               <div class="jc-node-success">打卡成功</div>
@@ -58,7 +58,8 @@ export default {
             let times = item.time.split(' ')
 
             list.push({ userId: item.userId, userName: item.userName, type: item.type + '', typeName: USER_GRID_STATUS.toString(item.type + ''),
-              time: times[1], date: times[0], url: item.photoUrl, duration: item.onguardDuration, distence: item.journey, reportEvent: item.eventReportCount })
+              areaId: item.areaId, areaName: item.areaName, time: times[1], date: times[0], url: item.photoUrl,
+              duration: item.onguardDuration, distence: item.journey, reportEvent: item.eventReportCount })
           })
         }
         this.list = list
