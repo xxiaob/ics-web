@@ -179,3 +179,15 @@ export const USER_GRID_STATUS = new JcEnum([
   { key: 'INGUARD', value: '2', label: '进岗' },
   { key: 'OUTGUARD', value: '3', label: '离岗' }
 ])
+
+/**
+ * 音视频 - 类型
+ */
+export const VIDEO_INVITE_TYPES = new JcEnum([
+  { key: 'MEETAUDIO', value: '0', label: '多人语音' },
+  { key: 'MEETVIDEO', value: '1', label: '多人视频' },
+  { key: 'FORCEOBSERVE', value: '2', label: '强制观摩' },
+  { key: 'OBSERVE', value: '3', label: '观摩' },
+  { key: 'DOUBLEAUDIO', value: '4', label: '双人语音' },
+  { key: 'DOUBLEVIDEO', value: '5', label: '双人视频' }
+])

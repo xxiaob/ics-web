@@ -76,7 +76,9 @@ const defaultForm = {
   date: null,
   workTime: 0,
   workPeopleNbr: 0,
-  taskTimePOS: []
+  taskTimePOS: [],
+  ifOnTime: 0,
+  workFrequency: 0
 }
 
 export default {
