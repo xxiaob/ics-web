@@ -27,4 +27,11 @@ export default [{
   meta: {
     title: '考勤管理-到岗查询'
   }
+}, {
+  path: 'attend/configure',
+  name: 'configure',
+  component: () => import('@/bundles/attendBundle/configure'),
+  meta: {
+    title: '考勤管理-考勤配置'
+  }
 }]
