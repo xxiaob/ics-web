@@ -23,7 +23,7 @@
         <el-input v-model="form.desc" placeholder="请输入事件描述" type="textarea"></el-input>
         <!-- <jc-editor v-model="form.desc"></jc-editor> -->
       </el-form-item>
-      <el-form-item label="处理前图片" prop="beforePhoto" :rules="[{required: true, message: '请上传文件'}]">
+      <el-form-item label="处理前图片" prop="beforePhoto">
         <upload :show="dialogVisible" :urls.sync="form.beforePhoto" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg"></upload>
       </el-form-item>
       <el-form-item label="处理后图片" prop="afterPhoto" :rules="[{required: true, message: '请上传文件'}]">
