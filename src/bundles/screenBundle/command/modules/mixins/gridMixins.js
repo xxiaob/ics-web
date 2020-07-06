@@ -25,6 +25,7 @@ export default {
   },
   created() {
     this.$EventBus.$on('org-change', this.areaMap) //监听行级别切换
+    this.$EventBus.$on('screen-grid-location', this.gridLocation) //监听网格定位
     this.$EventBus.$on('show-area-change', this.gridShowAreaChange) //监听区域显示切换
     this.$EventBus.$on('show-word-change', this.gridShowWordChange) //监听文字显示切换
     this.$EventBus.$on('show-together-change', this.gridTogetherChange) //监听聚合显示改变
@@ -79,7 +80,7 @@ export default {
               })
             }
 
-            gridTypeMap.lnglats.push({ lnglat: item.center.split(',') })
+            gridTypeMap.lnglats.push({ lnglat: item.center.split(','), key: item.center, areaId: item.areaId })
 
             gridAreas[item.areaTypeId] = gridTypeMap
           }
@@ -203,6 +204,31 @@ export default {
       }
       gridAreas = {}
     },
+    gridLocation(data) {
+      //网格定位
+      console.log('gridLocation', data)
+      //先处理当前数据类型在地图上是否显示，如果不显示，则不处理
+      if (this.areaTipVisibles.includes(data.areaTypeId)) {
+        let gridTypeMap = gridAreas[data.areaTypeId]
+
+        for (let i = 0; i < gridTypeMap.lnglats.length; i++) {
+          if (gridTypeMap.lnglats[i].areaId == data.id) {
+            if (this.areaAreaVisibles.includes(data.areaTypeId)) {
+              let gridSign = gridTypeMap.signs[gridTypeMap.lnglats[i].key]
+
+              if (gridSign && gridSign.sign) {
+                gridSign.sign.fitView()
+              }
+            } else {
+              let myJcMap = this.getMyJcMap() //获取地图对象
+
+              myJcMap.map.setZoomAndCenter(18, gridTypeMap.lnglats[i].key.split(','))
+            }
+            break
+          }
+        }
+      }
+    },
     gridShowAreaChange(areas) {
       //组织区域显示
       this.areaAreaVisibles = [...areas]
@@ -224,6 +250,7 @@ export default {
     this.clearGrids() //清除基础数据
     //去除事件监听
     this.$EventBus.$off('org-change', this.areaMap)
+    this.$EventBus.$off('screen-grid-location', this.gridLocation)
     this.$EventBus.$off('show-area-change', this.gridShowAreaChange)
     this.$EventBus.$off('show-word-change', this.gridShowWordChange)
     this.$EventBus.$off('show-together-change', this.gridTogetherChange)

@@ -157,7 +157,22 @@ export default {
       })
     },
     orgLocation(data) {
+      console.log('orgLocation', data, this.nowOrgId)
       //组织定位
+      if (this.nowOrgId == data.id) {
+        let myJcMap = this.getMyJcMap() //获取地图对象
+
+        myJcMap.fitView(orgAreas)
+        return
+      }
+      for (let i = 0; i < orgAreas.length; i++) {
+        let item = orgAreas[i]
+
+        if (item.extData.orgId == data.id) {
+          item.fitView()
+          break
+        }
+      }
     },
     orgShowAreaChange(areas) {
       this.orgAreaVisible = areas.includes('org') //如果存在组织区域显示，则显示区域，否则不显示

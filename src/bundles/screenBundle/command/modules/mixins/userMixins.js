@@ -22,6 +22,7 @@ export default {
   },
   created() {
     this.$EventBus.$on('map-user-change', this.userMap) //监听用户改变
+    this.$EventBus.$on('screen-user-location', this.userLocation) //监听用户定位
     this.$EventBus.$on('show-word-change', this.userShowWordChange) //监听文字显示切换
     this.$EventBus.$on('show-together-change', this.userTogetherChange) //监听聚合显示改变
     this.$EventBus.$on('screen-use-select', this.userSelect) //监听框选用户
@@ -206,6 +207,10 @@ export default {
       }
       usersData = { markerCluster: null, users: {}, lnglats: [] }
     },
+    userLocation(data) {
+      //用户定位
+
+    },
     userShowWordChange(words) {
       this.userTipVisible = words.includes('user') //如果存在用户显示，则显示用户，否则不显示
       this.fitUsers()
@@ -220,6 +225,7 @@ export default {
     userMouseTool = null
     //去除事件监听
     this.$EventBus.$off('map-user-change', this.userMap)
+    this.$EventBus.$off('screen-user-location', this.userLocation) //监听用户定位
     this.$EventBus.$off('show-word-change', this.orgShowWordChange)
     this.$EventBus.$off('show-together-change', this.userTogetherChange)
     this.$EventBus.$off('screen-use-select', this.userSelect)

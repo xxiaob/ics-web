@@ -139,9 +139,9 @@ export default {
       //去定位
       console.log('screen-grid-location-data', data)
       if (data.areaId) {
-        this.$EventBus.$emit('screen-grid-location', data) //通知网格定位
+        this.$EventBus.$emit('screen-grid-location', { id: data.id, areaTypeId: data.areaTypeId, icon: data.icon }) //通知网格定位
       } else {
-        this.$EventBus.$emit('screen-org-location', data) //通知组织定位
+        this.$EventBus.$emit('screen-org-location', { id: data.id }) //通知组织定位
       }
     }
   }
