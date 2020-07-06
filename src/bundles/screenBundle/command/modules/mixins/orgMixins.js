@@ -165,13 +165,19 @@ export default {
         myJcMap.fitView(orgAreas)
         return
       }
+      let noOrg = true //处理组织是否存在，不存在则提示
+
       for (let i = 0; i < orgAreas.length; i++) {
         let item = orgAreas[i]
 
         if (item.extData.orgId == data.id) {
           item.fitView()
+          noOrg = false
           break
         }
+      }
+      if (noOrg) {
+        this.$message.error('组织结构未显示')
       }
     },
     orgShowAreaChange(areas) {

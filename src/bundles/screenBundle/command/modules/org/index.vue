@@ -8,7 +8,8 @@
             <div class="jc-text-warp" v-text="node.label"></div>
           </div>
           <div class="jc-tree-options" v-on:click.stop>
-            <el-button type="text" size="small" icon="el-icon-map-location" @click="goLocation(data)"></el-button>
+            <el-button type="text" size="small" icon="el-icon-map-location" @click="goLocation(data)" title="定位"></el-button>
+            <el-button type="text" size="small" icon="el-icon-view" v-if="data.type=='user'" @click="userDetail(data)" title="详情"></el-button>
           </div>
         </div>
       </el-tree>
@@ -149,6 +150,10 @@ export default {
       } else if (data.type == 'org') {
         this.$EventBus.$emit('screen-org-location', { id: data.id }) //通知组织定位
       }
+    },
+    userDetail(userItem) {
+      //显示用户详情
+      this.$EventBus.$emit('view-component-change', { component: 'UserDetail', options: { userId: userItem.id, userName: userItem.label } }) //通知窗口改变
     },
     goMeeting() {
       //去进行会议

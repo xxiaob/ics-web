@@ -17,7 +17,8 @@ export default {
     return {
       gatherUserIds: [], //正在采集的用户id 数组
       userTipVisible: true, //用户是否显示
-      togetherVisible: true //用户是否聚合
+      togetherVisible: true, //用户是否聚合
+      locationUserId: null //定位的用户id
     }
   },
   created() {
@@ -176,7 +177,13 @@ export default {
         content += `<img src=${JcUserIcons.online} class="jc-marker-icon"/></div>`
       }
 
-      context.marker.setzIndex(20)
+      //如果是定位的用户，则突出显示
+      if (userItem.userId == this.locationUserId) {
+        context.marker.setzIndex(20)
+      } else {
+        context.marker.setzIndex(18)
+      }
+
       context.marker.setContent(content)
     },
     markerUserClusterClick(context) {
@@ -208,8 +215,24 @@ export default {
       usersData = { markerCluster: null, users: {}, lnglats: [] }
     },
     userLocation(data) {
-      //用户定位
+      //用户定位id
+      let noUser = true //处理是否有用户
 
+      if (this.userTipVisible) {
+        //查找该用户使用已经存在，如果存在则更新，否则进行添加
+        let lnglat = usersData.lnglats.find(user => user.userId == data.id)
+
+        if (lnglat) {
+          this.locationUserId = data.id
+          let myJcMap = this.getMyJcMap() //获取地图对象
+
+          myJcMap.map.setZoomAndCenter(18, lnglat.key.split(','))
+          noUser = false //设置查找到该用户
+        }
+      }
+      if (noUser) {
+        this.$message.error('用户不在线或未显示')
+      }
     },
     userShowWordChange(words) {
       this.userTipVisible = words.includes('user') //如果存在用户显示，则显示用户，否则不显示

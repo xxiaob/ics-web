@@ -208,6 +208,8 @@ export default {
       //网格定位
       console.log('gridLocation', data)
       //先处理当前数据类型在地图上是否显示，如果不显示，则不处理
+      let noGrid = true //处理网格是否存在，不存在则提示
+
       if (this.areaTipVisibles.includes(data.areaTypeId)) {
         let gridTypeMap = gridAreas[data.areaTypeId]
 
@@ -218,15 +220,20 @@ export default {
 
               if (gridSign && gridSign.sign) {
                 gridSign.sign.fitView()
+                noGrid = false //设置网格存在
               }
             } else {
               let myJcMap = this.getMyJcMap() //获取地图对象
 
               myJcMap.map.setZoomAndCenter(18, gridTypeMap.lnglats[i].key.split(','))
+              noGrid = false //设置网格存在
             }
             break
           }
         }
+      }
+      if (noGrid) {
+        this.$message.error('该网格未显示')
       }
     },
     gridShowAreaChange(areas) {
