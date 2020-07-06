@@ -15,12 +15,15 @@
       <el-form-item label="任务人员" prop="" :rules="rules.SELECT_NOT_NULL" class="jc-left-width50">
         <jc-task-people :peopleType.sync="peopleType" :selecteds.sync="peoples" :orgTree="orgTree"></jc-task-people>
       </el-form-item>
-      <!-- <el-form-item label="任务频率" prop="taskName" :rules="rules.Len50" class="jc-left-width50">
-        <el-input v-model="form.taskName" placeholder=""></el-input>
+      <el-form-item label="任务频率" prop="workFrequency" :rules="rules.num" class="jc-left-width50">
+        <el-select v-model.number="form.workFrequency" clearable="" filterable allow-create default-first-option placeholder="请选择或者输入任务频率">
+          <el-option v-for="item in TASK_FREQUENCYS.VALUES" :key="item.value" :label="item.label" :value="item.value">
+          </el-option>
+        </el-select>
       </el-form-item>
-      <el-form-item label="准点到岗" prop="taskName" :rules="rules.Len50" class="jc-left-width50">
-        <el-input v-model="form.taskName" placeholder=""></el-input>
-      </el-form-item> -->
+      <el-form-item label="准点到岗" prop="ifOnTime" :rules="rules.num" class="jc-left-width50">
+        <el-switch v-model="form.ifOnTime" :active-value="1" :inactive-value="0"></el-switch>
+      </el-form-item>
       <div label="任务要求" class="jc-left-width50">
         <el-form-item label="任务时间" prop="date" :rules="rules.SELECT_NOT_NULL">
           <el-date-picker v-model="form.date" @change="changeDate" value-format="timestamp" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期">
@@ -60,7 +63,7 @@ import { taskSave } from '@/api/task'
 // import { userListByOrg } from '@/api/user'
 import { getStringRule, getNumberRule, NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
-import { TASK_TYPES, TASK_AREA_TYPES, TASK_PEOPLE_TYPES, PROJECT_TYPES } from '@/constant/Dictionaries'
+import { TASK_TYPES, TASK_AREA_TYPES, TASK_PEOPLE_TYPES, PROJECT_TYPES, TASK_FREQUENCYS } from '@/constant/Dictionaries'
 
 const defaultForm = {
   workAreaType: TASK_AREA_TYPES.GRID,
@@ -77,8 +80,8 @@ const defaultForm = {
   workTime: 0,
   workPeopleNbr: 0,
   taskTimePOS: [],
-  ifOnTime: 0,
-  workFrequency: 0
+  ifOnTime: 1,
+  workFrequency: 1
 }
 
 export default {
@@ -108,6 +111,7 @@ export default {
   },
   data() {
     return {
+      TASK_FREQUENCYS,
       peopleType: TASK_PEOPLE_TYPES.PEOPLE,
       peoples: [],
       peopleProps: {
@@ -163,13 +167,13 @@ export default {
     },
     formatFormData() {
       if (this.options) {
-        const { orgIds, assignees, detailViewVO: { businessKey, projectId, taskDesc, taskName, endDate, startDate }, taskTimePOS, workPeopleNbr, workTime, workAreaType, assigneeAreaPOS } = this.options
+        const { orgIds, assignees, detailViewVO: { businessKey, projectId, taskDesc, taskName, endDate, startDate }, taskTimePOS, workPeopleNbr, workTime, workAreaType, assigneeAreaPOS, ifOnTime, workFrequency } = this.options
 
         const project = this.projectListArr.filter(item=>item.value == projectId)
         const newProjectId = (project[0] && project[0].value) || PROJECT_TYPES.NORMAL
 
         const form = { businessKey, projectId: newProjectId, taskName, beginTime: startDate, endTime: endDate, taskDesc, date: [startDate, endDate], taskTimePOS, workPeopleNbr, workTime, workAreaType,
-          assigneeAreaPOS: assigneeAreaPOS.map(item=>item.areaId) }
+          assigneeAreaPOS: assigneeAreaPOS.map(item=>item.areaId), ifOnTime, workFrequency }
 
         const times = []
 

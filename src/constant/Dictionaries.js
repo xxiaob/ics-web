@@ -119,6 +119,15 @@ export const TASK_PEOPLE_TYPES = new JcEnum([
 ])
 
 /**
+ * 任务处理 - 日常任务 - 任务频率
+ */
+export const TASK_FREQUENCYS = new JcEnum([
+  { key: 'DAT', value: 1, label: '日' },
+  { key: 'WEEK', value: 7, label: '周' },
+  { key: 'MONTH', value: 30, label: '月' }
+])
+
+/**
  * 考勤 - 考勤周期
  */
 export const ATTEND_PERIODS = new JcEnum([
