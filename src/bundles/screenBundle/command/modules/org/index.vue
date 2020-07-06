@@ -8,7 +8,8 @@
             <div class="jc-text-warp" v-text="node.label"></div>
           </div>
           <div class="jc-tree-options" v-on:click.stop>
-            <el-button type="text" size="small" icon="el-icon-map-location" @click="goLocation(data)"></el-button>
+            <el-button type="text" size="small" icon="el-icon-map-location" @click="goLocation(data)" title="定位"></el-button>
+            <el-button type="text" size="small" icon="el-icon-view" v-if="data.type=='user'" @click="userDetail(data)" title="详情"></el-button>
           </div>
         </div>
       </el-tree>
@@ -33,6 +34,7 @@
 <script>
 import { getOrgUserListByProject } from '@/api/user'
 import TreesFilterMixins from '@/mixins/TreesFilterMixins'
+import { VIDEO_INVITE_TYPES } from '@/constant/Dictionaries'
 
 export default {
   name: 'ScreenCommandOrg',
@@ -150,13 +152,17 @@ export default {
         this.$EventBus.$emit('screen-org-location', { id: data.id }) //通知组织定位
       }
     },
+    userDetail(userItem) {
+      //显示用户详情
+      this.$EventBus.$emit('view-component-change', { component: 'UserDetail', options: { userId: userItem.id, userName: userItem.label } }) //通知窗口改变
+    },
     goMeeting() {
       //去进行会议
       if (this.users.length) {
         if (this.users.length > 17) {
           this.$message.error('最多支持17人')
         } else {
-          this.$EventBus.$emit('screen-media-live', { users: this.users, type: this.talkType == 'video' ? '1' : '0' })
+          this.$EventBus.$emit('screen-media-live', { users: this.users, type: this.talkType == 'video' ? VIDEO_INVITE_TYPES.MEETVIDEO : VIDEO_INVITE_TYPES.MEETAUDIO })
           this.clearUsers() //清空用户
         }
       } else {
