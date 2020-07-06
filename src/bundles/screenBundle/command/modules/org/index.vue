@@ -145,9 +145,9 @@ export default {
       //去定位
       console.log('screen-org-location-data', data)
       if (data.type == 'user') {
-        this.$EventBus.$emit('screen-user-location', data) //通知网格定位
+        this.$EventBus.$emit('screen-user-location', { id: data.id }) //通知网格定位
       } else if (data.type == 'org') {
-        this.$EventBus.$emit('screen-org-location', data) //通知组织定位
+        this.$EventBus.$emit('screen-org-location', { id: data.id }) //通知组织定位
       }
     },
     goMeeting() {
