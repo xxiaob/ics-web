@@ -18,20 +18,22 @@ import { initMoveAnimation } from '@/map/aMap/aMapUtil'
 
 let myJcMap = null
 
+let startMarker, endMarker, moveMarker //定义开始，
+
 export default {
   name: 'ScreenCommandUserDetailTrajectory',
   data() {
     return {
       form: { date: '' },
       loading: false,
-      visible: true,
-      user: { userId: '--', userName: '--' },
+      visible: false,
+      user: { userId: '56776731599568896', userName: '--' },
       rules: { NOT_NULL }
     }
   },
   created() {
     this.$EventBus.$on('screen-user-trajectory', this.initData) //监听显示人员轨迹
-    setTimeout(this.initData, 1000 * 5)
+    // setTimeout(this.initData, 1000 * 5)
   },
   methods: {
     async initData() {
@@ -39,7 +41,7 @@ export default {
         myJcMap = new JcMap()
         await initMoveAnimation() //加载动画组件
         await myJcMap.init(this.$refs.myMap) //等待地图初始化
-        myJcMap.map.setPitch(45)
+        // myJcMap.map.setPitch(45)
       }
     },
     onSubmit() {
@@ -64,6 +66,9 @@ export default {
     if (myJcMap) {
       myJcMap.destroy()
     }
+    startMarker = null
+    endMarker = null
+    moveMarker = null
     this.$EventBus.$off('screen-user-trajectory', this.initData)
   }
 }
