@@ -34,6 +34,7 @@
 <script>
 import { getOrgUserListByProject } from '@/api/user'
 import TreesFilterMixins from '@/mixins/TreesFilterMixins'
+import { VIDEO_INVITE_TYPES } from '@/constant/Dictionaries'
 
 export default {
   name: 'ScreenCommandOrg',
@@ -161,7 +162,7 @@ export default {
         if (this.users.length > 17) {
           this.$message.error('最多支持17人')
         } else {
-          this.$EventBus.$emit('screen-media-live', { users: this.users, type: this.talkType == 'video' ? '1' : '0' })
+          this.$EventBus.$emit('screen-media-live', { users: this.users, type: this.talkType == 'video' ? VIDEO_INVITE_TYPES.MEETVIDEO : VIDEO_INVITE_TYPES.MEETAUDIO })
           this.clearUsers() //清空用户
         }
       } else {

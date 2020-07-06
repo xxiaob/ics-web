@@ -4,7 +4,7 @@
 import { getMarkerCluster, getMouseTool } from '@/map/aMap/aMapUtil'
 import { JcUserIcons } from '@/config/JcIconConfig'
 
-let usersData = null //存储用户信息
+let usersData = { markerCluster: null, users: {}, lnglats: [] } //存储用户信息
 
 let MarkerCluster //存储 MarkerCluster
 
