@@ -14,7 +14,11 @@
         <el-table-column prop="orgName" label="所属组织"></el-table-column>
         <el-table-column prop="startWorkTime" label="上班时间"></el-table-column>
         <el-table-column prop="endWorkTime" label="下班时间"></el-table-column>
-        <el-table-column prop="enabled" label="考勤状态" :formatter="formatStatus"></el-table-column>
+        <el-table-column prop="enabled" label="考勤状态">
+          <template slot-scope="scope">
+            <el-switch v-model="scope.row.enabled" :active-value="ATTEND_CONFIGURE_STATUSES.ENABLED" :inactive-value="ATTEND_CONFIGURE_STATUSES.NOTENABLED" @change="enabledChange(scope.row)"></el-switch>
+          </template>
+        </el-table-column>
         <el-table-column prop="createTime" label="创建时间" width="140" :formatter="formatTime"></el-table-column>
         <el-table-column width="100" label="操作">
           <template slot-scope="scope">
@@ -31,7 +35,7 @@
   </div>
 </template>
 <script>
-import { cfgList, cfgGet, cfgDel } from '@/api/attend'
+import { cfgList, cfgGet, cfgDel, cfgSave } from '@/api/attend'
 import { formatDate } from '@/libs/util'
 import PaginationMixins from '@/mixins/PaginationMixins'
 import { organizationList } from '@/api/organization'
@@ -48,6 +52,7 @@ export default {
   },
   data() {
     return {
+      ATTEND_CONFIGURE_STATUSES,
       info: null,
       visible: false,
       orgId: '',
@@ -69,7 +74,7 @@ export default {
       return formatDate(cellValue)
     },
     formatStatus(row, column, cellValue) {
-      return ATTEND_CONFIGURE_STATUSES.toString(cellValue)
+      return ATTEND_CONFIGURE_STATUSES.toString(cellValue.toString())
     },
     formatOrgTree(child) {
       let trees = []
@@ -136,6 +141,19 @@ export default {
       cfgDel(id).then(() => {
         this.$message.success('删除成功')
         this.currentChange(this.page.pageNum - 1)
+      })
+    },
+    enabledChange(row) {
+      this.$confirm('确认修改状态', '提示', { type: 'warning' }).then(async () => {
+        console.log( row.enabled, row.id)
+        try {
+          await cfgSave({ id: row.id, enabled: row.enabled })
+          this.$message.success('操作成功')
+        } catch (error) {
+          console.error(error)
+        }
+      }).catch(() => {
+        row.enabled = row.enabled ? 0 : 1
       })
     }
   }
