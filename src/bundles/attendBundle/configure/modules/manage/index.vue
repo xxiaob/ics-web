@@ -20,11 +20,7 @@
         <el-tree ref="tree" :data="orgTree" node-key="value" :filter-node-method="filterNode" :default-expanded-keys="orgTree.map(item=>item.value)" :current-node-key="form.orgId" @node-click="nodeClick" :expand-on-click-node="false" :highlight-current="true"></el-tree>
       </el-form-item>
       <el-form-item label="人员选择" prop="userIds" :rules="rules.SELECT_NOT_NULL">
-        <!-- <el-select v-model="form.userIds" multiple placeholder="请选择人员">
-          <el-option v-for="item in users" :key="item.userId" :label="item.userName" :value="item.userId">
-          </el-option>
-        </el-select> -->
-        <jc-people :selecteds.sync="form.userIds" :tree="users"></jc-people>
+        <jc-people v-model="form.userIds" :tree="users"></jc-people>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">

@@ -20,6 +20,10 @@
 <script>
 export default {
   name: 'ConfigureManagePeople',
+  model: {
+    prop: 'selecteds',
+    event: 'change'
+  },
   props: {
     selecteds: {
       type: Array,
@@ -35,12 +39,6 @@ export default {
       filterArr: [],
       checkedNodes: []
     }
-  },
-  async created() {
-    // setTimeout(()=>{
-    //   this.filterArr = this.tree.map(item=>item.id)
-    //   this.checkedNodes = this.$refs.tree.getCheckedNodes()
-    // })
   },
   watch: {
     filterText(val) {
@@ -74,18 +72,22 @@ export default {
       const index = selecteds.indexOf(tag.id)
 
       selecteds.splice(index, 1)
-      this.$emit('update:selecteds', selecteds)
+      this.$emit('change', selecteds)
+      this.$parent.$emit('el.form.change')
     },
     check(checkedNode, { checkedKeys }) {
-      this.$emit('update:selecteds', checkedKeys)
+      this.$emit('change', checkedKeys)
+      this.$parent.$emit('el.form.change')
     },
     setCheckedKeys() {
       const selecteds = new Set([...this.filterArr, ...this.selecteds])
 
-      this.$emit('update:selecteds', [...selecteds])
+      this.$emit('change', [...selecteds])
+      this.$parent.$emit('el.form.change')
     },
     resetChecked() {
-      this.$emit('update:selecteds', [])
+      this.$emit('change', [])
+      this.$parent.$emit('el.form.change')
     },
     filterNode(value, data) {
       if (!value) {
