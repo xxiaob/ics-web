@@ -177,7 +177,12 @@ export default {
     exportUserOversee: 'task-service/taskDataExport/getUserSupervise',
     exportPostOversee: 'task-service/taskDataExport/getPostSupervise',
     addUserOversee: 'task-service/taskSupervise/addUserSupervise',
-    addPostOversee: 'task-service/taskSupervise/addPostSupervise'
+    addPostOversee: 'task-service/taskSupervise/addPostSupervise',
+    cfgAdd: 'task-service/userAttendanceCfg/add',
+    cfgUpdate: 'task-service/userAttendanceCfg/upt',
+    cfgList: 'task-service/userAttendanceCfg/select',
+    cfgGet: 'task-service/userAttendanceCfg/getConfigDetail',
+    cfgDel: 'task-service/userAttendanceCfg/del'
   },
   screen: {
     //大屏接口
