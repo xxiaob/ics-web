@@ -159,6 +159,13 @@ export const POST_OVERSEE_RESULTS = new JcEnum([
   { key: 'NOTSTANDARD', value: '0', label: '未达标' },
   { key: 'STANDARD', value: '1', label: '达标' }
 ])
+/**
+ * 考勤配置 - 考勤状态
+ */
+export const ATTEND_CONFIGURE_STATUSES = new JcEnum([
+  { key: 'NOTENABLED', value: 0, label: '未启用' },
+  { key: 'ENABLED', value: 1, label: '启用' }
+])
 
 /**
  * 天气 字典

@@ -10,16 +10,17 @@
       </div>
       <el-table :data="list" v-loading="loading" row-key="id" class="jc-table">
         <el-table-column type="index" :index="indexMethod" label="序号" width="50"></el-table-column>
-        <el-table-column prop="name" label="考勤名称"></el-table-column>
+        <el-table-column prop="attendanceName" label="考勤名称"></el-table-column>
         <el-table-column prop="orgName" label="所属组织"></el-table-column>
-        <el-table-column prop="name" label="打卡时间"></el-table-column>
-        <el-table-column prop="name" label="考勤状态"></el-table-column>
-        <el-table-column prop="recordTime" label="创建时间" width="140"></el-table-column>
+        <el-table-column prop="startWorkTime" label="上班时间"></el-table-column>
+        <el-table-column prop="endWorkTime" label="下班时间"></el-table-column>
+        <el-table-column prop="enabled" label="考勤状态" :formatter="formatStatus"></el-table-column>
+        <el-table-column prop="createTime" label="创建时间" width="140" :formatter="formatTime"></el-table-column>
         <el-table-column width="100" label="操作">
           <template slot-scope="scope">
-            <el-button type="text" size="mini" icon="el-icon-view" @click="detail(scope.row)" title="查看"></el-button>
-            <el-button type="text" size="mini" icon="el-icon-edit-outline" @click="manage(scope.row)" title="编辑" :disabled="scope.row.reportUser!==user.userId"></el-button>
-            <el-button type="text" size="mini" icon="el-icon-delete" @click="del(scope.row)" title="删除" :disabled="scope.row.reportUser!==user.userId"></el-button>
+            <!-- <el-button type="text" size="mini" icon="el-icon-view" @click="detail(scope.row)" title="查看"></el-button> -->
+            <el-button type="text" size="mini" icon="el-icon-edit-outline" @click="manage(scope.row)" title="编辑"></el-button>
+            <el-button type="text" size="mini" icon="el-icon-delete" @click="del(scope.row)" title="删除"></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -30,10 +31,11 @@
   </div>
 </template>
 <script>
-import { inPostList } from '@/api/attend'
+import { cfgList, cfgGet, cfgDel } from '@/api/attend'
 import { formatDate } from '@/libs/util'
 import PaginationMixins from '@/mixins/PaginationMixins'
 import { organizationList } from '@/api/organization'
+import { ATTEND_CONFIGURE_STATUSES } from '@/constant/Dictionaries'
 import { createNamespacedHelpers } from 'vuex'
 const { mapState } = createNamespacedHelpers('user')
 
@@ -66,8 +68,8 @@ export default {
     formatTime(row, column, cellValue) {
       return formatDate(cellValue)
     },
-    formatOrg(row, column, cellValue) {
-      return this.orgObj[cellValue]
+    formatStatus(row, column, cellValue) {
+      return ATTEND_CONFIGURE_STATUSES.toString(cellValue)
     },
     formatOrgTree(child) {
       let trees = []
@@ -99,7 +101,7 @@ export default {
       if (!this.loading) {
         this.loading = true
         try {
-          const { total, resultList } = await inPostList({ userId: this.user.userId, ...this.filter, ...this.page })
+          const { total, resultList } = await cfgList({ ...this.filter, ...this.page })
 
           this.page.total = total
           this.list = resultList
@@ -115,24 +117,23 @@ export default {
       this.currentChange(1)
     },
     async manage(row) {
-      // if (row) {
-      //   const res = await eventManageGet(row.id)
+      if (row) {
+        const res = await cfgGet(row.id)
 
-      //   this.info = res
-      // } else {
-      //   this.info = null
-      // }
-      this.info = row
+        this.info = res
+      } else {
+        this.info = null
+      }
       this.orgId = this.user.orgId
       this.visible = true
     },
     del(row) {
-      this.$confirm('确认删除该事件', '提示', { type: 'warning' }).then(() => {
+      this.$confirm('确认删除该配置', '提示', { type: 'warning' }).then(() => {
         this.remove(row.id)
       }).catch(() => {})
     },
     remove(id) {
-      eventManageDel(id).then(() => {
+      cfgDel(id).then(() => {
         this.$message.success('删除成功')
         this.currentChange(this.page.pageNum - 1)
       })
@@ -141,12 +142,4 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.el-table /deep/ {
-  .jc-abnormal {
-    color: $jc-color-danger;
-  }
-  .jc-normal {
-    color: $jc-color-success;
-  }
-}
 </style>

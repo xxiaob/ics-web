@@ -113,3 +113,53 @@ export function exportPostOversee(data) {
 export function exportInPostAttend(data) {
   window.open(process.env.API_HOST.base + API.attend.exportInPostAttend + '?' + qs.stringify(data))
 }
+
+
+/**
+ * 考勤配置列表
+ * @param {object} data
+ * @returns {Object} axios 对象
+ */
+export function cfgList(data) {
+  return axios.post(API.attend.cfgList, data)
+}
+/**
+ * 考勤配置新增
+ * @param {object} data
+ * @returns {Object} axios 对象
+ */
+export function cfgAdd(data) {
+  return axios.post(API.attend.cfgAdd, data)
+}
+/**
+ * 考勤配置修改
+ * @param {object} data
+ * @returns {Object} axios 对象
+ */
+export function cfgUpdate(data) {
+  return axios.post(API.attend.cfgUpdate, data)
+}
+/**
+ * 考勤配置保存
+ * @param {object} data
+ * @returns {Object} axios 对象
+ */
+export function cfgSave(data) {
+  return data.id ? cfgUpdate(data) : cfgAdd(data)
+}
+/**
+ * 考勤配置详情
+ * @param {String} id
+ * @returns {Object} axios 对象
+ */
+export function cfgGet(id) {
+  return axios.post(API.attend.cfgGet + '?id=' + id)
+}
+/**
+ * 考勤配置删除
+ * @param {String} id
+ * @returns {Object} axios 对象
+ */
+export function cfgDel(id) {
+  return axios.post(API.attend.cfgDel + '?id=' + id)
+}
