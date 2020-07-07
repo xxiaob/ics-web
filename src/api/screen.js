@@ -50,3 +50,13 @@ export function getTaskPostLine(data) {
 export function getTaskPersonalLine(data) {
   return axios.post(API.screen.command.getTaskPersonalLine, data)
 }
+
+/**
+ * 获取用户历史定位
+ * @param {object} data
+ * @param { String } data.userId 用户id
+ * @returns {Object} axios 对象
+ */
+export function getUserHistoryPosition(data) {
+  return axios.post(API.screen.command.getUserHistoryPosition, data)
+}
