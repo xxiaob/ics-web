@@ -1,6 +1,6 @@
 <template>
-  <el-dialog :title="options ? '编辑配置' : '新增配置'" :visible.sync="dialogVisible" width="600px" :close-on-click-modal="false" :append-to-body="true" @close="dialogClose">
-    <el-form ref="form" label-width="80px" :model="form" class="jc-manage-form">
+  <el-dialog :title="options ? '编辑配置' : '新增配置'" :visible.sync="dialogVisible" width="600px" :close-on-click-modal="false" :append-to-body="true" @close="dialogClose" top="2vh">
+    <el-form ref="form" label-width="80px" :model="form" class="jc-manage-form" size="small">
       <el-form-item label="考勤名称" prop="attendanceName" :rules="rules.Len50">
         <el-input v-model="form.attendanceName" placeholder="请输入考勤名称"></el-input>
       </el-form-item>
@@ -20,10 +20,11 @@
         <el-tree ref="tree" :data="orgTree" node-key="value" :filter-node-method="filterNode" :default-expanded-keys="orgTree.map(item=>item.value)" :current-node-key="form.orgId" @node-click="nodeClick" :expand-on-click-node="false" :highlight-current="true"></el-tree>
       </el-form-item>
       <el-form-item label="人员选择" prop="userIds" :rules="rules.SELECT_NOT_NULL">
-        <el-select v-model="form.userIds" multiple placeholder="请选择人员">
+        <!-- <el-select v-model="form.userIds" multiple placeholder="请选择人员">
           <el-option v-for="item in users" :key="item.userId" :label="item.userName" :value="item.userId">
           </el-option>
-        </el-select>
+        </el-select> -->
+        <jc-people :selecteds.sync="form.userIds" :tree="users"></jc-people>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -59,6 +60,9 @@ export default {
       type: String
     }
   },
+  components: {
+    JcPeople: () => import('./people')
+  },
   data() {
     return {
       ATTEND_CONFIGURE_STATUSES,
@@ -85,11 +89,17 @@ export default {
 
         if (orgId) {
           this.getUsers(orgId)
+          if (this.$refs.tree) {
+            this.$refs.tree.setCurrentKey(orgId)
+          }
         }
         return { id, attendanceName, startWorkTime, endWorkTime, enabled, orgId, userIds }
       } else {
         if (this.orgId) {
           this.getUsers(this.orgId)
+          if (this.$refs.tree) {
+            this.$refs.tree.setCurrentKey(this.orgId)
+          }
         }
         return { ...defaultForm, orgId: this.orgId }
       }
@@ -97,7 +107,7 @@ export default {
     async getUsers(orgId) {
       const res = await userListByOrg([orgId])
 
-      this.users = res
+      this.users = res.map(item=>({ id: item.userId, label: item.userName }))
     },
     onSubmit() {
       this.loading = true
@@ -123,7 +133,7 @@ export default {
       return data.label.indexOf(value) !== -1
     },
     nodeClick(data) {
-      console.log(data)
+      // console.log(data)
       this.form.orgId = data.value
       this.getUsers(data.value)
       this.form.userIds = []
