@@ -35,7 +35,7 @@
   </div>
 </template>
 <script>
-import { cfgList, cfgGet, cfgDel, cfgSave } from '@/api/attend'
+import { cfgList, cfgGet, cfgDel, uptStatus } from '@/api/attend'
 import { formatDate } from '@/libs/util'
 import PaginationMixins from '@/mixins/PaginationMixins'
 import { organizationList } from '@/api/organization'
@@ -147,7 +147,7 @@ export default {
       this.$confirm('确认修改状态', '提示', { type: 'warning' }).then(async () => {
         console.log( row.enabled, row.id)
         try {
-          await cfgSave({ id: row.id, enabled: row.enabled })
+          await uptStatus({ id: row.id, enabled: row.enabled })
           this.$message.success('操作成功')
         } catch (error) {
           console.error(error)

@@ -182,7 +182,8 @@ export default {
     cfgUpdate: 'task-service/userAttendanceCfg/upt',
     cfgList: 'task-service/userAttendanceCfg/select',
     cfgGet: 'task-service/userAttendanceCfg/getConfigDetail',
-    cfgDel: 'task-service/userAttendanceCfg/del'
+    cfgDel: 'task-service/userAttendanceCfg/del',
+    uptStatus: 'task-service/userAttendanceCfg/uptStatus'
   },
   screen: {
     //大屏接口

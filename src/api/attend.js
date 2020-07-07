@@ -140,6 +140,14 @@ export function cfgUpdate(data) {
   return axios.post(API.attend.cfgUpdate, data)
 }
 /**
+ * 考勤配置更新状态
+ * @param {object} data
+ * @returns {Object} axios 对象
+ */
+export function uptStatus(data) {
+  return axios.post(API.attend.uptStatus, data)
+}
+/**
  * 考勤配置保存
  * @param {object} data
  * @returns {Object} axios 对象
