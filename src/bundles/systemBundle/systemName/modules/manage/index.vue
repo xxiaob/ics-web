@@ -1,14 +1,14 @@
 <template>
   <el-dialog :title="options ? '编辑系统名称':'新增系统名称'" :visible.sync="dialogVisible" width="600px" :close-on-click-modal="false" :append-to-body="true" @close="dialogClose">
     <el-form ref="form" label-width="100px" :model="form" class="jc-manage-form">
-      <el-form-item label="系统域名" prop="domain" :rules="rules.Len50">
+      <el-form-item label="系统域名" prop="domain" :rules="rules.NOT_NULL">
         <el-input v-model="form.domain" placeholder="请输入系统域名"></el-input>
       </el-form-item>
-      <el-form-item label="系统名称" prop="name" :rules="rules.Len50">
-        <el-input v-model="form.name" placeholder="请输入系统名称"></el-input>
+      <el-form-item label="系统名称" prop="systemName" :rules="rules.Len50">
+        <el-input v-model="form.systemName" placeholder="请输入系统名称"></el-input>
       </el-form-item>
-      <el-form-item label="系统logo" prop="logo" :rules="rules.NOT_NULL">
-        <upload-one-img :url.sync="form.logo"></upload-one-img>
+      <el-form-item label="系统logo" prop="domainLogo" :rules="rules.NOT_NULL">
+        <upload-one-img :url.sync="form.domainLogo"></upload-one-img>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -18,11 +18,11 @@
   </el-dialog>
 </template>
 <script>
-import { positionSave } from '@/api/position'
-import { getStringRule, NOT_NULL, getIntegerRule } from '@/libs/rules'
+import { save } from '@/api/domainLogo'
+import { getStringRule, NOT_NULL } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
 
-let defaultForm = { name: '', domain: '', logo: '' }
+let defaultForm = { systemName: '', domain: '', domainLogo: '' }
 
 export default {
   name: 'SystemNameManage',
@@ -32,8 +32,7 @@ export default {
       loading: false,
       rules: {
         NOT_NULL,
-        Len50: getStringRule(1, 50),
-        Int: getIntegerRule()
+        Len50: getStringRule(1, 50)
       }
     }
   },
@@ -52,8 +51,7 @@ export default {
       this.loading = true
       this.$refs.form.validate(valid => {
         if (valid) {
-          this.form.loginType = this.form.type.join(',')
-          positionSave(this.form).then(() => {
+          save(this.form).then(() => {
             this.$message.success('操作成功')
             this.dialogVisible = false
             this.$emit('save-success')

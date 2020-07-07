@@ -1,8 +1,11 @@
 <template>
   <el-card class="jc-tabfilter-card">
     <el-form ref="form" :inline="true" :model="form" class="jc-tabfilter-form" size="small" @submit.native.prevent>
-      <el-form-item prop="positionName" label="系统名称">
-        <el-input v-model="form.positionName" placeholder="请输入系统名称" @keyup.enter.native="onSubmit"></el-input>
+      <el-form-item prop="domain" label="域名">
+        <el-input v-model="form.domain" placeholder="请输入域名" @keyup.enter.native="onSubmit"></el-input>
+      </el-form-item>
+      <el-form-item prop="systemName" label="系统名称">
+        <el-input v-model="form.systemName" placeholder="请输入系统名称" @keyup.enter.native="onSubmit"></el-input>
       </el-form-item>
       <el-form-item class="jc-tabfilter-btns">
         <el-button type="primary" @click="onSubmit">查询</el-button>
@@ -17,7 +20,8 @@ export default {
   data() {
     return {
       form: {
-        positionName: ''
+        domain: '',
+        systemName: ''
       }
     }
   },
@@ -26,7 +30,14 @@ export default {
       this.$refs.form.resetFields()
     },
     onSubmit() {
-      this.$emit('filter', this.form)
+      const form = {}
+
+      Object.keys(this.form).forEach(key=>{
+        if (this.form[key]) {
+          form[key] = this.form[key]
+        }
+      })
+      this.$emit('filter', form)
     }
   }
 }

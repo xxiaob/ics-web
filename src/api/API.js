@@ -194,5 +194,13 @@ export default {
       getTaskPersonalLine: 'task-service/taskAttendance/getTaskPersonalLine', //个人考勤事件流水
       getUserHistoryPosition: 'message-srv/message/getUserHistoryPosition' //获取用户历史定位
     }
+  },
+  domainLogo: {
+    //域名logo配置
+    list: 'user-service/domainLogo/getSystemDomainLogo',
+    listByPage: 'user-service/domainLogo/getSystemDomainLogoByPage',
+    add: 'user-service/domainLogo/addSystemDomainLogo',
+    del: 'user-service/domainLogo/delSystemDomainLogo',
+    upd: 'user-service/domainLogo/updSystemDomainLogo'
   }
 }

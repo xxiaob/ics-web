@@ -51,8 +51,8 @@ export default {
   position: relative;
   .jc-close {
     position: absolute;
-    top: 5px;
-    right: 5px;
+    top: 2px;
+    right: 2px;
     cursor: pointer;
   }
 }

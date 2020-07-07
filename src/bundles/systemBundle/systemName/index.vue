@@ -9,13 +9,17 @@
           <el-button type="danger" icon="el-icon-delete" size="small" @click="removeAll">删除</el-button>
         </div>
       </div>
-      <el-table :data="list" v-loading="loading" row-key="positionId" class="jc-table" @selection-change="tableSelect">
+      <el-table :data="list" v-loading="loading" row-key="id" class="jc-table" @selection-change="tableSelect">
         <el-table-column type="selection" width="40"></el-table-column>
         <el-table-column type="index" :index="indexMethod" label="序号" width="50"></el-table-column>
-        <el-table-column prop="positionName" label="域名"></el-table-column>
-        <el-table-column prop="positionName" label="系统名称"></el-table-column>
-        <el-table-column prop="positionName" label="系统logo"></el-table-column>
-        <el-table-column prop="createTime" label="创建时间" :formatter="formatTime"></el-table-column>
+        <el-table-column prop="domain" label="域名" width="200"></el-table-column>
+        <el-table-column prop="systemName" label="系统名称" width="200"></el-table-column>
+        <el-table-column prop="domainLogo" label="系统logo">
+          <template slot-scope="scope">
+            <img :src="scope.row.domainLogo" alt="" width="100%">
+          </template>
+        </el-table-column>
+        <el-table-column prop="createTime" label="创建时间" :formatter="formatTime" width="140"></el-table-column>
         <el-table-column width="60" label="操作">
           <template slot-scope="scope">
             <el-button type="text" size="mini" icon="el-icon-edit-outline" @click="manage(scope.row)" title="编辑"></el-button>
@@ -30,7 +34,7 @@
 </template>
 <script>
 import PaginationMixins from '@/mixins/PaginationMixins'
-import { positionList, positionDel } from '@/api/position'
+import { listByPage, del } from '@/api/domainLogo'
 import { formatDate } from '@/libs/util'
 
 export default {
@@ -61,7 +65,7 @@ export default {
       if (!this.loading) {
         this.loading = true
         try {
-          const { total, resultList } = await positionList({ ...this.filter, ...this.page })
+          const { total, resultList } = await listByPage({ ...this.filter, ...this.page })
 
           this.list = resultList
           this.page.total = total
@@ -81,14 +85,14 @@ export default {
 
       if (selections && selections.length) {
         selections.forEach(item=> {
-          ids.push(item.positionId)
+          ids.push(item.id)
         })
       }
       this.ids = ids
     },
     del(row) {
       this.$confirm('确认删除该系统名称', '提示', { type: 'warning' }).then(() => {
-        this.remove([row.positionId])
+        this.remove([row.id])
       }).catch(() => {})
     },
     removeAll() {
@@ -101,7 +105,7 @@ export default {
       }
     },
     remove(ids) {
-      positionDel(ids).then(() => {
+      del({ ids }).then(() => {
         this.$message.success('删除成功')
         this.currentChange(this.page.pageNum - 1)
       })
