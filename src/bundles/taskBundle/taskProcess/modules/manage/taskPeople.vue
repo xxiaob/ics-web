@@ -196,7 +196,6 @@ export default {
     height: 200px;
     overflow: auto;
     margin-top: 5px;
-    // border: 1px solid #dcdfe6;
   }
 }
 
@@ -208,8 +207,6 @@ export default {
   padding: 0 10px;
 }
 .jc-selected {
-  // margin: 0 10px;
-  // border: 1px solid #dcdfe6;
   background: #f6f6f6;
   margin-top: 10px;
   border-radius: 4px;

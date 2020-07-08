@@ -1,60 +1,64 @@
 <template>
   <el-dialog :title="options ? '编辑日常任务' : '新增日常任务'" :visible.sync="dialogVisible" width="1100px" :close-on-click-modal="false" :append-to-body="true" @close="dialogClose" top="5vh">
-    <el-form ref="form" label-width="80px" :model="form" class="jc-manage-form">
-      <el-form-item label="项目名称" prop="projectId" :rules="rules.SELECT_NOT_NULL" class="jc-left-width50">
-        <el-cascader v-model="form.projectId" :options="projectList" :props="{expandTrigger:'hover',emitPath:false}"></el-cascader>
-      </el-form-item>
-      <el-form-item label="任务名称" prop="taskName" :rules="rules.Len50" class="jc-left-width50">
-        <el-input v-model="form.taskName" placeholder="请输入任务名称"></el-input>
-      </el-form-item>
+    <el-form ref="form" label-width="80px" :model="form" class="jc-manage-form" size="small">
+      <div class="jc-clearboth">
+        <el-form-item label="项目名称" prop="projectId" :rules="rules.SELECT_NOT_NULL" class="jc-left-width45">
+          <el-cascader v-model="form.projectId" :options="projectList" :props="{expandTrigger:'hover',emitPath:false}"></el-cascader>
+        </el-form-item>
+        <el-form-item label="任务名称" prop="taskName" :rules="rules.Len50" class="jc-right-width45">
+          <el-input v-model="form.taskName" placeholder="请输入任务名称"></el-input>
+        </el-form-item>
+      </div>
       <!-- assigneeAreaPOS -->
-      <el-form-item label="任务区域" prop="" :rules="rules.NOT_NULL" class="jc-left-width50">
+      <el-form-item label="任务区域" prop="" :rules="rules.NOT_NULL">
         <jc-task-area :areaType.sync="form.workAreaType" :selectedAreas.sync="form.assigneeAreaPOS" :orgTree="orgTree"></jc-task-area>
       </el-form-item>
       <!-- peopleProps[peopleType] -->
-      <el-form-item label="任务人员" prop="" :rules="rules.SELECT_NOT_NULL" class="jc-left-width50">
+      <el-form-item label="任务人员" prop="" :rules="rules.SELECT_NOT_NULL">
         <jc-task-people :peopleType.sync="peopleType" :selecteds.sync="peoples" :orgTree="orgTree"></jc-task-people>
       </el-form-item>
-      <el-form-item label="任务频率" prop="workFrequency" :rules="rules.num" class="jc-left-width50">
-        <el-select v-model.number="form.workFrequency" clearable="" filterable allow-create default-first-option placeholder="请选择或者输入任务频率">
-          <el-option v-for="item in TASK_FREQUENCYS.VALUES" :key="item.value" :label="item.label" :value="item.value">
-          </el-option>
-        </el-select>
+      <el-form-item label="任务时间" prop="date" :rules="rules.SELECT_NOT_NULL">
+        <el-date-picker style="width:40%" v-model="form.date" @change="changeDate" value-format="timestamp" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期">
+        </el-date-picker>
       </el-form-item>
-      <el-form-item label="准点到岗" prop="ifOnTime" :rules="rules.num" class="jc-left-width50">
-        <el-switch v-model="form.ifOnTime" :active-value="1" :inactive-value="0"></el-switch>
-      </el-form-item>
-      <div label="任务要求" class="jc-left-width50">
-        <el-form-item label="任务时间" prop="date" :rules="rules.SELECT_NOT_NULL">
-          <el-date-picker v-model="form.date" @change="changeDate" value-format="timestamp" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期">
-          </el-date-picker>
-        </el-form-item>
-        <!-- taskTimePOS -->
-        <el-form-item label="在岗时间" prop="" :rules="rules.SELECT_NOT_NULL">
-          <!-- <el-date-picker style="width: 300px;" v-for="(item,index) in taskTimes" v-model="taskTimes[index]" :key="index" value-format="HH:mm:ss" format="HH:mm:ss" type="datetimerange" range-separator="-" start-placeholder="开始时间" end-placeholder="结束时间">
-          </el-date-picker> -->
-          <el-time-picker style="width: 300px;" v-for="(item,index) in taskTimes" v-model="taskTimes[index]" :key="index" value-format="HH:mm:ss" is-range range-separator="-" start-placeholder="开始时间" end-placeholder="结束时间" placeholder="选择时间范围">
-          </el-time-picker>
-          <el-button icon="el-icon-close" circle size="mini" title="增加" @click="delTime"></el-button>
-          <el-button icon="el-icon-plus" circle size="mini" title="删除" @click="addTime"></el-button>
-        </el-form-item>
-        <el-form-item label="在岗时长" prop="workTime" :rules="rules.NOT_NULL">
-          <el-input v-model="form.workTime" placeholder="请输入在岗时长(单位小时)"></el-input>
-        </el-form-item>
-        <el-form-item label="在岗人数" prop="workPeopleNbr" :rules="rules.num">
-          <el-input v-model.number="form.workPeopleNbr" type="number" placeholder="请输入在岗人数"></el-input>
-        </el-form-item>
-      </div>
-      <el-form-item label="任务描述" prop="taskDesc" :rules="rules.NOT_NULL" class="jc-left-width50">
-        <!-- <el-input v-model="form.taskDesc" placeholder="请输入任务描述" type="textarea"></el-input> -->
+      <el-form-item label="任务描述" prop="taskDesc" :rules="rules.NOT_NULL">
         <jc-editor v-model="form.taskDesc"></jc-editor>
       </el-form-item>
-      <div></div>
+      <div class="jc-clearboth" v-show="peopleType===TASK_PEOPLE_TYPES.PEOPLE">
+        <el-form-item label="任务频率" prop="workFrequency" :rules="rules.num" class="jc-left-width45">
+          <el-select v-model.number="form.workFrequency" clearable="" filterable allow-create default-first-option placeholder="请选择或者输入任务频率">
+            <el-option v-for="item in TASK_FREQUENCYS.VALUES" :key="item.value" :label="item.label" :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="准点到岗" prop="ifOnTime" :rules="rules.num" class="jc-right-width45">
+          <el-switch v-model="form.ifOnTime" :active-value="1" :inactive-value="0"></el-switch>
+        </el-form-item>
+      </div>
+      <div class="jc-clearboth" v-show="peopleType===TASK_PEOPLE_TYPES.PEOPLE">
+        <div class="jc-left-width45">
+          <el-form-item label="在岗时长" prop="workTime" :rules="rules.NOT_NULL">
+            <el-input v-model="form.workTime" placeholder="请输入在岗时长(单位小时)"></el-input>
+          </el-form-item>
+          <el-form-item label="在岗人数" prop="workPeopleNbr" :rules="rules.num">
+            <el-input v-model.number="form.workPeopleNbr" type="number" placeholder="请输入在岗人数"></el-input>
+          </el-form-item>
+        </div>
+        <div class="jc-right-width45">
+          <el-form-item label="在岗时间" prop="" :rules="rules.SELECT_NOT_NULL">
+            <el-time-picker style="width: 260px;" v-for="(item,index) in taskTimes" v-model="taskTimes[index]" :key="index" value-format="HH:mm:ss" is-range range-separator="-" start-placeholder="开始时间" end-placeholder="结束时间" placeholder="选择时间范围">
+            </el-time-picker>
+            <el-button icon="el-icon-close" circle size="mini" title="增加" @click="delTime"></el-button>
+            <el-button icon="el-icon-plus" circle size="mini" title="删除" @click="addTime"></el-button>
+          </el-form-item>
+        </div>
+      </div>
+
     </el-form>
     <div slot="footer" class="dialog-footer">
-      <el-button @click="dialogVisible = false">取 消</el-button>
-      <el-button type="primary" :loading="loading" @click="onSubmit(false)">暂 存</el-button>
-      <el-button type="primary" :loading="loading" @click="onSubmit(true)">下 发</el-button>
+      <el-button @click="dialogVisible = false" size="small">取 消</el-button>
+      <el-button type="primary" :loading="loading" @click="onSubmit(false)" size="small">暂 存</el-button>
+      <el-button type="primary" :loading="loading" @click="onSubmit(true)" size="small">下 发</el-button>
     </div>
   </el-dialog>
 </template>
@@ -111,6 +115,7 @@ export default {
   },
   data() {
     return {
+      TASK_PEOPLE_TYPES,
       TASK_FREQUENCYS,
       peopleType: TASK_PEOPLE_TYPES.PEOPLE,
       peoples: [],
@@ -260,19 +265,46 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-/deep/ .el-dialog__body::after {
+// /deep/ .el-dialog__body::after {
+//   content: "";
+//   display: table;
+//   clear: both;
+// }
+/deep/ .el-dialog {
+  .el-dialog__body {
+    padding: 20px 80px;
+    .el-form-item--small.el-form-item {
+      margin-bottom: 15px;
+    }
+  }
+  .el-dialog__header {
+    padding: 5px 20px;
+    .el-dialog__title {
+      font-size: 16px;
+    }
+  }
+}
+.dialog-footer {
+  text-align: center;
+}
+.jc-left-width45 {
+  width: 45%;
+  float: left;
+}
+.jc-right-width45 {
+  width: 45%;
+  float: right;
+}
+.jc-clearboth::after,
+.jc-clearboth::before {
   content: "";
   display: table;
   clear: both;
 }
-.jc-left-width50 {
-  width: 50%;
-  float: left;
-}
 .jc-myeditor {
-  height: 200px;
+  height: 160px;
   /deep/ .w-e-text-container {
-    height: 160px !important;
+    height: 120px !important;
   }
 }
 </style>
