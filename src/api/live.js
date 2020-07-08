@@ -36,3 +36,11 @@ export function startRecord(data) {
 export function endRecord(data) {
   return axios.post(API.live.endRecord, data)
 }
+/**
+ * 获取频道
+ * @param {Object} data
+ * @returns {Object} axios 对象
+ */
+export function getChannelByUserId(data) {
+  return axios.post(API.live.getChannelByUserId, data)
+}

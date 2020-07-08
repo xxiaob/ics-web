@@ -160,7 +160,8 @@ export default {
     imAuth: 'user-service/getAuthToken',
     agoraToken: 'device-service/recording/getChannelKey',
     record: 'device-service/recording/startRecording',
-    endRecord: 'device-service/recording/endRecording'
+    endRecord: 'device-service/recording/endRecording',
+    getChannelByUserId: 'device-service/recording/getChannelByUserId'
   },
   attend: {
     //考勤管理

@@ -16,6 +16,7 @@
 </template>
 <script>
 import { VIDEO_INVITE_TYPES } from '@/constant/Dictionaries'
+import { getChannelByUserId } from '@/api/live'
 
 export default {
   name: 'ScreenCommandUserDetail',
@@ -35,8 +36,23 @@ export default {
     }
   },
   methods: {
-    goMediaLive(type) {
-      this.$EventBus.$emit('screen-media-live', { users: [{ id: this.options.userId, name: this.options.userName }], type })
+    async goMediaLive(type) {
+      if (type == VIDEO_INVITE_TYPES.OBSERVE) {
+        //如果是观摩，则取查询观摩的房间号，如果房间号不存在，则不能观摩
+        try {
+          let res = await getChannelByUserId({ userId: this.options.userId })
+
+          if (res && res.channelName) {
+            this.$EventBus.$emit('screen-media-live', { users: [{ id: this.options.userId, name: this.options.userName, channelId: res.channelName }], type })
+          } else {
+            this.$message.error('当前用户未在采集中')
+          }
+        } catch (error) {
+          console.log(error)
+        }
+      } else {
+        this.$EventBus.$emit('screen-media-live', { users: [{ id: this.options.userId, name: this.options.userName }], type })
+      }
     },
     userTrajectory() {
       this.$EventBus.$emit('screen-user-trajectory', { id: this.options.userId, name: this.options.userName }) //查看用户轨迹
