@@ -31,7 +31,7 @@ export default {
           this.params = {
             users, //用户列表
             inviteType: data.type,
-            channelId: null //可选  采集观摩需要
+            channelId: data.channelId || null //可选  采集观摩需要
           }
           this.visible = true
         }
