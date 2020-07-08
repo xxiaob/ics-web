@@ -22,6 +22,7 @@
 import { mapMutations } from 'vuex'
 import { login } from '@/api/auth'
 import md5 from 'md5'
+import { listAll } from '@/api/domainLogo'
 
 export default {
   name: 'Login',
@@ -38,7 +39,13 @@ export default {
       }
     }
   },
+  created() {
+    this.initData() //初始化内容
+  },
   methods: {
+    async initData() {
+
+    },
     onSubmit() {
       this.tip = ''
       if (this.form.userName && this.form.password) {
