@@ -22,7 +22,7 @@
         <el-table-column prop="createTime" label="创建时间" width="140" :formatter="formatTime"></el-table-column>
         <el-table-column width="100" label="操作">
           <template slot-scope="scope">
-            <!-- <el-button type="text" size="mini" icon="el-icon-view" @click="detail(scope.row)" title="查看"></el-button> -->
+            <el-button type="text" size="mini" icon="el-icon-view" @click="detail(scope.row)" title="查看"></el-button>
             <el-button type="text" size="mini" icon="el-icon-edit-outline" @click="manage(scope.row)" title="编辑"></el-button>
             <el-button type="text" size="mini" icon="el-icon-delete" @click="del(scope.row)" title="删除"></el-button>
           </template>
@@ -32,6 +32,8 @@
     </el-card>
 
     <jc-manage :orgTree="orgTree" :orgId="orgId" :options="info" :visible.sync="visible" @save-success="initData"></jc-manage>
+
+    <jc-detail :options="detailInfo" :visible.sync="detailVisible"></jc-detail>
   </div>
 </template>
 <script>
@@ -48,13 +50,16 @@ export default {
   mixins: [PaginationMixins],
   components: {
     JcManage: () => import('./modules/manage'),
+    JcDetail: () => import('./modules/detail'),
     TabFilter: () => import('./modules/tabFilter')
   },
   data() {
     return {
       ATTEND_CONFIGURE_STATUSES,
       info: null,
+      detailInfo: null,
       visible: false,
+      detailVisible: false,
       orgId: '',
       orgTree: [],
       list: [],
@@ -131,6 +136,12 @@ export default {
       }
       this.orgId = this.user.orgId
       this.visible = true
+    },
+    async detail(row) {
+      const res = await cfgGet(row.id)
+
+      this.detailInfo = res
+      this.detailVisible = true
     },
     del(row) {
       this.$confirm('确认删除该配置', '提示', { type: 'warning' }).then(() => {
