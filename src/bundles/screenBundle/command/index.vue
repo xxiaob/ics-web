@@ -174,6 +174,7 @@ export default {
   },
   beforeDestroy() {
     myJcMap.destroy()
+    myJcMap = null
     //去除事件监听
     this.$EventBus.$off('view-component-change', this.viewComponentChange)
     this.$EventBus.$off('view-component-back', this.viewBack)

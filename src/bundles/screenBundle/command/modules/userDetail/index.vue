@@ -9,7 +9,7 @@
       <div class="jc-user-detail-item jc-command" title="指挥" @click="goMediaLive(videoTypes.DOUBLEVIDEO)"></div>
       <div class="jc-user-detail-item jc-video" title="观摩" @click="goMediaLive(videoTypes.OBSERVE)"></div>
       <div class="jc-user-detail-item jc-force-video" title="强制观摩" @click="goMediaLive(videoTypes.FORCEOBSERVE)"></div>
-      <div class="jc-user-detail-item jc-trajectory" title="轨迹"></div>
+      <div class="jc-user-detail-item jc-trajectory" title="轨迹" @click="userTrajectory"></div>
       <div class="jc-user-detail-item jc-screen" title="投屏"></div>
     </div>
   </view-warp>
@@ -37,6 +37,9 @@ export default {
   methods: {
     goMediaLive(type) {
       this.$EventBus.$emit('screen-media-live', { users: [{ id: this.options.userId, name: this.options.userName }], type })
+    },
+    userTrajectory() {
+      this.$EventBus.$emit('screen-user-trajectory', { id: this.options.userId, name: this.options.userName }) //查看用户轨迹
     }
   }
 }

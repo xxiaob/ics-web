@@ -105,7 +105,8 @@ export default {
       //处理用户信息
       if (data.users && data.users.length) {
         data.users.forEach(item => {
-          let center = [parseFloat(item.lng).toFixed(9), parseFloat(item.lat).toFixed(9)]
+          //计算用户的中心点和key，处理用户坐标相同的情况
+          let { center, key } = this.getUserCenterAndKey(item.lng, item.lat, item.userId)
 
           //查找该用户使用已经存在，如果存在则更新，否则进行添加
           let lnglat = usersData.lnglats.find(user => user.userId == item.userId)
@@ -114,9 +115,9 @@ export default {
             delete usersData.users[lnglat.key]
             lnglat.lnglat = center
           } else {
-            usersData.lnglats.push({ lnglat: center, key: center.join(','), userId: item.userId })
+            usersData.lnglats.push({ lnglat: center, key, userId: item.userId })
           }
-          usersData.users[center.join(',')] = { ...item, center }
+          usersData.users[key] = { ...item, center }
         })
       }
       if (usersData.markerCluster) {
@@ -131,6 +132,21 @@ export default {
         usersData.markerCluster.on('click', this.markerUserClusterClick)
       }
       this.fitUsers() //控制用户显示
+    },
+    getUserCenterAndKey(lng, lat, userId) {
+      let center = [parseFloat(lng).toFixed(9), parseFloat(lat).toFixed(9)]
+
+      let key = center.join(',')
+
+      //处理是已经有用户和当前用户位置完全相同，如果相同则进行处理偏差处理
+      let user = usersData.users[key]
+
+      if (user && user.userId != userId) {
+        //如果该坐标用户存在，且不是当前用户，则将该用户位置进行偏差，再次进行处理
+        return this.getUserCenterAndKey(parseFloat(lng) + 0.000000001, parseFloat(lat) + 0.000000001, userId)
+      }
+
+      return { center, key }
     },
     fitUsers() {
       if (!usersData.markerCluster) {
