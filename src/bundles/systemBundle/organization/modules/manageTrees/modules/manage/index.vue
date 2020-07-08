@@ -19,10 +19,10 @@
       <el-form-item label="数据大屏标题" prop="dataScreenLogo" :rules="rules.Len50">
         <el-input v-model="form.dataScreenLogo" placeholder="请输入数据大屏标题"></el-input>
       </el-form-item>
-      <el-form-item label="欢迎页logo" prop="welcomeLogo" :rules="rules.NOT_NULL">
+      <el-form-item label="首页logo" prop="welcomeLogo" :rules="rules.NOT_NULL">
         <upload-one-img :url.sync="form.welcomeLogo"></upload-one-img>
       </el-form-item>
-      <el-form-item label="首页logo" prop="homePageLogo" :rules="rules.NOT_NULL">
+      <el-form-item label="系统logo" prop="homePageLogo" :rules="rules.NOT_NULL">
         <upload-one-img :url.sync="form.homePageLogo"></upload-one-img>
       </el-form-item>
     </el-form>
@@ -58,7 +58,6 @@ export default {
   methods: {
     formatFormData() {
       if (this.options) {
-        console.log(this.options)
         return { ...this.options }
       } else {
         return { ...defaultForm }

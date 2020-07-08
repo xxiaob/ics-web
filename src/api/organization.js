@@ -50,6 +50,14 @@ export function organizationGet(orgId) {
   return axios.post(API.organization.get, { orgId })
 }
 /**
+ * logo详情
+ * @param {String} orgId
+ * @returns {Object} axios 对象
+ */
+export function getOrgLogo(orgId) {
+  return axios.post(API.organization.getOrgLogo + '?orgId=' + orgId)
+}
+/**
  * 删除
  * @param {String} orgId
  * @returns {Object} axios 对象

@@ -19,7 +19,7 @@
 </template>
 <script>
 import TreesFilterMixins from '@/mixins/TreesFilterMixins'
-import { organizationList, organizationDel } from '@/api/organization'
+import { organizationList, organizationDel, getOrgLogo } from '@/api/organization'
 
 export default {
   name: 'SystemOrganizationManageTreesTreeCard',
@@ -101,11 +101,16 @@ export default {
       return trees
     },
     manage(node, type) {
-      this.checkManage(() => {
+      this.checkManage(async () => {
         if (type == 1) {
           this.pNode = { name: node.name, pid: node.pid }
-          console.log(node)
-          this.info = { orgId: node.orgId, orgName: node.orgName, orgCode: node.orgCode, sameLevelAuth: node.sameLevelAuth }
+          try {
+            const { commandScreenLogo, dataScreenLogo, welcomeLogo, homePageLogo } = await getOrgLogo(node.orgId)
+
+            this.info = { orgId: node.orgId, orgName: node.orgName, orgCode: node.orgCode, sameLevelAuth: node.sameLevelAuth, commandScreenLogo, dataScreenLogo, welcomeLogo, homePageLogo }
+          } catch (error) {
+            console.error(error)
+          }
         } else if (type == 2) {
           this.pNode = { name: node.orgName, pid: node.orgId }
           this.info = null
