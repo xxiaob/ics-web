@@ -1,7 +1,7 @@
 <template>
   <div class="jc-welcome-warp">
     <img src="./assets/bg.png" class="jc-welcome-bg" />
-    <div class="jc-welcome-content">
+    <div class="jc-welcome-content" :style="welcomeLogo">
       <router-link :to="{name: 'specialControl'}" tag="div" class="jc-welcome-item jc-icon1"></router-link>
       <div class="jc-welcome-item jc-icon2"></div>
       <div class="jc-welcome-item jc-icon3"></div>
@@ -11,8 +11,26 @@
   </div>
 </template>
 <script>
+import { mapState } from 'vuex'
+
 export default {
-  name: 'IndexWelcome'
+  name: 'IndexWelcome',
+  data() {
+    return {
+      list: []
+    }
+  },
+  computed: {
+    ...mapState('user', {
+      user: state => state.user
+    }),
+    welcomeLogo() {
+      return this.user && this.user.userRespInnerDTO && this.user.userRespInnerDTO.welcomeLogo ? `background-image: url(${this.user.userRespInnerDTO.welcomeLogo});` : ''
+    }
+  },
+  created() {
+
+  }
 }
 </script>
 <style lang="scss" scoped>

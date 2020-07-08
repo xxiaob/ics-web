@@ -108,8 +108,6 @@ export default {
           //计算用户的中心点和key，处理用户坐标相同的情况
           let { center, key } = this.getUserCenterAndKey(item.lng, item.lat, item.userId)
 
-          console.log('getUserCenterAndKey', center, key, item)
-
           //查找该用户使用已经存在，如果存在则更新，否则进行添加
           let lnglat = usersData.lnglats.find(user => user.userId == item.userId)
 
@@ -244,7 +242,7 @@ export default {
           this.locationUserId = data.id
           let myJcMap = this.getMyJcMap() //获取地图对象
 
-          myJcMap.map.setZoomAndCenter(18, lnglat.key.split(','))
+          myJcMap.map.setZoomAndCenter(20, lnglat.key.split(','))
           noUser = false //设置查找到该用户
         }
       }

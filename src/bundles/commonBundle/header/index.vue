@@ -1,6 +1,6 @@
 <template>
   <header class="jc-header">
-    <img src="/static/images/header-logo.png" class="jc-header-logo" @click="$router.push({name: 'index'})" />
+    <img :src="systemLogo" class="jc-header-logo" @click="$router.push({name: 'index'})" />
     <template v-if="isLogin">
       <div class="jc-header-menus">
         <div class="jc-user-warp">
@@ -38,6 +38,9 @@ export default {
     ...mapState('user', {
       user: state => state.user
     }),
+    systemLogo() {
+      return this.user && this.user.userRespInnerDTO && this.user.userRespInnerDTO.homePageLogo ? this.user.userRespInnerDTO.homePageLogo : '/static/images/header-logo.png'
+    },
     ...mapGetters('user', { isLogin: 'isLogin' })
   },
   methods: {
