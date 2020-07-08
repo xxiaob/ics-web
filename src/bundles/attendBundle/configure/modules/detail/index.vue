@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="options ? '编辑配置' : '新增配置'" :visible.sync="dialogVisible" width="800px" :close-on-click-modal="false" :append-to-body="true" @close="dialogClose" top="2vh">
+  <el-dialog title="查看配置" :visible.sync="dialogVisible" width="600px" :close-on-click-modal="false" :append-to-body="true" @close="dialogClose">
     <el-form ref="form" label-width="80px" :model="form" class="jc-manage-form" size="small">
       <el-form-item label="考勤名称" prop="attendanceName" :rules="rules.Len50">
         <el-input v-model="form.attendanceName" placeholder="请输入考勤名称"></el-input>
@@ -23,7 +23,6 @@
         <div ref="myMap" class="jc-area-warp"></div>
       </el-form-item>
       <el-form-item label="人员选择" prop="userIds" :rules="rules.SELECT_NOT_NULL">
-        <jc-people v-model="form.userIds" :tree="users"></jc-people>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -38,7 +37,7 @@ import { userListByOrg } from '@/api/user'
 import { getStringRule, NOT_NULL, SELECT_NOT_NULL, getNumberRule } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
 import { ATTEND_CONFIGURE_STATUSES } from '@/constant/Dictionaries'
-import viewOrgMixins from './viewOrgMixins'
+import viewOrgMixins from '../manage/viewOrgMixins'
 
 import { JcMap } from '@/map'
 let myJcMap
@@ -62,9 +61,6 @@ export default {
     orgId: {
       type: String
     }
-  },
-  components: {
-    JcPeople: () => import('./people')
   },
   data() {
     return {

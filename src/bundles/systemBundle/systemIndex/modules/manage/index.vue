@@ -1,20 +1,20 @@
 <template>
   <el-dialog :title="options ? '编辑系统':'新增系统'" :visible.sync="dialogVisible" width="600px" :close-on-click-modal="false" :append-to-body="true" @close="dialogClose">
     <el-form ref="form" label-width="100px" :model="form" class="jc-manage-form">
-      <el-form-item label="系统名称" prop="name" :rules="rules.Len50">
-        <el-input v-model="form.name" placeholder="请输入系统名称"></el-input>
+      <el-form-item label="系统名称" prop="systemName" :rules="rules.Len50">
+        <el-input v-model="form.systemName" placeholder="请输入系统名称"></el-input>
       </el-form-item>
       <el-form-item label="排序">
-        <el-input v-model.number="form.sort" placeholder="请输入排序"></el-input>
+        <el-input v-model.number="form.order" placeholder="请输入排序"></el-input>
       </el-form-item>
-      <el-form-item label="链接" prop="link" :rules="rules.NOT_NULL">
-        <el-input v-model="form.link" placeholder="请输入链接"></el-input>
+      <el-form-item label="链接" prop="url" :rules="rules.NOT_NULL">
+        <el-input v-model="form.url" placeholder="请输入链接"></el-input>
       </el-form-item>
-      <el-form-item label="启用" prop="on" :rules="rules.NOT_NULL">
-        <el-switch v-model="form.on" :active-value="1" :inactive-value="0"></el-switch>
+      <el-form-item label="启用" prop="enabled" :rules="rules.NOT_NULL">
+        <el-switch v-model="form.enabled" :active-value="1" :inactive-value="0"></el-switch>
       </el-form-item>
-      <el-form-item label="新窗口打开" prop="on" :rules="rules.NOT_NULL">
-        <el-switch v-model="form.on" :active-value="1" :inactive-value="0"></el-switch>
+      <el-form-item label="新窗口打开" prop="newWindow" :rules="rules.NOT_NULL">
+        <el-switch v-model="form.newWindow" :active-value="1" :inactive-value="0"></el-switch>
       </el-form-item>
       <el-form-item label="logo" prop="logo" :rules="rules.NOT_NULL">
         <upload-one-img :url.sync="form.logo"></upload-one-img>
@@ -27,11 +27,18 @@
   </el-dialog>
 </template>
 <script>
-import { positionSave } from '@/api/position'
+import { save } from '@/api/systemIndex'
 import { getStringRule, NOT_NULL, getIntegerRule } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
 
-let defaultForm = { name: '', logo: '', sort: 0, on: 1, link: '' }
+let defaultForm = {
+  enabled: 0,
+  logo: '',
+  newWindow: 0,
+  order: 0,
+  systemName: '',
+  url: ''
+}
 
 export default {
   name: 'SystemIndexManage',
@@ -52,7 +59,7 @@ export default {
   methods: {
     formatFormData() {
       if (this.options) {
-        return { ...this.options }
+        return { ...this.options, recordId: this.options.id }
       } else {
         return { ...defaultForm }
       }
@@ -61,8 +68,7 @@ export default {
       this.loading = true
       this.$refs.form.validate(valid => {
         if (valid) {
-          this.form.loginType = this.form.type.join(',')
-          positionSave(this.form).then(() => {
+          save(this.form).then(() => {
             this.$message.success('操作成功')
             this.dialogVisible = false
             this.$emit('save-success')

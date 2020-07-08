@@ -16,7 +16,7 @@
         <el-table-column prop="systemName" label="系统名称" width="200"></el-table-column>
         <el-table-column prop="domainLogo" label="系统logo">
           <template slot-scope="scope">
-            <img :src="scope.row.domainLogo" alt="" height="60">
+            <img :src="scope.row.domainLogo" alt="">
           </template>
         </el-table-column>
         <el-table-column prop="createTime" label="创建时间" :formatter="formatTime" width="140"></el-table-column>
@@ -123,4 +123,10 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.el-table /deep/ {
+  img {
+    max-height: 60px;
+    max-width: 100%;
+  }
+}
 </style>
