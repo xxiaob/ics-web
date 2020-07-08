@@ -86,3 +86,19 @@ export function getUserMenus() {
 export function setUserMenus(info) {
   storageSet(STORAGE_KEY.USER_MENUS, info)
 }
+
+/**
+ * 获取系统配置
+ * @returns {String} lan 语言信息
+ */
+export function getDomainLogoConfig() {
+  return storageGet(STORAGE_KEY.DO_MAIN_LOGO_CONFIG)
+}
+
+/**
+ * 保存系统菜单
+ * @param {object} info 语言信息
+ */
+export function setDomainLogoConfig(info) {
+  storageSet(STORAGE_KEY.DO_MAIN_LOGO_CONFIG, info)
+}
