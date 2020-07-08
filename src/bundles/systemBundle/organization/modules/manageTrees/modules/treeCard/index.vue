@@ -104,6 +104,7 @@ export default {
       this.checkManage(() => {
         if (type == 1) {
           this.pNode = { name: node.name, pid: node.pid }
+          console.log(node)
           this.info = { orgId: node.orgId, orgName: node.orgName, orgCode: node.orgCode, sameLevelAuth: node.sameLevelAuth }
         } else if (type == 2) {
           this.pNode = { name: node.orgName, pid: node.orgId }

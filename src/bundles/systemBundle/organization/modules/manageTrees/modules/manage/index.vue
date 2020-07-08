@@ -13,18 +13,18 @@
       <el-form-item label="是否同级查看" prop="sameLevelAuth">
         <el-switch v-model="form.sameLevelAuth" active-value="1" inactive-value="0"></el-switch>
       </el-form-item>
-      <!-- <el-form-item label="指挥大屏标题" prop="orgName" :rules="rules.Len50">
-        <el-input v-model="form.orgName" placeholder="请输入指挥大屏标题"></el-input>
+      <el-form-item label="指挥大屏标题" prop="commandScreenLogo" :rules="rules.Len50">
+        <el-input v-model="form.commandScreenLogo" placeholder="请输入指挥大屏标题"></el-input>
       </el-form-item>
-      <el-form-item label="数据大屏标题" prop="orgName" :rules="rules.Len50">
-        <el-input v-model="form.orgName" placeholder="请输入数据大屏标题"></el-input>
+      <el-form-item label="数据大屏标题" prop="dataScreenLogo" :rules="rules.Len50">
+        <el-input v-model="form.dataScreenLogo" placeholder="请输入数据大屏标题"></el-input>
       </el-form-item>
-      <el-form-item label="首页logo" prop="logo" :rules="rules.NOT_NULL">
-        <upload-one-img :url.sync="form.logo"></upload-one-img>
+      <el-form-item label="欢迎页logo" prop="welcomeLogo" :rules="rules.NOT_NULL">
+        <upload-one-img :url.sync="form.welcomeLogo"></upload-one-img>
       </el-form-item>
-      <el-form-item label="导航logo" prop="logo" :rules="rules.NOT_NULL">
-        <upload-one-img :url.sync="form.logo"></upload-one-img>
-      </el-form-item> -->
+      <el-form-item label="首页logo" prop="homePageLogo" :rules="rules.NOT_NULL">
+        <upload-one-img :url.sync="form.homePageLogo"></upload-one-img>
+      </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="dialogVisible = false">取 消</el-button>
@@ -37,7 +37,7 @@ import { organizationSave } from '@/api/organization'
 import { getStringRule, NOT_NULL } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
 
-let defaultForm = { orgName: '', sameLevelAuth: '0', orgCode: '' }
+let defaultForm = { orgName: '', sameLevelAuth: '0', orgCode: '', commandScreenLogo: '', dataScreenLogo: '', welcomeLogo: '', homePageLogo: '' }
 
 export default {
   name: 'SystemOrganizationManage',
@@ -58,6 +58,7 @@ export default {
   methods: {
     formatFormData() {
       if (this.options) {
+        console.log(this.options)
         return { ...this.options }
       } else {
         return { ...defaultForm }

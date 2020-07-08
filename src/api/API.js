@@ -28,7 +28,8 @@ export default {
     get: 'user-service/org/byId',
     list: 'user-service/org/list',
     update: 'user-service/org/upd',
-    del: 'user-service/org/del'
+    del: 'user-service/org/del',
+    getOrgLogo: 'user-service/org/getOrgLogoByOrgId'
   },
   role: {
     //角色管理
@@ -203,5 +204,14 @@ export default {
     add: 'user-service/domainLogo/addSystemDomainLogo',
     del: 'user-service/domainLogo/delSystemDomainLogo',
     upd: 'user-service/domainLogo/updSystemDomainLogo'
+  },
+  systemIndex: {
+    //首页设置 配置欢迎页图标
+    add: 'user-service/orgLinkLogo/add',
+    delete: 'user-service/orgLinkLogo/delete',
+    get: 'user-service/orgLinkLogo/getDetail',
+    getByOrgId: 'user-service/orgLinkLogo/getDetailByOrgId',
+    list: 'user-service/orgLinkLogo/getList',
+    update: 'user-service/orgLinkLogo/update'
   }
 }
