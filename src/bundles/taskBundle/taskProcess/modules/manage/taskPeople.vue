@@ -1,18 +1,20 @@
 <template>
   <div>
-    <div class="jc-left-width60">
-      <el-radio-group v-model="selfPeopleType" size="small" @change="changePeopleType">
+    <div class="jc-left-width48">
+      <el-radio-group v-model="selfPeopleType" size="mini" @change="changePeopleType">
         <el-radio-button v-for="item in TASK_PEOPLE_TYPES.VALUES" :key="item.value" :label="item.value">{{item.label}}</el-radio-button>
       </el-radio-group>
-      <el-input placeholder="输入关键字进行过滤" v-model="filterText" size="small"></el-input>
-      <el-button type="" @click="setCheckedKeys" size="mini">全选</el-button>
-      <el-button type="" @click="resetChecked" size="mini">清空</el-button>
-      <el-tree ref="tree" :data="tree" show-checkbox node-key="id" :check-strictly="true" :filter-node-method="filterNode" :default-expanded-keys="tree.map(item=>item.id)" @check="check" :default-checked-keys="selecteds"></el-tree>
+      <div class="tree-content">
+        <el-input placeholder="输入关键字进行过滤" v-model="filterText" size="mini" style="margin-bottom:5px"></el-input>
+        <el-button type="" @click="setCheckedKeys" size="mini">全选</el-button>
+        <el-button type="" @click="resetChecked" size="mini">清空</el-button>
+        <el-tree ref="tree" :data="tree" show-checkbox node-key="id" :check-strictly="true" :filter-node-method="filterNode" :default-expanded-keys="tree.map(item=>item.id)" @check="check" :default-checked-keys="selecteds"></el-tree>
+      </div>
     </div>
-    <div class="jc-left-width40 jc-selected-box">
+    <div class="jc-right-width48 jc-selected-box">
       <div>已选人员</div>
       <div class="jc-selected">
-        <el-tag v-for="tag in checkedNodes" :key="tag.id" closable size="small" @close="handleCloseTag(tag)">
+        <el-tag v-for="tag in checkedNodes" :key="tag.id" effect="plain" closable size="medium" @close="handleCloseTag(tag)">
           {{tag.label}}
         </el-tag>
       </div>
@@ -173,23 +175,33 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.el-tree {
-  height: 200px;
-  overflow: auto;
-  border: 1px solid #dcdfe6;
-  border-radius: 4px;
-}
-.el-select {
-  width: inherit;
-}
-.jc-left-width60 {
-  width: 60%;
+.jc-left-width48 {
+  width: 48%;
   float: left;
   box-sizing: border-box;
 }
-.jc-left-width40 {
-  width: 40%;
-  float: left;
+.jc-right-width48 {
+  width: 48%;
+  float: right;
+  box-sizing: border-box;
+}
+.tree-content {
+  margin-top: 10px;
+  background: #f6f6f6;
+  box-sizing: border-box;
+  padding: 10px 20px;
+  border-radius: 4px;
+  .el-tree {
+    background: #f6f6f6;
+    height: 200px;
+    overflow: auto;
+    margin-top: 5px;
+    // border: 1px solid #dcdfe6;
+  }
+}
+
+.el-select {
+  width: inherit;
 }
 .jc-selected-box {
   box-sizing: border-box;
@@ -197,8 +209,13 @@ export default {
 }
 .jc-selected {
   // margin: 0 10px;
-  border: 1px solid #dcdfe6;
-  height: 280px;
+  // border: 1px solid #dcdfe6;
+  background: #f6f6f6;
+  margin-top: 10px;
+  border-radius: 4px;
+  box-sizing: border-box;
+  padding: 10px 20px;
+  height: 294px;
   overflow: auto;
   line-height: normal;
 

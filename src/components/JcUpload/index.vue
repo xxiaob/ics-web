@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class="jc-clearboth">
+    <div class="jc-clearboth" v-show="urls.length">
       <div v-for="url in imgs" :key="url.id" class="jc-img">
         <el-image :src="url" :preview-src-list="imgs"></el-image>
         <img class="jc-close" src="@/bundles/taskBundle/assets/close.png" alt="" @click.stop="handleRemove(url)">
@@ -28,7 +28,7 @@
     </div>
 
     <el-upload :action="uploadUrl" :accept="accept" :headers="uploadHeaders" :before-upload="handleBeforeUpload" :on-success="handleSuccess" :show-file-list="false">
-      <el-button size="small" type="primary" :loading="loading">点击上传</el-button>
+      <el-button size="mini" type="primary" :loading="loading" icon="el-icon-plus" title="点击上传" circle></el-button>
     </el-upload>
 
     <el-dialog title="视频播放" :visible.sync="dialogVideoVisible" width="800px" :close-on-click-modal="false" :append-to-body="true">
