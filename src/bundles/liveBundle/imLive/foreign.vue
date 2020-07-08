@@ -1,5 +1,7 @@
 <template>
-  <div id="tolive"></div>
+  <div id="tolive">
+    <div :id="invitUserId"></div>
+  </div>
 </template>
 
 <script>
@@ -137,5 +139,9 @@ export default {
 #tolive {
   width: 100%;
   height: 100%;
+  & > div {
+    width: 100%;
+    height: 100%;
+  }
 }
 </style>
