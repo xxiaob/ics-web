@@ -53,7 +53,7 @@ export default {
 .jc-tabs-warp {
   display: flex;
   position: relative;
-  font-size: $jc-font-size-base;
+  font-size: $jc-font-size-small;
   text-align: center;
   border-bottom: solid 1px $jc-color-line-primary;
   .jc-tabs-item {

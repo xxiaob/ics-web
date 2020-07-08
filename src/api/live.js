@@ -44,3 +44,11 @@ export function endRecord(data) {
 export function getChannelByUserId(data) {
   return axios.post(API.live.getChannelByUserId, data)
 }
+/**
+ * 获取录像视频
+ * @param {Object} data
+ * @returns {Object} axios 对象
+ */
+export function getRecording(data) {
+  return axios.post(API.live.getRecording, data)
+}
