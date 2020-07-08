@@ -1,14 +1,11 @@
 <template>
   <div class="jc-view-content" v-loading="loading" element-loading-background="rgba(0, 0, 0, 0)">
-    <el-row :gutter="10">
-      <el-col :span="12">
-        <div class="jc-resource-warp">
-          <video class="jc-video"></video>
-          <div class="jc-title"></div>
-        </div>
-      </el-col>
-      <el-col :span="12">2</el-col>
-    </el-row>
+    <div class="jc-resource-warp">
+      <div class="jc-resource-item">
+        <video class="jc-video"></video>
+        <div class="jc-title"></div>
+      </div>
+    </div>
     <view-empty v-if="list.length < 1"></view-empty>
     <el-dialog title="视频播放" :visible.sync="dialogVideoVisible" width="800px" :close-on-click-modal="false" :append-to-body="true">
       <video v-if="dialogVideoVisible" :src="dialogVideoUrl" autoplay controls width="100%"></video>
@@ -16,6 +13,7 @@
   </div>
 </template>
 <script>
+import { getRecording } from '@/api/live'
 import MediaMixins from '@/bundles/taskBundle/mixins/MediaMixins'
 
 export default {
@@ -44,7 +42,7 @@ export default {
       this.loading = true
       this.list = []
       try {
-        // this.detail = await userGet({ userId: this.options.userId })
+        let res = await getRecording({ initiator: this.options.userId, videoType: 'Capture' })
       } catch (error) {
         console.log(error)
       }
@@ -55,5 +53,22 @@ export default {
 </script>
 <style lang="scss" scoped>
 .jc-resource-warp {
+  position: relative;
+  padding: $jc-default-dis/2;
+  .jc-resource-item {
+    position: relative;
+    overflow: hidden;
+    .jc-video {
+      display: block;
+      width: 100%;
+      height: 160px;
+    }
+    .jc-title {
+      text-align: center;
+      height: 30px;
+      line-height: 30px;
+      color: $jc-color-text-regular;
+    }
+  }
 }
 </style>
