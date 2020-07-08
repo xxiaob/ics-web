@@ -46,7 +46,7 @@ export default {
   methods: {
     async initData() {
       this.loading = true
-      //初始化组织,如果是专项,则需要初始化默认组织
+      //初始化组织,如果是应急项目，则使用项目名称作为父级，如果是专项,则需要初始化默认组织
       if (PROJECT_TYPES.EmergencySupport == this.project.projectType) {
         this.expandedKeys = [this.project.orgId]
         this.parentNode = [{ id: this.project.orgId, orgId: this.project.orgId, name: this.project.projectName }]

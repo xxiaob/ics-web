@@ -12,6 +12,7 @@
 </template>
 <script>
 import { mapState } from 'vuex'
+import { getByOrgId } from '@/api/systemIndex'
 
 export default {
   name: 'IndexWelcome',
@@ -29,7 +30,12 @@ export default {
     }
   },
   created() {
+    this.initData() //初始化内容
+  },
+  methods: {
+    async initData() {
 
+    }
   }
 }
 </script>
