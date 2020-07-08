@@ -42,7 +42,7 @@ export default {
       this.loading = true
       this.list = []
       try {
-        let res = await getRecording({ initiator: this.options.userId, videoType: 'Capture' })
+        let res = await getRecording({ initiator: '56783818509516800', videoType: 'Capture' })
       } catch (error) {
         console.log(error)
       }
