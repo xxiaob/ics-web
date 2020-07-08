@@ -1,11 +1,9 @@
 <template>
   <div>
-    <div class="img" v-show="url">
-      <img :src="url" alt="" width="100%">
-      <img class="jc-close" src="@/bundles/taskBundle/assets/close.png" alt="" title="删除" @click.stop="handleRemove">
-    </div>
-    <el-upload v-show="!url" :action="uploadUrl" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg" :headers="uploadHeaders" :before-upload="handleBeforeUpload" :on-success="handleSuccess" :show-file-list="false">
-      <el-button size="small" type="primary" :loading="loading">点击上传</el-button>
+    <el-upload drag :action="uploadUrl" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg" :headers="uploadHeaders" :before-upload="handleBeforeUpload" :on-success="handleSuccess" :show-file-list="false">
+      <i v-show="!url" class="el-icon-upload"></i>
+      <div v-show="!url" class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+      <img class="myImg" v-show="url" :src="url" alt="">
     </el-upload>
   </div>
 </template>
@@ -47,13 +45,13 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.img {
-  position: relative;
-  .jc-close {
-    position: absolute;
-    top: 2px;
-    right: 2px;
-    cursor: pointer;
+/deep/ .el-upload-dragger {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  .myImg {
+    max-width: 100%;
+    max-height: 100%;
   }
 }
 </style>
