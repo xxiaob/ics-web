@@ -12,6 +12,7 @@ import moment from 'moment'
 import { projectGet } from '@/api/projects'
 import { PROJECT_TYPES } from '@/constant/Dictionaries'
 import { organizationList } from '@/api/organization'
+import { getUser } from '@/libs/storage'
 const orgMap = {}
 
 export default {
@@ -54,7 +55,14 @@ export default {
       this.title = `${this.project.projectName}数据大屏`
       this.org = { name: this.project.projectName, orgId: this.project.orgId }
     } else {
-      this.title = `${parentOrg.label}常态数据大屏`
+      let user = getUser()
+
+      if (user && user.userRespInnerDTO && user.userRespInnerDTO.dataScreenLogo) {
+        this.title = user.userRespInnerDTO.dataScreenLogo
+      } else {
+        this.title = `${parentOrg.label}常态数据大屏`
+      }
+
       this.org = { ...orgMap[parentOrg.value] }
     }
     this.$EventBus.$emit('org-change', this.org) //使用事件总线进行级别切换通知

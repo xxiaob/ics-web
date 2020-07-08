@@ -46,3 +46,15 @@ export function save(data) {
 export function del(id) {
   return axios.post(API.systemIndex.delete + '?id=' + id)
 }
+
+import { getUser } from '@/libs/storage'
+
+/**
+ * 查询组织关联链接logo根据orgId
+ * @returns {Object} axios 对象
+ */
+export function getByOrgId() {
+  let user = getUser()
+
+  return axios.post(API.systemIndex.getByOrgId + '?orgId=' + user.orgId)
+}
