@@ -7,11 +7,10 @@ import API from './API'
 /*-------------------------------域名logo配置------------------------------------ */
 /**
  * 列表 - 所有
- * @param {object} data
  * @returns {Object} axios 对象
  */
-export function listAll(data) {
-  return axios.post(API.domainLogo.list, data)
+export function listAll() {
+  return axios.post(API.domainLogo.list)
 }
 /**
  * 列表 - 分页
