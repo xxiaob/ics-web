@@ -113,6 +113,7 @@ export default {
   },
   beforeDestroy() {
     myJcMap.destroy() //销毁地图
+    myJcMap = null
   }
 }
 </script>

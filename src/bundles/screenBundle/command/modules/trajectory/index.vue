@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="user.userName" :visible.sync="visible" width="1000px" :close-on-click-modal="false" :append-to-body="true">
+  <el-dialog :title="user.userName + '-轨迹查询'" :visible.sync="visible" width="1000px" :close-on-click-modal="false" :append-to-body="true">
     <el-form ref="form" :inline="true" :model="form" class="jc-tabfilter-form" size="small" @submit.native.prevent>
       <el-form-item label="日期" prop="date" :rules="rules.NOT_NULL">
         <el-date-picker v-model="form.date" value-format="timestamp" type="datetimerange" :default-time="['00:00:00','23:59:59']" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
@@ -28,22 +28,28 @@ export default {
     return {
       form: { date: '' },
       loading: false,
-      visible: true,
-      user: { userId: '56776731599568896', userName: '--' },
+      visible: false,
+      user: { userId: '56776731599568896', userName: '杨超' },
       rules: { NOT_NULL }
     }
   },
   created() {
     this.$EventBus.$on('screen-user-trajectory', this.initData) //监听显示人员轨迹
-    setTimeout(this.initData, 1000 * 5)
+    // setTimeout(this.initData, 1000 * 5)
   },
   methods: {
-    async initData() {
+    async initData(user) {
+      this.visible = true
       if (!myJcMap) {
         myJcMap = new JcMap()
         await initMoveAnimation() //加载动画组件
         await myJcMap.init(this.$refs.myMap) //等待地图初始化
-        myJcMap.map.setPitch(60) //设置地图倾斜，呈现3D地图
+        this.$nextTick(() => {
+          myJcMap.map.setPitch(60) //设置地图倾斜，呈现3D地图
+        })
+      }
+      if (user) {
+        this.user = { userId: user.id, userName: user.name }
       }
       this.clearMap()
     },
@@ -147,6 +153,7 @@ export default {
     this.clearMap()
     if (myJcMap) {
       myJcMap.destroy()
+      myJcMap = null
     }
     this.$EventBus.$off('screen-user-trajectory', this.initData)
   }

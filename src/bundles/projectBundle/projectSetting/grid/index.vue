@@ -105,6 +105,7 @@ export default {
   beforeDestroy() {
     if (myJcMap) {
       myJcMap.destroy() //销毁地图
+      myJcMap = null
     }
   }
 }
