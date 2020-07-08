@@ -162,7 +162,7 @@ export default {
     agoraToken: 'device-service/recording/getChannelKey',
     record: 'device-service/recording/startRecording',
     endRecord: 'device-service/recording/endRecording',
-    getRecording: '/recording/getRecording', //获取录像视频
+    getRecording: 'device-service/recording/getRecording', //获取录像视频
     getChannelByUserId: 'device-service/recording/getChannelByUserId'
   },
   attend: {

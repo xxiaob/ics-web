@@ -108,6 +108,8 @@ export default {
           //计算用户的中心点和key，处理用户坐标相同的情况
           let { center, key } = this.getUserCenterAndKey(item.lng, item.lat, item.userId)
 
+          console.log('getUserCenterAndKey', center, key, item)
+
           //查找该用户使用已经存在，如果存在则更新，否则进行添加
           let lnglat = usersData.lnglats.find(user => user.userId == item.userId)
 
@@ -134,7 +136,7 @@ export default {
       this.fitUsers() //控制用户显示
     },
     getUserCenterAndKey(lng, lat, userId) {
-      let center = [parseFloat(lng).toFixed(9), parseFloat(lat).toFixed(9)]
+      let center = [parseFloat(lng).toFixed(6), parseFloat(lat).toFixed(6)]
 
       let key = center.join(',')
 
@@ -143,7 +145,7 @@ export default {
 
       if (user && user.userId != userId) {
         //如果该坐标用户存在，且不是当前用户，则将该用户位置进行偏差，再次进行处理
-        return this.getUserCenterAndKey(parseFloat(lng) + 0.000000001, parseFloat(lat) + 0.000000001, userId)
+        return this.getUserCenterAndKey(parseFloat(lng) + 0.000001, parseFloat(lat) + 0.000001, userId)
       }
 
       return { center, key }
@@ -178,7 +180,7 @@ export default {
     },
     renderUserMarker(context) {
       console.log('绘制用户-单点绘制', context)
-      let key = parseFloat(context.data[0].lnglat.lng).toFixed(9) + ',' + parseFloat(context.data[0].lnglat.lat).toFixed(9)
+      let key = parseFloat(context.data[0].lnglat.lng).toFixed(6) + ',' + parseFloat(context.data[0].lnglat.lat).toFixed(6)
 
       let userItem = usersData.users[key]
 
@@ -211,7 +213,7 @@ export default {
         myJcMap.map.setBounds(this.getAmapBundles(context.clusterData))
       } else {
         //获取信息去通知显示详情
-        let key = parseFloat(context.lnglat.lng).toFixed(9) + ',' + parseFloat(context.lnglat.lat).toFixed(9)
+        let key = parseFloat(context.lnglat.lng).toFixed(6) + ',' + parseFloat(context.lnglat.lat).toFixed(6)
 
         let userItem = usersData.users[key]
 
