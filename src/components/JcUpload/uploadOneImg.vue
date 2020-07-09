@@ -51,7 +51,8 @@ export default {
   justify-content: center;
   .myImg {
     max-width: 100%;
-    max-height: 100%;
+    max-height: 180px;
+    object-fit: contain;
   }
 }
 </style>
