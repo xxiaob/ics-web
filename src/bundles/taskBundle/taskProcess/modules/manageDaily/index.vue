@@ -11,7 +11,7 @@
       </div>
       <!-- assigneeAreaPOS -->
       <el-form-item label="任务区域" prop="" :rules="rules.NOT_NULL">
-        <jc-task-area :areaType.sync="form.workAreaType" :selectedAreas.sync="form.assigneeAreaPOS" :orgTree="orgTree"></jc-task-area>
+        <jc-task-area :projectId="form.projectId" :emergency="emergency" :areaType.sync="form.workAreaType" :selectedAreas.sync="form.assigneeAreaPOS" :orgTree="orgTree"></jc-task-area>
       </el-form-item>
       <!-- peopleProps[peopleType] -->
       <el-form-item label="任务人员" prop="" :rules="rules.SELECT_NOT_NULL">

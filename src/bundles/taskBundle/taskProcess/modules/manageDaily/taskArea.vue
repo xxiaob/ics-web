@@ -26,12 +26,14 @@
 
 <script>
 import { TASK_AREA_TYPES } from '@/constant/Dictionaries'
-import { areaGridList } from '@/api/area'
+import { areaGridList, areaList } from '@/api/area'
 import { areaTypeList } from '@/api/areaType'
 
 export default {
   name: 'TaskProcessManageDailyArea',
   props: {
+    projectId: String,
+    emergency: false,
     selectedAreas: {
       type: Array,
       default: ()=>[]
@@ -49,9 +51,9 @@ export default {
       selfAreaType: this.areaType,
       TASK_AREA_TYPES,
       orgGrid: [],
+      projectGrid: [],
       filterText: '',
       filterArr: [],
-      filterArrGrid: [],
       objTree: {},
       gridTypes: [],
       areaTypeId: '',
@@ -63,7 +65,11 @@ export default {
       if (this.areaType === TASK_AREA_TYPES.ORG) {
         return this.orgTree
       } else {
-        return this.orgGrid
+        if (this.emergency) {
+          return this.projectGrid
+        } else {
+          return this.orgGrid
+        }
       }
     }
   },
@@ -92,9 +98,25 @@ export default {
         })
       },
       deep: true
+    },
+    projectId: {
+      immediate: true,
+      handler(val) {
+        if (val && this.emergency) {
+          this.projectAreaList(val)
+        }
+      }
     }
   },
   methods: {
+    async projectAreaList(val) {
+      const res = await areaList({ projectId: val, searchType: 2 })
+
+      this.projectGrid = this.formatGridTree(res)
+      this.filterArr = Object.keys(this.formatTreeToObj(this.projectGrid, true))
+      this.$emit('update:selectedAreas', [])
+      // console.log(res)
+    },
     formatGridTree(tree) {
       let trees = []
 
