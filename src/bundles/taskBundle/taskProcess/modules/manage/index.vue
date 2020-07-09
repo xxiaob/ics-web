@@ -6,7 +6,7 @@
           <span>{{user.userName}}</span>
         </el-form-item>
         <el-form-item label="项目名称" prop="projectId" :rules="rules.SELECT_NOT_NULL" class="jc-right-width45">
-          <el-cascader v-model="form.projectId" :options="projectList" :props="{expandTrigger:'hover',emitPath:false}" :disabled="!!projectId"></el-cascader>
+          <el-cascader v-model="form.projectId" :options="projectList" :props="{expandTrigger:'hover',emitPath:false}" :disabled="!!projectId" @change="changeProject"></el-cascader>
         </el-form-item>
       </div>
       <div class="jc-clearboth">
@@ -38,7 +38,7 @@
       </el-form-item>
       <!-- peopleProps[peopleType] -->
       <el-form-item label="任务人员" prop="" :rules="rules.SELECT_NOT_NULL">
-        <jc-task-people :peopleType.sync="peopleType" :selecteds.sync="peoples" :orgTree="orgTree"></jc-task-people>
+        <jc-task-people :emergency="emergency" :peopleType.sync="peopleType" :selecteds.sync="peoples" :orgTree="orgTree"></jc-task-people>
       </el-form-item>
       <el-form-item label="任务描述" prop="taskDesc" :rules="rules.NOT_NULL">
         <jc-editor v-model="form.taskDesc"></jc-editor>
@@ -103,6 +103,7 @@ export default {
   },
   data() {
     return {
+      emergency: false,
       projectListArr: [],
       projectList: [],
       peopleType: TASK_PEOPLE_TYPES.PEOPLE,
@@ -151,6 +152,12 @@ export default {
     await this.formatProjectList()
   },
   methods: {
+    changeProject(val) {
+      const res = this.EmergencySupport.filter(item=>item.value === val)
+
+      this.emergency = res.length ? true : false
+      // console.log('changeProject', this.emergency)
+    },
     userChange(val) {
       if (this.peopleType === TASK_PEOPLE_TYPES.ORG) {
         this.peoples = val
@@ -228,13 +235,13 @@ export default {
       }
     },
     formatFormData() {
-      let questionTaskSource = '', uploadFilePaths = []
+      let questionTaskSource = '', paths = []
 
       if (this.question) {
         this.taskSources.push(this.question) // bug 避免重复push  - 判断是否存在
         questionTaskSource = this.question.value
         this.taskSourceDisabled = true
-        uploadFilePaths = this.question.uploadFilePaths
+        paths = this.question.uploadFilePaths
       } else {
         this.taskSources = JSON.parse(JSON.stringify(TASK_SOURCES.VALUES))
         this.taskSourceDisabled = false
@@ -246,6 +253,8 @@ export default {
 
         const project = this.projectListArr.filter(item=>item.value == projectId)
         const newProjectId = (project[0] && project[0].value) || PROJECT_TYPES.NORMAL
+
+        this.changeProject(projectId)
 
         this.position = { position: taskPosition, name: taskPositionName }
         const form = {
@@ -291,10 +300,12 @@ export default {
           const project = this.projectListArr.filter(item=>item.value == this.projectId)
 
           newProjectId = (project[0] && project[0].value) || PROJECT_TYPES.NORMAL
+          this.changeProject(this.projectId)
         } else {
           newProjectId = PROJECT_TYPES.NORMAL
+          this.emergency = false
         }
-        return { ...defaultForm, taskSource: questionTaskSource, projectId: newProjectId, beginTime, endTime, date: [beginTime, endTime], uploadFilePaths }
+        return { ...defaultForm, taskSource: questionTaskSource, projectId: newProjectId, beginTime, endTime, date: [beginTime, endTime], uploadFilePaths: paths }
       }
     },
     onSubmit(ifStart) {

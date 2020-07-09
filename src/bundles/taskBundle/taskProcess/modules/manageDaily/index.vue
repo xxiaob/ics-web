@@ -3,7 +3,7 @@
     <el-form ref="form" label-width="80px" :model="form" class="jc-manage-form" size="small">
       <div class="jc-clearboth">
         <el-form-item label="项目名称" prop="projectId" :rules="rules.SELECT_NOT_NULL" class="jc-left-width45">
-          <el-cascader v-model="form.projectId" :options="projectList" :props="{expandTrigger:'hover',emitPath:false}"></el-cascader>
+          <el-cascader v-model="form.projectId" :options="projectList" :props="{expandTrigger:'hover',emitPath:false}" @change="changeProject"></el-cascader>
         </el-form-item>
         <el-form-item label="任务名称" prop="taskName" :rules="rules.Len50" class="jc-right-width45">
           <el-input v-model="form.taskName" placeholder="请输入任务名称"></el-input>
@@ -15,7 +15,7 @@
       </el-form-item>
       <!-- peopleProps[peopleType] -->
       <el-form-item label="任务人员" prop="" :rules="rules.SELECT_NOT_NULL">
-        <jc-task-people :peopleType.sync="peopleType" :selecteds.sync="peoples" :orgTree="orgTree"></jc-task-people>
+        <jc-task-people :emergency="emergency" :peopleType.sync="peopleType" :selecteds.sync="peoples" :orgTree="orgTree"></jc-task-people>
       </el-form-item>
       <el-form-item label="任务时间" prop="date" :rules="rules.SELECT_NOT_NULL">
         <el-date-picker style="width:40%" v-model="form.date" @change="changeDate" value-format="timestamp" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期">
@@ -92,6 +92,9 @@ export default {
   name: 'TaskProcessManageDaily',
   mixins: [FormMixins],
   props: {
+    EmergencySupport: {
+      type: Array
+    },
     orgObj: {
       type: Object
     },
@@ -115,6 +118,7 @@ export default {
   },
   data() {
     return {
+      emergency: false,
       TASK_PEOPLE_TYPES,
       TASK_FREQUENCYS,
       peopleType: TASK_PEOPLE_TYPES.PEOPLE,
@@ -149,6 +153,12 @@ export default {
     }
   },
   methods: {
+    changeProject(val) {
+      const res = this.EmergencySupport.filter(item=>item.value === val)
+
+      this.emergency = res.length ? true : false
+      // console.log('changeProject', this.emergency, this.EmergencySupport, val)
+    },
     delTime() {
       const len = this.taskTimes.length
 
@@ -173,6 +183,8 @@ export default {
     formatFormData() {
       if (this.options) {
         const { orgIds, assignees, detailViewVO: { businessKey, projectId, taskDesc, taskName, endDate, startDate }, taskTimePOS, workPeopleNbr, workTime, workAreaType, assigneeAreaPOS, ifOnTime, workFrequency } = this.options
+
+        this.changeProject(projectId)
 
         const project = this.projectListArr.filter(item=>item.value == projectId)
         const newProjectId = (project[0] && project[0].value) || PROJECT_TYPES.NORMAL
@@ -205,6 +217,7 @@ export default {
         }
         return form
       } else {
+        this.emergency = false
         this.peopleType = TASK_PEOPLE_TYPES.PEOPLE
         this.peoples = []
         return { ...defaultForm, projectId: PROJECT_TYPES.NORMAL }

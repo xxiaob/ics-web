@@ -39,7 +39,7 @@
 
     <jc-manage :orgTree="orgTree" :projectList="projectList" :projectListArr="projectListArr" :user="user" :options="info" :visible.sync="visible" @save-success="initData"></jc-manage>
 
-    <jc-manage-daily :orgTree="orgTree" :projectList="projectList" :projectListArr="projectListArr" :orgObj="orgObj" :orgId="orgId" :options="dailyInfo" :visible.sync="visibleDaily" @save-success="initData"></jc-manage-daily>
+    <jc-manage-daily :EmergencySupport="EmergencySupport" :orgTree="orgTree" :projectList="projectList" :projectListArr="projectListArr" :orgObj="orgObj" :orgId="orgId" :options="dailyInfo" :visible.sync="visibleDaily" @save-success="initData"></jc-manage-daily>
 
     <jc-detail-daily :orgTree="orgTree" :projectListArr="projectListArr" :orgObj="orgObj" :info="dailyInfo" :dailyDetailShow.sync="dailyDetailShow" v-show="dailyDetailShow" @save-success="initData"></jc-detail-daily>
 
@@ -68,6 +68,7 @@ export default {
   },
   data() {
     return {
+      EmergencySupport: [],
       TASK_SELECT_TYPES,
       orgTree: [],
       orgObj: {},

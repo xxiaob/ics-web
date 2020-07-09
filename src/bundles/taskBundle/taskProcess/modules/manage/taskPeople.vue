@@ -29,6 +29,7 @@ import { getOrgUserList } from '@/api/user'
 export default {
   name: 'TaskProcessManagePeople',
   props: {
+    emergency: false,
     selecteds: {
       type: Array,
       default: ()=>[]
@@ -55,6 +56,10 @@ export default {
   computed: {
     tree() {
       if (this.peopleType === TASK_PEOPLE_TYPES.ORG) {
+        if (this.emergency) {
+          this.$emit('update:selecteds', [])
+          return []
+        }
         return this.orgTree
       } else {
         return this.orgPeople
