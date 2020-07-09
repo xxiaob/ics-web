@@ -7,7 +7,7 @@
       <el-form-item label="排序">
         <el-input v-model.number="form.order" placeholder="请输入排序"></el-input>
       </el-form-item>
-      <el-form-item label="链接" prop="url" :rules="rules.NOT_NULL">
+      <el-form-item label="链接" prop="url">
         <el-input v-model="form.url" placeholder="请输入链接"></el-input>
       </el-form-item>
       <el-form-item label="启用" prop="enabled" :rules="rules.NOT_NULL">
