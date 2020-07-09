@@ -44,7 +44,7 @@ export default {
           let res = await getChannelByUserId({ userId: this.options.userId })
 
           if (res && res.channelName) {
-            this.$EventBus.$emit('screen-media-live', { users: [{ id: this.options.userId, name: this.options.userName, channelId: res.channelName }], type })
+            this.$EventBus.$emit('screen-media-live', { users: [{ id: this.options.userId, name: this.options.userName }], type, channelId: res.channelName })
           } else {
             this.$message.error('当前用户未在采集中')
           }
