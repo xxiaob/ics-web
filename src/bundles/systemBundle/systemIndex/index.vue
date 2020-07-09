@@ -15,7 +15,7 @@
         <el-table-column prop="systemName" label="系统名称" width="200"></el-table-column>
         <el-table-column prop="enabled" label="是否启用" width="80" :formatter="formatStatus"></el-table-column>
         <el-table-column prop="url" label="链接" width="200"></el-table-column>
-        <el-table-column prop="newWindow" label="是否新窗口打开" width="80" :formatter="formatStatus"></el-table-column>
+        <el-table-column prop="newWindow" label="是否新窗口打开" width="140" :formatter="formatStatus"></el-table-column>
         <el-table-column prop="order" label="排序" width="60"></el-table-column>
         <el-table-column prop="logo" label="logo">
           <template slot-scope="scope">
@@ -131,7 +131,7 @@ export default {
 <style lang="scss" scoped>
 .el-table /deep/ {
   img {
-    max-height: 60px;
+    max-height: 100px;
     max-width: 100%;
   }
 }

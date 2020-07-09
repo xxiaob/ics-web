@@ -24,7 +24,7 @@
       <el-form-item label="任务描述" prop="taskDesc" :rules="rules.NOT_NULL">
         <jc-editor v-model="form.taskDesc"></jc-editor>
       </el-form-item>
-      <div class="jc-clearboth" v-show="peopleType===TASK_PEOPLE_TYPES.PEOPLE">
+      <div class="jc-clearboth" v-if="peopleType===TASK_PEOPLE_TYPES.PEOPLE">
         <el-form-item label="任务频率" prop="workFrequency" :rules="rules.num" class="jc-left-width45">
           <el-select v-model.number="form.workFrequency" clearable="" filterable allow-create default-first-option placeholder="请选择或者输入任务频率">
             <el-option v-for="item in TASK_FREQUENCYS.VALUES" :key="item.value" :label="item.label" :value="item.value">
@@ -35,7 +35,7 @@
           <el-switch v-model="form.ifOnTime" :active-value="1" :inactive-value="0"></el-switch>
         </el-form-item>
       </div>
-      <div class="jc-clearboth" v-show="peopleType===TASK_PEOPLE_TYPES.PEOPLE">
+      <div class="jc-clearboth" v-if="peopleType===TASK_PEOPLE_TYPES.PEOPLE">
         <div class="jc-left-width45">
           <el-form-item label="在岗时长" prop="workTime" :rules="rules.NOT_NULL">
             <el-input v-model="form.workTime" placeholder="请输入在岗时长(单位小时)"></el-input>
