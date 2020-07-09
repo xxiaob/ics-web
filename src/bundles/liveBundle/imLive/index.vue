@@ -128,6 +128,7 @@ export default {
           this.users = users
           this.inviteType = inviteType
           //设置频道id
+          console.log('大屏传进来的channelId', channelId)
           this.channelId = channelId ? channelId : new Date().getTime().toString()
           const type = this.inviteTypes[inviteType][0]
 
