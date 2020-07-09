@@ -16,6 +16,7 @@ export default {
   data() {
     return {
       gatherUserIds: [], //正在采集的用户id 数组
+      abnormalUserIds: [], //异常的用户id 数组
       userTipVisible: true, //用户是否显示
       togetherVisible: true, //用户是否聚合
       locationUserId: null //定位的用户id
@@ -100,6 +101,22 @@ export default {
         }
         if (!data.collectUser.off && index < 0) {
           this.gatherUserIds.push(data.collectUser.userId)
+        }
+      } else if (data.type == 5) {
+        //用户考勤状态更新
+        if (data.attendance && data.attendance.length) {
+          data.attendance.forEach(item => {
+            let index = this.abnormalUserIds.indexOf(item.id)
+
+            //如果异常用户列表，用户存在，用户为正常，则从异常列表移除，如果用户不存在，异常，则增加
+            if (index > -1) {
+              if (item.status == 0) {
+                this.abnormalUserIds.splice(index, 1)
+              }
+            } else if (item.status == 1) {
+              this.abnormalUserIds.push(item.id)
+            }
+          })
         }
       }
       //处理用户信息
@@ -187,7 +204,10 @@ export default {
       if (this.userTipVisible) {
         content += `<div class="jc-marker-title">${userItem.userName}</div>`
       }
-      if (this.gatherUserIds.includes(userItem.userId)) {
+      //处理用户图标显示
+      if (this.abnormalUserIds.includes(userItem.userId)) {
+        content += `<img src=${JcUserIcons.abnormal} class="jc-marker-icon"/></div>`
+      } else if (this.gatherUserIds.includes(userItem.userId)) {
         content += `<img src=${JcUserIcons.gather} class="jc-marker-icon"/></div>`
       } else {
         content += `<img src=${JcUserIcons.online} class="jc-marker-icon"/></div>`
@@ -228,6 +248,9 @@ export default {
       if (usersData && usersData.markerCluster) {
         usersData.markerCluster.setMap(null)
       }
+      this.gatherUserIds = [] //重置用户聚合id数组
+      this.abnormalUserIds = [] //重置用户异常id数组
+
       usersData = { markerCluster: null, users: {}, lnglats: [] }
     },
     userLocation(data) {
