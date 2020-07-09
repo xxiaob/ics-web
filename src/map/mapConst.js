@@ -16,5 +16,6 @@ export const mapStyle = new JcEnum([
  * 点标记样式
  */
 export const markerStyle = new JcEnum([
-  { key: 'CENTER_MARKER', value: 'centerMarker', label: '居中的marker' }
+  { key: 'CENTER_MARKER', value: 'centerMarker', label: '居中的marker' },
+  { key: 'TRAJECTORY', value: 'trajectory', label: '轨迹' }
 ])

@@ -148,7 +148,7 @@ export const SearchOptions = {
   }
 }
 
-import { defaultMarker, centerMarker } from './marker/template'
+import { defaultMarker, centerMarker, trajectoryMasker } from './marker/template'
 //market配置参数
 export const markerOptions = {
   [mapStyle.BASE]: {
@@ -174,5 +174,11 @@ export const markerOptions = {
       anchor: [-15, -15]
     },
     getContent: centerMarker
+  },
+  [markerStyle.TRAJECTORY]: {
+    base: {
+      anchor: 'center'
+    },
+    getContent: trajectoryMasker
   }
 }
