@@ -118,7 +118,8 @@ export default {
     addRemark: 'task-service/task/addTaskRemark',
     listRemark: 'task-service/task/remarkSelect',
     listRecord: 'task-service/task/getTaskRecord',
-    postArea: 'task-service/task/getTaskPostArea'
+    postArea: 'task-service/task/getTaskPostArea',
+    listByProblemId: 'task-service/task/getTaskByProblemId'
   },
   question: {
     //问题管理

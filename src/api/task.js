@@ -118,3 +118,11 @@ export function taskListRemark(data) {
 export function taskListRecord(id) {
   return axios.post(API.task.listRecord + '?businessKey=' + id)
 }
+/**
+ * 根据问题id查询任务
+ * @param {object} id
+ * @returns {Object} axios 对象
+ */
+export function listByProblemId(id) {
+  return axios.post(API.task.listByProblemId + '?problemId=' + id)
+}

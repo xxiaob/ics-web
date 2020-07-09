@@ -95,6 +95,19 @@ export default {
     await this.getOrgTree()
     await this.formatProjectList()
     this.initData()
+
+
+    //问题页面 查看关联任务详情
+    const { taskStatus, businessKey } = this.$route.query
+
+    if (businessKey) {
+      console.log(taskStatus == TASK_STATES.PROCESSING)
+      if (taskStatus == TASK_STATES.PROCESSING) {
+        this.handle({ businessKey, taskType: TASK_TYPES.TEMPORARY }, true)
+      } else {
+        this.handle({ businessKey, taskType: TASK_TYPES.TEMPORARY }, false)
+      }
+    }
   },
   methods: {
     formatTime(row, column, cellValue) {

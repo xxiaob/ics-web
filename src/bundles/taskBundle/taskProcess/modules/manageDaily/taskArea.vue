@@ -115,7 +115,6 @@ export default {
       this.projectGrid = this.formatGridTree(res)
       this.filterArr = Object.keys(this.formatTreeToObj(this.projectGrid, true))
       this.$emit('update:selectedAreas', [])
-      // console.log(res)
     },
     formatGridTree(tree) {
       let trees = []
