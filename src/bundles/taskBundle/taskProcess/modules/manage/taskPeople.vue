@@ -25,10 +25,12 @@
 <script>
 import { TASK_PEOPLE_TYPES } from '@/constant/Dictionaries'
 import { getOrgUserList } from '@/api/user'
+import { getOrgUserListByProject } from '@/api/user'
 
 export default {
   name: 'TaskProcessManagePeople',
   props: {
+    projectId: String,
     emergency: false,
     selecteds: {
       type: Array,
@@ -47,6 +49,7 @@ export default {
       selfPeopleType: this.peopleType,
       TASK_PEOPLE_TYPES,
       orgPeople: [],
+      projectPeople: [],
       filterText: '',
       filterArr: [],
       filterArrPeople: [],
@@ -62,7 +65,7 @@ export default {
         }
         return this.orgTree
       } else {
-        return this.orgPeople
+        return this.projectPeople
       }
     }
   },
@@ -70,8 +73,8 @@ export default {
     const res = await getOrgUserList({})
 
     this.orgPeople = this.formatPeopleTree(res)
+    this.getProjectUsers('')
     setTimeout(()=>{
-      this.filterArr = Object.keys(this.formatTreeToObj(this.orgTree))
       this.checkedNodes = this.$refs.tree.getCheckedNodes()
     })
   },
@@ -92,9 +95,30 @@ export default {
         })
       },
       deep: true
+    },
+    projectId: {
+      immediate: true,
+      handler(val) {
+        // console.log('projectId', val)
+        if (val === '0') {
+          this.getProjectUsers('')
+        } else {
+          this.getProjectUsers(val)
+        }
+      }
     }
   },
   methods: {
+    async getProjectUsers(projectId) {
+      const res = await getOrgUserListByProject({ projectId })
+
+      this.projectPeople = this.formatPeopleTree(res)
+
+      if (this.peopleType === TASK_PEOPLE_TYPES.PEOPLE) {
+        this.filterArr = Object.keys(this.formatTreeToObj(this.projectPeople, true))
+        this.$emit('update:selecteds', [])
+      }
+    },
     formatPeopleTree(tree) {
       let trees = []
 
@@ -150,7 +174,7 @@ export default {
       if (value === TASK_PEOPLE_TYPES.ORG) {
         this.filterArr = Object.keys(this.formatTreeToObj(this.orgTree))
       } else {
-        this.filterArr = Object.keys(this.formatTreeToObj(this.orgPeople, true))
+        this.filterArr = Object.keys(this.formatTreeToObj(this.projectPeople, true))
       }
       this.filterText = ''
       this.$emit('update:peopleType', value)
