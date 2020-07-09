@@ -2,7 +2,7 @@
   <el-dialog :title="user.userName + '-轨迹查询'" :visible.sync="visible" width="1000px" :close-on-click-modal="false" :append-to-body="true">
     <el-form ref="form" :inline="true" :model="form" class="jc-tabfilter-form" size="small" @submit.native.prevent>
       <el-form-item label="日期" prop="date" :rules="rules.NOT_NULL">
-        <el-date-picker v-model="form.date" value-format="timestamp" type="datetimerange" :default-time="['00:00:00','23:59:59']" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
+        <el-date-picker v-model="form.date" value-format="timestamp" :picker-options="pickerOptions" type="datetimerange" :default-time="['00:00:00','23:59:59']" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
       </el-form-item>
       <el-form-item class="jc-tabfilter-btns">
         <el-button type="primary" :loading="loading" @click="onSubmit">查询</el-button>
@@ -30,7 +30,20 @@ export default {
       loading: false,
       visible: false,
       user: { userId: '56776731599568896', userName: '杨超' },
-      rules: { NOT_NULL }
+      rules: { NOT_NULL },
+      pickerOptions: {
+        shortcuts: [{
+          text: '6:00-9:00',
+          onClick(picker) {
+            window.picker = picker
+            const end = new Date()
+            const start = new Date()
+
+            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
+            picker.$emit('pick', [start, end])
+          }
+        }]
+      }
     }
   },
   created() {
@@ -114,9 +127,9 @@ export default {
     },
     drawPath(path, pathData) {
       //设置开始点
-      startMarker = new JcMapMarker({ map: myJcMap, titleVisible: false, position: path[0] })
+      startMarker = new JcMapMarker({ map: myJcMap, titleVisible: false, position: path[0], icon: '/static/mapIcons/trajectorystart.png' })
       //设置结束点
-      endMarker = new JcMapMarker({ map: myJcMap, titleVisible: false, position: path[path.length - 1] })
+      endMarker = new JcMapMarker({ map: myJcMap, titleVisible: false, position: path[path.length - 1], icon: '/static/mapIcons/trajectoryend.png' })
 
       //画线
       let polyline = new myJcMap.AMap.Polyline({ path, strokeColor: '#0183ff', strokeWeight: 6, showDir: true })

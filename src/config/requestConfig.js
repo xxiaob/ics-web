@@ -5,7 +5,7 @@ import RESPONSE_CODE from '@/constant/RESPONSE_CODE'
 import { getToken } from '@/libs/storage'
 
 //设置默认值 defaults
-axios.defaults.timeout = 1000 * 10 //设置请求超时时长
+axios.defaults.timeout = 1000 * 15 //设置请求超时时长
 //设置默认请求域
 axios.defaults.baseURL = process.env.API_HOST.base /*eslint-disable-line*/
 
