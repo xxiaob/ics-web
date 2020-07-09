@@ -18,6 +18,7 @@ export default {
   data() {
     return {
       gridOrg: null,
+      abnormalGridIds: [], //异常的网格id 数组
       areaTipVisibles: [], //网格区域对应类型是否显示名称
       areaAreaVisibles: [], //网格区域对应类型是否显示区域
       togetherVisibles: [] //网格区域对应类型是否聚合显示区域
@@ -25,12 +26,33 @@ export default {
   },
   created() {
     this.$EventBus.$on('org-change', this.areaMap) //监听行级别切换
+    this.$EventBus.$on('map-grid-change', this.mapGridChange) //岗点考勤状态变化
     this.$EventBus.$on('screen-grid-location', this.gridLocation) //监听网格定位
     this.$EventBus.$on('show-area-change', this.gridShowAreaChange) //监听区域显示切换
     this.$EventBus.$on('show-word-change', this.gridShowWordChange) //监听文字显示切换
     this.$EventBus.$on('show-together-change', this.gridTogetherChange) //监听聚合显示改变
   },
   methods: {
+    mapGridChange(data) {
+      if (data.type == 1) {
+        //岗点考勤状态更新
+        if (data.attendance && data.attendance.length) {
+          data.attendance.forEach(item => {
+            let index = this.abnormalGridIds.indexOf(item.id)
+
+            //如果异常岗点列表，岗点存在，岗点为正常，则从异常列表移除，如果岗点不存在，异常，则增加
+            if (index > -1) {
+              if (item.status == 0) {
+                this.abnormalGridIds.splice(index, 1)
+              }
+            } else if (item.status == 1) {
+              this.abnormalGridIds.push(item.id)
+            }
+          })
+        }
+      }
+      this.fitGrids()
+    },
     async areaMap(org) {
       MarkerCluster = await getMarkerCluster() //获取 MarkerCluster 对象
       //处理地图
@@ -171,7 +193,12 @@ export default {
       if (this.areaTipVisibles.includes(signItem.areaTypeId)) {
         content += `<div class="jc-marker-title">${signItem.areaName}</div>`
       }
-      content += `<img src=${JcIcons[signItem.icon].icon} class="jc-marker-icon"/></div>`
+      if (this.abnormalGridIds.includes(signItem.areaId)) {
+        content += `<img src=${JcIcons[signItem.icon].abnormal} class="jc-marker-icon"/></div>`
+      } else {
+        content += `<img src=${JcIcons[signItem.icon].icon} class="jc-marker-icon"/></div>`
+      }
+
       context.marker.setContent(content)
     },
     markerGridClusterClick(gridTypeMap, context) {
@@ -203,6 +230,7 @@ export default {
         }
       }
       gridAreas = {}
+      this.abnormalGridIds = [] //重置岗点异常id数组
     },
     gridLocation(data) {
       //网格定位
@@ -257,6 +285,7 @@ export default {
     this.clearGrids() //清除基础数据
     //去除事件监听
     this.$EventBus.$off('org-change', this.areaMap)
+    this.$EventBus.$off('map-grid-change', this.mapGridChange)
     this.$EventBus.$off('screen-grid-location', this.gridLocation)
     this.$EventBus.$off('show-area-change', this.gridShowAreaChange)
     this.$EventBus.$off('show-word-change', this.gridShowWordChange)
