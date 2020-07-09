@@ -1,25 +1,20 @@
 <template>
   <div class="jc-view-content" v-loading="loading" element-loading-background="rgba(0, 0, 0, 0)">
     <div class="jc-resource-warp">
-      <div class="jc-resource-item">
-        <video class="jc-video"></video>
-        <div class="jc-title"></div>
+      <div class="jc-resource-item" v-for="item in list" :key="item.id">
+        <video :src="item.url" class="jc-video" controls></video>
+        <div class="jc-title" v-text="item.name"></div>
       </div>
     </div>
     <view-empty v-if="list.length < 1"></view-empty>
-    <el-dialog title="视频播放" :visible.sync="dialogVideoVisible" width="800px" :close-on-click-modal="false" :append-to-body="true">
-      <video v-if="dialogVideoVisible" :src="dialogVideoUrl" autoplay controls width="100%"></video>
-    </el-dialog>
   </div>
 </template>
 <script>
 import { getRecording } from '@/api/live'
-import MediaMixins from '@/bundles/taskBundle/mixins/MediaMixins'
 
 export default {
   name: 'ScreenCommandUserDetailResources',
   props: ['options', 'project'],
-  mixins: [MediaMixins],
   components: {
     ViewEmpty: () =>import('@/bundles/screenBundle/command/modules/common/viewEmpty')
   },
@@ -43,6 +38,15 @@ export default {
       this.list = []
       try {
         let res = await getRecording({ initiator: '56783818509516800', videoType: 'Capture' })
+
+        let list = []
+
+        if (res && res.length) {
+          res.forEach(item => {
+            list.push({ id: item.id, name: item.videoName, url: item.videoUrl })
+          })
+        }
+        this.list = list
       } catch (error) {
         console.log(error)
       }

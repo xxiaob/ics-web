@@ -54,12 +54,15 @@ export default {
       this.clearMap()
     },
     clearMap() {
+      startMarker = null
+      endMarker = null
+      if (moveMarker) {
+        moveMarker.marker.pauseMove()
+        moveMarker = null
+      }
       if (myJcMap) {
         myJcMap.clearSign()
       }
-      startMarker = null
-      endMarker = null
-      moveMarker = null
     },
     async formatPath(res) {
       console.log('UserHistoryPosition', res)

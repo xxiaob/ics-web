@@ -34,7 +34,18 @@ export default {
   },
   methods: {
     async initData() {
+      try {
+        let res = await getByOrgId()
 
+        let list = []
+
+        if (res && res.length) {
+
+        }
+        this.list = list
+      } catch (error) {
+        console.log(error)
+      }
     }
   }
 }

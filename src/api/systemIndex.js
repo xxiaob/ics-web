@@ -56,5 +56,5 @@ import { getUser } from '@/libs/storage'
 export function getByOrgId() {
   let user = getUser()
 
-  return axios.post(API.systemIndex.getByOrgId + '?orgId=' + user.orgId)
+  return axios.get(API.systemIndex.getByOrgId + '?orgId=' + user.orgId)
 }
