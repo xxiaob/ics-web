@@ -156,7 +156,7 @@ export default {
         this.myMarker.name = name
         this.myMarker.show(center)
       } else {
-        this.myMarker = new JcMapMarker({ map: myJcMap, name, icon: '/static/mapIcons/temporarytasks.gif', position: center, mapStyle: markerStyle.TEMPORARY_TASKS })
+        this.myMarker = new JcMapMarker({ map: myJcMap, name, icon: '/static/mapIcons/temporarytasks.gif', position: center, mapStyle: markerStyle.CENTER_MARKER })
       }
     }
   },

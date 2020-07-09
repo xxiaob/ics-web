@@ -188,12 +188,14 @@ export default {
 
       let signItem = gridTypeMap.signs[key]
 
-      let content = '<div class="jc-marker-content">'
+      let isAbnormal = this.abnormalGridIds.includes(signItem.areaId) //当前岗点是否异常
+
+      let content = isAbnormal ? '<div class="jc-marker-content jc-market-center">' : '<div class="jc-marker-content">'
 
       if (this.areaTipVisibles.includes(signItem.areaTypeId)) {
         content += `<div class="jc-marker-title">${signItem.areaName}</div>`
       }
-      if (this.abnormalGridIds.includes(signItem.areaId)) {
+      if (isAbnormal) {
         content += `<img src=${JcIcons[signItem.icon].abnormal} class="jc-marker-icon"/></div>`
       } else {
         content += `<img src=${JcIcons[signItem.icon].icon} class="jc-marker-icon"/></div>`

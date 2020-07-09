@@ -199,7 +199,7 @@ export default {
 
       let userItem = usersData.users[key]
 
-      let content = '<div class="jc-marker-content">'
+      let content = '<div class="jc-marker-content jc-market-center">'
 
       if (this.userTipVisible) {
         content += `<div class="jc-marker-title">${userItem.userName}</div>`

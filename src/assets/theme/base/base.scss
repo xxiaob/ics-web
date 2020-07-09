@@ -324,11 +324,11 @@ input::-webkit-input-placeholder {
   position: relative;
   padding-top: 20px;
   width: 18px;
-  height: 54px;
+  height: 50px;
   text-align: center;
 
   &.jc-market-center {
-    width: 32px;
+    width: 30px;
   }
 }
 
@@ -343,6 +343,8 @@ input::-webkit-input-placeholder {
   border: solid 1px $jc-marker-color;
   border-radius: 2px;
   max-width: 100px;
+  height: 18px;
+  line-height: 16px;
   transform: translateX(-50%);
   text-align: center;
   white-space: nowrap;
@@ -353,8 +355,9 @@ input::-webkit-input-placeholder {
 }
 
 .jc-marker-icon {
+  display: block;
   width: 100%;
-  object-fit: contain;
+  height: 100%;
 }
 
 .jc-cluster-content {

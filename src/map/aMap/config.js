@@ -153,23 +153,23 @@ import { defaultMarker, centerMarker } from './marker/template'
 export const markerOptions = {
   [mapStyle.BASE]: {
     base: {
-      anchor: [-9, -54]
+      anchor: [-9, -50]
     },
     getContent: defaultMarker
   },
   [mapStyle.DARK]: {
     base: {
-      anchor: [-9, -54]
+      anchor: [-9, -50]
     },
     getContent: defaultMarker
   },
   [mapStyle.SATELLITE]: {
     base: {
-      anchor: [-9, -54]
+      anchor: [-9, -50]
     },
     getContent: defaultMarker
   },
-  [markerStyle.TEMPORARY_TASKS]: {
+  [markerStyle.CENTER_MARKER]: {
     base: {
       anchor: [-15, -15]
     },
