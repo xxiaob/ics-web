@@ -1,12 +1,12 @@
 <template>
   <div class="jc-view-content" v-loading="loading" element-loading-background="rgba(0, 0, 0, 0)">
-    <div class="jc-resource-warp">
+    <div class="jc-resource-warp" v-if="list.length">
       <div class="jc-resource-item" v-for="item in list" :key="item.id">
         <video :src="item.url" class="jc-video" controls></video>
         <div class="jc-title" v-text="item.name"></div>
       </div>
     </div>
-    <view-empty v-if="list.length < 1"></view-empty>
+    <view-empty v-else></view-empty>
   </div>
 </template>
 <script>
