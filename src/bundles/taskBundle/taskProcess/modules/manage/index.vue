@@ -228,12 +228,13 @@ export default {
       }
     },
     formatFormData() {
-      let questionTaskSource = ''
+      let questionTaskSource = '', uploadFilePaths = []
 
       if (this.question) {
         this.taskSources.push(this.question) // bug 避免重复push  - 判断是否存在
         questionTaskSource = this.question.value
         this.taskSourceDisabled = true
+        uploadFilePaths = this.question.uploadFilePaths
       } else {
         this.taskSources = JSON.parse(JSON.stringify(TASK_SOURCES.VALUES))
         this.taskSourceDisabled = false
@@ -293,7 +294,7 @@ export default {
         } else {
           newProjectId = PROJECT_TYPES.NORMAL
         }
-        return { ...defaultForm, taskSource: questionTaskSource, projectId: newProjectId, beginTime, endTime, date: [beginTime, endTime] }
+        return { ...defaultForm, taskSource: questionTaskSource, projectId: newProjectId, beginTime, endTime, date: [beginTime, endTime], uploadFilePaths }
       }
     },
     onSubmit(ifStart) {
