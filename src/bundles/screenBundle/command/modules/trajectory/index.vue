@@ -41,7 +41,7 @@ let getTime = function (date, time1, time2) {
     startTime = formatDate(date[0], true)
     endTime = formatDate(date[1], true)
   }
-  return [new Date(startTime + ' ' + time1), new Date(endTime + ' ' + time2)]
+  return [new Date(startTime + ' ' + time1).getTime(), new Date(endTime + ' ' + time2).getTime()]
 }
 
 export default {
@@ -90,14 +90,14 @@ export default {
         await initMoveAnimation() //加载动画组件
         await myJcMap.init(this.$refs.myMap) //等待地图初始化
         this.$nextTick(() => {
-          myJcMap.map.setPitch(60) //设置地图倾斜，呈现3D地图
+          myJcMap.map.setPitch(45) //设置地图倾斜，呈现3D地图
         })
       }
       if (user) {
         this.user = { userId: user.id, userName: user.name }
       }
       this.clearMap()
-      this.form.date = [new Date(today + ' 00:00:00'), new Date(today + ' 23:59:59')]
+      this.form.date = [new Date(today + ' 00:00:00').getTime(), new Date(today + ' 23:59:59').getTime()]
     },
     clearMap() {
       this.isPlay = false
@@ -125,6 +125,7 @@ export default {
     },
     resetPlay() {
       if (moveMarker) {
+        moveMarker.marker.off('moving', this.markerMoving)
         moveMarker.marker.stopMove()//开始动画
         moveMarker.hide()
       }
@@ -134,10 +135,14 @@ export default {
 
         moveMarker.marker.moveAlong(path, { duration: 200, autoRotation: true })
         moveMarker.marker.pauseMove()//暂停动画
+        moveMarker.marker.on('moving', this.markerMoving)
         if (this.isPlay) {
           this.isPlay = false
         }
       }
+    },
+    markerMoving(e) {
+      console.log(e.passedPath)
     },
     async formatPath(res) {
       console.log('UserHistoryPosition', res)
@@ -178,10 +183,10 @@ export default {
         } catch (error) {
           console.log(error)
         }
-        this.loading = false
       } else {
         this.$message.error('暂无轨迹')
       }
+      this.loading = false
     },
     drawPath() {
       //设置开始点
@@ -203,7 +208,7 @@ export default {
       this.loading = true
       this.$refs.form.validate(valid => {
         if (valid) {
-          getUserHistoryPosition({ userId: this.user.userId, startTime: this.form.date[0], endTime: this.form.date[1] }).then((res) => {
+          getUserHistoryPosition({ userId: this.user.userId, startTimestamp: this.form.date[0], endTimestamp: this.form.date[1] }).then((res) => {
             this.formatPath(res)
           }).catch(() => {
             this.loading = false
