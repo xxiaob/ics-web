@@ -33,11 +33,22 @@ let path = [] //记录处理的path坐标
 
 let pathData = {} //记录处理的详细数据
 
+//获取事件
+let getTime = function (date, time1, time2) {
+  let startTime = today, endTime = today
+
+  if (date && date.length == 2) {
+    startTime = formatDate(date[0], true)
+    endTime = formatDate(date[1], true)
+  }
+  return [new Date(startTime + ' ' + time1), new Date(endTime + ' ' + time2)]
+}
+
 export default {
   name: 'ScreenCommandUserDetailTrajectory',
   data() {
     return {
-      form: { date: [new Date(today + ' 00:00:00'), new Date(today + ' 23:59:59')] },
+      form: { date: '' },
       loading: false,
       visible: false,
       isPlay: false,
@@ -45,14 +56,24 @@ export default {
       rules: { NOT_NULL },
       pickerOptions: {
         shortcuts: [{
-          text: '6:00-9:00',
+          text: '6:00 ~ 9:00',
           onClick(picker) {
-            window.picker = picker
-            const end = new Date()
-            const start = new Date()
-
-            start.setTime(start.getTime() - 3600 * 1000 * 24 * 7)
-            picker.$emit('pick', [start, end])
+            picker.$emit('pick', getTime(picker.value, '6:00:00', '9:00:00'))
+          }
+        }, {
+          text: '9:00 ~ 12:00',
+          onClick(picker) {
+            picker.$emit('pick', getTime(picker.value, '9:00:00', '12:00:00'))
+          }
+        }, {
+          text: '12:00 ~ 15:00',
+          onClick(picker) {
+            picker.$emit('pick', getTime(picker.value, '12:00:00', '15:00:00'))
+          }
+        }, {
+          text: '15:00 ~ 18:00',
+          onClick(picker) {
+            picker.$emit('pick', getTime(picker.value, '15:00:00', '18:00:00'))
           }
         }]
       }
@@ -76,6 +97,7 @@ export default {
         this.user = { userId: user.id, userName: user.name }
       }
       this.clearMap()
+      this.form.date = [new Date(today + ' 00:00:00'), new Date(today + ' 23:59:59')]
     },
     clearMap() {
       this.isPlay = false
