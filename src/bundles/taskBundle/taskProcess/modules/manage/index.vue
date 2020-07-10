@@ -28,6 +28,7 @@
           <el-select v-model="form.taskSource" placeholder="选择任务来源" :disabled="taskSourceDisabled">
             <el-option v-for="item in taskSources" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
+          <span>{{taskSourceName}}</span>
         </el-form-item>
       </div>
       <el-form-item label="任务指派">
@@ -72,6 +73,7 @@ const defaultForm = {
   // projectType: '',
   taskName: '',
   taskSource: '',
+  taskSourceId: '',
   beginTime: '',
   endTime: '',
   taskDesc: '',
@@ -103,6 +105,7 @@ export default {
   },
   data() {
     return {
+      taskSourceName: '',
       emergency: false,
       projectListArr: [],
       projectList: [],
@@ -119,7 +122,7 @@ export default {
         NOT_NULL
       },
       orgTree: [],
-      taskSources: JSON.parse(JSON.stringify(TASK_SOURCES.VALUES)),
+      taskSources: TASK_SOURCES.VALUES,
       taskSourceDisabled: false,
       position: {}
     }
@@ -216,15 +219,6 @@ export default {
       }
       return trees
     },
-    formatQuestionForm() {
-      const { id, problemTitle } = this.$route.query
-
-      if (id) {
-        this.taskSources.push({ key: id, value: id, label: problemTitle })
-        this.form.taskSource = id
-        this.taskSourceDisabled = true
-      }
-    },
     changeDate(value) {
       if (value) {
         this.form.beginTime = value[0]
@@ -235,15 +229,15 @@ export default {
       }
     },
     formatFormData() {
-      let questionTaskSource = '', paths = []
+      let questionTaskSource = '', paths = [], taskSourceId = ''
 
       if (this.question) {
-        this.taskSources.push(this.question) // bug 避免重复push  - 判断是否存在
-        questionTaskSource = this.question.value
-        this.taskSourceDisabled = true
+        questionTaskSource = TASK_SOURCES.PROBLEMFEEDBACK
+        taskSourceId = this.question.value
         paths = this.question.uploadFilePaths
+        this.taskSourceName = this.question.label
+        this.taskSourceDisabled = true
       } else {
-        this.taskSources = JSON.parse(JSON.stringify(TASK_SOURCES.VALUES))
         this.taskSourceDisabled = false
       }
 
@@ -305,7 +299,7 @@ export default {
           newProjectId = PROJECT_TYPES.NORMAL
           this.emergency = false
         }
-        return { ...defaultForm, taskSource: questionTaskSource, projectId: newProjectId, beginTime, endTime, date: [beginTime, endTime], uploadFilePaths: paths }
+        return { ...defaultForm, taskSource: questionTaskSource, projectId: newProjectId, beginTime, endTime, date: [beginTime, endTime], uploadFilePaths: paths, taskSourceId }
       }
     },
     onSubmit(ifStart) {
