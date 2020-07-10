@@ -204,11 +204,7 @@ export default {
       }
     },
     taskSourceName() {
-      if (this.form.taskSourceName) {
-        return TASK_SOURCES.toString(this.form.taskSource) + ' ' + this.form.taskSourceName
-      } else {
-        return TASK_SOURCES.toString(this.form.taskSource)
-      }
+      return TASK_SOURCES.toString(this.form.taskSource) + ' ' + this.form.taskSourceName
     },
     formatUsers() {
       if (this.form.assignees && this.form.assignees.length) {

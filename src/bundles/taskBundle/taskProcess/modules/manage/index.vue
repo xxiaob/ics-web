@@ -25,10 +25,10 @@
           <span>{{form.taskPositionName}}</span>
         </el-form-item>
         <el-form-item label="任务来源" prop="taskSource" :rules="rules.SELECT_NOT_NULL" class="jc-right-width45">
-          <el-select v-model="form.taskSource" placeholder="选择任务来源" :disabled="taskSourceDisabled">
+          <el-select v-model="form.taskSource" placeholder="选择任务来源" :disabled="taskSourceDisabled" :class="{'jc-left-width45':taskSourceDisabled}">
             <el-option v-for="item in taskSources" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
-          <span>{{taskSourceName}}</span>
+          <div v-show="taskSourceDisabled" class="taskSourceName" :title="taskSourceName">{{taskSourceName}}</div>
         </el-form-item>
       </div>
       <el-form-item label="任务指派">
@@ -377,6 +377,13 @@ export default {
   content: "";
   display: table;
   clear: both;
+}
+.taskSourceName {
+  width: 52%;
+  float: right;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 .jc-map {
   height: 300px;
