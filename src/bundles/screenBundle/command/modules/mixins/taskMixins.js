@@ -3,6 +3,11 @@
  */
 import { JcMapMarker } from '@/map'
 import { markerStyle } from '@/map/mapConst'
+import { MAP_EVENT } from '@/constant/CONST'
+import { MESSAGE_TYPE } from '@/constant/Dictionaries'
+
+
+let userTasks = {} //记录
 
 export default {
   data() {
@@ -11,34 +16,44 @@ export default {
     }
   },
   created() {
-    this.$EventBus.$on('map-grid-change', this.mapTaskChange) //临时任务考勤状态
+    this.$EventBus.$on('map-task-change', this.mapTaskChange) //临时任务考勤状态
   },
   methods: {
     mapTaskChange(data) {
-      if (data.type == 1) {
-        //岗点考勤状态更新
-        // if (data.tasks && data.tasks.length) {
-        //   data.tasks.forEach(item => {
-        //     let index = this.abnormalGridIds.indexOf(item.id)
+      let myJcMap = this.getMyJcMap() //获取地图对象
 
-        //     //如果异常岗点列表，岗点存在，岗点为正常，则从异常列表移除，如果岗点不存在，异常，则增加
-        //     if (index > -1) {
-        //       if (item.status == 0) {
-        //         this.abnormalGridIds.splice(index, 1)
-        //       }
-        //     } else if (item.status == 1) {
-        //       this.abnormalGridIds.push(item.id)
-        //     }
-        //   })
-        // }
+      if (data.type == 1) {
+        //临时任务考勤状态更新
+        if (data.tasks && data.tasks.length) {
+          data.tasks.forEach(item => {
+            /**
+             * 如果地图有该任务报警，但是状态恢复正常，则取消显示
+             * 如果地图该任务报警不存在，且任务需要报警，则进行显示
+             */
+            if (userTasks[item.taskId]) {
+              if (item.status == 0) {
+                userTasks[item.taskId].marker.hide()
+                delete userTasks[item.taskId]
+              }
+            } else if (item.status == 1) {
+              let center = item.position.split(',')
+
+              let marker = new JcMapMarker({ map: myJcMap, name: item.taskName, icon: '/static/mapIcons/temporarytaskswarn.gif', position: center, mapStyle: markerStyle.CENTER_MARKER })
+
+              //添加监听
+              marker.on(MAP_EVENT.CLICK, () => {
+                this.$EventBus.$emit('view-component-change', { component: 'MessageDetail', options: { id: item.taskId, type: MESSAGE_TYPE.TEMPORARY } }) //通知窗口改变
+              })
+              userTasks[item.taskId] = { taskId: item.taskId, center, marker }
+            }
+          })
+        }
       }
-      // this.fitGrids()
     }
   },
   beforeDestroy() {
-    // this.clearUsers() //清除基础数据
-    // userMouseTool = null
-    // //去除事件监听
-    this.$EventBus.$off('map-grid-change', this.mapTaskChange)
+    userTasks = {}
+    //去除事件监听
+    this.$EventBus.$off('map-task-change', this.mapTaskChange)
   }
 }

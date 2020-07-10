@@ -195,7 +195,7 @@ export default {
     },
     renderUserMarker(context) {
       console.log('绘制用户-单点绘制', context)
-      let key = parseFloat(context.data[0].lnglat.lng).toFixed(6) + ',' + parseFloat(context.data[0].lnglat.lat).toFixed(6)
+      let key = this.getKeyByLngLat(context.data[0].lnglat.lng, context.data[0].lnglat.lat)
 
       let userItem = usersData.users[key]
 
@@ -231,7 +231,7 @@ export default {
         myJcMap.map.setBounds(this.getAmapBundles(context.clusterData))
       } else {
         //获取信息去通知显示详情
-        let key = parseFloat(context.lnglat.lng).toFixed(6) + ',' + parseFloat(context.lnglat.lat).toFixed(6)
+        let key = this.getKeyByLngLat(context.lnglat.lng, context.lnglat.lat)
 
         let userItem = usersData.users[key]
 

@@ -40,6 +40,7 @@ import TemporaryTasksMixins from './modules/mixins/temporaryTasksMixins' //临�
 import ScreenMapSocketMixins from './modules/mixins/screenMapSocketMixins' //大屏socket 连接
 import GridMixins from './modules/mixins/gridMixins' //网格处理
 import UserMixins from './modules/mixins/userMixins.js' //用户处理
+import TaskMixins from './modules/mixins/taskMixins' //任务处理
 import CommandHeader from './modules/header'//顶部
 import CommandMessage from './modules/message'//任务等消息弹窗
 
@@ -47,7 +48,7 @@ let myJcMap //个人 map 对象
 
 export default {
   name: 'ScreenCommand',
-  mixins: [OrgMixins, GridMixins, UserMixins, TemporaryTasksMixins, ScreenMapSocketMixins],
+  mixins: [OrgMixins, GridMixins, UserMixins, TaskMixins, TemporaryTasksMixins, ScreenMapSocketMixins],
   components: {
     CommandHeader,
     CommandOperate: () => import('./modules/operate'), //功能操作区域
@@ -170,6 +171,10 @@ export default {
         this.viewOptions = item.options
         this.viewComponent = item.component
       }
+    },
+    getKeyByLngLat(lng, lat) {
+      //根据经纬度去计算key
+      return parseFloat(lng).toFixed(6) + ',' + parseFloat(lat).toFixed(6)
     }
   },
   beforeDestroy() {
