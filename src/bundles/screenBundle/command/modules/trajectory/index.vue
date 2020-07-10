@@ -126,6 +126,7 @@ export default {
     resetPlay() {
       if (moveMarker) {
         moveMarker.marker.off('moving', this.markerMoving)
+        // moveMarker.marker.off('movealong', this.resetPlay)
         moveMarker.marker.stopMove()//开始动画
         moveMarker.hide()
       }
@@ -136,6 +137,7 @@ export default {
         moveMarker.marker.moveAlong(path, { duration: 200, autoRotation: true })
         moveMarker.marker.pauseMove()//暂停动画
         moveMarker.marker.on('moving', this.markerMoving)
+        // moveMarker.marker.on('movealong', this.resetPlay)
         if (this.isPlay) {
           this.isPlay = false
         }
