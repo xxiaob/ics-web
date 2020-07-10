@@ -78,13 +78,13 @@ export default {
     formatProject(row, column, cellValue) {
       const project = this.projectListArr.filter(item=>item.value == cellValue)
 
-      return (project[0] && project[0].label) || ''
+      return (project[0] && project[0].label) || PROJECT_TYPES.toString(PROJECT_TYPES.NORMAL)
     },
     async formatProjectList() {
       this.EmergencySupport = await this.getProjectList(PROJECT_TYPES.EmergencySupport)
       this.SpecialControl = await this.getProjectList(PROJECT_TYPES.SpecialControl)
 
-      this.projectListArr = [...PROJECT_TYPES.VALUES]
+      // this.projectListArr = [...PROJECT_TYPES.VALUES]
       if (this.EmergencySupport) {
         this.projectListArr = [...this.projectListArr, ...this.EmergencySupport]
       }
