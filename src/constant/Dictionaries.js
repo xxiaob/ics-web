@@ -185,7 +185,7 @@ export const MESSAGE_TYPE = new JcEnum([
   { key: 'TASK', value: '0', label: '日常任务' },
   { key: 'QUESTION', value: '1', label: '问题' },
   { key: 'EVENT', value: '2', label: '事件' },
-  { key: 'TEMPORARY', value: '3', label: '临时任务' }
+  { key: 'TEMPORARY', value: '4', label: '临时任务' }
 ])
 
 /** 用户在岗 考勤状态 */
