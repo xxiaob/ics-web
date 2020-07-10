@@ -198,7 +198,7 @@ export default {
   computed: {
     form() {
       if (this.info) {
-        return { ...this.info, ...this.info.detailViewVO, ...this.info.taskDetailVO }
+        return { ...this.info, ...this.info.detailViewVO, ...this.info.taskDetailVO, taskStatusName: this.info.taskStatusName }
       } else {
         return {}
       }

@@ -281,7 +281,7 @@ export default {
       } else if (row.taskType == TASK_TYPES.TEMPORARY) {
         const res = await taskGet(row.businessKey)
 
-        this.info = { ...row, ...res }
+        this.info = { ...row, ...res, taskStatusName: row.taskStatusName }
         this.info.handle = handle
         this.detailShow = true
       }
