@@ -7,7 +7,7 @@ import { getToken } from '@/libs/storage'
 //设置默认值 defaults
 axios.defaults.timeout = 1000 * 15 //设置请求超时时长
 //设置默认请求域
-axios.defaults.baseURL = process.env.API_HOST.base /*eslint-disable-line*/
+axios.defaults.baseURL = process.env.apiHostConfig.base /*eslint-disable-line*/
 
 //设置全局http请求
 let errorRun = () => {

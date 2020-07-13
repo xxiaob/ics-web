@@ -69,7 +69,7 @@ export default {
   },
   data() {
     return {
-      uploadUrl: process.env.API_HOST.base + api.upload,
+      uploadUrl: process.env.apiHostConfig.base + api.upload,
       uploadHeaders: { token: getToken() },
       loading: false
     }

@@ -4,7 +4,7 @@
 import API from './API'
 import qs from 'qs'
 
-const baseUrl = process.env.API_HOST.ws /*eslint-disable-line*/
+const baseUrl = process.env.apiHostConfig.ws /*eslint-disable-line*/
 import JcSocket from '@/libs/JcSocket'
 import { getToken } from '@/libs/storage'
 

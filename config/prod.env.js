@@ -14,7 +14,10 @@ for (let i = 0; i < process.argv.length; i++) {
 
 console.log(`building for ${evnMode}.host.js`)
 
+let sysConfigs = require(`../allConfigs/${evnMode}.host`)
+
 module.exports = {
   NODE_ENV: '"production"',
-  API_HOST: require(`../hosts/${evnMode}.host`)
+  apiHostConfig: sysConfigs.apiHostConfig,
+  aMapConfig: sysConfigs.aMapConfig
 }
