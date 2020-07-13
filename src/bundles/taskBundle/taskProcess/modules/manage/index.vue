@@ -229,12 +229,14 @@ export default {
       }
     },
     formatFormData() {
-      let questionTaskSource = '', paths = [], taskSourceId = ''
+      let questionTaskSource = '', paths = [], taskSourceId = '', position = '', positionName = ''
 
       if (this.question) {
         questionTaskSource = TASK_SOURCES.PROBLEMFEEDBACK
         taskSourceId = this.question.value
         paths = this.question.uploadFilePaths
+        position = this.question.position
+        positionName = this.question.positionName
         this.taskSourceName = this.question.label
         this.taskSourceDisabled = true
       } else {
@@ -282,7 +284,7 @@ export default {
         }
         return form
       } else {
-        this.position = {}
+        this.position = { position: position, name: positionName }
         this.peopleType = TASK_PEOPLE_TYPES.PEOPLE
         this.peoples = []
         const beginTime = new Date().getTime()
@@ -299,7 +301,8 @@ export default {
           newProjectId = PROJECT_TYPES.NORMAL
           this.emergency = false
         }
-        return { ...defaultForm, taskSource: questionTaskSource, projectId: newProjectId, beginTime, endTime, date: [beginTime, endTime], uploadFilePaths: paths, taskSourceId }
+        return { ...defaultForm, taskSource: questionTaskSource, projectId: newProjectId, beginTime, endTime, date: [beginTime, endTime], uploadFilePaths: paths, taskSourceId, taskPosition: position,
+          taskPositionName: positionName }
       }
     },
     onSubmit(ifStart) {

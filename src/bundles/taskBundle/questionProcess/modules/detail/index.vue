@@ -144,13 +144,15 @@ export default {
     },
     //生成任务
     async generateTask() {
-      const { id, problemTitle, uploadFilePaths } = this.form
+      const { id, problemTitle, uploadFilePaths, position, positionName } = this.form
 
       this.question = {
         key: id.toString(),
         value: id,
         label: problemTitle,
-        uploadFilePaths
+        uploadFilePaths,
+        position,
+        positionName
       }
       this.TaskManageShow = true
     },
