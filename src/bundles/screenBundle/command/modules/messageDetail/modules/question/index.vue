@@ -50,7 +50,7 @@
       </div>
     </div>
 
-    <div class="jc-footer">
+    <div class="jc-footer" v-if="form.auth">
       <el-button @click="toSuperior" :loading="loading" type="primary" size="small">反馈至上级</el-button>
       <el-button @click="generateTask" :loading="loading" type="primary" size="small">生成任务</el-button>
       <el-button @click="closeQuestion" :loading="loading" size="small">关闭问题</el-button>
@@ -62,7 +62,7 @@
 
 </template>
 <script>
-import { questionReport, questionGet, questionTypeList } from '@/api/question'
+import { questionReport, questionGet, questionTypeList, getProblemAuth } from '@/api/question'
 import MediaMixins from '@/bundles/taskBundle/mixins/MediaMixins'
 
 export default {
@@ -106,8 +106,9 @@ export default {
         this.loading = true
         try {
           const res = await questionGet(this.info.id)
+          const auth = await getProblemAuth(this.info.id)
 
-          this.form = { ...this.info, ...res }
+          this.form = { ...this.info, ...res, auth: auth.auth, taskId: auth.taskId }
           this.handleUrls(this.form.uploadFilePaths)
           this.loading = false
         } catch (error) {
@@ -183,6 +184,7 @@ export default {
         this.$message.success('操作成功')
         this.loading = false
         // this.$emit('save-success')
+        this.getDetail()
         this.$EventBus.$emit('view-component-back')
       } catch (error) {
         this.loading = false

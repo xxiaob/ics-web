@@ -131,7 +131,8 @@ export default {
     start: 'task-service/problem/start',
     report: 'task-service/problem/report',
     get: 'task-service/problem/getProblemTask',
-    typeList: 'task-service/problem/getProblemTypes'
+    typeList: 'task-service/problem/getProblemTypes',
+    getProblemAuth: 'task-service/problem/getProblemAuth'
   },
   pttGroup: {
     //PTT群组

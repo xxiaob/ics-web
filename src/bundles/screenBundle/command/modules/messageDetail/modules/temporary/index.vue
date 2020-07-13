@@ -380,6 +380,7 @@ export default {
         this.$message.success('操作成功')
         this.dialogVisibleHandle = false
         this.loading = false
+        this.getDetail()
         this.$EventBus.$emit('view-component-back')
       } catch (e) {
         this.loading = false

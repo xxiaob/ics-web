@@ -77,3 +77,11 @@ export function questionReport(data) {
 export function questionTypeList() {
   return axios.post(API.question.typeList)
 }
+/**
+ * 用户是否具有问题处理权限
+ * @param {String} id
+ * @returns {Object} axios 对象
+ */
+export function getProblemAuth(id) {
+  return axios.post(API.question.getProblemAuth + '?businessKey=' + id)
+}
