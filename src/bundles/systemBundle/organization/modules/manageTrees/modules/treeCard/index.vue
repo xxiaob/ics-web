@@ -8,8 +8,8 @@
         <div class="jc-tree-options" v-if="edit" v-on:click.stop>
           <template v-if="node.level > 1">
             <el-button type="text" size="small" icon="el-icon-delete" @click="del(data)"></el-button>
-            <el-button type="text" size="small" icon="el-icon-edit-outline" @click="manage(data, 1)"></el-button>
           </template>
+          <el-button type="text" size="small" icon="el-icon-edit-outline" @click="manage(data, 1)"></el-button>
           <el-button type="text" size="small" icon="el-icon-circle-plus-outline" @click="manage(data, 2)"></el-button>
         </div>
       </div>
