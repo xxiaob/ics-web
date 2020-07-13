@@ -49,7 +49,7 @@ import { createNamespacedHelpers } from 'vuex'
 const { mapState } = createNamespacedHelpers('user')
 
 export default {
-  name: 'TaskQuestionProcessIndex',
+  name: 'QuestionProcessIndex',
   mixins: [PaginationMixins],
   components: {
     TabFilter: () => import('./modules/tabFilter'),

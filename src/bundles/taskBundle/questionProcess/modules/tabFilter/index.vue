@@ -29,7 +29,7 @@
 <script>
 import { QUESTION_TYPES } from '@/constant/Dictionaries'
 export default {
-  name: 'TaskQuestionProcessFilter',
+  name: 'QuestionProcessFilter',
   props: {
     types: {
       type: Array,

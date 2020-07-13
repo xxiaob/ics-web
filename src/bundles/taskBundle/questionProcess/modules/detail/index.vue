@@ -69,7 +69,7 @@ import { questionReport } from '@/api/question'
 import MediaMixins from '../../../mixins/MediaMixins'
 
 export default {
-  name: 'TaskQuestionProcessDetail',
+  name: 'QuestionProcessDetail',
   props: {
     orgTree: {
       type: Array
