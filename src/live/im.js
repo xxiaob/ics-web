@@ -23,7 +23,7 @@ export class IM {
 
   /**
    * 初始化
-   * @param {Object} authToken 用户名
+   * @param {Object} authToken
    * @param {String} authToken.appkey
    * @param {String} authToken.random_str 随机数
    * @param {String} authToken.timestamp  时间戳
@@ -179,6 +179,7 @@ export class IM {
    * @param {String} obj.isExit "0":退出房间, "1":结束聊天
   */
   sendSingleMsg(username, obj) {
+    this.console('开始发送消息', username, obj)
     obj = { inviteDevice: '3', ...obj }
     this.JIM.sendSingleMsg({
       target_username: username,
