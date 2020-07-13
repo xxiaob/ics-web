@@ -14,7 +14,7 @@ for (let i = 0; i < process.argv.length; i++) {
 
 console.log(`building for ${evnMode}.host.js`)
 
-let sysConfigs = require(`../allConfigs/${evnMode}.host`)
+let sysConfigs = require(`../allConfigs/${evnMode}.config`)
 
 module.exports = {
   NODE_ENV: '"production"',
