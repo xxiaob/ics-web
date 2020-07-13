@@ -112,7 +112,7 @@ export function taskListRemark(data) {
 }
 /**
  * 列表流转记录
- * @param {object} id
+ * @param {String} id
  * @returns {Object} axios 对象
  */
 export function taskListRecord(id) {
@@ -120,9 +120,17 @@ export function taskListRecord(id) {
 }
 /**
  * 根据问题id查询任务
- * @param {object} id
+ * @param {String} id
  * @returns {Object} axios 对象
  */
 export function listByProblemId(id) {
   return axios.post(API.task.listByProblemId + '?problemId=' + id)
+}
+/**
+ * 用户是否具有任务处理权限
+ * @param {String} id
+ * @returns {Object} axios 对象
+ */
+export function getTaskAuth(id) {
+  return axios.post(API.task.getTaskAuth + '?businessKey=' + id)
 }
