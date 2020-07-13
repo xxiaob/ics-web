@@ -10,16 +10,16 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <!-- <el-form-item label="问题位置" prop="problemPosition" :rules="rules.NOT_NULL">
-        <el-input v-model="form.problemPosition" style="display:none"></el-input>
-        <span>{{form.problemPositionName}}</span>
+      <el-form-item label="问题位置" prop="position" :rules="rules.NOT_NULL">
+        <el-input v-model="form.position" style="display:none"></el-input>
+        <span>{{form.positionName}}</span>
       </el-form-item>
       <el-form-item>
         <div class="jc-map">
           <div class="jc-map-tip">右键点击地图选中位置</div>
           <map-user-marker v-model="position"></map-user-marker>
         </div>
-      </el-form-item> -->
+      </el-form-item>
       <el-form-item label="问题描述" prop="problemDesc" :rules="rules.NOT_NULL">
         <!-- <el-input v-model="form.problemDesc" placeholder="请输入问题描述" type="textarea"></el-input> -->
         <jc-editor v-model="form.problemDesc"></jc-editor>
@@ -45,8 +45,8 @@ let defaultForm = {
   problemTitle: '',
   problemType: '',
   uploadFilePaths: [],
-  problemPosition: '',
-  problemPositionName: ''
+  position: '',
+  positionName: ''
 }
 
 export default {
@@ -82,8 +82,8 @@ export default {
   watch: {
     position: {
       handler(val) {
-        this.form.problemPosition = val.position
-        this.form.problemPositionName = val.name
+        this.form.position = val.position
+        this.form.positionName = val.name
       },
       deep: true
     }
@@ -91,9 +91,9 @@ export default {
   methods: {
     formatFormData() {
       if (this.options) {
-        const { id, taskId, orgId, userName, problemDesc, problemTitle, problemType, uploadFilePaths, problemPosition, problemPositionName } = this.options
+        const { id, taskId, orgId, userName, problemDesc, problemTitle, problemType, uploadFilePaths, position, positionName } = this.options
 
-        this.position = { position: problemPosition, name: problemPositionName }
+        this.position = { position: position, name: positionName }
         return {
           id,
           taskId,
@@ -101,8 +101,8 @@ export default {
           userName,
           problemDesc,
           problemTitle,
-          problemPositionName,
-          problemPosition,
+          positionName,
+          position,
           problemType: problemType.toString(),
           uploadFilePaths
         }

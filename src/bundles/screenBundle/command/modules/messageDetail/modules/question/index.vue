@@ -23,6 +23,10 @@
         <div class="jc-detail-content">{{formatType(form.problemType)}}</div>
       </div>
       <div class="jc-detail-warp">
+        <div class="jc-detail-label">问题位置</div>
+        <div class="jc-detail-content">{{form.positionName}}</div>
+      </div>
+      <div class="jc-detail-warp">
         <div class="jc-detail-label">问题描述</div>
         <div class="jc-detail-content">
           <div v-html="form.problemDesc"></div>

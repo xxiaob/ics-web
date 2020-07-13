@@ -24,6 +24,9 @@
           <el-form-item label="问题类型">
             <span>{{formatType(form.problemType)}}</span>
           </el-form-item>
+          <el-form-item label="问题位置">
+            <span>{{form.positionName}}</span>
+          </el-form-item>
           <el-form-item label="问题描述">
             <!-- <span>{{form.problemDesc}}</span> -->
             <div v-html="form.problemDesc"></div>
