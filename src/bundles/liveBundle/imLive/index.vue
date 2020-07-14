@@ -136,7 +136,7 @@ export default {
           this.$message.info('正在发起' + type)
           this.title = type
           this.inviteAllUsers(...this.inviteTypes[inviteType][1], users)
-          if (this.inviteType === '4' || this.inviteType === '5' || this.inviteType === '3' || this.inviteType === '2') {
+          if (this.inviteType === '4' || this.inviteType === '5') {
             this.timeout = setTimeout(()=>{
               this.$message.info('对方未接听')
               this.confirmExit()
