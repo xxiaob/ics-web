@@ -40,8 +40,8 @@
       </div>
       <div class="jc-clearboth" v-if="peopleType===TASK_PEOPLE_TYPES.PEOPLE">
         <div class="jc-left-width45">
-          <el-form-item label="在岗时长" prop="workTime" :rules="rules.NOT_NULL">
-            <el-input v-model="form.workTime" placeholder="请输入在岗时长(单位小时)"></el-input>
+          <el-form-item label="在岗时长" prop="workTime" :rules="rules.num">
+            <el-input v-model.number="form.workTime" placeholder="请输入在岗时长(单位小时)"></el-input>
           </el-form-item>
           <el-form-item label="在岗人数" prop="workPeopleNbr" :rules="rules.num">
             <el-input v-model.number="form.workPeopleNbr" type="number" placeholder="请输入在岗人数"></el-input>
@@ -134,7 +134,7 @@ export default {
       loading: false,
       rules: {
         Len50: getStringRule(1, 50),
-        num: getNumberRule(false),
+        num: getNumberRule(true, null, 0),
         SELECT_NOT_NULL,
         NOT_NULL
       },
@@ -196,7 +196,7 @@ export default {
         const project = this.projectListArr.filter(item=>item.value == projectId)
         const newProjectId = (project[0] && project[0].value) || PROJECT_TYPES.NORMAL
 
-        const form = { businessKey, projectId: newProjectId, taskName, beginTime: startDate, endTime: endDate, taskDesc, date: [startDate, endDate], taskTimePOS, workPeopleNbr, workTime, workAreaType,
+        const form = { businessKey, projectId: newProjectId, taskName, beginTime: startDate, endTime: endDate, taskDesc, date: [startDate, endDate], taskTimePOS, workPeopleNbr, workTime: Number(workTime), workAreaType,
           assigneeAreaPOS: assigneeAreaPOS.map(item=>item.areaId), ifOnTime, workFrequency }
 
         const res = TASK_FREQUENCYS.VALUES.filter(item=>item.value === workFrequency)

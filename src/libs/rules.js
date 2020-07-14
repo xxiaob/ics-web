@@ -75,15 +75,15 @@ export function getNumberRule(ignore = false, max, min) {
   let extraRules = []
 
   if (max) {
-    extraRules.push({ max, message: `数字不大于${max}` })
+    extraRules.push({ type: 'number', max, message: `数字不大于${max}` })
   }
-  if (min) {
-    extraRules.push({ min, message: `数字不小于${min}` })
+  if (min !== 'undefined') {
+    extraRules.push({ type: 'number', min, message: `数字不小于${min}` })
   }
   if (ignore) {
-    return [{ type: 'number', message: '请输入数字' }]
+    return [...NOT_NULL, { type: 'number', message: '请输入数字' }, ...extraRules]
   }
-  return [...NOT_NULL, { type: 'number', message: '请输入数字' }]
+  return [{ type: 'number', message: '请输入数字' }, ...extraRules]
 }
 
 /**
