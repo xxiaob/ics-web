@@ -230,6 +230,7 @@ export default {
         this.emergency = false
         this.peopleType = TASK_PEOPLE_TYPES.PEOPLE
         this.peoples = []
+        this.workFrequency = null
         return { ...defaultForm, projectId: PROJECT_TYPES.NORMAL }
       }
     },
