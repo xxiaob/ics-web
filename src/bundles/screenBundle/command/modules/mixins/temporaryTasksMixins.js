@@ -15,12 +15,6 @@ export default {
   computed: {
     temporaryTaskprojectId() {
       return this.project.projectId || PROJECT_TYPES.NORMAL
-    },
-    temporaryTaskProject() {
-      if (this.project.id) {
-        return [{ value: this.project.projectType, label: PROJECT_TYPES.toString(this.project.projectType) }]
-      }
-      return [{ value: PROJECT_TYPES.NORMAL, label: PROJECT_TYPES.toString(PROJECT_TYPES.NORMAL) }]
     }
   },
   methods: {

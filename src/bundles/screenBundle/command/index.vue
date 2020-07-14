@@ -25,7 +25,7 @@
       </keep-alive>
     </transition>
     <!-- 临时任务下发 -->
-    <temporary-tasks-manage :projectList="temporaryTaskProject" :projectId="temporaryTaskprojectId" :visible.sync="temporaryTaskVisible" @save-success="temporaryTaskSuccess"></temporary-tasks-manage>
+    <temporary-tasks-manage :projectId="temporaryTaskprojectId" :visible.sync="temporaryTaskVisible" @save-success="temporaryTaskSuccess"></temporary-tasks-manage>
     <!-- 音视频处理 -->
     <media-live></media-live>
     <!-- 人员轨迹处理 -->

@@ -169,9 +169,9 @@ export default {
         this.peoples = [...new Set([...this.peoples, ...val])]
       }
     },
-    async  formatProjectList() {
-      this.EmergencySupport = await this.getProjectList(PROJECT_TYPES.EmergencySupport)
-      this.SpecialControl = await this.getProjectList(PROJECT_TYPES.SpecialControl)
+    async formatProjectList() {
+      this.EmergencySupport = await this.getProjectList(PROJECT_TYPES.EmergencySupport) || []
+      this.SpecialControl = await this.getProjectList(PROJECT_TYPES.SpecialControl) || []
 
       // this.projectListArr = [...PROJECT_TYPES.VALUES]
       this.projectListArr = []
