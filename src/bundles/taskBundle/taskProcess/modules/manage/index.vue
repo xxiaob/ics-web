@@ -170,8 +170,8 @@ export default {
       }
     },
     async formatProjectList() {
-      this.EmergencySupport = await this.getProjectList(PROJECT_TYPES.EmergencySupport) || []
-      this.SpecialControl = await this.getProjectList(PROJECT_TYPES.SpecialControl) || []
+      this.EmergencySupport = await this.getProjectList(PROJECT_TYPES.EmergencySupport)
+      this.SpecialControl = await this.getProjectList(PROJECT_TYPES.SpecialControl)
 
       // this.projectListArr = [...PROJECT_TYPES.VALUES]
       this.projectListArr = []
@@ -185,7 +185,7 @@ export default {
       this.projectList = PROJECT_TYPES.VALUES.map(item=>{
         const { value, label, key } = item
 
-        return { value, label, children: this[key] || null }
+        return { value, label, children: this[key] && this[key].length ? this[key] : null }
       })
     },
     async getProjectList(projectType) {
@@ -194,7 +194,7 @@ export default {
       if (res && res.length) {
         return res.map(item=>({ value: item.projectId, label: item.projectName }))
       } else {
-        return null
+        return []
       }
     },
     formatOrgTree(child) {
