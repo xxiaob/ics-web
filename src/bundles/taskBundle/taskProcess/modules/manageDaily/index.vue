@@ -25,12 +25,15 @@
         <jc-editor v-model="form.taskDesc"></jc-editor>
       </el-form-item>
       <div class="jc-clearboth" v-if="peopleType===TASK_PEOPLE_TYPES.PEOPLE">
-        <el-form-item label="任务频率" prop="workFrequency" :rules="rules.num" class="jc-left-width45">
-          <el-select v-model.number="form.workFrequency" clearable="" filterable allow-create default-first-option placeholder="请选择或者输入任务频率">
-            <el-option v-for="item in TASK_FREQUENCYS.VALUES" :key="item.value" :label="item.label" :value="item.value">
-            </el-option>
-          </el-select>
-        </el-form-item>
+        <div class="jc-left-width45">
+          <el-form-item label="任务频率" prop="workFrequency" :rules="rules.num" class="workFrequency" :class="{custom:workFrequency===0}">
+            <el-select v-model="workFrequency" clearable placeholder="请选择任务频率" @change="changeWorkFrequency">
+              <el-option v-for="item in TASK_FREQUENCYS.VALUES" :key="item.value" :label="item.label" :value="item.value">
+              </el-option>
+            </el-select>
+            <el-input v-model.number="form.workFrequency" placeholder="请输入任务频率"></el-input>
+          </el-form-item>
+        </div>
         <el-form-item label="准点到岗" prop="ifOnTime" :rules="rules.num" class="jc-right-width45">
           <el-switch v-model="form.ifOnTime" :active-value="1" :inactive-value="0"></el-switch>
         </el-form-item>
@@ -81,11 +84,11 @@ const defaultForm = {
   orgIds: [],
   userIds: [],
   date: null,
-  workTime: 0,
-  workPeopleNbr: 0,
+  workTime: null,
+  workPeopleNbr: null,
   taskTimePOS: [],
   ifOnTime: 1,
-  workFrequency: 1
+  workFrequency: null
 }
 
 export default {
@@ -118,6 +121,7 @@ export default {
   },
   data() {
     return {
+      workFrequency: null,
       emergency: false,
       TASK_PEOPLE_TYPES,
       TASK_FREQUENCYS,
@@ -153,6 +157,9 @@ export default {
     }
   },
   methods: {
+    changeWorkFrequency(val) {
+      this.form.workFrequency = val ? val : null
+    },
     changeProject(val) {
       const res = this.EmergencySupport.filter(item=>item.value === val)
 
@@ -192,6 +199,9 @@ export default {
         const form = { businessKey, projectId: newProjectId, taskName, beginTime: startDate, endTime: endDate, taskDesc, date: [startDate, endDate], taskTimePOS, workPeopleNbr, workTime, workAreaType,
           assigneeAreaPOS: assigneeAreaPOS.map(item=>item.areaId), ifOnTime, workFrequency }
 
+        const res = TASK_FREQUENCYS.VALUES.filter(item=>item.value === workFrequency)
+
+        this.workFrequency = res.length ? workFrequency : 0
         const times = []
 
         if (taskTimePOS && taskTimePOS.length) {
@@ -318,6 +328,19 @@ export default {
   height: 160px;
   /deep/ .w-e-text-container {
     height: 120px !important;
+  }
+}
+.workFrequency {
+  .el-input {
+    display: none;
+  }
+}
+.custom {
+  .el-input,
+  .el-select {
+    width: 50%;
+    display: block;
+    float: left;
   }
 }
 </style>

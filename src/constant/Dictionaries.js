@@ -124,7 +124,8 @@ export const TASK_PEOPLE_TYPES = new JcEnum([
 export const TASK_FREQUENCYS = new JcEnum([
   { key: 'DAT', value: 1, label: '日' },
   { key: 'WEEK', value: 7, label: '周' },
-  { key: 'MONTH', value: 30, label: '月' }
+  { key: 'MONTH', value: 30, label: '月' },
+  { key: 'CUSTOM', value: 0, label: '自定义' }
 ])
 
 /**
