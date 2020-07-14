@@ -8,10 +8,16 @@
         <el-button type="primary" :loading="loading" @click="onSubmit">查询</el-button>
       </el-form-item>
     </el-form>
-    <div class="jc-map-warp" ref="myMap" v-loading="loading"></div>
-    <div class="jc-trajectory-controll">
-      <i class="jc-trajectory-item" :class="isPlay ? 'el-icon-video-pause' : 'el-icon-video-play'" :title="isPlay ? '暂停' : '播放'" @click="goPlay"></i>
-      <i class="jc-trajectory-item el-icon-refresh" title="重新播放" @click="resetPlay"></i>
+    <div class="jc-trajectory-warp">
+      <div class="jc-trajectory-info">
+        <div class="jc-trajectory-speed">{{runInfo.speed}}<span class="jc-trajectory-unit">KM/H</span></div>
+        <div class="jc-trajectory-addr" v-text="runInfo.addr"></div>
+      </div>
+      <div class="jc-map-warp" ref="myMap" v-loading="loading"></div>
+      <div class="jc-trajectory-controll">
+        <i class="jc-trajectory-item" :class="isPlay ? 'el-icon-video-pause' : 'el-icon-video-play'" :title="isPlay ? '暂停' : '播放'" @click="goPlay"></i>
+        <i class="jc-trajectory-item el-icon-refresh" title="重新播放" @click="resetPlay"></i>
+      </div>
     </div>
   </el-dialog>
 </template>
@@ -52,7 +58,8 @@ export default {
       loading: false,
       visible: false,
       isPlay: false,
-      user: { userId: '', userName: '' },
+      user: { userId: '', userName: '' }, //用户信息
+      runInfo: { addr: '--', speed: 0 }, //运行信息
       rules: { NOT_NULL },
       pickerOptions: {
         shortcuts: [{
@@ -81,6 +88,9 @@ export default {
   },
   created() {
     this.$EventBus.$on('screen-user-trajectory', this.initData) //监听显示人员轨迹
+    // setTimeout(() => {
+    //   this.initData({ id: '56783818509516800', name: '李向玉江宁' })
+    // }, 5000)
   },
   methods: {
     async initData(user) {
@@ -109,6 +119,7 @@ export default {
       }
       path = [] //记录处理的path坐标
       pathData = {} //记录处理的详细数据
+      this.runInfo = { addr: '--', speed: 0 } //设置运行信息
       if (myJcMap) {
         myJcMap.clearSign()
       }
@@ -116,9 +127,9 @@ export default {
     goPlay() {
       if (moveMarker) {
         if (this.isPlay) {
-          moveMarker.marker.pauseMove()//暂停动画
+          moveMarker.marker.stopMove()//暂停动画
         } else {
-          moveMarker.marker.startMove()//开始动画
+          moveMarker.marker.resumeMove()//开始动画
         }
         this.isPlay = !this.isPlay
       }
@@ -126,7 +137,6 @@ export default {
     resetPlay() {
       if (moveMarker) {
         moveMarker.marker.off('moving', this.markerMoving)
-        // moveMarker.marker.off('movealong', this.resetPlay)
         moveMarker.marker.stopMove()//开始动画
         moveMarker.hide()
       }
@@ -135,16 +145,41 @@ export default {
         moveMarker = new JcMapMarker({ map: myJcMap, position: path[0], icon: '/static/mapIcons/trajectorycar.png', mapStyle: markerStyle.TRAJECTORY })
 
         moveMarker.marker.moveAlong(path, { duration: 200, autoRotation: true })
-        moveMarker.marker.pauseMove()//暂停动画
+        moveMarker.marker.stopMove()//暂停动画
         moveMarker.marker.on('moving', this.markerMoving)
-        // moveMarker.marker.on('movealong', this.resetPlay)
         if (this.isPlay) {
           this.isPlay = false
         }
       }
     },
     markerMoving(e) {
-      console.log(e.passedPath)
+      let lastP = e.passedPath[e.passedPath.length - 1]
+
+      let key = this.getKeyByLngLat(lastP.lng, lastP.lat)
+
+      if (key != this.runInfo.key && pathData[key]) {
+        this.runInfo = { addr: pathData[key].d, speed: pathData[key].s, key } //设置运行信息
+        this.setMarketContent() //更新图标
+      }
+    },
+    setMarketContent() {
+      let icon = moveMarker.icon //设置当前icon
+
+      let speed = parseFloat(this.runInfo.speed)
+
+      if (speed < 10) {
+        icon = '/static/mapIcons/trajectoryuser.png'
+      } else if (speed < 20) {
+        icon = '/static/mapIcons/trajectorybicycle.png'
+      } else if (speed < 40) {
+        icon = '/static/mapIcons/trajectorymtcycle.png'
+      } else {
+        icon = '/static/mapIcons/trajectorycar.png'
+      }
+      if (icon != moveMarker.icon) {
+        moveMarker.icon = icon
+        moveMarker.setContent() //重设内容
+      }
     },
     async formatPath(res) {
       console.log('UserHistoryPosition', res)
@@ -162,7 +197,7 @@ export default {
           activeDot = { p: lastP, s: res.data[0].s, t: formatDate(res.data[0].t) }
           activeDot.d = await getAddressByPosition(lastP)
           path.push(lastP)
-          pathData[res.data[0].ln + res.data[0].la] = activeDot
+          pathData[this.getKeyByLngLat(res.data[0].ln, res.data[0].la)] = activeDot
           for (let i = 1; i < res.data.length; i++) {
             let item = res.data[i]
 
@@ -173,9 +208,9 @@ export default {
               if (activeDot.p.distance(p) >= 200) {
                 activeDot = { p: lastP, s: item.s, t: formatDate(item.t) }
                 activeDot.d = await getAddressByPosition(lastP)
-                pathData[item.ln + item.la] = activeDot
+                pathData[this.getKeyByLngLat(item.ln, item.la)] = activeDot
               } else {
-                pathData[item.ln + item.la] = { p: lastP, s: item.s, t: formatDate(item.t), d: activeDot.d }
+                pathData[this.getKeyByLngLat(item.ln, item.la)] = { p: lastP, s: item.s || 0, t: formatDate(item.t), d: activeDot.d }
               }
               path.push(lastP)
             }
@@ -205,6 +240,10 @@ export default {
 
       myJcMap.map.setFitView(null, false, [0, 0, 0, 0], 20)
     },
+    getKeyByLngLat(lng, lat) {
+      //根据经纬度去计算key
+      return parseFloat(lng).toFixed(6) + ',' + parseFloat(lat).toFixed(6)
+    },
     onSubmit() {
       this.clearMap() //情况map
       this.loading = true
@@ -232,16 +271,20 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.jc-trajectory-warp {
+  position: relative;
+  height: 500px;
+}
 .jc-map-warp {
   position: relative;
   width: 100%;
-  height: 500px;
+  height: 100%;
 }
 $jc-item-width: 36px;
 .jc-trajectory-controll {
   position: absolute;
   top: 0;
-  right: 20px;
+  right: 0;
   height: $jc-item-width * 2;
   bottom: 0;
   margin: auto 0;
@@ -264,6 +307,29 @@ $jc-item-width: 36px;
   &:hover,
   &.jc-active {
     font-size: $jc-font-size-larger;
+  }
+}
+.jc-trajectory-info {
+  position: absolute;
+  top: $jc-default-dis;
+  left: 50%;
+  text-align: center;
+  width: 300px;
+  transform: translateX(-50%);
+  color: $jc-color-white;
+  z-index: 8;
+  background-color: rgba($color: $jc-menu-bg-color, $alpha: 0.6);
+  border-radius: $jc-border-radius-base;
+  .jc-trajectory-speed {
+    font-size: $jc-font-size-larger;
+    line-height: 28px;
+  }
+  .jc-trajectory-unit {
+    font-size: $jc-font-size-smaller;
+    padding-left: 4px;
+  }
+  .jc-trajectory-addr {
+    line-height: 24px;
   }
 }
 </style>
