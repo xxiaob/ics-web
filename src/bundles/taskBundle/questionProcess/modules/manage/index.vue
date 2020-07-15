@@ -146,7 +146,7 @@ export default {
   .jc-map-tip {
     color: red;
     font-size: 12px;
-    position: absolute;
+    // position: absolute;
     top: 5px;
     left: 5px;
     z-index: 100;
