@@ -109,8 +109,8 @@ export default {
       }
     },
     formatFormData() {
+      this.edit = true
       if (this.options) {
-        this.edit = true
         const { id, attendanceName, startWorkTime, endWorkTime, enabled, orgId, users } = this.options
 
         if (orgId) {
@@ -122,7 +122,6 @@ export default {
         }
         return { id, attendanceName, startWorkTime, endWorkTime, enabled, orgId, userIds: users.map(user=>user.userId) }
       } else {
-        this.edit = false
         if (this.orgId) {
           // this.getUsers(this.orgId)
           if (this.$refs.tree) {

@@ -9,9 +9,9 @@
         </el-option>
       </el-select>
       <el-input placeholder="输入关键字进行过滤" v-model="filterText" size="mini" style="margin:5px 0"></el-input>
-      <el-button type="" @click="setCheckedKeys" size="mini">全选</el-button>
-      <el-button type="" @click="resetChecked" size="mini">清空</el-button>
-      <el-tree ref="tree" :data="tree" show-checkbox node-key="id" :check-strictly="true" :filter-node-method="filterNode" @check="check" :default-expanded-keys="tree.map(item=>item.id)" :default-checked-keys="selectedAreas"></el-tree>
+      <!-- <el-button type="" @click="setCheckedKeys" size="mini">全选</el-button>
+      <el-button type="" @click="resetChecked" size="mini">清空</el-button> -->
+      <el-tree ref="tree" :data="tree" show-checkbox node-key="id" :filter-node-method="filterNode" @check="check" :default-expanded-keys="tree.map(item=>item.id)" :default-checked-keys="selectedAreas"></el-tree>
     </div>
     <div class="jc-right-width48 jc-selected-box">
       <div>已选区域</div>
@@ -32,6 +32,7 @@ import { areaTypeList } from '@/api/areaType'
 export default {
   name: 'TaskProcessManageDailyArea',
   props: {
+    edit: false,
     projectId: String,
     emergency: false,
     selectedAreas: {
@@ -81,7 +82,7 @@ export default {
     setTimeout(()=>{
       // this.filterArr = Object.keys(this.formatTreeToObj(this.orgTree))
       this.filterArr = Object.keys(this.formatTreeToObj(this.orgGrid, true))
-      this.checkedNodes = this.$refs.tree.getCheckedNodes()
+      this.checkedNodes = this.$refs.tree.getCheckedNodes().filter(item=>item.org === false)
     })
   },
   watch: {
@@ -93,8 +94,11 @@ export default {
       immediate: true,
       handler(val) {
         this.$nextTick(()=>{
-          this.$refs.tree.setCheckedKeys(val)
-          this.checkedNodes = this.$refs.tree.getCheckedNodes()
+          if (this.edit) {
+            this.$refs.tree.setCheckedKeys(val)
+            this.$emit('update:edit', false)
+          }
+          this.checkedNodes = this.$refs.tree.getCheckedNodes().filter(item=>item.org === false)
         })
       },
       deep: true
@@ -122,7 +126,7 @@ export default {
       if (tree && tree.length) {
         tree.forEach(item => {
           let node = {
-            disabled: item.areaId ? false : true,
+            org: item.areaId ? false : true,
             areaTypeId: item.areaTypeId || '',
             id: item.areaId || item.orgId,
             label: item.areaName || item.orgName
@@ -138,8 +142,10 @@ export default {
       }
       return trees
     },
-    check(checkedNodes, { checkedKeys }) {
-      this.$emit('update:selectedAreas', checkedKeys)
+    check(checkedNode, { checkedKeys, checkedNodes }) {
+      const selecteds = checkedNodes.filter(item=>item.org === false).map(item=>item.id)
+
+      this.$emit('update:selectedAreas', selecteds)
     },
     handleCloseTag(tag) {
       const selecteds = this.selectedAreas.slice(0)
@@ -211,7 +217,7 @@ export default {
             objs = Object.assign(objs, this.formatTreeToObj(item.children, grid))
           }
           if (grid) {
-            if (item.disabled === false) {
+            if (item.org === false) {
               objs[item.id] = item.label
             }
           } else {
@@ -259,7 +265,7 @@ export default {
   border-radius: 4px;
   box-sizing: border-box;
   padding: 10px 20px;
-  height: 299px;
+  height: 267px;
   overflow: auto;
   line-height: normal;
 
