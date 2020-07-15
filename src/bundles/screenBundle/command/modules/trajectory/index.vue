@@ -191,7 +191,7 @@ export default {
 
       let lastP = null //记录最后一个点
 
-      if (res.data && res.data.length) {
+      if (res.data && res.data.length > 1) {
         try {
           lastP = new myJcMap.AMap.LngLat(res.data[0].ln, res.data[0].la)
           activeDot = { p: lastP, s: res.data[0].s, t: formatDate(res.data[0].t) }
