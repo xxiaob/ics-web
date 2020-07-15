@@ -8,7 +8,7 @@
         <el-input placeholder="输入关键字进行过滤" v-model="filterText" size="mini" style="margin-bottom:5px"></el-input>
         <el-button type="" @click="setCheckedKeys" size="mini">全选</el-button>
         <el-button type="" @click="resetChecked" size="mini">清空</el-button>
-        <el-tree ref="tree" :data="tree" show-checkbox node-key="id" :check-strictly="true" :filter-node-method="filterNode" :default-expanded-keys="tree.map(item=>item.id)" @check="check" :default-checked-keys="selecteds"></el-tree>
+        <el-tree ref="tree" :data="tree" show-checkbox node-key="id" :check-strictly="selfPeopleType===TASK_PEOPLE_TYPES.ORG" :filter-node-method="filterNode" :default-expanded-keys="tree.map(item=>item.id)" @check="check" :default-checked-keys="selecteds"></el-tree>
       </div>
     </div>
     <div class="jc-right-width48 jc-selected-box">
@@ -29,6 +29,7 @@ import { getOrgUserList, getOrgUserListByProject } from '@/api/user'
 export default {
   name: 'TaskProcessManagePeople',
   props: {
+    edit: false,
     projectId: String,
     emergency: false,
     selecteds: {
@@ -74,7 +75,11 @@ export default {
     this.orgPeople = this.formatPeopleTree(res)
     this.getProjectUsers('')
     setTimeout(()=>{
-      this.checkedNodes = this.$refs.tree.getCheckedNodes()
+      if (this.peopleType === TASK_PEOPLE_TYPES.PEOPLE) {
+        this.checkedNodes = this.$refs.tree.getCheckedNodes().filter(item=>item.org === false)
+      } else {
+        this.checkedNodes = this.$refs.tree.getCheckedNodes()
+      }
     })
   },
   watch: {
@@ -89,8 +94,15 @@ export default {
       immediate: true,
       handler(val) {
         this.$nextTick(()=>{
-          this.$refs.tree.setCheckedKeys(val)
-          this.checkedNodes = this.$refs.tree.getCheckedNodes()
+          if (this.edit) {
+            this.$refs.tree.setCheckedKeys(val)
+            this.$emit('update:edit', false)
+          }
+          if (this.peopleType === TASK_PEOPLE_TYPES.PEOPLE) {
+            this.checkedNodes = this.$refs.tree.getCheckedNodes().filter(item=>item.org === false)
+          } else {
+            this.checkedNodes = this.$refs.tree.getCheckedNodes()
+          }
         })
       },
       deep: true
@@ -124,7 +136,7 @@ export default {
       if (tree && tree.length) {
         tree.forEach(item => {
           let node = {
-            disabled: item.userId ? false : true,
+            org: item.userId ? false : true,
             id: item.userId || item.orgId,
             label: item.userName || item.orgName
           }
@@ -144,10 +156,17 @@ export default {
       const index = selecteds.indexOf(tag.id)
 
       selecteds.splice(index, 1)
+      this.$refs.tree.setCheckedKeys(selecteds)
       this.$emit('update:selecteds', selecteds)
     },
-    check(checkedNode, { checkedKeys }) {
-      this.$emit('update:selecteds', checkedKeys)
+    check(checkedNode, { checkedKeys, checkedNodes }) {
+      if (this.peopleType === TASK_PEOPLE_TYPES.PEOPLE) {
+        const selecteds = checkedNodes.filter(item=>item.org === false).map(item=>item.id)
+
+        this.$emit('update:selecteds', selecteds)
+      } else {
+        this.$emit('update:selecteds', checkedKeys)
+      }
     },
     setCheckedKeys() {
       const areas = new Set([...this.filterArr, ...this.selecteds])
@@ -155,6 +174,8 @@ export default {
       this.$emit('update:selecteds', [...areas])
     },
     resetChecked() {
+      this.$refs.tree.setCheckedKeys([])
+      this.checkedNodes = []
       this.$emit('update:selecteds', [])
     },
     filterNode(value, data) {
@@ -188,7 +209,7 @@ export default {
             objs = Object.assign(objs, this.formatTreeToObj(item.children, People))
           }
           if (People) {
-            if (item.disabled === false) {
+            if (item.org === false) {
               objs[item.id] = item.label
             }
           } else {

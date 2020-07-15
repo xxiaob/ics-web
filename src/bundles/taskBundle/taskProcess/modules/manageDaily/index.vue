@@ -15,7 +15,7 @@
       </el-form-item>
       <!-- peopleProps[peopleType] -->
       <el-form-item label="任务人员" prop="" :rules="rules.SELECT_NOT_NULL">
-        <jc-task-people :projectId="form.projectId" :emergency="emergency" :peopleType.sync="peopleType" :selecteds.sync="peoples" :orgTree="orgTree"></jc-task-people>
+        <jc-task-people :edit.sync="edit" :projectId="form.projectId" :emergency="emergency" :peopleType.sync="peopleType" :selecteds.sync="peoples" :orgTree="orgTree"></jc-task-people>
       </el-form-item>
       <el-form-item label="任务时间" prop="date" :rules="rules.SELECT_NOT_NULL">
         <el-date-picker style="width:40%" v-model="form.date" @change="changeDate" value-format="timestamp" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期">
@@ -121,6 +121,7 @@ export default {
   },
   data() {
     return {
+      edit: false,
       workFrequency: null,
       emergency: false,
       TASK_PEOPLE_TYPES,
@@ -188,6 +189,7 @@ export default {
       }
     },
     formatFormData() {
+      this.edit = true
       if (this.options) {
         const { orgIds, assignees, detailViewVO: { businessKey, projectId, taskDesc, taskName, endDate, startDate }, taskTimePOS, workPeopleNbr, workTime, workAreaType, assigneeAreaPOS, ifOnTime, workFrequency } = this.options
 
