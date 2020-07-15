@@ -313,11 +313,21 @@ class JcMapEditor extends JcMapEditorBase {
    * 添加吸附区域
    * @param {Array} signs 标记数组
    */
-  addAdsorbPolygons(signs) {
+  addAdsorbPolygons(signs = []) {
     let subPolygon = this.getSignsPolygons(signs)
 
     if (this.amapEditor && subPolygon.length) {
       this.amapEditor.addAdsorbPolygons(subPolygon)
+    }
+
+    if (this.subSigns && this.subSigns.length && signs && signs.length) {
+      signs.forEach(item => {
+        let index = this.subSigns.findIndex(sign => sign.id == item.id)
+
+        if (index < 0) {
+          this.subSigns.push(item)
+        }
+      })
     }
   }
 
@@ -330,6 +340,16 @@ class JcMapEditor extends JcMapEditorBase {
 
     if (this.amapEditor && subPolygon.length) {
       this.amapEditor.removeAdsorbPolygons(subPolygon)
+    }
+
+    if (this.subSigns && this.subSigns.length && signs && signs.length) {
+      signs.forEach(item => {
+        let index = this.subSigns.findIndex(sign => sign.id == item.id)
+
+        if (index > -1) {
+          this.subSigns.splice(index, 1)
+        }
+      })
     }
   }
 

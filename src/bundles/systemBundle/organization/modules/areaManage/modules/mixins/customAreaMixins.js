@@ -44,8 +44,12 @@ export default {
     endCustomArea() {
       if (myJcMapEditor) {
         myJcMapEditor.destroy()
+        if (parentSign) {
+          myJcMapEditor.removeAdsorbPolygons([parentSign.sign])
+          parentSign.sign.hide()
+          parentSign = null
+        }
         myJcMapEditor = null
-        parentSign = null
       }
     },
     async showParentView() {
@@ -81,9 +85,9 @@ export default {
       }
       if (parentSign.show) {
         parentSign.sign.show()
-        myJcMapEditor.addAdsorbPolygons(parentSign.sign)
+        myJcMapEditor.addAdsorbPolygons([parentSign.sign])
       } else {
-        myJcMapEditor.removeAdsorbPolygons(parentSign.sign)
+        myJcMapEditor.removeAdsorbPolygons([parentSign.sign])
         parentSign.sign.hide()
       }
     },
