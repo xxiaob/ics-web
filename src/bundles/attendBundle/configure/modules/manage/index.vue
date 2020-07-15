@@ -15,15 +15,15 @@
       <el-form-item label="启用" prop="enabled" :rules="rules.num" class="jc-left-width50">
         <el-switch v-model="form.enabled" :active-value="ATTEND_CONFIGURE_STATUSES.ENABLED" :inactive-value="ATTEND_CONFIGURE_STATUSES.NOTENABLED"></el-switch>
       </el-form-item>
-      <el-form-item label="所属组织" prop="orgId" :rules="rules.SELECT_NOT_NULL">
+      <el-form-item label="考勤区域" prop="orgId" :rules="rules.SELECT_NOT_NULL">
         <div class="org">
           <el-input placeholder="输入关键字进行过滤" v-model="filterText" size="small"></el-input>
           <el-tree ref="tree" :data="orgTree" node-key="value" :filter-node-method="filterNode" :default-expanded-keys="orgTree.map(item=>item.value)" :current-node-key="form.orgId" @node-click="nodeClick" :expand-on-click-node="false" :highlight-current="true"></el-tree>
         </div>
         <div ref="myMap" class="jc-area-warp"></div>
       </el-form-item>
-      <el-form-item label="人员选择" prop="userIds" :rules="rules.SELECT_NOT_NULL">
-        <jc-people v-model="form.userIds" :tree="users"></jc-people>
+      <el-form-item label="考勤人员" prop="userIds" :rules="rules.SELECT_NOT_NULL">
+        <jc-people v-model="form.userIds"></jc-people>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -34,7 +34,7 @@
 </template>
 <script>
 import { cfgSave } from '@/api/attend'
-import { userListByOrg } from '@/api/user'
+// import { userListByOrg } from '@/api/user'
 import { getStringRule, NOT_NULL, SELECT_NOT_NULL, getNumberRule } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
 import { ATTEND_CONFIGURE_STATUSES } from '@/constant/Dictionaries'
@@ -112,7 +112,7 @@ export default {
         const { id, attendanceName, startWorkTime, endWorkTime, enabled, orgId, users } = this.options
 
         if (orgId) {
-          this.getUsers(orgId)
+          // this.getUsers(orgId)
           if (this.$refs.tree) {
             this.$refs.tree.setCurrentKey(orgId)
           }
@@ -121,7 +121,7 @@ export default {
         return { id, attendanceName, startWorkTime, endWorkTime, enabled, orgId, userIds: users.map(user=>user.userId) }
       } else {
         if (this.orgId) {
-          this.getUsers(this.orgId)
+          // this.getUsers(this.orgId)
           if (this.$refs.tree) {
             this.$refs.tree.setCurrentKey(this.orgId)
           }
@@ -130,11 +130,11 @@ export default {
         return { ...defaultForm, orgId: this.orgId }
       }
     },
-    async getUsers(orgId) {
-      const res = await userListByOrg([orgId])
+    // async getUsers(orgId) {
+    //   const res = await userListByOrg([orgId])
 
-      this.users = res.map(item=>({ id: item.userId, label: item.userName }))
-    },
+    //   this.users = res.map(item=>({ id: item.userId, label: item.userName }))
+    // },
     onSubmit() {
       this.loading = true
       this.$refs.form.validate(valid => {
@@ -161,7 +161,7 @@ export default {
     nodeClick(data) {
       // console.log(data)
       this.form.orgId = data.value
-      this.getUsers(data.value)
+      // this.getUsers(data.value)
       this.form.userIds = []
       this.viewControl(myJcMap, data.value).then(() => {
         myJcMap.fitView()

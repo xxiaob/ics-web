@@ -24,8 +24,7 @@
 
 <script>
 import { TASK_PEOPLE_TYPES } from '@/constant/Dictionaries'
-import { getOrgUserList } from '@/api/user'
-import { getOrgUserListByProject } from '@/api/user'
+import { getOrgUserList, getOrgUserListByProject } from '@/api/user'
 
 export default {
   name: 'TaskProcessManagePeople',

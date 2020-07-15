@@ -13,11 +13,11 @@
       <el-form-item label="启用">
         <span>{{form.enabled?'是':'否'}}</span>
       </el-form-item>
-      <el-form-item label="所属组织">
+      <el-form-item label="考勤区域">
         <span>{{form.orgName}}</span>
         <div ref="myMap" class="jc-area-warp"></div>
       </el-form-item>
-      <el-form-item label="人员">
+      <el-form-item label="考勤人员">
         <span>{{form.users}}</span>
       </el-form-item>
     </el-form>

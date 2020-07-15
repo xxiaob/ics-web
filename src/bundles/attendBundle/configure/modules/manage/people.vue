@@ -1,12 +1,12 @@
 <template>
   <div>
-    <div class="jc-left-width60">
+    <div class="jc-left-width50">
       <el-input placeholder="输入关键字进行过滤" v-model="filterText" size="small"></el-input>
       <el-button type="" @click="setCheckedKeys" size="mini">全选</el-button>
       <el-button type="" @click="resetChecked" size="mini">清空</el-button>
-      <el-tree ref="tree" :data="tree" show-checkbox node-key="id" :check-strictly="true" :filter-node-method="filterNode" @check="check" :default-checked-keys="selecteds"></el-tree>
+      <el-tree ref="tree" :data="tree" show-checkbox node-key="id" :check-strictly="true" :filter-node-method="filterNode" :default-expanded-keys="tree.map(item=>item.id)" @check="check" :default-checked-keys="selecteds"></el-tree>
     </div>
-    <div class="jc-left-width40 jc-selected-box">
+    <div class="jc-left-width50 jc-selected-box">
       <div>已选人员</div>
       <div class="jc-selected">
         <el-tag v-for="tag in checkedNodes" :key="tag.id" closable size="small" @close="handleCloseTag(tag)">
@@ -18,6 +18,7 @@
 </template>
 
 <script>
+import { getOrgUserList } from '@/api/user'
 export default {
   name: 'ConfigureManagePeople',
   model: {
@@ -28,32 +29,20 @@ export default {
     selecteds: {
       type: Array,
       default: ()=>[]
-    },
-    tree: {
-      type: Array
     }
   },
   data() {
     return {
       filterText: '',
       filterArr: [],
-      checkedNodes: []
+      checkedNodes: [],
+      tree: []
     }
   },
   watch: {
     filterText(val) {
       this.filterArr = []
       this.$refs.tree.filter(val)
-    },
-    tree: {
-      handler(val) {
-        this.filterText = ''
-        this.filterArr = val.map(item=>item.id)
-        this.$nextTick(()=>{
-          this.checkedNodes = this.$refs.tree.getCheckedNodes()
-        })
-      },
-      deep: true
     },
     selecteds: {
       immediate: true,
@@ -65,6 +54,15 @@ export default {
       },
       deep: true
     }
+  },
+  async created() {
+    const res = await getOrgUserList({})
+
+    this.tree = this.formatPeopleTree(res)
+    this.filterArr = Object.keys(this.formatTreeToObj(this.tree, true))
+    setTimeout(()=>{
+      this.checkedNodes = this.$refs.tree.getCheckedNodes()
+    })
   },
   methods: {
     handleCloseTag(tag) {
@@ -100,6 +98,46 @@ export default {
       } else {
         return false
       }
+    },
+    formatPeopleTree(tree) {
+      let trees = []
+
+      if (tree && tree.length) {
+        tree.forEach(item => {
+          let node = {
+            disabled: item.userId ? false : true,
+            id: item.userId || item.orgId,
+            label: item.userName || item.orgName
+          }
+
+          const children = [...(item.children || []), ...(item.userRespDTOList || [])]
+
+          if (children && children.length) {
+            node.children = this.formatPeopleTree(children)
+          }
+          trees.push(node)
+        })
+      }
+      return trees
+    },
+    formatTreeToObj(child, People) {
+      let objs = {}
+
+      if (child && child.length) {
+        child.forEach(item => {
+          if (item.children && item.children.length) {
+            objs = Object.assign(objs, this.formatTreeToObj(item.children, People))
+          }
+          if (People) {
+            if (item.disabled === false) {
+              objs[item.id] = item.label
+            }
+          } else {
+            objs[item.id] = item.label
+          }
+        })
+      }
+      return objs
     }
   }
 }
@@ -115,14 +153,10 @@ export default {
 .el-select {
   width: inherit;
 }
-.jc-left-width60 {
-  width: 60%;
+.jc-left-width50 {
+  width: 50%;
   float: left;
   box-sizing: border-box;
-}
-.jc-left-width40 {
-  width: 40%;
-  float: left;
 }
 .jc-selected-box {
   box-sizing: border-box;
