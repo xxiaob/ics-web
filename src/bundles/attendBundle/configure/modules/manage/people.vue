@@ -2,9 +2,9 @@
   <div>
     <div class="jc-left-width50">
       <el-input placeholder="输入关键字进行过滤" v-model="filterText" size="small"></el-input>
-      <el-button type="" @click="setCheckedKeys" size="mini">全选</el-button>
-      <el-button type="" @click="resetChecked" size="mini">清空</el-button>
-      <el-tree ref="tree" :data="tree" show-checkbox node-key="id" :check-strictly="true" :filter-node-method="filterNode" :default-expanded-keys="tree.map(item=>item.id)" @check="check" :default-checked-keys="selecteds"></el-tree>
+      <!-- <el-button type="" @click="setCheckedKeys" size="mini">全选</el-button>
+      <el-button type="" @click="resetChecked" size="mini">清空</el-button> -->
+      <el-tree ref="tree" :data="tree" show-checkbox node-key="id" :filter-node-method="filterNode" :default-expanded-keys="tree.map(item=>item.id)" @check="check" :default-checked-keys="selecteds"></el-tree>
     </div>
     <div class="jc-left-width50 jc-selected-box">
       <div>已选人员</div>
@@ -26,6 +26,7 @@ export default {
     event: 'change'
   },
   props: {
+    edit: false,
     selecteds: {
       type: Array,
       default: ()=>[]
@@ -48,8 +49,11 @@ export default {
       immediate: true,
       handler(val) {
         this.$nextTick(()=>{
-          this.$refs.tree.setCheckedKeys(val)
-          this.checkedNodes = this.$refs.tree.getCheckedNodes()
+          if (this.edit) {
+            this.$refs.tree.setCheckedKeys(val)
+            this.$emit('update:edit', false)
+          }
+          this.checkedNodes = this.$refs.tree.getCheckedNodes().filter(item=>item.org === false)
         })
       },
       deep: true
@@ -61,7 +65,7 @@ export default {
     this.tree = this.formatPeopleTree(res)
     this.filterArr = Object.keys(this.formatTreeToObj(this.tree, true))
     setTimeout(()=>{
-      this.checkedNodes = this.$refs.tree.getCheckedNodes()
+      this.checkedNodes = this.$refs.tree.getCheckedNodes().filter(item=>item.org === false)
     })
   },
   methods: {
@@ -73,8 +77,11 @@ export default {
       this.$emit('change', selecteds)
       this.$parent.$emit('el.form.change')
     },
-    check(checkedNode, { checkedKeys }) {
-      this.$emit('change', checkedKeys)
+    check(checkedNode, { checkedKeys, checkedNodes }) {
+      // console.log('checkedNodes', checkedNodes)
+      const selecteds = checkedNodes.filter(item=>item.org === false).map(item=>item.id)
+
+      this.$emit('change', selecteds)
       this.$parent.$emit('el.form.change')
     },
     setCheckedKeys() {
@@ -105,7 +112,7 @@ export default {
       if (tree && tree.length) {
         tree.forEach(item => {
           let node = {
-            disabled: item.userId ? false : true,
+            org: item.userId ? false : true,
             id: item.userId || item.orgId,
             label: item.userName || item.orgName
           }
@@ -129,7 +136,7 @@ export default {
             objs = Object.assign(objs, this.formatTreeToObj(item.children, People))
           }
           if (People) {
-            if (item.disabled === false) {
+            if (item.org === false) {
               objs[item.id] = item.label
             }
           } else {
@@ -149,6 +156,7 @@ export default {
   overflow: auto;
   border: 1px solid #dcdfe6;
   border-radius: 4px;
+  margin-top: 10px;
 }
 .el-select {
   width: inherit;
@@ -163,9 +171,9 @@ export default {
   padding: 0 10px;
 }
 .jc-selected {
-  // margin: 0 10px;
+  margin-top: 10px;
   border: 1px solid #dcdfe6;
-  height: 233px;
+  height: 200px;
   overflow: auto;
   line-height: normal;
 

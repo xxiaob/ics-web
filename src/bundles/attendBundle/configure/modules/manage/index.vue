@@ -23,7 +23,7 @@
         <div ref="myMap" class="jc-area-warp"></div>
       </el-form-item>
       <el-form-item label="考勤人员" prop="userIds" :rules="rules.SELECT_NOT_NULL">
-        <jc-people v-model="form.userIds"></jc-people>
+        <jc-people v-model="form.userIds" :edit.sync="edit"></jc-people>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -68,6 +68,7 @@ export default {
   },
   data() {
     return {
+      edit: false,
       ATTEND_CONFIGURE_STATUSES,
       filterText: '',
       loading: false,
@@ -109,6 +110,7 @@ export default {
     },
     formatFormData() {
       if (this.options) {
+        this.edit = true
         const { id, attendanceName, startWorkTime, endWorkTime, enabled, orgId, users } = this.options
 
         if (orgId) {
@@ -120,6 +122,7 @@ export default {
         }
         return { id, attendanceName, startWorkTime, endWorkTime, enabled, orgId, userIds: users.map(user=>user.userId) }
       } else {
+        this.edit = false
         if (this.orgId) {
           // this.getUsers(this.orgId)
           if (this.$refs.tree) {
