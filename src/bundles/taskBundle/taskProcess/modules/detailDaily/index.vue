@@ -22,7 +22,7 @@
         </div>
         <div class="jc-clearboth">
           <el-form-item label="任务周期：" class="jc-left-width50">
-            <span>{{form.startDate|filterTime}} - {{form.endDate|filterTime}}</span>
+            <span>{{form.startDate|filterDate}} - {{form.endDate|filterDate}}</span>
           </el-form-item>
           <el-form-item label="任务类型：" class="jc-left-width25">
             <span>{{form.taskTypeName}}</span>
@@ -42,17 +42,24 @@
             {{formatUsers}}
           </el-form-item>
         </div>
-        <el-form-item label="任务要求：">
-          <el-form-item label="在岗时间：" style="white-space: pre-line;">{{form.taskTimePOS|filterTimePos}}</el-form-item>
-          <el-form-item label="在岗时长：">
-            {{form.workTime}} 小时
+        <div class="jc-clearboth" v-show="form.assignees && form.assignees.length">
+          <el-form-item label="任务要求：" class="jc-left-width50">
+            <el-form-item label="在岗时间：" style="white-space: pre-line;">{{form.taskTimePOS|filterTimePos}}</el-form-item>
+            <el-form-item label="在岗时长：">
+              {{form.workTime}} 小时
+            </el-form-item>
+            <el-form-item label="在岗人数：">
+              {{form.workPeopleNbr}}
+            </el-form-item>
           </el-form-item>
-          <el-form-item label="在岗人数：">
-            {{form.workPeopleNbr}}
+          <el-form-item label="任务频率：" class="jc-left-width25">
+            <span>{{formatWorkFrequency}}</span>
           </el-form-item>
-        </el-form-item>
+          <el-form-item label="准点到岗：" class="jc-left-width25">
+            <span>{{form.ifOnTime?'是':'否'}}</span>
+          </el-form-item>
+        </div>
         <el-form-item label="任务描述：">
-          <!-- {{form.taskDesc}} -->
           <div v-html="form.taskDesc"></div>
         </el-form-item>
       </el-form>
@@ -95,7 +102,7 @@ import { taskFinish, taskAddRemark } from '@/api/task'
 import { NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
 import { formatDate } from '@/libs/util'
 import moment from 'moment'
-import { TASK_PEOPLE_TYPES, PROJECT_TYPES } from '@/constant/Dictionaries'
+import { TASK_PEOPLE_TYPES, PROJECT_TYPES, TASK_FREQUENCYS } from '@/constant/Dictionaries'
 
 export default {
   name: 'TaskProcessDetailDaily',
@@ -167,11 +174,17 @@ export default {
       const project = this.projectListArr.filter(item=>item.value == this.form.projectId)
 
       return (project[0] && project[0].label) || PROJECT_TYPES.toString(PROJECT_TYPES.NORMAL)
+    },
+    formatWorkFrequency() {
+      return TASK_FREQUENCYS.toString(this.form.workFrequency) || `${this.form.workFrequency}天`
     }
   },
   filters: {
     filterTime(value) {
       return formatDate(value)
+    },
+    filterDate(value) {
+      return moment(value).format('YYYY-MM-DD')
     },
     filterTimePos(value) {
       if (value) {
