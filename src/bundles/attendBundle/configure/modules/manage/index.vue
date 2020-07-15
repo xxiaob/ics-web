@@ -162,7 +162,7 @@ export default {
       // console.log(data)
       this.form.orgId = data.value
       // this.getUsers(data.value)
-      this.form.userIds = []
+      // this.form.userIds = []
       this.viewControl(myJcMap, data.value).then(() => {
         myJcMap.fitView()
       })

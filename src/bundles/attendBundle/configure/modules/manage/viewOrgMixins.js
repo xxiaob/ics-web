@@ -32,6 +32,8 @@ export default {
 
       if (res && res.length) {
         item = res[0]
+      } else {
+        this.form.orgId = ''
       }
       if (item) {
         areaSign = new JcMapSign({
