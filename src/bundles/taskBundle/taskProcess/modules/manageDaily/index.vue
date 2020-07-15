@@ -26,12 +26,13 @@
       </el-form-item>
       <div class="jc-clearboth" v-if="peopleType===TASK_PEOPLE_TYPES.PEOPLE">
         <div class="jc-left-width45">
-          <el-form-item label="任务频率" prop="workFrequency" :rules="rules.num" class="workFrequency" :class="{custom:workFrequency===0}">
+          <el-form-item label="任务频率" prop="workFrequency" :rules="rules.num" class="workFrequency custom">
             <el-select v-model="workFrequency" clearable placeholder="请选择任务频率" @change="changeWorkFrequency">
               <el-option v-for="item in TASK_FREQUENCYS.VALUES" :key="item.value" :label="item.label" :value="item.value">
               </el-option>
             </el-select>
-            <el-input v-model.number="form.workFrequency" placeholder="请输入任务频率"></el-input>
+            <el-input v-model.number="form.workFrequency" placeholder="请输入任务频率" :disabled="workFrequency!=0"></el-input>
+            <span>天</span>
           </el-form-item>
         </div>
         <el-form-item label="准点到岗" prop="ifOnTime" :rules="rules.num" class="jc-right-width45">
@@ -344,6 +345,9 @@ export default {
     width: 50%;
     display: block;
     float: left;
+  }
+  .el-input {
+    width: 45%;
   }
 }
 </style>
