@@ -32,8 +32,8 @@
         </el-form-item>
       </div>
       <el-form-item label="任务指派">
+        <div class="jc-map-tip">右键点击地图选中位置</div>
         <div class="jc-map">
-          <div class="jc-map-tip">右键点击地图选中位置</div>
           <map-user-marker v-model="position" @user-change="userChange"></map-user-marker>
         </div>
       </el-form-item>
@@ -391,14 +391,14 @@ export default {
 .jc-map {
   height: 300px;
   position: relative;
-  .jc-map-tip {
-    color: red;
-    font-size: 12px;
-    // position: absolute;
-    top: 5px;
-    left: 5px;
-    z-index: 100;
-  }
+}
+.jc-map-tip {
+  color: red;
+  font-size: 12px;
+  // position: absolute;
+  // top: 5px;
+  // left: 5px;
+  // z-index: 100;
 }
 .jc-myeditor {
   height: 160px;

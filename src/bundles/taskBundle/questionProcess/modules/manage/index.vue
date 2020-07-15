@@ -15,8 +15,8 @@
         <span>{{form.positionName}}</span>
       </el-form-item>
       <el-form-item>
+        <div class="jc-map-tip">右键点击地图选中位置</div>
         <div class="jc-map">
-          <div class="jc-map-tip">右键点击地图选中位置</div>
           <map-user-marker v-model="position"></map-user-marker>
         </div>
       </el-form-item>
@@ -143,16 +143,18 @@ export default {
   height: 250px;
   line-height: normal;
   position: relative;
-  .jc-map-tip {
-    color: red;
-    font-size: 12px;
-    // position: absolute;
-    top: 5px;
-    left: 5px;
-    z-index: 100;
-  }
+
   /deep/ .jc-select-warp {
     display: none;
   }
+}
+.jc-map-tip {
+  color: red;
+  font-size: 12px;
+  line-height: normal;
+  // position: absolute;
+  // top: 5px;
+  // left: 5px;
+  // z-index: 100;
 }
 </style>
