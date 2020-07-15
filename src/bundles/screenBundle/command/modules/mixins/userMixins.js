@@ -92,6 +92,11 @@ export default {
             break
           }
         }
+        let index = this.gatherUserIds.indexOf(data.offUserId)
+
+        if (index > -1) {
+          this.gatherUserIds.splice(index, 1)
+        }
       } else if (data.type == 4) {
         //是否再一键采集中，如果正在一键采集则显示状态，结束采集则恢复状态
         let index = this.gatherUserIds.indexOf(data.collectUser.userId)
