@@ -59,9 +59,11 @@ export default {
           this.trees = this.formatTree(res)
           if (this.trees.length) {
             this.$nextTick(() => {
+              let pid = this.orgId ? '' : this.trees[0].pid
+
               this.orgId = this.orgId || this.trees[0].orgId
               this.$refs.tree.setCurrentKey(this.orgId)
-              this.nodeChange({ orgId: this.orgId, type: 'manage' })
+              this.nodeChange({ orgId: this.orgId, pid, type: 'manage' })
             })
           }
           this.loading = false
@@ -123,6 +125,7 @@ export default {
         this.$confirm('确认删除该组织架构', '提示', { type: 'warning' }).then(() => {
           organizationDel(node.orgId).then(() => {
             this.$message.success('删除成功')
+            this.orgId = ''
             this.initData()
           })
         }).catch(() => {})
@@ -133,7 +136,7 @@ export default {
       this.checkManage(() => {
         this.orgId = data.orgId
         this.$refs.tree.setCurrentKey(this.orgId)
-        this.nodeChange({ orgId: this.orgId, type: 'node-click' })
+        this.nodeChange({ orgId: this.orgId, pid: data.pid, type: 'node-click' })
       })
     }
   }

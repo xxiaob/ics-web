@@ -37,12 +37,12 @@ export default {
       this.loading = true
       this.list = []
       try {
-        let res = await getRecording({ initiator: '56783818509516800', videoType: 'Capture' })
+        let res = await getRecording({ initiator: this.options.userId, videoType: 'CAPTURE' })
 
         let list = []
 
-        if (res && res.length) {
-          res.forEach(item => {
+        if (res.resultList && res.resultList.length) {
+          res.resultList.forEach(item => {
             list.push({ id: item.id, name: item.videoName, url: item.videoUrl })
           })
         }

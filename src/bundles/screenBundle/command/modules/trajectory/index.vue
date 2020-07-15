@@ -144,7 +144,7 @@ export default {
         //设置移动的对象
         moveMarker = new JcMapMarker({ map: myJcMap, position: path[0], icon: '/static/mapIcons/trajectorycar.png', mapStyle: markerStyle.TRAJECTORY })
 
-        moveMarker.marker.moveAlong(path, { duration: 200, autoRotation: true })
+        moveMarker.marker.moveAlong(path, { duration: 500, autoRotation: true })
         moveMarker.marker.stopMove()//暂停动画
         moveMarker.marker.on('moving', this.markerMoving)
         if (this.isPlay) {

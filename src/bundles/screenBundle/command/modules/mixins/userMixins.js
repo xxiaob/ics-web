@@ -199,6 +199,11 @@ export default {
 
       let userItem = usersData.users[key]
 
+      //过滤掉用户信息为空的场景
+      if (!userItem) {
+        return
+      }
+
       let content = '<div class="jc-marker-content jc-market-center">'
 
       if (this.userTipVisible) {
