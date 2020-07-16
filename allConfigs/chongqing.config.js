@@ -4,8 +4,8 @@
 module.exports = {
   //接口地址配置
   apiHostConfig: {
-    base: '"https://47.108.52.3:8002/"',
-    ws: '"wss://47.108.52.3:8002/"'
+    base: '"https://chongqing.bg365.top/gwy-api/"',
+    ws: '"wss://chongqing.bg365.top/gwy-api/"'
   },
   //高德地图参数配置
   aMapConfig: {
