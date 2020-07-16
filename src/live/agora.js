@@ -22,9 +22,9 @@ export class Live {
       remoteStreams: [],
       params: {}
     }
-
+    console.log('process.env.agoraConfig.appID', process.env.agoraConfig)
     this.option = {
-      appID: '2923891558a04fa8a5c30514e06cfac8',
+      appID: process.env.agoraConfig.appID,
       channel: 'Channel name',
       uid: null,
       token: 'Your token'

@@ -19,5 +19,6 @@ let sysConfigs = require(`../allConfigs/${evnMode}.config`)
 module.exports = {
   NODE_ENV: '"production"',
   apiHostConfig: sysConfigs.apiHostConfig,
-  aMapConfig: sysConfigs.aMapConfig
+  aMapConfig: sysConfigs.aMapConfig,
+  agoraConfig: sysConfigs.agoraConfig
 }
