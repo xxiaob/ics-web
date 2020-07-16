@@ -144,8 +144,11 @@ export default {
   line-height: normal;
   position: relative;
 
-  /deep/ .jc-select-warp {
-    display: none;
+  /deep/ {
+    .el-radio-group,
+    .jc-select-warp {
+      display: none;
+    }
   }
 }
 .jc-map-tip {
