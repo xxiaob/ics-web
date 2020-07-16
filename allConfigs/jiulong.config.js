@@ -4,8 +4,8 @@
 module.exports = {
   //接口地址配置
   apiHostConfig: {
-    base: '"https://42.228.59.203:8002/"',
-    ws: '"wss://42.228.59.203:8002/"'
+    base: '"https://42.228.59.203:88/gwy-api/"',
+    ws: '"wss://42.228.59.203:88/gwy-api/"'
   },
   //高德地图参数配置
   aMapConfig: {
