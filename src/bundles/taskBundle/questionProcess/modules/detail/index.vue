@@ -1,63 +1,78 @@
 <template>
-  <div class="jc-detail">
-    <el-form ref="form" label-width="100px" :model="form" class="jc-manage-form" size="small">
-      <el-form-item label="问题ID">
-        <span>{{form.id}}</span>
-      </el-form-item>
-      <el-form-item label="上报人">
-        <span>{{form.userName}}</span>
-      </el-form-item>
-      <el-form-item label="所属组织">
-        <span>{{form.orgName}}</span>
-      </el-form-item>
-      <el-form-item label="问题标题">
-        <span>{{form.problemTitle}}</span>
-      </el-form-item>
-      <el-form-item label="问题类型">
-        <span>{{formatType(form.problemType)}}</span>
-      </el-form-item>
-      <el-form-item label="问题描述">
-        <!-- <span>{{form.problemDesc}}</span> -->
-        <div v-html="form.problemDesc"></div>
-      </el-form-item>
-      <el-form-item label="附件">
-        <el-image v-for="url in imgs" :key="url" :src="url" :preview-src-list="imgs" class="jc-img"></el-image>
-        <div class="jc-video" v-for="url in videos" :key="url" @click="showVideo(url)">
-          <video :src="url"></video>
-          <div class="hover">
-            <img class="jc-video-play" src="../../../assets/play.png" alt="">
-          </div>
+  <div>
+    <el-card class="jc-table-card">
+      <div slot="header" class="jc-card-header">
+        <div class="jc-card-title">{{form&&form.handle?'处理问题':'问题详情'}}</div>
+        <div class="jc-button-group">
+          <el-button size="small" icon="el-icon-arrow-left" @click="$emit('update:detailShow', false)">返回</el-button>
         </div>
-        <div v-for="(url,index) in audios" :key="url" class="jc-audio" @click="playAudio(url,index)">
-          <img class="jc-audio-mike" src="../../../assets/mike.png" alt="">
-          <div class="hover">
-            <img class="jc-video-play" src="../../../assets/play.png" alt="" v-show="audioPlayShows[index]">
-            <img class="jc-video-play" src="../../../assets/pause.png" alt="" v-show="!audioPlayShows[index]">
-          </div>
+      </div>
+      <div class="jc-detail">
+        <el-form ref="form" label-width="100px" :model="form" class="jc-manage-form" size="small">
+          <el-form-item label="问题ID">
+            <span>{{form.id}}</span>
+          </el-form-item>
+          <el-form-item label="上报人">
+            <span>{{form.userName}}</span>
+          </el-form-item>
+          <el-form-item label="所属组织">
+            <span>{{form.orgName}}</span>
+          </el-form-item>
+          <el-form-item label="问题标题">
+            <span>{{form.problemTitle}}</span>
+          </el-form-item>
+          <el-form-item label="问题类型">
+            <span>{{formatType(form.problemType)}}</span>
+          </el-form-item>
+          <el-form-item label="问题位置">
+            <span>{{form.positionName}}</span>
+          </el-form-item>
+          <el-form-item label="问题描述">
+            <!-- <span>{{form.problemDesc}}</span> -->
+            <div v-html="form.problemDesc"></div>
+          </el-form-item>
+          <el-form-item label="附件">
+            <el-image v-for="url in imgs" :key="url" :src="url" :preview-src-list="imgs" class="jc-img"></el-image>
+            <div class="jc-video" v-for="url in videos" :key="url" @click="showVideo(url)">
+              <video :src="url"></video>
+              <div class="hover">
+                <img class="jc-video-play" src="../../../assets/play.png" alt="">
+              </div>
+            </div>
+            <div v-for="(url,index) in audios" :key="url" class="jc-audio" @click="playAudio(url,index)">
+              <img class="jc-audio-mike" src="../../../assets/mike.png" alt="">
+              <div class="hover">
+                <img class="jc-video-play" src="../../../assets/play.png" alt="" v-show="audioPlayShows[index]">
+                <img class="jc-video-play" src="../../../assets/pause.png" alt="" v-show="!audioPlayShows[index]">
+              </div>
+            </div>
+            <audio v-if="detailShow" ref="audio" :src="audioUrl" style="width:0;height:0" @ended="audioEnded"></audio>
+          </el-form-item>
+        </el-form>
+        <div class="jc-detail-footer" v-if="form.handle">
+          <el-button @click="toSuperior" :loading="loading" type="primary" size="small">反馈至上级</el-button>
+          <!-- v-if="!firstOrgIds.includes(form.orgId)" -->
+          <el-button @click="generateTask" :loading="loading" type="primary" size="small">生成任务</el-button>
+          <el-button @click="closeQuestion" :loading="loading" size="small">关闭问题</el-button>
         </div>
-        <audio v-if="detailShow" ref="audio" :src="audioUrl" style="width:0;height:0" @ended="audioEnded"></audio>
-      </el-form-item>
-    </el-form>
-    <div class="jc-detail-footer" v-if="form.handle">
-      <el-button @click="toSuperior" :loading="loading" type="primary" size="small">反馈至上级</el-button>
-      <!-- v-if="!firstOrgIds.includes(form.orgId)" -->
-      <el-button @click="generateTask" :loading="loading" type="primary" size="small">生成任务</el-button>
-      <el-button @click="closeQuestion" :loading="loading" size="small">关闭问题</el-button>
-    </div>
 
-    <task-manage :projectId="form.projectId" :orgTree="orgTree" :user="user" :question="question" :visible.sync="TaskManageShow" @save-success="generateTaskSuccess"></task-manage>
+        <task-manage :projectId="form.projectId" :orgTree="orgTree" :user="user" :question="question" :visible.sync="TaskManageShow" @save-success="generateTaskSuccess"></task-manage>
 
-    <el-dialog title="视频播放" :visible.sync="dialogVideoVisible" width="800px" :close-on-click-modal="false" :append-to-body="true">
-      <video v-if="dialogVideoVisible" :src="dialogVideoUrl" autoplay controls width="100%"></video>
-    </el-dialog>
+        <el-dialog title="视频播放" :visible.sync="dialogVideoVisible" width="800px" :close-on-click-modal="false" :append-to-body="true">
+          <video v-if="dialogVideoVisible" :src="dialogVideoUrl" autoplay controls width="100%"></video>
+        </el-dialog>
+      </div>
+    </el-card>
+    <jc-task :problemId="form.id"></jc-task>
   </div>
+
 </template>
 <script>
 import { questionReport } from '@/api/question'
 import MediaMixins from '../../../mixins/MediaMixins'
 
 export default {
-  name: 'TaskQuestionProcessDetail',
+  name: 'QuestionProcessDetail',
   props: {
     orgTree: {
       type: Array
@@ -82,7 +97,8 @@ export default {
   },
   mixins: [MediaMixins],
   components: {
-    TaskManage: () => import('../../../taskProcess/modules/manage')
+    TaskManage: () => import('../../../taskProcess/modules/manage'),
+    JcTask: ()=>import('./task.vue')
   },
   data() {
     return {
@@ -128,12 +144,15 @@ export default {
     },
     //生成任务
     async generateTask() {
-      const { id, problemTitle } = this.form
+      const { id, problemTitle, uploadFilePaths, position, positionName } = this.form
 
       this.question = {
         key: id.toString(),
         value: id,
-        label: problemTitle
+        label: problemTitle,
+        uploadFilePaths,
+        position,
+        positionName
       }
       this.TaskManageShow = true
     },

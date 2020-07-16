@@ -28,7 +28,8 @@ export default {
     get: 'user-service/org/byId',
     list: 'user-service/org/list',
     update: 'user-service/org/upd',
-    del: 'user-service/org/del'
+    del: 'user-service/org/del',
+    getOrgLogo: 'user-service/org/getOrgLogoByOrgId'
   },
   role: {
     //角色管理
@@ -117,7 +118,9 @@ export default {
     addRemark: 'task-service/task/addTaskRemark',
     listRemark: 'task-service/task/remarkSelect',
     listRecord: 'task-service/task/getTaskRecord',
-    postArea: 'task-service/task/getTaskPostArea'
+    postArea: 'task-service/task/getTaskPostArea',
+    listByProblemId: 'task-service/task/getTaskByProblemId',
+    getTaskAuth: 'task-service/task/getTaskAuth'
   },
   question: {
     //问题管理
@@ -128,7 +131,8 @@ export default {
     start: 'task-service/problem/start',
     report: 'task-service/problem/report',
     get: 'task-service/problem/getProblemTask',
-    typeList: 'task-service/problem/getProblemTypes'
+    typeList: 'task-service/problem/getProblemTypes',
+    getProblemAuth: 'task-service/problem/getProblemAuth'
   },
   pttGroup: {
     //PTT群组
@@ -160,7 +164,9 @@ export default {
     imAuth: 'user-service/getAuthToken',
     agoraToken: 'device-service/recording/getChannelKey',
     record: 'device-service/recording/startRecording',
-    endRecord: 'device-service/recording/endRecording'
+    endRecord: 'device-service/recording/endRecording',
+    getRecording: 'device-service/recording/getRecording', //获取录像视频
+    getChannelByUserId: 'device-service/recording/getChannelByUserId'
   },
   attend: {
     //考勤管理
@@ -177,7 +183,13 @@ export default {
     exportUserOversee: 'task-service/taskDataExport/getUserSupervise',
     exportPostOversee: 'task-service/taskDataExport/getPostSupervise',
     addUserOversee: 'task-service/taskSupervise/addUserSupervise',
-    addPostOversee: 'task-service/taskSupervise/addPostSupervise'
+    addPostOversee: 'task-service/taskSupervise/addPostSupervise',
+    cfgAdd: 'task-service/userAttendanceCfg/add',
+    cfgUpdate: 'task-service/userAttendanceCfg/upt',
+    cfgList: 'task-service/userAttendanceCfg/select',
+    cfgGet: 'task-service/userAttendanceCfg/getConfigDetail',
+    cfgDel: 'task-service/userAttendanceCfg/del',
+    uptStatus: 'task-service/userAttendanceCfg/uptStatus'
   },
   screen: {
     //大屏接口
@@ -186,8 +198,25 @@ export default {
       screenMap: 'message-service/icsServer/screenMap', //大屏推送接口
       getScreenData: 'task-service/taskScreen/getScreenData',
       getTaskPostLine: 'task-service/taskAttendance/getTaskPostLine', //岗点考勤事件流水
-      getTaskPersonalLine: 'task-service/taskAttendance/getTaskPersonalLine' //个人考勤事件流水
-
+      getTaskPersonalLine: 'task-service/taskAttendance/getTaskPersonalLine', //个人考勤事件流水
+      getUserHistoryPosition: 'message-srv/message/getUserHistoryPosition' //获取用户历史定位
     }
+  },
+  domainLogo: {
+    //域名logo配置
+    list: 'user-service/domainLogo/getSystemDomainLogo',
+    listByPage: 'user-service/domainLogo/getSystemDomainLogoByPage',
+    add: 'user-service/domainLogo/addSystemDomainLogo',
+    del: 'user-service/domainLogo/delSystemDomainLogo',
+    upd: 'user-service/domainLogo/updSystemDomainLogo'
+  },
+  systemIndex: {
+    //首页设置 配置欢迎页图标
+    add: 'user-service/orgLinkLogo/add',
+    delete: 'user-service/orgLinkLogo/delete',
+    get: 'user-service/orgLinkLogo/getDetail',
+    getByOrgId: 'user-service/orgLinkLogo/getDetailByOrgId',
+    list: 'user-service/orgLinkLogo/getList',
+    update: 'user-service/orgLinkLogo/update'
   }
 }

@@ -102,21 +102,6 @@ class JcMapEditor extends JcMapEditorBase {
     } else {
       this.colorStyle = getColors()
     }
-    //处理需要吸附的多边形
-    let subPolygon = []
-
-    if (this.subSigns && this.subSigns.length) {
-      this.subSigns.forEach(item => {
-        if (item.boundaries && item.boundaries.length) {
-          item.boundaries.forEach(boundary => {
-            if (boundary.type == MAP_SIGN_TYPE.Polygon) {
-              subPolygon.push(boundary.target)
-            }
-          })
-        }
-      })
-    }
-    this.subPolygon = subPolygon
   }
 
   /**
@@ -268,7 +253,9 @@ class JcMapEditor extends JcMapEditorBase {
     if (item.type == MAP_SIGN_TYPE.Polygon) {
       //如果是矩形，则使用矩形编辑器
       this.amapEditor = new this.map.AMap.PolygonEditor(this.map.map)
-      let adsorbPolygons = [...this.subPolygon]
+
+      //处理需要吸附的多边形
+      let adsorbPolygons = this.getSignsPolygons(this.subSigns)
 
       this.boundaries.forEach(boundary => {
         if (boundary.id != item.id && boundary.type == MAP_SIGN_TYPE.Polygon) {
@@ -321,6 +308,72 @@ class JcMapEditor extends JcMapEditorBase {
     }
   }
 
+
+  /**
+   * 添加吸附区域
+   * @param {Array} signs 标记数组
+   */
+  addAdsorbPolygons(signs = []) {
+    let subPolygon = this.getSignsPolygons(signs)
+
+    if (this.amapEditor && subPolygon.length) {
+      this.amapEditor.addAdsorbPolygons(subPolygon)
+    }
+
+    if (this.subSigns && this.subSigns.length && signs && signs.length) {
+      signs.forEach(item => {
+        let index = this.subSigns.findIndex(sign => sign.id == item.id)
+
+        if (index < 0) {
+          this.subSigns.push(item)
+        }
+      })
+    }
+  }
+
+  /**
+   * 移除吸附区域
+   * @param {Array} signs 标记数组
+   */
+  removeAdsorbPolygons(signs) {
+    let subPolygon = this.getSignsPolygons(signs)
+
+    if (this.amapEditor && subPolygon.length) {
+      this.amapEditor.removeAdsorbPolygons(subPolygon)
+    }
+
+    if (this.subSigns && this.subSigns.length && signs && signs.length) {
+      signs.forEach(item => {
+        let index = this.subSigns.findIndex(sign => sign.id == item.id)
+
+        if (index > -1) {
+          this.subSigns.splice(index, 1)
+        }
+      })
+    }
+  }
+
+  /**
+   * 添加吸附区域
+   * @param {Array} signs 标记数组
+   * @returns {Array} 返回矩形吸附对象
+   */
+  getSignsPolygons(signs) {
+    let subPolygon = []
+
+    if (signs && signs.length) {
+      signs.forEach(item => {
+        if (item.boundaries && item.boundaries.length) {
+          item.boundaries.forEach(boundary => {
+            if (boundary.type == MAP_SIGN_TYPE.Polygon) {
+              subPolygon.push(boundary.target)
+            }
+          })
+        }
+      })
+    }
+    return subPolygon
+  }
 
   /**
    * 添加事件监听

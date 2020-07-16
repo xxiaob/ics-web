@@ -1,6 +1,6 @@
 <template>
   <el-dialog :title="options ? '编辑组织':'新增组织'" :visible.sync="dialogVisible" width="600px" :append-to-body="true" :close-on-click-modal="false" @close="dialogClose">
-    <el-form ref="form" label-width="100px" :model="form" class="jc-manage-form">
+    <el-form ref="form" label-width="120px" :model="form" class="jc-manage-form">
       <el-form-item label="上级组织">
         <span v-text="pNode.name"></span>
       </el-form-item>
@@ -13,6 +13,18 @@
       <el-form-item label="是否同级查看" prop="sameLevelAuth">
         <el-switch v-model="form.sameLevelAuth" active-value="1" inactive-value="0"></el-switch>
       </el-form-item>
+      <el-form-item label="指挥大屏标题">
+        <el-input v-model="form.commandScreenLogo" placeholder="请输入指挥大屏标题"></el-input>
+      </el-form-item>
+      <el-form-item label="数据大屏标题">
+        <el-input v-model="form.dataScreenLogo" placeholder="请输入数据大屏标题"></el-input>
+      </el-form-item>
+      <el-form-item label="首页logo">
+        <upload-one-img :url.sync="form.welcomeLogo"></upload-one-img>
+      </el-form-item>
+      <el-form-item label="系统logo">
+        <upload-one-img :url.sync="form.homePageLogo"></upload-one-img>
+      </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="dialogVisible = false">取 消</el-button>
@@ -22,10 +34,10 @@
 </template>
 <script>
 import { organizationSave } from '@/api/organization'
-import { getStringRule } from '@/libs/rules'
+import { getStringRule, NOT_NULL } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
 
-let defaultForm = { orgName: '', sameLevelAuth: '0', orgCode: '' }
+let defaultForm = { orgName: '', sameLevelAuth: '0', orgCode: '', commandScreenLogo: '', dataScreenLogo: '', welcomeLogo: '', homePageLogo: '' }
 
 export default {
   name: 'SystemOrganizationManage',
@@ -35,9 +47,13 @@ export default {
     return {
       loading: false,
       rules: {
+        NOT_NULL,
         Len50: getStringRule(1, 50)
       }
     }
+  },
+  components: {
+    uploadOneImg: () => import('@/components/JcUpload/uploadOneImg.vue')
   },
   methods: {
     formatFormData() {

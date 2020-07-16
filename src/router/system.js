@@ -69,4 +69,18 @@ export default [{
   meta: {
     title: '系统设置-PTT群组'
   }
+}, {
+  path: 'system/name',
+  name: 'systemName',
+  component: () => import('@/bundles/systemBundle/systemName'),
+  meta: {
+    title: '系统设置-系统名称'
+  }
+}, {
+  path: 'system/index',
+  name: 'systemIndex',
+  component: () => import('@/bundles/systemBundle/systemIndex'),
+  meta: {
+    title: '系统设置-首页设置'
+  }
 }]

@@ -39,7 +39,7 @@
 
     <jc-manage :orgTree="orgTree" :projectList="projectList" :projectListArr="projectListArr" :user="user" :options="info" :visible.sync="visible" @save-success="initData"></jc-manage>
 
-    <jc-manage-daily :orgTree="orgTree" :projectList="projectList" :projectListArr="projectListArr" :orgObj="orgObj" :orgId="orgId" :options="dailyInfo" :visible.sync="visibleDaily" @save-success="initData"></jc-manage-daily>
+    <jc-manage-daily :EmergencySupport="EmergencySupport" :orgTree="orgTree" :projectList="projectList" :projectListArr="projectListArr" :orgObj="orgObj" :orgId="orgId" :options="dailyInfo" :visible.sync="visibleDaily" @save-success="initData"></jc-manage-daily>
 
     <jc-detail-daily :orgTree="orgTree" :projectListArr="projectListArr" :orgObj="orgObj" :info="dailyInfo" :dailyDetailShow.sync="dailyDetailShow" v-show="dailyDetailShow" @save-success="initData"></jc-detail-daily>
 
@@ -68,6 +68,7 @@ export default {
   },
   data() {
     return {
+      EmergencySupport: [],
       TASK_SELECT_TYPES,
       orgTree: [],
       orgObj: {},
@@ -94,6 +95,19 @@ export default {
     await this.getOrgTree()
     await this.formatProjectList()
     this.initData()
+
+
+    //问题页面 查看关联任务详情
+    const { taskStatus, businessKey } = this.$route.query
+
+    if (businessKey) {
+      console.log(taskStatus == TASK_STATES.PROCESSING)
+      if (taskStatus == TASK_STATES.PROCESSING) {
+        this.handle({ businessKey, taskType: TASK_TYPES.TEMPORARY }, true)
+      } else {
+        this.handle({ businessKey, taskType: TASK_TYPES.TEMPORARY }, false)
+      }
+    }
   },
   methods: {
     formatTime(row, column, cellValue) {
@@ -129,7 +143,7 @@ export default {
       if (res && res.length) {
         return res.map(item=>({ value: item.projectId, label: item.projectName }))
       } else {
-        return null
+        return []
       }
     },
     formatOrgTree(child) {
@@ -267,7 +281,7 @@ export default {
       } else if (row.taskType == TASK_TYPES.TEMPORARY) {
         const res = await taskGet(row.businessKey)
 
-        this.info = { ...row, ...res }
+        this.info = { ...row, ...res, taskStatusName: row.taskStatusName }
         this.info.handle = handle
         this.detailShow = true
       }

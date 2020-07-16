@@ -178,3 +178,18 @@ export async function getMouseTool() {
 
   return result
 }
+
+/**
+ * 加载动画插件
+ */
+export async function initMoveAnimation() {
+  let map = await initAmap()
+
+  let result = await new Promise(function (resolve) {
+    map.plugin(['AMap.MoveAnimation'], function () {
+      resolve()
+    })
+  })
+
+  return result
+}

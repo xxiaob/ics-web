@@ -78,6 +78,11 @@ class JcMapMarket {
   getPosition() { }
 
   /**
+   * 设置marker内容
+   */
+  setContent() { }
+
+  /**
    * 地图自适应 显示
    */
   fitView() {

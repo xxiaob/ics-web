@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="options ? '编辑问题' : '新增问题'" :visible.sync="dialogVisible" width="600px" :close-on-click-modal="false" :append-to-body="true" @close="dialogClose">
+  <el-dialog :title="options ? '编辑问题' : '新增问题'" :visible.sync="dialogVisible" width="600px" :close-on-click-modal="false" :append-to-body="true" @close="dialogClose" top="5vh">
     <el-form ref="form" label-width="100px" :model="form" class="jc-manage-form">
       <el-form-item label="问题标题" prop="problemTitle" :rules="rules.Len50">
         <el-input v-model="form.problemTitle" placeholder="请输入问题标题"></el-input>
@@ -9,6 +9,16 @@
           <el-option v-for="item in types" :key="item.id" :label="item.typeName" :value="item.id">
           </el-option>
         </el-select>
+      </el-form-item>
+      <el-form-item label="问题位置" prop="position" :rules="rules.NOT_NULL">
+        <el-input v-model="form.position" style="display:none"></el-input>
+        <span>{{form.positionName}}</span>
+      </el-form-item>
+      <el-form-item>
+        <div class="jc-map-tip">右键点击地图选中位置</div>
+        <div class="jc-map">
+          <map-user-marker v-model="position"></map-user-marker>
+        </div>
       </el-form-item>
       <el-form-item label="问题描述" prop="problemDesc" :rules="rules.NOT_NULL">
         <!-- <el-input v-model="form.problemDesc" placeholder="请输入问题描述" type="textarea"></el-input> -->
@@ -34,11 +44,13 @@ let defaultForm = {
   problemDesc: '',
   problemTitle: '',
   problemType: '',
-  uploadFilePaths: []
+  uploadFilePaths: [],
+  position: '',
+  positionName: ''
 }
 
 export default {
-  name: 'TaskQuestionProcessManage',
+  name: 'QuestionProcessManage',
   mixins: [FormMixins],
   props: {
     types: {
@@ -53,10 +65,12 @@ export default {
   },
   components: {
     upload: () => import('@/components/JcUpload'),
-    JcEditor: () => import('@/components/JcForm/JcEditor')
+    JcEditor: () => import('@/components/JcForm/JcEditor'),
+    MapUserMarker: () => import('@/components/JcMap/MapUserMarker')
   },
   data() {
     return {
+      position: {},
       loading: false,
       rules: {
         Len50: getStringRule(1, 50),
@@ -65,11 +79,21 @@ export default {
       }
     }
   },
+  watch: {
+    position: {
+      handler(val) {
+        this.form.position = val.position
+        this.form.positionName = val.name
+      },
+      deep: true
+    }
+  },
   methods: {
     formatFormData() {
       if (this.options) {
-        const { id, taskId, orgId, userName, problemDesc, problemTitle, problemType, uploadFilePaths } = this.options
+        const { id, taskId, orgId, userName, problemDesc, problemTitle, problemType, uploadFilePaths, position, positionName } = this.options
 
+        this.position = { position: position, name: positionName }
         return {
           id,
           taskId,
@@ -77,10 +101,13 @@ export default {
           userName,
           problemDesc,
           problemTitle,
+          positionName,
+          position,
           problemType: problemType.toString(),
           uploadFilePaths
         }
       } else {
+        this.position = {}
         return { ...defaultForm, orgId: this.orgId }
       }
     },
@@ -111,5 +138,26 @@ export default {
   /deep/ .w-e-text-container {
     height: 160px !important;
   }
+}
+.jc-map {
+  height: 250px;
+  line-height: normal;
+  position: relative;
+
+  /deep/ {
+    .el-radio-group,
+    .jc-select-warp {
+      display: none;
+    }
+  }
+}
+.jc-map-tip {
+  color: red;
+  font-size: 12px;
+  line-height: normal;
+  // position: absolute;
+  // top: 5px;
+  // left: 5px;
+  // z-index: 100;
 }
 </style>

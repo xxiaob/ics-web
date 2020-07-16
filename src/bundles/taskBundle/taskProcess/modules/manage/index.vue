@@ -1,65 +1,58 @@
 <template>
   <el-dialog :title="options ? '编辑临时任务' : '新增临时任务'" :visible.sync="dialogVisible" width="1100px" :close-on-click-modal="false" :append-to-body="true" @close="dialogClose" top="1vh">
-    <el-form ref="form" label-width="80px" :model="form" class="jc-manage-form">
+    <el-form ref="form" label-width="80px" :model="form" class="jc-manage-form" size="small">
       <div class="jc-clearboth">
-        <el-form-item label="下发人" class="jc-left-width50">
+        <el-form-item label="下发人" class="jc-left-width45">
           <span>{{user.userName}}</span>
         </el-form-item>
-        <el-form-item label="项目名称" prop="projectId" :rules="rules.SELECT_NOT_NULL" class="jc-left-width50">
-          <el-cascader v-model="form.projectId" :options="projectList" :props="{expandTrigger:'hover',emitPath:false}" :disabled="!!projectId"></el-cascader>
+        <el-form-item label="项目名称" prop="projectId" :rules="rules.SELECT_NOT_NULL" class="jc-right-width45">
+          <el-cascader v-model="form.projectId" :options="projectList" :props="{expandTrigger:'hover',emitPath:false}" :disabled="!!projectId" @change="changeProject"></el-cascader>
         </el-form-item>
       </div>
       <div class="jc-clearboth">
-        <el-form-item label="任务名称" prop="taskName" :rules="rules.Len50" class="jc-left-width50">
+        <el-form-item label="任务名称" prop="taskName" :rules="rules.Len50" class="jc-left-width45">
           <el-input v-model="form.taskName" placeholder="请输入任务名称"></el-input>
         </el-form-item>
-        <el-form-item label="任务时间" prop="date" :rules="rules.NOT_NULL" class="jc-left-width50">
+        <el-form-item label="任务时间" prop="date" :rules="rules.NOT_NULL" class="jc-right-width45">
           <el-date-picker style="width:100%" v-model="form.date" @change="changeDate" value-format="timestamp" type="datetimerange" range-separator="-" start-placeholder="开始时间" end-placeholder="结束时间">
           </el-date-picker>
         </el-form-item>
       </div>
       <div class="jc-clearboth">
-        <el-form-item label="任务位置" prop="taskPosition" :rules="rules.NOT_NULL" class="jc-left-width50">
+        <el-form-item label="任务位置" prop="taskPosition" :rules="rules.NOT_NULL" class="jc-left-width45">
           <el-input v-model="form.taskPosition" placeholder="请点击地图选择任务位置" style="display:none"></el-input>
           <!-- <el-input v-model="form.taskPositionName" placeholder="请输入任务位置" disabled=""></el-input> -->
           <span>{{form.taskPositionName}}</span>
         </el-form-item>
-        <el-form-item label="任务来源" prop="taskSource" :rules="rules.SELECT_NOT_NULL" class="jc-left-width50">
-          <el-select v-model="form.taskSource" placeholder="选择任务来源" :disabled="taskSourceDisabled">
+        <el-form-item label="任务来源" prop="taskSource" :rules="rules.SELECT_NOT_NULL" class="jc-right-width45">
+          <el-select v-model="form.taskSource" placeholder="选择任务来源" :disabled="taskSourceDisabled" :class="{'jc-left-width45':taskSourceDisabled}">
             <el-option v-for="item in taskSources" :key="item.value" :label="item.label" :value="item.value"></el-option>
           </el-select>
+          <div v-show="taskSourceDisabled" class="taskSourceName" :title="taskSourceName">{{taskSourceName}}</div>
         </el-form-item>
       </div>
-      <div class="jc-clearboth">
-        <div class="jc-left-width50">
-          <div style="color:red">右键点击地图选中位置</div>
-          <div class="jc-map">
-            <map-user-marker v-model="position" @user-change="userChange"></map-user-marker>
-          </div>
+      <el-form-item label="任务指派">
+        <div class="jc-map-tip">右键点击地图选中位置</div>
+        <div class="jc-map">
+          <map-user-marker v-model="position" @user-change="userChange"></map-user-marker>
         </div>
-        <!-- peopleProps[peopleType] -->
-        <el-form-item label="任务人员" prop="" :rules="rules.SELECT_NOT_NULL" class="jc-left-width50">
-          <jc-task-people :peopleType.sync="peopleType" :selecteds.sync="peoples" :orgTree="orgTree"></jc-task-people>
-        </el-form-item>
-      </div>
-      <!-- <el-form-item label="任务指派" prop="taskPositionName" :rules="rules.NOT_NULL">
-        <el-input v-model="form.taskPositionName" placeholder="请输入任务指派"></el-input>
-      </el-form-item> -->
-      <div class="jc-clearboth">
-        <el-form-item label="任务描述" prop="taskDesc" :rules="rules.NOT_NULL" class="jc-left-width50">
-          <!-- <el-input v-model="form.taskDesc" placeholder="请输入任务描述" type="textarea"></el-input> -->
-          <jc-editor v-model="form.taskDesc"></jc-editor>
-        </el-form-item>
-        <el-form-item label="附件" class="jc-left-width50">
-          <upload :show="dialogVisible" :urls.sync="form.uploadFilePaths" accept="*"></upload>
-        </el-form-item>
-      </div>
+      </el-form-item>
+      <!-- peopleProps[peopleType] -->
+      <el-form-item label="任务人员" prop="" :rules="rules.SELECT_NOT_NULL">
+        <jc-task-people :edit.sync="edit" :projectId="form.projectId" :emergency="emergency" :peopleType.sync="peopleType" :selecteds.sync="peoples" :orgTree="orgTree"></jc-task-people>
+      </el-form-item>
+      <el-form-item label="任务描述" prop="taskDesc" :rules="rules.NOT_NULL">
+        <jc-editor v-model="form.taskDesc"></jc-editor>
+      </el-form-item>
+      <el-form-item label="附件">
+        <upload :show="dialogVisible" :urls.sync="form.uploadFilePaths" accept="*"></upload>
+      </el-form-item>
 
     </el-form>
     <div slot="footer" class="dialog-footer">
-      <el-button @click="dialogVisible = false">取 消</el-button>
-      <el-button type="primary" :loading="loading" @click="onSubmit(false)" v-if="!question">暂 存</el-button>
-      <el-button type="primary" :loading="loading" @click="onSubmit(true)">下 发</el-button>
+      <el-button @click="dialogVisible = false" size="small">取 消</el-button>
+      <el-button type="primary" :loading="loading" @click="onSubmit(false)" v-if="!question" size="small">暂 存</el-button>
+      <el-button type="primary" :loading="loading" @click="onSubmit(true)" size="small">下 发</el-button>
     </div>
   </el-dialog>
 </template>
@@ -80,6 +73,7 @@ const defaultForm = {
   // projectType: '',
   taskName: '',
   taskSource: '',
+  taskSourceId: '',
   beginTime: '',
   endTime: '',
   taskDesc: '',
@@ -111,9 +105,12 @@ export default {
   },
   data() {
     return {
+      edit: false,
+      taskSourceName: '',
+      emergency: false,
       projectListArr: [],
       projectList: [],
-      peopleType: TASK_PEOPLE_TYPES.ORG,
+      peopleType: TASK_PEOPLE_TYPES.PEOPLE,
       peopleProps: {
         [TASK_PEOPLE_TYPES.ORG]: 'orgIds',
         [TASK_PEOPLE_TYPES.PEOPLE]: 'userIds'
@@ -126,7 +123,7 @@ export default {
         NOT_NULL
       },
       orgTree: [],
-      taskSources: JSON.parse(JSON.stringify(TASK_SOURCES.VALUES)),
+      taskSources: TASK_SOURCES.VALUES,
       taskSourceDisabled: false,
       position: {}
     }
@@ -159,6 +156,12 @@ export default {
     await this.formatProjectList()
   },
   methods: {
+    changeProject(val) {
+      const res = this.EmergencySupport.filter(item=>item.value === val)
+
+      this.emergency = res.length ? true : false
+      // console.log('changeProject', this.emergency)
+    },
     userChange(val) {
       if (this.peopleType === TASK_PEOPLE_TYPES.ORG) {
         this.peoples = val
@@ -167,7 +170,7 @@ export default {
         this.peoples = [...new Set([...this.peoples, ...val])]
       }
     },
-    async  formatProjectList() {
+    async formatProjectList() {
       this.EmergencySupport = await this.getProjectList(PROJECT_TYPES.EmergencySupport)
       this.SpecialControl = await this.getProjectList(PROJECT_TYPES.SpecialControl)
 
@@ -183,7 +186,7 @@ export default {
       this.projectList = PROJECT_TYPES.VALUES.map(item=>{
         const { value, label, key } = item
 
-        return { value, label, children: this[key] || null }
+        return { value, label, children: this[key] && this[key].length ? this[key] : null }
       })
     },
     async getProjectList(projectType) {
@@ -192,7 +195,7 @@ export default {
       if (res && res.length) {
         return res.map(item=>({ value: item.projectId, label: item.projectName }))
       } else {
-        return null
+        return []
       }
     },
     formatOrgTree(child) {
@@ -217,15 +220,6 @@ export default {
       }
       return trees
     },
-    formatQuestionForm() {
-      const { id, problemTitle } = this.$route.query
-
-      if (id) {
-        this.taskSources.push({ key: id, value: id, label: problemTitle })
-        this.form.taskSource = id
-        this.taskSourceDisabled = true
-      }
-    },
     changeDate(value) {
       if (value) {
         this.form.beginTime = value[0]
@@ -236,14 +230,19 @@ export default {
       }
     },
     formatFormData() {
-      let questionTaskSource = ''
+      let questionTaskSource = '', paths = [], taskSourceId = '', position = '', positionName = ''
+
+      this.edit = true
 
       if (this.question) {
-        this.taskSources.push(this.question) // bug 避免重复push  - 判断是否存在
-        questionTaskSource = this.question.value
+        questionTaskSource = TASK_SOURCES.PROBLEMFEEDBACK
+        taskSourceId = this.question.value
+        paths = this.question.uploadFilePaths
+        position = this.question.position
+        positionName = this.question.positionName
+        this.taskSourceName = this.question.label
         this.taskSourceDisabled = true
       } else {
-        this.taskSources = JSON.parse(JSON.stringify(TASK_SOURCES.VALUES))
         this.taskSourceDisabled = false
       }
 
@@ -253,6 +252,8 @@ export default {
 
         const project = this.projectListArr.filter(item=>item.value == projectId)
         const newProjectId = (project[0] && project[0].value) || PROJECT_TYPES.NORMAL
+
+        this.changeProject(projectId)
 
         this.position = { position: taskPosition, name: taskPositionName }
         const form = {
@@ -286,8 +287,8 @@ export default {
         }
         return form
       } else {
-        this.position = {}
-        this.peopleType = TASK_PEOPLE_TYPES.ORG
+        this.position = { position: position, name: positionName }
+        this.peopleType = TASK_PEOPLE_TYPES.PEOPLE
         this.peoples = []
         const beginTime = new Date().getTime()
         const endTime = beginTime + 2 * 60 * 60 * 1000
@@ -298,8 +299,13 @@ export default {
           const project = this.projectListArr.filter(item=>item.value == this.projectId)
 
           newProjectId = (project[0] && project[0].value) || PROJECT_TYPES.NORMAL
+          this.changeProject(this.projectId)
+        } else {
+          newProjectId = PROJECT_TYPES.NORMAL
+          this.emergency = false
         }
-        return { ...defaultForm, taskSource: questionTaskSource, projectId: newProjectId, beginTime, endTime, date: [beginTime, endTime] }
+        return { ...defaultForm, taskSource: questionTaskSource, projectId: newProjectId, beginTime, endTime, date: [beginTime, endTime], uploadFilePaths: paths, taskSourceId, taskPosition: position,
+          taskPositionName: positionName }
       }
     },
     onSubmit(ifStart) {
@@ -347,17 +353,30 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.jc-left-width50 {
-  width: 50%;
+/deep/ .el-dialog {
+  .el-dialog__body {
+    padding: 20px 80px;
+    .el-form-item--small.el-form-item {
+      margin-bottom: 15px;
+    }
+  }
+  .el-dialog__header {
+    padding: 5px 20px;
+    .el-dialog__title {
+      font-size: 16px;
+    }
+  }
+}
+.dialog-footer {
+  text-align: center;
+}
+.jc-left-width45 {
+  width: 45%;
   float: left;
 }
-.jc-left-width40 {
-  width: 40%;
-  float: left;
-}
-.jc-left-width60 {
-  width: 60%;
-  float: left;
+.jc-right-width45 {
+  width: 45%;
+  float: right;
 }
 .jc-clearboth::after,
 .jc-clearboth::before {
@@ -365,13 +384,29 @@ export default {
   display: table;
   clear: both;
 }
+.taskSourceName {
+  width: 52%;
+  float: right;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 .jc-map {
   height: 300px;
+  position: relative;
+}
+.jc-map-tip {
+  color: red;
+  font-size: 12px;
+  // position: absolute;
+  // top: 5px;
+  // left: 5px;
+  // z-index: 100;
 }
 .jc-myeditor {
-  height: 200px;
+  height: 160px;
   /deep/ .w-e-text-container {
-    height: 160px !important;
+    height: 120px !important;
   }
 }
 </style>

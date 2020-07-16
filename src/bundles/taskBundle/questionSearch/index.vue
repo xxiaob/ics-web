@@ -1,5 +1,6 @@
 <template>
   <div class="jc-main-container-warp">
+
     <div v-show="!detailShow">
       <tab-filter :types="types" :orgTree="orgTree" @filter="goFilter"></tab-filter>
       <el-card class="jc-table-card jc-mt">
@@ -23,15 +24,9 @@
         <el-pagination @current-change="currentChange" @size-change="sizeChange" :current-page.sync="page.pageNum" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.total" class="text-right jc-mt"></el-pagination>
       </el-card>
     </div>
-    <el-card class="jc-table-card" v-show="detailShow">
-      <div slot="header" class="jc-card-header">
-        <div class="jc-card-title">{{info&&info.handle?'处理问题':'问题详情'}}</div>
-        <div class="jc-button-group">
-          <el-button size="small" icon="el-icon-arrow-left" @click="detailShow=false">返回</el-button>
-        </div>
-      </div>
-      <jc-detail :types="types" :info="info" :firstOrgIds="firstOrgIds" :detailShow.sync="detailShow" @save-success="initData"></jc-detail>
-    </el-card>
+
+    <jc-detail v-show="detailShow" :types="types" :info="info" :firstOrgIds="firstOrgIds" :detailShow.sync="detailShow" @save-success="initData"></jc-detail>
+
   </div>
 </template>
 <script>

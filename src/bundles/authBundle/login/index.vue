@@ -1,7 +1,7 @@
 <template>
   <div class="jc-login-warp">
     <img src="./assets/login-bg.png" class="jc-login-bg" />
-    <div class="jc-login-header"></div>
+    <div class="jc-login-header" :style="systemLogo"></div>
     <div class="jc-login-space">
       <div class="jc-login-title">欢迎登录</div>
       <div class="jc-input-warp">
@@ -22,6 +22,8 @@
 import { mapMutations } from 'vuex'
 import { login } from '@/api/auth'
 import md5 from 'md5'
+import { getDomainLogoConfig, setDomainLogoConfig } from '@/libs/storage'
+import { listAll } from '@/api/domainLogo'
 
 export default {
   name: 'Login',
@@ -32,13 +34,42 @@ export default {
     return {
       loading: false,
       tip: '',
-      form: {
-        userName: '',
-        password: ''
-      }
+      logo: '', //系统logo
+      form: { userName: '', password: '' }
     }
   },
+  computed: {
+    systemLogo() {
+      return this.logo ? `background-image: url(${this.logo});` : ''
+    }
+  },
+  created() {
+    this.initData() //初始化内容
+  },
   methods: {
+    async initData() {
+      let configs = getDomainLogoConfig()
+
+      this.calcLogo(configs)
+      try {
+        configs = await listAll()
+        this.calcLogo(configs)
+        setDomainLogoConfig(configs)
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    calcLogo(configs) {
+      console.log('登录系统配置', configs)
+      //根据配置设置系统logo
+      if (configs && configs.length) {
+        let host = window.location.host
+
+        let domain = configs.find(config => config.domain == host)
+
+        this.logo = domain ? domain.domainLogo : ''
+      }
+    },
     onSubmit() {
       this.tip = ''
       if (this.form.userName && this.form.password) {
@@ -85,7 +116,8 @@ export default {
   right: 0;
   height: 110px;
   z-index: 9;
-  background: url(/static/images/login-logo.png) no-repeat;
+  background-image: url(/static/images/login-logo.png);
+  background-repeat: no-repeat;
   background-position: 60px center;
   border-bottom: solid 1px #253270;
 }

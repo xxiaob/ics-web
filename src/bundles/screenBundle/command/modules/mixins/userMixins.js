@@ -4,7 +4,7 @@
 import { getMarkerCluster, getMouseTool } from '@/map/aMap/aMapUtil'
 import { JcUserIcons } from '@/config/JcIconConfig'
 
-let usersData = null //存储用户信息
+let usersData = { markerCluster: null, users: {}, lnglats: [] } //存储用户信息
 
 let MarkerCluster //存储 MarkerCluster
 
@@ -16,12 +16,15 @@ export default {
   data() {
     return {
       gatherUserIds: [], //正在采集的用户id 数组
+      abnormalUserIds: [], //异常的用户id 数组
       userTipVisible: true, //用户是否显示
-      togetherVisible: true //用户是否聚合
+      togetherVisible: true, //用户是否聚合
+      locationUserId: null //定位的用户id
     }
   },
   created() {
     this.$EventBus.$on('map-user-change', this.userMap) //监听用户改变
+    this.$EventBus.$on('screen-user-location', this.userLocation) //监听用户定位
     this.$EventBus.$on('show-word-change', this.userShowWordChange) //监听文字显示切换
     this.$EventBus.$on('show-together-change', this.userTogetherChange) //监听聚合显示改变
     this.$EventBus.$on('screen-use-select', this.userSelect) //监听框选用户
@@ -89,6 +92,11 @@ export default {
             break
           }
         }
+        let index = this.gatherUserIds.indexOf(data.offUserId)
+
+        if (index > -1) {
+          this.gatherUserIds.splice(index, 1)
+        }
       } else if (data.type == 4) {
         //是否再一键采集中，如果正在一键采集则显示状态，结束采集则恢复状态
         let index = this.gatherUserIds.indexOf(data.collectUser.userId)
@@ -99,11 +107,28 @@ export default {
         if (!data.collectUser.off && index < 0) {
           this.gatherUserIds.push(data.collectUser.userId)
         }
+      } else if (data.type == 5) {
+        //用户考勤状态更新
+        if (data.attendance && data.attendance.length) {
+          data.attendance.forEach(item => {
+            let index = this.abnormalUserIds.indexOf(item.id)
+
+            //如果异常用户列表，用户存在，用户为正常，则从异常列表移除，如果用户不存在，异常，则增加
+            if (index > -1) {
+              if (item.status == 0) {
+                this.abnormalUserIds.splice(index, 1)
+              }
+            } else if (item.status == 1) {
+              this.abnormalUserIds.push(item.id)
+            }
+          })
+        }
       }
       //处理用户信息
       if (data.users && data.users.length) {
         data.users.forEach(item => {
-          let center = [parseFloat(item.lng).toFixed(9), parseFloat(item.lat).toFixed(9)]
+          //计算用户的中心点和key，处理用户坐标相同的情况
+          let { center, key } = this.getUserCenterAndKey(item.lng, item.lat, item.userId)
 
           //查找该用户使用已经存在，如果存在则更新，否则进行添加
           let lnglat = usersData.lnglats.find(user => user.userId == item.userId)
@@ -112,9 +137,9 @@ export default {
             delete usersData.users[lnglat.key]
             lnglat.lnglat = center
           } else {
-            usersData.lnglats.push({ lnglat: center, key: center.join(','), userId: item.userId })
+            usersData.lnglats.push({ lnglat: center, key, userId: item.userId })
           }
-          usersData.users[center.join(',')] = { ...item, center }
+          usersData.users[key] = { ...item, center }
         })
       }
       if (usersData.markerCluster) {
@@ -129,6 +154,21 @@ export default {
         usersData.markerCluster.on('click', this.markerUserClusterClick)
       }
       this.fitUsers() //控制用户显示
+    },
+    getUserCenterAndKey(lng, lat, userId) {
+      let center = [parseFloat(lng).toFixed(6), parseFloat(lat).toFixed(6)]
+
+      let key = center.join(',')
+
+      //处理是已经有用户和当前用户位置完全相同，如果相同则进行处理偏差处理
+      let user = usersData.users[key]
+
+      if (user && user.userId != userId) {
+        //如果该坐标用户存在，且不是当前用户，则将该用户位置进行偏差，再次进行处理
+        return this.getUserCenterAndKey(parseFloat(lng) + 0.000001, parseFloat(lat) + 0.000001, userId)
+      }
+
+      return { center, key }
     },
     fitUsers() {
       if (!usersData.markerCluster) {
@@ -160,22 +200,36 @@ export default {
     },
     renderUserMarker(context) {
       console.log('绘制用户-单点绘制', context)
-      let key = parseFloat(context.data[0].lnglat.lng).toFixed(9) + ',' + parseFloat(context.data[0].lnglat.lat).toFixed(9)
+      let key = this.getKeyByLngLat(context.data[0].lnglat.lng, context.data[0].lnglat.lat)
 
       let userItem = usersData.users[key]
 
-      let content = '<div class="jc-marker-content">'
+      //过滤掉用户信息为空的场景
+      if (!userItem) {
+        return
+      }
+
+      let content = '<div class="jc-marker-content jc-market-center">'
 
       if (this.userTipVisible) {
         content += `<div class="jc-marker-title">${userItem.userName}</div>`
       }
-      if (this.gatherUserIds.includes(userItem.userId)) {
+      //处理用户图标显示
+      if (this.abnormalUserIds.includes(userItem.userId)) {
+        content += `<img src=${JcUserIcons.abnormal} class="jc-marker-icon"/></div>`
+      } else if (this.gatherUserIds.includes(userItem.userId)) {
         content += `<img src=${JcUserIcons.gather} class="jc-marker-icon"/></div>`
       } else {
         content += `<img src=${JcUserIcons.online} class="jc-marker-icon"/></div>`
       }
 
-      context.marker.setzIndex(20)
+      //如果是定位的用户，则突出显示
+      if (userItem.userId == this.locationUserId) {
+        context.marker.setzIndex(20)
+      } else {
+        context.marker.setzIndex(18)
+      }
+
       context.marker.setContent(content)
     },
     markerUserClusterClick(context) {
@@ -187,7 +241,7 @@ export default {
         myJcMap.map.setBounds(this.getAmapBundles(context.clusterData))
       } else {
         //获取信息去通知显示详情
-        let key = parseFloat(context.lnglat.lng).toFixed(9) + ',' + parseFloat(context.lnglat.lat).toFixed(9)
+        let key = this.getKeyByLngLat(context.lnglat.lng, context.lnglat.lat)
 
         let userItem = usersData.users[key]
 
@@ -204,7 +258,30 @@ export default {
       if (usersData && usersData.markerCluster) {
         usersData.markerCluster.setMap(null)
       }
+      this.gatherUserIds = [] //重置用户聚合id数组
+      this.abnormalUserIds = [] //重置用户异常id数组
+
       usersData = { markerCluster: null, users: {}, lnglats: [] }
+    },
+    userLocation(data) {
+      //用户定位id
+      let noUser = true //处理是否有用户
+
+      if (this.userTipVisible) {
+        //查找该用户使用已经存在，如果存在则更新，否则进行添加
+        let lnglat = usersData.lnglats.find(user => user.userId == data.id)
+
+        if (lnglat) {
+          this.locationUserId = data.id
+          let myJcMap = this.getMyJcMap() //获取地图对象
+
+          myJcMap.map.setZoomAndCenter(20, lnglat.key.split(','))
+          noUser = false //设置查找到该用户
+        }
+      }
+      if (noUser) {
+        this.$message.error('用户不在线或未显示')
+      }
     },
     userShowWordChange(words) {
       this.userTipVisible = words.includes('user') //如果存在用户显示，则显示用户，否则不显示
@@ -220,6 +297,7 @@ export default {
     userMouseTool = null
     //去除事件监听
     this.$EventBus.$off('map-user-change', this.userMap)
+    this.$EventBus.$off('screen-user-location', this.userLocation) //监听用户定位
     this.$EventBus.$off('show-word-change', this.orgShowWordChange)
     this.$EventBus.$off('show-together-change', this.userTogetherChange)
     this.$EventBus.$off('screen-use-select', this.userSelect)

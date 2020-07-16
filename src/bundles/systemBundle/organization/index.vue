@@ -45,7 +45,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 $jc-edit-trees-width: $jc-trees-width * 1.2;
-$jc-detail-height: 110px;
+$jc-detail-height: 160px;
 .jc-trees-warp {
   position: absolute;
   top: $jc-default-dis;

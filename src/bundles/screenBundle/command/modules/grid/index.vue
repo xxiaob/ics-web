@@ -46,7 +46,7 @@ export default {
   methods: {
     async initData() {
       this.loading = true
-      //初始化组织,如果是专项,则需要初始化默认组织
+      //初始化组织,如果是应急项目，则使用项目名称作为父级，如果是专项,则需要初始化默认组织
       if (PROJECT_TYPES.EmergencySupport == this.project.projectType) {
         this.expandedKeys = [this.project.orgId]
         this.parentNode = [{ id: this.project.orgId, orgId: this.project.orgId, name: this.project.projectName }]
@@ -139,9 +139,9 @@ export default {
       //去定位
       console.log('screen-grid-location-data', data)
       if (data.areaId) {
-        this.$EventBus.$emit('screen-grid-location', data) //通知网格定位
+        this.$EventBus.$emit('screen-grid-location', { id: data.id, areaTypeId: data.areaTypeId, icon: data.icon }) //通知网格定位
       } else {
-        this.$EventBus.$emit('screen-org-location', data) //通知组织定位
+        this.$EventBus.$emit('screen-org-location', { id: data.id }) //通知组织定位
       }
     }
   }

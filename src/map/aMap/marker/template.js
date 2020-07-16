@@ -52,3 +52,12 @@ export function centerMarker(options) {
   result += `<img src=${getIconUrl(options.icon)} class="jc-marker-icon"/></div>`
   return result
 }
+/**
+ *
+ * @param {*} options 参数
+ * @param {String} options.icon 中心点标记图标，url
+ * @returns {String} html字符串
+ */
+export function trajectoryMasker(options) {
+  return `<div class="jc-trajectory-content" style="background-image: url(${options.icon});"></div>`
+}

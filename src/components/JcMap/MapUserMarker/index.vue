@@ -115,7 +115,7 @@ export default {
           results.forEach(item => {
             let userPosition = item.location
 
-            let marker = new JcMapMarker({ map: myJcMap, name: item.userName, icon: JcUserIcons.online, position: userPosition })
+            let marker = new JcMapMarker({ map: myJcMap, name: item.userName, icon: JcUserIcons.online, position: userPosition, mapStyle: markerStyle.CENTER_MARKER })
 
             users.push({ userId: item.userId, userName: item.userId, center: userPosition, marker })
           })
@@ -156,7 +156,7 @@ export default {
         this.myMarker.name = name
         this.myMarker.show(center)
       } else {
-        this.myMarker = new JcMapMarker({ map: myJcMap, name, icon: '/static/mapIcons/temporarytasks.gif', position: center, mapStyle: markerStyle.TEMPORARY_TASKS })
+        this.myMarker = new JcMapMarker({ map: myJcMap, name, icon: '/static/mapIcons/temporarytasks.gif', position: center, mapStyle: markerStyle.CENTER_MARKER })
       }
     }
   },

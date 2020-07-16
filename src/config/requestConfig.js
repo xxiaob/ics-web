@@ -5,9 +5,9 @@ import RESPONSE_CODE from '@/constant/RESPONSE_CODE'
 import { getToken } from '@/libs/storage'
 
 //设置默认值 defaults
-axios.defaults.timeout = 1000 * 10 //设置请求超时时长
+axios.defaults.timeout = 1000 * 15 //设置请求超时时长
 //设置默认请求域
-axios.defaults.baseURL = process.env.API_HOST.base /*eslint-disable-line*/
+axios.defaults.baseURL = process.env.apiHostConfig.base /*eslint-disable-line*/
 
 //设置全局http请求
 let errorRun = () => {
@@ -34,6 +34,7 @@ axios.interceptors.response.use(function (res) {
       return res.data.resData
     } else {
       if (res.data.resMsg.msgCode === RESPONSE_CODE.AUTH_ERROR || res.data.resMsg.msgCode === RESPONSE_CODE.AUTH_EXPIRE) {
+        Message.error('您未登录或登录已失效')
         router.push({ name: 'login' })
       } else {
         Message.error(res.data.resMsg.msgText)

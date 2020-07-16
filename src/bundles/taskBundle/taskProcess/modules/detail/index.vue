@@ -198,17 +198,13 @@ export default {
   computed: {
     form() {
       if (this.info) {
-        return { ...this.info, ...this.info.detailViewVO, ...this.info.taskDetailVO }
+        return { ...this.info, ...this.info.detailViewVO, ...this.info.taskDetailVO, taskStatusName: this.info.taskStatusName }
       } else {
         return {}
       }
     },
     taskSourceName() {
-      if (this.form.taskSourceName) {
-        return this.form.taskSourceName
-      } else {
-        return TASK_SOURCES.toString(this.form.taskSource)
-      }
+      return TASK_SOURCES.toString(this.form.taskSource) + ' ' + this.form.taskSourceName
     },
     formatUsers() {
       if (this.form.assignees && this.form.assignees.length) {

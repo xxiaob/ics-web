@@ -35,6 +35,16 @@ class JcMapEditor {
   addArea() { }
 
   /**
+   * 添加吸附区域
+   */
+  addAdsorbPolygons() { }
+
+  /**
+   * 移除吸附区域
+   */
+  removeAdsorbPolygons() { }
+
+  /**
    * 恢复重置
    */
   reset() {

@@ -5,16 +5,19 @@
       <component :is="tabComponent" :options="options" :project="project"></component>
     </keep-alive>
     <div class="jc-user-detail-footer">
-      <div class="jc-user-detail-item jc-audio" title="对讲" @click="goMediaLive('0')"></div>
-      <div class="jc-user-detail-item jc-command" title="指挥" @click="goMediaLive('1')"></div>
-      <div class="jc-user-detail-item jc-video" title="观摩" @click="goMediaLive('3')"></div>
-      <div class="jc-user-detail-item jc-force-video" title="强制观摩" @click="goMediaLive('2')"></div>
-      <div class="jc-user-detail-item jc-trajectory" title="轨迹"></div>
+      <div class="jc-user-detail-item jc-audio" title="对讲" @click="goMediaLive(videoTypes.DOUBLEAUDIO)"></div>
+      <div class="jc-user-detail-item jc-command" title="指挥" @click="goMediaLive(videoTypes.DOUBLEVIDEO)"></div>
+      <div class="jc-user-detail-item jc-video" title="观摩" @click="goMediaLive(videoTypes.OBSERVE)"></div>
+      <div class="jc-user-detail-item jc-force-video" title="强制观摩" @click="goMediaLive(videoTypes.FORCEOBSERVE)"></div>
+      <div class="jc-user-detail-item jc-trajectory" title="轨迹" @click="userTrajectory"></div>
       <div class="jc-user-detail-item jc-screen" title="投屏"></div>
     </div>
   </view-warp>
 </template>
 <script>
+import { VIDEO_INVITE_TYPES } from '@/constant/Dictionaries'
+import { getChannelByUserId } from '@/api/live'
+
 export default {
   name: 'ScreenCommandUserDetail',
   props: ['options', 'project'],
@@ -23,17 +26,37 @@ export default {
     ViewTabs: () => import('../common/viewTabs'),
     BaseInfo: () => import('./modules/baseInfo'), //基础信息
     UserTask: () => import('./modules/task'), //任务 问题 事件
-    WorkCheck: () =>import('./modules/workCheck') //考勤
+    WorkCheck: () =>import('./modules/workCheck'), //考勤
+    UserResources: ()=> import('./modules/resources') //用户资源，目前显示一键采集的内容
   },
   data() {
     return {
       tabComponent: 'BaseInfo',
-      tabs: [{ label: '基础信息', value: 'BaseInfo' }, { label: '综合', value: 'UserTask' }, { label: '考勤', value: 'WorkCheck' }]
+      videoTypes: VIDEO_INVITE_TYPES,
+      tabs: [{ label: '基础信息', value: 'BaseInfo' }, { label: '综合', value: 'UserTask' }, { label: '考勤', value: 'WorkCheck' }, { label: '一键采集', value: 'UserResources' }]
     }
   },
   methods: {
-    goMediaLive(type) {
-      this.$EventBus.$emit('screen-media-live', { users: [{ id: this.options.userId, name: this.options.userName }], type })
+    async goMediaLive(type) {
+      if (type == VIDEO_INVITE_TYPES.OBSERVE) {
+        //如果是观摩，则取查询观摩的房间号，如果房间号不存在，则不能观摩
+        try {
+          let res = await getChannelByUserId({ userId: this.options.userId })
+
+          if (res && res.channelName) {
+            this.$EventBus.$emit('screen-media-live', { users: [{ id: this.options.userId, name: this.options.userName }], type, channelId: res.channelName })
+          } else {
+            this.$message.error('当前用户未在采集中')
+          }
+        } catch (error) {
+          console.log(error)
+        }
+      } else {
+        this.$EventBus.$emit('screen-media-live', { users: [{ id: this.options.userId, name: this.options.userName }], type })
+      }
+    },
+    userTrajectory() {
+      this.$EventBus.$emit('screen-user-trajectory', { id: this.options.userId, name: this.options.userName }) //查看用户轨迹
     }
   }
 }

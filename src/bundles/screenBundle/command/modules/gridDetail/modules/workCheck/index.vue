@@ -91,7 +91,7 @@ export default {
               time: times[1], date: times[0], url: item.photoUrl, duration: item.onguardDuration, distence: item.journey, reportEvent: item.eventReportCount })
           })
         }
-        this.list = list.reverse()
+        this.list = list
       } catch (error) {
         console.log(error)
       }

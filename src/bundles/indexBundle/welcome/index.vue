@@ -1,18 +1,76 @@
 <template>
   <div class="jc-welcome-warp">
     <img src="./assets/bg.png" class="jc-welcome-bg" />
-    <div class="jc-welcome-content">
-      <router-link :to="{name: 'specialControl'}" tag="div" class="jc-welcome-item jc-icon1"></router-link>
-      <div class="jc-welcome-item jc-icon2"></div>
-      <div class="jc-welcome-item jc-icon3"></div>
-      <a href="http://36.153.138.122:10002/eUrbanMIS/openconstructionwithoutlogin.htm?userName=%E5%9F%8E%E7%AE%A1%E5%B1%80%E6%89%A7%E6%B3%95&password=12345678#MontiorMgr" target="_blank" class="jc-welcome-item jc-icon4"></a>
-      <router-link :to="{name: 'intelligenceControl'}" tag="div" class="jc-welcome-item jc-icon5"></router-link>
+    <div class="jc-welcome-content" :style="welcomeLogo">
+      <div class="jc-welcome-item" v-for="item in list" :key="item.id" :style="item.logo" @click="goLink(item)"></div>
+      <template v-if="list.length < 1">
+        <router-link :to="{name: 'specialControl'}" tag="div" class="jc-welcome-item jc-icon1"></router-link>
+        <div class="jc-welcome-item jc-icon2"></div>
+        <div class="jc-welcome-item jc-icon3"></div>
+        <div class="jc-welcome-item jc-icon4"></div>
+        <div class="jc-welcome-item jc-icon5"></div>
+      </template>
     </div>
   </div>
 </template>
 <script>
+import { mapState } from 'vuex'
+import { getByOrgId } from '@/api/systemIndex'
+
 export default {
-  name: 'IndexWelcome'
+  name: 'IndexWelcome',
+  data() {
+    return {
+      list: []
+    }
+  },
+  computed: {
+    ...mapState('user', {
+      user: state => state.user
+    }),
+    welcomeLogo() {
+      return this.user && this.user.userRespInnerDTO && this.user.userRespInnerDTO.welcomeLogo ? `background-image: url(${this.user.userRespInnerDTO.welcomeLogo});` : ''
+    }
+  },
+  created() {
+    this.initData() //初始化内容
+  },
+  methods: {
+    async initData() {
+      try {
+        let res = await getByOrgId()
+
+        let list = []
+
+        if (res && res.length) {
+          res.forEach(item => {
+            list.push({ id: item.id, logo: `background-image: url(${item.logo});`, url: item.url, newWindow: item.newWindow })
+          })
+        }
+        this.list = list
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    goLink(item) {
+      //处理点击跳转
+      if (item.url) {
+        let linkUrl = item.url
+
+        if (item.url.indexOf('://') < 0) {
+          const { href } = this.$router.resolve({ name: item.url })
+
+          linkUrl = href
+        }
+        if (item.newWindow == 1) {
+          //新页面打开
+          window.open(linkUrl, '_blank')
+        } else {
+          window.location.href = linkUrl
+        }
+      }
+    }
+  }
 }
 </script>
 <style lang="scss" scoped>

@@ -3,7 +3,7 @@
     <div class="jc-task-item" v-for="item in list" :key="item.id" :class="style[item.type]" @click="detail(item)">
       <div class="jc-info-title" v-text="item.title"></div>
       <div class="jc-info-item">组织：{{item.orgName}}</div>
-      <template v-if="item.type == types.TASK">
+      <template v-if="item.type == types.TASK || item.type == types.TEMPORARY">
         <div class="jc-info-item">任务类型：{{item.taskTypeName}}</div>
         <div class="jc-info-item">下发人：{{item.userName}}</div>
       </template>
@@ -54,7 +54,7 @@ export default {
         if (result.tasks && result.tasks.length) {
           //处理任务
           result.tasks.forEach(item => {
-            list.push({ id: item.businessKey, type: MESSAGE_TYPE.TASK, title: item.taskName, taskTypeName: item.taskTypeName,
+            list.push({ id: item.businessKey, type: item.taskType == '0' ? MESSAGE_TYPE.TEMPORARY : MESSAGE_TYPE.TASK, title: item.taskName, taskTypeName: item.taskTypeName,
               userName: item.startUser, orgName: item.startOrg, time: formatDate(item.createTime) })
           })
         }

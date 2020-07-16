@@ -87,7 +87,7 @@
     <div v-show="activate==='3'" class="jc-view-content jc-event" v-loading="loading" element-loading-background="rgba(0, 0, 0, 0)">
       <jc-event-list :taskId="form.businessKey" :small="true"></jc-event-list>
     </div>
-    <div class="jc-footer">
+    <div class="jc-footer" v-if="form.auth">
       <el-button @click="handleTask(true)" size="small" type="primary">流转任务</el-button>
       <el-button @click="handleTask(false)" size="small">结束任务</el-button>
     </div>
@@ -117,7 +117,7 @@
 
 </template>
 <script>
-import { taskGet, taskFinish } from '@/api/task'
+import { taskGet, taskFinish, getTaskAuth } from '@/api/task'
 import { eventManageSelectList } from '@/api/eventManage'
 import { projectsList } from '@/api/projects'
 import { organizationList } from '@/api/organization'
@@ -323,8 +323,9 @@ export default {
         this.loading = true
         try {
           const res = await taskGet(this.info.id)
+          const auth = await getTaskAuth(this.info.id)
 
-          this.form = { ...this.info, ...res, ...res.detailViewVO, ...res.taskDetailVO }
+          this.form = { ...this.info, ...res, ...res.detailViewVO, ...res.taskDetailVO, auth: auth.auth, taskId: auth.taskId }
           this.handleUrls(this.form.uploadFilePaths)
           this.loading = false
         } catch (error) {
@@ -379,6 +380,7 @@ export default {
         this.$message.success('操作成功')
         this.dialogVisibleHandle = false
         this.loading = false
+        this.getDetail()
         this.$EventBus.$emit('view-component-back')
       } catch (e) {
         this.loading = false

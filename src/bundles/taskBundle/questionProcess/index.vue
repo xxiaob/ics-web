@@ -1,5 +1,6 @@
 <template>
   <div class="jc-main-container-warp">
+
     <div v-show="!detailShow">
       <tab-filter :types="types" @filter="goFilter">
         <template v-slot:manage>
@@ -31,17 +32,11 @@
         <el-pagination @current-change="currentChange" @size-change="sizeChange" :current-page.sync="page.pageNum" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.total" class="text-right jc-mt"></el-pagination>
       </el-card>
     </div>
-    <el-card class="jc-table-card" v-show="detailShow">
-      <div slot="header" class="jc-card-header">
-        <div class="jc-card-title">{{info&&info.handle?'处理问题':'问题详情'}}</div>
-        <div class="jc-button-group">
-          <el-button size="small" icon="el-icon-arrow-left" @click="detailShow=false">返回</el-button>
-        </div>
-      </div>
-      <jc-detail :types="types" :info="info" :orgTree="orgTree" :user="user" :firstOrgIds="firstOrgIds" :detailShow.sync="detailShow" @save-success="initData"></jc-detail>
-    </el-card>
+
+    <jc-detail v-show="detailShow" :types="types" :info="info" :orgTree="orgTree" :user="user" :firstOrgIds="firstOrgIds" :detailShow.sync="detailShow" @save-success="initData"></jc-detail>
 
     <jc-manage :types="types" :orgTree="orgTree" :orgId="orgId" :options="info" :visible.sync="visible" @save-success="initData"></jc-manage>
+
   </div>
 </template>
 <script>
@@ -54,7 +49,7 @@ import { createNamespacedHelpers } from 'vuex'
 const { mapState } = createNamespacedHelpers('user')
 
 export default {
-  name: 'TaskQuestionProcessIndex',
+  name: 'QuestionProcessIndex',
   mixins: [PaginationMixins],
   components: {
     TabFilter: () => import('./modules/tabFilter'),

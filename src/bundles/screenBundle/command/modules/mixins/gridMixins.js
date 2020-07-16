@@ -18,6 +18,7 @@ export default {
   data() {
     return {
       gridOrg: null,
+      abnormalGridIds: [], //异常的网格id 数组
       areaTipVisibles: [], //网格区域对应类型是否显示名称
       areaAreaVisibles: [], //网格区域对应类型是否显示区域
       togetherVisibles: [] //网格区域对应类型是否聚合显示区域
@@ -25,11 +26,33 @@ export default {
   },
   created() {
     this.$EventBus.$on('org-change', this.areaMap) //监听行级别切换
+    this.$EventBus.$on('map-grid-change', this.mapGridChange) //岗点考勤状态变化
+    this.$EventBus.$on('screen-grid-location', this.gridLocation) //监听网格定位
     this.$EventBus.$on('show-area-change', this.gridShowAreaChange) //监听区域显示切换
     this.$EventBus.$on('show-word-change', this.gridShowWordChange) //监听文字显示切换
     this.$EventBus.$on('show-together-change', this.gridTogetherChange) //监听聚合显示改变
   },
   methods: {
+    mapGridChange(data) {
+      if (data.type == 1) {
+        //岗点考勤状态更新
+        if (data.attendance && data.attendance.length) {
+          data.attendance.forEach(item => {
+            let index = this.abnormalGridIds.indexOf(item.id)
+
+            //如果异常岗点列表，岗点存在，岗点为正常，则从异常列表移除，如果岗点不存在，异常，则增加
+            if (index > -1) {
+              if (item.status == 0) {
+                this.abnormalGridIds.splice(index, 1)
+              }
+            } else if (item.status == 1) {
+              this.abnormalGridIds.push(item.id)
+            }
+          })
+        }
+      }
+      this.fitGrids()
+    },
     async areaMap(org) {
       MarkerCluster = await getMarkerCluster() //获取 MarkerCluster 对象
       //处理地图
@@ -79,7 +102,7 @@ export default {
               })
             }
 
-            gridTypeMap.lnglats.push({ lnglat: item.center.split(',') })
+            gridTypeMap.lnglats.push({ lnglat: item.center.split(','), key: item.center, areaId: item.areaId })
 
             gridAreas[item.areaTypeId] = gridTypeMap
           }
@@ -165,12 +188,19 @@ export default {
 
       let signItem = gridTypeMap.signs[key]
 
-      let content = '<div class="jc-marker-content">'
+      let isAbnormal = this.abnormalGridIds.includes(signItem.areaId) //当前岗点是否异常
+
+      let content = isAbnormal ? '<div class="jc-marker-content jc-market-center">' : '<div class="jc-marker-content">'
 
       if (this.areaTipVisibles.includes(signItem.areaTypeId)) {
         content += `<div class="jc-marker-title">${signItem.areaName}</div>`
       }
-      content += `<img src=${JcIcons[signItem.icon].icon} class="jc-marker-icon"/></div>`
+      if (isAbnormal) {
+        content += `<img src=${JcIcons[signItem.icon].abnormal} class="jc-marker-icon"/></div>`
+      } else {
+        content += `<img src=${JcIcons[signItem.icon].icon} class="jc-marker-icon"/></div>`
+      }
+
       context.marker.setContent(content)
     },
     markerGridClusterClick(gridTypeMap, context) {
@@ -202,6 +232,39 @@ export default {
         }
       }
       gridAreas = {}
+      this.abnormalGridIds = [] //重置岗点异常id数组
+    },
+    gridLocation(data) {
+      //网格定位
+      console.log('gridLocation', data)
+      //先处理当前数据类型在地图上是否显示，如果不显示，则不处理
+      let noGrid = true //处理网格是否存在，不存在则提示
+
+      if (this.areaTipVisibles.includes(data.areaTypeId)) {
+        let gridTypeMap = gridAreas[data.areaTypeId]
+
+        for (let i = 0; i < gridTypeMap.lnglats.length; i++) {
+          if (gridTypeMap.lnglats[i].areaId == data.id) {
+            if (this.areaAreaVisibles.includes(data.areaTypeId)) {
+              let gridSign = gridTypeMap.signs[gridTypeMap.lnglats[i].key]
+
+              if (gridSign && gridSign.sign) {
+                gridSign.sign.fitView()
+                noGrid = false //设置网格存在
+              }
+            } else {
+              let myJcMap = this.getMyJcMap() //获取地图对象
+
+              myJcMap.map.setZoomAndCenter(18, gridTypeMap.lnglats[i].key.split(','))
+              noGrid = false //设置网格存在
+            }
+            break
+          }
+        }
+      }
+      if (noGrid) {
+        this.$message.error('该网格未显示')
+      }
     },
     gridShowAreaChange(areas) {
       //组织区域显示
@@ -224,6 +287,8 @@ export default {
     this.clearGrids() //清除基础数据
     //去除事件监听
     this.$EventBus.$off('org-change', this.areaMap)
+    this.$EventBus.$off('map-grid-change', this.mapGridChange)
+    this.$EventBus.$off('screen-grid-location', this.gridLocation)
     this.$EventBus.$off('show-area-change', this.gridShowAreaChange)
     this.$EventBus.$off('show-word-change', this.gridShowWordChange)
     this.$EventBus.$off('show-together-change', this.gridTogetherChange)

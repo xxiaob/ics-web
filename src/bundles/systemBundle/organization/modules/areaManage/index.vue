@@ -21,6 +21,7 @@
       <i class="jc-panel-item iconfont iconxinzengquyu" title="新增区域" @click="addArea"></i>
       <i class="jc-panel-item iconfont iconzu" title="保存设置" @click="manage"></i>
       <i class="jc-panel-item iconfont iconfuwei" title="重置" @click="customAreaReset"></i>
+      <i class="jc-panel-item el-icon-view" title="查看父级" @click="showParentView"></i>
     </div>
   </div>
 </template>
@@ -52,6 +53,7 @@ export default {
       editAreas: [], //编辑的区域数据
       type: '',
       orgId: '',
+      orgPid: '', //记录组织父级id
       areaId: ''
     }
   },
@@ -60,20 +62,23 @@ export default {
     this.registerManage(this.editCheck) //注册 编辑检查
   },
   methods: {
-    initData(data) {
+    async initData(data) {
+      //设置组织id和父级组织id
       this.orgId = data.orgId
+      this.orgPid = data.pid
       this.loading = true
-      myJcMap.init(this.$refs.myMap).then(() => {
-        this.$refs.mapSearch.initData(myJcMap) //初始化搜索对象
-        areaList({ orgId: this.orgId, orgSearchType: AREAS_TYPE.SAMELEVEL, searchType: AREAS_SEARCH_TYPE.ORG }).then(res => {
-          this.adcode = ''
-          this.areaId = ''
-          this.drawSign(res, myJcMap) //去绘画边界
-          this.loading = false
-        }).catch(() => {
-          this.loading = false
-        })
-      })
+      try {
+        await myJcMap.init(this.$refs.myMap)//初始化地图
+        this.$refs.mapSearch.initData(myJcMap) //初始化搜索
+        let res = await areaList({ orgId: this.orgId, orgSearchType: AREAS_TYPE.SAMELEVEL, searchType: AREAS_SEARCH_TYPE.ORG })
+
+        this.adcode = ''
+        this.areaId = ''
+        this.drawSign(res, myJcMap) //去绘画边界
+      } catch (error) {
+        console.log(error)
+      }
+      this.loading = false
     },
     editCheck(cb = noop) {
       this.reset(() => {
@@ -113,6 +118,7 @@ export default {
   },
   beforeDestroy() {
     myJcMap.destroy() //销毁地图
+    myJcMap = null
   }
 }
 </script>

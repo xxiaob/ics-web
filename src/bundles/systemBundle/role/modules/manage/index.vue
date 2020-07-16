@@ -35,11 +35,9 @@ export default {
       loading: false,
       orgTree: [],
       menuTree: [],
+      parentKeys: [], //记录所有父节点，用于过滤不设置为 选择的key
       checkedKeys: [],
-      props: {
-        children: 'children',
-        label: 'resName'
-      },
+      props: { children: 'children', label: 'resName' },
       rules: {
         Len50: getStringRule(1, 50),
         SELECT_NOT_NULL
@@ -52,7 +50,9 @@ export default {
         this.orgTree = this.formatOrgTree(res)
       })
       menusGet().then(res => {
+        this.parentKeys = []
         this.menuTree = this.formatMenuTree(res)
+        this.setCheckedKeys() //设置初始化选中的key
       })
     },
     formatOrgTree(child) {
@@ -78,15 +78,13 @@ export default {
 
       if (child && child.length) {
         child.forEach(item => {
-          let node = {
-            resId: item.resId,
-            resName: item.resName
-          }
+          let node = { resId: item.resId, resName: item.resName }
 
           let children = this.formatMenuTree(item.children)
 
           if (children && children.length) {
             node.children = children
+            this.parentKeys.push(item.resId)
           }
 
           trees.push(node)
@@ -96,16 +94,28 @@ export default {
     },
     formatFormData() {
       if (this.options) {
-        this.checkedKeys = this.options.resIds || []
-        return {
-          roleId: this.options.roleId,
-          roleName: this.options.roleName,
-          orgId: this.options.orgId
-        }
+        this.setCheckedKeys() //设置初始化选中的key
+        const { roleId, roleName, orgId } = this.options
+
+        return { roleId, roleName, orgId }
       } else {
         this.checkedKeys = []
         return { ...defaultForm, orgId: this.orgId }
       }
+    },
+    setCheckedKeys() {
+      //处理开始选中的菜单，如果是父级，则不进行设置
+      let checkedKeys = []
+
+      if (this.options && this.options.resIds && this.options.resIds.length) {
+        this.options.resIds.forEach(resId => {
+          if (!this.parentKeys.includes(resId)) {
+            checkedKeys.push(resId)
+          }
+        })
+      }
+
+      this.checkedKeys = checkedKeys
     },
     onSubmit() {
       this.loading = true

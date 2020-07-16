@@ -1,18 +1,20 @@
 <template>
   <div>
-    <div class="jc-left-width60">
-      <el-radio-group v-model="selfPeopleType" size="small" @change="changePeopleType">
+    <div class="jc-left-width48">
+      <el-radio-group v-model="selfPeopleType" size="mini" @change="changePeopleType">
         <el-radio-button v-for="item in TASK_PEOPLE_TYPES.VALUES" :key="item.value" :label="item.value">{{item.label}}</el-radio-button>
       </el-radio-group>
-      <el-input placeholder="输入关键字进行过滤" v-model="filterText" size="small"></el-input>
-      <el-button type="" @click="setCheckedKeys" size="mini">全选</el-button>
-      <el-button type="" @click="resetChecked" size="mini">清空</el-button>
-      <el-tree ref="tree" :data="tree" show-checkbox node-key="id" :check-strictly="true" :filter-node-method="filterNode" :default-expanded-keys="tree.map(item=>item.id)" @check="check" :default-checked-keys="selecteds"></el-tree>
+      <div class="tree-content">
+        <el-input placeholder="输入关键字进行过滤" v-model="filterText" size="mini" style="margin-bottom:5px"></el-input>
+        <el-button type="" @click="setCheckedKeys" size="mini">全选</el-button>
+        <el-button type="" @click="resetChecked" size="mini">清空</el-button>
+        <el-tree ref="tree" :data="tree" show-checkbox node-key="id" :check-strictly="selfPeopleType===TASK_PEOPLE_TYPES.ORG" :filter-node-method="filterNode" :default-expanded-keys="tree.map(item=>item.id)" @check="check" :default-checked-keys="selecteds"></el-tree>
+      </div>
     </div>
-    <div class="jc-left-width40 jc-selected-box">
+    <div class="jc-right-width48 jc-selected-box">
       <div>已选人员</div>
       <div class="jc-selected">
-        <el-tag v-for="tag in checkedNodes" :key="tag.id" closable size="small" @close="handleCloseTag(tag)">
+        <el-tag v-for="tag in checkedNodes" :key="tag.id" effect="plain" closable size="medium" @close="handleCloseTag(tag)">
           {{tag.label}}
         </el-tag>
       </div>
@@ -22,18 +24,21 @@
 
 <script>
 import { TASK_PEOPLE_TYPES } from '@/constant/Dictionaries'
-import { getOrgUserList } from '@/api/user'
+import { getOrgUserList, getOrgUserListByProject } from '@/api/user'
 
 export default {
   name: 'TaskProcessManagePeople',
   props: {
+    edit: false,
+    projectId: String,
+    emergency: false,
     selecteds: {
       type: Array,
       default: ()=>[]
     },
     peopleType: {
       type: String,
-      default: TASK_PEOPLE_TYPES.ORG
+      default: TASK_PEOPLE_TYPES.PEOPLE
     },
     orgTree: {
       type: Array
@@ -44,6 +49,7 @@ export default {
       selfPeopleType: this.peopleType,
       TASK_PEOPLE_TYPES,
       orgPeople: [],
+      projectPeople: [],
       filterText: '',
       filterArr: [],
       filterArrPeople: [],
@@ -53,9 +59,13 @@ export default {
   computed: {
     tree() {
       if (this.peopleType === TASK_PEOPLE_TYPES.ORG) {
+        if (this.emergency) {
+          this.$emit('update:selecteds', [])
+          return []
+        }
         return this.orgTree
       } else {
-        return this.orgPeople
+        return this.projectPeople
       }
     }
   },
@@ -63,9 +73,13 @@ export default {
     const res = await getOrgUserList({})
 
     this.orgPeople = this.formatPeopleTree(res)
+    this.getProjectUsers('')
     setTimeout(()=>{
-      this.filterArr = Object.keys(this.formatTreeToObj(this.orgTree))
-      this.checkedNodes = this.$refs.tree.getCheckedNodes()
+      if (this.peopleType === TASK_PEOPLE_TYPES.PEOPLE) {
+        this.checkedNodes = this.$refs.tree.getCheckedNodes().filter(item=>item.org === false)
+      } else {
+        this.checkedNodes = this.$refs.tree.getCheckedNodes()
+      }
     })
   },
   watch: {
@@ -80,21 +94,49 @@ export default {
       immediate: true,
       handler(val) {
         this.$nextTick(()=>{
-          this.$refs.tree.setCheckedKeys(val)
-          this.checkedNodes = this.$refs.tree.getCheckedNodes()
+          if (this.edit) {
+            this.$refs.tree.setCheckedKeys(val)
+            this.$emit('update:edit', false)
+          }
+          if (this.peopleType === TASK_PEOPLE_TYPES.PEOPLE) {
+            this.checkedNodes = this.$refs.tree.getCheckedNodes().filter(item=>item.org === false)
+          } else {
+            this.checkedNodes = this.$refs.tree.getCheckedNodes()
+          }
         })
       },
       deep: true
+    },
+    projectId: {
+      immediate: true,
+      handler(val) {
+        // console.log('projectId', val)
+        if (val === '0') {
+          this.getProjectUsers('')
+        } else {
+          this.getProjectUsers(val)
+        }
+      }
     }
   },
   methods: {
+    async getProjectUsers(projectId) {
+      const res = await getOrgUserListByProject({ projectId })
+
+      this.projectPeople = this.formatPeopleTree(res)
+
+      if (this.peopleType === TASK_PEOPLE_TYPES.PEOPLE) {
+        this.filterArr = Object.keys(this.formatTreeToObj(this.projectPeople, true))
+        this.$emit('update:selecteds', [])
+      }
+    },
     formatPeopleTree(tree) {
       let trees = []
 
       if (tree && tree.length) {
         tree.forEach(item => {
           let node = {
-            disabled: item.userId ? false : true,
+            org: item.userId ? false : true,
             id: item.userId || item.orgId,
             label: item.userName || item.orgName
           }
@@ -114,10 +156,17 @@ export default {
       const index = selecteds.indexOf(tag.id)
 
       selecteds.splice(index, 1)
+      this.$refs.tree.setCheckedKeys(selecteds)
       this.$emit('update:selecteds', selecteds)
     },
-    check(checkedNode, { checkedKeys }) {
-      this.$emit('update:selecteds', checkedKeys)
+    check(checkedNode, { checkedKeys, checkedNodes }) {
+      if (this.peopleType === TASK_PEOPLE_TYPES.PEOPLE) {
+        const selecteds = checkedNodes.filter(item=>item.org === false).map(item=>item.id)
+
+        this.$emit('update:selecteds', selecteds)
+      } else {
+        this.$emit('update:selecteds', checkedKeys)
+      }
     },
     setCheckedKeys() {
       const areas = new Set([...this.filterArr, ...this.selecteds])
@@ -125,6 +174,8 @@ export default {
       this.$emit('update:selecteds', [...areas])
     },
     resetChecked() {
+      this.$refs.tree.setCheckedKeys([])
+      this.checkedNodes = []
       this.$emit('update:selecteds', [])
     },
     filterNode(value, data) {
@@ -143,7 +194,7 @@ export default {
       if (value === TASK_PEOPLE_TYPES.ORG) {
         this.filterArr = Object.keys(this.formatTreeToObj(this.orgTree))
       } else {
-        this.filterArr = Object.keys(this.formatTreeToObj(this.orgPeople, true))
+        this.filterArr = Object.keys(this.formatTreeToObj(this.projectPeople, true))
       }
       this.filterText = ''
       this.$emit('update:peopleType', value)
@@ -158,7 +209,7 @@ export default {
             objs = Object.assign(objs, this.formatTreeToObj(item.children, People))
           }
           if (People) {
-            if (item.disabled === false) {
+            if (item.org === false) {
               objs[item.id] = item.label
             }
           } else {
@@ -173,32 +224,44 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.el-tree {
-  height: 200px;
-  overflow: auto;
-  border: 1px solid #dcdfe6;
-  border-radius: 4px;
-}
-.el-select {
-  width: inherit;
-}
-.jc-left-width60 {
-  width: 60%;
+.jc-left-width48 {
+  width: 48%;
   float: left;
   box-sizing: border-box;
 }
-.jc-left-width40 {
-  width: 40%;
-  float: left;
+.jc-right-width48 {
+  width: 48%;
+  float: right;
+  box-sizing: border-box;
+}
+.tree-content {
+  margin-top: 10px;
+  background: #f6f6f6;
+  box-sizing: border-box;
+  padding: 10px 20px;
+  border-radius: 4px;
+  .el-tree {
+    background: #f6f6f6;
+    height: 200px;
+    overflow: auto;
+    margin-top: 5px;
+  }
+}
+
+.el-select {
+  width: inherit;
 }
 .jc-selected-box {
   box-sizing: border-box;
   padding: 0 10px;
 }
 .jc-selected {
-  // margin: 0 10px;
-  border: 1px solid #dcdfe6;
-  height: 280px;
+  background: #f6f6f6;
+  margin-top: 10px;
+  border-radius: 4px;
+  box-sizing: border-box;
+  padding: 10px 20px;
+  height: 294px;
   overflow: auto;
   line-height: normal;
 

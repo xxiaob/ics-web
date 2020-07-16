@@ -1,22 +1,22 @@
 <template>
   <div>
-    <div class="jc-left-width60">
-      <el-radio-group v-model="selfAreaType" size="small" @change="changeAreaType">
+    <div class="jc-left-width48 tree-content">
+      <!-- <el-radio-group v-model="selfAreaType" size="mini" @change="changeAreaType">
         <el-radio-button v-for="item in TASK_AREA_TYPES.VALUES" :key="item.value" :label="item.value">{{item.label}}</el-radio-button>
-      </el-radio-group>
-      <el-select class="jc-area-type-select" v-model="areaTypeId" clearable placeholder="网格类型" size="small" v-if="selfAreaType===TASK_AREA_TYPES.GRID" @change="areaTypeChange">
+      </el-radio-group> -->
+      <el-select v-model="areaTypeId" clearable placeholder="网格类型" size="mini" v-if="selfAreaType===TASK_AREA_TYPES.GRID" @change="areaTypeChange">
         <el-option v-for="item in gridTypes" :key="item.areaTypeId" :label="item.areaTypeName" :value="item.areaTypeId">
         </el-option>
       </el-select>
-      <el-input placeholder="输入关键字进行过滤" v-model="filterText" size="small"></el-input>
-      <el-button type="" @click="setCheckedKeys" size="mini">全选</el-button>
-      <el-button type="" @click="resetChecked" size="mini">清空</el-button>
-      <el-tree ref="tree" :data="tree" show-checkbox node-key="id" :check-strictly="true" :filter-node-method="filterNode" @check="check" :default-expanded-keys="tree.map(item=>item.id)" :default-checked-keys="selectedAreas"></el-tree>
+      <el-input placeholder="输入关键字进行过滤" v-model="filterText" size="mini" style="margin:5px 0"></el-input>
+      <!-- <el-button type="" @click="setCheckedKeys" size="mini">全选</el-button>
+      <el-button type="" @click="resetChecked" size="mini">清空</el-button> -->
+      <el-tree ref="tree" :data="tree" show-checkbox node-key="id" :filter-node-method="filterNode" @check="check" :default-expanded-keys="tree.map(item=>item.id)" :default-checked-keys="selectedAreas"></el-tree>
     </div>
-    <div class="jc-left-width40 jc-selected-box">
+    <div class="jc-right-width48 jc-selected-box">
       <div>已选区域</div>
       <div class="jc-selected">
-        <el-tag v-for="tag in checkedNodes" :key="tag.id" closable size="small" @close="handleCloseTag(tag)">
+        <el-tag v-for="tag in checkedNodes" :key="tag.id" closable effect="plain" size="medium" @close="handleCloseTag(tag)">
           {{tag.label}}
         </el-tag>
       </div>
@@ -26,19 +26,22 @@
 
 <script>
 import { TASK_AREA_TYPES } from '@/constant/Dictionaries'
-import { areaGridList } from '@/api/area'
+import { areaGridList, areaList } from '@/api/area'
 import { areaTypeList } from '@/api/areaType'
 
 export default {
   name: 'TaskProcessManageDailyArea',
   props: {
+    edit: false,
+    projectId: String,
+    emergency: false,
     selectedAreas: {
       type: Array,
       default: ()=>[]
     },
     areaType: {
       type: String,
-      default: TASK_AREA_TYPES.ORG
+      default: TASK_AREA_TYPES.GRID
     },
     orgTree: {
       type: Array
@@ -49,9 +52,9 @@ export default {
       selfAreaType: this.areaType,
       TASK_AREA_TYPES,
       orgGrid: [],
+      projectGrid: [],
       filterText: '',
       filterArr: [],
-      filterArrGrid: [],
       objTree: {},
       gridTypes: [],
       areaTypeId: '',
@@ -63,7 +66,11 @@ export default {
       if (this.areaType === TASK_AREA_TYPES.ORG) {
         return this.orgTree
       } else {
-        return this.orgGrid
+        if (this.emergency) {
+          return this.projectGrid
+        } else {
+          return this.orgGrid
+        }
       }
     }
   },
@@ -73,8 +80,9 @@ export default {
     this.orgGrid = this.formatGridTree(res)
     this.gridTypes = await areaTypeList({})
     setTimeout(()=>{
-      this.filterArr = Object.keys(this.formatTreeToObj(this.orgTree))
-      this.checkedNodes = this.$refs.tree.getCheckedNodes()
+      // this.filterArr = Object.keys(this.formatTreeToObj(this.orgTree))
+      this.filterArr = Object.keys(this.formatTreeToObj(this.orgGrid, true))
+      this.checkedNodes = this.$refs.tree.getCheckedNodes().filter(item=>item.org === false)
     })
   },
   watch: {
@@ -86,21 +94,39 @@ export default {
       immediate: true,
       handler(val) {
         this.$nextTick(()=>{
-          this.$refs.tree.setCheckedKeys(val)
-          this.checkedNodes = this.$refs.tree.getCheckedNodes()
+          if (this.edit) {
+            this.$refs.tree.setCheckedKeys(val)
+            this.$emit('update:edit', false)
+          }
+          this.checkedNodes = this.$refs.tree.getCheckedNodes().filter(item=>item.org === false)
         })
       },
       deep: true
+    },
+    projectId: {
+      immediate: true,
+      handler(val) {
+        if (val && this.emergency) {
+          this.projectAreaList(val)
+        }
+      }
     }
   },
   methods: {
+    async projectAreaList(val) {
+      const res = await areaList({ projectId: val, searchType: 2 })
+
+      this.projectGrid = this.formatGridTree(res)
+      this.filterArr = Object.keys(this.formatTreeToObj(this.projectGrid, true))
+      this.$emit('update:selectedAreas', [])
+    },
     formatGridTree(tree) {
       let trees = []
 
       if (tree && tree.length) {
         tree.forEach(item => {
           let node = {
-            disabled: item.areaId ? false : true,
+            org: item.areaId ? false : true,
             areaTypeId: item.areaTypeId || '',
             id: item.areaId || item.orgId,
             label: item.areaName || item.orgName
@@ -116,8 +142,10 @@ export default {
       }
       return trees
     },
-    check(checkedNodes, { checkedKeys }) {
-      this.$emit('update:selectedAreas', checkedKeys)
+    check(checkedNode, { checkedKeys, checkedNodes }) {
+      const selecteds = checkedNodes.filter(item=>item.org === false).map(item=>item.id)
+
+      this.$emit('update:selectedAreas', selecteds)
     },
     handleCloseTag(tag) {
       const selecteds = this.selectedAreas.slice(0)
@@ -189,7 +217,7 @@ export default {
             objs = Object.assign(objs, this.formatTreeToObj(item.children, grid))
           }
           if (grid) {
-            if (item.disabled === false) {
+            if (item.org === false) {
               objs[item.id] = item.label
             }
           } else {
@@ -204,33 +232,40 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.el-tree {
-  height: 200px;
-  overflow: auto;
-  border: 1px solid #dcdfe6;
-  border-radius: 4px;
-}
-.jc-area-type-select {
-  width: 105px;
-  float: right;
-}
-.jc-left-width60 {
-  width: 60%;
+.jc-left-width48 {
+  width: 48%;
   float: left;
   box-sizing: border-box;
 }
-.jc-left-width40 {
-  width: 40%;
-  float: left;
+.jc-right-width48 {
+  width: 48%;
+  float: right;
+  box-sizing: border-box;
+}
+.tree-content {
+  margin-top: 10px;
+  background: #f6f6f6;
+  box-sizing: border-box;
+  padding: 10px 20px;
+  border-radius: 4px;
+  .el-tree {
+    background: #f6f6f6;
+    height: 200px;
+    overflow: auto;
+    margin-top: 5px;
+  }
 }
 .jc-selected-box {
   box-sizing: border-box;
   padding: 0 10px;
 }
 .jc-selected {
-  // margin: 0 10px;
-  border: 1px solid #dcdfe6;
-  height: 280px;
+  background: #f6f6f6;
+  margin-top: 10px;
+  border-radius: 4px;
+  box-sizing: border-box;
+  padding: 10px 20px;
+  height: 267px;
   overflow: auto;
   line-height: normal;
 

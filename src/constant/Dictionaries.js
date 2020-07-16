@@ -114,8 +114,18 @@ export const TASK_AREA_TYPES = new JcEnum([
  * 任务处理 - 任务人员类型
  */
 export const TASK_PEOPLE_TYPES = new JcEnum([
-  { key: 'ORG', value: '0', label: '组织' },
-  { key: 'PEOPLE', value: '1', label: '人员' }
+  { key: 'PEOPLE', value: '1', label: '人员' },
+  { key: 'ORG', value: '0', label: '组织' }
+])
+
+/**
+ * 任务处理 - 日常任务 - 任务频率
+ */
+export const TASK_FREQUENCYS = new JcEnum([
+  { key: 'DAT', value: 1, label: '日' },
+  { key: 'WEEK', value: 7, label: '周' },
+  { key: 'MONTH', value: 30, label: '月' },
+  { key: 'CUSTOM', value: 0, label: '自定义 / 天' }
 ])
 
 /**
@@ -150,6 +160,13 @@ export const POST_OVERSEE_RESULTS = new JcEnum([
   { key: 'NOTSTANDARD', value: '0', label: '未达标' },
   { key: 'STANDARD', value: '1', label: '达标' }
 ])
+/**
+ * 考勤配置 - 考勤状态
+ */
+export const ATTEND_CONFIGURE_STATUSES = new JcEnum([
+  { key: 'NOTENABLED', value: 0, label: '未启用' },
+  { key: 'ENABLED', value: 1, label: '启用' }
+])
 
 /**
  * 天气 字典
@@ -169,7 +186,7 @@ export const MESSAGE_TYPE = new JcEnum([
   { key: 'TASK', value: '0', label: '日常任务' },
   { key: 'QUESTION', value: '1', label: '问题' },
   { key: 'EVENT', value: '2', label: '事件' },
-  { key: 'TEMPORARY', value: '3', label: '临时任务' }
+  { key: 'TEMPORARY', value: '4', label: '临时任务' }
 ])
 
 /** 用户在岗 考勤状态 */
@@ -178,4 +195,16 @@ export const USER_GRID_STATUS = new JcEnum([
   { key: 'OUTCIRCLE', value: '1', label: '出圈' },
   { key: 'INGUARD', value: '2', label: '进岗' },
   { key: 'OUTGUARD', value: '3', label: '离岗' }
+])
+
+/**
+ * 音视频 - 类型
+ */
+export const VIDEO_INVITE_TYPES = new JcEnum([
+  { key: 'MEETAUDIO', value: '0', label: '多人语音' },
+  { key: 'MEETVIDEO', value: '1', label: '多人视频' },
+  { key: 'FORCEOBSERVE', value: '2', label: '强制观摩' },
+  { key: 'OBSERVE', value: '3', label: '观摩' },
+  { key: 'DOUBLEAUDIO', value: '4', label: '双人语音' },
+  { key: 'DOUBLEVIDEO', value: '5', label: '双人视频' }
 ])

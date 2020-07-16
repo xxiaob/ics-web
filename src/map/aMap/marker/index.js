@@ -57,6 +57,13 @@ class JcMapmarker extends JcMapmarkerBase {
   }
 
   /**
+   * 设置marker内容
+   */
+  setContent() {
+    this.marker.setContent(markerOptions[this.mapStyle || this.map.mapStyle].getContent({ icon: this.icon, title: this.name, titleVisible: this.titleVisible, extData: this.extData }))
+  }
+
+  /**
    * 隐藏标记
    */
   hide() {

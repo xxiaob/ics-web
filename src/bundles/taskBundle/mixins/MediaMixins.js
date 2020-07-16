@@ -31,11 +31,11 @@ export default {
           audioReg = /\.(mp3|cd|wave|aiff|mpeg|mpeg-4|midi|wma|realaudio|vqf|oggvorbis|amr|ape|flac|aac)$/
 
         urls.forEach(url => {
-          if (imgReg.test(url)) {
+          if (imgReg.test(url.toLowerCase())) {
             imgs.push(url)
-          } else if (videoReg.test(url)) {
+          } else if (videoReg.test(url.toLowerCase())) {
             videos.push(url)
-          } else if (audioReg.test(url)) {
+          } else if (audioReg.test(url.toLowerCase())) {
             audios.push(url)
           } else {
             others.push(url)

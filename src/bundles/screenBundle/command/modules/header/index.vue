@@ -33,6 +33,7 @@ import { organizationList } from '@/api/organization'
 import { PROJECT_TYPES } from '@/constant/Dictionaries'
 import { JC_WEATHER } from '@/constant/Dictionaries'
 import { getAreaCodeByOrgId } from '@/api/area'
+import { getUser } from '@/libs/storage'
 
 let weeks = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'] //周数据
 
@@ -81,7 +82,13 @@ export default {
           if (PROJECT_TYPES.SpecialControl == this.project.projectType) {
             this.title = `${this.project.projectName}指挥大屏`
           } else {
-            this.title = `${parentOrg.label}常态指挥大屏`
+            let user = getUser()
+
+            if (user && user.userRespInnerDTO && user.userRespInnerDTO.commandScreenLogo) {
+              this.title = user.userRespInnerDTO.commandScreenLogo
+            } else {
+              this.title = `${parentOrg.label}常态指挥大屏`
+            }
           }
         }
       } catch (error) {
