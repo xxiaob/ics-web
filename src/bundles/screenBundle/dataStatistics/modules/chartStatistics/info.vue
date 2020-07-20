@@ -1,0 +1,162 @@
+<template>
+  <div class="jc-flex-con jc-flex-warp jc-flex-vertical info">
+    <div class="top">信息累计</div>
+    <div class="jc-flex-con">
+      <jc-charts :options="options"></jc-charts>
+    </div>
+  </div>
+</template>
+
+<script>
+import echarts from 'echarts'
+import JcCharts from '@/components/JcForm/JcCharts'
+export default {
+  components: {
+    JcCharts
+  },
+  data() {
+    return {
+      options: {
+      // color: [ '#1772d7', '#44c2fa' ],
+        textStyle: {
+          color: 'white',
+          fontSize: 12
+        },
+        tooltip: {
+          trigger: 'axis',
+          axisPointer: {
+            type: 'shadow'
+          }
+        },
+        legend: {
+          x: 'right',
+          data: [ '新建问题', '已经处理', '转成任务' ],
+          // icon: 'circle',
+          itemWidth: 10, // 设置宽度
+          itemHeight: 10, // 设置高度
+          itemGap: 20,
+          right: 20,
+          textStyle: {
+            color: 'rgb(139,193,252)',
+            fontSize: 12
+          }
+        },
+        grid: {
+          top: 35,
+          left: 0,
+          right: 0,
+          bottom: 0,
+          containLabel: true
+        },
+        xAxis: [
+          {
+            type: 'category',
+            axisTick: {
+              show: false
+            },
+            data: ['雨花', '秦淮', '鼓楼', '玄武', '建邺', '江宁', '溧水', '六合', '高淳', '栖霞']
+          }
+        ],
+        yAxis: [
+          {
+            type: 'value',
+            show: true,
+            boundaryGap: [0, 0.01],
+            splitLine: {
+              lineStyle: {
+                type: 'dashed'
+              }
+            },
+            axisTick: {
+              show: false
+            }
+          }
+        ],
+        series: [
+          {
+            itemStyle: {
+              emphasis: {
+                barBorderRadius: [10, 10, 10, 10]
+              },
+              normal: {
+                barBorderRadius: [10, 10, 10, 10],
+                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                  {
+                    offset: 1,
+                    color: '#12b9bb'
+                  },
+                  {
+                    offset: 0,
+                    color: '#00c39b'
+                  }
+                ])
+              }
+            },
+            name: '新建问题',
+            type: 'bar',
+            data: [53, 51, 52, 53, 54, 55, 56, 57, 58, 59 ]
+          },
+          {
+            itemStyle: {
+              emphasis: {
+                barBorderRadius: [10, 10, 10, 10]
+              },
+              normal: {
+                barBorderRadius: [10, 10, 10, 10],
+                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                  {
+                    offset: 1,
+                    color: '#009fff'
+                  },
+                  {
+                    offset: 0,
+                    color: '#17dafb'
+                  }
+                ])
+              }
+            },
+            name: '已经处理',
+            type: 'bar',
+            data: [33, 31, 32, 33, 34, 35, 36, 37, 38, 39 ]
+          },
+          {
+            itemStyle: {
+              emphasis: {
+                barBorderRadius: [10, 10, 10, 10]
+              },
+              normal: {
+                barBorderRadius: [10, 10, 10, 10],
+                color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
+                  {
+                    offset: 1,
+                    color: '#faa107'
+                  },
+                  {
+                    offset: 0,
+                    color: '#feee3d'
+                  }
+                ])
+              }
+            },
+            name: '转成任务',
+            type: 'bar',
+            data: [13, 11, 12, 13, 14, 15, 16, 17, 18, 19 ]
+          }
+        ]
+      }
+    }
+  },
+  created() {
+  }
+}
+</script>
+
+<style lang="scss" scoped>
+.info {
+  padding: 0 20px;
+  box-sizing: border-box;
+}
+.top {
+  height: 40px;
+}
+</style>

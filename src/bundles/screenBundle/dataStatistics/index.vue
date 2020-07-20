@@ -3,6 +3,10 @@
     <screen-header></screen-header>
     <div class="jc-screen-content">
       <data-docking class="jc-flex-con" :project="project"></data-docking>
+      <chart-statistics class="jc-flex-con"></chart-statistics>
+      <div class="jc-flex-con-2"></div>
+      <div class="jc-flex-con"></div>
+      <div class="jc-flex-con"></div>
     </div>
   </section>
 </template>
@@ -10,10 +14,11 @@
 import { projectGet } from '@/api/projects'
 import ScreenHeader from './modules/header' //顶部header
 import DataDocking from './modules/dataDocking' //最左侧，数据对接，在应急和专项大屏不显示
+import ChartStatistics from './modules/chartStatistics' //信息累计、下辖区域占比、事务类型占比
 
 export default {
   name: 'ScreenDataStatistics',
-  components: { ScreenHeader, DataDocking },
+  components: { ScreenHeader, DataDocking, ChartStatistics },
   data() {
     return {
       project: { projectId: '', projectName: '', orgId: '', projectType: '' }
@@ -35,3 +40,10 @@ export default {
 }
 </script>
 <style lang="scss" scoped src="./css/datastatistics.scss"></style>
+<style lang="scss" scoped>
+.jc-flex-con,
+.jc-flex-con-2,
+.jc-flex-con-3 {
+  margin: 0 10px;
+}
+</style>
