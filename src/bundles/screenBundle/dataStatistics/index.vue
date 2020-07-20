@@ -2,17 +2,18 @@
   <section class="jc-screen-warp">
     <screen-header></screen-header>
     <div class="jc-screen-content">
-
+      <data-docking class="jc-flex-con" :project="project"></data-docking>
     </div>
   </section>
 </template>
 <script>
 import { projectGet } from '@/api/projects'
 import ScreenHeader from './modules/header' //顶部header
+import DataDocking from './modules/dataDocking' //最左侧，数据对接，在应急和专项大屏不显示
 
 export default {
   name: 'ScreenDataStatistics',
-  components: { ScreenHeader },
+  components: { ScreenHeader, DataDocking },
   data() {
     return {
       project: { projectId: '', projectName: '', orgId: '', projectType: '' }
