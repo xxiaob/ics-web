@@ -1,6 +1,12 @@
 <template>
   <div class="jc-flex-con jc-flex-warp jc-flex-vertical info">
-    <div class="top">信息累计</div>
+    <div class="top">
+      <img src="../../assets/title.png" alt="" height="18">
+      <span class="title">信息累计</span>
+      <span class="right">临时任务</span>
+      <span class="right activated">网巡问题</span>
+      <span class="right">上报事件</span>
+    </div>
     <div class="jc-flex-con">
       <jc-charts :options="options"></jc-charts>
     </div>
@@ -11,6 +17,7 @@
 import echarts from 'echarts'
 import JcCharts from '@/components/JcForm/JcCharts'
 export default {
+  name: 'ScreenDataStatisticsChartStatisticsInfo',
   components: {
     JcCharts
   },
@@ -152,11 +159,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.info {
-  padding: 0 $jc-default-dis;
-  box-sizing: border-box;
-}
-.top {
-  height: 40px;
-}
 </style>

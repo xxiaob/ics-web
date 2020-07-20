@@ -5,18 +5,22 @@
       <div class="jc-flex-con activated">周</div>
       <div class="jc-flex-con">月</div>
     </div>
-    <jc-info></jc-info>
-    <div class="jc-flex-con">2</div>
-    <div class="jc-flex-con">3</div>
+    <jc-info class="chart-comp"></jc-info>
+    <jc-area class="chart-comp"></jc-area>
+    <jc-type class="chart-comp"></jc-type>
   </div>
 </template>
 
 <script>
 import JcInfo from './info'
+import JcArea from './area'
+import JcType from './type'
 export default {
   name: 'ScreenDataStatisticsChartStatistics',
   components: {
-    JcInfo
+    JcInfo,
+    JcArea,
+    JcType
   }
 }
 </script>
@@ -40,6 +44,53 @@ export default {
     .activated {
       background: rgb(3, 60, 147);
       color: white;
+    }
+  }
+
+  .chart-comp {
+    padding: 0 $jc-default-dis $jc-default-dis/2;
+    box-sizing: border-box;
+    &:not(:last-child) {
+      border-bottom: 1px solid rgb(32, 73, 154);
+    }
+    /deep/ {
+      .top {
+        height: 40px;
+        line-height: 40px;
+        img {
+          position: relative;
+          top: 2px;
+        }
+        .title {
+          color: rgb(139, 193, 252);
+          font-size: 18px;
+          font-weight: bold;
+          margin-left: 10px;
+        }
+        .right {
+          float: right;
+          font-size: 12px;
+          color: rgb(5, 114, 189);
+          cursor: pointer;
+          margin-left: $jc-default-dis/2;
+
+          &.activated {
+            color: rgb(20, 237, 252);
+          }
+
+          &:not(:last-child) {
+            &::after {
+              content: "";
+              float: left;
+              width: 1px;
+              height: 14px;
+              margin-right: $jc-default-dis/2;
+              margin-top: 14px;
+              background-color: rgb(5, 114, 189);
+            }
+          }
+        }
+      }
     }
   }
 }
