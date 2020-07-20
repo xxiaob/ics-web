@@ -74,6 +74,32 @@ input::-webkit-input-placeholder {
   font-size: $jc-font-size-smaller;
 }
 
+/*flex布局*/
+.jc-flex-warp {
+  display: flex;
+}
+
+.jc-content-warp {
+  height: 100%;
+}
+
+.jc-flex-con {
+  flex: 1;
+}
+
+.jc-flex-con-2 {
+  flex: 2;
+}
+
+.jc-flex-con-3 {
+  flex: 3;
+}
+
+.jc-flex-vertical {
+  -webkit-box-orient: vertical;
+  flex-flow: column;
+}
+
 //字体样式
 .jc-link {
   color: $jc-color-primary;
