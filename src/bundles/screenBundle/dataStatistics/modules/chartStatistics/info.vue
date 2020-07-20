@@ -153,7 +153,7 @@ export default {
 
 <style lang="scss" scoped>
 .info {
-  padding: 0 20px;
+  padding: 0 $jc-default-dis;
   box-sizing: border-box;
 }
 .top {

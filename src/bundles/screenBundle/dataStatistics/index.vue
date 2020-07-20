@@ -44,6 +44,6 @@ export default {
 .jc-flex-con,
 .jc-flex-con-2,
 .jc-flex-con-3 {
-  margin: 0 10px;
+  margin: 0 $jc-default-dis/2;
 }
 </style>
