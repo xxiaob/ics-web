@@ -1,13 +1,13 @@
 <template>
   <div class="jc-flex-warp chartStatistics jc-flex-vertical">
     <div class="top jc-flex-warp">
-      <div class="jc-flex-con">日</div>
-      <div class="jc-flex-con activated">周</div>
-      <div class="jc-flex-con">月</div>
+      <div class="jc-flex-con" :class="{activated:activated===1}" @click="changeCycle(1)">日</div>
+      <div class="jc-flex-con" :class="{activated:activated===7}" @click="changeCycle(7)">周</div>
+      <div class="jc-flex-con" :class="{activated:activated===30}" @click="changeCycle(30)">月</div>
     </div>
-    <jc-info class="chart-comp"></jc-info>
-    <jc-area class="chart-comp"></jc-area>
-    <jc-type class="chart-comp"></jc-type>
+    <jc-info class="chart-comp" :cycle="activated"></jc-info>
+    <jc-area class="chart-comp" :cycle="activated"></jc-area>
+    <jc-type class="chart-comp" :cycle="activated"></jc-type>
   </div>
 </template>
 
@@ -21,6 +21,20 @@ export default {
     JcInfo,
     JcArea,
     JcType
+  },
+  data() {
+    return {
+      activated: 1
+    }
+  },
+  methods: {
+    changeCycle(val) {
+      if (val !== this.activated) {
+        this.activated = val
+      } else {
+        console.log('请勿重复点击')
+      }
+    }
   }
 }
 </script>
