@@ -1,6 +1,6 @@
 <template>
   <div class="jc-flex-con jc-flex-warp jc-flex-vertical info">
-    <div class="top">
+    <div class="jc-title">
       <img src="../../assets/title.png" alt="" height="18">
       <span class="title">下辖区域占比</span>
       <span class="right">临时任务</span>

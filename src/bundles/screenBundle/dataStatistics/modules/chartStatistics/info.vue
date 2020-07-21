@@ -1,6 +1,6 @@
 <template>
   <div class="jc-flex-con jc-flex-warp jc-flex-vertical info">
-    <div class="top">
+    <div class="jc-title">
       <img src="../../assets/title.png" alt="" height="18">
       <span class="title">信息累计</span>
       <span class="right">临时任务</span>
@@ -26,8 +26,8 @@ export default {
       options: {
       // color: [ '#1772d7', '#44c2fa' ],
         textStyle: {
-          color: 'white',
-          fontSize: 12
+          color: 'rgb(139,192,252)',
+          fontSize: 10
         },
         tooltip: {
           trigger: 'axis',
@@ -71,7 +71,8 @@ export default {
             boundaryGap: [0, 0.01],
             splitLine: {
               lineStyle: {
-                type: 'dashed'
+                type: 'dotted',
+                color: 'rgb(32,73,154)'
               }
             },
             axisTick: {
@@ -90,11 +91,11 @@ export default {
                 color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
                   {
                     offset: 1,
-                    color: '#12b9bb'
+                    color: '#21ddc5'
                   },
                   {
                     offset: 0,
-                    color: '#00c39b'
+                    color: '#0e9ab2'
                   }
                 ])
               }
@@ -113,11 +114,11 @@ export default {
                 color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
                   {
                     offset: 1,
-                    color: '#009fff'
+                    color: '#02b5ee'
                   },
                   {
                     offset: 0,
-                    color: '#17dafb'
+                    color: '#005fc6'
                   }
                 ])
               }
@@ -136,11 +137,11 @@ export default {
                 color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
                   {
                     offset: 1,
-                    color: '#faa107'
+                    color: '#baad42'
                   },
                   {
                     offset: 0,
-                    color: '#feee3d'
+                    color: '#7a8b28'
                   }
                 ])
               }
