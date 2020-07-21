@@ -12,9 +12,9 @@
 </template>
 
 <script>
-import JcInfo from './info'
-import JcArea from './area'
-import JcType from './type'
+import JcInfo from './modules/info'
+import JcArea from './modules/area'
+import JcType from './modules/type'
 export default {
   name: 'ScreenDataStatisticsChartStatistics',
   components: {

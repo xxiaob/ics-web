@@ -1,8 +1,8 @@
 <template>
   <div class="jc-flex-con jc-flex-warp jc-flex-vertical info">
     <div class="jc-title">
-      <img src="../../assets/title.png" alt="" height="18">
-      <span class="title">事务类型占比</span>
+      <img src="../../../assets/title.png" alt="" height="18">
+      <span class="title">下辖区域占比</span>
       <span class="right">临时任务</span>
       <span class="right activated">网巡问题</span>
       <span class="right">上报事件</span>
@@ -16,7 +16,7 @@
 <script>
 import JcCharts from '@/components/JcForm/JcCharts'
 export default {
-  name: 'ScreenDataStatisticsChartStatisticsType',
+  name: 'ScreenDataStatisticsChartStatisticsArea',
   components: {
     JcCharts
   },
@@ -45,7 +45,7 @@ export default {
           {
             name: '事件总数',
             type: 'pie',
-            // radius: ['25%', '65%'],
+            radius: ['25%', '65%'],
             center: ['50%', '50%'],
             label: {
               show: false
