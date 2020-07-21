@@ -35,6 +35,9 @@ export default {
 
         this.project = { projectId, projectName, orgId, projectType }
       }
+
+      console.log('emit-data-statistics-init-success')
+      this.$EventBus.$emit('data-statistics-init-success', this.project) //通知基础数据初始化完成
     }
   }
 }
