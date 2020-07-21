@@ -43,16 +43,14 @@
         color: rgb(20, 237, 252);
       }
 
-      &:not(:last-child) {
-        &::after {
-          content: "";
-          float: left;
-          width: 1px;
-          height: 14px;
-          margin-right: $jc-default-dis/2;
-          margin-top: 14px;
-          background-color: rgb(5, 114, 189);
-        }
+      &:not(:last-child)::after {
+        content: "";
+        float: left;
+        width: 1px;
+        height: 14px;
+        margin-right: $jc-default-dis/2;
+        margin-top: 14px;
+        background-color: rgb(5, 114, 189);
       }
     }
   }
