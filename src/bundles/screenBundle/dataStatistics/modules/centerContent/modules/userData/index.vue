@@ -25,13 +25,6 @@ export default {
       duration: 4000
     }
   },
-  computed: {
-    list: {
-      set() {
-        console.log()
-      }
-    }
-  },
   created() {
 
   }
