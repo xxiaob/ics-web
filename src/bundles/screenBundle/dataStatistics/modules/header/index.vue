@@ -1,22 +1,38 @@
 <template>
   <div class="jc-screen-header">
-
+    <div class="jc-screen-title" v-text="title"></div>
   </div>
 </template>
 <script>
+import { PROJECT_TYPES } from '@/constant/Dictionaries'
+import { getUser } from '@/libs/storage'
+
 export default {
   name: 'ScreenDataStatisticsHeader',
   data() {
     return {
-      title: '--'
+      title: '--',
+      project: null
     }
   },
   created() {
     this.$EventBus.$on('data-statistics-init-success', this.initData) //监听基础数据初始化完成
   },
   methods: {
-    initData() {
+    initData(project) {
+      this.project = project
+      //处理标题显示
+      if (PROJECT_TYPES.SpecialControl == this.project.projectType) {
+        this.title = `${this.project.projectName}数据大屏`
+      } else {
+        let user = getUser()
 
+        if (user && user.userRespInnerDTO && user.userRespInnerDTO.dataScreenLogo) {
+          this.title = user.userRespInnerDTO.dataScreenLogo
+        } else {
+          this.title = `${this.project.projectName}常态数据大屏`
+        }
+      }
     }
   },
   beforeDestroy() {
@@ -31,5 +47,14 @@ export default {
   height: 160px;
   background: url(./assets/header-bg.png) no-repeat center;
   background-size: auto 100%;
+}
+.jc-screen-title {
+  position: relative;
+  text-align: center;
+  color: $jc-color-white;
+  font-weight: bold;
+  line-height: 70px;
+  font-size: 30px;
+  letter-spacing: 2px;
 }
 </style>

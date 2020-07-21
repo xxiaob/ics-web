@@ -5,9 +5,15 @@
   width: 3200px;
 }
 
+.jc-flex-con,
+.jc-flex-con-2,
+.jc-flex-con-3 {
+  margin: 0 $jc-default-dis/2;
+}
+
 .jc-screen-content {
   position: absolute;
-  top: 80px;
+  top: 70px;
   left: 0;
   right: 0;
   bottom: 0;

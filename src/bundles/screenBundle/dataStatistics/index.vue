@@ -43,10 +43,3 @@ export default {
 }
 </script>
 <style lang="scss" scoped src="./css/datastatistics.scss"></style>
-<style lang="scss" scoped>
-.jc-flex-con,
-.jc-flex-con-2,
-.jc-flex-con-3 {
-  margin: 0 $jc-default-dis/2;
-}
-</style>
