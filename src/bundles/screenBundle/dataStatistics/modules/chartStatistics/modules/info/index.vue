@@ -1,7 +1,7 @@
 <template>
   <div class="jc-flex-con jc-flex-warp jc-flex-vertical info">
     <div class="jc-title">
-      <img src="../../../assets/title.png" alt="" height="18">
+      <img src="@/bundles/screenBundle/dataStatistics/assets/title.png" alt="" height="18">
       <span class="title">信息累计</span>
       <span class="right">临时任务</span>
       <span class="right activated">网巡问题</span>
