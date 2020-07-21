@@ -22,7 +22,7 @@ export default {
   components: { ScreenHeader, DataDocking, CenterContent, ChartStatistics },
   data() {
     return {
-      project: { projectId: this.$route.params.projectId, projectName: '', orgId: '', projectType: '' }
+      project: { projectId: this.$route.params.projectId || '', projectName: '', orgId: '', projectType: '' }
     }
   },
   mounted() {
@@ -30,9 +30,9 @@ export default {
   },
   methods: {
     async initData() {
-      if (this.$route.params.projectId) {
+      if (this.project.projectId) {
         //处理项目，如果项目id存在则获取项目详情
-        let { projectId, projectName, orgId, projectType } = await projectGet(this.$route.params.projectId)
+        let { projectId, projectName, orgId, projectType } = await projectGet(this.project.projectId)
 
         this.project = { projectId, projectName, orgId, projectType }
       }
