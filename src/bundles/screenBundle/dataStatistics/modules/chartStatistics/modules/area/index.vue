@@ -93,7 +93,10 @@ export default {
               index = i
             }
           })
-          return [`{a| ${name}}`, `{b| ${((datas[index].value / total) * 100).toFixed(2)}%}`].join('')
+          const percentage = ((datas[index].value / total) * 100).toFixed(2)
+          const sName = name.length > 7 ? `${name.substring(0, 6)}...` : name
+
+          return [`{a| ${sName}}`, `{b| ${percentage}%}`].join('')
         }
       },
       series: [
