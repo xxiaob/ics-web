@@ -68,11 +68,32 @@ export default {
         itemWidth: 10,
         itemHeight: 10,
         itemGap: 10,
-        formatter: '{name}　　20%',
-        // data: ['私搭乱建', '非法小广告', '绿地脏乱', '倚门出摊', '机动车乱停放'],
         textStyle: {
           color: 'rgb(139,193,252)',
-          fontSize: 12
+          fontSize: 12,
+          rich: {
+            a: {
+              width: 120,
+              color: 'rgb(139,193,252)'
+            },
+            b: {
+              width: 20,
+              color: 'rgb(139,193,252)',
+              align: 'right'
+            }
+          }
+        },
+        formatter: name=> {
+          let index = 0, total = 0
+          const datas = this.options.series[0].data
+
+          datas.forEach((v, i) => {
+            total += v.value
+            if (v.name == name) {
+              index = i
+            }
+          })
+          return [`{a| ${name}}`, `{b| ${((datas[index].value / total) * 100).toFixed(2)}%}`].join('')
         }
       },
       series: [
