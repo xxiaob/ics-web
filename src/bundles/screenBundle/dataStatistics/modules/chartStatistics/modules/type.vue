@@ -23,7 +23,7 @@ export default {
   data() {
     return {
       options: {
-        color: [ '#409eff', '#51cefc', '#20a867', '#e7fc01', '#fcbe01', '#ff7140', '#fd5503', '#e22d14', '#04dcfc', '#bb55eb', '#fb2087' ],
+        color: [ '#112adf', '#0f89d2', '#ee761e', '#5f1eee', '#d21fff', '#ff7140', '#fd5503', '#e22d14', '#04dcfc', '#bb55eb', '#fb2087' ],
         textStyle: {
           color: 'white',
           fontSize: 12
@@ -34,8 +34,13 @@ export default {
         },
         legend: {
           orient: 'vertical',
-          left: 'right',
-          data: ['私搭乱建', '非法小广告', '绿地脏乱', '倚门出摊', '机动车乱停放'],
+          right: 50,
+          top: 20,
+          bottom: 20,
+          itemWidth: 10,
+          itemHeight: 10,
+          itemGap: 20,
+          formatter: '{name}　　20%',
           textStyle: {
             color: 'rgb(139,193,252)',
             fontSize: 12
@@ -45,17 +50,106 @@ export default {
           {
             name: '事件总数',
             type: 'pie',
-            // radius: ['25%', '65%'],
-            center: ['50%', '50%'],
+            center: ['30%', '50%'],
             label: {
               show: false
             },
             data: [
-              { value: 335, name: '私搭乱建' },
-              { value: 310, name: '非法小广告' },
-              { value: 274, name: '绿地脏乱' },
-              { value: 235, name: '倚门出摊' },
-              { value: 400, name: '机动车乱停放' }
+              {
+                value: 335,
+                name: '私搭乱建',
+                itemStyle: {
+                  color: {
+                    type: 'linear',
+                    x: 0,
+                    y: 1,
+                    x2: 0,
+                    y2: 0,
+                    colorStops: [{
+                      offset: 0, color: '#112adf' // 0% 处的颜色
+                    }, {
+                      offset: 1, color: '#3b7afd' // 100% 处的颜色
+                    }],
+                    global: false // 缺省为 false
+                  }
+                }
+              },
+              {
+                value: 310,
+                name: '非法小广告',
+                itemStyle: {
+                  color: {
+                    type: 'linear',
+                    x: 0,
+                    y: 1,
+                    x2: 0,
+                    y2: 0,
+                    colorStops: [{
+                      offset: 0, color: '#0f89d2' // 0% 处的颜色
+                    }, {
+                      offset: 1, color: '#19cfed' // 100% 处的颜色
+                    }],
+                    global: false // 缺省为 false
+                  }
+                }
+              },
+              {
+                value: 274,
+                name: '绿地脏乱',
+                itemStyle: {
+                  color: {
+                    type: 'linear',
+                    x: 0,
+                    y: 1,
+                    x2: 0,
+                    y2: 0,
+                    colorStops: [{
+                      offset: 0, color: '#ee761e' // 0% 处的颜色
+                    }, {
+                      offset: 1, color: '#ffbc07' // 100% 处的颜色
+                    }],
+                    global: false // 缺省为 false
+                  }
+                }
+              },
+              {
+                value: 235,
+                name: '倚门出摊',
+                itemStyle: {
+                  color: {
+                    type: 'linear',
+                    x: 0,
+                    y: 1,
+                    x2: 0,
+                    y2: 0,
+                    colorStops: [{
+                      offset: 0, color: '#5f1eee' // 0% 处的颜色
+                    }, {
+                      offset: 1, color: '#9e4bfb' // 100% 处的颜色
+                    }],
+                    global: false // 缺省为 false
+                  }
+                }
+              },
+              {
+                value: 200,
+                name: '机动车乱停放',
+                itemStyle: {
+                  color: {
+                    type: 'linear',
+                    x: 0,
+                    y: 1,
+                    x2: 0,
+                    y2: 0,
+                    colorStops: [{
+                      offset: 0, color: '#d21fff' // 0% 处的颜色
+                    }, {
+                      offset: 1, color: '#ff4b9b' // 100% 处的颜色
+                    }],
+                    global: false // 缺省为 false
+                  }
+                }
+              }
             ].sort( (a, b)=> b.value - a.value),
             roseType: 'radius',
             // labelLine: {

@@ -23,7 +23,7 @@ export default {
   data() {
     return {
       options: {
-        color: [ '#409eff', '#51cefc', '#20a867', '#e7fc01', '#fcbe01', '#ff7140', '#fd5503', '#e22d14', '#04dcfc', '#bb55eb', '#fb2087' ],
+        color: [ '#0041fb', '#006cff', '#0096ff', '#04e0f9', '#48f754', '#f9ff5c', '#ffba00', '#ff5d5d', '#04dcfc', '#bb55eb', '#fb2087' ],
         textStyle: {
           color: 'white',
           fontSize: 12
@@ -33,9 +33,16 @@ export default {
           formatter: '{a} <br/>{b} : {c} ({d}%)'
         },
         legend: {
+          type: 'scroll',
           orient: 'vertical',
-          left: 'right',
-          data: ['私搭乱建', '非法小广告', '绿地脏乱', '倚门出摊', '机动车乱停放'],
+          right: 50,
+          top: 20,
+          bottom: 20,
+          itemWidth: 10,
+          itemHeight: 10,
+          itemGap: 10,
+          formatter: '{name}　　20%',
+          // data: ['私搭乱建', '非法小广告', '绿地脏乱', '倚门出摊', '机动车乱停放'],
           textStyle: {
             color: 'rgb(139,193,252)',
             fontSize: 12
@@ -45,19 +52,25 @@ export default {
           {
             name: '事件总数',
             type: 'pie',
-            radius: ['25%', '65%'],
-            center: ['50%', '50%'],
+            radius: ['40%', '65%'],
+            center: ['30%', '50%'],
             label: {
               show: false
+            },
+            itemStyle: {
+              borderWidth: 2,
+              borderColor: '#000438'
             },
             data: [
               { value: 335, name: '私搭乱建' },
               { value: 310, name: '非法小广告' },
               { value: 274, name: '绿地脏乱' },
               { value: 235, name: '倚门出摊' },
+              { value: 235, name: '倚门出摊1' },
+              { value: 235, name: '倚门出摊2' },
+              { value: 235, name: '倚门出摊3' },
               { value: 400, name: '机动车乱停放' }
             ].sort( (a, b)=> b.value - a.value),
-            roseType: 'radius',
             // labelLine: {
             //  lineStyle: {
             //   color: 'white'
