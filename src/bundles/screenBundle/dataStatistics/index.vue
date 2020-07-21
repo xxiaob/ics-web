@@ -2,7 +2,7 @@
   <section class="jc-screen-warp">
     <screen-header></screen-header>
     <div class="jc-screen-content">
-      <data-docking class="jc-flex-con" :project="project"></data-docking>
+      <data-docking class="jc-flex-con"></data-docking>
       <chart-statistics class="jc-flex-con"></chart-statistics>
       <div class="jc-flex-con-2"></div>
       <div class="jc-flex-con"></div>
