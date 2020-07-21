@@ -4,9 +4,9 @@
       <img class="jc-title-sign" src="@/bundles/screenBundle/dataStatistics/assets/title.png" alt="" height="18">
       <span class="jc-title-content">下辖区域占比</span>
       <div class="jc-right-box">
-        <span class="jc-right-item">上报事件</span>|
-        <span class="jc-right-item jc-activated">网巡问题</span>|
-        <span class="jc-right-item">临时任务</span>
+        <span class="jc-right-item" :class="{'jc-activated':activated===1}" @click="changeType(1)">上报事件</span>|
+        <span class="jc-right-item" :class="{'jc-activated':activated===2}" @click="changeType(2)">网巡问题</span>|
+        <span class="jc-right-item" :class="{'jc-activated':activated===3}" @click="changeType(3)">临时任务</span>
       </div>
     </div>
     <div class="jc-flex-con">
@@ -29,7 +29,23 @@ export default {
   },
   data() {
     return {
-
+      project: null,
+      options: null,
+      activated: 1
+    }
+  },
+  watch: {
+    cycle() {
+      console.log('Area 周期变化', this.cycle)
+    }
+  },
+  methods: {
+    changeType(val) {
+      if (val !== this.activated) {
+        this.activated = val
+      } else {
+        console.log('请勿重复点击')
+      }
     }
   },
   created() {
@@ -69,7 +85,7 @@ export default {
             show: false
           },
           itemStyle: {
-            borderWidth: 2,
+            borderWidth: 3,
             borderColor: '#000438'
           },
           data: [
@@ -98,6 +114,11 @@ export default {
         }
       ]
     }
+
+    this.$EventBus.$on('data-statistics-init-success', val=>{
+      console.log('info 接收信息成功', val)
+      this.project = val
+    })
   }
 }
 </script>

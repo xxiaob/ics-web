@@ -4,9 +4,9 @@
       <img class="jc-title-sign" src="@/bundles/screenBundle/dataStatistics/assets/title.png" alt="" height="18">
       <span class="jc-title-content">信息累计</span>
       <div class="jc-right-box">
-        <span class="jc-right-item">上报事件</span>|
-        <span class="jc-right-item jc-activated">网巡问题</span>|
-        <span class="jc-right-item">临时任务</span>
+        <span class="jc-right-item" :class="{'jc-activated':activated===1}" @click="changeType(1)">上报事件</span>|
+        <span class="jc-right-item" :class="{'jc-activated':activated===2}" @click="changeType(2)">网巡问题</span>|
+        <span class="jc-right-item" :class="{'jc-activated':activated===3}" @click="changeType(3)">临时任务</span>
       </div>
 
     </div>
@@ -33,13 +33,23 @@ export default {
   data() {
     return {
       project: null,
-      options: null
+      options: null,
+      activated: 1
     }
   },
   watch: {
     cycle() {
       console.log('info 周期变化', this.cycle)
       // this.options.series[0].data = [153, 151, 152, 153, 154, 155, 156, 157, 158, 159 ]
+    }
+  },
+  methods: {
+    changeType(val) {
+      if (val !== this.activated) {
+        this.activated = val
+      } else {
+        console.log('请勿重复点击')
+      }
     }
   },
   created() {
@@ -173,7 +183,7 @@ export default {
     }
 
     this.$EventBus.$on('data-statistics-init-success', val=>{
-      console.log('接收信息成功', val)
+      console.log('info 接收信息成功', val)
       this.project = val
 
       const xAxisData = ['雨花', '秦淮', '鼓楼', '玄武', '建邺', '江宁', '溧水', '六合', '高淳', '栖霞']
