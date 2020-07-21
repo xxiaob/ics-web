@@ -1,5 +1,5 @@
 <template>
-  <section class="jc-screen-warp">
+  <section class="jc-screen-warp no-select">
     <screen-header></screen-header>
     <div class="jc-screen-content">
       <data-docking class="jc-flex-con" v-if="!project.projectId"></data-docking>

@@ -1,8 +1,9 @@
 .jc-screen-warp {
   position: relative;
   height: 100%;
-  background-color: #000438;
   width: 3200px;
+  background: url(../assets/screen-bg.png) no-repeat center;
+  background-size: cover;
 }
 
 .jc-flex-con,
