@@ -4,7 +4,7 @@
     <div class="jc-welcome-content" :style="welcomeLogo">
       <div class="jc-welcome-item" v-for="item in list" :key="item.id" :style="item.logo" @click="goLink(item)"></div>
       <template v-if="list.length < 1">
-        <router-link :to="{name: 'specialControl'}" tag="div" class="jc-welcome-item jc-icon1"></router-link>
+        <router-link :to="{name: 'main'}" tag="div" class="jc-welcome-item jc-icon1"></router-link>
         <div class="jc-welcome-item jc-icon2"></div>
         <div class="jc-welcome-item jc-icon3"></div>
         <div class="jc-welcome-item jc-icon4"></div>
