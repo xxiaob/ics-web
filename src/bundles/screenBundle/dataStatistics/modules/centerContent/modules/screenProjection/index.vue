@@ -1,24 +1,32 @@
 <template>
   <transition name="bounce">
     <div class="jc-screen-space" v-show="show">
-      <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris facilisis enim libero, at lacinia diam fermentum id. Pellentesque habitant morbi tristique senectus et netus.</p>
+      <jc-live v-show="showModule===1"></jc-live>
+      <jc-event v-show="showModule===2"></jc-event>
     </div>
   </transition>
 
 </template>
 
 <script>
+import JcLive from './modules/live'
+import JcEvent from './modules/event'
 export default {
   name: 'ScreenDataCenterContentScreenProjection',
+  components: { JcLive, JcEvent },
   data() {
     return {
-      show: false
+      show: false,
+      showModule: 1
     }
   },
   created() {
     // setTimeout(()=>{
     //   this.show = true
     // }, 2000)
+    // setTimeout(()=>{
+    //   this.show = false
+    // }, 4000)
   },
   methods: {
     test() {
