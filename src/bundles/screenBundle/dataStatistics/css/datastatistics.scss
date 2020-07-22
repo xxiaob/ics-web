@@ -2,6 +2,7 @@
   position: relative;
   height: 100%;
   width: 3200px;
+  margin-left: -2000px;  // 开发调试大屏右侧区域使用, 
   background: url(../assets/screen-bg.png) no-repeat center;
   background-size: cover;
 }
@@ -62,4 +63,40 @@
 
     }
   }
+}
+
+/deep/ {
+  .jc-category {
+      flex-wrap: wrap;
+      justify-content: space-between;
+      height:100%;
+
+
+      .jc-category-item{
+        justify-content: center;
+        align-items: center;
+        width: 50%;
+        height:50%;
+      
+        .jc-category-title {
+          font-size: 14px;
+          letter-spacing: 1px;
+          color: #11e7ff;
+          margin-right:20px;
+        }
+
+        .jc-category-count {
+          font-size: 18px;
+          letter-spacing: 1px;
+          color: #ffffff;
+        }
+      
+      }
+  }
+}
+
+// 通用的边框及内
+/deep/ .data-statistics-border {
+  border: 1px solid rgb(32, 73, 154);
+  box-shadow: inset 0 0 10px 0 rgb(32, 73, 154);
 }
