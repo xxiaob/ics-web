@@ -8,7 +8,7 @@
       <screen-projection></screen-projection>
     </div>
     <div class="jc-map-footer">
-      <img src="./assets/map-footer.png" class="jc-map-img" />
+      <img src="./assets/map-footer.gif" class="jc-map-img" />
     </div>
   </div>
 </template>
