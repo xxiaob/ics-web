@@ -43,6 +43,8 @@ export default {
   padding: $jc-default-dis;
   background: url(./assets/map-bg.png) no-repeat center;
   background-size: 100% 100%;
+  width: 100%;
+  height: 100%;
 }
 .jc-map-warp {
   position: relative;
