@@ -33,12 +33,8 @@ export default {
   },
   methods: {
     async initData() {
-<<<<<<< HEAD
-      
-      if (this.$route.params.projectId) {
-=======
       if (this.project.projectId) {
->>>>>>> origin/dev
+
         //处理项目，如果项目id存在则获取项目详情
         let { projectId, projectName, orgId, projectType } = await projectGet(this.project.projectId)
 
