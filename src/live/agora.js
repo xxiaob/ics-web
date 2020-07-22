@@ -109,7 +109,31 @@ export class Live {
       this.console('remoteId', remoteId)
       // e.stream.play(this.remoteId)
       e.stream.play(remoteId)
+
+      if (!this.interval) {
+        this.interval = setInterval(() => {
+          this.rtc.client.getRemoteVideoStats(remoteVideoStatsMap => {
+            /**
+             * End2EndDelay 端到端延迟（ms）从远端采集视频到本地播放视频的延迟。
+             * TotalFreezeTime  视频卡顿总时间，单位为秒
+             * PacketLossRate  远端视频的丢包率（%）
+             * TransportDelay  传输延迟（ms） 从远端发送视频到本地接收视频的延迟。
+             *
+             * MuteState  视频画面是否开启 "1"：视频画面开启 "0"：视频画面关闭
+             * RecvBitrate  视频接收码率，单位 Kbps
+             * RecvResolutionHeight  视频接收分辨率高度，单位为像素
+             * RecvResolutionWidth  视频接收分辨率宽度，单位为像素
+             * RenderFrameRate  视频解码输出帧率（渲染帧率），单位 fps
+             * RenderResolutionHeight  视频渲染分辨率高度，单位为像素
+             * RenderResolutionWidth  视频渲染分辨率宽度，单位为像素
+             * TotalPlayDuration  视频播放总时间，单位为秒
+             */
+            console.log('getRemoteVideoStats 监听 远端流的情况', remoteVideoStatsMap)
+          })
+        }, 2000)
+      }
     })
+
 
     //监听远端流移除
     this.rtc.client.on('stream-removed', e => {
@@ -143,6 +167,11 @@ export class Live {
     //直播更新
     this.rtc.client.on('liveTranscodingUpdated', e => {
       this.console('liveTranscodingUpdated 直播更新', e)
+    })
+
+    //网络质量统计数据
+    this.rtc.client.on('network-quality', e => {
+      this.console('network-quality 本地网络数据', e)
     })
   }
 
@@ -235,6 +264,9 @@ export class Live {
 
   //离开房间
   leaveChannel() {
+    if (this.interval) {
+      clearInterval(this.interval)
+    }
     if (this.recordParams.recorded) {
       endRecord(this.recordParams)
     }
