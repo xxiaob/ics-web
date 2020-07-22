@@ -1,7 +1,7 @@
 <template>
   <div class="jc-flex-con jc-flex-warp jc-flex-vertical info">
     <div class="jc-title">
-      <img class="jc-title-sign" src="@/bundles/screenBundle/dataStatistics/assets/title.png" alt="" height="18">
+      <!-- <img class="jc-title-sign" src="@/bundles/screenBundle/dataStatistics/assets/title.png" alt="" height="18"> -->
       <span class="jc-title-content">事务类型占比</span>
       <div class="jc-right-box">
         <span class="jc-right-item" :class="{'jc-activated':activated===1}" @click="changeType(1)">上报事件</span>|

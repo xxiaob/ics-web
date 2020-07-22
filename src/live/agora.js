@@ -96,7 +96,7 @@ export class Live {
 
       //订阅远端流，触发订阅事件
       this.rtc.client.subscribe(e.stream, err => {
-        this.console('Subscribe stream failed 失败', err)
+        this.console('Subscribe stream failed 失败', e.stream, e.stream.getId(), err)
       })
     })
 
