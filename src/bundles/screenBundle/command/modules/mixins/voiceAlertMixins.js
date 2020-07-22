@@ -1,14 +1,20 @@
 /**
  * 声音提醒
  */
+import { VoiceSource } from '@/config/JcVoiceAlertConfig'
 
 export default {
   created() {
     this.$EventBus.$on('map-voice-alert', this.voicePlay)
   },
   methods: {
-    voicePlay() {
+    voicePlay(data) {
+      let source = VoiceSource[data.type]
 
+      if (source) {
+        this.$refs.myScreenAudio.src = source
+        this.$refs.myScreenAudio.play()
+      }
     }
   },
   beforeDestroy() {

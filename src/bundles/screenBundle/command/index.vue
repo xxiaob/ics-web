@@ -1,5 +1,6 @@
 <template>
   <section class="jc-screen-warp">
+    <audio src="" ref="myScreenAudio"></audio>
     <!-- 顶部header -->
     <command-header></command-header>
     <!-- 地图搜索组件 -->
@@ -41,6 +42,7 @@ import ScreenMapSocketMixins from './modules/mixins/screenMapSocketMixins' //大
 import GridMixins from './modules/mixins/gridMixins' //网格处理
 import UserMixins from './modules/mixins/userMixins.js' //用户处理
 import TaskMixins from './modules/mixins/taskMixins' //任务处理
+import VoiceAlertMixins from './modules/mixins/voiceAlertMixins' //音频播放
 import CommandHeader from './modules/header'//顶部
 import CommandMessage from './modules/message'//任务等消息弹窗
 
@@ -48,7 +50,7 @@ let myJcMap //个人 map 对象
 
 export default {
   name: 'ScreenCommand',
-  mixins: [OrgMixins, GridMixins, UserMixins, TaskMixins, TemporaryTasksMixins, ScreenMapSocketMixins],
+  mixins: [OrgMixins, GridMixins, UserMixins, TaskMixins, TemporaryTasksMixins, ScreenMapSocketMixins, VoiceAlertMixins],
   components: {
     CommandHeader,
     CommandOperate: () => import('./modules/operate'), //功能操作区域
