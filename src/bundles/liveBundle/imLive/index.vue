@@ -96,12 +96,12 @@ export default {
       invited: false, //我是邀请方
       //邀请类型
       inviteTypes: {
-        '0': ['多人语音', ['0', '0', 'host']],
-        '1': ['多人视频', ['0', '1', 'host']],
+        '0': ['音频会议', ['0', '0', 'host']],
+        '1': ['视频会议', ['0', '1', 'host']],
         '2': ['强制观摩', ['2', '1', 'audience']],
         '3': ['观摩', ['0', '1', 'audience']],
-        '4': ['语音', ['0', '0', 'host']], //双人语音
-        '5': ['视频', ['0', '1', 'host']] //双人视频
+        '4': ['对讲', ['0', '0', 'host']], //双人语音
+        '5': ['指挥', ['0', '1', 'host']] //双人视频
       },
       inviteType: '',
       invitUserId: '', //邀请用户的id
@@ -184,7 +184,7 @@ export default {
       if (msgType === '1') {
         console.log('邀请视频')
         if (isExit) {
-          //退出房间消息
+          //退出消息
           this.exitHandel({ nickName, isExit })
         } else if ( agree) {
           //邀请消息 我是邀请方
@@ -212,7 +212,7 @@ export default {
           }
           this.title = mediaType === '0' ? '语音' : '视频'
           if (inviteType === '0') {
-            let msg = content === 'help' ? '一键求助' : (mediaType === '0' ? '语音' : '视频')
+            let msg = content === 'help' ? '寻求求助' : (mediaType === '0' ? '语音' : '视频')
 
             this.msg = nickName + '邀请你' + msg
           }
@@ -224,7 +224,7 @@ export default {
     },
     exitHandel({ nickName, isExit }) {
       if (this.live.joined) {
-        this.$message.warning(nickName + '已经挂断')
+        this.$message.warning(nickName + '退出')
       }
       if (isExit === '1' || (this.inviteType === '4' || this.inviteType === '5')) {
         console.log('结束视频')
@@ -365,7 +365,7 @@ export default {
     },
     //结束按钮操作
     exit() {
-      this.$confirm('确认退出房间', '提示', { type: 'warning' }).then( () => {
+      this.$confirm('确认退出', '提示', { type: 'warning' }).then( () => {
         this.confirmExit()
       }).catch(() => {})
     },

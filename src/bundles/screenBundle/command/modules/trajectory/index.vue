@@ -98,10 +98,7 @@ export default {
       if (!myJcMap) {
         myJcMap = new JcMap()
         await initMoveAnimation() //加载动画组件
-        await myJcMap.init(this.$refs.myMap) //等待地图初始化
-        this.$nextTick(() => {
-          myJcMap.map.setPitch(45) //设置地图倾斜，呈现3D地图
-        })
+        await myJcMap.init(this.$refs.myMap, { pitch: 45 }) //等待地图初始化
       }
       if (user) {
         this.user = { userId: user.id, userName: user.name }

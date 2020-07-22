@@ -61,8 +61,9 @@
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="dialogVisible = false" size="small">取 消</el-button>
-      <el-button type="primary" :loading="loading" @click="onSubmit(false)" size="small">暂 存</el-button>
-      <el-button type="primary" :loading="loading" @click="onSubmit(true)" size="small">下 发</el-button>
+      <el-button type="primary" :loading="loading" @click="onSubmit(false)" size="small" v-show="selectType!=TASK_SELECT_TYPES.ISSUED||!options">暂 存</el-button>
+      <el-button type="primary" :loading="loading" @click="onSubmit(true)" size="small" v-show="selectType!=TASK_SELECT_TYPES.ISSUED||!options">下 发</el-button>
+      <el-button type="primary" :loading="loading" @click="onSubmit(false)" size="small" v-show="selectType===TASK_SELECT_TYPES.ISSUED&&options">保 存</el-button>
     </div>
   </el-dialog>
 </template>
@@ -71,7 +72,7 @@ import { taskSave } from '@/api/task'
 // import { userListByOrg } from '@/api/user'
 import { getStringRule, getNumberRule, NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
-import { TASK_TYPES, TASK_AREA_TYPES, TASK_PEOPLE_TYPES, PROJECT_TYPES, TASK_FREQUENCYS } from '@/constant/Dictionaries'
+import { TASK_TYPES, TASK_AREA_TYPES, TASK_PEOPLE_TYPES, PROJECT_TYPES, TASK_FREQUENCYS, TASK_SELECT_TYPES } from '@/constant/Dictionaries'
 
 const defaultForm = {
   workAreaType: TASK_AREA_TYPES.GRID,
@@ -113,6 +114,9 @@ export default {
     },
     orgId: {
       type: String
+    },
+    selectType: {
+      type: String
     }
   },
   components: {
@@ -122,6 +126,7 @@ export default {
   },
   data() {
     return {
+      TASK_SELECT_TYPES,
       editArea: false,
       edit: false,
       workFrequency: null,

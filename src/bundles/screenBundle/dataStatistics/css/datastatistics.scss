@@ -1,16 +1,24 @@
 .jc-screen-warp {
   position: relative;
   height: 100%;
-  background-color: #000438;
   width: 3200px;
+  background: url(../assets/screen-bg.png) no-repeat center;
+  background-size: cover;
+}
+
+.jc-flex-con,
+.jc-flex-con-2,
+.jc-flex-con-3 {
+  margin: 0 $jc-default-dis/2;
 }
 
 .jc-screen-content {
   position: absolute;
-  top: 60px;
+  top: 70px;
   left: 0;
   right: 0;
   bottom: 0;
+  z-index: 8;
   display: flex;
   padding: 0 0 $jc-default-dis;
 }
@@ -19,39 +27,39 @@
   .jc-title {
     height: 40px;
     line-height: 40px;
+    background: url(../assets/title.png) no-repeat left center;
+    padding-left: 16px;
 
-    img {
+    .jc-title-sign {
       position: relative;
       top: 2px;
     }
 
-    .title {
+    .jc-title-content {
       color: rgb(139, 193, 252);
       font-size: 18px;
       font-weight: bold;
       margin-left: 10px;
     }
 
-    .right {
+    .jc-right-box {
       float: right;
       font-size: 12px;
       color: rgb(5, 114, 189);
-      cursor: pointer;
-      margin-left: $jc-default-dis/2;
 
-      &.activated {
+      .jc-activated {
         color: rgb(20, 237, 252);
       }
 
-      &:not(:last-child)::after {
-        content: "";
-        float: left;
-        width: 1px;
-        height: 14px;
-        margin-right: $jc-default-dis/2;
-        margin-top: 14px;
-        background-color: rgb(5, 114, 189);
+      .jc-right-item {
+        margin: 0 10px;
+        cursor: pointer;
       }
+
+      .jc-right-item:last-child {
+        margin-right: 0;
+      }
+
     }
   }
 }
