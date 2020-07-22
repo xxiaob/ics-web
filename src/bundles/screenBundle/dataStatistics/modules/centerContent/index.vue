@@ -5,6 +5,7 @@
     <div class="jc-flex-con jc-data-content">
       <!-- 指挥范围显示 map -->
       <map-data></map-data>
+      <screen-projection></screen-projection>
     </div>
     <div class="jc-map-footer">
       <img src="./assets/map-footer.png" class="jc-map-img" />
@@ -14,10 +15,11 @@
 <script>
 import UserData from './modules/userData'
 import MapData from './modules/mapData'
+import ScreenProjection from './modules/screenProjection'
 
 export default {
   name: 'ScreenDataCenterContent',
-  components: { UserData, MapData }
+  components: { UserData, MapData, ScreenProjection }
 }
 </script>
 <style lang="scss" scoped>
