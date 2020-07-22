@@ -1,16 +1,20 @@
 <template>
-  <div class="jc-live">
-    <div class="big-box"></div>
-    <div class="live-in">
-      <div class="live" @click="checkBigLive(user.userId)" :class="{audio:inviteType==='0'||inviteType==='4','big-live':bigLiveId===user.userId}" v-for="user in users" :key="user.userId" :id="user.userId">
-        <div class="userName">{{user.userName}}</div>
+  <div class="jc-live-out">
+    <div class="jc-live">
+      <div class="big-box"></div>
+      <div class="live-in">
+        <div class="live" @click="checkBigLive(user.userId)" :class="{audio:inviteType==='0'||inviteType==='4','big-live':bigLiveId===user.userId}" v-for="user in users" :key="user.userId" :id="user.userId">
+          <div class="userName">{{user.userName}}</div>
+        </div>
+        <div class="live big-live">1</div>
+        <div class="live">2</div>
+        <div class="live">3</div>
+        <div class="live">4</div>
+        <div class="live">4</div>
       </div>
-      <div class="live">1</div>
-      <div class="live">2</div>
-      <div class="live">3</div>
-      <div class="live">4</div>
     </div>
   </div>
+
 </template>
 
 <script>
@@ -55,12 +59,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.jc-live-out {
+  height: 100%;
+  position: relative;
+}
 .jc-live {
   height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
   box-sizing: border-box;
-  position: relative;
   .big-box {
     width: 68%;
     height: 100%;
@@ -77,19 +84,22 @@ export default {
     height: 100%;
     .live {
       display: block;
-      margin-bottom: 5px;
+      margin-bottom: 10px;
       cursor: pointer;
       height: 30%;
+
+      background-color: aqua;
     }
 
     .big-live {
       animation: big-live-to-full 0.3s linear;
 
-      width: 600px;
-      height: 440px;
+      width: 68%;
+      height: 100%;
+      margin-bottom: 0;
       position: absolute;
-      left: 10px;
-      top: 44px;
+      left: 0;
+      top: 0;
       z-index: 999;
     }
   }
