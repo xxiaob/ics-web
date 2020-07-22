@@ -31,6 +31,7 @@ export default {
     }
   },
   mounted() {
+    
     this.drawChart()
     window.addEventListener('resize', this.resize)
   },
