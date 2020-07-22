@@ -5,14 +5,14 @@ import { JcMapMarker } from '@/map'
 import { markerStyle } from '@/map/mapConst'
 import { MAP_EVENT } from '@/constant/CONST'
 import { MESSAGE_TYPE } from '@/constant/Dictionaries'
-
+import { VOICE_TYPE } from '@/config/JcVoiceAlertConfig'
 
 let userTasks = {} //记录
 
 export default {
   data() {
     return {
-
+      abnormalTaskIds: [] //异常的临时任务数组
     }
   },
   created() {
