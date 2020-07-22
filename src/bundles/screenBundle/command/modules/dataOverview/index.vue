@@ -47,11 +47,12 @@ export default {
     async initData(org) {
       if (org) {
         this.org = org
+        this.loading = true
       }
       if (!this.org) {
         return
       }
-      this.loading = true
+
       try {
         let result = await getCommandScreenData({ orgId: this.org.orgId, projectId: this.project.projectId || this.$route.params.projectId || '' })
 

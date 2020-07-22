@@ -60,6 +60,8 @@ export default {
       if (this.list.length > this.maxLength) {
         this.list.splice(this.maxLength, this.list.length - this.maxLength)
       }
+
+      this.$EventBus.$emit('map-voice-alert', { type: message.messageType + '' }) //通知播放提示音
     },
     messageInit(data) {
       console.log('screen-message-init', data)

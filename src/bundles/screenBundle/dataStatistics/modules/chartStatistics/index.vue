@@ -32,6 +32,11 @@ export default {
       this.changeCycle()
     }, 3000)
   },
+  destroyed() {
+    if (this.interval) {
+      clearInterval(this.interval)
+    }
+  },
   methods: {
     changeCycle(val) {
       if (val) {

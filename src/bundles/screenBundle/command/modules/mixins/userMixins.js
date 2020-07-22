@@ -3,6 +3,7 @@
  */
 import { getMarkerCluster, getMouseTool } from '@/map/aMap/aMapUtil'
 import { JcUserIcons } from '@/config/JcIconConfig'
+import { VOICE_TYPE } from '@/config/JcVoiceAlertConfig'
 
 let usersData = { markerCluster: null, users: {}, lnglats: [] } //存储用户信息
 
@@ -120,6 +121,7 @@ export default {
               }
             } else if (item.status == 1) {
               this.abnormalUserIds.push(item.id)
+              this.$EventBus.$emit('map-voice-alert', { type: VOICE_TYPE.USER_ABNORMAL }) //通知播放提示音
             }
           })
         }
