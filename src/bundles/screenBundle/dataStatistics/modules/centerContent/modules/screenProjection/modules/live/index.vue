@@ -6,11 +6,6 @@
         <div class="live" @click="checkBigLive(user.userId)" :class="{audio:inviteType==='0'||inviteType==='4','big-live':bigLiveId===user.userId}" v-for="user in users" :key="user.userId" :id="user.userId">
           <div class="userName">{{user.userName}}</div>
         </div>
-        <div class="live big-live">1</div>
-        <div class="live">2</div>
-        <div class="live">3</div>
-        <div class="live">4</div>
-        <div class="live">4</div>
       </div>
     </div>
   </div>
@@ -29,7 +24,15 @@ export default {
   },
   data() {
     return {
-      users: []
+      bigLiveId: 1,
+      inviteType: '2',
+      users: [
+        { userName: '1', userId: 1 },
+        { userName: '2', userId: 2 },
+        { userName: '3', userId: 3 },
+        { userName: '4', userId: 4 },
+        { userName: '5', userId: 5 }
+      ]
     }
   },
   mounted() {
@@ -74,6 +77,7 @@ export default {
     position: absolute;
     left: 0;
     top: 0;
+    background-color: #cccccc;
   }
 
   .live-in {
@@ -89,6 +93,16 @@ export default {
       height: 30%;
 
       background-color: aqua;
+      position: relative;
+      .userName {
+        padding: 5px 10px;
+        background: rgba($color: #000000, $alpha: 0.2);
+        color: white;
+        width: 100%;
+        position: absolute;
+        bottom: 0;
+        z-index: 100;
+      }
     }
 
     .big-live {
@@ -107,15 +121,15 @@ export default {
 
 @keyframes big-live-to-full {
   0% {
-    height: 150px;
-    width: 200px;
-    left: 600px;
+    height: 30%;
+    width: 30%;
+    left: 70%;
   }
 
   100% {
-    width: 600px;
-    height: 440px;
-    left: 5px;
+    width: 68%;
+    height: 100%;
+    left: 0;
   }
 }
 </style>
