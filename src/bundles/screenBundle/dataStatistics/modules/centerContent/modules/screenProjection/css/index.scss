@@ -1,0 +1,18 @@
+.jc-content {
+  height: 100%;
+  overflow-y: auto;
+}
+.el-form {
+  padding: $jc-default-dis;
+}
+.el-form-item {
+  margin-bottom: 10px;
+
+  /deep/ {
+    .el-form-item__content,
+    .el-form-item__label {
+      font-size: 16px;
+      color: #8bc1fc;
+    }
+  }
+}

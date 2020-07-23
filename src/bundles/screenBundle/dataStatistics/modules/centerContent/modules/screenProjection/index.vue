@@ -4,7 +4,8 @@
       <jc-live v-show="showModule===1"></jc-live>
       <jc-event v-show="showModule===2"></jc-event>
       <jc-question v-show="showModule===3"></jc-question>
-      <jc-task v-show="showModule===4"></jc-task>
+      <jc-temporary-task v-show="showModule===4"></jc-temporary-task>
+      <jc-daily-task v-show="showModule===5"></jc-daily-task>
     </div>
   </transition>
 
@@ -14,14 +15,15 @@
 import JcLive from './modules/live'
 import JcEvent from './modules/event'
 import JcQuestion from './modules/question'
-import JcTask from './modules/task'
+import JcTemporaryTask from './modules/temporaryTask'
+import JcDailyTask from './modules/dailyTask'
 export default {
   name: 'ScreenDataCenterContentScreenProjection',
-  components: { JcLive, JcEvent, JcQuestion, JcTask },
+  components: { JcLive, JcEvent, JcQuestion, JcDailyTask, JcTemporaryTask },
   data() {
     return {
       show: false,
-      showModule: 2
+      showModule: 5
     }
   },
   created() {

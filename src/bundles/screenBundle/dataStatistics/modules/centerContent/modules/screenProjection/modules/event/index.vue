@@ -1,5 +1,5 @@
 <template>
-  <div class="jc-event">
+  <div class="jc-content">
     <el-form label-width="100px" :model="form" size="mini">
       <el-form-item label="事件ID : ">
         <span>{{form.eventNumber}}事件ID : </span>
@@ -54,22 +54,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.jc-event {
-  height: 100%;
-  overflow-y: auto;
-}
-.el-form {
-  padding: $jc-default-dis;
-}
-.el-form-item {
-  margin-bottom: 10px;
-
-  /deep/ {
-    .el-form-item__content,
-    .el-form-item__label {
-      font-size: 16px;
-      color: #8bc1fc;
-    }
-  }
-}
+@import "../../css/index.scss";
 </style>
