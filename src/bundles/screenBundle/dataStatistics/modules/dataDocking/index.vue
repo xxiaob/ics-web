@@ -36,44 +36,6 @@ export default {
   .dock-comp {
     border-top: 1px solid rgb(32, 73, 154);
     padding: 0 $jc-default-dis $jc-default-dis/2;
-
-    .jc-city-management {
-      flex-wrap: wrap;
-      justify-content: space-between;
-      height: 100%;
-
-      .jc-manage-item {
-        justify-content: center;
-        align-items: center;
-        width: 50%;
-        height: 50%;
-        background: url("../../assets/citysummary.png") no-repeat center/100%;
-        background-origin: content-box;
-
-        &:nth-child(odd) {
-          padding-right: 16px;
-        }
-        &:nth-child(even) {
-          padding-left: 16px;
-        }
-
-        span {
-          padding-bottom: 24px;
-        }
-        .jc-manage-title {
-          font-size: 14px;
-          letter-spacing: 1px;
-          color: #11e7ff;
-          margin-right: 20px;
-        }
-
-        .jc-manage-count {
-          font-size: 18px;
-          letter-spacing: 1px;
-          color: #ffffff;
-        }
-      }
-    }
   }
 }
 </style>

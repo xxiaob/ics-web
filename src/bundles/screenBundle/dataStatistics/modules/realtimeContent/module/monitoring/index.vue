@@ -1,6 +1,14 @@
 <template>
 
   <jc-abstract-area title="监控视频">
+    <!-- 标题插槽内容 -->
+    <div class="jc-right-box" slot="title">
+      <span class="jc-right-item" :class="{'jc-activated':activated===1}" @click="changeType(1)">重点区域</span>|
+      <span class="jc-right-item" :class="{'jc-activated':activated===2}" @click="changeType(2)">网巡车</span>|
+      <span class="jc-right-item" :class="{'jc-activated':activated===3}" @click="changeType(3)">无人机</span>
+    </div>
+
+    <!-- 默认插槽内容 -->
     <div class="js-monitoring-content jc-flex-warp">
       <div class="jc-monitoring-wrap">
         <div class="monitoring-wrap data-statistics-border jc-flex-warp jc-flex-vertical">
@@ -52,6 +60,20 @@ export default {
   name: 'ScreenDataStatisticsRealtimeContentMonitoring',
   components: {
     JcAbstractArea
+  },
+  data() {
+    return {
+      activated: 1
+    }
+  },
+  methods: {
+    changeType(val) {
+      if (val !== this.activated) {
+        this.activated = val
+      } else {
+        console.log('请勿重复点击')
+      }
+    }
   }
 }
 </script>
@@ -89,12 +111,12 @@ export default {
       .montitoring-title {
         height: 38px;
         line-height: 38px;
-        font-size: 16px;
+        font-size: 14px;
         color: #11e7ff;
       }
 
       .montitoring {
-        background: #11e7ff;
+        background: url("./assets/video-space.png") no-repeat 0 0 / cover;
       }
     }
   }

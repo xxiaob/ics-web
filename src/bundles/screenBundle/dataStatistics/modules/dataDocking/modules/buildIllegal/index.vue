@@ -48,7 +48,7 @@ export default {
   position: relative;
 
   .jc-category-item {
-    background: url("../../../../assets/building-bg.png") no-repeat center/100%;
+    background: url("./assets/building-bg.png") no-repeat center/100%;
     background-origin: content-box;
 
     &:nth-child(odd) {
@@ -69,7 +69,7 @@ export default {
     margin: auto;
     width: 88px;
     height: 88px;
-    background: url("../../../../assets/enforcement.png") no-repeat center;
+    background: url("./assets/enforcement.png") no-repeat center;
   }
 }
 </style>

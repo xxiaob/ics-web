@@ -48,7 +48,7 @@ export default {
 <style lang="scss" scoped>
 .jc-category {
   .jc-category-item {
-    background: url("../../../../assets/citysummary.png") no-repeat center/100%;
+    background: url("./assets/citysummary.png") no-repeat center/100%;
     background-origin: content-box;
 
     &:nth-child(odd) {

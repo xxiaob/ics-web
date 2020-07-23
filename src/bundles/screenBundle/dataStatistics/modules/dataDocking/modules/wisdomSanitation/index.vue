@@ -4,7 +4,7 @@
     <div class="jc-category jc-flex-warp">
       <div class="jc-category-item jc-flex-warp">
         <div class="jc-sanitation-img">
-          <img src="../../../../assets/sanitation-people.png" alt="">
+          <img src="./assets/sanitation-people.png" alt="">
         </div>
         <div class="jc-sanitation-content jc-flex-con jc-flex-warp jc-flex-vertical">
           <span class="jc-sanitation-title">在线人数</span>
@@ -15,7 +15,7 @@
       </div>
       <div class="jc-category-item jc-flex-warp">
         <div class="jc-sanitation-img">
-          <img src="../../../../assets/sanitation-vehicle.png" alt="">
+          <img src="./assets/sanitation-vehicle.png" alt="">
         </div>
         <div class="jc-sanitation-content jc-flex-con jc-flex-warp jc-flex-vertical">
           <span class="jc-sanitation-title">在线车辆</span>
@@ -27,7 +27,7 @@
 
       <div class="jc-category-item jc-flex-warp">
         <div class="jc-sanitation-img">
-          <img src="../../../../assets/sanitation-garbage.png" alt="">
+          <img src="./assets/sanitation-garbage.png" alt="">
         </div>
         <div class="jc-sanitation-content jc-flex-con jc-flex-warp jc-flex-vertical">
           <span class="jc-sanitation-title">垃圾收集点</span>
@@ -39,7 +39,7 @@
 
       <div class="jc-category-item jc-flex-warp">
         <div class="jc-sanitation-img">
-          <img src="../../../../assets/sanitation-transit.png" alt="">
+          <img src="./assets/sanitation-transit.png" alt="">
         </div>
         <div class="jc-sanitation-content jc-flex-con jc-flex-warp jc-flex-vertical">
           <span class="jc-sanitation-title">垃圾中转站</span>
@@ -51,7 +51,7 @@
 
       <div class="jc-category-item jc-flex-warp">
         <div class="jc-sanitation-img">
-          <img src="../../../../assets/sanitation-toilet.png" alt="">
+          <img src="./assets/sanitation-toilet.png" alt="">
         </div>
         <div class="jc-sanitation-content jc-flex-con jc-flex-warp jc-flex-vertical">
           <span class="jc-sanitation-title">公共厕所</span>
@@ -62,7 +62,7 @@
       </div>
       <div class="jc-category-item jc-flex-warp">
         <div class="jc-sanitation-img">
-          <img src="../../../../assets/sanitation-classify.png" alt="">
+          <img src="./assets/sanitation-classify.png" alt="">
         </div>
         <div class="jc-sanitation-content jc-flex-con jc-flex-warp jc-flex-vertical">
           <span class="jc-sanitation-title">垃圾分类执法</span>
