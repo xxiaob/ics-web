@@ -25,13 +25,7 @@ import RealtimeContent from './modules/realtimeContent' //右二, 实时数据�
 
 export default {
   name: 'ScreenDataStatistics',
-  components: { 
-    ScreenHeader, 
-    DataDocking, 
-    CenterContent, 
-    ChartStatistics,
-    RealtimeContent
-  },
+  components: { ScreenHeader, DataDocking, CenterContent, ChartStatistics, RealtimeContent },
   data() {
     return {
       project: { projectId: this.$route.params.projectId || '', projectName: '', orgId: '', projectType: '' }
@@ -43,7 +37,6 @@ export default {
   methods: {
     async initData() {
       if (this.project.projectId) {
-
         //处理项目，如果项目id存在则获取项目详情
         let { projectId, projectName, orgId, projectType } = await projectGet(this.project.projectId)
 
