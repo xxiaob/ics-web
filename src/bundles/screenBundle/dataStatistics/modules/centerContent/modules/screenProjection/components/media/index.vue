@@ -2,18 +2,25 @@
   <div class="jc-media">
     <div class="swiper-container">
       <div class="swiper-wrapper">
-        <div class="swiper-slide">
-          <img src="./assets/audio.gif" alt="">
+        <div v-for="url in imgs" :key="url.id" class="swiper-slide jc-img">
+          <img class="img" :src="url" alt="">
         </div>
-        <div class="swiper-slide">
-          <img src="./assets/audio.gif" alt="">
+        <div class="jc-video swiper-slide" v-for="url in videos" :key="url" @click="showVideo(url)">
+          <video :src="url"></video>
+          <div class="hover">
+            <img class="jc-video-play" src="@/bundles/taskBundle/assets/play.png" alt="">
+          </div>
         </div>
-        <div class="swiper-slide">
-          <img src="./assets/audio.gif" alt="">
+        <div v-for="(url,index) in audios" :key="url" class="jc-audio swiper-slide" @click="playAudio(url,index)">
+          <div class="hover">
+            <img class="jc-video-play" src="@/bundles/taskBundle/assets/play.png" alt="" v-show="audioPlayShows[index]">
+            <img class="jc-video-play" src="@/bundles/taskBundle/assets/pause.png" alt="" v-show="!audioPlayShows[index]">
+          </div>
         </div>
-        <div class="swiper-slide">
-          <img src="./assets/audio.gif" alt="">
-        </div>
+        <audio v-if="show" ref="audio" :src="audioUrl" style="width:0;height:0" @ended="audioEnded"></audio>
+        <a class="jc-other swiper-slide" v-for="url in others" :key="url" :href="url" download="" title="点击下载">
+          <img class="jc-other-down" src="@/bundles/taskBundle/assets/down.png" alt="">
+        </a>
       </div>
     </div>
 
@@ -28,10 +35,16 @@
 <script>
 import Swiper from 'swiper'
 import 'swiper/swiper-bundle.css'
+import MediaMixins from '@/bundles/taskBundle/mixins/MediaMixins'
 
 export default {
+  mixins: [MediaMixins],
   name: 'ScreenProjectionMedia',
   props: {
+    urls: {
+      type: Array,
+      default: ()=>[]
+    },
     title: {
       type: String,
       default: ''
@@ -39,13 +52,26 @@ export default {
   },
   data() {
     return {
-      dialogVideoVisible: false
+      show: true
+    }
+  },
+  watch: {
+    urls: {
+      immediate: true,
+      deep: true,
+      handler(newValue) {
+        this.handleUrls(newValue)
+      }
     }
   },
   mounted() {
     setTimeout(()=>{
       this.mySwiper = new Swiper('.swiper-container', {
-        autoplay: true,
+        autoplay: {
+          delay: 1000,
+          stopOnLastSlide: false,
+          disableOnInteraction: true
+        },
         slidesPerView: 3
       })
     })
@@ -70,11 +96,61 @@ export default {
   }
 }
 
+.swiper-container {
+  height: 100px;
+}
+
 .swiper-slide {
   color: white;
   text-align: center;
   padding: 0 5px;
   box-sizing: border-box;
   height: 100px;
+}
+
+.jc-img,
+.jc-video,
+.jc-audio,
+.jc-other {
+  cursor: pointer;
+  position: relative;
+
+  .img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  video {
+    width: 100%;
+    height: 100%;
+  }
+
+  .hover {
+    display: none;
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+    // background: rgba($color: #000000, $alpha: 0.2);
+
+    .jc-video-play {
+      position: absolute;
+      left: 42px;
+      top: 32px;
+    }
+  }
+  .jc-other-down {
+    position: absolute;
+    left: 48px;
+    top: 32px;
+  }
+  &:hover .hover {
+    display: block;
+  }
+}
+.jc-audio {
+  background: url(./assets/audio.gif) no-repeat center;
 }
 </style>

@@ -23,7 +23,7 @@
         <div v-html="form.desc"></div>
       </el-form-item>
     </el-form>
-    <jc-media class="media" title="处理前图片"></jc-media>
+    <jc-media class="media" title="处理前图片" :urls="urls"></jc-media>
   </div>
 </template>
 
@@ -35,7 +35,8 @@ export default {
   components: { JcMedia },
   data() {
     return {
-      form: {}
+      form: {},
+      urls: ['https://192.168.0.180:9000/group1/M00/00/1B/wKgAeF8QV2KAbH_-AAIW1VEkksk412.png', 'https://192.168.0.180:9000/group1/M00/00/1B/wKgAeF8QV2KAbH_-AAIW1VEkksk412.png', 'https://192.168.0.180:9000/group1/M00/00/1C/wKgAeF8Ze-OAXo-OAAhtEcbFSQ0391.zip', 'https://192.168.0.180:9000/group1/M00/00/1B/wKgAeF8Rbv6AOwtpAAAhWWA5JUU347.aac', 'https://192.168.0.180:9000/group1/M00/00/1B/wKgAeF8RbwaAd2HcACWhtioMYrg052.mp4']
     }
   },
   methods: {
