@@ -54,7 +54,7 @@
 
 <script>
 // 标题抽象组件
-import JcAbstractArea from '../../../../command/abstractArea'
+import JcAbstractArea from '../../../common/abstractArea'
 
 export default {
   name: 'ScreenDataStatisticsRealtimeContentMonitoring',
