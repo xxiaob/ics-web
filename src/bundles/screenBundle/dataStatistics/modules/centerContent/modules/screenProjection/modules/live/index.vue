@@ -1,7 +1,7 @@
 <template>
   <div class="jc-live-out">
     <div class="jc-live">
-      <div class="big-box"></div>
+      <div class="big-box" :class="{audio:inviteType==='0'||inviteType==='4'}"></div>
       <div class="live-in">
         <div class="live" @click="checkBigLive(user.userId)" :class="{audio:inviteType==='0'||inviteType==='4','big-live':bigLiveId===user.userId}" v-for="user in users" :key="user.userId" :id="user.userId">
           <div class="userName">{{user.userName}}</div>
@@ -25,7 +25,7 @@ export default {
   data() {
     return {
       bigLiveId: 1,
-      inviteType: '2',
+      inviteType: '1',
       users: [
         { userName: '1', userId: 1 },
         { userName: '2', userId: 2 },
@@ -66,34 +66,44 @@ export default {
   height: 100%;
   position: relative;
 }
+
 .jc-live {
   height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
   box-sizing: border-box;
+
   .big-box {
-    width: 68%;
+    width: 73%;
     height: 100%;
     position: absolute;
     left: 0;
     top: 0;
-    background-color: #cccccc;
+    background: url(./assets/big-video.gif) no-repeat;
+    background-size: 100% 100%;
+  }
+
+  .big-box.audio {
+    background: url(./assets/big-audio.gif) no-repeat;
+    background-size: 100% 100%;
   }
 
   .live-in {
-    width: 30%;
+    width: 26%;
     white-space: normal;
     box-sizing: border-box;
     float: right;
     height: 100%;
+
     .live {
       display: block;
       margin-bottom: 10px;
       cursor: pointer;
-      height: 30%;
-
-      background-color: aqua;
+      height: 32%;
+      background: url(./assets/video.gif) no-repeat;
+      background-size: 100% 100%;
       position: relative;
+
       .userName {
         padding: 5px 10px;
         background: rgba($color: #000000, $alpha: 0.2);
@@ -105,10 +115,16 @@ export default {
       }
     }
 
+    .live.audio {
+      background: url(./assets/audio.gif) no-repeat;
+      background-size: 100% 100%;
+    }
+
     .big-live {
       animation: big-live-to-full 0.3s linear;
-
-      width: 68%;
+      background: url(./assets/big-video.gif) no-repeat;
+      background-size: 100% 100%;
+      width: 73%;
       height: 100%;
       margin-bottom: 0;
       position: absolute;
@@ -116,18 +132,23 @@ export default {
       top: 0;
       z-index: 999;
     }
+
+    .big-live.audio {
+      background: url(./assets/big-audio.gif) no-repeat;
+      background-size: 100% 100%;
+    }
   }
 }
 
 @keyframes big-live-to-full {
   0% {
-    height: 30%;
-    width: 30%;
+    height: 32%;
+    width: 26%;
     left: 70%;
   }
 
   100% {
-    width: 68%;
+    width: 73%;
     height: 100%;
     left: 0;
   }
