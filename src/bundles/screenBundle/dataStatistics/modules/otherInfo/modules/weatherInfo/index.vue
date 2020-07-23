@@ -1,12 +1,12 @@
 <template>
-  <div class="js-case-summary">
-    summary
+  <div class="weather-info">
+    weather
   </div>
 </template>
 
 <script>
 export default {
-  name: 'ScreenDataStatisticsDataDockingCaseSummary'
+  name: 'ScreenDataStatisticsOtherInfoWeatherInfo'
 }
 </script>
 

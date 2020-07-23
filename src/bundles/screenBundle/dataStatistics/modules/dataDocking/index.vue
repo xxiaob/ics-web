@@ -11,7 +11,6 @@
 <script>
 // 导入组件
 import JcCaseSummary from './modules/caseSummary'
-
 import JcUrbanManagement from './modules/urbanManagement'
 import JcBuildIllegal from './modules/buildIllegal'
 import JcWisdomSanitation from './modules/wisdomSanitation'

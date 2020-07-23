@@ -11,7 +11,7 @@
 
       <!-- 右二区域 -->
       <realtime-content class="jc-flex-con"></realtime-content>
-      <div class="jc-flex-con"></div>
+      <other-info class="jc-flex-con"></other-info>
     </div>
   </section>
 </template>
@@ -22,10 +22,11 @@ import DataDocking from './modules/dataDocking' //最左侧，数据对接，在
 import ChartStatistics from './modules/chartStatistics' //信息累计、下辖区域占比、事务类型占比
 import CenterContent from './modules/centerContent' //中间展示和交互区域
 import RealtimeContent from './modules/realtimeContent' //右二, 实时数据展示, 监控视频, 实时事件
+import OtherInfo from './modules/otherInfo' //右一, 其他信息展示, 气象,出勤,智能分析
 
 export default {
   name: 'ScreenDataStatistics',
-  components: { ScreenHeader, DataDocking, CenterContent, ChartStatistics, RealtimeContent },
+  components: { ScreenHeader, DataDocking, CenterContent, ChartStatistics, RealtimeContent, OtherInfo },
   data() {
     return {
       project: { projectId: this.$route.params.projectId || '', projectName: '', orgId: '', projectType: '' }

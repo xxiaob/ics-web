@@ -78,7 +78,7 @@
 </template>
 <script>
 // 导入组件
-import abstractArea from '../../../../command/abstractArea'
+import abstractArea from '../../../common/abstractArea'
 
 import countTo from 'vue-count-to'
 

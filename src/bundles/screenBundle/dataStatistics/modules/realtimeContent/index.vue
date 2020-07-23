@@ -1,8 +1,9 @@
 <template>
   <div class="jc-flex-warp jc-flex-vertical">
-    <jc-monitoring class="jc-flex-con data-statistics-border js-monitoring">
+    <!-- 监控视频 -->
+    <jc-monitoring class="jc-flex-con data-statistics-border js-monitoring"></jc-monitoring>
 
-    </jc-monitoring>
+    <!-- 实时事件区域 -->
     <div class="jc-flex-con data-statistics-border">
 
     </div>
