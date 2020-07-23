@@ -232,6 +232,7 @@ export default {
         context.marker.setzIndex(18)
       }
 
+      context.marker.setPosition(userItem.center)
       context.marker.setContent(content)
     },
     markerUserClusterClick(context) {
