@@ -169,17 +169,6 @@ export const ATTEND_CONFIGURE_STATUSES = new JcEnum([
 ])
 
 /**
- * 天气 字典
- */
-export const JC_WEATHER = new JcEnum([
-  { key: 'SUNNY', value: '0', label: '晴天' },
-  { key: 'OVERCAST', value: '1', label: '阴天' },
-  { key: 'SMOG', value: '2', label: '雾霾' },
-  { key: 'RAIN', value: '3', label: '下雨' },
-  { key: 'SNOW', value: '4', label: '下雪' }
-])
-
-/**
  * 事件推送类型 字典
  */
 export const MESSAGE_TYPE = new JcEnum([

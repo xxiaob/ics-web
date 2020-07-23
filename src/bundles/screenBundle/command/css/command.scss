@@ -116,26 +116,6 @@ $jc-screen-height: 56px;
     }
   }
 
-  .jc-weather-sunny {
-    background-image: url(../modules/header/assets/sunny.png);
-  }
-
-  .jc-weather-snow {
-    background-image: url(../modules/header/assets/snow.png);
-  }
-
-  .jc-weather-overcast {
-    background-image: url(../modules/header/assets/overcast.png);
-  }
-
-  .jc-weather-smog {
-    background-image: url(../modules/header/assets/smog.png);
-  }
-
-  .jc-weather-rain {
-    background-image: url(../modules/header/assets/rain.png);
-  }
-
   .jc-time {
     padding: 0 $jc-default-dis/2;
     @extend .jc-header-item;
