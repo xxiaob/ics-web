@@ -10,8 +10,11 @@
     </el-form>
     <div class="jc-trajectory-warp">
       <div class="jc-trajectory-info">
-        <div class="jc-trajectory-speed">{{runInfo.speed}}<span class="jc-trajectory-unit">KM/H</span></div>
-        <div class="jc-trajectory-addr" v-text="runInfo.addr"></div>
+        <div class="jc-trajectory-type" :class="runInfo.style"></div>
+        <div class="jc-flex-con">
+          <div class="jc-trajectory-text">{{runInfo.speed}}<span class="jc-trajectory-unit">KM/H</span></div>
+          <div class="jc-trajectory-text" v-text="runInfo.addr"></div>
+        </div>
       </div>
       <div class="jc-map-warp" ref="myMap" v-loading="loading"></div>
       <div class="jc-trajectory-controll">
@@ -59,7 +62,7 @@ export default {
       visible: false,
       isPlay: false,
       user: { userId: '', userName: '' }, //用户信息
-      runInfo: { addr: '--', speed: 0 }, //运行信息
+      runInfo: { addr: '--', speed: 0, style: 'jc-trajectory-walk' }, //运行信息
       rules: { NOT_NULL },
       pickerOptions: {
         shortcuts: [{
@@ -116,7 +119,7 @@ export default {
       }
       path = [] //记录处理的path坐标
       pathData = {} //记录处理的详细数据
-      this.runInfo = { addr: '--', speed: 0 } //设置运行信息
+      this.runInfo = { addr: '--', speed: 0, style: 'jc-trajectory-walk' } //设置运行信息
       if (myJcMap) {
         myJcMap.clearSign()
       }
@@ -139,9 +142,9 @@ export default {
       }
       if (path.length) {
         //设置移动的对象
-        moveMarker = new JcMapMarker({ map: myJcMap, position: path[0], icon: '/static/mapIcons/trajectorycar.png', mapStyle: markerStyle.TRAJECTORY })
+        moveMarker = new JcMapMarker({ map: myJcMap, position: path[0], icon: '/static/mapIcons/trajectorysign.png', mapStyle: markerStyle.TRAJECTORY })
 
-        moveMarker.marker.moveAlong(path, { duration: 500, autoRotation: true })
+        moveMarker.marker.moveAlong(path, { duration: 400, autoRotation: true })
         moveMarker.marker.stopMove()//暂停动画
         moveMarker.marker.on('moving', this.markerMoving)
         if (this.isPlay) {
@@ -155,27 +158,17 @@ export default {
       let key = this.getKeyByLngLat(lastP.lng, lastP.lat)
 
       if (key != this.runInfo.key && pathData[key]) {
-        this.runInfo = { addr: pathData[key].d, speed: pathData[key].s, key } //设置运行信息
-        this.setMarketContent() //更新图标
-      }
-    },
-    setMarketContent() {
-      let icon = moveMarker.icon //设置当前icon
+        //更新图标
+        let style = 'jc-trajectory-walk'
 
-      let speed = parseFloat(this.runInfo.speed)
+        let speed = parseFloat(pathData[key].s)
 
-      if (speed < 10) {
-        icon = '/static/mapIcons/trajectoryuser.png'
-      } else if (speed < 20) {
-        icon = '/static/mapIcons/trajectorybicycle.png'
-      } else if (speed < 40) {
-        icon = '/static/mapIcons/trajectorymtcycle.png'
-      } else {
-        icon = '/static/mapIcons/trajectorycar.png'
-      }
-      if (icon != moveMarker.icon) {
-        moveMarker.icon = icon
-        moveMarker.setContent() //重设内容
+        if (speed > 40 ) {
+          style = 'jc-trajectory-car'
+        } else if (speed > 10) {
+          style = 'jc-trajectory-elcicle'
+        }
+        this.runInfo = { addr: pathData[key].d, speed: pathData[key].s, key, style } //设置运行信息
       }
     },
     async formatPath(res) {
@@ -310,23 +303,51 @@ $jc-item-width: 36px;
   position: absolute;
   top: $jc-default-dis;
   left: 50%;
-  text-align: center;
-  width: 300px;
+  width: 380px;
   transform: translateX(-50%);
   color: $jc-color-white;
   z-index: 8;
   background-color: rgba($color: $jc-menu-bg-color, $alpha: 0.6);
   border-radius: $jc-border-radius-base;
-  .jc-trajectory-speed {
-    font-size: $jc-font-size-larger;
-    line-height: 28px;
+  padding: $jc-default-dis/2 $jc-default-dis/2 $jc-default-dis/2 0;
+
+  display: flex;
+
+  .jc-trajectory-type {
+    position: relative;
+    width: 66px;
+    background-repeat: no-repeat;
+    background-position: center;
+    margin-right: $jc-default-dis/2;
+    &::after {
+      content: "";
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      height: 28px;
+      width: 1px;
+      background-color: rgba($color: $jc-menu-bg-color, $alpha: 0.8);
+    }
+    &.jc-trajectory-walk {
+      background-image: url(./assets/walk.png);
+    }
+    &.jc-trajectory-car {
+      background-image: url(./assets/car.png);
+    }
+    &.jc-trajectory-elcicle {
+      background-image: url(./assets/elcicle.png);
+    }
   }
+
+  .jc-trajectory-text {
+    font-size: $jc-font-size-base;
+    line-height: 22px;
+  }
+
   .jc-trajectory-unit {
     font-size: $jc-font-size-smaller;
     padding-left: 4px;
-  }
-  .jc-trajectory-addr {
-    line-height: 24px;
   }
 }
 </style>
