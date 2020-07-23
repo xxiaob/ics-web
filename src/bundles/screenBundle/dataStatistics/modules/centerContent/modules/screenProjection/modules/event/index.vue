@@ -22,23 +22,20 @@
       <el-form-item label="事件描述 : ">
         <div v-html="form.desc"></div>
       </el-form-item>
-
     </el-form>
-
-    <el-dialog title="视频播放" :visible.sync="dialogVideoVisible" width="800px" :close-on-click-modal="false" :append-to-body="true">
-      <video v-if="dialogVideoVisible" :src="dialogVideoUrl" autoplay controls width="100%"></video>
-    </el-dialog>
+    <jc-media class="media" title="处理前图片"></jc-media>
   </div>
 </template>
 
 <script>
 import { eventManageGet } from '@/api/eventManage'
+import JcMedia from '../../components/media'
 export default {
   name: 'ScreenDataCenterContentScreenProjectionEvent',
+  components: { JcMedia },
   data() {
     return {
-      form: {},
-      dialogVideoVisible: false
+      form: {}
     }
   },
   methods: {
@@ -55,4 +52,8 @@ export default {
 
 <style lang="scss" scoped>
 @import "../../css/index.scss";
+.media {
+  width: 49%;
+  float: left;
+}
 </style>

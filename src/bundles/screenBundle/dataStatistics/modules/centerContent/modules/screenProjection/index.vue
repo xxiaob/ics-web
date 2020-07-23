@@ -23,13 +23,13 @@ export default {
   data() {
     return {
       show: false,
-      showModule: 1
+      showModule: 2
     }
   },
   created() {
-    // setTimeout(()=>{
-    //   this.show = true
-    // }, 2000)
+    setTimeout(()=>{
+      this.show = true
+    }, 0)
     // setTimeout(()=>{
     //   this.show = false
     // }, 4000)

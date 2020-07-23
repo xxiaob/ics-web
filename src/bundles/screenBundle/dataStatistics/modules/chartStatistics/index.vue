@@ -28,9 +28,9 @@ export default {
     }
   },
   mounted() {
-    this.interval = setInterval(() => {
-      this.changeCycle()
-    }, 3000)
+    // this.interval = setInterval(() => {
+    //   this.changeCycle()
+    // }, 3000)
   },
   destroyed() {
     if (this.interval) {
