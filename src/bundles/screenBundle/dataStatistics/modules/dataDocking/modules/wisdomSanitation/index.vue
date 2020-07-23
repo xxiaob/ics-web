@@ -79,7 +79,6 @@
 <script>
 // 导入组件
 import abstractArea from '../../../common/abstractArea'
-
 import countTo from 'vue-count-to'
 
 export default {

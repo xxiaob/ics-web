@@ -1,12 +1,16 @@
 <template>
-  <div class="weather-info">
-    weather
-  </div>
+  <jc-abstract-area title="气象信息">
+
+  </jc-abstract-area>
 </template>
 
 <script>
+// 组件
+import JcAbstractArea from '../../../common/abstractArea'
+
 export default {
-  name: 'ScreenDataStatisticsOtherInfoWeatherInfo'
+  name: 'ScreenDataStatisticsOtherInfoWeatherInfo',
+  components: { JcAbstractArea }
 }
 </script>
 
