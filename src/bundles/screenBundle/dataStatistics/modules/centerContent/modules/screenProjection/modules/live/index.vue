@@ -1,16 +1,15 @@
 <template>
-  <div class="jc-live">
-    <div class="big-box"></div>
-    <div class="live-in">
-      <div class="live" @click="checkBigLive(user.userId)" :class="{audio:inviteType==='0'||inviteType==='4','big-live':bigLiveId===user.userId}" v-for="user in users" :key="user.userId" :id="user.userId">
-        <div class="userName">{{user.userName}}</div>
+  <div class="jc-live-out">
+    <div class="jc-live">
+      <div class="big-box"></div>
+      <div class="live-in">
+        <div class="live" @click="checkBigLive(user.userId)" :class="{audio:inviteType==='0'||inviteType==='4','big-live':bigLiveId===user.userId}" v-for="user in users" :key="user.userId" :id="user.userId">
+          <div class="userName">{{user.userName}}</div>
+        </div>
       </div>
-      <div class="live">1</div>
-      <div class="live">2</div>
-      <div class="live">3</div>
-      <div class="live">4</div>
     </div>
   </div>
+
 </template>
 
 <script>
@@ -25,7 +24,15 @@ export default {
   },
   data() {
     return {
-      users: []
+      bigLiveId: 1,
+      inviteType: '2',
+      users: [
+        { userName: '1', userId: 1 },
+        { userName: '2', userId: 2 },
+        { userName: '3', userId: 3 },
+        { userName: '4', userId: 4 },
+        { userName: '5', userId: 5 }
+      ]
     }
   },
   mounted() {
@@ -55,18 +62,22 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.jc-live-out {
+  height: 100%;
+  position: relative;
+}
 .jc-live {
   height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
   box-sizing: border-box;
-  position: relative;
   .big-box {
     width: 68%;
     height: 100%;
     position: absolute;
     left: 0;
     top: 0;
+    background-color: #cccccc;
   }
 
   .live-in {
@@ -77,19 +88,32 @@ export default {
     height: 100%;
     .live {
       display: block;
-      margin-bottom: 5px;
+      margin-bottom: 10px;
       cursor: pointer;
       height: 30%;
+
+      background-color: aqua;
+      position: relative;
+      .userName {
+        padding: 5px 10px;
+        background: rgba($color: #000000, $alpha: 0.2);
+        color: white;
+        width: 100%;
+        position: absolute;
+        bottom: 0;
+        z-index: 100;
+      }
     }
 
     .big-live {
       animation: big-live-to-full 0.3s linear;
 
-      width: 600px;
-      height: 440px;
+      width: 68%;
+      height: 100%;
+      margin-bottom: 0;
       position: absolute;
-      left: 10px;
-      top: 44px;
+      left: 0;
+      top: 0;
       z-index: 999;
     }
   }
@@ -97,15 +121,15 @@ export default {
 
 @keyframes big-live-to-full {
   0% {
-    height: 150px;
-    width: 200px;
-    left: 600px;
+    height: 30%;
+    width: 30%;
+    left: 70%;
   }
 
   100% {
-    width: 600px;
-    height: 440px;
-    left: 5px;
+    width: 68%;
+    height: 100%;
+    left: 0;
   }
 }
 </style>

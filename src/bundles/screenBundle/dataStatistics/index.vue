@@ -25,13 +25,7 @@ import RealtimeContent from './modules/realtimeContent' //右二, 实时数据�
 
 export default {
   name: 'ScreenDataStatistics',
-  components: {
-    ScreenHeader,
-    DataDocking,
-    CenterContent,
-    ChartStatistics,
-    RealtimeContent
-  },
+  components: { ScreenHeader, DataDocking, CenterContent, ChartStatistics, RealtimeContent },
   data() {
     return {
       project: { projectId: this.$route.params.projectId || '', projectName: '', orgId: '', projectType: '' }
