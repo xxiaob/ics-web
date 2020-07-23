@@ -234,13 +234,13 @@ input::-webkit-input-placeholder {
   }
 
   .el-form-item__content {
-    &>.el-range-editor {
+    & > .el-range-editor {
       width: 350px;
     }
 
-    &>.el-input,
-    &>.el-cascader,
-    &>.el-select {
+    & > .el-input,
+    & > .el-cascader,
+    & > .el-select {
       width: 160px;
     }
   }
@@ -295,7 +295,7 @@ input::-webkit-input-placeholder {
 }
 
 .jc-table {
-  .el-button+.el-button {
+  .el-button + .el-button {
     margin-left: 0;
   }
 
@@ -316,7 +316,6 @@ input::-webkit-input-placeholder {
 }
 
 .jc-manage-form {
-
   .el-select,
   .el-cascader,
   .el-date-editor {
