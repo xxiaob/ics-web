@@ -232,6 +232,7 @@ export default {
         context.marker.setzIndex(18)
       }
 
+      context.marker.setPosition(userItem.center)
       context.marker.setContent(content)
     },
     markerUserClusterClick(context) {
@@ -277,7 +278,7 @@ export default {
           this.locationUserId = data.id
           let myJcMap = this.getMyJcMap() //获取地图对象
 
-          myJcMap.map.setZoomAndCenter(20, lnglat.key.split(','))
+          myJcMap.map.setZoomAndCenter(20, lnglat.lnglat)
           noUser = false //设置查找到该用户
         }
       }
