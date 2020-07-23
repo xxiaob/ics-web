@@ -50,9 +50,11 @@ export default class JcWeather {
       for (let key in this.weatherMapping) {
         if (this.weatherMapping[key].includes(item.dayWeather)) {
           item.dayType = key
+          item.source = WeatherResource[key]
         }
         if (this.weatherMapping[key].includes(item.nightWeather)) {
           item.nightType = key
+          item.source = WeatherResource[key]
         }
       }
     })
