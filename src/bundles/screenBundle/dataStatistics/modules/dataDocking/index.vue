@@ -34,7 +34,6 @@ export default {
 
   .dock-comp {
     border-top: 1px solid rgb(32, 73, 154);
-    padding: 0 $jc-default-dis $jc-default-dis/2;
   }
 }
 </style>

@@ -210,10 +210,8 @@ export default {
 
 <style lang="scss" scoped>
 .smart-analy {
-  padding: 0 16px 16px;
-
   .smart-analy-content {
-    margin-top: 20px;
+    padding: 16px;
 
     .smart-analy-center {
       position: relative;

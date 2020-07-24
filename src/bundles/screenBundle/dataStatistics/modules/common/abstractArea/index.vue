@@ -1,9 +1,11 @@
 <template>
   <div class="jc-abstract-area jc-flex-warp jc-flex-vertical jc-flex-con">
-    <div class="jc-title">
-      <span class="jc-title-content">{{ title }}</span>
+    <div class="jc-title-wrap">
+      <div class="jc-title">
+        <span class="jc-title-content">{{ title }}</span>
 
-      <slot name="title"></slot>
+        <slot name="title"></slot>
+      </div>
     </div>
     <div class="jc-flex-con jc-flex-warp">
       <slot></slot>
@@ -24,4 +26,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.jc-title-wrap {
+  padding: 0 16px;
+}
 </style>

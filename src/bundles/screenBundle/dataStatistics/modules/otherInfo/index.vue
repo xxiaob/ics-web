@@ -4,7 +4,9 @@
     <jc-weather-info class="jc-weather-info data-statistics-border jc-flex-con-2"></jc-weather-info>
 
     <!-- 出勤信息 -->
-    <jc-attendance-info class="jc-attendance-info data-statistics-border jc-flex-con-4"></jc-attendance-info>
+    <div class="jc-attendance-info jc-flex-con-4">
+      <jc-attendance-info class=" data-statistics-border "></jc-attendance-info>
+    </div>
 
     <!-- AI 智能分析 -->
     <jc-smart-analy class="jc-intelligent-analysis data-statistics-border jc-flex-con-3"></jc-smart-analy>
@@ -24,10 +26,7 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.jc-weather-info {
-  padding: 0 16px 16px;
-}
 .jc-attendance-info {
-  margin: 20px 0;
+  padding: 20px 0;
 }
 </style>
