@@ -14,7 +14,7 @@
         <span>{{form.startDate|filterTime}} - {{form.endDate|filterTime}}</span>
       </el-form-item>
       <el-form-item label="任务类型 : ">
-        <span>{{form.taskTypeName}}</span>
+        <span>临时任务</span>
       </el-form-item>
       <el-form-item label="任务状态 : ">
         <span>{{form.taskStatusName}}</span>
@@ -38,6 +38,7 @@
         <div v-html="form.taskDesc"></div>
       </el-form-item>
     </el-form>
+    <jc-media class="media" title="附件" :urls="form.uploadFilePaths"></jc-media>
   </div>
 </template>
 
@@ -46,8 +47,11 @@ import { formatDate } from '@/libs/util'
 import { taskGet } from '@/api/task'
 import { projectsList } from '@/api/projects'
 import { PROJECT_TYPES, TASK_SOURCES } from '@/constant/Dictionaries'
+import JcMedia from '../../components/media'
+
 export default {
   name: 'ScreenDataCenterContentScreenProjectionTemporaryTask',
+  components: { JcMedia },
   data() {
     return {
       form: {},
@@ -89,6 +93,7 @@ export default {
   async created() {
     await this.formatProjectList()
     // console.log('projectListArr', this.projectListArr)
+    this.getDetail('71636607261736960')
   },
   methods: {
     async getDetail(id) {
@@ -98,7 +103,6 @@ export default {
           const res = await taskGet(id)
 
           this.form = { ...res, ...res.detailViewVO, ...res.taskDetailVO }
-          this.handleUrls(this.form.uploadFilePaths)
           this.loading = false
         } catch (error) {
           this.form = {}

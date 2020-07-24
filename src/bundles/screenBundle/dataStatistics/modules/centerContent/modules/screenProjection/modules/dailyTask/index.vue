@@ -14,7 +14,7 @@
         <span>{{form.startDate|filterDate}} - {{form.endDate|filterDate}}</span>
       </el-form-item>
       <el-form-item label="任务类型 : ">
-        <span>{{form.taskTypeName}}</span>
+        <span>日常任务</span>
       </el-form-item>
       <el-form-item label="任务状态 : ">
         <span>{{form.taskStatusName}}</span>
@@ -105,6 +105,7 @@ export default {
   async created() {
     await this.formatProjectList()
     // console.log('projectListArr', this.projectListArr)
+    this.getDetail('70910841347637248')
   },
   methods: {
     async getDetail(id) {
@@ -114,7 +115,6 @@ export default {
           const res = await taskGetDaily(id)
 
           this.form = { ...res, ...res.detailViewVO, ...res.taskDetailVO }
-          this.handleUrls(this.form.uploadFilePaths)
           this.loading = false
         } catch (error) {
           this.form = {}

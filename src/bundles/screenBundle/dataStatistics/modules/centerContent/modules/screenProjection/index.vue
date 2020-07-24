@@ -23,7 +23,7 @@ export default {
   data() {
     return {
       show: false,
-      showModule: 2
+      showModule: 5
     }
   },
   created() {

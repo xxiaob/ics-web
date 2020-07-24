@@ -75,7 +75,7 @@ export default {
         slidesPerView: 3,
         spaceBetween: 10
       })
-    }, 100)
+    }, 500)
   }
 }
 </script>
