@@ -24,6 +24,9 @@
       </el-form-item>
     </el-form>
     <jc-media class="media" title="处理前图片" :urls="urls"></jc-media>
+    <jc-media class="media jc-right-media" title="处理后前图片" :urls="urls"></jc-media>
+    <jc-media class="media" title="视频文件" :urls="urls"></jc-media>
+    <jc-media class="media jc-right-media" title="音频文件" :urls="urls"></jc-media>
   </div>
 </template>
 
@@ -54,7 +57,11 @@ export default {
 <style lang="scss" scoped>
 @import "../../css/index.scss";
 .media {
-  width: 49%;
+  width: 48%;
   float: left;
+  margin-bottom: $jc-default-dis;
+}
+.jc-right-media {
+  float: right;
 }
 </style>
