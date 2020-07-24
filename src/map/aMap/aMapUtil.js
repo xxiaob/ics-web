@@ -201,7 +201,7 @@ export async function getMap3D() {
   let map = await initAmap()
 
   let result = await new Promise(function (resolve) {
-    map.plugin(['AMap.Map3D'], function () {
+    map.plugin(['AMap.Object3D', 'AMap.Object3DLayer'], function () {
       resolve()
     })
   })

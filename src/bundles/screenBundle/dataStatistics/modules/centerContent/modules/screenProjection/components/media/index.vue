@@ -1,6 +1,6 @@
 <template>
   <div class="jc-media">
-    <div class="swiper-container">
+    <div class="swiper-container" v-show="urls&&urls.length">
       <div class="swiper-wrapper">
         <div v-for="url in imgs" :key="url.id" class="swiper-slide jc-img">
           <img class="img" :src="url" alt="">
@@ -8,19 +8,19 @@
         <div class="jc-video swiper-slide" v-for="url in videos" :key="url" @click="showVideo(url)">
           <video :src="url"></video>
           <div class="hover">
-            <img class="jc-video-play" src="@/bundles/taskBundle/assets/play.png" alt="">
+            <img class="jc-video-play" src="./assets/play.png" alt="" width="40">
           </div>
         </div>
         <div v-for="(url,index) in audios" :key="url" class="jc-audio swiper-slide" @click="playAudio(url,index)">
           <div class="hover">
-            <img class="jc-video-play" src="@/bundles/taskBundle/assets/play.png" alt="" v-show="audioPlayShows[index]">
-            <img class="jc-video-play" src="@/bundles/taskBundle/assets/pause.png" alt="" v-show="!audioPlayShows[index]">
+            <img class="jc-video-play" src="./assets/play.png" alt="" width="40" v-show="audioPlayShows[index]">
+            <img class="jc-video-play" src="./assets/pause.png" alt="" width="40" v-show="!audioPlayShows[index]">
           </div>
         </div>
         <audio v-if="show" ref="audio" :src="audioUrl" style="width:0;height:0" @ended="audioEnded"></audio>
-        <a class="jc-other swiper-slide" v-for="url in others" :key="url" :href="url" download="" title="点击下载">
+        <!-- <a class="jc-other swiper-slide" v-for="url in others" :key="url" :href="url" download="" title="点击下载">
           <img class="jc-other-down" src="@/bundles/taskBundle/assets/down.png" alt="">
-        </a>
+        </a> -->
       </div>
     </div>
 
@@ -72,9 +72,10 @@ export default {
           stopOnLastSlide: false,
           disableOnInteraction: true
         },
-        slidesPerView: 3
+        slidesPerView: 3,
+        spaceBetween: 10
       })
-    })
+    }, 500)
   }
 }
 </script>
@@ -82,9 +83,9 @@ export default {
 <style lang="scss" scoped>
 .jc-media {
   // width: 410px;
-  padding: 10px;
+  padding: 0 10px;
   box-sizing: border-box;
-  height: 160px;
+  // height: 150px;
   background: url(./assets/border.png) no-repeat;
   background-size: 100% 100%;
 
@@ -97,13 +98,14 @@ export default {
 }
 
 .swiper-container {
-  height: 100px;
+  // height: 100px;
+  margin-top: 10px;
 }
 
 .swiper-slide {
   color: white;
   text-align: center;
-  padding: 0 5px;
+  // padding: 0 5px;
   box-sizing: border-box;
   height: 100px;
 }
@@ -118,12 +120,13 @@ export default {
   .img {
     width: 100%;
     height: 100%;
-    object-fit: contain;
+    // object-fit: contain;
   }
 
   video {
     width: 100%;
     height: 100%;
+    object-fit: cover;
   }
 
   .hover {
@@ -137,8 +140,10 @@ export default {
 
     .jc-video-play {
       position: absolute;
-      left: 42px;
-      top: 32px;
+      left: 50%;
+      top: 50%;
+      margin-left: -20px;
+      margin-top: -20px;
     }
   }
   .jc-other-down {
@@ -152,5 +157,6 @@ export default {
 }
 .jc-audio {
   background: url(./assets/audio.gif) no-repeat center;
+  background-size: 100% 100%;
 }
 </style>

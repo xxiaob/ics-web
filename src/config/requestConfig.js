@@ -12,7 +12,7 @@ axios.defaults.baseURL = process.env.apiHostConfig.base /*eslint-disable-line*/
 //设置全局http请求
 let errorRun = () => {
   //这里处理请求出错的场景
-  Message.error('网络请求失败')
+  Message({ message: '网络请求失败', type: 'error', offset: 20 })
 }
 
 //拦截request请求，配置请求参数

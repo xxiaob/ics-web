@@ -10,8 +10,8 @@
         <el-table-column prop="time" label="时间" width="140"></el-table-column>
         <el-table-column prop="orgName" label="所属组织"></el-table-column>
         <el-table-column prop="name" label="用户名"></el-table-column>
-        <el-table-column prop="onguardDuration" label="在岗时长(h)"></el-table-column>
-        <el-table-column prop="journey" label="在岗里程(km)"></el-table-column>
+        <el-table-column prop="onguardDuration" label="巡逻时长(h)"></el-table-column>
+        <el-table-column prop="journey" label="巡逻里程(km)"></el-table-column>
         <el-table-column prop="inoutCount" label="触岗次数"></el-table-column>
         <el-table-column prop="eventReportCount" label="事件上报数"></el-table-column>
         <el-table-column prop="problemFeedbackCount" label="问题反馈数"></el-table-column>

@@ -23,13 +23,16 @@
         <div v-html="form.problemDesc"></div>
       </el-form-item>
     </el-form>
+    <jc-media class="media" title="附件" :urls="form.uploadFilePaths"></jc-media>
   </div>
 </template>
 
 <script>
 import { questionGet, questionTypeList } from '@/api/question'
+import JcMedia from '../../components/media'
 export default {
   name: 'ScreenDataCenterContentScreenProjectionQuestion',
+  components: { JcMedia },
   data() {
     return {
       types: [],
@@ -39,6 +42,7 @@ export default {
   },
   async created() {
     this.types = await questionTypeList() || []
+    await this.getDetail('73488564293206016')
   },
   methods: {
     formatType(value) {
