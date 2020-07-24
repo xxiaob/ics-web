@@ -25,10 +25,10 @@ export default {
     async initData() {
       let { AMap } = await getMap3D() //获取amap 对象
 
-      let object3Dlayer = new AMap.Object3DLayer()
+      // let object3Dlayer = new AMap.Object3DLayer()
 
       //, dragEnable: false, zoomEnable: false, rotateEnable: false, keyboardEnable: false
-      await myJcMap.init(this.$refs.myMap, { features: ['bg', 'road'], pitch: 50, layers: [object3Dlayer] }) //等待地图初始化
+      await myJcMap.init(this.$refs.myMap, { features: ['bg', 'road'], pitch: 50, layers: [] }) //等待地图初始化
       window.myMap = myJcMap.map
     },
     getMyJcMap() {
