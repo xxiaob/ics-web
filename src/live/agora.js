@@ -180,12 +180,14 @@ export class Live {
    * @param {String} id
   */
   removeRemoteId(id) {
+    // this.console('removeRemoteId', id)
     const index = this.rtc.remoteStreams.findIndex(v => v === id)
 
     if (index > -1) {
       this.rtc.remoteStreams.splice(index, 1)
       // this.setPublish()
     }
+    // this.console('this.rtc.remoteStreams', this.rtc.remoteStreams)
   }
 
   /**
