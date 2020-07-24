@@ -2,7 +2,7 @@
   position: relative;
   height: 100%;
   width: 3200px;
-  margin-left: -1000px; // 开发调试大屏右侧区域使用, 
+  margin-left: -1500px; // 开发调试大屏右侧区域使用,
   background: url(../assets/screen-bg.png) no-repeat center;
   background-size: cover;
 }
@@ -60,7 +60,6 @@
       .jc-right-item:last-child {
         margin-right: 0;
       }
-
     }
   }
 }
@@ -70,7 +69,6 @@
     flex-wrap: wrap;
     justify-content: space-between;
     height: 100%;
-
 
     .jc-category-item {
       justify-content: center;
@@ -90,7 +88,6 @@
         letter-spacing: 1px;
         color: #ffffff;
       }
-
     }
   }
 }
