@@ -3,23 +3,24 @@
     <div class="jc-title">
       <span class="jc-title-content">实时事件</span>
       <div class="jc-right-box">
-        <span class="jc-right-item">7月8日</span>
-        <span class="jc-right-item">江苏省 南京市 溧水区</span>
+        <!-- <span class="jc-right-item">{{nowDate}}</span> -->
+        <span class="jc-right-item">{{user.orgName}}</span>
       </div>
     </div>
     <div class="jc-flex-con jc-event-list">
       <transition-group name="jc-list" tag="div">
-        <div class="jc-list-item jc-flex-warp" v-for="item in list" :key="item">
+        <div class="jc-list-item jc-flex-warp" v-for="item in list" :key="item.id">
           <div class="img">
-            <img src="./assets/none.png" alt="" width="100%" height="100%">
+            <img v-if="item.beforePhotos&&item.beforePhotos.length" :src="item.beforePhotos[0]" alt="" width="100%" height="100%">
+            <img v-else src="./assets/none.png" alt="" width="100%" height="100%">
           </div>
           <div class="jc-flex-con jc-list-item-content jc-flex-warp jc-flex-vertical">
-            <div class="jc-list-item-content-title">非机动车乱停放</div>
-            <div class="jc-list-item-content-position">开城路溧水区开城路188号</div>
+            <div class="jc-list-item-content-title">{{item.eventTitle}}</div>
+            <div class="jc-list-item-content-position">{{item.positionName}}</div>
             <div class="jc-list-item-content-detail jc-flex-warp">
-              <span>上报人：张三</span>
-              <span>单位：溧水区</span>
-              <span>12:22:59</span>
+              <span>{{item.reportUserName}}</span>
+              <span>{{item.orgName}}</span>
+              <span>{{item.createTime|fliterTime}}</span>
             </div>
           </div>
         </div>
@@ -29,19 +30,50 @@
 </template>
 
 <script>
+import { eventManageList } from '@/api/eventManage'
+import moment from 'moment'
+import { createNamespacedHelpers } from 'vuex'
+const { mapState } = createNamespacedHelpers('user')
+
 export default {
   name: 'ScreenDataStatisticsRealtimeContentEvent',
   data() {
     return {
-      list: [1, 2, 3, 4, 5]
+      // nowDate: moment(new Date()).format('MM月DD日'),
+      list: [],
+      loading: false,
+      filter: {},
+      page: {
+        pageSize: 10,
+        pageNum: 1
+      }
     }
   },
   created() {
     this.initData()
   },
+  filters: {
+    fliterTime(value) {
+      return moment(value).format('YYYY-MM-DD HH:mm:ss')
+    }
+  },
+  computed: {
+    ...mapState(['user'])
+  },
   methods: {
-    initData() {
+    async initData() {
+      if (!this.loading) {
+        this.loading = true
+        try {
+          const { resultList } = await eventManageList({ ...this.filter, ...this.page })
 
+          this.list = resultList.length > 5 ? resultList.slice(0, 5) : resultList
+          this.loading = false
+        } catch (error) {
+          console.error(error)
+          this.loading = false
+        }
+      }
     }
   },
   mounted() {
@@ -85,15 +117,18 @@ export default {
     .jc-list-item-content {
       padding: 0 20px;
       justify-content: space-between;
+      width: 0;
 
       .jc-list-item-content-title {
         color: #11e7ff;
         font-size: 16px;
+        @include jc-text-warp;
       }
 
       .jc-list-item-content-position {
         color: #8bc1fc;
         font-size: 14px;
+        @include jc-text-warp;
       }
 
       .jc-list-item-content-detail {
