@@ -4,20 +4,20 @@
     <jc-monitoring class="jc-flex-con data-statistics-border js-monitoring"></jc-monitoring>
 
     <!-- 实时事件区域 -->
-    <div class="jc-flex-con data-statistics-border">
-
-    </div>
+    <jc-event class="data-statistics-border"></jc-event>
   </div>
 </template>
 
 <script>
 // 监控视频组件
 import JcMonitoring from './module/monitoring'
+import JcEvent from './module/event'
 
 export default {
   name: 'ScreenDataStatisticsRealtimeContent',
   components: {
-    JcMonitoring
+    JcMonitoring,
+    JcEvent
   }
 }
 </script>

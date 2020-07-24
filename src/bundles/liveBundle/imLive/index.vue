@@ -225,6 +225,10 @@ export default {
     exitHandel({ nickName, isExit }) {
       if (this.live.joined) {
         this.$message.warning(nickName + '退出')
+        console.log('isExit - rtc.remoteStreams', this.live.rtc.remoteStreams)
+        if (this.live.rtc.remoteStreams.length === 0) {
+          this.leaveChannel()
+        }
       }
       if (isExit === '1' || (this.inviteType === '4' || this.inviteType === '5')) {
         console.log('结束视频')
@@ -370,7 +374,6 @@ export default {
       }).catch(() => {})
     },
     confirmExit() {
-      // console.log('rtc.remoteStreams', this.live.rtc.remoteStreams)
       const isExit = (this.invited || this.inviteType === '4' || this.inviteType === '5') ? '1' : '0'
       const msg = {
         msgType: '1',
@@ -380,9 +383,13 @@ export default {
       }
 
       if (this.invited) {
-        this.params.users.forEach(item=>{
-          this.im.sendSingleMsg(item.userId, msg)
+        console.log('rtc.remoteStreams', this.live.rtc.remoteStreams)
+        this.live.rtc.remoteStreams.forEach(item=>{
+          this.im.sendSingleMsg(item.split('_')[0], msg)
         })
+        // this.params.users.forEach(item=>{
+        //   this.im.sendSingleMsg(item.userId, msg)
+        // })
       } else {
         this.im.sendSingleMsg(this.fromUsername, msg)
       }
