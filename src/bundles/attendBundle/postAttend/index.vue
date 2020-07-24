@@ -14,6 +14,8 @@
         <el-table-column prop="journey" label="在岗里程(km)"></el-table-column>
         <el-table-column prop="inoutCount" label="触岗次数"></el-table-column>
         <el-table-column prop="eventReportCount" label="事件上报数"></el-table-column>
+        <el-table-column prop="eventReportCount" label="任务达标数"></el-table-column>
+        <el-table-column prop="eventReportCount" label="未达标原因"></el-table-column>
       </el-table>
       <el-pagination @current-change="currentChange" @size-change="sizeChange" :current-page.sync="page.pageNum" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.total" class="text-right jc-mt"></el-pagination>
     </el-card>
