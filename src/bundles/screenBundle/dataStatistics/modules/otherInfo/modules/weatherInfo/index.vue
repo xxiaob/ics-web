@@ -78,7 +78,7 @@ export default {
   },
   methods: {
     async getWeather() {
-      const _this = this
+      const This = this
 
       console.log('weather info ', getUser())
 
@@ -96,7 +96,7 @@ export default {
 
       forecasts = forecasts.map(item => ({
         ...item,
-        currentWeek: _this.getWeek(item.week)
+        currentWeek: This.getWeek(item.week)
       }))
 
       this.weather = Object.assign({}, this.weather, forecasts[0])
