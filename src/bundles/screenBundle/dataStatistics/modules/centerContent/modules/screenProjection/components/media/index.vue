@@ -1,6 +1,6 @@
 <template>
   <div class="jc-media">
-    <div class="swiper-container">
+    <div class="swiper-container" v-show="urls&&urls.length">
       <div class="swiper-wrapper">
         <div v-for="url in imgs" :key="url.id" class="swiper-slide jc-img">
           <img class="img" :src="url" alt="">
@@ -75,7 +75,7 @@ export default {
         slidesPerView: 3,
         spaceBetween: 10
       })
-    })
+    }, 100)
   }
 }
 </script>
@@ -83,9 +83,9 @@ export default {
 <style lang="scss" scoped>
 .jc-media {
   // width: 410px;
-  padding: 10px 10px 0;
+  padding: 0 10px;
   box-sizing: border-box;
-  height: 150px;
+  // height: 150px;
   background: url(./assets/border.png) no-repeat;
   background-size: 100% 100%;
 
@@ -98,7 +98,8 @@ export default {
 }
 
 .swiper-container {
-  height: 100px;
+  // height: 100px;
+  margin-top: 10px;
 }
 
 .swiper-slide {

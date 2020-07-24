@@ -23,10 +23,10 @@
         <div v-html="form.desc"></div>
       </el-form-item>
     </el-form>
-    <jc-media class="media" title="处理前图片" :urls="urls"></jc-media>
-    <jc-media class="media jc-right-media" title="处理后前图片" :urls="urls"></jc-media>
-    <jc-media class="media" title="视频文件" :urls="urls"></jc-media>
-    <jc-media class="media jc-right-media" title="音频文件" :urls="urls"></jc-media>
+    <jc-media class="media" title="处理前图片" :urls="form.beforePhotos"></jc-media>
+    <jc-media class="media jc-right-media" title="处理后前图片" :urls="form.afterPhotos"></jc-media>
+    <jc-media class="media" title="视频文件" :urls="form.videoAddrs"></jc-media>
+    <jc-media class="media jc-right-media" title="音频文件" :urls="form.audioAddrs"></jc-media>
   </div>
 </template>
 
@@ -42,13 +42,14 @@ export default {
       urls: ['https://192.168.0.180:9000/group1/M00/00/1B/wKgAeF8QV2KAbH_-AAIW1VEkksk412.png', 'https://192.168.0.180:9000/group1/M00/00/1B/wKgAeF8QV2KAbH_-AAIW1VEkksk412.png', 'https://192.168.0.180:9000/group1/M00/00/1C/wKgAeF8Ze-OAXo-OAAhtEcbFSQ0391.zip', 'https://192.168.0.180:9000/group1/M00/00/1B/wKgAeF8Rbv6AOwtpAAAhWWA5JUU347.aac', 'https://192.168.0.180:9000/group1/M00/00/1B/wKgAeF8RbwaAd2HcACWhtioMYrg052.mp4']
     }
   },
+  created() {
+    this.getDetail('71279185972166656')
+  },
   methods: {
     async getDetail(id) {
       const res = await eventManageGet(id)
 
       this.form = { ...res }
-      // this.audios = this.form.audioAddrs
-      // this.audioPlayShows = new Array(this.audios.length).fill(true)
     }
   }
 }
