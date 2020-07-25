@@ -196,15 +196,8 @@ export async function initMoveAnimation() {
 
 /**
  * 获取3D地图插件
+ * @returns {AMapLoader} AMapLoader
  */
-export async function getMap3D() {
-  let map = await initAmap()
-
-  let result = await new Promise(function (resolve) {
-    map.plugin(['AMap.Object3D', 'AMap.Object3DLayer'], function () {
-      resolve()
-    })
-  })
-
-  return { map3D: result, Amap: map }
+export function getAMapLoader() {
+  return AMapLoader
 }
