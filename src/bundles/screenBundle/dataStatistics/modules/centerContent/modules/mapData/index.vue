@@ -55,6 +55,8 @@ export default {
       myJcMap.AmbientLight = new AMap.Lights.AmbientLight([1, 1, 1], 0.5)
       myJcMap.DirectionLight = new AMap.Lights.DirectionLight([0, 0, 1], [1, 1, 1], 1)
 
+      this.$EventBus.$emit('data-statistics-amap-success') //通知地图加载完成
+
       this.getOrgAreas(this.orgId) //获取组织区域信息
     },
     async getOrgAreas(orgId) {
