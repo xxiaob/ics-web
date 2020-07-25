@@ -54,7 +54,7 @@
         <span class="invitedButton">
           <img class="gif" src="./assets/help.gif" alt="" width="50">
           <img class="btn" src="./assets/answer.png" alt="" width="50" @click="agree" title="接听">
-          <img class="btn" src="./assets/hangup.png" alt="" width="50" @click="refuse" title="挂断">
+          <img class="btn" src="./assets/hangup.png" alt="" width="50" @click="refuse('0')" title="挂断">
         </span>
         <h3 class="title">{{msg}}</h3>
       </div>
@@ -67,6 +67,7 @@
 <script>
 import { IM } from '@/live/im'
 import { Live } from '@/live/agora'
+import { VOICE_TYPE } from '@/config/JcVoiceAlertConfig'
 import { createNamespacedHelpers } from 'vuex'
 const { mapState } = createNamespacedHelpers('user')
 
@@ -215,6 +216,14 @@ export default {
             let msg = content === 'help' ? '寻求求助' : (mediaType === '0' ? '语音' : '视频')
 
             this.msg = nickName + '邀请你' + msg
+
+            const type = content === 'help' ? VOICE_TYPE.HELP_REMIND : (mediaType === '0' ? VOICE_TYPE.AUDIO_REMIND : VOICE_TYPE.VIDEO_REMIND)
+
+            // console.log('type', type)
+            this.$EventBus.$emit('map-voice-alert', { type, loop: true }) //通知播放提示音
+            this.timeout = setTimeout(()=>{
+              this.refuse('2')
+            }, 30000)
           }
           this.invitedHandelMsg({ channelId, mediaType, inviteType })
         }
@@ -280,17 +289,25 @@ export default {
     },
     //同意加入频道
     agree() {
+      if (this.timeout) {
+        clearTimeout(this.timeout)
+      }
+      this.$EventBus.$emit('map-voice-end') //通知停止播放提示音
       this.joinChannel()
       this.invitedButton = false
       this.msg = ''
     },
     //拒绝加入频道
-    refuse() {
+    refuse(agree = '0') {
+      if (this.timeout) {
+        clearTimeout(this.timeout)
+      }
+      this.$EventBus.$emit('map-voice-end') //通知停止播放提示音
       this.im.sendSingleMsg(this.fromUsername, {
         msgType: '1',
         nickName: this.user.userName,
         channelId: this.channelId,
-        agree: '0' // "0":拒绝邀请, "1":接受邀请
+        agree // "0":拒绝邀请, "1":接受邀请
       })
       this.invitedButton = false
       this.leaveChannel()
@@ -383,13 +400,13 @@ export default {
       }
 
       if (this.invited) {
-        console.log('rtc.remoteStreams', this.live.rtc.remoteStreams)
-        this.live.rtc.remoteStreams.forEach(item=>{
-          this.im.sendSingleMsg(item.split('_')[0], msg)
-        })
-        // this.params.users.forEach(item=>{
-        //   this.im.sendSingleMsg(item.userId, msg)
+        // console.log('rtc.remoteStreams', this.live.rtc.remoteStreams)
+        // this.live.rtc.remoteStreams.forEach(item=>{
+        //   this.im.sendSingleMsg(item.split('_')[0], msg)
         // })
+        this.params.users.forEach(item=>{
+          this.im.sendSingleMsg(item.userId, msg)
+        })
       } else {
         this.im.sendSingleMsg(this.fromUsername, msg)
       }
