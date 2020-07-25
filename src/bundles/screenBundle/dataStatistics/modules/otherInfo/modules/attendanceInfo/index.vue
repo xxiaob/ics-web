@@ -193,18 +193,23 @@ export default {
         white-space: nowrap;
       }
 
+      .regional-attendance-theader {
+        padding-bottom: 10px;
+      }
       .regional-attendance-tbody {
         overflow: auto;
         max-height: 136px;
-        padding-top: 10px;
         .regional-attendance-tr {
           background-color: rgba(0, 46, 138, 0.2);
-          margin-top: 10px;
           height: 30px;
           line-height: 30px;
 
           .jc-omit-cell:not(:first-child) {
             color: #4ee2fd;
+          }
+
+          &:not(:first-child) {
+            margin-top: 10px;
           }
         }
       }
