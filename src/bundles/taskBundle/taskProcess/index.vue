@@ -24,7 +24,7 @@
           <el-table-column width="90" label="操作">
             <template slot-scope="scope">
               <el-button type="text" size="mini" icon="el-icon-view" @click="handle(scope.row,false)" title="查看" v-if="filter.selectType===TASK_SELECT_TYPES.DONE||filter.selectType===TASK_SELECT_TYPES.ISSUED"></el-button>
-              <el-button type="text" size="mini" icon="el-icon-edit-outline" @click="manage(scope.row)" v-if="filter.selectType===TASK_SELECT_TYPES.DEAFT||(filter.selectType===TASK_SELECT_TYPES.ISSUED&&scope.row.taskType==TASK_TYPES.DAILY)" title="编辑"></el-button>
+              <el-button type="text" size="mini" icon="el-icon-edit-outline" @click="manage(scope.row)" v-if="filter.selectType===TASK_SELECT_TYPES.DEAFT||filter.selectType===TASK_SELECT_TYPES.ISSUED" title="编辑"></el-button>
               <el-button type="text" size="mini" icon="el-icon-refresh-right" @click="handle(scope.row,true)" title="处理" v-if="filter.selectType===TASK_SELECT_TYPES.PENDING"></el-button>
               <el-button type="text" size="mini" icon="el-icon-arrow-down" @click="startTask(scope.row)" title="下发" v-if="filter.selectType===TASK_SELECT_TYPES.DEAFT"></el-button>
               <el-button type="text" size="mini" icon="el-icon-delete" @click="del(scope.row)" title="删除" v-if="filter.selectType!==TASK_SELECT_TYPES.PENDING"></el-button>
