@@ -99,7 +99,8 @@ export const TASK_REPEATS = new JcEnum([
   { key: 'HAIRDOWN', value: '1', label: '下发任务' },
   { key: 'FORWARD', value: '2', label: '转发任务' },
   { key: 'FINISHED', value: '3', label: '结束任务' },
-  { key: 'REMARK', value: '4', label: '添加备注' }
+  { key: 'REMARK', value: '4', label: '添加备注' },
+  { key: 'UPDATE', value: '5', label: '修改任务' }
 ])
 
 /**
