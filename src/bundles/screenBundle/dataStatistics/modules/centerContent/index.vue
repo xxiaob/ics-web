@@ -5,7 +5,7 @@
     <div class="jc-flex-con jc-data-content">
       <!-- 指挥范围显示 map -->
       <map-data></map-data>
-      <screen-projection></screen-projection>
+      <!-- <screen-projection></screen-projection> -->
     </div>
     <div class="jc-map-footer">
       <img src="./assets/map-footer.gif" class="jc-map-img" />
@@ -25,12 +25,12 @@ export default {
 <style lang="scss" scoped>
 .jc-data-content {
   position: relative;
-  z-index: 1;
+  z-index: 2;
 }
 .jc-map-footer {
   position: relative;
   height: 70px;
-  z-index: 2;
+  z-index: 1;
 }
 .jc-map-img {
   position: absolute;
