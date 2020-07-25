@@ -73,8 +73,8 @@ export default {
       futureWeather: []
     }
   },
-  mounted() {
-    this.getWeather() // 获取天气信息
+  created() {
+    this.$EventBus.$on('data-statistics-amap-success', this.getWeather) //地图加载完成去获取天气
   },
   methods: {
     async getWeather() {
@@ -125,6 +125,9 @@ export default {
         return '日'
       }
     }
+  },
+  beforeDestroy() {
+    this.$EventBus.$off('data-statistics-amap-success', this.getWeather) //通知地图加载完成
   }
 }
 </script>
