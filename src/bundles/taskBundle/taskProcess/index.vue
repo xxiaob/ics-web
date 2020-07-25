@@ -37,7 +37,7 @@
 
     <jc-detail :orgTree="orgTree" :projectListArr="projectListArr" :orgObj="orgObj" :info="info" :detailShow.sync="detailShow" v-show="detailShow" @save-success="initData"></jc-detail>
 
-    <jc-manage :orgTree="orgTree" :projectList="projectList" :projectListArr="projectListArr" :user="user" :options="info" :visible.sync="visible" @save-success="initData"></jc-manage>
+    <jc-manage :selectType="filter.selectType" :orgTree="orgTree" :projectList="projectList" :projectListArr="projectListArr" :user="user" :options="info" :visible.sync="visible" @save-success="initData"></jc-manage>
 
     <jc-manage-daily :selectType="filter.selectType" :EmergencySupport="EmergencySupport" :orgTree="orgTree" :projectList="projectList" :projectListArr="projectListArr" :orgObj="orgObj" :orgId="orgId" :options="dailyInfo" :visible.sync="visibleDaily" @save-success="initData"></jc-manage-daily>
 

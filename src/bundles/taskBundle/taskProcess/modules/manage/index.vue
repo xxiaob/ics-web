@@ -51,8 +51,12 @@
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="dialogVisible = false" size="small">取 消</el-button>
-      <el-button type="primary" :loading="loading" @click="onSubmit(false)" v-if="!question" size="small">暂 存</el-button>
-      <el-button type="primary" :loading="loading" @click="onSubmit(true)" size="small">下 发</el-button>
+      <!-- <el-button type="primary" :loading="loading" @click="onSubmit(false)" v-if="!question" size="small">暂 存</el-button>
+      <el-button type="primary" :loading="loading" @click="onSubmit(true)" size="small">下 发</el-button> -->
+
+      <el-button type="primary" :loading="loading" @click="onSubmit(false)" size="small" v-show="(selectType!=TASK_SELECT_TYPES.ISSUED||!options) && !question">暂 存</el-button>
+      <el-button type="primary" :loading="loading" @click="onSubmit(true)" size="small" v-show="selectType!=TASK_SELECT_TYPES.ISSUED||!options">下 发</el-button>
+      <el-button type="primary" :loading="loading" @click="onSubmit(false)" size="small" v-show="selectType===TASK_SELECT_TYPES.ISSUED&&options">保 存</el-button>
     </div>
   </el-dialog>
 </template>
@@ -62,7 +66,7 @@ import { organizationList } from '@/api/organization'
 import { projectsList } from '@/api/projects'
 import { getStringRule, NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
-import { TASK_TYPES, TASK_SOURCES, TASK_PEOPLE_TYPES, PROJECT_TYPES } from '@/constant/Dictionaries'
+import { TASK_TYPES, TASK_SOURCES, TASK_PEOPLE_TYPES, PROJECT_TYPES, TASK_SELECT_TYPES } from '@/constant/Dictionaries'
 import { createNamespacedHelpers } from 'vuex'
 const { mapState } = createNamespacedHelpers('user')
 
@@ -92,7 +96,10 @@ export default {
     question: {
       required: false
     },
-    projectId: String
+    projectId: String,
+    selectType: {
+      type: String
+    }
   },
   components: {
     upload: () => import('@/components/JcUpload'),
@@ -105,6 +112,7 @@ export default {
   },
   data() {
     return {
+      TASK_SELECT_TYPES,
       edit: false,
       taskSourceName: '',
       emergency: false,
