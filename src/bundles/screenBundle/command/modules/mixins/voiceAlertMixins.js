@@ -20,6 +20,7 @@ export default {
       }
 
       if (source) {
+        this.voicePause()
         this.$refs.myScreenAudio.src = source
         this.$refs.myScreenAudio.play()
       }

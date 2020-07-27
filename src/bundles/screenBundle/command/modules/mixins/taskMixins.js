@@ -28,7 +28,9 @@ export default {
 
         if (tasks && tasks.length) {
           tasks.forEach(item => {
-            this.drawTask({ taskId: item.businessKey, taskName: item.taskName, center: item.position.split(',') })
+            if (item.position) {
+              this.drawTask({ taskId: item.businessKey, taskName: item.taskName, center: item.position.split(',') })
+            }
           })
         }
       } catch (error) {
@@ -87,8 +89,8 @@ export default {
         }
       } else if (data.type == 3) {
         //新增临时任务，如果地图该内容不存在，则去显示
-        if (!userTasks[data.businessKey]) {
-          this.drawTask({ taskId: data.businessKey, taskName: data.titleName, center: data.position.split(',') })
+        if (!userTasks[data.task.businessKey] && data.task.position) {
+          this.drawTask({ taskId: data.task.businessKey, taskName: data.task.titleName, center: data.task.position.split(',') })
         }
       }
     }
