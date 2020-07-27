@@ -52,6 +52,8 @@ export default {
       if (data.type == 1) {
         //临时任务考勤状态更新
         if (data.tasks && data.tasks.length) {
+          let hasAbnormalTask = false //记录获取的批量异常任务里是否有新增，如果有，则通知播放提示音
+
           data.tasks.forEach(item => {
             let index = this.abnormalTaskIds.indexOf(item.taskId)
 
@@ -62,7 +64,7 @@ export default {
               }
             } else if (item.status == 1) {
               this.abnormalTaskIds.push(item.taskId)
-              this.$EventBus.$emit('map-voice-alert', { type: VOICE_TYPE.TEMPORARY_ABNORMAL }) //通知播放提示音
+              hasAbnormalTask = true
             }
             //如果该地图对象存在，则去设置显示
             if (userTasks[item.taskId]) {
@@ -72,6 +74,10 @@ export default {
               marker.setContent()
             }
           })
+
+          if (hasAbnormalTask) {
+            this.$EventBus.$emit('map-voice-alert', { type: VOICE_TYPE.TEMPORARY_ABNORMAL }) //通知播放提示音
+          }
         }
       } else if (data.type == 2) {
         //任务结束

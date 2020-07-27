@@ -111,6 +111,8 @@ export default {
       } else if (data.type == 5) {
         //用户考勤状态更新
         if (data.attendance && data.attendance.length) {
+          let hasAbnormalUser = false //记录获取的批量用户里是否有新增，如果有，则通知播放提示音
+
           data.attendance.forEach(item => {
             let index = this.abnormalUserIds.indexOf(item.id)
 
@@ -121,9 +123,13 @@ export default {
               }
             } else if (item.status == 1) {
               this.abnormalUserIds.push(item.id)
-              this.$EventBus.$emit('map-voice-alert', { type: VOICE_TYPE.USER_ABNORMAL }) //通知播放提示音
+              hasAbnormalUser = true
             }
           })
+
+          if (hasAbnormalUser) {
+            this.$EventBus.$emit('map-voice-alert', { type: VOICE_TYPE.USER_ABNORMAL }) //通知播放提示音
+          }
         }
       }
       //处理用户信息
