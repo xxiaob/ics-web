@@ -6,6 +6,7 @@ import { markerStyle } from '@/map/mapConst'
 import { MAP_EVENT } from '@/constant/CONST'
 import { MESSAGE_TYPE } from '@/constant/Dictionaries'
 import { VOICE_TYPE } from '@/config/JcVoiceAlertConfig'
+import { getScreenTask } from '@/api/screen'
 
 let userTasks = {} //记录
 
@@ -16,9 +17,19 @@ export default {
     }
   },
   created() {
+    this.$EventBus.$on('org-change', this.initMapTask) //监听第一次组织级别切换，然后去初始化地图临时任务
     this.$EventBus.$on('map-task-change', this.mapTaskChange) //临时任务考勤状态
   },
   methods: {
+    async initMapTask(org) {
+      //初始化
+      try {
+        let res = await getScreenTask({ orgId: org.orgId, projectId: this.project.projectId })
+      } catch (error) {
+        console.log(error)
+      }
+      this.$EventBus.$off('org-change', this.initMapTask) //获取完成
+    },
     mapTaskChange(data) {
       let myJcMap = this.getMyJcMap() //获取地图对象
 
@@ -54,6 +65,7 @@ export default {
   beforeDestroy() {
     userTasks = {}
     //去除事件监听
+    this.$EventBus.$off('org-change', this.initMapTask)
     this.$EventBus.$off('map-task-change', this.mapTaskChange)
   }
 }

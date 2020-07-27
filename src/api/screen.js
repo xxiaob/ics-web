@@ -72,3 +72,14 @@ export function getTaskPersonalLine(data) {
 export function getUserHistoryPosition(data) {
   return axios.post(API.screen.command.getUserHistoryPosition, data)
 }
+
+/**
+ * 最近两天未完成的临时任务
+ * @param {object} data
+ * @param { String } data.orgId 组织id
+ * @param { String } data.projectId 项目id
+ * @returns {Object} axios 对象
+ */
+export function getScreenTask(data) {
+  return axios.post(API.screen.command.getScreenTask + '?' + qs.stringify(data))
+}
