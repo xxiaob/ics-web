@@ -4,19 +4,20 @@
       <div class="jc-info-title" v-text="item.title"></div>
       <div class="jc-info-item">组织：{{item.orgName}}</div>
       <template v-if="item.type == types.TASK || item.type == types.TEMPORARY">
-        <div class="jc-info-item">任务类型：{{item.taskTypeName}}</div>
+        <div class="jc-info-item">任务类型：{{item.typeName}}</div>
         <div class="jc-info-item">下发人：{{item.userName}}</div>
       </template>
       <div class="jc-info-item" v-else>上报人：{{item.userName}}</div>
-      <div class="jc-info-item" v-if="item.type == types.EVENT">位置：{{item.positionName}}</div>
-      <div class="jc-info-item" v-if="item.type == types.QUESTION">问题类型：{{item.problemTypeName}}</div>
+      <div class="jc-info-item" v-if="item.type != types.TASK">位置：{{item.positionName}}</div>
+      <div class="jc-info-item" v-if="item.type == types.QUESTION">问题类型：{{item.typeName}}</div>
+      <div class="jc-info-item" v-else-if="item.type == types.EVENT">事件类型：{{item.typeName}}</div>
       <div class="jc-info-item">{{item.time}}</div>
     </div>
     <view-empty v-if="list.length < 1"></view-empty>
   </div>
 </template>
 <script>
-import { getScreenData } from '@/api/screen'
+import { getScreenOverallData } from '@/api/screen'
 import { MESSAGE_TYPE } from '@/constant/Dictionaries'
 import { formatDate } from '@/libs/util'
 
@@ -49,27 +50,12 @@ export default {
       try {
         let list = []
 
-        let result = await getScreenData({ userId: this.options.userId, projectId: this.project.projectId })
+        let result = await getScreenOverallData({ userId: this.options.userId, projectId: this.project.projectId })
 
-        if (result.tasks && result.tasks.length) {
-          //处理任务
-          result.tasks.forEach(item => {
-            list.push({ id: item.businessKey, type: item.taskType == '0' ? MESSAGE_TYPE.TEMPORARY : MESSAGE_TYPE.TASK, title: item.taskName, taskTypeName: item.taskTypeName,
-              userName: item.startUser, orgName: item.startOrg, time: formatDate(item.createTime) })
-          })
-        }
-        if (result.events && result.events.length) {
-          //处理事件
-          result.events.forEach(item => {
-            list.push({ id: item.id, type: MESSAGE_TYPE.EVENT, title: item.eventTitle, positionName: item.positionName,
-              userName: item.reportUserName, orgName: item.orgName, time: formatDate(item.createTime) })
-          })
-        }
-        if (result.problems && result.problems.length) {
-          //处理问题
-          result.problems.forEach(item => {
-            list.push({ id: item.businessKey, type: MESSAGE_TYPE.QUESTION, title: item.problemTitle, problemTypeName: item.problemTypeName,
-              userName: item.userName, orgName: item.orgName, time: formatDate(item.createTime) })
+        if (result && result.length) {
+          result.forEach(item => {
+            list.push({ id: item.id, type: item.type + '', title: item.title, typeName: item.typeName, userName: item.creatorName, orgName: item.orgName,
+              time: formatDate(item.createTime), positionName: item.positionName })
           })
         }
         this.list = list
