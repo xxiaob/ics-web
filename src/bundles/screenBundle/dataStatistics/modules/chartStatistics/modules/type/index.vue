@@ -202,7 +202,7 @@ export default {
                 }
               }
             }
-          ].sort( (a, b)=> b.value - a.value),
+          ].sort( (a, b)=> a.value - b.value),
           roseType: 'radius',
           // labelLine: {
           //  lineStyle: {

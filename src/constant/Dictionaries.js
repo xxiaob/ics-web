@@ -48,6 +48,7 @@ export const QUESTION_STATES = new JcEnum([
   { key: 'NOTREPORTED', value: '0', label: '未上报' },
   { key: 'INPROGRESS', value: '1', label: '进行中' },
   { key: 'CLOSED', value: '2', label: '已关闭' }
+  // { key: 'TASK', value: '3', label: '转任务' },
 ])
 
 /**

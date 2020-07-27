@@ -200,6 +200,9 @@ export default {
       getTaskPostLine: 'task-service/taskAttendance/getTaskPostLine', //岗点考勤事件流水
       getTaskPersonalLine: 'task-service/taskAttendance/getTaskPersonalLine', //个人考勤事件流水
       getUserHistoryPosition: 'message-srv/message/getUserHistoryPosition' //获取用户历史定位
+    },
+    dataStatistics: {
+      accumulateInfo: 'data-service/largeScreen/accumulateInfo'
     }
   },
   domainLogo: {

@@ -25,6 +25,9 @@ export default {
   props: {
     cycle: {
       type: Number
+    },
+    infoAndArea: {
+      type: Object
     }
   },
   data() {
@@ -37,6 +40,12 @@ export default {
   watch: {
     cycle() {
       console.log('Area 周期变化', this.cycle)
+    },
+    infoAndArea: {
+      deep: true,
+      handler() {
+        this.processData()
+      }
     }
   },
   methods: {
@@ -45,6 +54,20 @@ export default {
         this.activated = val
       } else {
         console.log('请勿重复点击')
+      }
+    },
+    processData() {
+      if (this.infoAndArea) {
+        console.log('this.infoAndArea', this.infoAndArea)
+
+        const eventData = []
+
+        this.infoAndArea.areas.forEach((area, key)=>{
+          eventData.push({ value: this.infoAndArea.events[key], name: area })
+        })
+
+        this.options.series[0].name = '事件'
+        this.options.series[0].data = eventData.sort((a, b)=> a.value - b.value)
       }
     }
   },
@@ -112,16 +135,7 @@ export default {
             borderWidth: 3,
             borderColor: '#000438'
           },
-          data: [
-            { value: 335, name: '私搭乱建' },
-            { value: 310, name: '非法小广告' },
-            { value: 274, name: '绿地脏乱' },
-            { value: 235, name: '倚门出摊' },
-            { value: 235, name: '倚门出摊1' },
-            { value: 235, name: '倚门出摊2' },
-            { value: 235, name: '倚门出摊3' },
-            { value: 400, name: '机动车乱停放' }
-          ].sort( (a, b)=> b.value - a.value),
+          data: [{}],
           // labelLine: {
           //  lineStyle: {
           //   color: 'white'
@@ -138,11 +152,11 @@ export default {
         }
       ]
     }
-
-    this.$EventBus.$on('data-statistics-init-success', val=>{
-      console.log('info 接收信息成功', val)
-      this.project = val
-    })
+    // this.processData()
+    // this.$EventBus.$on('data-statistics-init-success', val=>{
+    //   console.log('info 接收信息成功', val)
+    //   this.project = val
+    // })
   }
 }
 </script>
