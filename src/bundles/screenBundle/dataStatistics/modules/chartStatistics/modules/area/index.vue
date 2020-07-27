@@ -52,6 +52,7 @@ export default {
     changeType(val) {
       if (val !== this.activated) {
         this.activated = val
+        this.processData()
       } else {
         console.log('请勿重复点击')
       }
@@ -60,14 +61,29 @@ export default {
       if (this.infoAndArea) {
         console.log('this.infoAndArea', this.infoAndArea)
 
-        const eventData = []
+        let name = ''
+        const data = []
 
-        this.infoAndArea.areas.forEach((area, key)=>{
-          eventData.push({ value: this.infoAndArea.events[key], name: area })
-        })
+        if (this.activated === 1) {
+          name = '上报事件'
+          this.infoAndArea.areas.forEach((area, key)=>{
+            data.push({ value: this.infoAndArea.events[key], name: area })
+          })
+        } else if (this.activated === 2) {
+          name = '网巡问题'
+          this.infoAndArea.areas.forEach((area, key)=>{
+            data.push({ value: this.infoAndArea.problems[key], name: area })
+          })
+        } else if (this.activated === 3) {
+          name = '临时任务'
+          this.infoAndArea.areas.forEach((area, key)=>{
+            data.push({ value: this.infoAndArea.tasks[key], name: area })
+          })
+        }
 
-        this.options.series[0].name = '事件'
-        this.options.series[0].data = eventData.sort((a, b)=> a.value - b.value)
+
+        this.options.series[0].name = name
+        this.options.series[0].data = data.sort((a, b)=> a.value - b.value)
       }
     }
   },
