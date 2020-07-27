@@ -24,7 +24,7 @@ export default {
         console.log('screenMapSocket message data:', data)
         /**
          * 根据 消息type 区分消息类型
-         * 0为用户信息, 1为组织消息, 2为一开始订阅所有, 3为事件问题任务消息, 4为一键采集, 5为任务结束, 6人员考勤, 7岗点考勤，8异常临时任务
+         * 0为用户信息,2为一开始订阅所有,3为事件问题任务消息,4为一键采集,5为任务结束,6人员考勤,7岗点考勤,8异常临时任务 9.临时任务推送
          */
         if (data.type == 0) {
           //数据类型为用户信息变更
@@ -53,6 +53,12 @@ export default {
         } else if (data.type == 8) {
           //异常临时任务
           this.$EventBus.$emit('map-task-change', { type: 1, tasks: data.abnormalTasks }) //通知临时任务考勤状态
+        } else if (data.type == 5) {
+          //为任务结束
+          this.$EventBus.$emit('map-task-change', { type: 2, taskId: data.taskId }) //通知临时任务结束
+        } else if (data.type == 9) {
+          //临时任务推送
+          this.$EventBus.$emit('map-task-change', { type: 3, task: data.messageDTO }) //通知新增临时任务
         }
       })
     }

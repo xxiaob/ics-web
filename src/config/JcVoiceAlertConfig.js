@@ -12,7 +12,7 @@ export const VOICE_TYPE = new JcEnum([
   { key: 'EVENT', value: '2', label: '事件' },
   { key: 'TEMPORARY', value: '4', label: '临时任务' },
   { key: 'GRID_ABNORMAL', value: 'gridabnormal', label: '岗点异常' },
-  { key: 'USER_ABNORMAL', value: 'USERabnormal', label: '人出圈异常' },
+  { key: 'USER_ABNORMAL', value: 'userabnormal', label: '人出圈异常' },
   { key: 'TEMPORARY_ABNORMAL', value: 'temporaryabnormal', label: '临时任务异常' },
   { key: 'AUDIO_REMIND', value: 'audio', label: '语音提醒' },
   { key: 'VIDEO_REMIND', value: 'video', label: '视频提醒' },

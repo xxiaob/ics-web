@@ -10,6 +10,7 @@ export default {
   },
   methods: {
     voicePlay(data) {
+      console.log('指挥大屏，收到提示音处理', data)
       let source = VoiceSource[data.type]
 
       if (data.loop) {
@@ -19,6 +20,7 @@ export default {
       }
 
       if (source) {
+        this.voicePause()
         this.$refs.myScreenAudio.src = source
         this.$refs.myScreenAudio.play()
       }
