@@ -128,7 +128,7 @@ export function orgBoundariesFormat(boundaries = [], AMap = null) {
     boundaries.forEach(item => {
       if (item.areaInCoordinates && item.areaInCoordinates.length &&
         item.areaInCoordinates[0].areaInOutCoordinates && item.areaInCoordinates[0].areaInOutCoordinates.length) {
-        let resultItem = { type: MAP_SIGN_TYPE.Polygon, path: [] }
+        let resultItem = { hasInPath: false, path: [] }
 
         //处理外部区域
         let outPath = []
@@ -153,6 +153,7 @@ export function orgBoundariesFormat(boundaries = [], AMap = null) {
             inPaths.push(inPath)
           }
           resultItem.path = [outPath, ...inPaths]
+          resultItem.hasInPath = true //设置该区域有飞地
         } else {
           resultItem.path = outPath
         }

@@ -17,6 +17,9 @@
 </template>
 <script>
 import { projectGet } from '@/api/projects'
+import { screenMessageChannelSocket } from '@/api/socket'
+import { SOCKET_MESSAGE_TYPES } from '@/constant/Dictionaries'
+
 import ScreenHeader from './modules/header' //顶部header
 import DataDocking from './modules/dataDocking' //最左侧，数据对接，在应急和专项大屏不显示
 import ChartStatistics from './modules/chartStatistics' //信息累计、下辖区域占比、事务类型占比
@@ -29,8 +32,13 @@ export default {
   components: { ScreenHeader, DataDocking, CenterContent, ChartStatistics, RealtimeContent, OtherInfo },
   data() {
     return {
-      project: { projectId: this.$route.params.projectId || '', projectName: '', orgId: '', projectType: '' }
+      project: { projectId: this.$route.params.projectId || '', projectName: '', orgId: '', projectType: '' },
+      screenMessageChannelSocket: null
     }
+  },
+  created() {
+    this.$EventBus.$on('data-statistics-message-channel', this.sendScreenMessageChannelSocket) //监听消息发送
+    this.$EventBus.$on('data-statistics-amap-success', this.initScreenMessageChannelSocket) //通知地图加载完成
   },
   mounted() {
     this.initData() //初始化基本内容
@@ -46,7 +54,27 @@ export default {
 
       console.log('emit-data-statistics-init-success')
       this.$EventBus.$emit('data-statistics-init-success', this.project) //通知基础数据初始化完成
+    },
+    initScreenMessageChannelSocket(orgId) {
+      this.screenMessageChannelSocket = screenMessageChannelSocket({ orgId: orgId, projectId: this.project.projectId, type: SOCKET_MESSAGE_TYPES.DATA_STATISTICS })
+      this.screenMessageChannelSocket.connect((data) => {
+        console.log('数据大屏，收到推送操作消息', data)
+      })
+    },
+    sendScreenMessageChannelSocket(message) {
+      if (this.screenMessageChannelSocket && message) {
+        //如果消息存在，则去发送消息
+        this.screenMessageChannelSocket.send({ sendType: SOCKET_MESSAGE_TYPES.COMMAND, data: message })
+      }
     }
+  },
+  beforeDestroy() {
+    if (this.screenMessageChannelSocket) {
+      this.screenMessageChannelSocket.disconnect() //如果已经存在，则断开连接
+      this.screenMessageChannelSocket = null
+    }
+    this.$EventBus.$off('data-statistics-message-channel', this.sendScreenMessageChannelSocket)
+    this.$EventBus.$off('data-statistics-amap-success', this.initScreenMessageChannelSocket)
   }
 }
 </script>

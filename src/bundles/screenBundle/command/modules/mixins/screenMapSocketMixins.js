@@ -73,9 +73,10 @@ export default {
         this.screenMessageChannelSocket = screenMessageChannelSocket({
           orgId: this.screenSocketOrg.orgId,
           projectId: this.project.projectId,
-          type: SOCKET_MESSAGE_TYPES.command
+          type: SOCKET_MESSAGE_TYPES.COMMAND
         })
         this.screenMessageChannelSocket.connect((data) => { })
+        window.screenMessageChannelSocket = this.screenMessageChannelSocket
       }
       if (message) {
         //如果消息存在，则去发送消息

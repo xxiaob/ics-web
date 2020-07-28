@@ -15,14 +15,18 @@ let myJcMap, AMap, object3Dlayer //个人 map 对象,存储Amap对象,存储3D�
 
 let orgAreas = {} //存储区域信息
 
-let colors = ['#00a9ff', '#008eff', '#0083ff', '#1357ff', '#0f29e7']
+let colors = ['#00c0ff', '#00a9ff', '#0083ff', '#0072ff'], activeColor = '#00fcff'
 
 export default {
   name: 'ScreenDataCenterContentMapData',
   data() {
     return {
       project: null,
-      orgId: null
+      orgId: null,
+      mapParams: Object.freeze({ baseCoefficient: 0.00001, activeCoefficient: 0.00015 }), //记录高度基础和抬起的高度，不用于vue watch
+      showAreas: [], //存储所有显示的区域
+      index: 0, //当前循环到第几个
+      loopAreas: [] //存储 循环的区域
     }
   },
   created() {
@@ -42,9 +46,9 @@ export default {
       //初始化地图设置
       let AMapLoader = getAMapLoader() //获取amap 对象
 
-      AMap = await AMapLoader.load({ key: process.env.aMapConfig.accessKey, plugins: ['Map3D', 'AMap.Marker'] })
+      AMap = await AMapLoader.load({ key: process.env.aMapConfig.accessKey, plugins: ['Map3D', 'AMap.Marker', 'AMap.GeometryUtil'] })
 
-      object3Dlayer = new AMap.Object3DLayer({ opacity: 0.8 })
+      object3Dlayer = new AMap.Object3DLayer({ opacity: 0.84 })
 
       //, dragEnable: false, zoomEnable: false, rotateEnable: false, keyboardEnable: false
       myJcMap = new AMap.Map(this.$refs.myMap, {
@@ -53,9 +57,9 @@ export default {
       this.clearMapSign() //清除地图标记
       // 设置光照
       myJcMap.AmbientLight = new AMap.Lights.AmbientLight([1, 1, 1], 0.6)
-      myJcMap.DirectionLight = new AMap.Lights.DirectionLight([0, 0, 1], [1, 1, 1], 0.8)
+      myJcMap.DirectionLight = new AMap.Lights.DirectionLight([0, 0, 1], [1, 1, 1], 0.88)
 
-      this.$EventBus.$emit('data-statistics-amap-success') //通知地图加载完成
+      this.$EventBus.$emit('data-statistics-amap-success', this.orgId) //通知地图加载完成
 
       // this.orgId = '37621502421499904' //测试组织边界使用
       this.getOrgAreas(this.orgId) //获取组织区域信息
@@ -72,48 +76,154 @@ export default {
         }
 
         if (result && result.length) {
-          let index = 0, markers = []
+          let measureAreas = 0 //记录除自己之外所有区域的面积总和
+
+          let centerPosition = { lng: 0, lat: 0, length: 0 } //记录有边界区域的数量
+
+          let lnglats //获取最父级边界
 
           result.forEach(item => {
-            if (item.center) { //中心点必须存在
-              let center = item.center.split(',')
+            let orgInfo = { orgId: item.orgId, center: null, areaCode: item.areaCode, areaId: item.areaId, areaName: item.areaName, measureAreas: 0 }
 
-              let marker = new AMap.Marker({ position: center, anchor: 'middle-left', content: `<div class="jc-data-statistics-content">${item.areaName}</div>` })
+            //中心点存在则去计算边界等
+            if (item.center) {
+              orgInfo.center = item.center.split(',')
 
-              markers.push(marker)
-              let orgInfo = { orgId: item.orgId, center, areaCode: item.areaCode, areaId: item.areaId, areaName: item.areaName, marker }
+              orgInfo.boundaries = orgBoundariesFormat(item.withoutRadiusReqs, AMap) //处理边界数据
 
-              if (item.orgId != this.orgId || result.length == 1) {
-                orgInfo.boundaries = orgBoundariesFormat(item.withoutRadiusReqs, AMap)
+              //设置边界，去处理信息
+              if (orgInfo.boundaries && orgInfo.boundaries.length) {
+                orgInfo.boundaries.forEach(boundary => {
+                  let boundaryLnglats = this.getAreaBundleLnglats(boundary.hasInPath ? boundary.path[0] : boundary.path)
 
-                //设置边界，并绘画
-                if (orgInfo.boundaries && orgInfo.boundaries.length) {
-                  let prisms = [] //存储当前组织3D对象
+                  //设置边界 和 父级最大边界
+                  orgInfo.lnglats = this.calcBundleLnglats(orgInfo.lnglats, boundaryLnglats)
+                  lnglats = this.calcBundleLnglats(lnglats, orgInfo.lnglats)
 
-                  let height = index % 5 == 1 ? 6000 : 30000 //设置高度
+                  //计算边界面积
+                  orgInfo.measureAreas += AMap.GeometryUtil.ringArea(boundary.hasInPath ? boundary.path[0] : boundary.path)
 
-                  let color = colors[index++ % colors.length] //设置颜色
+                  if (item.orgId != this.orgId) {
+                    //如果不是当前组织，则累加面积
+                    measureAreas += orgInfo.measureAreas
+                  }
+                })
+                //如果该组织有区域边界，则统计需要绘图的中心点
+                centerPosition.lng += orgInfo.center[0] * 1
+                centerPosition.lat += orgInfo.center[1] * 1
+                centerPosition.length += 1
 
-                  orgInfo.boundaries.forEach(boundary => {
-                    let prism = new AMap.Object3D.Prism({ path: boundary.path, height, color })
-
-                    prism.transparent = true
-                    prisms.push(prism)
-                    object3Dlayer.add(prism) //添加图层
-                  })
-                  orgInfo.prisms = prisms
-                }
+                //存储需要显示的组织
+                this.showAreas.push({ orgId: orgInfo.orgId })
               }
-              orgAreas[item.orgId] = orgInfo
             }
+            orgAreas[item.orgId] = orgInfo
           })
-          myJcMap.add(object3Dlayer)//添加到地图
-          myJcMap.add(markers) //添加点标记
+
+          //最后处理最父级组织的数据
+          let parentOrg = orgAreas[this.orgId]
+
+          parentOrg.measureAreas = parentOrg.measureAreas > 0 ? parentOrg.measureAreas : measureAreas
+          parentOrg.lnglats = parentOrg.lnglats ? parentOrg.lnglats : lnglats
+          if (centerPosition.length) {
+            parentOrg.centerPosition = new AMap.LngLat(centerPosition.lng / centerPosition.length, centerPosition.lat / centerPosition.length)
+          }
+
           console.log('数据大屏，组织边界信息', orgAreas)
+
+          this.drawMapAreas() //去绘图
         }
       } catch (error) {
         console.log(error)
       }
+    },
+    drawMapAreas() {
+      //绘图
+      if (this.showAreas.length < 1) {
+        return
+      }
+      //如果需要显示的区域数量大于一，则需要过滤掉自己
+      if (this.showAreas.length > 1) {
+        let index = this.showAreas.findIndex(item => item.orgId == this.orgId)
+
+        if (index > -1) {
+          this.showAreas.splice(index, 1)
+        }
+      }
+      let markers = [] //存储所有区域的marker
+
+      let parentOrg = orgAreas[this.orgId] //父级区域
+
+      for (let i = 0; i < this.showAreas.length; i++) {
+        let keyOrgId = this.showAreas[i].orgId
+
+        let item = orgAreas[this.showAreas[i].orgId]
+
+        //如果非最父级组织或需要显示的组织只有一个
+        if (this.orgId != keyOrgId || this.showAreas.length == 1) {
+          item.marker = new AMap.Marker({ position: item.center, anchor: 'middle-left', content: `<div class="jc-data-statistics-content">${item.areaName}</div>` })
+
+          markers.push(item.marker)
+        }
+
+        this.showAreas[i].dis = AMap.GeometryUtil.distance(parentOrg.centerPosition, new AMap.LngLat(item.center[0], item.center[1]))
+      }
+      //对显示的数组做排序
+      // if(this.showAreas.length < 4) {
+
+      // }
+      // let item = orgAreas[orgId]
+
+      // let prisms = [] //存储当前组织3D对象
+
+      // let height = 30000 //设置高度
+
+      // let color = colors[index++ % colors.length] //设置颜色
+
+      // orgInfo.boundaries.forEach(boundary => {
+      //   let prism = new AMap.Object3D.Prism({ path: boundary.path, height, color })
+
+      //   prism.transparent = true
+      //   prisms.push(prism)
+      //   object3Dlayer.add(prism) //添加图层
+      // })
+      // orgInfo.prisms = prisms
+      // myJcMap.add(object3Dlayer)//添加到地图
+      // myJcMap.add(markers) //添加点标记
+    },
+    calcBundleLnglats(target1, target2) {
+      if (target1) {
+        target1.lng.max = target2.lng.max > target1.lng.max ? target2.lng.max : target1.lng.max
+        target1.lng.min = target2.lng.min < target1.lng.min ? target2.lng.min : target1.lng.min
+        target1.lat.max = target2.lat.max > target1.lat.max ? target2.lat.max : target1.lat.max
+        target1.lat.min = target2.lat.min < target1.lat.min ? target2.lat.min : target1.lat.min
+        return target1
+      }
+      return target2
+    },
+    getAreaBundleLnglats(path) {
+      //获取区域东南西北边界
+      // let maxRund = 1.00002, minRund = 0.99998 //设置边距
+
+      let lnglats = { lng: { max: null, min: null }, lat: { max: null, min: null } }
+
+      path.forEach(item => {
+        if (!lnglats.lng.max || item.lng > lnglats.lng.max) {
+          lnglats.lng.max = item.lng
+        }
+        if (!lnglats.lng.min || item.lng < lnglats.lng.min) {
+          lnglats.lng.min = item.lng
+        }
+        if (!lnglats.lat.max || item.lat > lnglats.lat.max) {
+          lnglats.lat.max = item.lat
+        }
+        if (!lnglats.lat.min || item.lat < lnglats.lat.min) {
+          lnglats.lat.min = item.lat
+        }
+      })
+
+      return lnglats
+      // return new myJcMap.AMap.Bounds([lnglats.lng.min * minRund, lnglats.lat.min * minRund], [lnglats.lng.max * maxRund, lnglats.lat.max * maxRund])
     },
     clearMapSign() {
       let complete = false //防止map complete事件触发多次
@@ -181,6 +291,7 @@ export default {
     background-color: #00fffc;
     border-radius: 50%;
     margin-right: 4px;
+    margin-left: -6px;
   }
 }
 </style>
