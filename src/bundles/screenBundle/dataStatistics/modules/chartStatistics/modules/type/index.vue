@@ -222,7 +222,7 @@ export default {
     }
 
     this.$EventBus.$on('data-statistics-init-success', val=>{
-      console.log('info 接收信息成功', val)
+      console.log('type 接收信息成功', val)
       this.project = val
     })
   }

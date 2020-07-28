@@ -1,7 +1,6 @@
 <template>
   <div class="jc-flex-con jc-flex-warp jc-flex-vertical info">
     <div class="jc-title">
-      <!-- <img class="jc-title-sign" src="@/bundles/screenBundle/dataStatistics/assets/title.png" alt="" height="18"> -->
       <span class="jc-title-content">下辖区域占比</span>
       <div class="jc-right-box">
         <span class="jc-right-item" :class="{'jc-activated':activated===1}" @click="changeType(1)">上报事件</span>|
@@ -23,9 +22,6 @@ export default {
     JcCharts
   },
   props: {
-    cycle: {
-      type: Number
-    },
     infoAndArea: {
       type: Object
     }
@@ -38,9 +34,6 @@ export default {
     }
   },
   watch: {
-    cycle() {
-      console.log('Area 周期变化', this.cycle)
-    },
     infoAndArea: {
       deep: true,
       handler() {
@@ -59,8 +52,6 @@ export default {
     },
     processData() {
       if (this.infoAndArea) {
-        console.log('this.infoAndArea', this.infoAndArea)
-
         let name = ''
         const data = []
 
@@ -80,7 +71,6 @@ export default {
             data.push({ value: this.infoAndArea.tasks[key], name: area })
           })
         }
-
 
         this.options.series[0].name = name
         this.options.series[0].data = data.sort((a, b)=> a.value - b.value)
@@ -132,7 +122,7 @@ export default {
               index = i
             }
           })
-          const percentage = ((datas[index].value / total) * 100).toFixed(2)
+          const percentage = datas[index].value === 0 ? 0 : ((datas[index].value / total) * 100).toFixed(2)
           const sName = name.length > 7 ? `${name.substring(0, 6)}...` : name
 
           return [`{a| ${sName}}`, `{b| ${percentage}%}`].join('')
@@ -169,10 +159,6 @@ export default {
       ]
     }
     // this.processData()
-    // this.$EventBus.$on('data-statistics-init-success', val=>{
-    //   console.log('info 接收信息成功', val)
-    //   this.project = val
-    // })
   }
 }
 </script>
