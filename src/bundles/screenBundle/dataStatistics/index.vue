@@ -65,7 +65,7 @@ export default {
     sendScreenMessageChannelSocket(message) {
       if (this.screenMessageChannelSocket && message) {
         //如果消息存在，则去发送消息
-        this.screenMessageChannelSocket.send({ sendType: SOCKET_MESSAGE_TYPES.COMMAND, data: message })
+        this.screenMessageChannelSocket.send(JSON.stringify({ sendType: SOCKET_MESSAGE_TYPES.COMMAND, data: message }))
       }
     }
   },

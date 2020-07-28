@@ -75,12 +75,13 @@ export default {
           subProjectId: this.project.projectId,
           type: SOCKET_MESSAGE_TYPES.COMMAND
         })
-        this.screenMessageChannelSocket.connect((data) => { })
-        window.screenMessageChannelSocket = this.screenMessageChannelSocket
+        this.screenMessageChannelSocket.connect((data) => {
+          console.log('指挥大屏，收到推送操作消息', data)
+        })
       }
       if (message) {
         //如果消息存在，则去发送消息
-        this.screenMessageChannelSocket.send({ sendType: SOCKET_MESSAGE_TYPES.DATA_STATISTICS, data: JSON.stringify(message) })
+        this.screenMessageChannelSocket.send(JSON.stringify({ sendType: SOCKET_MESSAGE_TYPES.DATA_STATISTICS, data: message }))
       }
     }
   },
