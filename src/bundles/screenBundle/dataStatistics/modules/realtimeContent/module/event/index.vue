@@ -7,7 +7,7 @@
         <span class="jc-right-item">{{user.orgName}}</span>
       </div>
     </div>
-    <div class="jc-flex-con jc-event-list">
+    <div class="jc-flex-con jc-event-list data-statistics-scrollbar ">
       <transition-group name="jc-list" tag="div">
         <div class="jc-list-item jc-flex-warp" v-for="item in list" :key="item.id">
           <div class="img">

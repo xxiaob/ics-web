@@ -136,6 +136,7 @@ export default {
         keyframeVal += `
           ${keyframe}%{
             transform: translateX(${offsetX}px) translateY(${offsetY}px);
+            z-index: ${100 - keyframe};
           }
         `
       }

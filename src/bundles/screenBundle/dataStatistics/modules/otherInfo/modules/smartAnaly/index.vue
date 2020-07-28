@@ -34,7 +34,7 @@
           <jc-charts :options="options"></jc-charts>
           <div class="smart-analy-count jc-flex-warp">
             <div class="count-to-wrap">
-              <count-to :startVal="0" :endVal="99" /> 件
+              <count-to :startVal="0" :endVal="current" /> 件
             </div>
           </div>
         </div>
@@ -91,12 +91,17 @@ export default {
 
     let color = 'rgba(21,229,253,1)'
 
+    let duration = 6000
+
     if ((eventPrecent * 100) < 30) {
       color = 'rgba(21,229,253,0.4)'
+      duration = 14000
     } else if ((eventPrecent * 100) < 60) {
       color = 'rgba(21,229,253,0.6)'
+      duration = 10000
     } else if ((eventPrecent * 100) < 80) {
       color = 'rgba(21,229,253,0.8)'
+      duration = 8000
     }
 
     const { PI, cos, sin } = Math
@@ -156,6 +161,7 @@ export default {
             'show': false
           }
         },
+        animationDuration: duration,
         data: [{
           name: '',
           value: val1,

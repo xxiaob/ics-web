@@ -71,7 +71,7 @@
             <span class="jc-flex-con jc-omit-cell text-center">视频查证</span>
           </div>
 
-          <div class="regional-attendance-tbody jc-flex-con">
+          <div class="regional-attendance-tbody jc-flex-con data-statistics-scrollbar">
             <!-- 需要循环的数据,根据后台数据在调整 -->
             <div>
               <div class="regional-attendance-tr jc-flex-warp">
@@ -206,8 +206,6 @@ export default {
         & > div {
           height: 0;
         }
-
-        // 滚动条
 
         .regional-attendance-tr {
           background-color: rgba(0, 46, 138, 0.2);
