@@ -204,7 +204,8 @@ export default {
       getScreenOverallData: 'task-service/taskScreen/getScreenOverallData' //根据用户和网格查询综合数据
     },
     dataStatistics: {
-      accumulateInfo: 'data-service/largeScreen/accumulateInfo'
+      accumulateInfo: 'data-service/largeScreen/accumulateInfo',
+      transactionType: 'data-service/largeScreen/transactionType'
     }
   },
   domainLogo: {

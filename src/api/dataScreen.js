@@ -13,3 +13,11 @@ import API from './API'
 export function getAccumulateInfo(data) {
   return axios.post(API.screen.dataStatistics.accumulateInfo, data)
 }
+/**
+ * 事务类型占比
+ * @param {object} data
+ * @returns {Object} axios 对象
+ */
+export function getTransactionType(data) {
+  return axios.post(API.screen.dataStatistics.transactionType, data)
+}

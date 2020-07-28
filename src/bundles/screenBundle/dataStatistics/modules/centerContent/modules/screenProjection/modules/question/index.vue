@@ -2,7 +2,7 @@
   <div class="jc-content">
     <el-form label-width="100px" :model="form" size="mini">
       <el-form-item label="问题ID : ">
-        <span>{{form.id}}问题ID</span>
+        <span>{{form.id}}</span>
       </el-form-item>
       <el-form-item label="上报人 : ">
         <span>{{form.userName}}</span>
@@ -33,6 +33,12 @@ import JcMedia from '../../components/media'
 export default {
   name: 'ScreenDataCenterContentScreenProjectionQuestion',
   components: { JcMedia },
+  props: {
+    options: {
+      type: Object,
+      default: ()=>{}
+    }
+  },
   data() {
     return {
       types: [],
@@ -40,9 +46,19 @@ export default {
       dialogVideoVisible: false
     }
   },
+  watch: {
+    options: {
+      deep: true,
+      handler() {
+        this.getDetail()
+      }
+    }
+  },
   async created() {
     this.types = await questionTypeList() || []
-    await this.getDetail('73488564293206016')
+    if (this.options && this.options.id) {
+      this.getDetail()
+    }
   },
   methods: {
     formatType(value) {
@@ -50,8 +66,8 @@ export default {
 
       return (type[0] && type[0].typeName) || ''
     },
-    async getDetail(id) {
-      const res = await questionGet(id)
+    async getDetail() {
+      const res = await questionGet(this.options.id)
 
       this.form = { ...res }
     }

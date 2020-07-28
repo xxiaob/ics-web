@@ -19,6 +19,12 @@ const { mapState } = createNamespacedHelpers('user')
 
 export default {
   name: 'ScreenDataCenterContentScreenProjectionLive',
+  props: {
+    options: {
+      type: Object,
+      default: ()=>{}
+    }
+  },
   computed: {
     ...mapState(['user'])
   },

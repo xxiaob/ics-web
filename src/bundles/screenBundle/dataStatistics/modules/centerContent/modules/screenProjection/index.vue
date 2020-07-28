@@ -1,11 +1,11 @@
 <template>
   <transition name="bounce">
     <div class="jc-screen-space" v-show="show">
-      <jc-live v-show="showModule===1"></jc-live>
-      <jc-event v-show="showModule===2"></jc-event>
-      <jc-question v-show="showModule===3"></jc-question>
-      <jc-temporary-task v-show="showModule===4"></jc-temporary-task>
-      <jc-daily-task v-show="showModule===5"></jc-daily-task>
+      <jc-live v-show="showModule===1" :options="options"></jc-live>
+      <jc-event v-show="showModule===2" :options="{id:'71279185972166656'}"></jc-event>
+      <jc-question v-show="showModule===3" :options="{id:'73488564293206016'}"></jc-question>
+      <jc-temporary-task v-show="showModule===4" :options="{id:'71636607261736960'}"></jc-temporary-task>
+      <jc-daily-task v-show="showModule===5" :options="{id:'70910841347637248'}"></jc-daily-task>
     </div>
   </transition>
 
@@ -23,7 +23,8 @@ export default {
   data() {
     return {
       show: false,
-      showModule: 1
+      showModule: 5,
+      options: {}
     }
   },
   created() {
