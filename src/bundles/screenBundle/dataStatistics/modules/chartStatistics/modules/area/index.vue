@@ -25,6 +25,9 @@ export default {
   props: {
     cycle: {
       type: Number
+    },
+    infoAndArea: {
+      type: Object
     }
   },
   data() {
@@ -37,14 +40,50 @@ export default {
   watch: {
     cycle() {
       console.log('Area 周期变化', this.cycle)
+    },
+    infoAndArea: {
+      deep: true,
+      handler() {
+        this.processData()
+      }
     }
   },
   methods: {
     changeType(val) {
       if (val !== this.activated) {
         this.activated = val
+        this.processData()
       } else {
         console.log('请勿重复点击')
+      }
+    },
+    processData() {
+      if (this.infoAndArea) {
+        console.log('this.infoAndArea', this.infoAndArea)
+
+        let name = ''
+        const data = []
+
+        if (this.activated === 1) {
+          name = '上报事件'
+          this.infoAndArea.areas.forEach((area, key)=>{
+            data.push({ value: this.infoAndArea.events[key], name: area })
+          })
+        } else if (this.activated === 2) {
+          name = '网巡问题'
+          this.infoAndArea.areas.forEach((area, key)=>{
+            data.push({ value: this.infoAndArea.problems[key], name: area })
+          })
+        } else if (this.activated === 3) {
+          name = '临时任务'
+          this.infoAndArea.areas.forEach((area, key)=>{
+            data.push({ value: this.infoAndArea.tasks[key], name: area })
+          })
+        }
+
+
+        this.options.series[0].name = name
+        this.options.series[0].data = data.sort((a, b)=> a.value - b.value)
       }
     }
   },
@@ -112,16 +151,7 @@ export default {
             borderWidth: 3,
             borderColor: '#000438'
           },
-          data: [
-            { value: 335, name: '私搭乱建' },
-            { value: 310, name: '非法小广告' },
-            { value: 274, name: '绿地脏乱' },
-            { value: 235, name: '倚门出摊' },
-            { value: 235, name: '倚门出摊1' },
-            { value: 235, name: '倚门出摊2' },
-            { value: 235, name: '倚门出摊3' },
-            { value: 400, name: '机动车乱停放' }
-          ].sort( (a, b)=> b.value - a.value),
+          data: [{}],
           // labelLine: {
           //  lineStyle: {
           //   color: 'white'
@@ -138,11 +168,11 @@ export default {
         }
       ]
     }
-
-    this.$EventBus.$on('data-statistics-init-success', val=>{
-      console.log('info 接收信息成功', val)
-      this.project = val
-    })
+    // this.processData()
+    // this.$EventBus.$on('data-statistics-init-success', val=>{
+    //   console.log('info 接收信息成功', val)
+    //   this.project = val
+    // })
   }
 }
 </script>

@@ -48,6 +48,7 @@ export const QUESTION_STATES = new JcEnum([
   { key: 'NOTREPORTED', value: '0', label: '未上报' },
   { key: 'INPROGRESS', value: '1', label: '进行中' },
   { key: 'CLOSED', value: '2', label: '已关闭' }
+  // { key: 'TASK', value: '3', label: '转任务' },
 ])
 
 /**
@@ -99,7 +100,8 @@ export const TASK_REPEATS = new JcEnum([
   { key: 'HAIRDOWN', value: '1', label: '下发任务' },
   { key: 'FORWARD', value: '2', label: '转发任务' },
   { key: 'FINISHED', value: '3', label: '结束任务' },
-  { key: 'REMARK', value: '4', label: '添加备注' }
+  { key: 'REMARK', value: '4', label: '添加备注' },
+  { key: 'UPDATE', value: '5', label: '修改任务' }
 ])
 
 /**

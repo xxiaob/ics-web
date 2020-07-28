@@ -197,9 +197,14 @@ export default {
       getCommandScreenData: 'data-service/largeScreen/getCommandScreenData',
       screenMap: 'message-service/icsServer/screenMap', //大屏推送接口
       getScreenData: 'task-service/taskScreen/getScreenData',
+      getScreenTask: 'task-service/task/getScreenTask', //最近两天未完成的临时任务
       getTaskPostLine: 'task-service/taskAttendance/getTaskPostLine', //岗点考勤事件流水
       getTaskPersonalLine: 'task-service/taskAttendance/getTaskPersonalLine', //个人考勤事件流水
-      getUserHistoryPosition: 'message-srv/message/getUserHistoryPosition' //获取用户历史定位
+      getUserHistoryPosition: 'message-srv/message/getUserHistoryPosition', //获取用户历史定位
+      getScreenOverallData: 'task-service/taskScreen/getScreenOverallData' //根据用户和网格查询综合数据
+    },
+    dataStatistics: {
+      accumulateInfo: 'data-service/largeScreen/accumulateInfo'
     }
   },
   domainLogo: {

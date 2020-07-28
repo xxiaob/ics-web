@@ -163,9 +163,9 @@ export default {
 
         let speed = parseFloat(pathData[key].s)
 
-        if (speed > 40 ) {
+        if (speed > 36 ) {
           style = 'jc-trajectory-car'
-        } else if (speed > 10) {
+        } else if (speed > 8) {
           style = 'jc-trajectory-elcicle'
         }
         this.runInfo = { addr: pathData[key].d, speed: pathData[key].s, key, style } //设置运行信息

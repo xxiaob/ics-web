@@ -12,8 +12,11 @@ export const VOICE_TYPE = new JcEnum([
   { key: 'EVENT', value: '2', label: '事件' },
   { key: 'TEMPORARY', value: '4', label: '临时任务' },
   { key: 'GRID_ABNORMAL', value: 'gridabnormal', label: '岗点异常' },
-  { key: 'USER_ABNORMAL', value: 'USERabnormal', label: '人出圈异常' },
-  { key: 'TEMPORARY_ABNORMAL', value: 'temporaryabnormal', label: '临时任务异常' }
+  { key: 'USER_ABNORMAL', value: 'userabnormal', label: '人出圈异常' },
+  { key: 'TEMPORARY_ABNORMAL', value: 'temporaryabnormal', label: '临时任务异常' },
+  { key: 'AUDIO_REMIND', value: 'audio', label: '语音提醒' },
+  { key: 'VIDEO_REMIND', value: 'video', label: '视频提醒' },
+  { key: 'HELP_REMIND', value: 'help', label: '求助提醒' }
 ])
 
 /**
@@ -26,5 +29,8 @@ export const VoiceSource = {
   [VOICE_TYPE.TEMPORARY]: '/static/voices/temporary.wav',
   [VOICE_TYPE.GRID_ABNORMAL]: '/static/voices/grid-abnormal.wav',
   [VOICE_TYPE.USER_ABNORMAL]: '/static/voices/user-abnormal.wav',
-  [VOICE_TYPE.TEMPORARY_ABNORMAL]: '/static/voices/temporary-abnormal.wav'
+  [VOICE_TYPE.TEMPORARY_ABNORMAL]: '/static/voices/temporary-abnormal.wav',
+  [VOICE_TYPE.AUDIO_REMIND]: '/static/voices/audio.wav',
+  [VOICE_TYPE.VIDEO_REMIND]: '/static/voices/video.wav',
+  [VOICE_TYPE.HELP_REMIND]: '/static/voices/help.wav'
 }
