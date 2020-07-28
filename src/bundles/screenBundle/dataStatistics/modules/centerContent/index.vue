@@ -5,7 +5,7 @@
     <div class="jc-flex-con jc-data-content">
       <!-- 指挥范围显示 map -->
       <map-data></map-data>
-      <screen-projection></screen-projection>
+      <!-- <screen-projection></screen-projection> -->
     </div>
     <div class="jc-map-footer">
       <img src="./assets/map-footer.gif" class="jc-map-img" />

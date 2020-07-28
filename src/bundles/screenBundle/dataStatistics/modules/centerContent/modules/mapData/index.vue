@@ -15,7 +15,7 @@ let myJcMap, AMap, object3Dlayer //个人 map 对象,存储Amap对象,存储3D�
 
 let orgAreas = {} //存储区域信息
 
-let colors = ['#00c0ff', '#00a9ff', '#0083ff', '#0072ff'], activeColor = '#00fcff'
+let colors = ['#0083ff', '#00c0ff', '#00a9ff', '#0072ff'], activeColor = '#00fcff'
 
 export default {
   name: 'ScreenDataCenterContentMapData',
@@ -23,9 +23,10 @@ export default {
     return {
       project: null,
       orgId: null,
-      mapParams: Object.freeze({ baseCoefficient: 0.00001, activeCoefficient: 0.00015 }), //记录高度基础和抬起的高度，不用于vue watch
+      mapParams: Object.freeze({ baseCoefficient: 0.000005, activeCoefficient: 0.000006 }), //记录高度基础和抬起的高度，不用于vue watch
       showAreas: [], //存储所有显示的区域
       index: 0, //当前循环到第几个
+      showNum: 4, //最多每次显示的个数
       loopAreas: [] //存储 循环的区域
     }
   },
@@ -52,7 +53,7 @@ export default {
 
       //, dragEnable: false, zoomEnable: false, rotateEnable: false, keyboardEnable: false
       myJcMap = new AMap.Map(this.$refs.myMap, {
-        mapStyle: 'amap://styles/1b8b05391432855bd2473c0d1d3628b5', viewMode: '3D', features: ['bg', 'road'], pitch: 45, skyColor: 'rgba(0,0,0,0)'
+        mapStyle: 'amap://styles/1b8b05391432855bd2473c0d1d3628b5', viewMode: '3D', features: ['bg', 'road'], pitch: 40, skyColor: 'rgba(0,0,0,0)'
       })
       this.clearMapSign() //清除地图标记
       // 设置光照
@@ -168,28 +169,64 @@ export default {
 
         this.showAreas[i].dis = AMap.GeometryUtil.distance(parentOrg.centerPosition, new AMap.LngLat(item.center[0], item.center[1]))
       }
+
       //对显示的数组做排序
-      // if(this.showAreas.length < 4) {
+      this.showAreas.sort((a, b) => a.dis - b.dis) //先进行记录小到大排序
 
-      // }
-      // let item = orgAreas[orgId]
+      let loopAreas = [], loopIndex = -1
 
-      // let prisms = [] //存储当前组织3D对象
+      //对数组进行分组
+      this.showAreas.forEach((item, index) => {
+        if (index % this.showNum == 0) {
+          loopIndex += 1
+        }
 
-      // let height = 30000 //设置高度
+        if (!loopAreas[loopIndex]) {
+          loopAreas[loopIndex] = []
+        }
+        loopAreas[loopIndex].push(item)
+      })
 
-      // let color = colors[index++ % colors.length] //设置颜色
+      console.log('处理前的loopAreas：', loopAreas)
+      //对每个分数组进行排序
+      let allAreas = [] //存储排序后的组织数据
 
-      // orgInfo.boundaries.forEach(boundary => {
-      //   let prism = new AMap.Object3D.Prism({ path: boundary.path, height, color })
+      loopAreas.forEach(loopArea => {
+        loopArea.sort(function (a, b) {
+          let aOrg = orgAreas[a.orgId], bOrg = orgAreas[b.orgId]
 
-      //   prism.transparent = true
-      //   prisms.push(prism)
-      //   object3Dlayer.add(prism) //添加图层
-      // })
-      // orgInfo.prisms = prisms
-      // myJcMap.add(object3Dlayer)//添加到地图
-      // myJcMap.add(markers) //添加点标记
+          return bOrg.center[0] * 1 - aOrg.center[0] * 1
+        })
+        allAreas.push(...loopArea)
+      })
+
+      //进行合并组合进行显示
+      console.log('处理后的loopAreas：', loopAreas, allAreas)
+
+      let height = Math.ceil(parentOrg.measureAreas * this.mapParams.baseCoefficient)//设置高度
+
+      allAreas.forEach((item, index) => {
+        let areaItem = orgAreas[item.orgId]
+
+        let prisms = [] //存储当前组织3D对象
+
+        let color = colors[index % colors.length] //设置颜色
+
+        areaItem.boundaries.forEach(boundary => {
+          let prism = new AMap.Object3D.Prism({ path: boundary.path, height, color })
+
+          prism.transparent = true
+          prisms.push(prism)
+          object3Dlayer.add(prism) //添加图层
+        })
+        areaItem.prisms = prisms
+      })
+      myJcMap.add(object3Dlayer)//添加到地图
+      myJcMap.add(markers) //添加点标记
+      //设置自适应显示
+      let lnglats = parentOrg.lnglats//设置边距
+
+      myJcMap.setBounds(new AMap.Bounds([lnglats.lng.min, lnglats.lat.min], [lnglats.lng.max, lnglats.lat.max * 0.992]))
     },
     calcBundleLnglats(target1, target2) {
       if (target1) {
@@ -203,8 +240,6 @@ export default {
     },
     getAreaBundleLnglats(path) {
       //获取区域东南西北边界
-      // let maxRund = 1.00002, minRund = 0.99998 //设置边距
-
       let lnglats = { lng: { max: null, min: null }, lat: { max: null, min: null } }
 
       path.forEach(item => {
@@ -223,7 +258,6 @@ export default {
       })
 
       return lnglats
-      // return new myJcMap.AMap.Bounds([lnglats.lng.min * minRund, lnglats.lat.min * minRund], [lnglats.lng.max * maxRund, lnglats.lat.max * maxRund])
     },
     clearMapSign() {
       let complete = false //防止map complete事件触发多次
