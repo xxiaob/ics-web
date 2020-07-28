@@ -27,7 +27,8 @@
               <el-button type="text" size="mini" icon="el-icon-edit-outline" @click="manage(scope.row)" v-if="filter.selectType===TASK_SELECT_TYPES.DEAFT||filter.selectType===TASK_SELECT_TYPES.ISSUED" title="编辑"></el-button>
               <el-button type="text" size="mini" icon="el-icon-refresh-right" @click="handle(scope.row,true)" title="处理" v-if="filter.selectType===TASK_SELECT_TYPES.PENDING"></el-button>
               <el-button type="text" size="mini" icon="el-icon-arrow-down" @click="startTask(scope.row)" title="下发" v-if="filter.selectType===TASK_SELECT_TYPES.DEAFT"></el-button>
-              <el-button type="text" size="mini" icon="el-icon-delete" @click="del(scope.row)" title="删除" v-if="filter.selectType!==TASK_SELECT_TYPES.PENDING"></el-button>
+              <el-button type="text" size="mini" icon="el-icon-delete" @click="del(scope.row)" title="删除" v-if="filter.selectType===TASK_SELECT_TYPES.DEAFT"></el-button>
+              <el-button type="text" size="mini" icon="el-icon-finished" @click="del(scope.row,true)" title="结束任务" v-if="filter.selectType===TASK_SELECT_TYPES.ISSUED"></el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -207,8 +208,8 @@ export default {
       this.filter = filter
       this.currentChange(1)
     },
-    del(row) {
-      this.$confirm('确认删除该任务', '提示', { type: 'warning' }).then(() => {
+    del(row, finished = false) {
+      this.$confirm(finished ? '确认结束该任务' : '确认删除该任务', '提示', { type: 'warning' }).then(() => {
         this.remove(row.businessKey)
       }).catch(() => {})
     },

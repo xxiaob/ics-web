@@ -89,7 +89,12 @@ export default {
         formatter: '{a} <br/>{b} : {c} ({d}%)'
       },
       legend: {
+        pageIconColor: '#112adf',
+        pageIconInactiveColor: '#0f89d2',
         type: 'scroll',
+        pageTextStyle: {
+          color: 'rgb(139,193,252)'
+        },
         orient: 'vertical',
         right: 50,
         top: 20,

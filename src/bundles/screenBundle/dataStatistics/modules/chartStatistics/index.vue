@@ -7,7 +7,7 @@
     </div>
     <jc-info class="jc-chart-comp" :cycle="activated" v-loading="loading" element-loading-background="rgba(32, 73, 154, 0.3)" :infoAndArea="infoAndArea"></jc-info>
     <jc-area class="jc-chart-comp" :cycle="activated" v-loading="loading" element-loading-background="rgba(32, 73, 154, 0.3)" :infoAndArea="infoAndArea"></jc-area>
-    <jc-type class="jc-chart-comp" :cycle="activated"></jc-type>
+    <jc-type class="jc-chart-comp" :date="date"></jc-type>
   </div>
 </template>
 
@@ -86,7 +86,7 @@ export default {
       if (!this.loading) {
         this.loading = true
         try {
-          const res = await getAccumulateInfo({ ...this.date, projectId: this.project.projectId, orgId: '35445539625500672' })
+          const res = await getAccumulateInfo({ ...this.date, projectId: this.project.projectId })
 
           this.processData(res)
           this.loading = false
