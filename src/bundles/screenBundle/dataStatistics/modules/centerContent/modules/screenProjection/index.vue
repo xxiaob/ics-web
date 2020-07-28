@@ -1,7 +1,7 @@
 <template>
   <transition name="bounce">
     <div class="jc-screen-space" v-show="show">
-      <jc-live v-show="showModule===1" :options="options"></jc-live>
+      <jc-live v-show="showModule===MESSAGE_DATA_TYPES.LIVE" :options="options"></jc-live>
       <jc-event v-show="showModule===2" :options="{id:'71279185972166656'}"></jc-event>
       <jc-question v-show="showModule===3" :options="{id:'73488564293206016'}"></jc-question>
       <jc-temporary-task v-show="showModule===4" :options="{id:'71636607261736960'}"></jc-temporary-task>
@@ -17,23 +17,38 @@ import JcEvent from './modules/event'
 import JcQuestion from './modules/question'
 import JcTemporaryTask from './modules/temporaryTask'
 import JcDailyTask from './modules/dailyTask'
+import { MESSAGE_DATA_TYPES } from '@/constant/Dictionaries'
+
 export default {
   name: 'ScreenDataCenterContentScreenProjection',
   components: { JcLive, JcEvent, JcQuestion, JcDailyTask, JcTemporaryTask },
   data() {
     return {
+      MESSAGE_DATA_TYPES,
       show: false,
       showModule: 1,
       options: {}
     }
   },
   created() {
-    setTimeout(()=>{
-      this.show = true
-    }, 0)
+    // setTimeout(()=>{
+    //   this.show = true
+    // }, 0)
     // setTimeout(()=>{
     //   this.show = false
     // }, 4000)
+    this.$EventBus.$on('data-statistics-screen-projection', data=>{
+      console.log('投屏消息', data)
+      if (data.type === MESSAGE_DATA_TYPES.CLOSR) {
+        this.show = false
+        this.showModule = null
+        this.options = null
+      } else {
+        this.show = true
+        this.showModule = data.type
+        this.options = data.data
+      }
+    })
   },
   methods: {
     test() {

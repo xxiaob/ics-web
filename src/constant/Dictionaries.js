@@ -216,5 +216,6 @@ export const MESSAGE_DATA_TYPES = new JcEnum([
   { key: 'QUESTION', value: 'question', label: '问题' },
   { key: 'EVENT', value: 'event', label: '事件' },
   { key: 'TEMPORARY', value: 'temporary', label: '临时任务' },
+  { key: 'LIVE', value: 'live', label: '音视频' },
   { key: 'CLOSR', value: 'close', label: '关闭投屏' }
 ])

@@ -41,6 +41,23 @@ export default {
       ]
     }
   },
+  watch: {
+    options: {
+      immediate: true,
+      deep: true,
+      handler(newValue) {
+        console.log('newValue', newValue)
+        if (newValue.channelId) {
+          this.inviteType = newValue.inviteType
+          this.users = newValue.users
+          this.join(newValue.channelId)
+          this.checkBigLive(newValue.users[0].userId)
+        } else {
+          this.close()
+        }
+      }
+    }
+  },
   mounted() {
     if (this.live) {
       console.log('直播客户端已经初始化')

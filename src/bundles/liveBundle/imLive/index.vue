@@ -8,7 +8,7 @@
           <span>{{title}}</span>
           <div class="right">
             <span class="exit" @click="exit" title="挂断">挂断</span>
-            <span title="投屏" v-show="inviteType!='2'&&inviteType!='3'">
+            <span title="投屏" v-show="inviteType!='2'&&inviteType!='3'" @click="sendScreen">
               <img src="./assets/bigScreen1.png" alt="" width="20">
               <img src="./assets/bigScreen2.png" alt="" width="20">
             </span>
@@ -68,6 +68,7 @@
 import { IM } from '@/live/im'
 import { Live } from '@/live/agora'
 import { VOICE_TYPE } from '@/config/JcVoiceAlertConfig'
+import { MESSAGE_DATA_TYPES } from '@/constant/Dictionaries'
 import { createNamespacedHelpers } from 'vuex'
 const { mapState } = createNamespacedHelpers('user')
 
@@ -84,6 +85,7 @@ export default {
   },
   data() {
     return {
+      isSendScreen: false,
       title: '视频',
       showNormal: false, //大弹框到中等弹框的过渡类
       bigLiveId: '', //大视频的id
@@ -161,6 +163,22 @@ export default {
     }
   },
   methods: {
+    sendScreen() {
+      const { inviteType, users } = this.params
+      const { userName, userId } = this.user
+      const copyUsers = JSON.parse(JSON.stringify(users))
+
+      copyUsers.unshift({ userId, userName })
+      const data = {
+        channelId: this.channelId,
+        inviteType,
+        users: copyUsers
+      }
+
+      // console.log('sendScreen', data)
+      this.isSendScreen = true
+      this.$EventBus.$emit('screen-message-channel', { type: MESSAGE_DATA_TYPES.LIVE, data })
+    },
     //切换小视频为大视频
     checkBigLive(val) {
       if (this.contentSize === '2') {
@@ -387,6 +405,9 @@ export default {
     },
     //离开频道
     async leaveChannel() {
+      if (this.isSendScreen) {
+        this.$EventBus.$emit('screen-message-channel', { type: MESSAGE_DATA_TYPES.CLOSR })
+      }
       if (this.timeout) {
         clearTimeout(this.timeout)
       }

@@ -100,7 +100,9 @@ export default {
     options: {
       deep: true,
       handler() {
-        this.getDetail()
+        if (this.options && this.options.id) {
+          this.getDetail()
+        }
       }
     }
   },
