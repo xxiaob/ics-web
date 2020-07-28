@@ -25,8 +25,8 @@ export function screenMapSocket(data) {
  * 指挥大屏和数据大屏通信
  * @param {*} data 参数
  * @param {String} data.token token
- * @param {String} data.orgId 组织id
- * @param {String} data.projectId 项目id
+ * @param {String} data.subOrgId 组织id
+ * @param {String} data.subProjectId 项目id
  * @param {String} data.type 类型标识
  * @returns {Object} JcSocket 对象
  */

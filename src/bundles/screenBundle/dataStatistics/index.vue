@@ -56,9 +56,10 @@ export default {
       this.$EventBus.$emit('data-statistics-init-success', this.project) //通知基础数据初始化完成
     },
     initScreenMessageChannelSocket(orgId) {
-      this.screenMessageChannelSocket = screenMessageChannelSocket({ orgId: orgId, projectId: this.project.projectId, type: SOCKET_MESSAGE_TYPES.DATA_STATISTICS })
+      this.screenMessageChannelSocket = screenMessageChannelSocket({ subOrgId: orgId, subProjectId: this.project.projectId, type: SOCKET_MESSAGE_TYPES.DATA_STATISTICS })
       this.screenMessageChannelSocket.connect((data) => {
         console.log('数据大屏，收到推送操作消息', data)
+        this.$EventBus.$emit('data-statistics-screen-projection', data)
       })
     },
     sendScreenMessageChannelSocket(message) {

@@ -71,8 +71,8 @@ export default {
       //如果消息通道不存在，则去连接
       if (!this.screenMessageChannelSocket) {
         this.screenMessageChannelSocket = screenMessageChannelSocket({
-          orgId: this.screenSocketOrg.orgId,
-          projectId: this.project.projectId,
+          subOrgId: this.screenSocketOrg.orgId,
+          subProjectId: this.project.projectId,
           type: SOCKET_MESSAGE_TYPES.COMMAND
         })
         this.screenMessageChannelSocket.connect((data) => { })
@@ -80,7 +80,7 @@ export default {
       }
       if (message) {
         //如果消息存在，则去发送消息
-        this.screenMessageChannelSocket.send({ sendType: SOCKET_MESSAGE_TYPES.DATA_STATISTICS, data: message })
+        this.screenMessageChannelSocket.send({ sendType: SOCKET_MESSAGE_TYPES.DATA_STATISTICS, data: JSON.stringify(message) })
       }
     }
   },
