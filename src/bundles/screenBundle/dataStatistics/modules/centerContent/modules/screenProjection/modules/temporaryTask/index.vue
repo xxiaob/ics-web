@@ -52,6 +52,12 @@ import JcMedia from '../../components/media'
 export default {
   name: 'ScreenDataCenterContentScreenProjectionTemporaryTask',
   components: { JcMedia },
+  props: {
+    options: {
+      type: Object,
+      default: ()=>{}
+    }
+  },
   data() {
     return {
       form: {},
@@ -90,17 +96,27 @@ export default {
       return (project[0] && project[0].label) || PROJECT_TYPES.toString(PROJECT_TYPES.NORMAL)
     }
   },
+  watch: {
+    options: {
+      deep: true,
+      handler() {
+        this.getDetail()
+      }
+    }
+  },
   async created() {
     await this.formatProjectList()
     // console.log('projectListArr', this.projectListArr)
-    this.getDetail('71636607261736960')
+    if (this.options && this.options.id) {
+      this.getDetail()
+    }
   },
   methods: {
-    async getDetail(id) {
+    async getDetail() {
       if (!this.loading) {
         this.loading = true
         try {
-          const res = await taskGet(id)
+          const res = await taskGet(this.options.id)
 
           this.form = { ...res, ...res.detailViewVO, ...res.taskDetailVO }
           this.loading = false

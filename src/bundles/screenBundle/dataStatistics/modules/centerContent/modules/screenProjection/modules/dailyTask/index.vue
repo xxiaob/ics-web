@@ -56,6 +56,12 @@ import moment from 'moment'
 import { PROJECT_TYPES, TASK_FREQUENCYS } from '@/constant/Dictionaries'
 export default {
   name: 'ScreenDataCenterContentScreenProjectioncDailyTask',
+  props: {
+    options: {
+      type: Object,
+      default: ()=>{}
+    }
+  },
   data() {
     return {
       form: {},
@@ -102,17 +108,27 @@ export default {
       }
     }
   },
+  watch: {
+    options: {
+      deep: true,
+      handler() {
+        this.getDetail()
+      }
+    }
+  },
   async created() {
     await this.formatProjectList()
     // console.log('projectListArr', this.projectListArr)
-    this.getDetail('70910841347637248')
+    if (this.options && this.options.id) {
+      this.getDetail()
+    }
   },
   methods: {
-    async getDetail(id) {
+    async getDetail() {
       if (!this.loading) {
         this.loading = true
         try {
-          const res = await taskGetDaily(id)
+          const res = await taskGetDaily(this.options.id)
 
           this.form = { ...res, ...res.detailViewVO, ...res.taskDetailVO }
           this.loading = false

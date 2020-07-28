@@ -2,7 +2,7 @@
   <div class="jc-content">
     <el-form label-width="100px" :model="form" size="mini">
       <el-form-item label="事件ID : ">
-        <span>{{form.eventNumber}}事件ID : </span>
+        <span>{{form.eventNumber}}</span>
       </el-form-item>
       <el-form-item label="上报人 : ">
         <span>{{form.reportUserName}}</span>
@@ -36,17 +36,33 @@ import JcMedia from '../../components/media'
 export default {
   name: 'ScreenDataCenterContentScreenProjectionEvent',
   components: { JcMedia },
+  props: {
+    options: {
+      type: Object,
+      default: ()=>{}
+    }
+  },
   data() {
     return {
       form: {}
     }
   },
+  watch: {
+    options: {
+      deep: true,
+      handler() {
+        this.getDetail()
+      }
+    }
+  },
   created() {
-    this.getDetail('71279185972166656')
+    if (this.options && this.options.id) {
+      this.getDetail()
+    }
   },
   methods: {
-    async getDetail(id) {
-      const res = await eventManageGet(id)
+    async getDetail() {
+      const res = await eventManageGet(this.options.id)
 
       this.form = { ...res }
     }
