@@ -1,6 +1,6 @@
 <template>
   <div class="jc-live-out">
-    <div class="jc-live">
+    <div class="jc-live data-statistics-scrollbar">
       <div class="big-box" :class="{audio:inviteType==='0'||inviteType==='4'}"></div>
       <div class="live-in">
         <div class="live" @click="checkBigLive(user.userId)" :class="{audio:inviteType==='0'||inviteType==='4','big-live':bigLiveId===user.userId}" v-for="user in users" :key="user.userId" :id="user.userId">

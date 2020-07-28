@@ -1,5 +1,5 @@
 <template>
-  <div class="jc-content">
+  <div class="jc-content data-statistics-scrollbar">
     <el-form label-width="100px" :model="form" size="mini">
       <el-form-item label="事件ID : ">
         <span>{{form.eventNumber}}</span>
