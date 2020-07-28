@@ -192,6 +192,7 @@ export default {
     uptStatus: 'task-service/userAttendanceCfg/uptStatus'
   },
   screen: {
+    messageChannel: 'message-service/icsServer/command',
     //大屏接口
     command: {
       getCommandScreenData: 'data-service/largeScreen/getCommandScreenData',
