@@ -68,8 +68,7 @@
   .jc-category {
     flex-wrap: wrap;
     justify-content: space-between;
-    height: 100%;
-    padding: 0 16px 16px;
+    padding: 6px 16px 16px;
 
     .jc-category-item {
       justify-content: center;
@@ -78,14 +77,14 @@
       height: 50%;
 
       .jc-category-title {
-        font-size: 14px;
+        font-size: 12px;
         letter-spacing: 1px;
         color: #11e7ff;
-        margin-right: 20px;
+        margin-right: 14px;
       }
 
       .jc-category-count {
-        font-size: 18px;
+        font-size: 16px;
         letter-spacing: 1px;
         color: #ffffff;
       }

@@ -14,6 +14,7 @@
           <!-- 遮罩 -->
           <div class="mark"></div>
         </div>
+
         <!-- 整体内容区域 -->
         <div class="jc-summary-content jc-flex-warp">
           <jc-summary class="jc-flex-con" />
@@ -58,7 +59,6 @@ export default {
         bottom: 0;
         left: 0;
         right: 0;
-        // background: rgba(0, 0, 0, 0.2);
         border: 2px solid #11e7ff;
         border-radius: 50%;
         animation: waves 3s linear infinite;
@@ -106,8 +106,6 @@ export default {
       padding-bottom: 26%;
       transform: translateY(-50%) translateZ(74px);
       z-index: 10;
-
-      // background: rgba(0, 0, 0, 0.3);
     }
   }
 }

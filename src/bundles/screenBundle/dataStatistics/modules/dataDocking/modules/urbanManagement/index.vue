@@ -1,7 +1,7 @@
 <template>
   <!--  数字城管  -->
   <abstract-area title="数字城管">
-    <div class="jc-category jc-flex-warp">
+    <div class="jc-category jc-flex-con jc-flex-warp">
       <div class="jc-category-item jc-flex-warp">
         <span class="jc-category-title">工单上报</span>
         <span class="jc-category-count">
@@ -47,8 +47,10 @@ export default {
 </script>
 <style lang="scss" scoped>
 .jc-category {
+  padding-top: 0;
   .jc-category-item {
-    background: url("./assets/citysummary.png") no-repeat center/100%;
+    align-items: center;
+    background: url("./assets/citysummary.png") no-repeat center bottom/100%;
     background-origin: content-box;
 
     &:nth-child(odd) {
@@ -56,10 +58,6 @@ export default {
     }
     &:nth-child(even) {
       padding-left: 16px;
-    }
-
-    span {
-      padding-bottom: 24px;
     }
   }
 }

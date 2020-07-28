@@ -80,7 +80,7 @@ export default {
   components: { JcAbstractArea, countTo, JcCharts },
   data() {
     return {
-      current: 100, // 当前事件数
+      current: 90, // 当前事件数
       total: 100// 总事件数
     }
   },
@@ -93,14 +93,11 @@ export default {
 
     if ((eventPrecent * 100) < 30) {
       color = 'rgba(21,229,253,0.4)'
-    }
-    if ((eventPrecent * 100) < 60) {
+    } else if ((eventPrecent * 100) < 60) {
       color = 'rgba(21,229,253,0.6)'
-    }
-    if ((eventPrecent * 100) < 80) {
+    } else if ((eventPrecent * 100) < 80) {
       color = 'rgba(21,229,253,0.8)'
     }
-
 
     const { PI, cos, sin } = Math
 
@@ -210,6 +207,7 @@ export default {
 
 <style lang="scss" scoped>
 .smart-analy {
+  font-size: 12px;
   .smart-analy-content {
     padding: 16px;
 

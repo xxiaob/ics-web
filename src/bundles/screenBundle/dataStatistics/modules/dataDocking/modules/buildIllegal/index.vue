@@ -48,7 +48,7 @@ export default {
   position: relative;
 
   .jc-category-item {
-    background: url("./assets/building-bg.png") no-repeat center/100%;
+    background: url("./assets/building-bg.png") no-repeat center/100% 100%;
     background-origin: content-box;
 
     &:nth-child(odd) {
@@ -56,6 +56,12 @@ export default {
     }
     &:nth-child(even) {
       padding-left: 5px;
+    }
+    &:nth-child(n + 3) {
+      padding-top: 6px;
+    }
+    &:nth-child(-n + 2) {
+      padding-bottom: 6px;
     }
   }
 
@@ -67,9 +73,9 @@ export default {
     left: 0;
     right: 0;
     margin: auto;
-    width: 88px;
-    height: 88px;
-    background: url("./assets/enforcement.png") no-repeat center;
+    padding-bottom: 16px;
+    background: url("./assets/enforcement.png") no-repeat center/auto 60%;
+    background-origin: content-box;
   }
 }
 </style>

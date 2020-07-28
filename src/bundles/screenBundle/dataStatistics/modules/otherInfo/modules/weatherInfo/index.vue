@@ -5,14 +5,14 @@
         <!-- 当前天气信息 -->
         <div class="jc-current-weather jc-flex-con-2 jc-flex-warp">
           <div class="jc-weather-img-wrap jc-flex-con jc-flex-warp">
-            <img :src="weather.source" alt="当前天气">
+            <img :src="weather.source" height="60" alt="天气">
           </div>
           <div class="jc-current-weather-content jc-flex-con-3 jc-flex-warp jc-flex-vertical">
 
             <div class="jc-weather-humidity jc-flex-con jc-flex-warp">
               <div class="weath-humidity-left">
-                <span>东北风3级</span> |
-                <span>湿度87%</span>
+                <span>{{weather.dayWindDir}}风{{weather.dayWindPower}}级</span> |
+                <span>湿度{{weather.humidity}}%</span>
               </div>
               <div class="weath-humidity-right">
                 <span>{{weather.date}}</span>
@@ -21,7 +21,7 @@
 
             <div class="jc-weather-temperature jc-flex-con-2 jc-flex-warp">
               <div class="weather-temperature-left">
-                <span>27℃</span>
+                <span>{{weather.temperature}}℃</span>
               </div>
               <div class="weather-temperature-right">
                 <span>周{{weather.currentWeek}}</span>
@@ -32,12 +32,12 @@
         </div>
 
         <!-- 未来天气信息 -->
-        <div class="jc-future-weather jc-flex-con-2 jc-flex-warp">
+        <div class="jc-future-weather jc-flex-warp">
 
           <div class="jc-future-weather-info jc-flex-con jc-flex-warp" v-for="(item) in futureWeather" :key="item.data">
 
-            <div class="future-weather-img-wrap jc-flex-warp jc-flex-con">
-              <img :src="item.source" width='36' alt="">
+            <div class="future-weather-img-wrap">
+              <img :src="item.source" width='100%' alt="">
             </div>
             <div class="future-weather-content jc-flex-con-2 jc-flex-vertical">
               <div class="future-top-info">
@@ -80,20 +80,16 @@ export default {
     async getWeather() {
       const This = this
 
-      console.log('weather info ', getUser())
-
       let { orgId } = await getUser() // 获取用户orgId
 
-      console.log(orgId)
       let { areaCode } = await getAreaCodeByOrgId(orgId) // 通过用户orgId获取城市areaCode
-
-      console.log(areaCode)
 
       let myWeather = new JcWeather() // 实例化获取天气的类
 
       this.weather = await myWeather.getWeather(areaCode) // 当日天气
       let { forecasts } = await myWeather.getForecastWeather(areaCode) // 四天天气
 
+      //  重新整理数据
       forecasts = forecasts.map(item => ({
         ...item,
         currentWeek: This.getWeek(item.week)
@@ -102,9 +98,6 @@ export default {
       this.weather = Object.assign({}, this.weather, forecasts[0])
 
       this.futureWeather = forecasts.filter((item, index) => !!index) // 未来三天天气
-
-      console.log(this.weather)
-      console.log(this.futureWeather)
     },
     getWeek(week) {
       switch (week) {
@@ -148,6 +141,7 @@ export default {
     .jc-weather-humidity {
       justify-content: space-between;
       align-items: center;
+      font-size: 12px;
 
       span {
         padding: 0 6px;
@@ -159,19 +153,21 @@ export default {
       align-items: flex-start;
 
       .weather-temperature-left {
-        font-size: 46px;
+        font-size: 36px;
+        font-weight: bold;
       }
       .weather-temperature-right {
         padding-right: 6px;
-        font-size: 16px;
+        font-size: 14px;
       }
     }
   }
 }
 
 .jc-future-weather {
+  height: 56px;
   background-color: rgba(4, 115, 192, 0.14);
-  padding: 14px 0;
+  padding: 10px 0;
 
   .jc-future-weather-info {
     position: relative;
@@ -189,9 +185,8 @@ export default {
     }
 
     .future-weather-img-wrap {
-      justify-content: flex-end;
-      align-items: center;
-      padding-right: 10px;
+      width: 30px;
+      margin: 4px 12px;
     }
     .future-weather-content {
       color: #8bc1fc;

@@ -1,9 +1,15 @@
 <template>
-  <div class="jc-screen-data-docking jc-flex-warp jc-flex-vertical">
+  <div class="jc-screen-data-docking data-statistics-border jc-flex-warp jc-flex-vertical">
+    <!-- 案件概要 -->
     <jc-case-summary class="jc-flex-con-3"></jc-case-summary>
 
+    <!-- 数字城管 -->
     <jc-urban-management class="dock-comp jc-flex-con-2"></jc-urban-management>
+
+    <!-- 建筑违建 -->
     <jc-build-illegal class="dock-comp jc-flex-con-2"></jc-build-illegal>
+
+    <!-- 智慧环卫 -->
     <jc-wisdom-sanitation class="dock-comp jc-flex-con-2"></jc-wisdom-sanitation>
 
   </div>
@@ -29,9 +35,7 @@ export default {
 </script>
 <style lang="scss" scoped>
 .jc-screen-data-docking {
-  border: 1px solid rgb(32, 73, 154);
-  box-shadow: inset 0 0 10px 0 rgb(32, 73, 154);
-
+  overflow: hidden;
   .dock-comp {
     border-top: 1px solid rgb(32, 73, 154);
   }
