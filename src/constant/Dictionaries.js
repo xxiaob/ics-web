@@ -199,3 +199,22 @@ export const VIDEO_INVITE_TYPES = new JcEnum([
   { key: 'DOUBLEAUDIO', value: '4', label: '双人语音' },
   { key: 'DOUBLEVIDEO', value: '5', label: '双人视频' }
 ])
+
+/**
+ * 推送类型 字典
+ */
+export const SOCKET_MESSAGE_TYPES = new JcEnum([
+  { key: 'COMMAND', value: 'command', label: '指挥大屏' },
+  { key: 'DATA_STATISTICS', value: 'datastatistics', label: '数据大屏' }
+])
+
+/**
+ * 推送数据 类型字典
+ */
+export const MESSAGE_DATA_TYPES = new JcEnum([
+  { key: 'TASK', value: 'task', label: '日常任务' },
+  { key: 'QUESTION', value: 'question', label: '问题' },
+  { key: 'EVENT', value: 'event', label: '事件' },
+  { key: 'TEMPORARY', value: 'temporary', label: '临时任务' },
+  { key: 'CLOSR', value: 'close', label: '关闭投屏' }
+])
