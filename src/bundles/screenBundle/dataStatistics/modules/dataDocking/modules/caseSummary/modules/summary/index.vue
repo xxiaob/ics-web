@@ -3,7 +3,7 @@
     <div class="jc-summary-round-wrap jc-flex-con" ref="summaryWrap">
 
       <!-- 旋转小球 -->
-      <div class="jc-summary-round" :class="'summary-round-'+ location[0]">
+      <div class="jc-summary-round summary-round-1">
         <div class="jc-summary-round-content jc-flex-warp jc-flex-vertical">
           <div class="jc-summary-count jc-flex-con-4 jc-flex-warp">
             <span>39件</span>
@@ -14,7 +14,7 @@
         </div>
       </div>
 
-      <div class="jc-summary-round" :class="'summary-round-'+ location[1]">
+      <div class="jc-summary-round summary-round-2">
         <div class="jc-summary-round-content jc-flex-warp jc-flex-vertical">
           <div class="jc-summary-count jc-flex-con-4 jc-flex-warp">
             <span>41%</span>
@@ -24,7 +24,7 @@
           </div>
         </div>
       </div>
-      <div class="jc-summary-round" :class="'summary-round-'+ location[2]">
+      <div class="jc-summary-round summary-round-3">
         <div class="jc-summary-round-content jc-flex-warp jc-flex-vertical">
           <div class="jc-summary-count jc-flex-con-4 jc-flex-warp">
             <span>39件</span>
@@ -34,7 +34,7 @@
           </div>
         </div>
       </div>
-      <div class="jc-summary-round" :class="'summary-round-'+ location[3]">
+      <div class="jc-summary-round summary-round-4">
         <div class="jc-summary-round-content jc-flex-warp jc-flex-vertical">
           <div class="jc-summary-count jc-flex-con-4 jc-flex-warp">
             <span>39件</span>
@@ -44,7 +44,7 @@
           </div>
         </div>
       </div>
-      <div class="jc-summary-round" :class="'summary-round-'+ location[4]">
+      <div class="jc-summary-round summary-round-5">
         <div class="jc-summary-round-content jc-flex-warp jc-flex-vertical">
           <div class="jc-summary-count jc-flex-con-4 jc-flex-warp">
             <span>39件</span>
@@ -54,7 +54,7 @@
           </div>
         </div>
       </div>
-      <div class="jc-summary-round" :class="'summary-round-'+ location[5]">
+      <div class="jc-summary-round summary-round-6">
         <div class="jc-summary-round-content jc-flex-warp jc-flex-vertical">
           <div class="jc-summary-count jc-flex-con-4 jc-flex-warp">
             <span>39件</span>
@@ -64,7 +64,7 @@
           </div>
         </div>
       </div>
-      <div class="jc-summary-round" :class="'summary-round-'+ location[6]">
+      <div class="jc-summary-round summary-round-7">
         <div class="jc-summary-round-content jc-flex-warp jc-flex-vertical">
           <div class="jc-summary-count jc-flex-con-4 jc-flex-warp">
             <span>39件</span>
@@ -80,7 +80,7 @@
     <div class="jc-summary-center-content jc-flex-warp jc-flex-vertical">
       <div class="jc-summary-center-count jc-flex-con-2 jc-flex-warp">
         <span>
-          <span class="jc-center-count">99</span> 件
+          <count-to class="jc-center-count" :startVal="0" :endVal="99" /> 件
         </span>
       </div>
       <div class="jc-summary-center-title jc-flex-con-3 jc-flex-warp">
@@ -91,11 +91,13 @@
 </template>
 
 <script>
+import countTo from 'vue-count-to'
 export default {
   name: 'ScreenDataStatisticsDataDockingCaseSummarySummary',
+  components: { countTo },
   data() {
     return {
-      location: [1, 2, 3, 4, 5, 6, 7]
+
     }
   },
   mounted() {
@@ -112,10 +114,6 @@ export default {
     resize() {
       const width = this.$refs.summaryWrap.clientWidth - 100
       const height = this.$refs.summaryWrap.clientHeight - 26
-
-      console.log(this.$refs.summaryWrap.clientWidth)
-      console.log(this.$refs.summaryWrap.innerWidth)
-
 
       let count = 40
 
@@ -260,12 +258,8 @@ export default {
     .jc-summary-center-title {
       justify-content: center;
       align-items: flex-start;
-
-      span {
-        background-image: linear-gradient(bottom, #95e4f5 0%, #ffffff 53%);
-        background-clip: text;
-        -webkit-text-fill-color: transparent;
-      }
+      font-weight: bold;
+      color: #ffffff;
     }
   }
 }
