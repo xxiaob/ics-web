@@ -80,7 +80,7 @@
     <div class="jc-summary-center-content jc-flex-warp jc-flex-vertical">
       <div class="jc-summary-center-count jc-flex-con-2 jc-flex-warp">
         <span>
-          <count-to class="jc-center-count" :startVal="0" :endVal="99" /> 件
+          <count-to class="jc-center-count" :startVal="stratVal" :endVal="endVal" :duration="5000" /> 件
         </span>
       </div>
       <div class="jc-summary-center-title jc-flex-con-3 jc-flex-warp">
@@ -97,7 +97,8 @@ export default {
   components: { countTo },
   data() {
     return {
-
+      startVal: 0,
+      endVal: 0
     }
   },
   mounted() {
@@ -136,7 +137,7 @@ export default {
         keyframeVal += `
           ${keyframe}%{
             transform: translateX(${offsetX}px) translateY(${offsetY}px);
-            z-index: ${100 - keyframe};
+            z-index: ${50 - keyframe};
           }
         `
       }
@@ -145,9 +146,16 @@ export default {
 
       oStyle.innerHTML = keyframeVal
 
-      document.head.appendChild(oStyle)
+      // 延迟动画
+      setTimeout(() =>{
+        this.$refs.summaryWrap.style.opacity = '1' // 动画元素显示
 
-      this.$forceUpdate()
+        document.head.appendChild(oStyle) // css动画样式添加到head中
+
+        this.$forceUpdate() // 属性
+
+        this.endVal = 99 // 改变显示数字
+      }, 5000)
     }
 
 
@@ -168,11 +176,11 @@ export default {
     left: 10%;
     right: 10%;
     bottom: -24%;
-    z-index: 99;
     background: url("./assets/summary-center.png") no-repeat center top/30% 66%;
   }
 
   .jc-summary-round-wrap {
+    opacity: 0;
     position: absolute;
     display: flex;
     justify-content: center;
@@ -187,30 +195,30 @@ export default {
       padding-top: 14%;
       border-radius: 50%;
       background: url("./assets/summary-round.png") no-repeat center/100%;
-      animation: jc-summary-move 7s linear infinite backwards;
+      animation: jc-summary-move 14s linear infinite backwards;
 
       &.summary-round-2 {
-        animation-delay: 1s;
-      }
-
-      &.summary-round-3 {
         animation-delay: 2s;
       }
 
-      &.summary-round-4 {
-        animation-delay: 3s;
-      }
-
-      &.summary-round-5 {
+      &.summary-round-3 {
         animation-delay: 4s;
       }
 
+      &.summary-round-4 {
+        animation-delay: 6s;
+      }
+
+      &.summary-round-5 {
+        animation-delay: 8s;
+      }
+
       &.summary-round-6 {
-        animation-delay: 5s;
+        animation-delay: 10s;
       }
 
       &.summary-round-7 {
-        animation-delay: 6s;
+        animation-delay: 12s;
       }
 
       .jc-summary-round-content {

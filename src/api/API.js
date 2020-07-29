@@ -206,7 +206,9 @@ export default {
     },
     dataStatistics: {
       accumulateInfo: 'data-service/largeScreen/accumulateInfo',
-      transactionType: 'data-service/largeScreen/transactionType'
+      transactionType: 'data-service/largeScreen/transactionType',
+      getAreaService: 'data-service/largeScreen/getAreaServiceStatistics', // 数据大屏区域出勤
+      getOverallAttendance: 'data-service/largeScreen/getOverallAttendanceStatistics' // 数据大屏总体出勤
     }
   },
   domainLogo: {
