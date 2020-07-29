@@ -87,9 +87,10 @@
     <div v-show="activate==='3'" class="jc-view-content jc-event" v-loading="loading" element-loading-background="rgba(0, 0, 0, 0)">
       <jc-event-list :taskId="form.businessKey" :small="true"></jc-event-list>
     </div>
-    <div class="jc-footer" v-if="form.auth">
-      <el-button @click="handleTask(true)" size="small" type="primary">流转任务</el-button>
-      <el-button @click="handleTask(false)" size="small">结束任务</el-button>
+    <div class="jc-footer">
+      <el-button v-if="form.auth" @click="handleTask(true)" size="small" type="primary">流转任务</el-button>
+      <el-button v-if="form.auth" @click="handleTask(false)" size="small">结束任务</el-button>
+      <el-button @click="sendScreen" type="primary" size="small">{{isSendScreen?'关闭投屏':'投屏'}}</el-button>
     </div>
 
     <el-dialog :title="taskForm.ifUpload?'流转任务':'结束任务'" :visible.sync="dialogVisibleHandle" :close-on-click-modal="false" width="600px" append-to-body>
@@ -121,7 +122,7 @@ import { taskGet, taskFinish, getTaskAuth } from '@/api/task'
 import { eventManageSelectList } from '@/api/eventManage'
 import { projectsList } from '@/api/projects'
 import { organizationList } from '@/api/organization'
-import { PROJECT_TYPES, TASK_SOURCES, TASK_PEOPLE_TYPES } from '@/constant/Dictionaries'
+import { PROJECT_TYPES, TASK_SOURCES, TASK_PEOPLE_TYPES, MESSAGE_DATA_TYPES } from '@/constant/Dictionaries'
 import { formatDate } from '@/libs/util'
 import { NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
 import moment from 'moment'
@@ -167,7 +168,8 @@ export default {
         orgIds: [],
         userIds: [],
         eventIds: []
-      }
+      },
+      isSendScreen: false
     }
   },
   watch: {
@@ -248,6 +250,17 @@ export default {
     }
   },
   methods: {
+    sendScreen() {
+      if (this.isSendScreen) {
+        this.isSendScreen = false
+        this.$EventBus.$emit('screen-message-channel', { type: MESSAGE_DATA_TYPES.CLOSR, closeType: MESSAGE_DATA_TYPES.TEMPORARY })
+        this.$message.success('关闭投屏成功')
+      } else {
+        this.isSendScreen = true
+        this.$EventBus.$emit('screen-message-channel', { type: MESSAGE_DATA_TYPES.TEMPORARY, data: { id: this.info.id } })
+        this.$message.success('投屏成功')
+      }
+    },
     changeActivate(val) {
       this.activate = val
     },

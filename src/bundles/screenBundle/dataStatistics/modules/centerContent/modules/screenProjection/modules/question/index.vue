@@ -30,6 +30,8 @@
 <script>
 import { questionGet, questionTypeList } from '@/api/question'
 import JcMedia from '../../components/media'
+import { MESSAGE_DATA_TYPES } from '@/constant/Dictionaries'
+
 export default {
   name: 'ScreenDataCenterContentScreenProjectionQuestion',
   components: { JcMedia },
@@ -50,7 +52,7 @@ export default {
     options: {
       deep: true,
       handler() {
-        if (this.options && this.options.id) {
+        if (this.options && this.options.id && this.options.type === MESSAGE_DATA_TYPES.QUESTION) {
           this.getDetail()
         }
       }
@@ -58,7 +60,7 @@ export default {
   },
   async created() {
     this.types = await questionTypeList() || []
-    if (this.options && this.options.id) {
+    if (this.options && this.options.id && this.options.type === MESSAGE_DATA_TYPES.QUESTION) {
       this.getDetail()
     }
   },

@@ -178,6 +178,7 @@ export default {
       // console.log('sendScreen', data)
       this.isSendScreen = true
       this.$EventBus.$emit('screen-message-channel', { type: MESSAGE_DATA_TYPES.LIVE, data })
+      this.$message.success('投屏成功')
     },
     //切换小视频为大视频
     checkBigLive(val) {
