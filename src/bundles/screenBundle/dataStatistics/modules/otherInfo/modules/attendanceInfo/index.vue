@@ -15,7 +15,7 @@
               </div>
               <div class="overall-count-wrap jc-flex-con jc-flex-warp">
                 <span>
-                  <count-to class="overall-count" :startVal="0" :endVal="overallAttendance.onGuardUserCount" />人
+                  <count-to class="overall-count" :startVal="0" :endVal="+overallAttendance.onGuardUserCount || 0" />人
                 </span>
               </div>
             </div>
@@ -31,7 +31,7 @@
               </div>
               <div class="overall-count-wrap jc-flex-con jc-flex-warp">
                 <span>
-                  <count-to class="overall-count" :startVal="0" :endVal="overallAttendance.journey" />KM
+                  <count-to class="overall-count" :startVal="0" :endVal="+overallAttendance.journey || 0" />KM
                 </span>
               </div>
             </div>
@@ -47,7 +47,7 @@
               </div>
               <div class="overall-count-wrap jc-flex-con jc-flex-warp">
                 <span>
-                  <count-to class="overall-count" :startVal="0" :endVal="overallAttendance.inoutCount" />次
+                  <count-to class="overall-count" :startVal="0" :endVal="+overallAttendance.inoutCount || 0" />次
                 </span>
               </div>
             </div>
@@ -104,23 +104,29 @@ export default {
   data() {
     return {
       arearService: [],
-      overallAttendance: {}
+      overallAttendance: {},
+      project: {}
     }
   },
   created() {
-    this.getAreaServiceData()
+    // 获取projectId所在对象
+    this.$EventBus.$on('data-statistics-init-success', val=>{
+      console.log('chartStatistics 接收信息成功', val)
+      this.project = val
+      this.getAreaServiceData()
+    })
   },
   methods: {
     async getAreaServiceData() {
       let { orgId } = await getUser() // 获取用户orgId
 
-      // let { areaCode } = await getAreaCodeByOrgId(orgId) // 通过用户orgId获取城市areaCode
+      let { projectId } = this.project // 获取projectId
 
-      console.log(orgId)
+      this.arearService = await getAreaService({ orgId, projectId }) // 区域出勤数据
 
-      this.arearService = await getAreaService({ orgId }) // 区域出勤数据
+      let overallAttendance = await getOverallAttendance({ orgId, projectId })// 总体出勤数据Array
 
-      let overallAttendance = await getOverallAttendance({ orgId })// 总体出勤数据Array
+      console.log(overallAttendance)
 
       this.overallAttendance = overallAttendance[0] // 取出总体数据 Object
     }

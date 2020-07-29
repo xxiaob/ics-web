@@ -43,3 +43,12 @@ export function getOverallAttendance(data) {
     params: data
   })
 }
+
+/**
+ * AI智能分析
+ * @param {object} data
+ * @returns {Object} axios 对象
+ */
+export function getEventGroupByEventType(data) {
+  return axios.post(API.screen.dataStatistics.getEventGroupByEventType, data)
+}
