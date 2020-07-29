@@ -101,7 +101,7 @@ export default {
     padding: 10px 10px 0;
 
     .jc-sanitation-img {
-      width: 46px;
+      width: 40px;
     }
 
     .jc-sanitation-content {
