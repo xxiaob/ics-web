@@ -58,7 +58,7 @@
       <el-button v-if="form.auth" @click="toSuperior" :loading="loading" type="primary" size="small">反馈至上级</el-button>
       <el-button v-if="form.auth" @click="generateTask" :loading="loading" type="primary" size="small">生成任务</el-button>
       <el-button v-if="form.auth" @click="closeQuestion" :loading="loading" size="small">关闭问题</el-button>
-      <el-button @click="sendScreen" type="primary" size="small">{{isSendScreen?'关闭投屏':'投屏'}}</el-button>
+      <el-button style="margin-top: 10px;" @click="sendScreen" type="primary" size="small">{{isSendScreen?'关闭投屏':'投屏'}}</el-button>
     </div>
 
     <task-manage :question="question" :visible.sync="TaskManageShow" @save-success="generateTaskSuccess"></task-manage>

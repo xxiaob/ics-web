@@ -61,14 +61,16 @@ export default {
       deep: true,
       handler(newValue) {
         this.handleUrls(newValue)
-        this.mySwiper = new Swiper('.swiper-container', {
-          autoplay: {
-            delay: 1000,
-            stopOnLastSlide: false,
-            disableOnInteraction: true
-          },
-          slidesPerView: 3,
-          spaceBetween: 10
+        this.$nextTick(()=>{
+          this.mySwiper = new Swiper('.swiper-container', {
+            autoplay: {
+              delay: 1000,
+              stopOnLastSlide: false,
+              disableOnInteraction: true
+            },
+            slidesPerView: 3,
+            spaceBetween: 10
+          })
         })
       }
     }
