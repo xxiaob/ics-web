@@ -406,7 +406,8 @@ export default {
     //离开频道
     async leaveChannel() {
       if (this.isSendScreen) {
-        this.$EventBus.$emit('screen-message-channel', { type: MESSAGE_DATA_TYPES.CLOSR })
+        this.$EventBus.$emit('screen-message-channel', { type: MESSAGE_DATA_TYPES.CLOSR, closeType: MESSAGE_DATA_TYPES.LIVE })
+        this.isSendScreen = false
       }
       if (this.timeout) {
         clearTimeout(this.timeout)
