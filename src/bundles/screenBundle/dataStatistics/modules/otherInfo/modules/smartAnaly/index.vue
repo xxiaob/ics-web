@@ -7,8 +7,8 @@
 
           <div class="smart-analy-item jc-flex-con jc-flex-warp" v-for="(item,index) in eventGroupLeftData" :key="index" @click="currentEventGroup(item,index)">
             <span class="smart-analy-title">{{ item.typeName && item.typeName}}</span>
-            <span>
-              <count-to :startVal="0" :endVal="item.typeCount || 0" /> 件
+            <span class="smart-analy-count jc-flex-con">
+              <count-to :startVal="0" :endVal="item.typeCount || 0" />件
             </span>
           </div>
 
@@ -26,8 +26,8 @@
         <div class="smart-analy-right jc-flex-con-2 jc-flex-warp jc-flex-vertical">
           <div class="smart-analy-item jc-flex-con jc-flex-warp" v-for="(item,index) in eventGroupRightData" :key="index" @click="currentEventGroup(item,index+4)">
             <span class="smart-analy-title">{{ item.typeName && item.typeName}}</span>
-            <span>
-              <count-to :startVal="0" :endVal="item.typeCount || 0" /> 件
+            <span class="smart-analy-count jc-flex-con">
+              <count-to :startVal="0" :endVal="item.typeCount || 0" />件
             </span>
           </div>
         </div>
@@ -62,7 +62,6 @@ export default {
   created() {
     // 获取projectId所在对象
     this.$EventBus.$on('data-statistics-init-success', val=>{
-      console.log('chartStatistics 接收信息成功', val)
       this.project = val
       this.getEventGroupByEventTypeData() // AI分析
     })
@@ -113,20 +112,25 @@ export default {
     smartAnalySetInterval() {
       let { timerId } = this
 
-      this.current = this.eventGroupData.eventInfoList[timerId] && this.eventGroupData.eventInfoList[timerId].typeCount
-      timerId++
-      this.initEchart()
-
-
-      // 开启定时器
-      this.smartTimerID = setInterval(() => {
+      // 执行echarts动画函数
+      let performEcharts = () => {
         this.current = this.eventGroupData.eventInfoList[timerId] && this.eventGroupData.eventInfoList[timerId].typeCount
         timerId++
-        this.timerId = timerId = timerId > 7 ? 0 : timerId // 判断边界
+        this.initEchart()
+      }
 
-        this.initEchart() // 开始echarts动画
+      // 初始echarts动画一次
+      performEcharts()
+
+
+      // 开启定时器循环
+      this.smartTimerID = setInterval(() => {
+        performEcharts()
+
+        this.timerId = timerId = timerId > 7 ? 0 : timerId // 判断边界
       }, 3000)
     },
+
 
     // 点击事件函数
     currentEventGroup(current, index) {
@@ -309,7 +313,15 @@ export default {
       }
 
       & .smart-analy-title {
-        margin-right: 10px;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        padding: 0 10px;
+        width: 80px;
+      }
+      & .smart-analy-count {
+        text-align: right;
+        padding-right: 6px;
       }
     }
   }
