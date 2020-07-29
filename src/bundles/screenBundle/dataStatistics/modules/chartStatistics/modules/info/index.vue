@@ -120,7 +120,7 @@ const series1pictorialBar = {
   symbolSize: ['100%', '10'],
   symbolPosition: 'end',
   data: [],
-  z: 3
+  z: 4
 }
 
 const series1pictorialBar2 = {
@@ -188,6 +188,129 @@ const series3 = {
   data: []
 }
 
+const pictorialBarLeft1 = {
+  tooltip: {
+    show: false
+  },
+  type: 'pictorialBar',
+  itemStyle: {
+    normal: {
+      color: new echarts.graphic.LinearGradient(0, 0, 1, 0,
+        [
+          { offset: 0, color: '#16f1f6' },
+          { offset: 1, color: '#00f8b3' }
+        ]
+      )
+    }
+  },
+  symbol: 'circle',
+  symbolSize: ['28%', '5'],
+  symbolOffset: ['-130%', 0],
+  symbolPosition: 'end',
+  data: [],
+  z: 4
+}
+
+const pictorialBarLeft2 = {
+  tooltip: {
+    show: false
+  },
+  type: 'pictorialBar',
+  itemStyle: {
+    normal: {
+      color: '#13acb7'
+    }
+  },
+  symbol: 'circle',
+  symbolSize: ['28%', '5'],
+  symbolOffset: ['-130%', 0],
+  symbolPosition: 'start',
+  data: [],
+  z: 3
+}
+
+const pictorialBarMiddle1 = {
+  tooltip: {
+    show: false
+  },
+  type: 'pictorialBar',
+  itemStyle: {
+    normal: {
+      color: new echarts.graphic.LinearGradient(0, 0, 1, 0,
+        [
+          { offset: 0, color: '#1ca2ff' },
+          { offset: 1, color: '#00e9fc' }
+        ]
+      )
+    }
+  },
+  symbol: 'circle',
+  symbolSize: ['28%', '5'],
+  // symbolOffset: ['-130%', 0],
+  symbolPosition: 'end',
+  data: [],
+  z: 4
+}
+
+const pictorialBarMiddle2 = {
+  tooltip: {
+    show: false
+  },
+  type: 'pictorialBar',
+  itemStyle: {
+    normal: {
+      color: '#007aff'
+    }
+  },
+  symbol: 'circle',
+  symbolSize: ['28%', '5'],
+  // symbolOffset: ['-130%', 0],
+  symbolPosition: 'start',
+  data: [],
+  z: 3
+}
+
+const pictorialBarRight1 = {
+  tooltip: {
+    show: false
+  },
+  type: 'pictorialBar',
+  itemStyle: {
+    normal: {
+      color: new echarts.graphic.LinearGradient(0, 0, 1, 0,
+        [
+          { offset: 0, color: '#ced545' },
+          { offset: 1, color: '#caa12d' }
+        ]
+      )
+    }
+  },
+  symbol: 'circle',
+  symbolSize: ['28%', '5'],
+  symbolOffset: ['130%', 0],
+  symbolPosition: 'end',
+  data: [],
+  z: 4
+}
+
+const pictorialBarRight2 = {
+  tooltip: {
+    show: false
+  },
+  type: 'pictorialBar',
+  itemStyle: {
+    normal: {
+      color: '#929832'
+    }
+  },
+  symbol: 'circle',
+  symbolSize: ['28%', '5'],
+  symbolOffset: ['130%', 0],
+  symbolPosition: 'start',
+  data: [],
+  z: 3
+}
+
 export default {
   name: 'ScreenDataStatisticsChartStatisticsInfo',
   components: {
@@ -239,7 +362,13 @@ export default {
           series1.data = this.infoAndArea.problems1
           series2.data = this.infoAndArea.problems2
           series3.data = this.infoAndArea.problems3
-          options.series = [series1, series2, series3]
+          pictorialBarLeft1.data = this.infoAndArea.problems1
+          pictorialBarLeft2.data = this.infoAndArea.problems1
+          pictorialBarMiddle1.data = this.infoAndArea.problems2
+          pictorialBarMiddle2.data = this.infoAndArea.problems2
+          pictorialBarRight1.data = this.infoAndArea.problems3
+          pictorialBarRight2.data = this.infoAndArea.problems3
+          options.series = [series1, series2, series3, pictorialBarLeft1, pictorialBarLeft2, pictorialBarMiddle1, pictorialBarMiddle2, pictorialBarRight1, pictorialBarRight2]
         } else if (this.activated === 3) {
           // 已下发，处理中，已完成
           series1.name = '已下发'
@@ -248,7 +377,13 @@ export default {
           series1.data = this.infoAndArea.tasks1
           series2.data = this.infoAndArea.tasks2
           series3.data = this.infoAndArea.tasks3
-          options.series = [series1, series2, series3]
+          pictorialBarLeft1.data = this.infoAndArea.tasks1
+          pictorialBarLeft2.data = this.infoAndArea.tasks1
+          pictorialBarMiddle1.data = this.infoAndArea.tasks2
+          pictorialBarMiddle2.data = this.infoAndArea.tasks2
+          pictorialBarRight1.data = this.infoAndArea.tasks3
+          pictorialBarRight2.data = this.infoAndArea.tasks3
+          options.series = [series1, series2, series3, pictorialBarLeft1, pictorialBarLeft2, pictorialBarMiddle1, pictorialBarMiddle2, pictorialBarRight1, pictorialBarRight2]
         }
         this.options = options
       }
