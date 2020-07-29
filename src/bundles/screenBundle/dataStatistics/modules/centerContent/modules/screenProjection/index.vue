@@ -1,11 +1,12 @@
 <template>
   <transition name="bounce">
     <div class="jc-screen-space" v-show="show">
+      <div class="jc-close" @click="close">投屏关闭</div>
       <jc-live v-show="showModule===MESSAGE_DATA_TYPES.LIVE" :options="options"></jc-live>
-      <jc-event v-show="showModule===2" :options="{id:'71279185972166656'}"></jc-event>
-      <jc-question v-show="showModule===3" :options="{id:'73488564293206016'}"></jc-question>
-      <jc-temporary-task v-show="showModule===4" :options="{id:'71636607261736960'}"></jc-temporary-task>
-      <jc-daily-task v-show="showModule===5" :options="{id:'70910841347637248'}"></jc-daily-task>
+      <jc-event v-show="showModule===MESSAGE_DATA_TYPES.EVENT" :options="{id:'71279185972166656'}"></jc-event>
+      <jc-question v-show="showModule===MESSAGE_DATA_TYPES.QUESTION" :options="{id:'73488564293206016'}"></jc-question>
+      <jc-temporary-task v-show="showModule===MESSAGE_DATA_TYPES.TEMPORARY" :options="{id:'71636607261736960'}"></jc-temporary-task>
+      <jc-daily-task v-show="showModule===MESSAGE_DATA_TYPES.TASK" :options="{id:'70910841347637248'}"></jc-daily-task>
     </div>
   </transition>
 
@@ -26,23 +27,21 @@ export default {
     return {
       MESSAGE_DATA_TYPES,
       show: false,
-      showModule: 1,
-      options: {}
+      showModule: null,
+      options: null
     }
   },
   created() {
-    // setTimeout(()=>{
-    //   this.show = true
-    // }, 0)
-    // setTimeout(()=>{
-    //   this.show = false
-    // }, 4000)
     this.$EventBus.$on('data-statistics-screen-projection', data=>{
       console.log('投屏消息', data)
       if (data.type === MESSAGE_DATA_TYPES.CLOSR) {
-        this.show = false
-        this.showModule = null
-        this.options = null
+        if (data.closeType === this.showModule) {
+          this.show = false
+          this.showModule = null
+          this.options = null
+        } else {
+          console.log('关闭投屏类型', data.closeType)
+        }
       } else {
         this.show = true
         this.showModule = data.type
@@ -51,8 +50,10 @@ export default {
     })
   },
   methods: {
-    test() {
+    close() {
       this.show = false
+      this.showModule = null
+      this.options = null
     }
   }
 }
@@ -68,6 +69,19 @@ export default {
   height: 100%;
   top: 0;
   left: 0;
+
+  .jc-close {
+    position: absolute;
+    right: 50px;
+    bottom: -50px;
+    cursor: pointer;
+    color: white;
+    background: #033c93;
+    width: 100px;
+    height: 36px;
+    line-height: 36px;
+    text-align: center;
+  }
 }
 
 .jc-screen-warp {

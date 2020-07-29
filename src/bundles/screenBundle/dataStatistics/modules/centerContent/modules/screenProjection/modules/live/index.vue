@@ -47,7 +47,7 @@ export default {
       deep: true,
       handler(newValue) {
         console.log('newValue', newValue)
-        if (newValue.channelId) {
+        if (newValue && newValue.channelId) {
           this.inviteType = newValue.inviteType
           this.users = newValue.users
           this.join(newValue.channelId)
@@ -76,7 +76,7 @@ export default {
     },
     //关闭投屏
     close() {
-      if (this.live.joined) {
+      if (this.live && this.live.joined) {
         this.live.leaveChannel()
       }
     }
