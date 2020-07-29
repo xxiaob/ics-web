@@ -80,7 +80,7 @@
     <div class="jc-summary-center-content jc-flex-warp jc-flex-vertical">
       <div class="jc-summary-center-count jc-flex-con-2 jc-flex-warp">
         <span>
-          <count-to class="jc-center-count" :startVal="stratVal" :endVal="endVal" :duration="5000" /> 件
+          <count-to class="jc-center-count" :startVal="startVal" :endVal="endVal" :duration="5000" /> 件
         </span>
       </div>
       <div class="jc-summary-center-title jc-flex-con-3 jc-flex-warp">

@@ -142,10 +142,26 @@
 <script>
 import JcAbstractArea from '../../../common/abstractArea'
 import countTo from 'vue-count-to'
+import { getAreaService, getOverallAttendance } from '@/api/dataScreen' // 获取数据方法
+import { getUser } from '@/libs/storage'
+import { getAreaCodeByOrgId } from '@/api/area'
 
 export default {
   name: 'ScreenDataStatisticsOtherInfoAttendanceInfo',
-  components: { JcAbstractArea, countTo }
+  components: { JcAbstractArea, countTo },
+  created() {
+    this.getAreaServiceData()
+  },
+  methods: {
+    async getAreaServiceData() {
+      let { orgId } = await getUser() // 获取用户orgId
+
+      let { areaCode } = await getAreaCodeByOrgId(orgId) // 通过用户orgId获取城市areaCode
+
+      console.log(orgId, areaCode)
+    }
+  }
+
 }
 </script>
 
