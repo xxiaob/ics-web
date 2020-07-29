@@ -10,7 +10,7 @@
 
     </div>
     <div class="jc-flex-con">
-      <jc-charts :options="options"></jc-charts>
+      <jc-charts :options="options" :isClear="true"></jc-charts>
     </div>
   </div>
 </template>
@@ -110,18 +110,33 @@ const series1pictorialBar = {
     normal: {
       color: new echarts.graphic.LinearGradient(0, 0, 1, 0,
         [
-          { offset: 0, color: '#2bc6dd' },
-          { offset: 1, color: '#18cde1' }
+          { offset: 0, color: '#16f1f6' },
+          { offset: 1, color: '#00f8b3' }
         ]
-      ),
-      borderWidth: 1,
-      borderColor: '#18CEE2'
+      )
     }
   },
   symbol: 'circle',
-  symbolSize: ['38', '22'],
+  symbolSize: ['100%', '10'],
   symbolPosition: 'end',
-  data: [220, 182, 191, 234, 290, 330, 310],
+  data: [],
+  z: 3
+}
+
+const series1pictorialBar2 = {
+  tooltip: {
+    show: false
+  },
+  type: 'pictorialBar',
+  itemStyle: {
+    normal: {
+      color: '#13acb7'
+    }
+  },
+  symbol: 'circle',
+  symbolSize: ['100%', '10'],
+  symbolPosition: 'start',
+  data: [],
   z: 3
 }
 
@@ -213,7 +228,9 @@ export default {
         if (this.activated === 1) {
           series1.name = '上报事件'
           series1.data = this.infoAndArea.events
-          options.series = [series1]
+          series1pictorialBar.data = this.infoAndArea.events
+          series1pictorialBar2.data = this.infoAndArea.events
+          options.series = [series1, series1pictorialBar, series1pictorialBar2]
         } else if (this.activated === 2) {
           // 进行中，已关闭，转任务
           series1.name = '进行中'

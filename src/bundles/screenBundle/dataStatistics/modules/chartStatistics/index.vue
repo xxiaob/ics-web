@@ -66,7 +66,7 @@ export default {
       } else if (newValue === 7) {
         this.date.beginTime = new Date(this.today - 6 * 24 * 60 * 60 * 1000)
       } else if (newValue === 30) {
-        this.date.beginTime = new Date(this.today - 6 * 24 * 60 * 60 * 1000)
+        this.date.beginTime = new Date(this.today - 29 * 24 * 60 * 60 * 1000)
       }
       this.initData()
     }

@@ -71,6 +71,7 @@ export default {
             slidesPerView: 3,
             spaceBetween: 10
           })
+          // this.mySwiper.startAutoplay()
         })
       }
     }
