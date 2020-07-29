@@ -15,7 +15,7 @@
               </div>
               <div class="overall-count-wrap jc-flex-con jc-flex-warp">
                 <span>
-                  <count-to class="overall-count" :startVal="0" :endVal="58" />人
+                  <count-to class="overall-count" :startVal="0" :endVal="overallAttendance.onGuardUserCount" />人
                 </span>
               </div>
             </div>
@@ -23,7 +23,7 @@
 
           <div class="jc-flex-con overall-cont-center jc-flex-warp">
             <div class="img-wrap jc-flex-warp">
-              <img src="./assets/mileage-patrol.png" width="100%" height="100%" alt="在线人数">
+              <img src="./assets/mileage-patrol.png" width="100%" height="100%" alt="巡逻里程">
             </div>
             <div class="overall-attendance-info jc-flex-con jc-flex-warp jc-flex-vertical">
               <div class="overall-title jc-flex-con jc-flex-warp">
@@ -31,7 +31,7 @@
               </div>
               <div class="overall-count-wrap jc-flex-con jc-flex-warp">
                 <span>
-                  <count-to class="overall-count" :startVal="0" :endVal="486" />KM
+                  <count-to class="overall-count" :startVal="0" :endVal="overallAttendance.journey" />KM
                 </span>
               </div>
             </div>
@@ -39,7 +39,7 @@
 
           <div class="jc-flex-con jc-flex-warp">
             <div class="img-wrap jc-flex-warp">
-              <img src="./assets/gangdian-touch.png" width="100%" height="100%" alt="在线人数">
+              <img src="./assets/gangdian-touch.png" width="100%" height="100%" alt="岗点触碰">
             </div>
             <div class="overall-attendance-info jc-flex-con jc-flex-warp jc-flex-vertical">
               <div class="overall-title jc-flex-con jc-flex-warp">
@@ -47,7 +47,7 @@
               </div>
               <div class="overall-count-wrap jc-flex-con jc-flex-warp">
                 <span>
-                  <count-to class="overall-count" :startVal="0" :endVal="139" />次
+                  <count-to class="overall-count" :startVal="0" :endVal="overallAttendance.inoutCount" />次
                 </span>
               </div>
             </div>
@@ -61,76 +61,29 @@
       <jc-abstract-area title="区域勤务">
         <!-- 区域出勤列表 -->
         <div class="regional-attendance-content jc-flex-con jc-flex-warp jc-flex-vertical">
+          <!-- 区域出勤标题 -->
           <div class="regional-attendance-theader jc-flex-warp">
-            <span class="jc-flex-con text-center"></span>
-            <span class="jc-flex-con jc-omit-cell text-center">在线人数</span>
-            <span class="jc-flex-con jc-omit-cell text-center">巡逻里程</span>
-            <span class="jc-flex-con jc-omit-cell text-center">事件上报数</span>
-            <span class="jc-flex-con jc-omit-cell text-center">任务处理数</span>
-            <span class="jc-flex-con jc-omit-cell text-center">网巡上报</span>
-            <span class="jc-flex-con jc-omit-cell text-center">视频查证</span>
+            <span class="jc-flex-con-3 text-center"></span>
+            <span class="jc-flex-con-2 jc-omit-cell text-center">在线人数</span>
+            <span class="jc-flex-con-2 jc-omit-cell text-center">巡逻里程</span>
+            <span class="jc-flex-con-2 jc-omit-cell text-center">事件上报</span>
+            <span class="jc-flex-con-2 jc-omit-cell text-center">网巡问题</span>
+            <span class="jc-flex-con-2 jc-omit-cell text-center">任务处理</span>
+            <span class="jc-flex-con-2 jc-omit-cell text-center">岗点触碰</span>
           </div>
 
+          <!-- 区域出勤数据 -->
           <div class="regional-attendance-tbody jc-flex-con data-statistics-scrollbar">
-            <!-- 需要循环的数据,根据后台数据在调整 -->
             <div>
-              <div class="regional-attendance-tr jc-flex-warp">
-                <span class="jc-flex-con jc-omit-cell text-center">永阳街道</span>
-                <span class="jc-flex-con jc-omit-cell text-center">30</span>
-                <span class="jc-flex-con jc-omit-cell text-center">22</span>
-                <span class="jc-flex-con jc-omit-cell text-center">15</span>
-                <span class="jc-flex-con jc-omit-cell text-center">16</span>
-                <span class="jc-flex-con jc-omit-cell text-center">12</span>
-                <span class="jc-flex-con jc-omit-cell text-center">17</span>
+              <div class="regional-attendance-tr jc-flex-warp" v-for="item in arearService" :key="item.orgId">
+                <span class="jc-flex-con-3 jc-omit-cell text-center">{{ item.orgName }}</span>
+                <span class="jc-flex-con-2 jc-omit-cell text-center">{{ item.onGuardUserCount }}</span>
+                <span class="jc-flex-con-2 jc-omit-cell text-center">{{ item.journey }}</span>
+                <span class="jc-flex-con-2 jc-omit-cell text-center">{{ item.eventReportCount }}</span>
+                <span class="jc-flex-con-2 jc-omit-cell text-center">{{ item.temporaryTaskCount }}</span>
+                <span class="jc-flex-con-2 jc-omit-cell text-center">{{ item.problemCount}}</span>
+                <span class="jc-flex-con-2 jc-omit-cell text-center">{{ item.inoutCount}}</span>
               </div>
-
-              <div class="regional-attendance-tr jc-flex-warp">
-                <span class="jc-flex-con jc-omit-cell text-center">永阳街道</span>
-                <span class="jc-flex-con jc-omit-cell text-center">30</span>
-                <span class="jc-flex-con jc-omit-cell text-center">22</span>
-                <span class="jc-flex-con jc-omit-cell text-center">15</span>
-                <span class="jc-flex-con jc-omit-cell text-center">16</span>
-                <span class="jc-flex-con jc-omit-cell text-center">12</span>
-                <span class="jc-flex-con jc-omit-cell text-center">17</span>
-              </div>
-
-              <div class="regional-attendance-tr jc-flex-warp">
-                <span class="jc-flex-con jc-omit-cell text-center">永阳街道</span>
-                <span class="jc-flex-con jc-omit-cell text-center">30</span>
-                <span class="jc-flex-con jc-omit-cell text-center">22</span>
-                <span class="jc-flex-con jc-omit-cell text-center">15</span>
-                <span class="jc-flex-con jc-omit-cell text-center">16</span>
-                <span class="jc-flex-con jc-omit-cell text-center">12</span>
-                <span class="jc-flex-con jc-omit-cell text-center">17</span>
-              </div>
-              <div class="regional-attendance-tr jc-flex-warp">
-                <span class="jc-flex-con jc-omit-cell text-center">永阳街道</span>
-                <span class="jc-flex-con jc-omit-cell text-center">30</span>
-                <span class="jc-flex-con jc-omit-cell text-center">22</span>
-                <span class="jc-flex-con jc-omit-cell text-center">15</span>
-                <span class="jc-flex-con jc-omit-cell text-center">16</span>
-                <span class="jc-flex-con jc-omit-cell text-center">12</span>
-                <span class="jc-flex-con jc-omit-cell text-center">17</span>
-              </div>
-              <div class="regional-attendance-tr jc-flex-warp">
-                <span class="jc-flex-con jc-omit-cell text-center">永阳街道</span>
-                <span class="jc-flex-con jc-omit-cell text-center">30</span>
-                <span class="jc-flex-con jc-omit-cell text-center">22</span>
-                <span class="jc-flex-con jc-omit-cell text-center">15</span>
-                <span class="jc-flex-con jc-omit-cell text-center">16</span>
-                <span class="jc-flex-con jc-omit-cell text-center">12</span>
-                <span class="jc-flex-con jc-omit-cell text-center">17</span>
-              </div>
-              <div class="regional-attendance-tr jc-flex-warp">
-                <span class="jc-flex-con jc-omit-cell text-center">永阳街道</span>
-                <span class="jc-flex-con jc-omit-cell text-center">30</span>
-                <span class="jc-flex-con jc-omit-cell text-center">22</span>
-                <span class="jc-flex-con jc-omit-cell text-center">15</span>
-                <span class="jc-flex-con jc-omit-cell text-center">16</span>
-                <span class="jc-flex-con jc-omit-cell text-center">12</span>
-                <span class="jc-flex-con jc-omit-cell text-center">17</span>
-              </div>
-
             </div>
           </div>
         </div>
@@ -144,11 +97,16 @@ import JcAbstractArea from '../../../common/abstractArea'
 import countTo from 'vue-count-to'
 import { getAreaService, getOverallAttendance } from '@/api/dataScreen' // 获取数据方法
 import { getUser } from '@/libs/storage'
-import { getAreaCodeByOrgId } from '@/api/area'
 
 export default {
   name: 'ScreenDataStatisticsOtherInfoAttendanceInfo',
   components: { JcAbstractArea, countTo },
+  data() {
+    return {
+      arearService: [],
+      overallAttendance: {}
+    }
+  },
   created() {
     this.getAreaServiceData()
   },
@@ -156,9 +114,15 @@ export default {
     async getAreaServiceData() {
       let { orgId } = await getUser() // 获取用户orgId
 
-      let { areaCode } = await getAreaCodeByOrgId(orgId) // 通过用户orgId获取城市areaCode
+      // let { areaCode } = await getAreaCodeByOrgId(orgId) // 通过用户orgId获取城市areaCode
 
-      console.log(orgId, areaCode)
+      console.log(orgId)
+
+      this.arearService = await getAreaService({ orgId }) // 区域出勤数据
+
+      let overallAttendance = await getOverallAttendance({ orgId })// 总体出勤数据Array
+
+      this.overallAttendance = overallAttendance[0] // 取出总体数据 Object
     }
   }
 
