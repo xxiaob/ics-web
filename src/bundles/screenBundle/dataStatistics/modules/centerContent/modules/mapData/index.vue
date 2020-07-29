@@ -11,11 +11,15 @@ import { PROJECT_TYPES } from '@/constant/Dictionaries'
 import { AREAS_TYPE, AREAS_SEARCH_TYPE } from '@/constant/CONST'
 import { orgBoundariesFormat } from '@/libs/apiFormat'
 
-let myJcMap, AMap, object3Dlayer //个人 map 对象,存储Amap对象,存储3D图层
+let myJcMap, AMap, object3Dlayer, labelsLayer //个人 map 对象,存储Amap对象,存储3D图层，存储点标记
 
 let orgAreas = {} //存储区域信息
 
-let colors = ['#0083ff', '#00c0ff', '#00a9ff', '#0072ff'], activeColor = '#00fcff'
+// let colors = ['#0041fb', '#0096ff', '#04e0f9', '#ff5d5d', '#ffba00'] //#0041fb、#0096ff、#04e0f9、#ff5d5d、#ffba00
+let baseOpacity = 0.68, activeOpacity = 1 //透明度
+
+let colors = [`rgba(0,131,255,${baseOpacity})`, `rgba(0,192,255,${baseOpacity})`, `rgba(0,169,255,${baseOpacity})`, `rgba(0,114,255,${baseOpacity})`],
+  activeColor = `rgba(0,252,255,${activeOpacity})`
 
 export default {
   name: 'ScreenDataCenterContentMapData',
@@ -49,7 +53,9 @@ export default {
 
       AMap = await AMapLoader.load({ key: process.env.aMapConfig.accessKey, plugins: ['Map3D', 'AMap.Marker', 'AMap.GeometryUtil'] })
 
-      object3Dlayer = new AMap.Object3DLayer({ opacity: 0.84 })
+      object3Dlayer = new AMap.Object3DLayer({ opacity: 1, zIndex: 8 })
+
+      labelsLayer = new AMap.LabelsLayer({ visible: true, zIndex: 9, collision: false })
 
       //, dragEnable: false, zoomEnable: false, rotateEnable: false, keyboardEnable: false
       myJcMap = new AMap.Map(this.$refs.myMap, {
@@ -58,7 +64,7 @@ export default {
       this.clearMapSign() //清除地图标记
       // 设置光照
       myJcMap.AmbientLight = new AMap.Lights.AmbientLight([1, 1, 1], 0.6)
-      myJcMap.DirectionLight = new AMap.Lights.DirectionLight([0, 0, 1], [1, 1, 1], 0.88)
+      myJcMap.DirectionLight = new AMap.Lights.DirectionLight([0, 0, 1], [1, 1, 1], 1)
 
       this.$EventBus.$emit('data-statistics-amap-success', this.orgId) //通知地图加载完成
 
@@ -155,6 +161,15 @@ export default {
 
       let parentOrg = orgAreas[this.orgId] //父级区域
 
+      //先进行排序去显示
+      this.showAreas.sort(function (a, b) {
+        let aOrg = orgAreas[a.orgId], bOrg = orgAreas[b.orgId]
+
+        return bOrg.center[0] * 1 - aOrg.center[0] * 1
+      })
+
+      let height = Math.ceil(parentOrg.measureAreas * this.mapParams.baseCoefficient)//设置高度
+
       for (let i = 0; i < this.showAreas.length; i++) {
         let keyOrgId = this.showAreas[i].orgId
 
@@ -162,13 +177,42 @@ export default {
 
         //如果非最父级组织或需要显示的组织只有一个
         if (this.orgId != keyOrgId || this.showAreas.length == 1) {
-          item.marker = new AMap.Marker({ position: item.center, anchor: 'middle-left', content: `<div class="jc-data-statistics-content">${item.areaName}</div>` })
-
+          item.marker = new AMap.LabelMarker({ position: item.center, zooms: [3, 20], icon: {
+            image: '/static/mapIcons/map-dot.png', anchor: 'center'
+          }, text: {
+            content: item.areaName,
+            direction: 'right',
+            offset: [-14, -2],
+            style: { fontSize: 14, fillColor: '#00fcff', fontWeight: 'bold' }
+          } })
           markers.push(item.marker)
+
+          let prisms = [] //存储当前组织3D对象
+
+          let color = colors[i % colors.length] //设置颜色
+
+          //循环增加每个组织的区域
+          for (let j = 0; j < item.boundaries.length; j++) {
+            let prism = new AMap.Object3D.Prism({ path: item.boundaries[j].path, height, color })
+
+            prism.transparent = true
+            prisms.push(prism)
+            object3Dlayer.add(prism) //添加图层
+          }
+          item.prisms = prisms
         }
 
         this.showAreas[i].dis = AMap.GeometryUtil.distance(parentOrg.centerPosition, new AMap.LngLat(item.center[0], item.center[1]))
       }
+
+      myJcMap.add(object3Dlayer)//添加到地图
+      labelsLayer.add(markers)
+      myJcMap.add(labelsLayer) //添加点标记
+
+      //设置自适应显示
+      let lnglats = parentOrg.lnglats//设置边距
+
+      myJcMap.setBounds(new AMap.Bounds([lnglats.lng.min, lnglats.lat.min], [lnglats.lng.max, lnglats.lat.max * 0.992]))
 
       //对显示的数组做排序
       this.showAreas.sort((a, b) => a.dis - b.dis) //先进行记录小到大排序
@@ -189,44 +233,18 @@ export default {
 
       console.log('处理前的loopAreas：', loopAreas)
       //对每个分数组进行排序
-      let allAreas = [] //存储排序后的组织数据
-
       loopAreas.forEach(loopArea => {
         loopArea.sort(function (a, b) {
           let aOrg = orgAreas[a.orgId], bOrg = orgAreas[b.orgId]
 
-          return bOrg.center[0] * 1 - aOrg.center[0] * 1
+          return bOrg.lnglats.lat.max * 1 - aOrg.lnglats.lat.max * 1
         })
-        allAreas.push(...loopArea)
       })
 
-      //进行合并组合进行显示
-      console.log('处理后的loopAreas：', loopAreas, allAreas)
-
-      let height = Math.ceil(parentOrg.measureAreas * this.mapParams.baseCoefficient)//设置高度
-
-      allAreas.forEach((item, index) => {
-        let areaItem = orgAreas[item.orgId]
-
-        let prisms = [] //存储当前组织3D对象
-
-        let color = colors[index % colors.length] //设置颜色
-
-        areaItem.boundaries.forEach(boundary => {
-          let prism = new AMap.Object3D.Prism({ path: boundary.path, height, color })
-
-          prism.transparent = true
-          prisms.push(prism)
-          object3Dlayer.add(prism) //添加图层
-        })
-        areaItem.prisms = prisms
-      })
-      myJcMap.add(object3Dlayer)//添加到地图
-      myJcMap.add(markers) //添加点标记
-      //设置自适应显示
-      let lnglats = parentOrg.lnglats//设置边距
-
-      myJcMap.setBounds(new AMap.Bounds([lnglats.lng.min, lnglats.lat.min], [lnglats.lng.max, lnglats.lat.max * 0.992]))
+      console.log('处理后的loopAreas：', loopAreas)
+    },
+    boundaryActiveShow() {
+      //高亮显示区域
     },
     calcBundleLnglats(target1, target2) {
       if (target1) {
@@ -288,6 +306,7 @@ export default {
     }
     AMap = null
     object3Dlayer = null
+    labelsLayer = null
     orgAreas = {}
     this.$EventBus.$off('data-statistics-init-success', this.initData)
   }
@@ -315,6 +334,7 @@ export default {
   height: 20px;
   line-height: 20px;
   color: #00fffc;
+  margin-left: -6px;
   font-size: $jc-font-size-base;
   @include jc-text-warp();
   &:before {
@@ -325,7 +345,6 @@ export default {
     background-color: #00fffc;
     border-radius: 50%;
     margin-right: 4px;
-    margin-left: -6px;
   }
 }
 </style>

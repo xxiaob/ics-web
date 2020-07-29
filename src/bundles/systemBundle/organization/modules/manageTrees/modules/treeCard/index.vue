@@ -1,6 +1,6 @@
 <template>
   <div class="jc-tree-card" v-loading="loading">
-    <el-tree ref="tree" :data="trees" :props="props" :filter-node-method="filterNode" node-key="orgId" @node-click="nodeClick" :expand-on-click-node="false" :highlight-current="true" :default-expand-all="true">
+    <el-tree ref="tree" :default-expanded-keys="expandedKeys" :data="trees" :props="props" :filter-node-method="filterNode" node-key="orgId" @node-click="nodeClick" :expand-on-click-node="false" :highlight-current="true">
       <div class="custom-tree-node" slot-scope="{ node,data }">
         <div class="jc-tree-label">
           <div class="jc-text-warp" v-text="node.label"></div>
@@ -41,11 +41,9 @@ export default {
       visible: false,
       info: null,
       orgId: '',
+      expandedKeys: [],
       pNode: { name: '', pid: '' },
-      props: {
-        children: 'children',
-        label: 'label'
-      }
+      props: { children: 'children', label: 'label' }
     }
   },
   created() {
@@ -63,6 +61,7 @@ export default {
 
               this.orgId = this.orgId || this.trees[0].orgId
               this.$refs.tree.setCurrentKey(this.orgId)
+              this.expandedKeys = [this.orgId]
               this.nodeChange({ orgId: this.orgId, pid, type: 'manage' })
             })
           }
