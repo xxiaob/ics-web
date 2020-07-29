@@ -3,10 +3,10 @@
     <div class="jc-screen-space" v-show="show">
       <div class="jc-close" @click="close">投屏关闭</div>
       <jc-live v-show="showModule===MESSAGE_DATA_TYPES.LIVE" :options="options"></jc-live>
-      <jc-event v-show="showModule===MESSAGE_DATA_TYPES.EVENT" :options="{id:'71279185972166656'}"></jc-event>
-      <jc-question v-show="showModule===MESSAGE_DATA_TYPES.QUESTION" :options="{id:'73488564293206016'}"></jc-question>
-      <jc-temporary-task v-show="showModule===MESSAGE_DATA_TYPES.TEMPORARY" :options="{id:'71636607261736960'}"></jc-temporary-task>
-      <jc-daily-task v-show="showModule===MESSAGE_DATA_TYPES.TASK" :options="{id:'70910841347637248'}"></jc-daily-task>
+      <jc-event v-show="showModule===MESSAGE_DATA_TYPES.EVENT" :options="options"></jc-event>
+      <jc-question v-show="showModule===MESSAGE_DATA_TYPES.QUESTION" :options="options"></jc-question>
+      <jc-temporary-task v-show="showModule===MESSAGE_DATA_TYPES.TEMPORARY" :options="options"></jc-temporary-task>
+      <jc-daily-task v-show="showModule===MESSAGE_DATA_TYPES.TASK" :options="options"></jc-daily-task>
     </div>
   </transition>
 
@@ -46,6 +46,7 @@ export default {
         this.show = true
         this.showModule = data.type
         this.options = data.data
+        this.options.type = data.type
       }
     })
   },

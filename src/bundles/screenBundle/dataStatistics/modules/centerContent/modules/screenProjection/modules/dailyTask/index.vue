@@ -54,6 +54,8 @@ import { projectsList } from '@/api/projects'
 import { taskGetDaily } from '@/api/task'
 import moment from 'moment'
 import { PROJECT_TYPES, TASK_FREQUENCYS } from '@/constant/Dictionaries'
+import { MESSAGE_DATA_TYPES } from '@/constant/Dictionaries'
+
 export default {
   name: 'ScreenDataCenterContentScreenProjectioncDailyTask',
   props: {
@@ -112,7 +114,7 @@ export default {
     options: {
       deep: true,
       handler() {
-        if (this.options && this.options.id) {
+        if (this.options && this.options.id && this.options.type === MESSAGE_DATA_TYPES.TASK) {
           this.getDetail()
         }
       }
@@ -121,7 +123,7 @@ export default {
   async created() {
     await this.formatProjectList()
     // console.log('projectListArr', this.projectListArr)
-    if (this.options && this.options.id) {
+    if (this.options && this.options.id && this.options.type === MESSAGE_DATA_TYPES.TASK) {
       this.getDetail()
     }
   },

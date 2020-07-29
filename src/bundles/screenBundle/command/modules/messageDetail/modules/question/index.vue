@@ -54,10 +54,11 @@
       </div>
     </div>
 
-    <div class="jc-footer" v-if="form.auth">
-      <el-button @click="toSuperior" :loading="loading" type="primary" size="small">反馈至上级</el-button>
-      <el-button @click="generateTask" :loading="loading" type="primary" size="small">生成任务</el-button>
-      <el-button @click="closeQuestion" :loading="loading" size="small">关闭问题</el-button>
+    <div class="jc-footer">
+      <el-button v-if="form.auth" @click="toSuperior" :loading="loading" type="primary" size="small">反馈至上级</el-button>
+      <el-button v-if="form.auth" @click="generateTask" :loading="loading" type="primary" size="small">生成任务</el-button>
+      <el-button v-if="form.auth" @click="closeQuestion" :loading="loading" size="small">关闭问题</el-button>
+      <el-button @click="sendScreen" type="primary" size="small">{{isSendScreen?'关闭投屏':'投屏'}}</el-button>
     </div>
 
     <task-manage :question="question" :visible.sync="TaskManageShow" @save-success="generateTaskSuccess"></task-manage>
@@ -68,6 +69,7 @@
 <script>
 import { questionReport, questionGet, questionTypeList, getProblemAuth } from '@/api/question'
 import MediaMixins from '@/bundles/taskBundle/mixins/MediaMixins'
+import { MESSAGE_DATA_TYPES } from '@/constant/Dictionaries'
 
 export default {
   name: 'ScreenCommandMessageDetailQuestion',
@@ -87,7 +89,8 @@ export default {
       form: {},
       types: [],
       question: null,
-      TaskManageShow: false
+      TaskManageShow: false,
+      isSendScreen: false
     }
   },
   watch: {
@@ -105,6 +108,17 @@ export default {
     }
   },
   methods: {
+    sendScreen() {
+      if (this.isSendScreen) {
+        this.isSendScreen = false
+        this.$EventBus.$emit('screen-message-channel', { type: MESSAGE_DATA_TYPES.CLOSR, closeType: MESSAGE_DATA_TYPES.QUESTION })
+        this.$message.success('关闭投屏成功')
+      } else {
+        this.isSendScreen = true
+        this.$EventBus.$emit('screen-message-channel', { type: MESSAGE_DATA_TYPES.QUESTION, data: { id: this.info.id } })
+        this.$message.success('投屏成功')
+      }
+    },
     async getDetail() {
       if (!this.loading) {
         this.loading = true

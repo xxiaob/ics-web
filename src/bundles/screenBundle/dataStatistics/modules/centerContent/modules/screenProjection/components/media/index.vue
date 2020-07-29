@@ -61,21 +61,31 @@ export default {
       deep: true,
       handler(newValue) {
         this.handleUrls(newValue)
+        this.mySwiper = new Swiper('.swiper-container', {
+          autoplay: {
+            delay: 1000,
+            stopOnLastSlide: false,
+            disableOnInteraction: true
+          },
+          slidesPerView: 3,
+          spaceBetween: 10
+        })
       }
     }
   },
   mounted() {
-    setTimeout(()=>{
-      this.mySwiper = new Swiper('.swiper-container', {
-        autoplay: {
-          delay: 1000,
-          stopOnLastSlide: false,
-          disableOnInteraction: true
-        },
-        slidesPerView: 3,
-        spaceBetween: 10
-      })
-    }, 500)
+    // setTimeout(()=>{
+
+    // }, 100)
+    // this.mySwiper = new Swiper('.swiper-container', {
+    //   autoplay: {
+    //     delay: 1000,
+    //     stopOnLastSlide: false,
+    //     disableOnInteraction: true
+    //   },
+    //   slidesPerView: 3,
+    //   spaceBetween: 10
+    // })
   }
 }
 </script>

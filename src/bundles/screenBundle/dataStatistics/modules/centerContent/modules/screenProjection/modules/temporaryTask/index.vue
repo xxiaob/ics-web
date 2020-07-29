@@ -48,6 +48,7 @@ import { taskGet } from '@/api/task'
 import { projectsList } from '@/api/projects'
 import { PROJECT_TYPES, TASK_SOURCES } from '@/constant/Dictionaries'
 import JcMedia from '../../components/media'
+import { MESSAGE_DATA_TYPES } from '@/constant/Dictionaries'
 
 export default {
   name: 'ScreenDataCenterContentScreenProjectionTemporaryTask',
@@ -100,7 +101,7 @@ export default {
     options: {
       deep: true,
       handler() {
-        if (this.options && this.options.id) {
+        if (this.options && this.options.id && this.options.type === MESSAGE_DATA_TYPES.TEMPORARY) {
           this.getDetail()
         }
       }
@@ -109,7 +110,7 @@ export default {
   async created() {
     await this.formatProjectList()
     // console.log('projectListArr', this.projectListArr)
-    if (this.options && this.options.id) {
+    if (this.options && this.options.id && this.options.type === MESSAGE_DATA_TYPES.TEMPORARY) {
       this.getDetail()
     }
   },
