@@ -60,5 +60,5 @@ export function getEventGroupByEventType(data) {
  * @returns {Object} axios 对象
  */
 export function getAreaDataStatistics(data) {
-  return axios.get(API.screen.dataStatistics.getAreaDataStatistics + '?' + qs.stringify(data))
+  return axios.get(API.screen.dataStatistics.getAreaDataStatistics + '?' + qs.stringify(data, { indices: false }))
 }

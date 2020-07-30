@@ -20,7 +20,7 @@ let baseOpacity = 0.6, activeOpacity = 0.8 //透明度
 
 let colors = ['0083ff', '00c0ff', '00a9ff', '0072ff', '00fcff']
 
-let mapParams = { baseCoefficient: 0.000005, activeCoefficient: 0.000009, animationTimes: 10 }
+let mapParams = { baseCoefficient: 0.000005, activeCoefficient: 0.000009, animationTimes: 10 } //设置一些地图参数
 
 export default {
   name: 'ScreenDataCenterContentMapData',
@@ -31,13 +31,13 @@ export default {
       mapParams: { baseHeight: 0, activeHeight: 0, dis: 0 }, //记录高度基础和抬起的高度
       showAreas: [], //存储所有显示的区域
       index: 0, //当前循环到第几个
-      showNum: 4, //最多每次显示的个数
       orgIds: [], //需要查询的组织id数组
       orgData: {}, //存储组织信息
+      orgInfoPosition: {}, //记录四个位置的坐标
       orgInterval: null, //存储获取数据定时器
       loopAreas: [], //存储 循环的区域
       loopInterval: null,
-      loopTimes: 1000 * 15 //循环时间
+      loopTimes: 1000 * 20 //循环时间
     }
   },
   created() {
@@ -63,9 +63,9 @@ export default {
 
       labelsLayer = new AMap.LabelsLayer({ visible: true, zIndex: 9, collision: false })
 
-      //, dragEnable: false, zoomEnable: false, rotateEnable: false, keyboardEnable: false
       myJcMap = new AMap.Map(this.$refs.myMap, {
         mapStyle: 'amap://styles/1b8b05391432855bd2473c0d1d3628b5', viewMode: '3D', features: ['bg', 'road'], pitch: 40, skyColor: 'rgba(0,0,0,0)'
+        //, dragEnable: false, zoomEnable: false, rotateEnable: false, keyboardEnable: false
       })
       this.clearMapSign() //清除地图标记
       // 设置光照
@@ -127,7 +127,7 @@ export default {
                 centerPosition.length += 1
 
                 //存储需要显示的组织
-                this.showAreas.push({ orgId: orgInfo.orgId })
+                this.showAreas.push({ orgId: orgInfo.orgId, center: orgInfo.center })
               }
             }
             orgAreas[item.orgId] = orgInfo
@@ -140,6 +140,12 @@ export default {
           parentOrg.lnglats = parentOrg.lnglats ? parentOrg.lnglats : lnglats
           if (centerPosition.length) {
             parentOrg.centerPosition = new AMap.LngLat(centerPosition.lng / centerPosition.length, centerPosition.lat / centerPosition.length)
+
+            //计算信息窗四个位置的坐标点
+            this.orgInfoPosition.leftTop = [parentOrg.lnglats.lng.min, (parentOrg.lnglats.lat.max + parentOrg.centerPosition.lat) / 2]
+            this.orgInfoPosition.rightTop = [parentOrg.lnglats.lng.max, (parentOrg.lnglats.lat.max + parentOrg.centerPosition.lat) / 2]
+            this.orgInfoPosition.leftBottom = [parentOrg.lnglats.lng.min, (parentOrg.lnglats.lat.min + parentOrg.centerPosition.lat) / 2]
+            this.orgInfoPosition.rightBottom = [parentOrg.lnglats.lng.max, (parentOrg.lnglats.lat.min + parentOrg.centerPosition.lat) / 2]
           }
 
           console.log('数据大屏，组织边界信息', orgAreas)
@@ -232,7 +238,7 @@ export default {
       //对显示的数组做排序
       this.showAreas.sort((a, b) => a.dis - b.dis) //先进行记录小到大排序
 
-      let loopAreas = [], loopIndex = -1, showNum = Math.ceil(this.showAreas.length / this.showNum)
+      let loopAreas = [], loopIndex = -1, showNum = Math.ceil(this.showAreas.length / 4)
 
       //对数组进行分组
       this.showAreas.forEach((item, index) => {
@@ -276,21 +282,29 @@ export default {
       await this.getOrgDatas() //先去获取数据信息
       //高亮显示区域
       if (this.loopAreas.length < 2) {
-        this.activeMarkerShow(0, 0)
+        this.activeMarkerShow(0, 0) //marker显示
+        this.orgInfoShow(0, 0) //信息显示
       } else {
         this.loopInterval = setInterval(() => {
           let nowIndex = (this.index++ ) % this.loopAreas.length
 
           let nextIndex = this.index % this.loopAreas.length
 
-          this.boundaryActiveShow(nowIndex, nextIndex)
-          this.activeMarkerShow(nowIndex, nextIndex)
+          this.boundaryActiveShow(nowIndex, nextIndex) //边界布局显示
+          this.activeMarkerShow(nowIndex, nextIndex) //marker显示
+          this.orgInfoShow(nowIndex, nextIndex) //信息显示
         }, this.loopTimes)
       }
     },
     async getOrgDatas() {
       try {
         let result = await getAreaDataStatistics({ orgIds: this.orgIds, projectId: this.project.projectId })
+
+        if (result && result.length) {
+          result.forEach(item => {
+            this.orgData[item.orgId] = Object.freeze(item)
+          })
+        }
       } catch (error) {
         console.log(error)
       }
@@ -371,6 +385,134 @@ export default {
       if (newMarkers.length) {
         myJcMap.add(newMarkers)
       }
+    },
+    orgInfoShow(nowIndex, nextIndex) {
+      //显示组织信息数据
+      let nowAreas = this.loopAreas[nowIndex]
+
+      nowAreas.forEach(item => {
+        let nowOrg = orgAreas[item.orgId]
+
+        if (nowOrg.infoMarker) {
+          // nowOrg.infoPolyline.hide()
+          nowOrg.infoMarker.hide()
+        }
+      })
+
+      //显示新的标记
+      let nextAreas = this.loopAreas[nextIndex]
+
+      let overlays = [] //存储覆盖物
+
+      this.calcAreasPosition(nextAreas) //去计算位置
+      nextAreas.forEach(item => {
+        let nextOrg = orgAreas[item.orgId]
+
+        let { position, content } = this.getPositionAndContent(item) //获取中心点和内容
+
+        if (nextOrg.infoMarker) {
+          nextOrg.infoMarker.setContent(content)
+          nextOrg.infoMarker.show()
+          // nextOrg.infoPolyline.show()
+        } else {
+          nextOrg.infoMarker = new AMap.Marker({ position, content, anchor: 'center', offset: new AMap.Pixel(0, 0) })
+          overlays.push(nextOrg.infoMarker )
+        }
+      })
+      if (overlays.length) {
+        myJcMap.add(overlays)
+      }
+    },
+    getInfoPositionKey(position) {
+      let parentOrg = orgAreas[this.orgId] //获取父级组织
+
+      if (position[0] <= parentOrg.centerPosition.lng) {
+        if (position[1] >= parentOrg.centerPosition.lat) {
+          return 'leftTop'
+        }
+        return 'leftBottom'
+      }
+      if (position[1] >= parentOrg.centerPosition.lat) {
+        return 'rightTop'
+      }
+      return 'rightBottom'
+    },
+    calcAreasPosition(areas) {
+      /**
+       * 如果信息显示位置不存在，则去计算位置，并设置信息窗的class
+       * 一次最多显示四个
+       * 如果当前可显示个数为1个，则根据中心点位置判断应该显示的位置
+       * 如果当前可显示个数为2个，则先根据中心点判断，再根据左右位置判断显示位置
+       * 如果当前可显示个数为3个，则先根据中心点判断，再根据上下左右位置判断显示位置
+       * 如果当前可显示个数为4个，则直接根据上下左右位置判断显示位置
+       */
+      if (areas[0].infoShowPosition) {
+        return
+      }
+      //对数组信息进行处理
+      if (areas.length == 1) {
+        areas[0].infoShowPosition = this.orgInfoPosition[this.getInfoPositionKey(areas[0].center)]
+      } else if (areas.length == 2) {
+        areas[0].infoShowPosition = this.orgInfoPosition[this.getInfoPositionKey(areas[0].center)]
+        areas[1].infoShowPosition = this.orgInfoPosition[this.getInfoPositionKey(areas[1].center)]
+        //如果两个位置相等，则去判断两个的位置，按照左右显示
+        if (areas[0].infoShowPosition == areas[1].infoShowPosition) {
+          if (areas[0].center[0] <= areas[1].center[0]) {
+            areas[0].infoShowPosition.replace('right', 'left')
+            areas[1].infoShowPosition.replace('left', 'right')
+          } else {
+            areas[0].infoShowPosition.replace('left', 'right')
+            areas[1].infoShowPosition.replace('right', 'left')
+          }
+        }
+      } else {
+        //对数组进行左右排序，然后在进行上下判断
+        areas.sort(function (a, b) {
+          let aOrg = orgAreas[a.orgId], bOrg = orgAreas[b.orgId]
+
+          return bOrg.center[0] * 1 - aOrg.center[0] * 1
+        })
+        if (areas[0].center[1] >= areas[1].center[1]) {
+          areas[0].infoShowPosition = 'leftTop'
+          areas[1].infoShowPosition = 'leftBottom'
+        } else {
+          areas[0].infoShowPosition = 'leftTop'
+          areas[1].infoShowPosition = 'leftBottom'
+        }
+        if (areas.length == 3) {
+          let parentOrg = orgAreas[this.orgId] //获取父级组织
+
+          if (areas[2].center[1] >= parentOrg.centerPosition.lat) {
+            areas[2].infoShowPosition = 'rightTop'
+          } else {
+            areas[2].infoShowPosition = 'rightBottom'
+          }
+        } else if (areas[2].center[1] >= areas[3].center[1]) {
+          areas[2].infoShowPosition = 'rightTop'
+          areas[3].infoShowPosition = 'rightBottom'
+        } else {
+          areas[2].infoShowPosition = 'rightTop'
+          areas[3].infoShowPosition = 'rightBottom'
+        }
+      }
+    },
+    getPositionAndContent(area) {
+      //获取位置和信息内容content
+      let info = this.orgData[area.orgId]
+
+      //设置基础信息
+      let infoContent = `<div class="jc-ds-info-title">${info.orgName}</div>`
+
+      infoContent += `<div class="jc-ds-info-item">在岗人数<span>${info.onGuardUserCount}人</span></div>`
+      infoContent += `<div class="jc-ds-info-item">巡逻里程<span>${info.journey}KM</span></div>`
+      infoContent += `<div class="jc-ds-info-item">岗点触碰<span>${info.inoutCount}次</span></div>`
+      infoContent += `<div class="jc-ds-info-item">上报事件<span>${info.eventReportCount}件</span></div>`
+      infoContent += `<div class="jc-ds-info-item">网巡问题<span>${info.problemCount}个</span></div>`
+      infoContent += `<div class="jc-ds-info-item">临时任务<span>${info.temporaryTaskCount}个</span></div>`
+
+      let content = `<div class="jc-data-statistics-warp jc-${area.infoShowPosition}">${infoContent}</div>`
+
+      return { position: this.orgInfoPosition[area.infoShowPosition], content }
     },
     calcBundleLnglats(target1, target2) {
       if (target1) {
@@ -461,4 +603,33 @@ export default {
 }
 </style>
 <style lang="scss">
+.jc-data-statistics-warp {
+  position: relative;
+  width: 154px;
+  height: 180px;
+  background: url(./assets/info-bg.png) no-repeat center;
+  background-size: 100% 100%;
+  font-size: 12px;
+  color: #feffff;
+  .jc-ds-info-title {
+    padding: 0 $jc-default-dis;
+    height: 40px;
+    line-height: 40px;
+    font-size: 14px;
+    text-align: center;
+    @include jc-text-warp;
+  }
+  .jc-ds-info-item {
+    padding: 0 $jc-default-dis;
+    display: flex;
+    span {
+      color: #14edfc;
+      flex: 1;
+      @include jc-text-warp(1);
+      text-align: right;
+      height: 22px;
+      line-height: 22px;
+    }
+  }
+}
 </style>
