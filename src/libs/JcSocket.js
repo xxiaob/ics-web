@@ -8,6 +8,7 @@ export default class JcSocket {
    */
   constructor(url) {
     this.url = url
+    this.lockReconnect = false
   }
 
   /**
@@ -67,9 +68,14 @@ export default class JcSocket {
    * 重新连接
    */
   reconnect() {
+    if (this.lockReconnect) {
+      return
+    }
+    this.lockReconnect = true
     setTimeout(() => {
       console.log('JcSocket 重连......')
       this.connect(this.callback)
+      this.lockReconnect = false
     }, 3000)
   }
 }
