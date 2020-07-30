@@ -34,7 +34,7 @@ export default {
   props: {
     edit: false,
     projectId: String,
-    emergency: false,
+    // emergency: false,
     selectedAreas: {
       type: Array,
       default: ()=>[]
@@ -66,22 +66,16 @@ export default {
       if (this.areaType === TASK_AREA_TYPES.ORG) {
         return this.orgTree
       } else {
-        if (this.emergency) {
-          return this.projectGrid
-        } else {
-          return this.orgGrid
-        }
+        return this.orgGrid
       }
     }
   },
   async created() {
-    const res = await areaGridList()
-
-    this.orgGrid = this.formatGridTree(res)
     this.gridTypes = await areaTypeList({})
+    this.getAreaGridList('')
+
     setTimeout(()=>{
       // this.filterArr = Object.keys(this.formatTreeToObj(this.orgTree))
-      this.filterArr = Object.keys(this.formatTreeToObj(this.orgGrid, true))
       this.checkedNodes = this.$refs.tree.getCheckedNodes().filter(item=>item.org === false)
     })
   },
@@ -106,18 +100,19 @@ export default {
     projectId: {
       immediate: true,
       handler(val) {
-        if (val && this.emergency) {
-          this.projectAreaList(val)
-        }
+        console.log('area projectId', val)
+        const projectId = val == '0' ? '' : val
+
+        this.getAreaGridList(projectId)
       }
     }
   },
   methods: {
-    async projectAreaList(val) {
-      const res = await areaList({ projectId: val, searchType: 2 })
+    async getAreaGridList(val) {
+      const res = await areaGridList(val)
 
-      this.projectGrid = this.formatGridTree(res)
-      this.filterArr = Object.keys(this.formatTreeToObj(this.projectGrid, true))
+      this.orgGrid = this.formatGridTree(res)
+      this.filterArr = Object.keys(this.formatTreeToObj(this.orgGrid, true))
       this.$emit('update:selectedAreas', [])
     },
     formatGridTree(tree) {
