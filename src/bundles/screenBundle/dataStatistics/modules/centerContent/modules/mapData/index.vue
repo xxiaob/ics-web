@@ -100,7 +100,9 @@ export default {
 
             //中心点存在则去计算边界等
             if (item.center) {
-              orgInfo.center = item.center.split(',')
+              let center = item.center.split(',')
+
+              orgInfo.center = [center[0] * 1, center[1] * 1]
 
               orgInfo.boundaries = orgBoundariesFormat(item.withoutRadiusReqs, AMap) //处理边界数据
 
@@ -479,8 +481,8 @@ export default {
           areas[0].infoShowPosition = 'leftTop'
           areas[1].infoShowPosition = 'leftBottom'
         } else {
-          areas[0].infoShowPosition = 'leftTop'
-          areas[1].infoShowPosition = 'leftBottom'
+          areas[0].infoShowPosition = 'leftBottom'
+          areas[1].infoShowPosition = 'leftTop'
         }
         if (areas.length == 3) {
           let parentOrg = orgAreas[this.orgId] //获取父级组织
@@ -494,8 +496,8 @@ export default {
           areas[2].infoShowPosition = 'rightTop'
           areas[3].infoShowPosition = 'rightBottom'
         } else {
-          areas[2].infoShowPosition = 'rightTop'
-          areas[3].infoShowPosition = 'rightBottom'
+          areas[2].infoShowPosition = 'rightBottom'
+          areas[3].infoShowPosition = 'rightTop'
         }
       }
     },
