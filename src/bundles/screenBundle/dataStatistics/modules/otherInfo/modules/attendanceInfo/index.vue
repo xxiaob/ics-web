@@ -205,6 +205,10 @@ export default {
           height: 30px;
           line-height: 30px;
 
+          & span:first-child {
+            padding-left: 8px;
+          }
+
           .jc-omit-cell:not(:first-child) {
             color: #4ee2fd;
           }

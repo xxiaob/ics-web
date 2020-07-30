@@ -184,8 +184,8 @@ export default {
     }
 
     .future-weather-img-wrap {
-      width: 36px;
-      margin: 0 12px;
+      width: 30px;
+      margin: 4px 12px;
     }
     .future-weather-content {
       color: #8bc1fc;
