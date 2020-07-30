@@ -6,6 +6,7 @@
       <!-- 最右侧数据显示，如果是常态则显示，应急和专项则不显示 -->
       <data-docking class="jc-flex-con" v-if="!project.projectId"></data-docking>
       <chart-statistics class="jc-flex-con"></chart-statistics>
+
       <!-- 中间区域内容 -->
       <center-content class="jc-flex-con-2"></center-content>
 

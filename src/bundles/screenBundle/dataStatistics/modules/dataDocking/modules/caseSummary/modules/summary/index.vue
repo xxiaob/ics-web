@@ -116,7 +116,7 @@ export default {
       const width = this.$refs.summaryWrap.clientWidth - 100
       const height = this.$refs.summaryWrap.clientHeight - 26
 
-      let count = 40
+      let count = 30
 
       let oStyle = document.head.querySelector('.animation')
 
