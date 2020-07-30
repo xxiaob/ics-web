@@ -83,7 +83,7 @@ export default {
       let { projectId } = this.project // projectId
 
       // 发送请求获取数据
-      let eventGroupData = await getEventGroupByEventType({ projectId })
+      let eventGroupData = await getEventGroupByEventType({ beginTime, endTime, projectId })
 
       console.log(eventGroupData)
       // 处理数据
