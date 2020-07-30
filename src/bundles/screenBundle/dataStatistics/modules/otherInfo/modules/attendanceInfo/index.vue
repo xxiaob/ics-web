@@ -114,6 +114,11 @@ export default {
       console.log('chartStatistics 接收信息成功', val)
       this.project = val
       this.getAreaServiceData()
+
+      // 轮询更新数据
+      this.attendanceTimer = setInterval(() => {
+        this.getAreaServiceData()
+      }, 30000)
     })
   },
   methods: {
@@ -126,10 +131,12 @@ export default {
 
       let overallAttendance = await getOverallAttendance({ orgId, projectId })// 总体出勤数据Array
 
-      console.log(overallAttendance)
-
       this.overallAttendance = overallAttendance[0] // 取出总体数据 Object
     }
+  },
+  beforeDestroy() {
+    // 清理定时器
+    clearInterval(this.attendanceTimer)
   }
 
 }

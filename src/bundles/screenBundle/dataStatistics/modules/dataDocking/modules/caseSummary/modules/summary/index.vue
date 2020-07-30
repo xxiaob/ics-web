@@ -76,7 +76,7 @@
       </div>
     </div>
 
-    <!-- 中央文字 -->
+    <!-- 案件总数,中央文字区域 -->
     <div class="jc-summary-center-content jc-flex-warp jc-flex-vertical">
       <div class="jc-summary-center-count jc-flex-con-2 jc-flex-warp">
         <span>
