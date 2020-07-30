@@ -6,8 +6,8 @@
         <div class="smart-analy-left jc-flex-con-2 jc-flex-warp jc-flex-vertical">
 
           <div class="smart-analy-item jc-flex-con jc-flex-warp" v-for="(item,index) in eventGroupLeftData" :key="index" @click="currentEventGroup(item,index)">
-            <span class="smart-analy-title">{{ item.typeName && item.typeName}}</span>
-            <span class="smart-analy-count jc-flex-con">
+            <span class="smart-analy-title jc-flex-con">{{ item.typeName && item.typeName}}</span>
+            <span class="smart-analy-count">
               <count-to :startVal="0" :endVal="item.typeCount || 0" />件
             </span>
           </div>
@@ -25,8 +25,8 @@
 
         <div class="smart-analy-right jc-flex-con-2 jc-flex-warp jc-flex-vertical">
           <div class="smart-analy-item jc-flex-con jc-flex-warp" v-for="(item,index) in eventGroupRightData" :key="index" @click="currentEventGroup(item,index+4)">
-            <span class="smart-analy-title">{{ item.typeName && item.typeName}}</span>
-            <span class="smart-analy-count jc-flex-con">
+            <span class="smart-analy-title jc-flex-con">{{ item.typeName && item.typeName}}</span>
+            <span class="smart-analy-count">
               <count-to :startVal="0" :endVal="item.typeCount || 0" />件
             </span>
           </div>
@@ -307,19 +307,19 @@ export default {
       align-items: center;
       color: #11e7ff;
       background: url("./assets/smartanaly-bg.png") no-repeat 0 0 / 100% 100%;
+      cursor: pointer;
 
       &:nth-child(n + 2) {
         margin-top: 16px;
       }
 
       & .smart-analy-title {
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis;
         padding: 0 10px;
         width: 80px;
+        @include jc-text-warp(1);
       }
       & .smart-analy-count {
+        width: 46px;
         text-align: right;
         padding-right: 6px;
       }
