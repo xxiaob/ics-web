@@ -291,10 +291,8 @@ export default {
           let nextIndex = this.index % this.loopAreas.length
 
           this.boundaryActiveShow(nowIndex, nextIndex) //边界布局显示
-          setTimeout(() => {
-            this.activeMarkerShow(nowIndex, nextIndex) //marker显示
-            this.orgInfoShow(nowIndex, nextIndex) //信息显示
-          }, 1200)
+          this.activeMarkerShow(nowIndex, nextIndex) //marker显示
+          this.orgInfoShow(nowIndex, nextIndex) //信息显示
         }, this.loopTimes)
       }
     },
