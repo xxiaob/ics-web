@@ -1,5 +1,5 @@
 <template>
-  <section class="jc-screen-warp no-select">
+  <section class="jc-screen-warp no-select" :class="{'jc-no-docking': project.projectId}">
     <!-- 大屏头部 -->
     <screen-header></screen-header>
     <div class="jc-screen-content">

@@ -37,7 +37,7 @@ export default {
       orgInterval: null, //存储获取数据定时器
       loopAreas: [], //存储 循环的区域
       loopInterval: null,
-      loopTimes: 1000 * 12 //循环时间
+      loopTimes: 1000 * 20 //循环时间
     }
   },
   created() {
@@ -64,8 +64,8 @@ export default {
       labelsLayer = new AMap.LabelsLayer({ visible: true, zIndex: 9, collision: false })
 
       myJcMap = new AMap.Map(this.$refs.myMap, {
-        mapStyle: 'amap://styles/1b8b05391432855bd2473c0d1d3628b5', viewMode: '3D', features: ['bg', 'road'], pitch: 40, skyColor: 'rgba(0,0,0,0)'
-        //, dragEnable: false, zoomEnable: false, rotateEnable: false, keyboardEnable: false
+        mapStyle: 'amap://styles/1b8b05391432855bd2473c0d1d3628b5', viewMode: '3D', features: ['bg', 'road'], pitch: 40, skyColor: 'rgba(0,0,0,0)',
+        dragEnable: false, zoomEnable: false, rotateEnable: false, keyboardEnable: false
       })
       this.clearMapSign() //清除地图标记
       // 设置光照
@@ -291,8 +291,10 @@ export default {
           let nextIndex = this.index % this.loopAreas.length
 
           this.boundaryActiveShow(nowIndex, nextIndex) //边界布局显示
-          this.activeMarkerShow(nowIndex, nextIndex) //marker显示
-          this.orgInfoShow(nowIndex, nextIndex) //信息显示
+          setTimeout(() => {
+            this.activeMarkerShow(nowIndex, nextIndex) //marker显示
+            this.orgInfoShow(nowIndex, nextIndex) //信息显示
+          }, 1200)
         }, this.loopTimes)
       }
     },
