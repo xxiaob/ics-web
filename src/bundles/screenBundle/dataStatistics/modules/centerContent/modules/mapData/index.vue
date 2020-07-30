@@ -417,7 +417,7 @@ export default {
         } else {
           nextOrg.infoMarker = new AMap.Marker({ position, content, anchor: 'center', offset: new AMap.Pixel(0, 0) })
 
-          nextOrg.infoPolyline = new AMap.Polyline({ path: [nextOrg.center, position], strokeOpacity: 1, strokeStyle: 'solid', strokeColor: '#00fcff', strokeWeight: 2 })
+          nextOrg.infoPolyline = new AMap.Polyline({ path: [nextOrg.center, position], strokeOpacity: 1, strokeStyle: 'solid', strokeColor: '#14edfc', strokeWeight: 2.4 })
           overlays.push(nextOrg.infoMarker)
           overlays.push(nextOrg.infoPolyline)
         }
@@ -606,6 +606,50 @@ export default {
 }
 </style>
 <style lang="scss">
+@keyframes left-top-in {
+  from {
+    opacity: 0;
+    transform: translate3d(-80%, -20px, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(-50%, -20px, 0);
+  }
+}
+@keyframes left-bottom-in {
+  from {
+    opacity: 0;
+    transform: translate3d(-80%, 20px, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(-50%, 20px, 0);
+  }
+}
+@keyframes right-top-in {
+  from {
+    opacity: 0;
+    transform: translate3d(80%, -20px, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(50%, -20px, 0);
+  }
+}
+@keyframes right-bottom-in {
+  from {
+    opacity: 0;
+    transform: translate3d(80%, 20px, 0);
+  }
+
+  to {
+    opacity: 1;
+    transform: translate3d(50%, 20px, 0);
+  }
+}
 .jc-data-statistics-warp {
   position: relative;
   width: 154px;
@@ -614,6 +658,8 @@ export default {
   background-size: 100% 100%;
   font-size: 12px;
   color: #feffff;
+  animation-duration: 0.4s;
+  animation-timing-function: ease;
   &:after {
     position: absolute;
     content: "";
@@ -623,28 +669,32 @@ export default {
     background-color: #14edfc;
   }
   &.jc-leftTop {
-    transform: translate(-50%, -20px);
+    animation-name: left-top-in;
+    transform: translate3d(-50%, -20px, 0);
     &:after {
       right: -2px;
       transform: translateY(10px);
     }
   }
   &.jc-leftBottom {
-    transform: translate(-50%, 20px);
+    animation-name: left-bottom-in;
+    transform: translate3d(-50%, 20px, 0);
     &:after {
       right: -2px;
       transform: translateY(-30px);
     }
   }
   &.jc-rightTop {
-    transform: translate(50%, -20px);
+    animation-name: right-top-in;
+    transform: translate3d(50%, -20px, 0);
     &:after {
       left: -2px;
       transform: translateY(10px);
     }
   }
   &.jc-rightBottom {
-    transform: translate(50%, 20px);
+    animation-name: right-bottom-in;
+    transform: translate3d(50%, 20px, 0);
     &:after {
       left: -2px;
       transform: translateY(-30px);
