@@ -11,7 +11,7 @@
       <transition-group name="jc-list" tag="div">
         <div class="jc-list-item jc-flex-warp" v-for="item in list" :key="item.id">
           <div class="img">
-            <img v-if="item.beforePhotos&&item.beforePhotos.length" :src="item.beforePhotos[0]" alt="" width="100%" height="100%">
+            <img v-if="item.afterPhotos&&item.afterPhotos.length" :src="item.afterPhotos[0]" alt="" width="100%" height="100%">
             <img v-else src="./assets/none.png" alt="" width="100%" height="100%">
           </div>
           <div class="jc-flex-con jc-list-item-content jc-flex-warp jc-flex-vertical">
