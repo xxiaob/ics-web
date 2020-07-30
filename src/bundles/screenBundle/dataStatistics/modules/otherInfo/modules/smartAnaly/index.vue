@@ -5,7 +5,7 @@
 
         <div class="smart-analy-left jc-flex-con-2 jc-flex-warp jc-flex-vertical">
 
-          <div class="smart-analy-item jc-flex-con jc-flex-warp" v-for="(item,index) in eventGroupLeftData" :key="index" @click="currentEventGroup(item,index)">
+          <div class="smart-analy-item jc-flex-con jc-flex-warp" :class="{actived:item.isActived}" v-for="(item,index) in eventGroupLeftData" :key="index" @click="currentEventGroup(item,index)">
             <span class="smart-analy-title jc-flex-con">{{ item.typeName && item.typeName}}</span>
             <span class="smart-analy-count">
               <count-to :startVal="0" :endVal="item.typeCount || 0" />件
@@ -24,7 +24,7 @@
         </div>
 
         <div class="smart-analy-right jc-flex-con-2 jc-flex-warp jc-flex-vertical">
-          <div class="smart-analy-item jc-flex-con jc-flex-warp" v-for="(item,index) in eventGroupRightData" :key="index" @click="currentEventGroup(item,index+4)">
+          <div class="smart-analy-item jc-flex-con jc-flex-warp" :class="{actived:item.isActived}" v-for="(item,index) in eventGroupRightData" :key="index" @click="currentEventGroup(item,index+4)">
             <span class="smart-analy-title jc-flex-con">{{ item.typeName && item.typeName}}</span>
             <span class="smart-analy-count">
               <count-to :startVal="0" :endVal="item.typeCount || 0" />件
@@ -50,13 +50,13 @@ export default {
     return {
       current: 0, // 当前事件数
       total: 0, // 总事件数
-      today: new Date(moment().format('YYYY-MM-DD') + ' 00:00:00').getTime(),
-      project: {},
-      options: {},
-      eventGroupData: [],
-      eventGroupLeftData: [],
-      eventGroupRightData: [],
-      timerId: 0
+      today: new Date(moment().format('YYYY-MM-DD') + ' 00:00:00').getTime(), // 初始时间
+      project: {}, // 获取projectId的对象
+      options: {}, // echarts配置对象
+      eventGroupData: {}, // AI智能分析处理后的数据
+      eventGroupLeftData: [], // AI智能分析左侧4条数据
+      eventGroupRightData: [], // AI智能分析右侧4条数据
+      timerId: 0 // 迭代索引
     }
   },
   created() {
@@ -87,11 +87,15 @@ export default {
       eventGroupData.eventInfoList = eventGroupData.eventInfoList && eventGroupData.eventInfoList.reduce((prev, current, index) => {
         if (index < 7 ) {
           total = total - current.typeCount
-          prev.push(current)
+          prev.push({
+            ...current,
+            isActived: false
+          })
         } else if (index == 7) {
           prev.push({
             typeName: '其他',
-            typeCount: total
+            typeCount: total,
+            isActived: false
           })
         }
 
@@ -114,21 +118,57 @@ export default {
 
       // 执行echarts动画函数
       let performEcharts = () => {
+        this.timerId = timerId // 同步timerID
+
+        // 确定当前值
         this.current = this.eventGroupData.eventInfoList[timerId] && this.eventGroupData.eventInfoList[timerId].typeCount
-        timerId++
         this.initEchart()
+
+
+        // 处理active
+        let oldIndex = timerId - 1
+
+        oldIndex = oldIndex < 0 ? 7 : oldIndex
+        this.switchActived(oldIndex, timerId)
+
+        // 累加
+        timerId++
+        timerId = timerId % 8// 判断边界
       }
 
       // 初始echarts动画一次
       performEcharts()
 
 
-      // 开启定时器循环
+      // setInterval定时器
       this.smartTimerID = setInterval(() => {
         performEcharts()
+      }, 5000)
+    },
 
-        this.timerId = timerId = timerId > 7 ? 0 : timerId // 判断边界
-      }, 3000)
+    // 切换actived
+    switchActived(oldIndex, newIndex) {
+      // 清除上一个元素的actived
+
+      let oldIsLeft = oldIndex < 4 // 判断当前选中时是左侧还是右侧
+
+      oldIndex = oldIndex % 4
+      if (oldIsLeft) {
+        this.eventGroupLeftData[oldIndex].isActived = false
+      } else {
+        this.eventGroupRightData[oldIndex].isActived = false
+      }
+
+
+      // 当前元素添加新的actived
+      let newIsLeft = newIndex < 4
+
+      newIndex = newIndex % 4
+      if (newIsLeft) {
+        this.eventGroupLeftData[newIndex].isActived = true
+      } else {
+        this.eventGroupRightData[newIndex].isActived = true
+      }
     },
 
 
@@ -138,10 +178,17 @@ export default {
       clearInterval(this.smartTimerID)
       clearTimeout(this.timeroutId)
 
+      //  点击时处理actived
+      let { timerId } = this
+
+      this.switchActived(timerId, index)
+
+
       // 赋予当前点击时的数据与索引
       this.current = current.typeCount
       this.timerId = index
       this.initEchart()
+
 
       // 延迟开启定时器
       this.timeroutId = setTimeout(() => {
@@ -150,7 +197,7 @@ export default {
       }, 3000)
     },
 
-    // echarts 动画函数
+    // echarts 配置函数
     initEchart() {
       let eventPrecent = this.current / this.total
 
@@ -231,13 +278,13 @@ export default {
                 color: {
                   type: 'linear',
                   x: pointStart[0],
-                  y: pointStart[1], //  注意此处注释掉了，若没有注释将是另一种效果
+                  y: pointStart[1],
                   x2: pointEnd1[0],
                   y2: pointEnd1[1],
                   colorStops: [
                   // !! 在此添加想要的渐变过程色 !!
-                    { offset: 0, color: color }, //rgba(21,229,253,1)
-                    { offset: 1, color: 'rgba(21,229,253,0.2)' }//rgba(0,0,0,0)
+                    { offset: 0, color: color },
+                    { offset: 1, color: 'rgba(21,229,253,0.2)' }
                   ]
                 },
                 shadowColor: 'rgba(21,229,253,0.8)',
@@ -308,6 +355,13 @@ export default {
       color: #11e7ff;
       background: url("./assets/smartanaly-bg.png") no-repeat 0 0 / 100% 100%;
       cursor: pointer;
+
+      &:hover {
+        background-image: url("./assets/smartanaly-hover.png");
+      }
+      &.actived {
+        background-image: url("./assets/smartanaly-hover.png");
+      }
 
       &:nth-child(n + 2) {
         margin-top: 16px;
