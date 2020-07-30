@@ -78,11 +78,11 @@ export default {
       }
     },
     processData({ eventInfoList, problemInfoList, tempTaskInfoList }) {
-      this.events = eventInfoList.map((item, key)=>({ value: item.typeCount, name: item.typeName, itemStyle: this.itemStyle(key) }))
+      this.events = eventInfoList.length ? eventInfoList.map((item, key)=>({ value: item.typeCount, name: item.typeName, itemStyle: this.itemStyle(key) })) : [{}]
 
-      this.problems = problemInfoList.map((item, key)=>({ value: item.typeCount, name: item.typeName, itemStyle: this.itemStyle(key) }))
+      this.problems = problemInfoList.length ? problemInfoList.map((item, key)=>({ value: item.typeCount, name: item.typeName, itemStyle: this.itemStyle(key) })) : [{}]
 
-      this.tasks = tempTaskInfoList.map((item, key)=>({ value: item.sourceCount, name: item.sourceName, itemStyle: this.itemStyle(key) }))
+      this.tasks = tempTaskInfoList.length ? tempTaskInfoList.map((item, key)=>({ value: item.sourceCount, name: item.sourceName, itemStyle: this.itemStyle(key) })) : [{}]
 
       this.formatEchart()
     },
@@ -95,9 +95,9 @@ export default {
           x2: 0,
           y2: 0,
           colorStops: [{
-            offset: 0, color: this.colors[key][0] // 0% 处的颜色
+            offset: 0, color: this.colors[key] ? this.colors[key][0] : this.colors[0][0] // 0% 处的颜色
           }, {
-            offset: 1, color: this.colors[key][1] // 100% 处的颜色
+            offset: 1, color: this.colors[key] ? this.colors[key][1] : this.colors[0][1]// 100% 处的颜色
           }],
           global: false // 缺省为 false
         }

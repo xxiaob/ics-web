@@ -14,6 +14,7 @@ export default {
     }
   },
   props: {
+    isClear: false,
     options: {
       type: Object,
       default() {
@@ -43,7 +44,9 @@ export default {
         console.log('ChartsLine add uid' + this.uid)
         myChart[this.uid] = echarts.init(this.$refs.echarts)
       } else {
-        myChart[this.uid].clear()
+        if (this.isClear) {
+          myChart[this.uid].clear()
+        }
       }
       myChart[this.uid].setOption(this.options)
     },

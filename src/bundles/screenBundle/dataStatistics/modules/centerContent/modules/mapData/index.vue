@@ -15,11 +15,11 @@ let myJcMap, AMap, object3Dlayer, labelsLayer //个人 map 对象,存储Amap对�
 
 let orgAreas = {} //存储区域信息
 
-// let colors = ['#0041fb', '#0096ff', '#04e0f9', '#ff5d5d', '#ffba00'] //#0041fb、#0096ff、#04e0f9、#ff5d5d、#ffba00
-let baseOpacity = 0.68, activeOpacity = 1 //透明度
+let baseOpacity = 0.6, activeOpacity = 0.8 //透明度
 
-let colors = [`rgba(0,131,255,${baseOpacity})`, `rgba(0,192,255,${baseOpacity})`, `rgba(0,169,255,${baseOpacity})`, `rgba(0,114,255,${baseOpacity})`],
-  activeColor = `rgba(0,252,255,${activeOpacity})`
+let colors = ['0083ff', '00c0ff', '00a9ff', '0072ff', '00fcff']
+
+let mapParams = { baseCoefficient: 0.000005, activeCoefficient: 0.000009, animationTimes: 10 }
 
 export default {
   name: 'ScreenDataCenterContentMapData',
@@ -27,11 +27,13 @@ export default {
     return {
       project: null,
       orgId: null,
-      mapParams: Object.freeze({ baseCoefficient: 0.000005, activeCoefficient: 0.000006 }), //记录高度基础和抬起的高度，不用于vue watch
+      mapParams: { baseHeight: 0, activeHeight: 0, dis: 0 }, //记录高度基础和抬起的高度
       showAreas: [], //存储所有显示的区域
       index: 0, //当前循环到第几个
       showNum: 4, //最多每次显示的个数
-      loopAreas: [] //存储 循环的区域
+      loopAreas: [], //存储 循环的区域
+      loopInterval: null,
+      loopTimes: 1000 * 15 //循环时间
     }
   },
   created() {
@@ -168,12 +170,17 @@ export default {
         return bOrg.center[0] * 1 - aOrg.center[0] * 1
       })
 
-      let height = Math.ceil(parentOrg.measureAreas * this.mapParams.baseCoefficient)//设置高度
+      //计算高度和选中高度以及每次变化的高度
+      this.mapParams.baseHeight = Math.ceil(parentOrg.measureAreas * mapParams.baseCoefficient)
+      this.mapParams.activeHeight = Math.ceil(parentOrg.measureAreas * mapParams.activeCoefficient)
+      this.mapParams.dis = Math.ceil((this.mapParams.activeHeight - this.mapParams.baseHeight) / mapParams.animationTimes)
 
       for (let i = 0; i < this.showAreas.length; i++) {
         let keyOrgId = this.showAreas[i].orgId
 
         let item = orgAreas[this.showAreas[i].orgId]
+
+        item.height = this.mapParams.baseHeight
 
         //如果非最父级组织或需要显示的组织只有一个
         if (this.orgId != keyOrgId || this.showAreas.length == 1) {
@@ -183,17 +190,18 @@ export default {
             content: item.areaName,
             direction: 'right',
             offset: [-14, -2],
-            style: { fontSize: 14, fillColor: '#00fcff', fontWeight: 'bold' }
+            style: { fillColor: '#00fcff', fontWeight: 'bold' }
           } })
           markers.push(item.marker)
 
           let prisms = [] //存储当前组织3D对象
 
-          let color = colors[i % colors.length] //设置颜色
+          item.color = AMap.Util.rgbHex2Rgba(colors[i % colors.length]) //设置颜色
 
           //循环增加每个组织的区域
           for (let j = 0; j < item.boundaries.length; j++) {
-            let prism = new AMap.Object3D.Prism({ path: item.boundaries[j].path, height, color })
+            let prism = new AMap.Object3D.Prism({ path: item.boundaries[j].path, height: this.mapParams.baseHeight,
+              color: item.color.replace('1.00', baseOpacity) })
 
             prism.transparent = true
             prisms.push(prism)
@@ -209,6 +217,8 @@ export default {
       labelsLayer.add(markers)
       myJcMap.add(labelsLayer) //添加点标记
 
+      window.orgAreas = orgAreas
+
       //设置自适应显示
       let lnglats = parentOrg.lnglats//设置边距
 
@@ -217,11 +227,11 @@ export default {
       //对显示的数组做排序
       this.showAreas.sort((a, b) => a.dis - b.dis) //先进行记录小到大排序
 
-      let loopAreas = [], loopIndex = -1
+      let loopAreas = [], loopIndex = -1, showNum = Math.ceil(this.showAreas.length / this.showNum)
 
       //对数组进行分组
       this.showAreas.forEach((item, index) => {
-        if (index % this.showNum == 0) {
+        if (index % showNum == 0) {
           loopIndex += 1
         }
 
@@ -231,7 +241,6 @@ export default {
         loopAreas[loopIndex].push(item)
       })
 
-      console.log('处理前的loopAreas：', loopAreas)
       //对每个分数组进行排序
       loopAreas.forEach(loopArea => {
         loopArea.sort(function (a, b) {
@@ -242,9 +251,112 @@ export default {
       })
 
       console.log('处理后的loopAreas：', loopAreas)
+      //处理循环数组
+      for (let i = 0; i < loopAreas[0].length; i++) {
+        let newLoopArea = [] //存储新的数组
+
+        loopAreas.forEach(item => {
+          if (item[i]) {
+            newLoopArea.push(item[i])
+          }
+        })
+        this.loopAreas.push(newLoopArea)
+      }
+      console.log('转至后的显示loopAreas：', this.loopAreas)
+
+      this.loopAreasStart() //开始循环显示区域和信息
     },
-    boundaryActiveShow() {
+    async loopAreasStart() {
       //高亮显示区域
+      if (this.loopAreas.length < 2) {
+        this.activeMarkerShow(0, 0)
+      } else {
+        this.loopInterval = setInterval(() => {
+          let nowIndex = (this.index++ ) % this.loopAreas.length
+
+          let nextIndex = this.index % this.loopAreas.length
+
+          this.boundaryActiveShow(nowIndex, nextIndex)
+          this.activeMarkerShow(nowIndex, nextIndex)
+        }, this.loopTimes)
+      }
+    },
+    boundaryAnimation(prisms, height, color, type) {
+      //如果不存在，则结束
+      if (!prisms || prisms.length < 1) {
+        return
+      }
+      //如果类型为1，则是降低，为2则是抬高
+      if (type == 1) {
+        height -= this.mapParams.dis
+      } else {
+        height += this.mapParams.dis
+      }
+      if (height >= this.mapParams.activeHeight) {
+        height = this.mapParams.activeHeight
+      } else if (height <= this.mapParams.baseHeight) {
+        height = this.mapParams.baseHeight
+      } else {
+        setTimeout(() => {
+          this.boundaryAnimation(prisms, height, color, type)
+        }, 100)
+      }
+      prisms.forEach(prism => {
+        prism.setOptions({ height, color })
+      })
+    },
+    boundaryActiveShow(nowIndex, nextIndex) {
+      //显示区域拔高，之前的显示，抬高新的区域
+      let nowAreas = this.loopAreas[nowIndex]
+
+      nowAreas.forEach(item => {
+        let nowOrg = orgAreas[item.orgId]
+
+        this.boundaryAnimation(nowOrg.prisms, nowOrg.height, nowOrg.color.replace('1.00', baseOpacity), 1)
+        nowOrg.height = this.mapParams.baseHeight
+      })
+
+      //抬高新的区域
+      let nextAreas = this.loopAreas[nextIndex]
+
+      nextAreas.forEach(item => {
+        let nextOrg = orgAreas[item.orgId]
+
+        this.boundaryAnimation(nextOrg.prisms, nextOrg.height, nextOrg.color.replace('1.00', activeOpacity), 2)
+        nextOrg.height = this.mapParams.activeHeight
+      })
+    },
+    activeMarkerShow(nowIndex, nextIndex) {
+      //显示标记信息，先隐藏之前的信息，再显示新的信息
+      let nowAreas = this.loopAreas[nowIndex]
+
+      nowAreas.forEach(item => {
+        let nowOrg = orgAreas[item.orgId]
+
+        if (nowOrg.activeMarker) {
+          nowOrg.activeMarker.hide()
+        }
+      })
+
+      //显示新的标记
+      let nextAreas = this.loopAreas[nextIndex]
+
+      let newMarkers = []
+
+      nextAreas.forEach(item => {
+        let nextOrg = orgAreas[item.orgId]
+
+        if (nextOrg.activeMarker) {
+          nextOrg.activeMarker.show()
+        } else {
+          nextOrg.activeMarker = new AMap.Marker({ position: nextOrg.center, anchor: 'bottom-center', offset: new AMap.Pixel(0, 0),
+            icon: new AMap.Icon({ image: '/static/mapIcons/map-active.gif', size: [24, 40], imageSize: new AMap.Size(24, 40) }) })
+          newMarkers.push(nextOrg.activeMarker)
+        }
+      })
+      if (newMarkers.length) {
+        myJcMap.add(newMarkers)
+      }
     },
     calcBundleLnglats(target1, target2) {
       if (target1) {
@@ -308,6 +420,10 @@ export default {
     object3Dlayer = null
     labelsLayer = null
     orgAreas = {}
+    //清除定时器
+    if (this.loopInterval) {
+      clearInterval(this.loopInterval)
+    }
     this.$EventBus.$off('data-statistics-init-success', this.initData)
   }
 }
@@ -328,23 +444,4 @@ export default {
 }
 </style>
 <style lang="scss">
-.jc-data-statistics-content {
-  position: relative;
-  width: 100px;
-  height: 20px;
-  line-height: 20px;
-  color: #00fffc;
-  margin-left: -6px;
-  font-size: $jc-font-size-base;
-  @include jc-text-warp();
-  &:before {
-    display: inline-block;
-    content: " ";
-    width: 8px;
-    height: 8px;
-    background-color: #00fffc;
-    border-radius: 50%;
-    margin-right: 4px;
-  }
-}
 </style>
