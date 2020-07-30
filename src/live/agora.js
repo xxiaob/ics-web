@@ -6,9 +6,11 @@ export class Live {
    * @param {String} userId 用户id
    * @param {String} localId 本地流播放的容器id
    * @param {String} remoteId 远端流播放的容器id
+   * @param {Function} cb
+   * @param {Function} remoteStremCb
    * @param {Boolean} debug
   */
-  constructor(userId, localId = 'live', remoteId = 'tolive', debug = true) {
+  constructor(userId, localId = 'live', remoteId = 'tolive', cb, remoteStremCb, debug = true) {
     this.userId = userId
     this.debug = debug
     this.localId = localId
@@ -38,7 +40,7 @@ export class Live {
     }
 
     this.init()
-    this.on()
+    this.on(cb, remoteStremCb)
   }
 
   //sdk初始化
@@ -53,8 +55,14 @@ export class Live {
     })
   }
 
-  //监听事件
-  on() {
+  noop() { }
+
+  /**
+   * 监听事件
+   * @param {Function} cb 监听回调
+   * @param {Function} remoteStremCb 监听回调
+   */
+  on(cb = this.noop, remoteStremCb = this.noop) {
     //报错信息
     this.rtc.client.on('error', (err) => {
       this.console('error', err)
@@ -128,7 +136,16 @@ export class Live {
              * RenderResolutionWidth  视频渲染分辨率宽度，单位为像素
              * TotalPlayDuration  视频播放总时间，单位为秒
              */
-            console.log('getRemoteVideoStats 监听 远端流的情况', remoteVideoStatsMap)
+            const badStreams = []
+
+            this.console('getRemoteVideoStats 监听 远端流的情况', remoteVideoStatsMap)
+
+            for (const key in remoteVideoStatsMap) {
+              if (remoteVideoStatsMap[key].PacketLossRate > 0) {
+                badStreams.push(key.split('_')[0])
+              }
+            }
+            remoteStremCb(badStreams)
           })
         }, 2000)
       }
@@ -172,6 +189,11 @@ export class Live {
     //网络质量统计数据
     this.rtc.client.on('network-quality', e => {
       this.console('network-quality 本地网络数据', e)
+      if (e.downlinkNetworkQuality > 3 || e.uplinkNetworkQuality > 3) {
+        cb(true)
+      } else {
+        cb(false)
+      }
     })
   }
 
@@ -266,8 +288,10 @@ export class Live {
 
   //离开房间
   leaveChannel() {
+    // this.console('this.interval', this.interval)
     if (this.interval) {
       clearInterval(this.interval)
+      this.interval = null
     }
     if (this.recordParams.recorded) {
       endRecord(this.recordParams)

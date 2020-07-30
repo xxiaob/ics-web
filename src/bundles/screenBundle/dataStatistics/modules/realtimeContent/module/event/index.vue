@@ -134,6 +134,9 @@ export default {
       .jc-list-item-content-detail {
         color: #8bc1fc;
         justify-content: space-between;
+        span {
+          @include jc-text-warp;
+        }
       }
     }
   }

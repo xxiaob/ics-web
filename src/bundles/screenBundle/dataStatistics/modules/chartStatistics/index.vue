@@ -46,7 +46,8 @@ export default {
         tasks1: [],
         tasks2: [],
         tasks3: []
-      }
+      },
+      intervalTime: 5000
     }
   },
   created() {
@@ -72,9 +73,9 @@ export default {
     }
   },
   mounted() {
-    // this.interval = setInterval(() => {
-    //   this.changeCycle()
-    // }, 3000)
+    this.interval = setInterval(() => {
+      this.changeCycle()
+    }, this.intervalTime)
   },
   destroyed() {
     if (this.interval) {
@@ -175,16 +176,16 @@ export default {
       }
     },
     mouseenter() {
-      // console.log('mouseenter')
-      // if (this.interval) {
-      //   clearInterval(this.interval)
-      // }
+      console.log('ChartStatistics mouseenter')
+      if (this.interval) {
+        clearInterval(this.interval)
+      }
     },
     mouseleave() {
-      // console.log('mouseleave')
-      // this.interval = setInterval(() => {
-      //   this.changeCycle()
-      // }, 3000)
+      console.log('ChartStatistics mouseleave')
+      this.interval = setInterval(() => {
+        this.changeCycle()
+      }, this.intervalTime)
     }
   }
 }

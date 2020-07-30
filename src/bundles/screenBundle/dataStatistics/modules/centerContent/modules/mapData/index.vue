@@ -7,6 +7,7 @@
 import { getAMapLoader } from '@/map/aMap/aMapUtil'
 import { organizationList } from '@/api/organization'
 import { areaList } from '@/api/area'
+import { getAreaDataStatistics } from '@/api/dataScreen'
 import { PROJECT_TYPES } from '@/constant/Dictionaries'
 import { AREAS_TYPE, AREAS_SEARCH_TYPE } from '@/constant/CONST'
 import { orgBoundariesFormat } from '@/libs/apiFormat'
@@ -31,6 +32,9 @@ export default {
       showAreas: [], //存储所有显示的区域
       index: 0, //当前循环到第几个
       showNum: 4, //最多每次显示的个数
+      orgIds: [], //需要查询的组织id数组
+      orgData: {}, //存储组织信息
+      orgInterval: null, //存储获取数据定时器
       loopAreas: [], //存储 循环的区域
       loopInterval: null,
       loopTimes: 1000 * 15 //循环时间
@@ -184,6 +188,7 @@ export default {
 
         //如果非最父级组织或需要显示的组织只有一个
         if (this.orgId != keyOrgId || this.showAreas.length == 1) {
+          this.orgIds.push(keyOrgId) //存储需要查询信息的组织id
           item.marker = new AMap.LabelMarker({ position: item.center, zooms: [3, 20], icon: {
             image: '/static/mapIcons/map-dot.png', anchor: 'center'
           }, text: {
@@ -267,6 +272,8 @@ export default {
       this.loopAreasStart() //开始循环显示区域和信息
     },
     async loopAreasStart() {
+      this.orgInterval = setInterval(this.getOrgDatas, 1000 * 60 * 1) //定时调用数据
+      await this.getOrgDatas() //先去获取数据信息
       //高亮显示区域
       if (this.loopAreas.length < 2) {
         this.activeMarkerShow(0, 0)
@@ -279,6 +286,13 @@ export default {
           this.boundaryActiveShow(nowIndex, nextIndex)
           this.activeMarkerShow(nowIndex, nextIndex)
         }, this.loopTimes)
+      }
+    },
+    async getOrgDatas() {
+      try {
+        let result = await getAreaDataStatistics({ orgIds: this.orgIds, projectId: this.project.projectId })
+      } catch (error) {
+        console.log(error)
       }
     },
     boundaryAnimation(prisms, height, color, type) {
@@ -299,7 +313,7 @@ export default {
       } else {
         setTimeout(() => {
           this.boundaryAnimation(prisms, height, color, type)
-        }, 100)
+        }, 120)
       }
       prisms.forEach(prism => {
         prism.setOptions({ height, color })
@@ -423,6 +437,9 @@ export default {
     //清除定时器
     if (this.loopInterval) {
       clearInterval(this.loopInterval)
+    }
+    if (this.orgInterval) {
+      clearInterval(this.orgInterval)
     }
     this.$EventBus.$off('data-statistics-init-success', this.initData)
   }

@@ -31,9 +31,11 @@
           <div class="live-in">
             <div id="live" v-show="myShow" class="live" :class="{audio:inviteType==='0'||inviteType==='4','big-live':bigLiveId===user.userId}" @click="checkBigLive(user.userId)">
               <div class="userName">{{user.userName}}</div>
+              <div class="badNetwork" v-show="badNetwork">您当前网络不好</div>
             </div>
             <div class="live" @click="checkBigLive(user.userId)" :class="{audio:inviteType==='0'||inviteType==='4','big-live':bigLiveId===user.userId}" v-for="user in users" :key="user.userId" :id="user.userId">
               <div class="userName">{{user.userName}}</div>
+              <div class="badStream" v-show="badStreams.includes(user.userId)">对方网络不好</div>
             </div>
           </div>
         </div>
@@ -111,7 +113,10 @@ export default {
       invitedButton: false, //接听按钮显示
       mediaType: '1',
       fromUsername: '', //哪个用户主动发消息过来
-      observation: false
+      observation: false,
+      overtime: 60000,
+      badNetwork: false,
+      badStreams: []
     }
   },
   computed: {
@@ -143,7 +148,7 @@ export default {
             this.timeout = setTimeout(()=>{
               this.$message.info('对方未接听')
               this.confirmExit()
-            }, 30000)
+            }, this.overtime)
           }
         } else {
           console.log('我是接收方')
@@ -159,10 +164,20 @@ export default {
     if (this.live) {
       console.log('直播客户端已经初始化')
     } else {
-      this.live = new Live(this.user.userId, 'live', 'tolive')
+      this.live = new Live(this.user.userId, 'live', 'tolive', this.liveNetworkCb, this.liveStreamCb)
     }
   },
   methods: {
+    //当前网络监听
+    liveNetworkCb(v) {
+      console.log('liveCb', v)
+      this.badNetwork = v
+    },
+    liveStreamCb(v) {
+      console.log('liveStreamCb', v)
+      this.badStreams = v
+    },
+    //投屏
     sendScreen() {
       const { inviteType, users } = this.params
       const { userName, userId } = this.user
@@ -251,7 +266,7 @@ export default {
               this.$EventBus.$emit('map-voice-alert', { type, loop: true }) //通知播放提示音
               this.timeout = setTimeout(()=>{
                 this.refuse('2')
-              }, 30000)
+              }, this.overtime)
             }
             this.invitedHandelMsg({ channelId, mediaType, inviteType })
           }
