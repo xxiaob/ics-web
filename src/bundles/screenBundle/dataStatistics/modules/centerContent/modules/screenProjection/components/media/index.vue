@@ -17,13 +17,10 @@
             <img class="jc-video-play" src="./assets/pause.png" alt="" width="40" v-show="!audioPlayShows[index]">
           </div>
         </div>
-        <audio v-if="show" ref="audio" :src="audioUrl" style="width:0;height:0" @ended="audioEnded"></audio>
-        <!-- <a class="jc-other swiper-slide" v-for="url in others" :key="url" :href="url" download="" title="点击下载">
-          <img class="jc-other-down" src="@/bundles/taskBundle/assets/down.png" alt="">
-        </a> -->
       </div>
     </div>
 
+    <audio v-if="show" ref="audio" :src="audioUrl" style="width:0;height:0" @ended="audioEnded"></audio>
     <div class="jc-media-title">{{title}}</div>
 
     <el-dialog title="视频播放" :visible.sync="dialogVideoVisible" width="800px" :close-on-click-modal="false" :append-to-body="true">
@@ -57,38 +54,30 @@ export default {
   },
   watch: {
     urls: {
-      immediate: true,
+      // immediate: true,
       deep: true,
       handler(newValue) {
         this.handleUrls(newValue)
-        this.$nextTick(()=>{
-          this.mySwiper = new Swiper('.swiper-container', {
-            autoplay: {
-              delay: 1000,
-              stopOnLastSlide: false,
-              disableOnInteraction: true
-            },
-            slidesPerView: 3,
-            spaceBetween: 10
+
+        //轮播图初始化 的时候  必须要有数据
+        if (newValue.length && !this.mySwiper) {
+          this.$nextTick(()=>{
+            this.mySwiper = new Swiper('.swiper-container', {
+              autoplay: {
+                delay: 1000,
+                stopOnLastSlide: false,
+                disableOnInteraction: true
+              },
+              slidesPerView: 3,
+              spaceBetween: 10
+            })
           })
-          // this.mySwiper.startAutoplay()
-        })
+        }
       }
     }
   },
   mounted() {
-    // setTimeout(()=>{
 
-    // }, 100)
-    // this.mySwiper = new Swiper('.swiper-container', {
-    //   autoplay: {
-    //     delay: 1000,
-    //     stopOnLastSlide: false,
-    //     disableOnInteraction: true
-    //   },
-    //   slidesPerView: 3,
-    //   spaceBetween: 10
-    // })
   }
 }
 </script>
