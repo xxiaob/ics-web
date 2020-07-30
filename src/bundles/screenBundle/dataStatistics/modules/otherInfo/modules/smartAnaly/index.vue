@@ -121,6 +121,7 @@ export default {
 
     // 定时器函数
     smartAnalySetInterval() {
+      clearInterval(this.smartTimerID)
       let { timerId } = this
 
       // 执行echarts动画函数
