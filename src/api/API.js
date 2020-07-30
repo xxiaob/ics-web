@@ -209,7 +209,8 @@ export default {
       transactionType: 'data-service/largeScreen/transactionType',
       getAreaService: 'data-service/largeScreen/getAreaServiceStatistics', // 数据大屏区域出勤
       getOverallAttendance: 'data-service/largeScreen/getOverallAttendanceStatistics', // 数据大屏总体出勤
-      getEventGroupByEventType: 'data-service/intelligentAnalysis/getEventGroupByEventType' // AI智能分析数据
+      getEventGroupByEventType: 'data-service/intelligentAnalysis/getEventGroupByEventType', // AI智能分析数据
+      getAreaDataStatistics: 'data-service/largeScreen/getAreaDataStatistics' //数据大屏地图各区域数据统计
     }
   },
   domainLogo: {

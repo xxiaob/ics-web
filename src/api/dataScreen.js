@@ -3,6 +3,7 @@
  */
 import axios from 'axios'
 import API from './API'
+import qs from 'qs'
 
 /*-------------------------------数据大屏接口------------------------------------ */
 /**
@@ -51,4 +52,13 @@ export function getOverallAttendance(data) {
  */
 export function getEventGroupByEventType(data) {
   return axios.post(API.screen.dataStatistics.getEventGroupByEventType, data)
+}
+
+/**
+ * 数据大屏地图各区域数据统计
+ * @param {object} data
+ * @returns {Object} axios 对象
+ */
+export function getAreaDataStatistics(data) {
+  return axios.get(API.screen.dataStatistics.getAreaDataStatistics + '?' + qs.stringify(data))
 }
