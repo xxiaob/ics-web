@@ -4,8 +4,8 @@
       <div class="weather-info-content jc-flex-con jc-flex-warp jc-flex-vertical">
         <!-- 当前天气信息 -->
         <div class="jc-current-weather jc-flex-con-2 jc-flex-warp">
-          <div class="jc-weather-img-wrap jc-flex-con jc-flex-warp">
-            <img :src="weather.source" height="60" alt="天气">
+          <div class="jc-weather-img-wrap jc-flex-con">
+            <img :src="weather.source" height="90%" alt="天气">
           </div>
           <div class="jc-current-weather-content jc-flex-con-3 jc-flex-warp jc-flex-vertical">
 
@@ -32,7 +32,7 @@
         </div>
 
         <!-- 未来天气信息 -->
-        <div class="jc-future-weather jc-flex-warp">
+        <div class="jc-future-weather jc-flex-con jc-flex-warp">
 
           <div class="jc-future-weather-info jc-flex-con jc-flex-warp" v-for="(item) in futureWeather" :key="item.data">
 
@@ -130,8 +130,7 @@ export default {
   padding: 16px;
 
   .jc-weather-img-wrap {
-    justify-content: center;
-    align-items: center;
+    text-align: center;
   }
 
   .jc-current-weather-content {
@@ -185,8 +184,8 @@ export default {
     }
 
     .future-weather-img-wrap {
-      width: 30px;
-      margin: 4px 12px;
+      width: 36px;
+      margin: 0 12px;
     }
     .future-weather-content {
       color: #8bc1fc;

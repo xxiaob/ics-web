@@ -63,7 +63,14 @@ export default {
     // 获取projectId所在对象
     this.$EventBus.$on('data-statistics-init-success', val=>{
       this.project = val
+
+      // 轮询更新数据
+
       this.getEventGroupByEventTypeData() // AI分析
+
+      this.smartDataId = setInterval(() => {
+        this.getEventGroupByEventTypeData()
+      }, 30000)
     })
   },
   methods: {
@@ -114,6 +121,7 @@ export default {
 
     // 定时器函数
     smartAnalySetInterval() {
+      clearInterval(this.smartTimerID)
       let { timerId } = this
 
       // 执行echarts动画函数
@@ -176,7 +184,7 @@ export default {
     currentEventGroup(current, index) {
       // 清除定时器
       clearInterval(this.smartTimerID)
-      clearTimeout(this.timeroutId)
+      clearTimeout(this.timeoutId)
 
       //  点击时处理actived
       let { timerId } = this
@@ -191,7 +199,7 @@ export default {
 
 
       // 延迟开启定时器
-      this.timeroutId = setTimeout(() => {
+      this.timeoutId = setTimeout(() => {
         this.timerId = ++index
         this.smartAnalySetInterval()
       }, 3000)
@@ -314,6 +322,12 @@ export default {
         ]
       }
     }
+  },
+
+  // 组件销毁前清理定时器
+  beforeDestroy() {
+    clearInterval(this.smartDataId)
+    clearInterval(this.smartTimerID)
   }
 }
 </script>
