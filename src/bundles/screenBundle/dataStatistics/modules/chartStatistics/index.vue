@@ -47,7 +47,7 @@ export default {
         tasks2: [],
         tasks3: []
       },
-      intervalTime: 5000
+      intervalTime: 30000
     }
   },
   created() {

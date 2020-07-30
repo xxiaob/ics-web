@@ -37,7 +37,7 @@ export default {
       orgInterval: null, //存储获取数据定时器
       loopAreas: [], //存储 循环的区域
       loopInterval: null,
-      loopTimes: 1000 * 20 //循环时间
+      loopTimes: 1000 * 12 //循环时间
     }
   },
   created() {
@@ -127,7 +127,7 @@ export default {
                 centerPosition.length += 1
 
                 //存储需要显示的组织
-                this.showAreas.push({ orgId: orgInfo.orgId, center: orgInfo.center })
+                this.showAreas.push({ orgId: orgInfo.orgId, center: Object.freeze(orgInfo.center) })
               }
             }
             orgAreas[item.orgId] = orgInfo
@@ -394,8 +394,8 @@ export default {
         let nowOrg = orgAreas[item.orgId]
 
         if (nowOrg.infoMarker) {
-          // nowOrg.infoPolyline.hide()
-          nowOrg.infoMarker.hide()
+          nowOrg.infoPolyline.setMap(null)
+          nowOrg.infoMarker.setMap(null)
         }
       })
 
@@ -412,11 +412,14 @@ export default {
 
         if (nextOrg.infoMarker) {
           nextOrg.infoMarker.setContent(content)
-          nextOrg.infoMarker.show()
-          // nextOrg.infoPolyline.show()
+          nextOrg.infoMarker.setMap(myJcMap)
+          nextOrg.infoPolyline.setMap(myJcMap)
         } else {
           nextOrg.infoMarker = new AMap.Marker({ position, content, anchor: 'center', offset: new AMap.Pixel(0, 0) })
-          overlays.push(nextOrg.infoMarker )
+
+          nextOrg.infoPolyline = new AMap.Polyline({ path: [nextOrg.center, position], strokeOpacity: 1, strokeStyle: 'solid', strokeColor: '#00fcff', strokeWeight: 2 })
+          overlays.push(nextOrg.infoMarker)
+          overlays.push(nextOrg.infoPolyline)
         }
       })
       if (overlays.length) {
@@ -451,10 +454,10 @@ export default {
       }
       //对数组信息进行处理
       if (areas.length == 1) {
-        areas[0].infoShowPosition = this.orgInfoPosition[this.getInfoPositionKey(areas[0].center)]
+        areas[0].infoShowPosition = this.getInfoPositionKey(areas[0].center)
       } else if (areas.length == 2) {
-        areas[0].infoShowPosition = this.orgInfoPosition[this.getInfoPositionKey(areas[0].center)]
-        areas[1].infoShowPosition = this.orgInfoPosition[this.getInfoPositionKey(areas[1].center)]
+        areas[0].infoShowPosition = this.getInfoPositionKey(areas[0].center)
+        areas[1].infoShowPosition = this.getInfoPositionKey(areas[1].center)
         //如果两个位置相等，则去判断两个的位置，按照左右显示
         if (areas[0].infoShowPosition == areas[1].infoShowPosition) {
           if (areas[0].center[0] <= areas[1].center[0]) {
@@ -470,7 +473,7 @@ export default {
         areas.sort(function (a, b) {
           let aOrg = orgAreas[a.orgId], bOrg = orgAreas[b.orgId]
 
-          return bOrg.center[0] * 1 - aOrg.center[0] * 1
+          return aOrg.center[0] * 1 - bOrg.center[0] * 1
         })
         if (areas[0].center[1] >= areas[1].center[1]) {
           areas[0].infoShowPosition = 'leftTop'
@@ -611,6 +614,42 @@ export default {
   background-size: 100% 100%;
   font-size: 12px;
   color: #feffff;
+  &:after {
+    position: absolute;
+    content: "";
+    top: 50%;
+    width: 3px;
+    height: 20px;
+    background-color: #14edfc;
+  }
+  &.jc-leftTop {
+    transform: translate(-50%, -20px);
+    &:after {
+      right: -2px;
+      transform: translateY(10px);
+    }
+  }
+  &.jc-leftBottom {
+    transform: translate(-50%, 20px);
+    &:after {
+      right: -2px;
+      transform: translateY(-30px);
+    }
+  }
+  &.jc-rightTop {
+    transform: translate(50%, -20px);
+    &:after {
+      left: -2px;
+      transform: translateY(10px);
+    }
+  }
+  &.jc-rightBottom {
+    transform: translate(50%, 20px);
+    &:after {
+      left: -2px;
+      transform: translateY(-30px);
+    }
+  }
   .jc-ds-info-title {
     padding: 0 $jc-default-dis;
     height: 40px;
