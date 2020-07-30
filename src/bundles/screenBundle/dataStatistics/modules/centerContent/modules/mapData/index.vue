@@ -144,10 +144,10 @@ export default {
             parentOrg.centerPosition = new AMap.LngLat(centerPosition.lng / centerPosition.length, centerPosition.lat / centerPosition.length)
 
             //计算信息窗四个位置的坐标点
-            this.orgInfoPosition.leftTop = [parentOrg.lnglats.lng.min, (parentOrg.lnglats.lat.max + parentOrg.centerPosition.lat) / 2]
-            this.orgInfoPosition.rightTop = [parentOrg.lnglats.lng.max, (parentOrg.lnglats.lat.max + parentOrg.centerPosition.lat) / 2]
-            this.orgInfoPosition.leftBottom = [parentOrg.lnglats.lng.min, (parentOrg.lnglats.lat.min + parentOrg.centerPosition.lat) / 2]
-            this.orgInfoPosition.rightBottom = [parentOrg.lnglats.lng.max, (parentOrg.lnglats.lat.min + parentOrg.centerPosition.lat) / 2]
+            this.orgInfoPosition.leftTop = [parentOrg.lnglats.lng.min * 0.9997, (parentOrg.lnglats.lat.max + parentOrg.centerPosition.lat) / 2]
+            this.orgInfoPosition.rightTop = [parentOrg.lnglats.lng.max * 1.00025, (parentOrg.lnglats.lat.max + parentOrg.centerPosition.lat) / 2]
+            this.orgInfoPosition.leftBottom = [parentOrg.lnglats.lng.min * 0.99975, (parentOrg.lnglats.lat.min + parentOrg.centerPosition.lat) / 2]
+            this.orgInfoPosition.rightBottom = [parentOrg.lnglats.lng.max * 1.00025, (parentOrg.lnglats.lat.min + parentOrg.centerPosition.lat) / 2]
           }
 
           console.log('数据大屏，组织边界信息', orgAreas)
