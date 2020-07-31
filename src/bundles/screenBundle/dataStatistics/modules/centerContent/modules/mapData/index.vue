@@ -20,7 +20,7 @@ let baseOpacity = 0.6, activeOpacity = 0.8 //透明度
 
 let colors = ['0083ff', '00c0ff', '00a9ff', '0072ff', '00fcff']
 
-let mapParams = { baseCoefficient: 0.000005, activeCoefficient: 0.000009, animationTimes: 10 } //设置一些地图参数
+let mapParams = { baseCoefficient: 0.0000032, activeCoefficient: 1.8, minHeight: 2400, animationTimes: 10 } //设置一些地图参数
 
 export default {
   name: 'ScreenDataCenterContentMapData',
@@ -64,8 +64,8 @@ export default {
       labelsLayer = new AMap.LabelsLayer({ visible: true, zIndex: 9, collision: false })
 
       myJcMap = new AMap.Map(this.$refs.myMap, {
-        mapStyle: 'amap://styles/1b8b05391432855bd2473c0d1d3628b5', viewMode: '3D', features: ['bg', 'road'], pitch: 40, skyColor: 'rgba(0,0,0,0)',
-        dragEnable: false, zoomEnable: false, rotateEnable: false, keyboardEnable: false
+        mapStyle: 'amap://styles/1b8b05391432855bd2473c0d1d3628b5', viewMode: '3D', features: ['bg', 'road'], pitch: 40, skyColor: 'rgba(0,0,0,0)'
+        // ,dragEnable: false, zoomEnable: false, rotateEnable: false, keyboardEnable: false
       })
       this.clearMapSign() //清除地图标记
       // 设置光照
@@ -89,14 +89,10 @@ export default {
         }
 
         if (result && result.length) {
-          let measureAreas = 0 //记录除自己之外所有区域的面积总和
-
-          let centerPosition = { lng: 0, lat: 0, length: 0 } //记录有边界区域的数量
-
           let lnglats //获取最父级边界
 
           result.forEach(item => {
-            let orgInfo = { orgId: item.orgId, center: null, areaCode: item.areaCode, areaId: item.areaId, areaName: item.areaName, measureAreas: 0 }
+            let orgInfo = { orgId: item.orgId, center: null, areaCode: item.areaCode, areaId: item.areaId, areaName: item.areaName }
 
             //中心点存在则去计算边界等
             if (item.center) {
@@ -113,20 +109,11 @@ export default {
 
                   //设置边界 和 父级最大边界
                   orgInfo.lnglats = this.calcBundleLnglats(orgInfo.lnglats, boundaryLnglats)
-                  lnglats = this.calcBundleLnglats(lnglats, orgInfo.lnglats)
-
-                  //计算边界面积
-                  orgInfo.measureAreas += AMap.GeometryUtil.ringArea(boundary.hasInPath ? boundary.path[0] : boundary.path)
-
-                  if (item.orgId != this.orgId) {
-                    //如果不是当前组织，则累加面积
-                    measureAreas += orgInfo.measureAreas
-                  }
                 })
-                //如果该组织有区域边界，则统计需要绘图的中心点
-                centerPosition.lng += orgInfo.center[0] * 1
-                centerPosition.lat += orgInfo.center[1] * 1
-                centerPosition.length += 1
+
+                if (item.orgId != this.orgId) {
+                  lnglats = this.calcBundleLnglats(lnglats, orgInfo.lnglats)//如果不是当前组织，则计算最大边界
+                }
 
                 //存储需要显示的组织
                 this.showAreas.push({ orgId: orgInfo.orgId, center: Object.freeze(orgInfo.center) })
@@ -138,16 +125,34 @@ export default {
           //最后处理最父级组织的数据
           let parentOrg = orgAreas[this.orgId]
 
-          parentOrg.measureAreas = parentOrg.measureAreas > 0 ? parentOrg.measureAreas : measureAreas
-          parentOrg.lnglats = parentOrg.lnglats ? parentOrg.lnglats : lnglats
-          if (centerPosition.length) {
-            parentOrg.centerPosition = new AMap.LngLat(centerPosition.lng / centerPosition.length, centerPosition.lat / centerPosition.length)
+          /**
+           * 处理显示使用的参数，
+           * 如果存在下级区域，则用下级区域参数，如果下级不存在，则使用父级显示
+           * 计算面积 AMap.GeometryUtil.ringArea
+           */
+          if (lnglats) {
+            parentOrg.totalLnglats = lnglats
+          } else {
+            parentOrg.totalLnglats = parentOrg.lnglats
+          }
+
+          if (parentOrg.totalLnglats) {
+            let totalLnglats = parentOrg.totalLnglats
+
+            parentOrg.measureAreas = AMap.GeometryUtil.ringArea([[totalLnglats.lng.min, totalLnglats.lat.max], [totalLnglats.lng.max, totalLnglats.lat.max],
+              [totalLnglats.lng.max, totalLnglats.lat.min], [totalLnglats.lng.min, totalLnglats.lat.min]]) //计算边框的面积
+
+            parentOrg.centerPosition = new AMap.LngLat((totalLnglats.lng.min + totalLnglats.lng.max) / 2, (totalLnglats.lat.min + totalLnglats.lat.max) / 2)
+
+            //设置矩形将内容框起来，用于自适应显示
+            parentOrg.rectangle = new AMap.Rectangle({ map: myJcMap, strokeOpacity: 0, fillOpacity: 0, zIndex: 1,
+              bounds: new AMap.Bounds([totalLnglats.lng.min, totalLnglats.lat.min], [totalLnglats.lng.max, totalLnglats.lat.max]) })
 
             //计算信息窗四个位置的坐标点
-            this.orgInfoPosition.leftTop = [parentOrg.lnglats.lng.min * 0.9997, (parentOrg.lnglats.lat.max + parentOrg.centerPosition.lat) / 2]
-            this.orgInfoPosition.rightTop = [parentOrg.lnglats.lng.max * 1.00025, (parentOrg.lnglats.lat.max + parentOrg.centerPosition.lat) / 2]
-            this.orgInfoPosition.leftBottom = [parentOrg.lnglats.lng.min * 0.99975, (parentOrg.lnglats.lat.min + parentOrg.centerPosition.lat) / 2]
-            this.orgInfoPosition.rightBottom = [parentOrg.lnglats.lng.max * 1.00025, (parentOrg.lnglats.lat.min + parentOrg.centerPosition.lat) / 2]
+            this.orgInfoPosition.leftTop = [totalLnglats.lng.min, (totalLnglats.lat.max + parentOrg.centerPosition.lat) / 2]
+            this.orgInfoPosition.rightTop = [totalLnglats.lng.max, (totalLnglats.lat.max + parentOrg.centerPosition.lat) / 2]
+            this.orgInfoPosition.leftBottom = [totalLnglats.lng.min, (totalLnglats.lat.min + parentOrg.centerPosition.lat) / 2]
+            this.orgInfoPosition.rightBottom = [totalLnglats.lng.max, (totalLnglats.lat.min + parentOrg.centerPosition.lat) / 2]
           }
 
           console.log('数据大屏，组织边界信息', orgAreas)
@@ -183,8 +188,8 @@ export default {
       })
 
       //计算高度和选中高度以及每次变化的高度
-      this.mapParams.baseHeight = Math.ceil(parentOrg.measureAreas * mapParams.baseCoefficient)
-      this.mapParams.activeHeight = Math.ceil(parentOrg.measureAreas * mapParams.activeCoefficient)
+      this.mapParams.baseHeight = mapParams.minHeight / mapParams.baseCoefficient > parentOrg.measureAreas ? mapParams.minHeight : Math.ceil(parentOrg.measureAreas * mapParams.baseCoefficient)
+      this.mapParams.activeHeight = Math.ceil(this.mapParams.baseHeight * mapParams.activeCoefficient)
       this.mapParams.dis = Math.ceil((this.mapParams.activeHeight - this.mapParams.baseHeight) / mapParams.animationTimes)
 
       for (let i = 0; i < this.showAreas.length; i++) {
@@ -233,9 +238,7 @@ export default {
       window.orgAreas = orgAreas
 
       //设置自适应显示
-      let lnglats = parentOrg.lnglats//设置边距
-
-      myJcMap.setBounds(new AMap.Bounds([lnglats.lng.min, lnglats.lat.min], [lnglats.lng.max, lnglats.lat.max * 0.992]))
+      myJcMap.setFitView(null, true, [0, 1, 1, 1]) //设置自适应显示
 
       //对显示的数组做排序
       this.showAreas.sort((a, b) => a.dis - b.dis) //先进行记录小到大排序
@@ -427,6 +430,7 @@ export default {
       if (overlays.length) {
         myJcMap.add(overlays)
       }
+      myJcMap.setFitView(null, true, [0, 1, 1, 1]) //设置自适应显示
     },
     getInfoPositionKey(position) {
       let parentOrg = orgAreas[this.orgId] //获取父级组织
@@ -525,9 +529,11 @@ export default {
         target1.lng.min = target2.lng.min < target1.lng.min ? target2.lng.min : target1.lng.min
         target1.lat.max = target2.lat.max > target1.lat.max ? target2.lat.max : target1.lat.max
         target1.lat.min = target2.lat.min < target1.lat.min ? target2.lat.min : target1.lat.min
-        return target1
+      } else {
+        target1 = { lng: { max: target2.lng.max, min: target2.lng.min }, lat: { max: target2.lat.max, min: target2.lat.min } }
       }
-      return target2
+
+      return target1
     },
     getAreaBundleLnglats(path) {
       //获取区域东南西北边界
