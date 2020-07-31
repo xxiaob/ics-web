@@ -144,12 +144,14 @@ export default {
           this.$message.info('正在发起' + type)
           this.title = type
           this.inviteAllUsers(...this.inviteTypes[inviteType][1], users)
-          if (this.inviteType === '4' || this.inviteType === '5') {
-            this.timeout = setTimeout(()=>{
+          // if (this.inviteType === '4' || this.inviteType === '5') {
+          // }
+          this.timeout = setTimeout(()=>{
+            if (this.live.rtc.remoteStreams.length === 0) {
               this.$message.info('对方未接听')
               this.confirmExit()
-            }, this.overtime)
-          }
+            }
+          }, this.overtime)
         } else {
           console.log('我是接收方')
         }
