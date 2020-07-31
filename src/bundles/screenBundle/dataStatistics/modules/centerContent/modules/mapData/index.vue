@@ -208,7 +208,7 @@ export default {
             content: item.areaName,
             direction: 'right',
             offset: [-14, -2],
-            style: { fillColor: '#00fcff', fontWeight: 'bold' }
+            style: { fontSize: 13, fillColor: '#00fcff', fontWeight: 'bold', fontFamily: '微软雅黑', strokeColor: '#00fcff' }
           } })
           markers.push(item.marker)
 
@@ -430,7 +430,6 @@ export default {
       if (overlays.length) {
         myJcMap.add(overlays)
       }
-      myJcMap.setFitView(null, true, [0, 1, 1, 1]) //设置自适应显示
     },
     getInfoPositionKey(position) {
       let parentOrg = orgAreas[this.orgId] //获取父级组织
