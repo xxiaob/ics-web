@@ -17,16 +17,14 @@
     <div class="jc-user-warp">
       <div class="jc-user-header">
         已选用户
-        <span class="jc-talk-type" :class="{'jc-active': talkType == 'video'}" @click="talkType = 'video'">视频</span>
-        <span class="jc-talk-type" :class="{'jc-active': talkType == 'audio'}" @click="talkType = 'audio'">音频</span>
       </div>
       <div class="jc-user-content">
         <div class="jc-user-item" v-for="(user,index) in users" :key="user.id">{{user.name}}<i class="el-icon-close" @click="deleteUser(index)"></i></div>
       </div>
       <div class="jc-user-footer">
-        <div class="jc-opera-item jc-clear" title="清除" @click="clearUsers"></div>
-        <div class="jc-opera-item jc-command" title="指挥" @click="goMeeting"></div>
-        <!-- <div class="jc-opera-item  jc-guanmo" title="观摩"></div> -->
+        <div class="jc-opera-item" @click="clearUsers">清除</div>
+        <div class="jc-opera-item " @click="goMeeting('audio')">音频指挥</div>
+        <div class="jc-opera-item" @click="goMeeting('video')">视频指挥</div>
       </div>
     </div>
   </view-warp>
@@ -59,8 +57,7 @@ export default {
       trees: [],
       expandedKeys: [],
       props: { children: 'children', label: 'label' },
-      checkKeys: [],
-      talkType: 'video'
+      checkKeys: []
     }
   },
   created() {
@@ -156,13 +153,13 @@ export default {
       //显示用户详情
       this.$EventBus.$emit('view-component-change', { component: 'UserDetail', options: { userId: userItem.id, userName: userItem.label } }) //通知窗口改变
     },
-    goMeeting() {
+    goMeeting(talkType) {
       //去进行会议
       if (this.users.length) {
         if (this.users.length > 17) {
           this.$message.error('最多支持17人')
         } else {
-          this.$EventBus.$emit('screen-media-live', { users: this.users, type: this.talkType == 'video' ? VIDEO_INVITE_TYPES.MEETVIDEO : VIDEO_INVITE_TYPES.MEETAUDIO })
+          this.$EventBus.$emit('screen-media-live', { users: this.users, type: talkType == 'video' ? VIDEO_INVITE_TYPES.MEETVIDEO : VIDEO_INVITE_TYPES.MEETAUDIO })
           this.clearUsers() //清空用户
         }
       } else {

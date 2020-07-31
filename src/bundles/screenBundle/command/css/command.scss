@@ -11,7 +11,7 @@
 $jc-screen-color: #142c79; //大屏颜色
 
 /*基础参数定义*/
-$jc-right-content-width: 300px; //右侧内容区域宽度
+$jc-right-content-width: 320px; //右侧内容区域宽度
 $jc-right-message-height: 150px; //右侧底部内容高度
 
 /* 大屏header */
@@ -517,26 +517,6 @@ $jc-screen-height: 56px;
       line-height: 26px;
       border-top: solid 1px $jc-color-primary;
       color: $jc-color-text-regular;
-
-      .jc-talk-type {
-        float: right;
-        opacity: 0.8;
-        cursor: pointer;
-        padding: 0 6px;
-        height: 20px;
-        line-height: 16px;
-        margin-top: 3px;
-        color: $jc-screen-color;
-        font-size: $jc-font-size-smaller;
-        border: solid 2px $jc-screen-color;
-
-        &:hover,
-        &.jc-active {
-          opacity: 1;
-          color: $jc-color-white;
-          background-color: $jc-screen-color;
-        }
-      }
     }
 
     .jc-user-content {
@@ -573,31 +553,23 @@ $jc-screen-height: 56px;
     }
 
     .jc-user-footer {
-      text-align: right;
+      display: flex;
 
       .jc-opera-item {
-        display: inline-block;
+        flex: 1;
         cursor: pointer;
-        width: 24px;
-        height: 28px;
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: 16px auto;
+        margin: 8px 0;
+        height: 20px;
+        @include jc-vhcenter;
+        font-size: $jc-font-size-smaller;
+        border-right: solid 1px $jc-color-line-primary;
 
-        &.jc-clear {
-          background-image: url(../modules/org/assets/clear.png);
-
-          &:hover {
-            background-image: url(../modules/org/assets/clear-on.png);
-          }
+        &:last-child {
+          border-right: none;
         }
 
-        &.jc-command {
-          background-image: url(../modules/org/assets/command.png);
-
-          &:hover {
-            background-image: url(../modules/org/assets/command-on.png);
-          }
+        &:hover {
+          color: $jc-color-primary;
         }
       }
     }
