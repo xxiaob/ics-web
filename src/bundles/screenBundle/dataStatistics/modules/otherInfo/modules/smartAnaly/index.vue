@@ -334,6 +334,8 @@ export default {
 
 <style lang="scss" scoped>
 .smart-analy {
+  // overflow: hidden;
+  // height: 0;
   font-size: 12px;
   .smart-analy-content {
     padding: 16px;
