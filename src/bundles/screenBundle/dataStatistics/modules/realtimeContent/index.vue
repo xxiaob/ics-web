@@ -25,6 +25,5 @@ export default {
 <style lang="scss" scoped>
 .js-monitoring {
   margin-bottom: 20px;
-  padding: 0 16px 16px;
 }
 </style>

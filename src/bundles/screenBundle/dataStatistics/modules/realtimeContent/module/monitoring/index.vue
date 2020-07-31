@@ -84,6 +84,7 @@ export default {
   flex-wrap: wrap;
   justify-content: center;
   align-content: center;
+  padding: 0 16px 16px;
 
   .jc-monitoring-wrap {
     width: 50%;
