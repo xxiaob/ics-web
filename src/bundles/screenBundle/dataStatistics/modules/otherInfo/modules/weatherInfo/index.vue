@@ -5,7 +5,7 @@
         <!-- 当前天气信息 -->
         <div class="jc-current-weather jc-flex-con-2 jc-flex-warp">
           <div class="jc-weather-img-wrap jc-flex-con">
-            <img :src="weather.source" height="90%" alt="天气">
+            <img :src="weather.source" height="100%" alt="天气">
           </div>
           <div class="jc-current-weather-content jc-flex-con-3 jc-flex-warp jc-flex-vertical">
 
@@ -19,7 +19,7 @@
               </div>
             </div>
 
-            <div class="jc-weather-temperature jc-flex-con-2 jc-flex-warp">
+            <div class="jc-weather-temperature jc-flex-con-1 jc-flex-warp">
               <div class="weather-temperature-left">
                 <span>{{weather.temperature}}℃</span>
               </div>
@@ -130,6 +130,7 @@ export default {
   padding: 16px;
 
   .jc-weather-img-wrap {
+    height: 70px;
     text-align: center;
   }
 
