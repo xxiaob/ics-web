@@ -16,12 +16,12 @@ export default {
   components: { countTo },
   data() {
     return {
-      list: [{ icon: 'jc-car', unit: '辆', name: '网巡车辆', key: 'first', start: 32, end: 38 },
-        { icon: 'jc-camera', unit: '个', name: '视频监控', key: 'second', start: 32, end: 38 },
-        { icon: 'jc-uav', unit: '个', name: '无人机', key: 'three', start: 32, end: 38 },
-        { icon: 'jc-sgg', unit: '个', name: '市管岗', key: 'four', start: 32, end: 38 },
-        { icon: 'jc-hxg', unit: '个', name: '护学岗', key: 'five', start: 32, end: 38 },
-        { icon: 'jc-zha', unit: '个', name: '渣土卡点', key: 'six', start: 32, end: 38 }],
+      list: [{ icon: 'jc-car', unit: '辆', name: '网巡车辆', key: 'first', start: 0, end: 0 },
+        { icon: 'jc-camera', unit: '个', name: '视频监控', key: 'second', start: 0, end: 0 },
+        { icon: 'jc-uav', unit: '个', name: '无人机', key: 'three', start: 0, end: 0 },
+        { icon: 'jc-sgg', unit: '个', name: '市管岗', key: 'four', start: 0, end: 0 },
+        { icon: 'jc-hxg', unit: '个', name: '护学岗', key: 'five', start: 0, end: 0 },
+        { icon: 'jc-zha', unit: '个', name: '渣土卡点', key: 'six', start: 0, end: 0 }],
       duration: 4000
     }
   },
