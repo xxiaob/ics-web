@@ -96,7 +96,7 @@ export default {
 }
 
 .bounce-leave-active {
-  animation: bounce-in 0.5s reverse;
+  animation: bounce-out 0.5s;
 }
 
 @keyframes bounce-in {
@@ -134,6 +134,23 @@ export default {
   to {
     opacity: 1;
     transform: scale3d(1, 1, 1);
+  }
+}
+
+@keyframes bounce-out {
+  20% {
+    transform: scale3d(0.9, 0.9, 0.9);
+  }
+
+  50%,
+  55% {
+    opacity: 1;
+    transform: scale3d(1.1, 1.1, 1.1);
+  }
+
+  to {
+    opacity: 0;
+    transform: scale3d(0.3, 0.3, 0.3);
   }
 }
 </style>
