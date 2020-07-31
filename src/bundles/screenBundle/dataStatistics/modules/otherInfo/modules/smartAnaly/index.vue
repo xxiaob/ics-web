@@ -378,7 +378,7 @@ export default {
       }
 
       &:nth-child(n + 2) {
-        margin-top: 16px;
+        margin-top: 12px;
       }
 
       & .smart-analy-title {
