@@ -20,7 +20,7 @@ let baseOpacity = 0.6, activeOpacity = 0.8 //透明度
 
 let colors = ['0083ff', '00c0ff', '00a9ff', '0072ff', '00fcff']
 
-let mapParams = { baseCoefficient: 0.0000032, activeCoefficient: 1.8, minHeight: 2400, animationTimes: 10 } //设置一些地图参数
+let mapParams = { baseCoefficient: 0.0000046, activeCoefficient: 1.8, minHeight: 2800, animationTimes: 10 } //设置一些地图参数
 
 export default {
   name: 'ScreenDataCenterContentMapData',
