@@ -30,7 +30,8 @@ export default {
   },
   data() {
     return {
-      menuActive: this.$route.name
+      menuActive: this.$route.name,
+      newWindowRouter: ['commandScreen', 'dataScreen'] //设置新窗口打开的路由
     }
   },
   computed: {
@@ -47,7 +48,13 @@ export default {
       //菜单点击
       console.log('menus', index, path)
       this.menuActive = index
-      this.$router.push({ name: index })
+      if (this.newWindowRouter.includes(index)) {
+        const { href } = this.$router.resolve({ name: index })
+
+        window.open(href, '_blank')
+      } else {
+        this.$router.push({ name: index })
+      }
     }
   }
 }
