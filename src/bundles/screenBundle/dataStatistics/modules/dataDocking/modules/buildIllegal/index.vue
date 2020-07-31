@@ -1,29 +1,29 @@
 <template>
   <!--  建筑违法  -->
   <abstract-area title="建筑违法">
-    <div class="jc-category jc-flex-warp">
+    <div class="jc-category jc-flex-con jc-flex-warp">
       <div class="jc-category-item jc-flex-warp">
         <span class="jc-category-title">违法建筑</span>
         <span class="jc-category-count">
-          <count-to :startVal="0" :endVal="2384" :duration="3000" separator="" />件
+          <count-to :startVal="0" :endVal="0" :duration="3000" separator="" />件
         </span>
       </div>
       <div class="jc-category-item jc-flex-warp">
         <span class="jc-category-title">建筑面积</span>
         <span class="jc-category-count">
-          <count-to :startVal="0" :endVal="1600" :duration="3000" separator="" />m<sup>2</sup>
+          <count-to :startVal="0" :endVal="0" :duration="3000" separator="" />m<sup>2</sup>
         </span>
       </div>
       <div class="jc-category-item jc-flex-warp">
         <span class="jc-category-title">拆除面积</span>
         <span class="jc-category-count">
-          <count-to :startVal="0" :endVal="1000" :duration="3000" separator="" />m<sup>2</sup>
+          <count-to :startVal="0" :endVal="0" :duration="3000" separator="" />m<sup>2</sup>
         </span>
       </div>
       <div class="jc-category-item jc-flex-warp">
         <span class="jc-category-title">拆除比率</span>
         <span class="jc-category-count">
-          <count-to :startVal="0" :endVal="1000/1600*100" :decimals="2" :duration="3000" separator="" />%
+          <count-to :startVal="0" :endVal="0" :decimals="2" :duration="3000" separator="" />%
         </span>
       </div>
     </div>

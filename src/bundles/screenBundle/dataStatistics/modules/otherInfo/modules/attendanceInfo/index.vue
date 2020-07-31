@@ -111,7 +111,7 @@ export default {
   created() {
     // 获取projectId所在对象
     this.$EventBus.$on('data-statistics-init-success', val=>{
-      console.log('chartStatistics 接收信息成功', val)
+      // console.log('chartStatistics 接收信息成功', val)
       this.project = val
       this.getAreaServiceData()
 

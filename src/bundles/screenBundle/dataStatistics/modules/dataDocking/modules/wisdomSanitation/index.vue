@@ -9,7 +9,7 @@
         <div class="jc-sanitation-content jc-flex-con jc-flex-warp jc-flex-vertical">
           <span class="jc-sanitation-title jc-flex-con">在线人数</span>
           <span class="jc-sanitation-count jc-flex-con">
-            <count-to :startVal="0" :endVal="1468" :duration="3000" separator="" />件
+            <count-to :startVal="0" :endVal="0" :duration="3000" separator="" />件
           </span>
         </div>
       </div>
@@ -20,7 +20,7 @@
         <div class="jc-sanitation-content jc-flex-con jc-flex-warp jc-flex-vertical">
           <span class="jc-sanitation-title">在线车辆</span>
           <span class="jc-sanitation-count">
-            <count-to :startVal="0" :endVal="849" :duration="3000" separator="" />辆
+            <count-to :startVal="0" :endVal="0" :duration="3000" separator="" />辆
           </span>
         </div>
       </div>
@@ -32,7 +32,7 @@
         <div class="jc-sanitation-content jc-flex-con jc-flex-warp jc-flex-vertical">
           <span class="jc-sanitation-title">垃圾收集点</span>
           <span class="jc-sanitation-count">
-            <count-to :startVal="0" :endVal="86" :duration="3000" separator="" />个
+            <count-to :startVal="0" :endVal="0" :duration="3000" separator="" />个
           </span>
         </div>
       </div>
@@ -44,7 +44,7 @@
         <div class="jc-sanitation-content jc-flex-con jc-flex-warp jc-flex-vertical">
           <span class="jc-sanitation-title">垃圾中转站</span>
           <span class="jc-sanitation-count">
-            <count-to :startVal="0" :endVal="343" :duration="3000" separator="" />个
+            <count-to :startVal="0" :endVal="0" :duration="3000" separator="" />个
           </span>
         </div>
       </div>
@@ -56,7 +56,7 @@
         <div class="jc-sanitation-content jc-flex-con jc-flex-warp jc-flex-vertical">
           <span class="jc-sanitation-title">公共厕所</span>
           <span class="jc-sanitation-count">
-            <count-to :startVal="0" :endVal="847" :duration="3000" separator="" />个
+            <count-to :startVal="0" :endVal="0" :duration="3000" separator="" />个
           </span>
         </div>
       </div>
@@ -67,7 +67,7 @@
         <div class="jc-sanitation-content jc-flex-con jc-flex-warp jc-flex-vertical">
           <span class="jc-sanitation-title">垃圾分类执法</span>
           <span class="jc-sanitation-count">
-            <count-to :startVal="0" :endVal="54" :duration="3000" separator="" />件
+            <count-to :startVal="0" :endVal="0" :duration="3000" separator="" />件
           </span>
         </div>
       </div>

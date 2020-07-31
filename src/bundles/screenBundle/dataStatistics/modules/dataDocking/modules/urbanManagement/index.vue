@@ -5,25 +5,25 @@
       <div class="jc-category-item jc-flex-warp">
         <span class="jc-category-title">工单上报</span>
         <span class="jc-category-count">
-          <count-to :startVal="0" :endVal="2384" :duration="3000" separator="" />件
+          <count-to :startVal="0" :endVal="0" :duration="3000" separator="" />件
         </span>
       </div>
       <div class="jc-category-item jc-flex-warp">
         <span class="jc-category-title">工单处理</span>
         <span class="jc-category-count">
-          <count-to :startVal="0" :endVal="2384" :duration="3000" separator="" />件
+          <count-to :startVal="0" :endVal="0" :duration="3000" separator="" />件
         </span>
       </div>
       <div class="jc-category-item jc-flex-warp">
         <span class="jc-category-title">结案比率</span>
         <span class="jc-category-count">
-          <count-to :startVal="0" :endVal="2384" :duration="3000" separator="" />件
+          <count-to :startVal="0" :endVal="0" :duration="3000" separator="" />件
         </span>
       </div>
       <div class="jc-category-item jc-flex-warp">
         <span class="jc-category-title">在线网格员</span>
         <span class="jc-category-count">
-          <count-to :startVal="0" :endVal="2384" :duration="3000" separator="" />件
+          <count-to :startVal="0" :endVal="0" :duration="3000" separator="" />件
         </span>
       </div>
 
