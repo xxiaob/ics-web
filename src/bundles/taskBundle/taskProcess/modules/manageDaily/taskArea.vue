@@ -11,7 +11,7 @@
       <el-input placeholder="输入关键字进行过滤" v-model="filterText" size="mini" style="margin:5px 0"></el-input>
       <!-- <el-button type="" @click="setCheckedKeys" size="mini">全选</el-button>
       <el-button type="" @click="resetChecked" size="mini">清空</el-button> -->
-      <el-tree ref="tree" :data="tree" show-checkbox node-key="id" :filter-node-method="filterNode" @check="check" :default-expanded-keys="tree.map(item=>item.id)" :default-checked-keys="selectedAreas"></el-tree>
+      <el-tree ref="tree" :data="orgGrid" show-checkbox node-key="id" :filter-node-method="filterNode" @check="check" :default-expanded-keys="orgGrid.map(item=>item.id)" :default-checked-keys="selectedAreas"></el-tree>
     </div>
     <div class="jc-right-width48 jc-selected-box">
       <div>已选区域</div>
@@ -58,26 +58,30 @@ export default {
       objTree: {},
       gridTypes: [],
       areaTypeId: '',
-      checkedNodes: []
+      checkedNodes: [],
+      first: true
     }
   },
-  computed: {
-    tree() {
-      if (this.areaType === TASK_AREA_TYPES.ORG) {
-        return this.orgTree
-      } else {
-        return this.orgGrid
-      }
-    }
-  },
+  // computed: {
+  //   tree() {
+  //     if (this.areaType === TASK_AREA_TYPES.ORG) {
+  //       return this.orgTree
+  //     } else {
+  //       return this.orgGrid
+  //     }
+  //   }
+  // },
   async created() {
     this.gridTypes = await areaTypeList({})
-    this.getAreaGridList('')
+    // this.getAreaGridList('')
 
-    setTimeout(()=>{
+    this.interval = setInterval(()=>{
       // this.filterArr = Object.keys(this.formatTreeToObj(this.orgTree))
       this.checkedNodes = this.$refs.tree.getCheckedNodes().filter(item=>item.org === false)
-    })
+      if (this.orgGrid.length) {
+        clearInterval(this.interval)
+      }
+    }, 100)
   },
   watch: {
     filterText(val) {
@@ -88,6 +92,7 @@ export default {
       immediate: true,
       handler(val) {
         this.$nextTick(()=>{
+          // console.log('this.edit', this.edit, val)
           if (this.edit) {
             this.$refs.tree.setCheckedKeys(val)
             this.$emit('update:edit', false)
@@ -100,7 +105,7 @@ export default {
     projectId: {
       immediate: true,
       handler(val) {
-        console.log('area projectId', val)
+        // console.log('area projectId', val)
         const projectId = val == '0' ? '' : val
 
         this.getAreaGridList(projectId)
@@ -113,7 +118,10 @@ export default {
 
       this.orgGrid = this.formatGridTree(res)
       this.filterArr = Object.keys(this.formatTreeToObj(this.orgGrid, true))
-      this.$emit('update:selectedAreas', [])
+      if (!this.first) {
+        this.$emit('update:selectedAreas', [])
+      }
+      this.first = false
     },
     formatGridTree(tree) {
       let trees = []
