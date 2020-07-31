@@ -283,7 +283,7 @@ export default {
       this.loopAreasStart() //开始循环显示区域和信息
     },
     async loopAreasStart() {
-      this.orgInterval = setInterval(this.getOrgDatas, 1000 * 60 * 1) //定时调用数据
+      this.orgInterval = setInterval(this.getOrgDatas, 1000 * 55) //定时调用数据
       await this.getOrgDatas() //先去获取数据信息
       //高亮显示区域
       if (this.loopAreas.length < 2) {
