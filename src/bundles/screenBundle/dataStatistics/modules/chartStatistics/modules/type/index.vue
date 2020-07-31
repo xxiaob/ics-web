@@ -1,5 +1,6 @@
 <template>
-  <div class="jc-flex-con jc-flex-warp jc-flex-vertical info" v-loading="loading" element-loading-background="rgba(32, 73, 154, 0.3)">
+  <!-- v-loading="loading" element-loading-background="rgba(32, 73, 154, 0.3)" -->
+  <div class="jc-flex-con jc-flex-warp jc-flex-vertical info">
     <div class="jc-title">
       <span class="jc-title-content">事务类型占比</span>
       <div class="jc-right-box">

@@ -5,8 +5,8 @@
       <div class="jc-flex-con" :class="{'jc-activated':activated===7}" @click="changeCycle(7)">周</div>
       <div class="jc-flex-con" :class="{'jc-activated':activated===30}" @click="changeCycle(30)">月</div>
     </div>
-    <jc-info class="jc-chart-comp" :cycle="activated" v-loading="loading" element-loading-background="rgba(32, 73, 154, 0.3)" :infoAndArea="infoAndArea"></jc-info>
-    <jc-area class="jc-chart-comp" :cycle="activated" v-loading="loading" element-loading-background="rgba(32, 73, 154, 0.3)" :infoAndArea="infoAndArea"></jc-area>
+    <jc-info class="jc-chart-comp" :cycle="activated" :infoAndArea="infoAndArea"></jc-info>
+    <jc-area class="jc-chart-comp" :cycle="activated" :infoAndArea="infoAndArea"></jc-area>
     <jc-type class="jc-chart-comp" :date="date"></jc-type>
   </div>
 </template>
