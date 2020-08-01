@@ -387,7 +387,7 @@ export default {
           setTimeout(function () {
             times += 1
             animationFN(times)
-          }, 60)
+          }, 80)
         }
       }
 
