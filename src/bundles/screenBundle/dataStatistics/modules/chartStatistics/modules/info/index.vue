@@ -62,6 +62,8 @@ const options = {
   yAxis: [
     {
       type: 'value',
+      max: 'dataMax',
+      minInterval: 1,
       show: true,
       boundaryGap: [0, 0.01],
       splitLine: {

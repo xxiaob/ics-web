@@ -94,7 +94,7 @@
       <el-button size="small" type="primary" @click="$emit('update:detailShow', false)">返回</el-button>
     </div>
     <el-dialog :title="taskForm.ifUpload?'流转任务':'结束任务'" :visible.sync="dialogVisibleHandle" :close-on-click-modal="false" width="600px" append-to-body>
-      <el-form ref="taskForm" label-width="80px" :model="taskForm" class="jc-manage-form">
+      <el-form ref="taskForm" label-width="80px" :model="taskForm" class="jc-manage-form" size="mini">
         <el-form-item label="任务人员" :prop="peopleProps[peopleType]" :rules="rules.SELECT_NOT_NULL" v-if="taskForm.ifUpload" class="jc-mb">
           <jc-task-people :peopleType.sync="peopleType" :selecteds.sync="peoples" :orgTree="orgTree"></jc-task-people>
         </el-form-item>
@@ -149,7 +149,7 @@ export default {
   },
   data() {
     return {
-      peopleType: TASK_PEOPLE_TYPES.ORG,
+      peopleType: TASK_PEOPLE_TYPES.PEOPLE,
       peopleProps: {
         [TASK_PEOPLE_TYPES.ORG]: 'orgIds',
         [TASK_PEOPLE_TYPES.PEOPLE]: 'userIds'
