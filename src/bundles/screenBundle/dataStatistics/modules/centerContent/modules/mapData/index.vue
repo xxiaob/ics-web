@@ -659,6 +659,7 @@ export default {
   position: relative;
   width: 154px;
   height: 180px;
+  text-align: center;
   background: url(./assets/info-bg.png) no-repeat center;
   background-size: 100% 100%;
   font-size: 12px;
@@ -706,12 +707,33 @@ export default {
     }
   }
   .jc-ds-info-title {
+    position: relative;
+    display: inline-block;
+    max-width: 100%;
     padding: 0 $jc-default-dis;
     height: 40px;
     line-height: 40px;
     font-size: 14px;
     text-align: center;
+    text-shadow: $jc-color-white 0 0 12px;
     @include jc-text-warp;
+    &:before,
+    &:after {
+      content: "";
+      position: absolute;
+      width: 5px;
+      height: 5px;
+      top: 50%;
+      transform: translateY(-50%);
+      border-radius: 50%;
+      background-color: $jc-color-white;
+    }
+    &:before {
+      left: 9px;
+    }
+    &:after {
+      right: 9px;
+    }
   }
   .jc-ds-info-item {
     padding: 0 $jc-default-dis;
