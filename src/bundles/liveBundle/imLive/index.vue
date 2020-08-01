@@ -208,6 +208,11 @@ export default {
       this.bigLiveId = ''
       this.showNormal = (val === '1' && this.contentSize === '2') ? true : false
       this.contentSize = val
+      if (this.contentSize === '2') {
+        setTimeout(()=>{
+          this.bigLiveId = this.user.userId
+        }, 200)
+      }
     },
     //im 实时数据回调
     imMsgCb(onType, data) {
