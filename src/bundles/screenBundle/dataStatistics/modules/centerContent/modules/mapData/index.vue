@@ -287,8 +287,7 @@ export default {
       await this.getOrgDatas() //先去获取数据信息
       //高亮显示区域
       if (this.loopAreas.length < 2) {
-        this.activeMarkerShow(0, 0) //marker显示
-        this.orgInfoShow(0, 0) //信息显示
+        this.showNextMarkerAndInfo(0) //显示信息
       } else {
         this.loopInterval = setInterval(() => {
           let nowIndex = (this.index++ ) % this.loopAreas.length
@@ -296,8 +295,10 @@ export default {
           let nextIndex = this.index % this.loopAreas.length
 
           this.boundaryActiveShow(nowIndex, nextIndex) //边界布局显示
-          this.activeMarkerShow(nowIndex, nextIndex) //marker显示
-          this.orgInfoShow(nowIndex, nextIndex) //信息显示
+          this.hidePreMarkerAndInfo(nowIndex)
+          setTimeout(() => {
+            this.showNextMarkerAndInfo(nextIndex) //显示信息
+          }, 1600)
         }, this.loopTimes)
       }
     },
@@ -359,8 +360,8 @@ export default {
         nextOrg.height = this.mapParams.activeHeight
       })
     },
-    activeMarkerShow(nowIndex, nextIndex) {
-      //显示标记信息，先隐藏之前的信息，再显示新的信息
+    hidePreMarkerAndInfo(nowIndex) {
+      //隐藏现在的marker 和信息窗口显示
       let nowAreas = this.loopAreas[nowIndex]
 
       nowAreas.forEach(item => {
@@ -369,27 +370,11 @@ export default {
         if (nowOrg.activeMarker) {
           nowOrg.activeMarker.hide()
         }
-      })
-
-      //显示新的标记
-      let nextAreas = this.loopAreas[nextIndex]
-
-      let newMarkers = []
-
-      nextAreas.forEach(item => {
-        let nextOrg = orgAreas[item.orgId]
-
-        if (nextOrg.activeMarker) {
-          nextOrg.activeMarker.show()
-        } else {
-          nextOrg.activeMarker = new AMap.Marker({ position: nextOrg.center, anchor: 'bottom-center', offset: new AMap.Pixel(0, 0),
-            icon: new AMap.Icon({ image: '/static/mapIcons/map-active.gif', size: [24, 40], imageSize: new AMap.Size(24, 40) }) })
-          newMarkers.push(nextOrg.activeMarker)
+        if (nowOrg.infoMarker) {
+          nowOrg.infoPolyline.setMap(null)
+          nowOrg.infoMarker.setMap(null)
         }
       })
-      if (newMarkers.length) {
-        myJcMap.add(newMarkers)
-      }
     },
     polylineAnimation(startPath, endPath, polyline) {
       let lngDis = (endPath[0] - startPath[0]) / mapParams.animationTimes, latDis = (endPath[1] - startPath[1]) / mapParams.animationTimes
@@ -402,26 +387,14 @@ export default {
           setTimeout(function () {
             times += 1
             animationFN(times)
-          }, 80)
+          }, 60)
         }
       }
 
       animationFN(0)
       polyline.setMap(myJcMap)
     },
-    orgInfoShow(nowIndex, nextIndex) {
-      //显示组织信息数据
-      let nowAreas = this.loopAreas[nowIndex]
-
-      nowAreas.forEach(item => {
-        let nowOrg = orgAreas[item.orgId]
-
-        if (nowOrg.infoMarker) {
-          nowOrg.infoPolyline.setMap(null)
-          nowOrg.infoMarker.setMap(null)
-        }
-      })
-
+    showNextMarkerAndInfo(nextIndex) {
       //显示新的标记
       let nextAreas = this.loopAreas[nextIndex]
 
@@ -433,13 +406,17 @@ export default {
 
         let { position, content } = this.getPositionAndContent(item) //获取中心点和内容
 
-        if (nextOrg.infoMarker) {
+        if (nextOrg.activeMarker) {
+          nextOrg.activeMarker.show()
           nextOrg.infoMarker.setContent(content)
           nextOrg.infoMarker.setMap(myJcMap)
         } else {
+          nextOrg.activeMarker = new AMap.Marker({ position: nextOrg.center, anchor: 'bottom-center', offset: new AMap.Pixel(0, 0),
+            icon: new AMap.Icon({ image: '/static/mapIcons/map-active.gif', size: [24, 40], imageSize: new AMap.Size(24, 40) }) })
           nextOrg.infoMarker = new AMap.Marker({ position, content, anchor: 'center', offset: new AMap.Pixel(0, 0) })
 
           nextOrg.infoPolyline = new AMap.Polyline({ path: [nextOrg.center, position], strokeOpacity: 1, strokeStyle: 'solid', strokeColor: '#14edfc', strokeWeight: 1.2 })
+          overlays.push(nextOrg.activeMarker)
           overlays.push(nextOrg.infoMarker)
         }
         this.polylineAnimation(nextOrg.center, position, nextOrg.infoPolyline)
