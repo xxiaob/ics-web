@@ -391,6 +391,24 @@ export default {
         myJcMap.add(newMarkers)
       }
     },
+    polylineAnimation(startPath, endPath, polyline) {
+      let lngDis = (endPath[0] - startPath[0]) / mapParams.animationTimes, latDis = (endPath[1] - startPath[1]) / mapParams.animationTimes
+
+      let animationFN = function (times) {
+        if (times >= mapParams.animationTimes) {
+          polyline.setPath([startPath, endPath])
+        } else {
+          polyline.setPath([startPath, [startPath[0] + lngDis * times, startPath[1] + latDis * times]])
+          setTimeout(function () {
+            times += 1
+            animationFN(times)
+          }, 80)
+        }
+      }
+
+      animationFN(0)
+      polyline.setMap(myJcMap)
+    },
     orgInfoShow(nowIndex, nextIndex) {
       //显示组织信息数据
       let nowAreas = this.loopAreas[nowIndex]
@@ -418,14 +436,13 @@ export default {
         if (nextOrg.infoMarker) {
           nextOrg.infoMarker.setContent(content)
           nextOrg.infoMarker.setMap(myJcMap)
-          nextOrg.infoPolyline.setMap(myJcMap)
         } else {
           nextOrg.infoMarker = new AMap.Marker({ position, content, anchor: 'center', offset: new AMap.Pixel(0, 0) })
 
-          nextOrg.infoPolyline = new AMap.Polyline({ path: [nextOrg.center, position], strokeOpacity: 1, strokeStyle: 'solid', strokeColor: '#14edfc', strokeWeight: 2.4 })
+          nextOrg.infoPolyline = new AMap.Polyline({ path: [nextOrg.center, position], strokeOpacity: 1, strokeStyle: 'solid', strokeColor: '#14edfc', strokeWeight: 1.2 })
           overlays.push(nextOrg.infoMarker)
-          overlays.push(nextOrg.infoPolyline)
         }
+        this.polylineAnimation(nextOrg.center, position, nextOrg.infoPolyline)
       })
       if (overlays.length) {
         myJcMap.add(overlays)
@@ -613,50 +630,54 @@ export default {
 }
 </style>
 <style lang="scss">
-@keyframes left-top-in {
-  from {
-    opacity: 0;
-    transform: translate3d(-80%, -20px, 0);
-  }
+@mixin jc-map-animation($name, $trans) {
+  @keyframes #{$name} {
+    from {
+      opacity: 0;
+      transform: scale3d(0.3, 0.3, 0.3) $trans;
+    }
+    from,
+    50%,
+    60%,
+    70%,
+    80%,
+    to {
+      animation-timing-function: cubic-bezier(0.215, 0.61, 0.355, 1);
+    }
 
-  to {
-    opacity: 1;
-    transform: translate3d(-50%, -20px, 0);
+    50% {
+      opacity: 0;
+      transform: scale3d(0.3, 0.3, 0.3) $trans;
+    }
+
+    60% {
+      transform: scale3d(1.1, 1.1, 1.1) $trans;
+    }
+
+    70% {
+      transform: scale3d(0.9, 0.9, 0.9) $trans;
+    }
+
+    80% {
+      opacity: 1;
+      transform: scale3d(1.03, 1.03, 1.03) $trans;
+    }
+
+    90% {
+      transform: scale3d(0.97, 0.97, 0.97) $trans;
+    }
+
+    to {
+      opacity: 1;
+      transform: scale3d(1, 1, 1) $trans;
+    }
   }
 }
-@keyframes left-bottom-in {
-  from {
-    opacity: 0;
-    transform: translate3d(-80%, 20px, 0);
-  }
-
-  to {
-    opacity: 1;
-    transform: translate3d(-50%, 20px, 0);
-  }
-}
-@keyframes right-top-in {
-  from {
-    opacity: 0;
-    transform: translate3d(80%, -20px, 0);
-  }
-
-  to {
-    opacity: 1;
-    transform: translate3d(50%, -20px, 0);
-  }
-}
-@keyframes right-bottom-in {
-  from {
-    opacity: 0;
-    transform: translate3d(80%, 20px, 0);
-  }
-
-  to {
-    opacity: 1;
-    transform: translate3d(50%, 20px, 0);
-  }
-}
+//增加动画样式
+@include jc-map-animation(left-top-in, translate3d(-50%, -20px, 0));
+@include jc-map-animation(left-bottom-in, translate3d(-50%, 20px, 0));
+@include jc-map-animation(right-top-in, translate3d(50%, -20px, 0));
+@include jc-map-animation(right-bottom-in, translate3d(50%, 20px, 0));
 .jc-data-statistics-warp {
   position: relative;
   width: 154px;
@@ -665,8 +686,8 @@ export default {
   background-size: 100% 100%;
   font-size: 12px;
   color: #feffff;
-  animation-duration: 0.4s;
-  animation-timing-function: ease;
+  animation-duration: 2.4s;
+
   &:after {
     position: absolute;
     content: "";

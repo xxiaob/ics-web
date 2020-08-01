@@ -8,7 +8,7 @@
       <screen-projection></screen-projection>
     </div>
     <div class="jc-map-footer">
-      <img src="./assets/map-footer.gif" class="jc-map-img" />
+      <img src="./assets/map-footer.png" class="jc-map-img" />
     </div>
   </div>
 </template>
@@ -30,7 +30,7 @@ export default {
 .jc-map-footer {
   position: relative;
   height: 70px;
-  z-index: 1;
+  z-index: 3;
 }
 .jc-map-img {
   position: absolute;
