@@ -81,7 +81,8 @@ $jc-screen-height: 56px;
       padding: $jc-default-dis;
       width: 180px;
       height: 168px;
-      background: url(../modules/header/assets/weather-bg.png) no-repeat center bottom;
+      background: url(../modules/header/assets/weather-bg.png) no-repeat center
+        bottom;
       background-size: 100% 160px;
       left: 0;
       visibility: hidden;
@@ -560,6 +561,7 @@ $jc-screen-height: 56px;
         cursor: pointer;
         margin: 8px 0;
         height: 20px;
+        color: $jc-color-text-secondary;
         @include jc-vhcenter;
         font-size: $jc-font-size-smaller;
         border-right: solid 1px $jc-color-line-primary;
@@ -631,7 +633,7 @@ $jc-screen-height: 56px;
 
     .jc-node-icon {
       left: -6px;
-      content: '';
+      content: "";
       width: 12px;
       height: 12px;
       background: url(../assets/node.png) no-repeat center $jc-color-white;
@@ -678,7 +680,7 @@ $jc-screen-height: 56px;
         position: relative;
 
         &:after {
-          content: '';
+          content: "";
           display: inline-block;
           width: 16px;
           height: 16px;
@@ -766,7 +768,8 @@ $jc-screen-height: 56px;
 
   .jc-message-user {
     width: 68px;
-    background: url(../modules/message/assets/peportperson.png) no-repeat left center;
+    background: url(../modules/message/assets/peportperson.png) no-repeat left
+      center;
     background-size: 20px 20px;
     padding: 0 $jc-default-dis/2 0 24px;
     @include jc-text-warp;
