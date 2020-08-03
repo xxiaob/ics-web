@@ -1,5 +1,5 @@
 <template>
-  <div class="jc-flex-con jc-flex-warp jc-flex-vertical info">
+  <div class="jc-flex-con jc-flex-warp jc-flex-vertical info" @mouseenter="mouseenter" @mouseleave="mouseleave">
     <div class="jc-title">
       <span class="jc-title-content">下辖区域占比</span>
       <div class="jc-right-box">
@@ -16,8 +16,11 @@
 
 <script>
 import JcCharts from '@/components/JcForm/JcCharts'
+import intervalMixin from '../../mixins/intervalMixin'
+
 export default {
   name: 'ScreenDataStatisticsChartStatisticsArea',
+  mixins: [intervalMixin],
   components: {
     JcCharts
   },
@@ -29,8 +32,7 @@ export default {
   data() {
     return {
       project: null,
-      options: null,
-      activated: 1
+      options: null
     }
   },
   watch: {
@@ -42,14 +44,6 @@ export default {
     }
   },
   methods: {
-    changeType(val) {
-      if (val !== this.activated) {
-        this.activated = val
-        this.processData()
-      } else {
-        console.log('请勿重复点击')
-      }
-    },
     processData() {
       if (this.infoAndArea) {
         let name = ''

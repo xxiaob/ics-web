@@ -25,7 +25,7 @@ export default {
     }
   },
   mounted() {
-    this.test = new Foreign('test', 'b11ad1b6c2c444ee9730d469e9fd960a', '3213123', '李向玉')
+    this.test = new Foreign('test', 'e8cf78c8bd6b49bcb60e65c1fc33973c', '3213123', '李向玉')
   },
   methods: {
     start() {
@@ -43,7 +43,7 @@ export default {
       //   channelId: null //可选  采集观摩需要
       // }
       // this.visible = true
-      this.test.start('68282327481974784')
+      this.test.start('68707744802144256')
     },
     stop() {
       this.test.stop()

@@ -208,7 +208,7 @@ export default {
             content: item.areaName,
             direction: 'right',
             offset: [-14, -2],
-            style: { fontSize: 13, fillColor: '#00fcff', fontWeight: 'bold', fontFamily: '微软雅黑', strokeColor: '#00fcff' }
+            style: { fontSize: 12, fillColor: '#ffffff', fontWeight: 'bold', fontFamily: '微软雅黑' }
           } })
           markers.push(item.marker)
 
@@ -505,12 +505,12 @@ export default {
       //设置基础信息
       let infoContent = `<div class="jc-ds-info-title">${info.orgName}</div>`
 
-      infoContent += `<div class="jc-ds-info-item">在岗人数<span>${info.onGuardUserCount}人</span></div>`
-      infoContent += `<div class="jc-ds-info-item">巡逻里程<span>${info.journey}KM</span></div>`
-      infoContent += `<div class="jc-ds-info-item">岗点触碰<span>${info.inoutCount}次</span></div>`
-      infoContent += `<div class="jc-ds-info-item">上报事件<span>${info.eventReportCount}件</span></div>`
-      infoContent += `<div class="jc-ds-info-item">网巡问题<span>${info.problemCount}个</span></div>`
-      infoContent += `<div class="jc-ds-info-item">临时任务<span>${info.temporaryTaskCount}个</span></div>`
+      infoContent += `<div class="jc-ds-info-item">在岗人数：<span>${info.onGuardUserCount}人</span></div>`
+      infoContent += `<div class="jc-ds-info-item">巡逻里程：<span>${info.journey}KM</span></div>`
+      infoContent += `<div class="jc-ds-info-item">岗点触碰：<span>${info.inoutCount}次</span></div>`
+      infoContent += `<div class="jc-ds-info-item">上报事件：<span>${info.eventReportCount}件</span></div>`
+      infoContent += `<div class="jc-ds-info-item">网巡问题：<span>${info.problemCount}个</span></div>`
+      infoContent += `<div class="jc-ds-info-item">临时任务：<span>${info.temporaryTaskCount}个</span></div>`
 
       let content = `<div class="jc-data-statistics-warp jc-${area.infoShowPosition}">${infoContent}</div>`
 
@@ -711,10 +711,11 @@ export default {
     display: inline-block;
     max-width: 100%;
     padding: 0 $jc-default-dis;
-    height: 40px;
-    line-height: 40px;
+    height: 34px;
+    line-height: 34px;
     font-size: 14px;
     text-align: center;
+    overflow: hidden;
     text-shadow: $jc-color-white 0 0 12px;
     @include jc-text-warp;
     &:before,
@@ -737,12 +738,9 @@ export default {
   }
   .jc-ds-info-item {
     padding: 0 $jc-default-dis;
-    display: flex;
+    text-align: left;
     span {
       color: #14edfc;
-      flex: 1;
-      @include jc-text-warp(1);
-      text-align: right;
       height: 22px;
       line-height: 22px;
     }
