@@ -117,7 +117,7 @@ export default {
       }
 
       .montitoring {
-        background: url("./assets/video-space.png") no-repeat 0 0 / cover;
+        background: url("./assets/video-space.png") no-repeat center / cover;
       }
     }
   }
