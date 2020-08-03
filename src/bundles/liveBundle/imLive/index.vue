@@ -195,7 +195,7 @@ export default {
       // console.log('sendScreen', data)
       this.isSendScreen = true
       this.$EventBus.$emit('screen-message-channel', { type: MESSAGE_DATA_TYPES.LIVE, data })
-      this.$message.success('投屏成功')
+      this.$message.success('投屏发送成功')
     },
     //切换小视频为大视频
     checkBigLive(val) {
@@ -283,6 +283,7 @@ export default {
       }
     },
     exitHandel({ nickName, isExit }) {
+      this.$EventBus.$emit('map-voice-end') //通知停止播放提示音
       if (this.live.joined) {
         this.$message.warning(nickName + '退出')
         console.log('isExit - rtc.remoteStreams', this.live.rtc.remoteStreams)

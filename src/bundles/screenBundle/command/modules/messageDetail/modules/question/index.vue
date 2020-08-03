@@ -116,7 +116,7 @@ export default {
       } else {
         this.isSendScreen = true
         this.$EventBus.$emit('screen-message-channel', { type: MESSAGE_DATA_TYPES.QUESTION, data: { id: this.info.id } })
-        this.$message.success('投屏成功')
+        this.$message.success('投屏发送成功')
       }
     },
     async getDetail() {
