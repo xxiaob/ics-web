@@ -9,7 +9,7 @@
           </div>
           <div class="jc-current-weather-content jc-flex-con-3 jc-flex-warp jc-flex-vertical">
 
-            <div class="jc-weather-humidity jc-flex-con jc-flex-warp">
+            <div class="jc-weather-humidity jc-flex-warp">
               <div class="weath-humidity-left">
                 <span>{{weather.dayWindDir}}风{{weather.dayWindPower}}级</span> |
                 <span>湿度{{weather.humidity}}%</span>
@@ -135,12 +135,14 @@ export default {
 
   .jc-current-weather-content {
     padding-left: 10px;
+    padding-top: 10px;
     color: #ffffff;
 
     .jc-weather-humidity {
       justify-content: space-between;
       align-items: center;
       font-size: 12px;
+      line-height: 2;
 
       span {
         padding: 0 6px;
@@ -153,8 +155,9 @@ export default {
 
       .weather-temperature-left {
         font-family: Impact, MicrosoftYaHei;
-        font-size: 36px;
+        font-size: 40px;
         font-weight: bold;
+        padding-left: 6px;
       }
       .weather-temperature-right {
         padding-right: 6px;

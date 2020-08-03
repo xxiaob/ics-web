@@ -1,7 +1,7 @@
 <template>
   <div class="jc-flex-warp jc-flex-vertical">
     <!-- 监控视频 -->
-    <jc-monitoring class="data-statistics-border js-monitoring"></jc-monitoring>
+    <jc-monitoring class="data-statistics-border"></jc-monitoring>
 
     <!-- 实时事件区域 -->
     <jc-event class="data-statistics-border"></jc-event>
@@ -23,7 +23,4 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.js-monitoring {
-  margin-bottom: 20px;
-}
 </style>
