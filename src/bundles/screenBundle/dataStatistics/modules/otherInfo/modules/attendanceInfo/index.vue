@@ -1,7 +1,7 @@
 <template>
   <div class="attendance-info jc-flex-warp jc-flex-vertical">
     <!-- 总体出勤 -->
-    <div class="overall-attendance jc-flex-con jc-flex-warp jc-flex-vertical">
+    <div class="overall-attendance jc-flex-warp jc-flex-vertical">
       <jc-abstract-area title="总体出勤">
         <!-- 总体出勤内容 -->
         <div class="overall-attendance-content jc-flex-warp jc-flex-con">
@@ -21,7 +21,7 @@
             </div>
           </div>
 
-          <div class="jc-flex-con overall-cont-center jc-flex-warp">
+          <div class="overall-cont-center jc-flex-warp jc-flex-con">
             <div class="img-wrap jc-flex-warp">
               <img src="./assets/mileage-patrol.png" width="100%" height="100%" alt="巡逻里程">
             </div>

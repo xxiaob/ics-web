@@ -1,7 +1,7 @@
 <template>
   <div class="jc-other-info jc-flex-warp jc-flex-vertical">
     <!-- 气象信息 -->
-    <jc-weather-info class="jc-weather-info data-statistics-border jc-flex-con-2"></jc-weather-info>
+    <jc-weather-info class="jc-weather-info data-statistics-border"></jc-weather-info>
 
     <!-- 出勤信息 -->
     <jc-attendance-info class=" data-statistics-border jc-attendance-info jc-flex-con-4"></jc-attendance-info>
