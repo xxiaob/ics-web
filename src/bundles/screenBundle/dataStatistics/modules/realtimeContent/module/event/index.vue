@@ -18,9 +18,9 @@
             <div class="jc-list-item-content-title">{{item.eventTitle}}</div>
             <div class="jc-list-item-content-position">{{item.positionName}}</div>
             <div class="jc-list-item-content-detail jc-flex-warp">
-              <span>{{item.reportUserName}}</span>
-              <span>{{item.orgName}}</span>
-              <span>{{item.createTime|fliterTime}}</span>
+              <span class="reportUserName">{{item.reportUserName}}</span>
+              <span class="orgName">{{item.orgName}}</span>
+              <span class="createTime">{{item.createTime|fliterTime}}</span>
             </div>
           </div>
         </div>
@@ -129,6 +129,7 @@ export default {
         color: #8bc1fc;
         font-size: 14px;
         @include jc-text-warp;
+        margin-bottom: 10px;
       }
 
       .jc-list-item-content-detail {
@@ -136,6 +137,17 @@ export default {
         justify-content: space-between;
         span {
           @include jc-text-warp;
+          display: inline-block;
+        }
+        .reportUserName {
+          width: 20%;
+        }
+        .orgName {
+          width: 20%;
+          margin: 0 10%;
+        }
+        .createTime {
+          width: 40%;
         }
       }
     }
