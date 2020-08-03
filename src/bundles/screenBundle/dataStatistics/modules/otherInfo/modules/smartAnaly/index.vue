@@ -16,7 +16,8 @@
 
         <div class="smart-analy-center jc-flex-con-3">
           <jc-charts :options="options"></jc-charts>
-          <div class="smart-analy-count jc-flex-warp">
+          <div class="smart-analy-count jc-flex-warp jc-flex-vertical">
+            <div class="smart-analy-title">事件总数</div>
             <div class="count-to-wrap">
               <count-to :startVal="0" :endVal="total || 0" /> 件
             </div>
@@ -243,20 +244,20 @@ export default {
 
       this.options = {
         backgroundColor: 'transparent',
-        title: {
-          'x': '50%',
-          'y': '50%',
-          top: '30%', //字体的位置
-          left: '33%',
-          'text': '事件总数',
-          'textStyle': {
-            'fontWeight': 'normal',
-            'color': '#11e7ff',
-            'fontSize': 14
-          }
+        // title: {
+        //   'x': '50%',
+        //   'y': '50%',
+        //   top: '50%', //字体的位置
+        //   left: '50%',
+        //   'text': '事件总数',
+        //   'textStyle': {
+        //     'fontWeight': 'normal',
+        //     'color': '#11e7ff',
+        //     'fontSize': 14
+        //   }
 
 
-        },
+        // },
 
         series: [{
           'name': '',
@@ -355,9 +356,9 @@ export default {
         justify-content: center;
         align-items: center;
         color: #11e7ff;
+        font-size: 14px;
 
         .count-to-wrap {
-          margin-top: 20px;
           span {
             font-size: 34px;
           }
