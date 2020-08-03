@@ -131,8 +131,8 @@ export default {
         {
           name: '事件总数',
           type: 'pie',
-          radius: ['40%', '65%'],
-          center: ['30%', '50%'],
+          radius: ['40%', '75%'],
+          center: ['25%', '50%'],
           label: {
             show: false
           },

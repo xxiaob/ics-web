@@ -164,6 +164,7 @@ export default {
         {
           name: '事务类型占比',
           type: 'pie',
+          radius: '75%',
           center: ['25%', '50%'],
           label: {
             show: false

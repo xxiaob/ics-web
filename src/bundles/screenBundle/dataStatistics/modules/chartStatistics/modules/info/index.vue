@@ -31,6 +31,7 @@ const options = {
       type: 'shadow'
     }
   },
+  color: ['#1cccc0'],
   legend: {
     x: 'right',
     // data: [ '新建问题', '已经处理', '转成任务' ],
@@ -57,7 +58,10 @@ const options = {
       axisTick: {
         show: false
       },
-      data: []
+      data: [],
+      axisLine: {
+        show: false
+      }
     }
   ],
   yAxis: [
@@ -74,6 +78,9 @@ const options = {
         }
       },
       axisTick: {
+        show: false
+      },
+      axisLine: {
         show: false
       }
     }
