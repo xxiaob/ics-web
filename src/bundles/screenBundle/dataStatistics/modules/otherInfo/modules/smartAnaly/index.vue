@@ -258,7 +258,7 @@ export default {
 
 
         // },
-
+        animationDuration: 1000,
         series: [{
           'name': '',
           'type': 'pie',
