@@ -1,6 +1,6 @@
 <template>
   <!-- v-loading="loading" element-loading-background="rgba(32, 73, 154, 0.3)" -->
-  <div class="jc-flex-con jc-flex-warp jc-flex-vertical info">
+  <div class="jc-flex-con jc-flex-warp jc-flex-vertical info" @mouseenter="mouseenter" @mouseleave="mouseleave">
     <div class="jc-title">
       <span class="jc-title-content">事务类型占比</span>
       <div class="jc-right-box">
@@ -18,9 +18,11 @@
 <script>
 import JcCharts from '@/components/JcForm/JcCharts'
 import { getTransactionType } from '@/api/dataScreen'
+import intervalMixin from '../../mixins/intervalMixin'
 
 export default {
   name: 'ScreenDataStatisticsChartStatisticsType',
+  mixins: [intervalMixin],
   components: {
     JcCharts
   },
@@ -34,7 +36,6 @@ export default {
       loading: false,
       project: null,
       options: null,
-      activated: 1,
       events: null,
       problems: null,
       tasks: null,
@@ -56,21 +57,13 @@ export default {
     }
   },
   methods: {
-    changeType(val) {
-      if (val !== this.activated) {
-        this.activated = val
-        this.formatEchart()
-      } else {
-        console.log('请勿重复点击')
-      }
-    },
     async initData() {
       if (!this.loading) {
         this.loading = true
         try {
           const res = await getTransactionType({ ...this.date, projectId: this.project.projectId })
 
-          this.processData(res)
+          this.handelData(res)
           this.loading = false
         } catch (error) {
           console.error(error)
@@ -78,14 +71,14 @@ export default {
         }
       }
     },
-    processData({ eventInfoList, problemInfoList, tempTaskInfoList }) {
+    handelData({ eventInfoList, problemInfoList, tempTaskInfoList }) {
       this.events = eventInfoList.length ? eventInfoList.map((item, key)=>({ value: item.typeCount, name: item.typeName, itemStyle: this.itemStyle(key) })) : [{}]
 
       this.problems = problemInfoList.length ? problemInfoList.map((item, key)=>({ value: item.typeCount, name: item.typeName, itemStyle: this.itemStyle(key) })) : [{}]
 
       this.tasks = tempTaskInfoList.length ? tempTaskInfoList.map((item, key)=>({ value: item.sourceCount, name: item.sourceName, itemStyle: this.itemStyle(key) })) : [{}]
 
-      this.formatEchart()
+      this.processData()
     },
     itemStyle(key) {
       return {
@@ -104,7 +97,7 @@ export default {
         }
       }
     },
-    formatEchart() {
+    processData() {
       if (this.activated === 1) {
         this.options.series[0].name = '上报事件'
         this.options.series[0].data = this.events.sort((a, b)=> a.value - b.value)
