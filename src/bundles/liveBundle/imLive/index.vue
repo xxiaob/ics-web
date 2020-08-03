@@ -256,7 +256,7 @@ export default {
                 }
               })
             }
-            if (content === 'double') {
+            if (content === 'double' || content === 'help') {
               this.inviteType = mediaType === '0' ? '4' : '5'
             } else {
               this.inviteType = mediaType
