@@ -70,7 +70,7 @@ export default {
 
       this.smartDataId = setInterval(() => {
         this.getEventGroupByEventTypeData()
-      }, 30000)
+      }, 40000)
     })
   },
   methods: {

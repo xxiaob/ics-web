@@ -118,7 +118,7 @@ export default {
       // 轮询更新数据
       this.attendanceTimer = setInterval(() => {
         this.getAreaServiceData()
-      }, 30000)
+      }, 25000)
     })
   },
   methods: {
