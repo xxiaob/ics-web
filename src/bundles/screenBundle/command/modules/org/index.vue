@@ -159,6 +159,7 @@ export default {
         if (this.users.length > 17) {
           this.$message.error('最多支持17人')
         } else {
+          this.$EventBus.$emit('screen-opera-control', { type: 'select', isSelect: false })
           this.$EventBus.$emit('screen-media-live', { users: this.users, type: talkType == 'video' ? VIDEO_INVITE_TYPES.MEETVIDEO : VIDEO_INVITE_TYPES.MEETAUDIO })
           this.clearUsers() //清空用户
         }

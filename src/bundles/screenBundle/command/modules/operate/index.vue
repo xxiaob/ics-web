@@ -92,6 +92,7 @@ export default {
     this.initData() //初始化基础数据
     this.$EventBus.$on('message-num-change', this.messageNumChange) //监听通知消息
     this.$EventBus.$on('map-grid-types-change', this.mapGridTypesChange) //监听 地图存在类型
+    this.$EventBus.$on('screen-opera-control', this.opreaControl) //操作按钮控制
   },
   computed: {
     controlAreaTypes() {
@@ -120,6 +121,14 @@ export default {
         this.togetherType = allCheckIds
       } catch (error) {
         console.log(error)
+      }
+    },
+    opreaControl(data) {
+      if (data.type == 'select') {
+        //如果框选状态不同，则设置框选状态
+        if (this.isSelect != data.isSelect) {
+          this.userSelect()
+        }
       }
     },
     userSelect() {
@@ -174,6 +183,7 @@ export default {
     //去除事件监听
     this.$EventBus.$off('message-num-change', this.messageNumChange)
     this.$EventBus.$off('map-grid-types-change', this.mapGridTypesChange)
+    this.$EventBus.$$off('screen-opera-control', this.opreaControl)
   }
 }
 </script>
