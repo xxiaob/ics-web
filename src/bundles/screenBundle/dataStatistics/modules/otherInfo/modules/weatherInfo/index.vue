@@ -153,6 +153,7 @@ export default {
       align-items: flex-start;
 
       .weather-temperature-left {
+        font-family: Impact, MicrosoftYaHei;
         font-size: 36px;
         font-weight: bold;
       }
