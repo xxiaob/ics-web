@@ -9,20 +9,18 @@ export default {
   name: 'JcRichEditor',
   model: { prop: 'value', event: 'change' },
   props: {
-    value: {
-      type: String,
-      default: ''
-    }
+    value: { type: String, default: '' }
   },
   data() {
     return {
       editor: null,
-      editorVal: ''
+      editorVal: this.value
     }
   },
   watch: {
     value(newVal) {
       if (this.editorVal != newVal) {
+        this.editorVal = newVal
         this.editor.txt.html(newVal)
       }
     },
