@@ -48,9 +48,10 @@ export default {
 
     .jc-summary-bgwrap {
       position: relative;
+      top: 50%;
       width: 100%;
       padding-top: 42%;
-      transform: rotateX(52deg);
+      transform: translate(0, -50%) rotateX(52deg);
       // background: pink;
 
       .summary-border {
