@@ -130,7 +130,6 @@ export default {
   padding: 16px;
 
   .jc-weather-img-wrap {
-    height: 70px;
     text-align: center;
   }
 
