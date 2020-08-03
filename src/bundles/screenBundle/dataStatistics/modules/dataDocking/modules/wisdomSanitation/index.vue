@@ -106,7 +106,8 @@ export default {
 
     .jc-sanitation-content {
       justify-content: center;
-      align-items: center;
+      align-items: flex-start;
+      padding-left: 14px;
 
       .jc-sanitation-title {
         font-size: 12px;
