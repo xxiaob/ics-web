@@ -70,6 +70,7 @@ export default {
     cursor: pointer;
     margin: 12px 0;
     height: 20px;
+    color: $jc-color-text-secondary;
     font-size: $jc-font-size-smaller;
     @include jc-vhcenter;
     border-right: solid 1px $jc-color-line-primary;
