@@ -49,7 +49,7 @@ const options = {
     top: 35,
     left: 0,
     right: 0,
-    bottom: -20,
+    bottom: -18,
     containLabel: true
   },
   xAxis: [
@@ -64,7 +64,8 @@ const options = {
       },
       axisLabel: {
         interval: 0,
-        rotate: -30
+        rotate: -30,
+        fontSize: 10
       }
     }
   ],

@@ -124,8 +124,10 @@ export default {
       legend: {
         orient: 'vertical',
         right: 50,
-        top: 20,
-        bottom: 20,
+        // top: 20,
+        // bottom: 20,
+        // x: 'center',
+        y: 'center',
         itemWidth: 10,
         itemHeight: 10,
         itemGap: 20,
@@ -170,7 +172,7 @@ export default {
             show: false
           },
           data: [{}],
-          roseType: 'radius',
+          // roseType: 'radius',
           // labelLine: {
           //  lineStyle: {
           //   color: 'white'
