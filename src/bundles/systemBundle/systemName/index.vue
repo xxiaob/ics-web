@@ -12,14 +12,31 @@
       <el-table :data="list" v-loading="loading" row-key="id" class="jc-table" @selection-change="tableSelect">
         <el-table-column type="selection" width="40"></el-table-column>
         <el-table-column type="index" :index="indexMethod" label="序号" width="50"></el-table-column>
-        <el-table-column prop="domain" label="域名" width="200"></el-table-column>
-        <el-table-column prop="systemName" label="系统名称" width="200"></el-table-column>
+        <el-table-column prop="domain" label="域名" width="120"></el-table-column>
+        <el-table-column prop="systemName" label="系统名称"></el-table-column>
         <el-table-column prop="domainLogo" label="系统logo">
           <template slot-scope="scope">
             <img :src="scope.row.domainLogo" alt="">
           </template>
         </el-table-column>
-        <el-table-column prop="createTime" label="创建时间" :formatter="formatTime" width="140"></el-table-column>
+        <!-- <el-table-column prop="createTime" label="创建时间" :formatter="formatTime" width="140"></el-table-column> -->
+
+        <!-- 登录页面背景和窗口图 -->
+        <el-table-column prop="firstPageLogo" label="登录页背景图">
+          <template slot-scope="scope">
+            <img :src="scope.row.firstPageLogo" alt="">
+          </template>
+        </el-table-column>
+        <el-table-column prop="firstPageLoginLogo" label="登录窗口背景图">
+          <template slot-scope="scope">
+            <img :src="scope.row.firstPageLoginLogo" alt="">
+          </template>
+        </el-table-column>
+        <!-- 窗口位置 -->
+        <el-table-column prop="loginLogoLocation" label="登录窗口位置" :formatter="formatLocation"></el-table-column>
+        <!-- 入口路由 -->
+        <el-table-column prop="entranceRouter" label="入口路由"></el-table-column>
+        <!--  -->
         <el-table-column width="60" label="操作">
           <template slot-scope="scope">
             <el-button type="text" size="mini" icon="el-icon-edit-outline" @click="manage(scope.row)" title="编辑"></el-button>
@@ -37,6 +54,9 @@ import PaginationMixins from '@/mixins/PaginationMixins'
 import { listByPage, del } from '@/api/domainLogo'
 import { formatDate } from '@/libs/util'
 
+import { LOGIN_WINDOWS_POSITION } from '@/constant/Dictionaries'
+console.log(LOGIN_WINDOWS_POSITION )
+
 export default {
   name: 'SystemNameIndex',
   mixins: [PaginationMixins],
@@ -51,13 +71,19 @@ export default {
       visible: false,
       info: null,
       ids: [],
-      filter: {}
+      filter: {},
+      loginLogoLocation: LOGIN_WINDOWS_POSITION.VALUES
+
     }
   },
   created() {
     this.initData()
   },
   methods: {
+    // 处理窗口位置
+    formatLocation(row, column, cellValue) {
+      return LOGIN_WINDOWS_POSITION.toString(cellValue)
+    },
     formatTime(row, column, cellValue) {
       return formatDate(cellValue)
     },
