@@ -34,13 +34,16 @@ export default {
     return {
       loading: false,
       tip: '',
-      logo: '', //系统logo
+      config: {}, //登录页配置信息
       form: { userName: '', password: '' }
     }
   },
   computed: {
     systemLogo() {
-      return this.logo ? `background-image: url(${this.logo});` : ''
+      return this.config.domainLogo ? `background-image: url(${this.config.domainLogo});` : ''
+    },
+    systemBg() {
+      return this.config.domainLogo ? `background-image: url(${this.config.domainLogo});` : ''
     }
   },
   created() {
@@ -65,9 +68,9 @@ export default {
       if (configs && configs.length) {
         let host = window.location.host
 
-        let domain = configs.find(config => config.domain == host)
+        let config = configs.find(item => item.domain == host)
 
-        this.logo = domain ? domain.domainLogo : ''
+        this.config = config ? config : {}
       }
     },
     onSubmit() {

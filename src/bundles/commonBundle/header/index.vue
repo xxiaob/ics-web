@@ -39,7 +39,7 @@ export default {
       user: state => state.user
     }),
     systemLogo() {
-      console.log(this.user);
+      console.log(this.user)
       return this.user && this.user.userRespInnerDTO && this.user.userRespInnerDTO.homePageLogo ? this.user.userRespInnerDTO.homePageLogo : '/static/images/header-logo.png'
     },
     ...mapGetters('user', { isLogin: 'isLogin' })

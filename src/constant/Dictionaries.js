@@ -219,3 +219,12 @@ export const MESSAGE_DATA_TYPES = new JcEnum([
   { key: 'LIVE', value: 'live', label: '音视频' },
   { key: 'CLOSR', value: 'close', label: '关闭投屏' }
 ])
+
+/**
+ * 登陆页 窗口位置字典
+ */
+export const LOGIN_WINDOWS_POSITION = new JcEnum([
+  { key: 'LEFT', value: 0, label: '左' },
+  { key: 'CENTER', value: 1, label: '中' },
+  { key: 'RIGHT', value: 2, label: '右' }
+])
