@@ -1,6 +1,6 @@
 <template>
   <header class="jc-header">
-    <img :src="systemLogo" class="jc-header-logo" @click="$router.push({name: 'index'})" />
+    <img :src="systemLogo" class="jc-header-logo" @click="$router.push({name: logoRouter})" />
     <template v-if="isLogin">
       <div class="jc-header-menus">
         <div class="jc-user-warp">
@@ -21,6 +21,7 @@
 
 <script>
 import { mapState, mapGetters, mapMutations } from 'vuex'
+import { getDomainLogoConfig } from '@/libs/storage'
 
 export default {
   name: 'CommonHeader',
@@ -31,8 +32,12 @@ export default {
   data() {
     return {
       visible: false,
+      logoRouter: 'index',
       resetPwdVisible: false
     }
+  },
+  created() {
+    this.getConfig() //获取配置
   },
   computed: {
     ...mapState('user', {
@@ -49,6 +54,20 @@ export default {
     logout() {
       this.loginOut()
       this.$router.push({ name: 'login' })
+    },
+    getConfig() {
+      let configs = getDomainLogoConfig()
+
+      if (configs && configs.length) {
+        let host = window.location.host
+
+        let config = configs.find(item => item.domain == host)
+
+        if (config) {
+          //如果router配置了，且不是index，则点击logo 进入main
+          this.logoRouter = (config.entranceRouter && config.entranceRouter != 'index') ? 'main' : 'index'
+        }
+      }
     }
   }
 }
