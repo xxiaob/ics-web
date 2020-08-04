@@ -224,7 +224,7 @@ export const MESSAGE_DATA_TYPES = new JcEnum([
  * 登陆页 窗口位置字典
  */
 export const LOGIN_WINDOWS_POSITION = new JcEnum([
-  { key: 'LEFT', value: 0, label: '左' },
-  { key: 'CENTER', value: 1, label: '中' },
-  { key: 'RIGHT', value: 2, label: '右' }
+  { key: 'LEFT', value: 1, label: '左' },
+  { key: 'CENTER', value: 2, label: '中' },
+  { key: 'RIGHT', value: 3, label: '右' }
 ])

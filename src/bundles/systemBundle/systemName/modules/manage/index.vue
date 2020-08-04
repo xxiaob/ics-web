@@ -36,7 +36,7 @@ import FormMixins from '@/mixins/FormMixins'
 import { LOGIN_WINDOWS_POSITION } from '@/constant/Dictionaries'
 
 
-let defaultForm = { systemName: '', domain: '', domainLogo: '', firstPageLogo: '', firstPageLoginLogo: '', loginLogoLocation: 2 }
+let defaultForm = { systemName: '', domain: '', domainLogo: '', firstPageLogo: '', firstPageLoginLogo: '', loginLogoLocation: 3 }
 
 export default {
   name: 'SystemNameManage',
