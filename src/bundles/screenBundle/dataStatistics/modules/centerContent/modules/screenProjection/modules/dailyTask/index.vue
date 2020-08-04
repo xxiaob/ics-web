@@ -140,8 +140,6 @@ export default {
           this.form = {}
           this.loading = false
         }
-      } else {
-        this.getDetail()
       }
     },
     async  formatProjectList() {
