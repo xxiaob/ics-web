@@ -18,6 +18,8 @@
           </div>
         </div>
       </div>
+      <!-- <div class="swiper-button-prev"></div>
+      <div class="swiper-button-next"></div> -->
     </div>
 
     <audio v-if="show" ref="audio" :src="audioUrl" style="width:0;height:0" @ended="audioEnded"></audio>
@@ -30,8 +32,9 @@
 </template>
 
 <script>
-import Swiper from 'swiper'
-import 'swiper/swiper-bundle.css'
+import Swiper from 'swiper/dist/js/swiper'
+import 'swiper/dist/css/swiper.css'
+
 import MediaMixins from '@/bundles/taskBundle/mixins/MediaMixins'
 
 export default {
@@ -64,12 +67,16 @@ export default {
           this.$nextTick(()=>{
             this.mySwiper = new Swiper('.swiper-container', {
               autoplay: {
-                delay: 1000,
+                delay: 3000,
                 stopOnLastSlide: false,
                 disableOnInteraction: true
               },
               slidesPerView: 3,
-              spaceBetween: 10
+              spaceBetween: 10,
+              navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev'
+              }
             })
           })
         }
@@ -102,6 +109,19 @@ export default {
 .swiper-container {
   // height: 100px;
   margin-top: 10px;
+
+  .swiper-button-next {
+    width: 44px;
+    background-image: url(./assets/next.png);
+    background-size: 100% 100%;
+    right: 20px;
+  }
+  .swiper-button-prev {
+    width: 44px;
+    background-image: url(./assets/next.png);
+    background-size: 100% 100%;
+    left: 20px;
+  }
 }
 
 .swiper-slide {
