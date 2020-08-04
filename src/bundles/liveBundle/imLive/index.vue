@@ -301,7 +301,7 @@ export default {
       if (agree === '3') {
         this.$message.warning(nickName + '正在忙')
 
-        if (this.inviteType === '4' || this.inviteType === '5' || this.inviteType === '3') {
+        if (this.inviteType === '4' || this.inviteType === '5' || this.inviteType === '3' || this.inviteType === '2') {
           setTimeout(()=>{
             this.leaveChannel()
           }, 2000)
