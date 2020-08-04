@@ -11,15 +11,15 @@
       <transition-group name="jc-list" tag="div">
         <div class="jc-list-item jc-flex-warp" v-for="item in list" :key="item.id">
           <div class="img">
-            <img v-if="item.afterPhotos&&item.afterPhotos.length" :src="item.afterPhotos[0]" alt="" width="100%" height="100%">
+            <img v-if="(item.beforePhotos&&item.beforePhotos.length)||(item.afterPhotos&&item.afterPhotos.length)" :src="item.beforePhotos[0]||item.afterPhotos[0]" alt="" width="100%" height="100%">
             <img v-else src="./assets/none.png" alt="" width="100%" height="100%">
           </div>
           <div class="jc-flex-con jc-list-item-content jc-flex-warp jc-flex-vertical">
-            <div class="jc-list-item-content-title">{{item.eventTitle}}</div>
-            <div class="jc-list-item-content-position">{{item.positionName}}</div>
+            <div class="jc-list-item-content-title" :title="item.positionName">{{item.positionName}}</div>
+            <div class="jc-list-item-content-position">{{item.orgName}}</div>
             <div class="jc-list-item-content-detail jc-flex-warp">
-              <span class="reportUserName">{{item.reportUserName}}</span>
-              <span class="orgName">{{item.orgName}}</span>
+              <span class="reportUserName">上报人：{{item.reportUserName}}</span>
+              <!-- <span class="orgName">{{item.orgName}}</span> -->
               <span class="createTime">{{item.createTime|fliterTime}}</span>
             </div>
           </div>
@@ -54,7 +54,7 @@ export default {
   },
   filters: {
     fliterTime(value) {
-      return moment(value).format('YYYY-MM-DD HH:mm:ss')
+      return moment(value).format('MM-DD HH:mm:ss')
     }
   },
   computed: {
@@ -127,7 +127,7 @@ export default {
 
       .jc-list-item-content-position {
         color: #8bc1fc;
-        font-size: 14px;
+        font-size: 16px;
         @include jc-text-warp;
         margin-bottom: 10px;
       }
@@ -135,20 +135,7 @@ export default {
       .jc-list-item-content-detail {
         color: #8bc1fc;
         justify-content: space-between;
-        span {
-          @include jc-text-warp;
-          display: inline-block;
-        }
-        .reportUserName {
-          width: 20%;
-        }
-        .orgName {
-          width: 20%;
-          margin: 0 10%;
-        }
-        .createTime {
-          width: 40%;
-        }
+        font-size: 12px;
       }
     }
   }
