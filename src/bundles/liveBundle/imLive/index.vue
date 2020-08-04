@@ -93,6 +93,7 @@ export default {
       bigLiveId: '', //大视频的id
       contentSize: '1', //弹框大小
       users: [], //通话中的用户列表(除了自己)
+      userIds: [],
       msg: '音视频通话',
       dialogVisible: false,
       contentShow: false,
@@ -134,6 +135,8 @@ export default {
           const { inviteType, users, channelId } = this.params
 
           this.users = users
+          this.userIds = users.map(item=>item.userId)
+
           this.inviteType = inviteType
           //设置频道id
           console.log('大屏传进来的channelId', channelId)
@@ -226,7 +229,9 @@ export default {
         console.log('邀请视频')
         if (isExit) {
           //退出消息
-          this.exitHandel({ nickName, isExit })
+          if (this.fromUsername == fromUsername || this.userIds.includes(fromUsername)) {
+            this.exitHandel({ nickName, isExit })
+          }
         } else if ( agree) {
           //邀请消息 我是邀请方
           this.inviteHandelMsg( agree, nickName)
