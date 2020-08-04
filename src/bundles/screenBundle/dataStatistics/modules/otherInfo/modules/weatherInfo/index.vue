@@ -5,7 +5,7 @@
         <!-- 当前天气信息 -->
         <div class="jc-current-weather jc-flex-con-2 jc-flex-warp">
           <div class="jc-weather-img-wrap jc-flex-con">
-            <img :src="weather.source" height="100%" alt="天气">
+            <img :src="weather.source" width="90%" alt="天气">
           </div>
           <div class="jc-current-weather-content jc-flex-con-3 jc-flex-warp jc-flex-vertical">
 
@@ -89,6 +89,8 @@ export default {
       this.weather = await myWeather.getWeather(areaCode) // 当日天气
       let { forecasts } = await myWeather.getForecastWeather(areaCode) // 四天天气
 
+      console.log(this.weather)
+
       //  重新整理数据
       forecasts = forecasts.map(item => ({
         ...item,
@@ -127,7 +129,7 @@ export default {
 
 <style lang="scss" scoped>
 .jc-current-weather {
-  padding: 16px;
+  padding: 0 16px;
 
   .jc-weather-img-wrap {
     text-align: center;
@@ -135,7 +137,7 @@ export default {
 
   .jc-current-weather-content {
     padding-left: 10px;
-    padding-top: 10px;
+    padding-top: 16px;
     color: #ffffff;
 
     .jc-weather-humidity {
