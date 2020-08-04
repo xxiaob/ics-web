@@ -85,6 +85,8 @@ export default {
         let config = configs.find(item => item.domain == host)
 
         this.config = config ? config : {}
+      } else {
+        this.config = {}
       }
     },
     onSubmit() {
