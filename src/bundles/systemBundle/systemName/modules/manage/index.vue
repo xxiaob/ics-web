@@ -8,7 +8,7 @@
         <el-input v-model="form.systemName" placeholder="请输入系统名称"></el-input>
       </el-form-item>
       <el-form-item label="系统logo" prop="domainLogo" :rules="rules.NOT_NULL">
-        <upload-one-img :url.sync="form.domainLogo"></upload-one-img>
+        <upload-one-img :url.sync="form.domainLogo" :isShowAdvice="isShowAdvice"></upload-one-img>
       </el-form-item>
       <el-form-item label="登录页背景" prop="firstPageLogo">
         <upload-one-img :url.sync="form.firstPageLogo"></upload-one-img>
@@ -48,7 +48,8 @@ export default {
         NOT_NULL,
         Len50: getStringRule(1, 50)
       },
-      loginPosition: LOGIN_WINDOWS_POSITION.VALUES
+      loginPosition: LOGIN_WINDOWS_POSITION.VALUES,
+      isShowAdvice: true // 显示提示文本
     }
   },
   components: {
