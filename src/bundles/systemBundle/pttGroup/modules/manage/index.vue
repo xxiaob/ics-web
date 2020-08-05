@@ -6,7 +6,7 @@
       </el-form-item>
       <el-form-item label="群组用户" prop="addUserIds" :rules="rules.SELECT_NOT_NULL">
         <el-cascader :options="orgTree" v-model="orgIds" :props="{expandTrigger: 'hover', emitPath: false, multiple: true ,checkStrictly: true}" clearable placeholder="请选择组织" :show-all-levels="false" @change="changeOrg" class="jc-left-width50"></el-cascader>
-        <el-select v-model="form.addUserIds" multiple placeholder="请选择用户" clearable class="jc-left-width50">
+        <el-select v-model="form.addUserIds" multiple placeholder="请选择用户" class="jc-left-width50">
           <el-option v-for="item in users" :key="item.id" :label="item.name" :value="item.id">
           </el-option>
         </el-select>
