@@ -60,7 +60,7 @@
       <div class="jc-detail-warp">
         <div class="jc-detail-label">附件</div>
         <div class="jc-detail-content">
-          <el-image v-for="url in imgs" :key="url" :src="url" :preview-src-list="imgs" class="jc-img"></el-image>
+          <img v-for="url in imgs" :key="url" :src="url" class="jc-img" @click="showFullImg(url)">
           <div class="jc-video" v-for="url in videos" :key="url" @click="showVideo(url)">
             <video :src="url"></video>
             <div class="hover">
@@ -246,6 +246,10 @@ export default {
     }
   },
   methods: {
+    showFullImg(url) {
+      // console.log('showFullImg', url, this.imgs)
+      this.$EventBus.$emit('show-full-img', { url, imgs: this.imgs })
+    },
     sendScreen() {
       if (this.isSendScreen) {
         this.isSendScreen = false
