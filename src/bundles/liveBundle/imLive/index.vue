@@ -220,12 +220,12 @@ export default {
     //im 实时数据回调
     imMsgCb(onType, data) {
       console.log('vue 数据', onType, data)
-      const { fromUsername, content: { channelId, msgType, agree, nickName, isExit, inviteType, mediaType, content, users } } = data
+      const { fromUsername, content: { channelId, msgType, inviteDevice, agree, nickName, isExit, inviteType, mediaType, content, users } } = data
 
       if (this.timeout) {
         clearTimeout(this.timeout)
       }
-      if (msgType === '1') {
+      if (msgType === '1' && (inviteDevice === '3' || inviteDevice === '0')) {
         console.log('邀请视频')
         if (isExit) {
           //退出消息
@@ -419,12 +419,18 @@ export default {
       }
 
       const content = contents[this.inviteType] || ''
+
+      let inviteDevice = '3'
+
+      if (this.inviteType === '2' || this.inviteType === '3') {
+        inviteDevice = '2'
+      }
       const msg = {
         content,
         msgType: '1',
         nickName: this.user.userName,
         channelId: this.channelId,
-        inviteDevice: '3', //"0":pc端, "1":移动端, "2":执法仪 , "3":全部
+        inviteDevice, //"0":pc端, "1":移动端, "2":执法仪 , "3":全部
         inviteType, //"0":正常,"1":强拉 2":强制观摩(拉执法仪)
         mediaType, //"0":音频,"1":视频,
         users: this.users
