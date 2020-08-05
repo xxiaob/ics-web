@@ -35,14 +35,14 @@
         <div class="jc-detail-label">处理前图片</div>
         <div class="jc-detail-content">
           <!-- <el-image v-for="url in form.beforePhotos" :key="url" :src="url" :preview-src-list="form.beforePhotos" class="jc-img"></el-image> -->
-          <img v-for="url in form.beforePhotos" :key="url" :src="url" class="jc-img" @click="showFullImg(url)">
+          <img v-for="url in form.beforePhotos" :key="url" :src="url" class="jc-img" @click="showFullImg(url,form.beforePhotos)">
         </div>
       </div>
       <div class="jc-detail-warp">
         <div class="jc-detail-label">处理后图片</div>
         <div class="jc-detail-content">
           <!-- <el-image v-for="url in form.afterPhotos" :key="url" :src="url" :preview-src-list="form.afterPhotos" class="jc-img"></el-image> -->
-          <img v-for="url in form.afterPhotos" :key="url" :src="url" class="jc-img" @click="showFullImg(url)">
+          <img v-for="url in form.afterPhotos" :key="url" :src="url" class="jc-img" @click="showFullImg(url,form.afterPhotos)">
         </div>
       </div>
       <div class="jc-detail-warp">
@@ -116,9 +116,9 @@ export default {
     }
   },
   methods: {
-    showFullImg(url) {
+    showFullImg(url, imgs) {
       // console.log('showFullImg', url, this.imgs)
-      this.$EventBus.$emit('show-full-img', { url, imgs: this.imgs })
+      this.$EventBus.$emit('show-full-img', { url, imgs })
     },
     sendScreen() {
       if (this.isSendScreen) {

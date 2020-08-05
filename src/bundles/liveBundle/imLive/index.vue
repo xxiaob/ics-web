@@ -225,7 +225,7 @@ export default {
       if (this.timeout) {
         clearTimeout(this.timeout)
       }
-      if (msgType === '1' && (inviteDevice === '3' || inviteDevice === '0')) {
+      if (msgType === '1' && (inviteDevice != '1' && inviteDevice != '2')) {
         console.log('邀请视频')
         if (isExit) {
           //退出消息
