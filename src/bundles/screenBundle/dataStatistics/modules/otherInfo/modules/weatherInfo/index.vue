@@ -11,7 +11,7 @@
 
             <div class="jc-weather-humidity jc-flex-warp">
               <div class="weath-humidity-left">
-                <span>{{weather.dayWindDir}}风{{weather.dayWindPower}}级</span> |
+                <span>{{weather.windDirection}}风{{weather.windPower}}级</span> |
                 <span>湿度{{weather.humidity}}%</span>
               </div>
               <div class="weath-humidity-right">
@@ -89,7 +89,12 @@ export default {
       this.weather = await myWeather.getWeather(areaCode) // 当日天气
       let { forecasts } = await myWeather.getForecastWeather(areaCode) // 四天天气
 
-      console.log(this.weather)
+      this.weather.date = this.weather.reportTime.split(' ')[0]
+      let findindex = forecasts.findIndex(item => this.weather.date == item.date)
+
+      if (findindex >= 0) {
+        forecasts = forecasts.map(item => ({ ...item, week: (+item.week + findindex) + '' }) )
+      }
 
       //  重新整理数据
       forecasts = forecasts.map(item => ({
@@ -97,7 +102,7 @@ export default {
         currentWeek: This.getWeek(item.week)
       }))
 
-      this.weather = Object.assign({}, this.weather, forecasts[0])
+      this.weather = Object.assign({}, forecasts[0], this.weather)
 
       this.futureWeather = forecasts.filter((item, index) => !!index) // 未来三天天气
     },
