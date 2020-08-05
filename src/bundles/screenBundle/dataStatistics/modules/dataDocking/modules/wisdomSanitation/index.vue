@@ -9,7 +9,7 @@
         <div class="jc-sanitation-content jc-flex-con jc-flex-warp jc-flex-vertical">
           <span class="jc-sanitation-title jc-flex-con">在线人数</span>
           <span class="jc-sanitation-count jc-flex-con">
-            <count-to :startVal="0" :endVal="0" :duration="3000" separator="" />件
+            <count-to :startVal="0" :endVal="0" :duration="3000" separator="" />人
           </span>
         </div>
       </div>
@@ -44,7 +44,7 @@
         <div class="jc-sanitation-content jc-flex-con jc-flex-warp jc-flex-vertical">
           <span class="jc-sanitation-title">垃圾中转站</span>
           <span class="jc-sanitation-count">
-            <count-to :startVal="0" :endVal="0" :duration="3000" separator="" />个
+            <count-to :startVal="0" :endVal="0" :duration="3000" separator="" />座
           </span>
         </div>
       </div>
