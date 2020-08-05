@@ -37,7 +37,7 @@ export default {
       orgInterval: null, //存储获取数据定时器
       loopAreas: [], //存储 循环的区域
       loopInterval: null,
-      loopTimes: 1000 * 20 //循环时间
+      loopTimes: 1000 * 19 //循环时间
     }
   },
   created() {
@@ -222,6 +222,7 @@ export default {
               color: item.color.replace('1.00', baseOpacity) })
 
             prism.transparent = true
+            prism.jcColor = item.color
             prisms.push(prism)
             object3Dlayer.add(prism) //添加图层
           }
@@ -234,8 +235,6 @@ export default {
       myJcMap.add(object3Dlayer)//添加到地图
       labelsLayer.add(markers)
       myJcMap.add(labelsLayer) //添加点标记
-
-      window.orgAreas = orgAreas
 
       //设置自适应显示
       myJcMap.setFitView(null, true, [0, 1, 1, 1]) //设置自适应显示
@@ -298,7 +297,7 @@ export default {
           this.hidePreMarkerAndInfo(nowIndex)
           setTimeout(() => {
             this.showNextMarkerAndInfo(nextIndex) //显示信息
-          }, 1600)
+          }, 1200)
         }, this.loopTimes)
       }
     },
@@ -315,7 +314,7 @@ export default {
         console.log(error)
       }
     },
-    boundaryAnimation(prisms, height, color, type) {
+    boundaryAnimation(prisms, height, type) {
       //如果不存在，则结束
       if (!prisms || prisms.length < 1) {
         return
@@ -332,33 +331,44 @@ export default {
         height = this.mapParams.baseHeight
       } else {
         setTimeout(() => {
-          this.boundaryAnimation(prisms, height, color, type)
+          this.boundaryAnimation(prisms, height, type)
         }, 120)
       }
       prisms.forEach(prism => {
-        prism.setOptions({ height, color })
+        prism.jcReDraw = prism.reDraw
+        prism.reDraw = function () {}
+        prism.setOptions({ height, color: type == 1 ? prism.jcColor.replace('1.00', baseOpacity) : prism.jcColor.replace('1.00', activeOpacity) })
+        prism.reDraw = prism.jcReDraw
       })
+      object3Dlayer.reDraw()
     },
     boundaryActiveShow(nowIndex, nextIndex) {
       //显示区域拔高，之前的显示，抬高新的区域
-      let nowAreas = this.loopAreas[nowIndex]
+      if (this.index > 1) {
+        let nowAreas = this.loopAreas[nowIndex]
 
-      nowAreas.forEach(item => {
-        let nowOrg = orgAreas[item.orgId]
+        let nowPrisms = [] //存储所有需要改变的数据
 
-        this.boundaryAnimation(nowOrg.prisms, nowOrg.height, nowOrg.color.replace('1.00', baseOpacity), 1)
-        nowOrg.height = this.mapParams.baseHeight
-      })
+        nowAreas.forEach(item => {
+          let nowOrg = orgAreas[item.orgId]
+
+          nowPrisms.push(...(nowOrg.prisms || []))
+        })
+
+        this.boundaryAnimation(nowPrisms, this.mapParams.activeHeight, 1)
+      }
 
       //抬高新的区域
       let nextAreas = this.loopAreas[nextIndex]
 
+      let nextPrisms = [] //存储所有需要改变的数据
+
       nextAreas.forEach(item => {
         let nextOrg = orgAreas[item.orgId]
 
-        this.boundaryAnimation(nextOrg.prisms, nextOrg.height, nextOrg.color.replace('1.00', activeOpacity), 2)
-        nextOrg.height = this.mapParams.activeHeight
+        nextPrisms.push(...(nextOrg.prisms || []))
       })
+      this.boundaryAnimation(nextPrisms, this.mapParams.baseHeight, 2)
     },
     hidePreMarkerAndInfo(nowIndex) {
       //隐藏现在的marker 和信息窗口显示
