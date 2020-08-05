@@ -51,6 +51,9 @@
             </div>
           </div>
           <audio ref="audio" :src="audioUrl" style="width:0;height:0" @ended="audioEnded"></audio>
+          <a class="jc-other" v-for="url in others" :key="url" :href="url" download="" title="点击下载">
+            <img class="jc-other-down" src="@/bundles/taskBundle/assets/down.png" alt="">
+          </a>
         </div>
       </div>
     </div>

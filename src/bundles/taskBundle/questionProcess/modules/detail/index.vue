@@ -47,6 +47,9 @@
               </div>
             </div>
             <audio v-if="detailShow" ref="audio" :src="audioUrl" style="width:0;height:0" @ended="audioEnded"></audio>
+            <a class="jc-other" v-for="url in others" :key="url" :href="url" download="" title="点击下载">
+              <img class="jc-other-down" src="@/bundles/taskBundle/assets/down.png" alt="">
+            </a>
           </el-form-item>
         </el-form>
         <div class="jc-detail-footer" v-if="form.handle">
