@@ -122,6 +122,13 @@ export default {
         formatter: '{a} <br/>{b} : {c} ({d}%)'
       },
       legend: {
+        pageIconColor: '#112adf',
+        pageIconInactiveColor: '#0f89d2',
+        pageIconSize: 12,
+        type: 'scroll',
+        pageTextStyle: {
+          color: 'rgb(139,193,252)'
+        },
         orient: 'vertical',
         right: 50,
         // top: 20,
@@ -130,9 +137,10 @@ export default {
         y: 'center',
         itemWidth: 10,
         itemHeight: 10,
-        itemGap: 20,
+        itemGap: 8,
         textStyle: {
           color: 'rgb(139,193,252)',
+          padding: [2, 0, 0, 0],
           fontSize: 12,
           rich: {
             a: {
