@@ -12,7 +12,7 @@
       <div class="jc-trajectory-info">
         <div class="jc-trajectory-type" :class="runInfo.style"></div>
         <div class="jc-flex-con">
-          <div class="jc-trajectory-text">{{runInfo.speed}}<span class="jc-trajectory-unit">KM/H</span></div>
+          <div class="jc-trajectory-text">{{runInfo.speed}}<span class="jc-trajectory-unit">KM/H</span><span class="jc-trajectory-time" v-text="runInfo.time"></span></div>
           <div class="jc-trajectory-text" v-text="runInfo.addr"></div>
         </div>
       </div>
@@ -62,7 +62,7 @@ export default {
       visible: false,
       isPlay: false,
       user: { userId: '', userName: '' }, //用户信息
-      runInfo: { addr: '--', speed: 0, style: 'jc-trajectory-walk' }, //运行信息
+      runInfo: { addr: '--', speed: 0, style: 'jc-trajectory-walk', time: '' }, //运行信息
       rules: { NOT_NULL },
       pickerOptions: {
         shortcuts: [{
@@ -119,7 +119,7 @@ export default {
       }
       path = [] //记录处理的path坐标
       pathData = {} //记录处理的详细数据
-      this.runInfo = { addr: '--', speed: 0, style: 'jc-trajectory-walk' } //设置运行信息
+      this.runInfo = { addr: '--', speed: 0, style: 'jc-trajectory-walk', time: '' } //设置运行信息
       if (myJcMap) {
         myJcMap.clearSign()
       }
@@ -168,7 +168,7 @@ export default {
         } else if (speed > 8) {
           style = 'jc-trajectory-elcicle'
         }
-        this.runInfo = { addr: pathData[key].d, speed: pathData[key].s, key, style } //设置运行信息
+        this.runInfo = { addr: pathData[key].d, speed: pathData[key].s, key, style, time: pathData[key].t } //设置运行信息
       }
     },
     async formatPath(res) {
@@ -348,6 +348,11 @@ $jc-item-width: 36px;
   .jc-trajectory-unit {
     font-size: $jc-font-size-smaller;
     padding-left: 4px;
+  }
+  .jc-trajectory-time {
+    float: right;
+    font-size: $jc-font-size-smaller;
+    opacity: 0.8;
   }
 }
 </style>
