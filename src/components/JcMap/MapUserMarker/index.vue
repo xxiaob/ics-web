@@ -32,7 +32,7 @@ export default {
   model: { prop: 'value', event: 'change' },
   props: {
     value: { type: Object, default: {} },
-    isGetUser: true
+    isGetUser: { type: Boolean, default: true }
   },
   components: { MapSearch },
   data() {
