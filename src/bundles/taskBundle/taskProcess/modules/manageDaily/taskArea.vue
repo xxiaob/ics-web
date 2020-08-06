@@ -269,7 +269,7 @@ export default {
   border-radius: 4px;
   box-sizing: border-box;
   padding: 10px 20px;
-  height: 267px;
+  height: 299px;
   overflow: auto;
   line-height: normal;
 
