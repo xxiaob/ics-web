@@ -17,7 +17,7 @@
       <el-form-item>
         <div class="jc-map-tip">右键点击地图选中位置</div>
         <div class="jc-map">
-          <map-user-marker v-model="position"></map-user-marker>
+          <map-user-marker v-model="position" :isGetUser="false"></map-user-marker>
         </div>
       </el-form-item>
       <el-form-item label="问题描述" prop="problemDesc" :rules="rules.NOT_NULL">
@@ -144,12 +144,12 @@ export default {
   line-height: normal;
   position: relative;
 
-  /deep/ {
-    .el-radio-group,
-    .jc-select-warp {
-      display: none;
-    }
-  }
+  // /deep/ {
+  //   .el-radio-group,
+  //   .jc-select-warp {
+  //     display: none;
+  //   }
+  // }
 }
 .jc-map-tip {
   color: red;

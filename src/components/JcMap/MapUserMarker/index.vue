@@ -1,11 +1,11 @@
 <template>
   <div class="jc-map-warp">
     <map-search ref="mapSearch" class="jc-area-search"></map-search>
-    <div class="jc-select-warp" :title="userSelect?'关闭框选':'开启框选'">
+    <div class="jc-select-warp" :title="userSelect?'关闭框选':'开启框选'" v-if="isGetUser">
       <el-switch v-model="userSelect" @change="userSelectChange"></el-switch>
     </div>
     <div class="jc-marker-map" ref="myMap"></div>
-    <el-radio-group v-model="distence" size="mini" class="jc-distence-warp" @change="getUsers">
+    <el-radio-group v-model="distence" size="mini" class="jc-distence-warp" @change="getUsers" v-if="isGetUser">
       <el-radio-button label="500">500m</el-radio-button>
       <el-radio-button label="2000">2000m</el-radio-button>
       <el-radio-button label="5000">5000m</el-radio-button>
@@ -30,7 +30,10 @@ let mousetool = null
 export default {
   name: 'MapUserMarker',
   model: { prop: 'value', event: 'change' },
-  props: { value: { type: Object, default: {} } },
+  props: {
+    value: { type: Object, default: {} },
+    isGetUser: true
+  },
   components: { MapSearch },
   data() {
     return {
@@ -142,7 +145,9 @@ export default {
         this.userSelect = false
         myJcMap.map.remove(myJcMap.map.getAllOverlays('rectangle'))
       }
-      this.getUsers() //去获取用户
+      if (this.isGetUser) {
+        this.getUsers() //去获取用户
+      }
     },
     userSelectChange(isSelect) {
       if (isSelect) {
