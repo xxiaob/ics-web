@@ -1,5 +1,5 @@
 <template>
-  <div class="jc-flex-con jc-flex-warp jc-flex-vertical info" @mouseenter="mouseenter" @mouseleave="mouseleave">
+  <div class="jc-flex-con jc-flex-warp jc-flex-vertical info">
     <div class="jc-title">
       <span class="jc-title-content">信息累计</span>
       <div class="jc-right-box">
@@ -339,7 +339,7 @@ export default {
   },
   data() {
     return {
-      project: null,
+      activated: 1,
       options: null
     }
   },
@@ -352,6 +352,16 @@ export default {
     }
   },
   methods: {
+    changeType(val) {
+      if (val) {
+        if (val !== this.activated) {
+          this.activated = val
+          this.processData()
+        } else {
+          console.log('请勿重复点击')
+        }
+      }
+    },
     processData() {
       if (this.infoAndArea) {
         options.xAxis[0].data = this.infoAndArea.areas

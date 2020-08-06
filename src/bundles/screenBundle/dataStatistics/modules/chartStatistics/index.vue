@@ -5,9 +5,9 @@
       <div class="jc-flex-con" :class="{'jc-activated':activated===7}" @click="changeCycle(7)">周</div>
       <div class="jc-flex-con" :class="{'jc-activated':activated===30}" @click="changeCycle(30)">月</div>
     </div>
-    <jc-info class="jc-chart-comp" :cycle="activated" :infoAndArea="infoAndArea"></jc-info>
-    <jc-area class="jc-chart-comp" :cycle="activated" :infoAndArea="infoAndArea"></jc-area>
-    <jc-type class="jc-chart-comp" :date="date"></jc-type>
+    <jc-info class="jc-chart-comp" :initActivated="itemActivated" :infoAndArea="infoAndArea"></jc-info>
+    <jc-area class="jc-chart-comp" :initActivated="itemActivated" :infoAndArea="infoAndArea"></jc-area>
+    <jc-type class="jc-chart-comp" :initActivated="itemActivated" :date="date"></jc-type>
   </div>
 </template>
 
@@ -47,7 +47,9 @@ export default {
         tasks2: [],
         tasks3: []
       },
-      intervalTime: 30000
+      itemActivated: 1,
+      intervalTime: 30000,
+      intervalItemTime: 10000
     }
   },
   created() {
@@ -76,6 +78,9 @@ export default {
     this.interval = setInterval(() => {
       this.changeCycle()
     }, this.intervalTime)
+    this.itemInterval = setInterval(() => {
+      this.changeItemActivated()
+    }, this.intervalItemTime)
   },
   destroyed() {
     if (this.interval) {
@@ -175,10 +180,22 @@ export default {
         }
       }
     },
+    changeItemActivated() {
+      if (this.itemActivated === 1) {
+        this.itemActivated = 2
+      } else if (this.itemActivated === 2) {
+        this.itemActivated = 3
+      } else if (this.itemActivated === 3) {
+        this.itemActivated = 1
+      }
+    },
     mouseenter() {
       console.log('ChartStatistics mouseenter')
       if (this.interval) {
         clearInterval(this.interval)
+      }
+      if (this.itemInterval) {
+        clearInterval(this.itemInterval)
       }
     },
     mouseleave() {
@@ -186,6 +203,9 @@ export default {
       this.interval = setInterval(() => {
         this.changeCycle()
       }, this.intervalTime)
+      this.itemInterval = setInterval(() => {
+        this.changeItemActivated()
+      }, this.intervalItemTime)
     }
   }
 }
