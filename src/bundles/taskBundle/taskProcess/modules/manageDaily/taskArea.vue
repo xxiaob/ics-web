@@ -9,9 +9,9 @@
         </el-option>
       </el-select>
       <el-input placeholder="输入关键字进行过滤" v-model="filterText" size="mini" style="margin:5px 0"></el-input>
-      <!-- <el-button type="" @click="setCheckedKeys" size="mini">全选</el-button>
-      <el-button type="" @click="resetChecked" size="mini">清空</el-button> -->
-      <el-tree ref="tree" :data="orgGrid" show-checkbox node-key="id" :filter-node-method="filterNode" @check="check" :default-expanded-keys="orgGrid.map(item=>item.id)" :default-checked-keys="selectedAreas"></el-tree>
+      <el-button type="" @click="setCheckedKeys" size="mini">全选</el-button>
+      <el-button type="" @click="resetChecked" size="mini">清空</el-button>
+      <el-tree ref="tree" :data="orgGrid" show-checkbox node-key="id" :filter-node-method="filterNode" @check="check" :check-strictly="true" :default-expanded-keys="orgGrid.map(item=>item.id)" :default-checked-keys="selectedAreas"></el-tree>
     </div>
     <div class="jc-right-width48 jc-selected-box">
       <div>已选区域</div>
@@ -92,11 +92,10 @@ export default {
       immediate: true,
       handler(val) {
         this.$nextTick(()=>{
-          // console.log('this.edit', this.edit, val)
-          if (this.edit) {
-            this.$refs.tree.setCheckedKeys(val)
-            this.$emit('update:edit', false)
-          }
+          this.$refs.tree.setCheckedKeys(val)
+          // if (this.edit) {
+          //   this.$emit('update:edit', false)
+          // }
           this.checkedNodes = this.$refs.tree.getCheckedNodes().filter(item=>item.org === false)
         })
       },
@@ -129,6 +128,7 @@ export default {
       if (tree && tree.length) {
         tree.forEach(item => {
           let node = {
+            disabled: item.areaId ? false : true,
             org: item.areaId ? false : true,
             areaTypeId: item.areaTypeId || '',
             id: item.areaId || item.orgId,
