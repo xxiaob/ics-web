@@ -93,9 +93,31 @@ export default {
   },
   methods: {
     // 滚动开关切换
-    scrollSwitchChange({ id, enableRollingMessage }) {
-      // 更新滚动值
-      updEnableRolling({ id, enableRollingMessage })
+    scrollSwitchChange(row) {
+      // 获取更新需要的id和enableRollingMessage值
+      let { id, enableRollingMessage } = row
+
+      // 弹窗显示内容
+      let isSwitchVal = enableRollingMessage ? '关闭' : '开启'
+
+      // 开关旧值,如果用户现金取消或更新失败, 回复到旧值状态
+      let oldVal = enableRollingMessage ? 0 : 1
+
+      // 弹窗提示用户是否更新
+      this.$confirm(`确认${isSwitchVal}滚动内容`, '提示', { type: 'warning', dangerouslyUseHTMLString: true })
+        .then(() => {
+          updEnableRolling({ id, enableRollingMessage })
+            .then(() => {
+              this.$message.success('设置成功')
+            }).catch(() => {
+              console.log(22)
+              row.enableRollingMessage = oldVal
+            })
+        })
+        .catch(() => {
+          console.log(11)
+          row.enableRollingMessage = oldVal
+        })
     },
     // 处理窗口位置
     formatLocation(row, column, cellValue) {
