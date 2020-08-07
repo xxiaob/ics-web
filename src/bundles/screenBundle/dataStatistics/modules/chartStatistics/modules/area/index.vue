@@ -127,21 +127,25 @@ export default {
           let index = 0, total = 0
           const datas = this.options.series[0].data
 
-          datas.forEach((v, i) => {
-            total += v.value
-            if (v.name == name) {
-              index = i
-            }
-          })
-          const percentage = datas[index].value === 0 ? 0 : ((datas[index].value / total) * 100).toFixed(2)
-          const sName = name.length > 7 ? `${name.substring(0, 6)}...` : name
+          if (datas.length) {
+            datas.forEach((v, i) => {
+              total += v.value
+              if (v.name == name) {
+                index = i
+              }
+            })
+            const percentage = datas[index].value === 0 ? 0 : ((datas[index].value / total) * 100).toFixed(2)
+            const sName = name.length > 7 ? `${name.substring(0, 6)}...` : name
 
-          return [`{a| ${sName}}`, `{b| ${percentage}%}`].join('')
+            return [`{a| ${sName}}`, `{b| ${percentage}%}`].join('')
+          } else {
+            return name
+          }
         }
       },
       series: [
         {
-          name: '事件总数',
+          name: '下辖区域占比',
           type: 'pie',
           radius: ['40%', '75%'],
           center: ['25%', '50%'],
@@ -152,7 +156,7 @@ export default {
             borderWidth: 3,
             borderColor: '#000438'
           },
-          data: [{}],
+          data: [],
           // labelLine: {
           //  lineStyle: {
           //   color: 'white'
