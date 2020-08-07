@@ -144,7 +144,7 @@ export default {
       if (res && res.length) {
         return res.map(item=>({ value: item.projectId, label: item.projectName }))
       } else {
-        return null
+        return []
       }
     }
   }
