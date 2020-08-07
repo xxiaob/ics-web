@@ -83,11 +83,11 @@ export default {
       }
     },
     handelData({ eventInfoList, problemInfoList, tempTaskInfoList }) {
-      this.events = eventInfoList.length ? eventInfoList.map((item, key)=>({ value: item.typeCount, name: item.typeName, itemStyle: this.itemStyle(key) })) : [{}]
+      this.events = eventInfoList.length ? eventInfoList.map((item, key)=>({ value: item.typeCount, name: item.typeName, itemStyle: this.itemStyle(key) })) : []
 
-      this.problems = problemInfoList.length ? problemInfoList.map((item, key)=>({ value: item.typeCount, name: item.typeName, itemStyle: this.itemStyle(key) })) : [{}]
+      this.problems = problemInfoList.length ? problemInfoList.map((item, key)=>({ value: item.typeCount, name: item.typeName, itemStyle: this.itemStyle(key) })) : []
 
-      this.tasks = tempTaskInfoList.length ? tempTaskInfoList.map((item, key)=>({ value: item.sourceCount, name: item.sourceName, itemStyle: this.itemStyle(key) })) : [{}]
+      this.tasks = tempTaskInfoList.length ? tempTaskInfoList.map((item, key)=>({ value: item.sourceCount, name: item.sourceName, itemStyle: this.itemStyle(key) })) : []
 
       this.processData()
     },
@@ -166,19 +166,24 @@ export default {
           }
         },
         formatter: name=> {
+          console.log('formatter', name, this.options.series[0].data)
           let index = 0, total = 0
           const datas = this.options.series[0].data
 
-          datas.forEach((v, i) => {
-            total += v.value
-            if (v.name == name) {
-              index = i
-            }
-          })
-          const percentage = ((datas[index].value / total) * 100).toFixed(2)
-          const sName = name.length > 7 ? `${name.substring(0, 6)}...` : name
+          if (datas.length) {
+            datas.forEach((v, i) => {
+              total += v.value
+              if (v.name == name) {
+                index = i
+              }
+            })
+            const percentage = ((datas[index].value / total) * 100).toFixed(2)
+            const sName = name.length > 7 ? `${name.substring(0, 6)}...` : name
 
-          return [`{a| ${sName}}`, `{b| ${percentage}%}`].join('')
+            return [`{a| ${sName}}`, `{b| ${percentage}%}`].join('')
+          } else {
+            return name
+          }
         }
       },
       series: [
@@ -190,7 +195,7 @@ export default {
           label: {
             show: false
           },
-          data: [{}],
+          data: [],
           // roseType: 'radius',
           // labelLine: {
           //  lineStyle: {
