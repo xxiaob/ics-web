@@ -4,8 +4,8 @@
 module.exports = {
   //接口地址配置
   apiHostConfig: {
-    base: '"https://www.bg365.top:88/gwy-api/"',
-    ws: '"wss://www.bg365.top:88/gwy-api/"'
+    base: '"/gwy-api/"',
+    ws: '"/gwy-api/"'
   },
   //高德地图参数配置
   aMapConfig: {
