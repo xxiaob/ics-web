@@ -13,7 +13,7 @@
       </div>
       <div class="jc-detail-warp">
         <div class="jc-detail-label">创建时间</div>
-        <div class="jc-detail-content">{{form.createTime|filterTime}}</div>
+        <div class="jc-detail-content">{{form.createDate|filterTime}}</div>
       </div>
       <div class="jc-detail-warp">
         <div class="jc-detail-label">项目名称</div>

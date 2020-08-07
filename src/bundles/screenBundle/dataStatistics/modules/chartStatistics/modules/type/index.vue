@@ -1,6 +1,6 @@
 <template>
   <!-- v-loading="loading" element-loading-background="rgba(32, 73, 154, 0.3)" -->
-  <div class="jc-flex-con jc-flex-warp jc-flex-vertical info" @mouseenter="mouseenter" @mouseleave="mouseleave">
+  <div class="jc-flex-con jc-flex-warp jc-flex-vertical info">
     <div class="jc-title">
       <span class="jc-title-content">事务类型占比</span>
       <div class="jc-right-box">
@@ -33,6 +33,7 @@ export default {
   },
   data() {
     return {
+      activated: 1,
       loading: false,
       project: null,
       options: null,
@@ -57,6 +58,16 @@ export default {
     }
   },
   methods: {
+    changeType(val) {
+      if (val) {
+        if (val !== this.activated) {
+          this.activated = val
+          this.processData()
+        } else {
+          console.log('请勿重复点击')
+        }
+      }
+    },
     async initData() {
       if (!this.loading) {
         this.loading = true
@@ -122,6 +133,13 @@ export default {
         formatter: '{a} <br/>{b} : {c} ({d}%)'
       },
       legend: {
+        pageIconColor: '#112adf',
+        pageIconInactiveColor: '#0f89d2',
+        pageIconSize: 12,
+        type: 'scroll',
+        pageTextStyle: {
+          color: 'rgb(139,193,252)'
+        },
         orient: 'vertical',
         right: 50,
         // top: 20,
@@ -130,9 +148,10 @@ export default {
         y: 'center',
         itemWidth: 10,
         itemHeight: 10,
-        itemGap: 20,
+        itemGap: 8,
         textStyle: {
           color: 'rgb(139,193,252)',
+          padding: [2, 0, 0, 0],
           fontSize: 12,
           rich: {
             a: {
