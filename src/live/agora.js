@@ -272,6 +272,24 @@ export class Live {
       screen: false
     })
 
+    this.rtc.localStream.setVideoEncoderConfiguration({
+      // 视频分辨率
+      resolution: {
+        width: 1280,
+        height: 720
+      },
+      // 视频编码帧率。通常建议是 15 帧，不超过 30 帧
+      frameRate: {
+        min: 15,
+        max: 30
+      },
+      // 码率。一般情况下推荐使用标准码率
+      bitrate: {
+        min: 2000,
+        max: 5000
+      }
+    })
+
     //本地流初始化
     this.rtc.localStream.init(() => {
       this.console('localStream.init 本地流初始化 成功')
