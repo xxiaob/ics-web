@@ -52,3 +52,12 @@ export function save(data) {
 export function del(data) {
   return axios.post(API.domainLogo.del, data)
 }
+
+/**
+ * 更新是否滚动消息
+ * @param {object} data
+ * @returns {Object} axios 对象
+ */
+export function updEnableRolling(data) {
+  return axios.post(API.domainLogo.updEnableRolling, data)
+}
