@@ -8,7 +8,7 @@
           <span>{{title}}</span>
           <div class="right">
             <span class="exit" @click="exit" title="挂断">挂断</span>
-            <span title="投屏" v-show="inviteType!='2'&&inviteType!='3'">
+            <span title="投屏" v-show="inviteType!='2'&&inviteType!='3'" @click="sendScreen">
               <img src="./assets/bigScreen1.png" alt="" width="20">
               <img src="./assets/bigScreen2.png" alt="" width="20">
             </span>
@@ -31,9 +31,11 @@
           <div class="live-in">
             <div id="live" v-show="myShow" class="live" :class="{audio:inviteType==='0'||inviteType==='4','big-live':bigLiveId===user.userId}" @click="checkBigLive(user.userId)">
               <div class="userName">{{user.userName}}</div>
+              <div class="badNetwork" v-show="badNetwork">您当前网络不好</div>
             </div>
             <div class="live" @click="checkBigLive(user.userId)" :class="{audio:inviteType==='0'||inviteType==='4','big-live':bigLiveId===user.userId}" v-for="user in users" :key="user.userId" :id="user.userId">
               <div class="userName">{{user.userName}}</div>
+              <div class="badStream" v-show="badStreams.includes(user.userId)">对方网络不好</div>
             </div>
           </div>
         </div>
@@ -54,7 +56,7 @@
         <span class="invitedButton">
           <img class="gif" src="./assets/help.gif" alt="" width="50">
           <img class="btn" src="./assets/answer.png" alt="" width="50" @click="agree" title="接听">
-          <img class="btn" src="./assets/hangup.png" alt="" width="50" @click="refuse" title="挂断">
+          <img class="btn" src="./assets/hangup.png" alt="" width="50" @click="refuse('0')" title="挂断">
         </span>
         <h3 class="title">{{msg}}</h3>
       </div>
@@ -67,6 +69,8 @@
 <script>
 import { IM } from '@/live/im'
 import { Live } from '@/live/agora'
+import { VOICE_TYPE } from '@/config/JcVoiceAlertConfig'
+import { MESSAGE_DATA_TYPES } from '@/constant/Dictionaries'
 import { createNamespacedHelpers } from 'vuex'
 const { mapState } = createNamespacedHelpers('user')
 
@@ -83,11 +87,13 @@ export default {
   },
   data() {
     return {
+      isSendScreen: false,
       title: '视频',
       showNormal: false, //大弹框到中等弹框的过渡类
       bigLiveId: '', //大视频的id
       contentSize: '1', //弹框大小
       users: [], //通话中的用户列表(除了自己)
+      userIds: [],
       msg: '音视频通话',
       dialogVisible: false,
       contentShow: false,
@@ -96,19 +102,22 @@ export default {
       invited: false, //我是邀请方
       //邀请类型
       inviteTypes: {
-        '0': ['多人语音', ['0', '0', 'host']],
-        '1': ['多人视频', ['0', '1', 'host']],
+        '0': ['音频会议', ['0', '0', 'host']],
+        '1': ['视频会议', ['0', '1', 'host']],
         '2': ['强制观摩', ['2', '1', 'audience']],
         '3': ['观摩', ['0', '1', 'audience']],
-        '4': ['语音', ['0', '0', 'host']], //双人语音
-        '5': ['视频', ['0', '1', 'host']] //双人视频
+        '4': ['对讲', ['0', '0', 'host']], //双人语音
+        '5': ['指挥', ['0', '1', 'host']] //双人视频
       },
       inviteType: '',
       invitUserId: '', //邀请用户的id
       invitedButton: false, //接听按钮显示
       mediaType: '1',
       fromUsername: '', //哪个用户主动发消息过来
-      observation: false
+      observation: false,
+      overtime: 60000,
+      badNetwork: false,
+      badStreams: []
     }
   },
   computed: {
@@ -126,6 +135,8 @@ export default {
           const { inviteType, users, channelId } = this.params
 
           this.users = users
+          this.userIds = users.map(item=>item.userId)
+
           this.inviteType = inviteType
           //设置频道id
           console.log('大屏传进来的channelId', channelId)
@@ -136,12 +147,14 @@ export default {
           this.$message.info('正在发起' + type)
           this.title = type
           this.inviteAllUsers(...this.inviteTypes[inviteType][1], users)
-          if (this.inviteType === '4' || this.inviteType === '5') {
-            this.timeout = setTimeout(()=>{
+          // if (this.inviteType === '4' || this.inviteType === '5') {
+          // }
+          this.timeout = setTimeout(()=>{
+            if (this.live.rtc.remoteStreams.length === 0) {
               this.$message.info('对方未接听')
               this.confirmExit()
-            }, 30000)
-          }
+            }
+          }, this.overtime)
         } else {
           console.log('我是接收方')
         }
@@ -156,10 +169,37 @@ export default {
     if (this.live) {
       console.log('直播客户端已经初始化')
     } else {
-      this.live = new Live(this.user.userId, 'live', 'tolive')
+      this.live = new Live(this.user.userId, 'live', 'tolive', this.liveNetworkCb, this.liveStreamCb)
     }
   },
   methods: {
+    //当前网络监听
+    liveNetworkCb(v) {
+      console.log('liveCb', v)
+      this.badNetwork = v
+    },
+    liveStreamCb(v) {
+      console.log('liveStreamCb', v)
+      this.badStreams = v
+    },
+    //投屏
+    sendScreen() {
+      const { inviteType, users } = this.params
+      const { userName, userId } = this.user
+      const copyUsers = JSON.parse(JSON.stringify(users))
+
+      copyUsers.unshift({ userId, userName })
+      const data = {
+        channelId: this.channelId,
+        inviteType,
+        users: copyUsers
+      }
+
+      // console.log('sendScreen', data)
+      this.isSendScreen = true
+      this.$EventBus.$emit('screen-message-channel', { type: MESSAGE_DATA_TYPES.LIVE, data })
+      this.$message.success('投屏发送成功')
+    },
     //切换小视频为大视频
     checkBigLive(val) {
       if (this.contentSize === '2') {
@@ -171,60 +211,90 @@ export default {
       this.bigLiveId = ''
       this.showNormal = (val === '1' && this.contentSize === '2') ? true : false
       this.contentSize = val
+      if (this.contentSize === '2') {
+        setTimeout(()=>{
+          this.bigLiveId = this.user.userId
+        }, 200)
+      }
     },
     //im 实时数据回调
     imMsgCb(onType, data) {
       console.log('vue 数据', onType, data)
-      const { fromUsername, content: { channelId, msgType, agree, nickName, isExit, inviteType, mediaType, content, users } } = data
+      const { fromUsername, content: { channelId, msgType, inviteDevice, agree, nickName, isExit, inviteType, mediaType, content, users } } = data
 
       if (this.timeout) {
         clearTimeout(this.timeout)
       }
-      this.fromUsername = fromUsername
-      if (msgType === '1') {
+      if (msgType === '1' && (inviteDevice != '1' && inviteDevice != '2')) {
         console.log('邀请视频')
         if (isExit) {
-          //退出房间消息
-          this.exitHandel({ nickName, isExit })
+          //退出消息
+          if (this.fromUsername == fromUsername || this.userIds.includes(fromUsername)) {
+            this.exitHandel({ nickName, isExit })
+          }
         } else if ( agree) {
           //邀请消息 我是邀请方
           this.inviteHandelMsg( agree, nickName)
         } else if (inviteType) {
           //我是被邀请方
-          this.$emit('update:visible', true)
-          this.$emit('update:params', null)
-          this.users = [{
-            userId: fromUsername,
-            userName: nickName
-          }]
-          if (users) {
-            console.log('邀请的所有users', users)
-            users.forEach(item=>{
-              if (item.userId !== this.user.userId) {
-                this.users.push(item)
-              }
+          if (this.live.joined) {
+            console.log('正则频道里')
+            this.im.sendSingleMsg(fromUsername, {
+              msgType: '1',
+              nickName: this.user.userName,
+              channelId: this.channelId,
+              agree: '3'
             })
-          }
-          if (content === 'double') {
-            this.inviteType = mediaType === '0' ? '4' : '5'
           } else {
-            this.inviteType = mediaType
-          }
-          this.title = mediaType === '0' ? '语音' : '视频'
-          if (inviteType === '0') {
-            let msg = content === 'help' ? '一键求助' : (mediaType === '0' ? '语音' : '视频')
+            this.fromUsername = fromUsername
+            this.$emit('update:visible', true)
+            this.$emit('update:params', null)
+            this.users = [{
+              userId: fromUsername,
+              userName: nickName
+            }]
+            if (users) {
+              console.log('邀请的所有users', users)
+              users.forEach(item=>{
+                if (item.userId !== this.user.userId) {
+                  this.users.push(item)
+                }
+              })
+            }
+            if (content === 'double' || content === 'help') {
+              this.inviteType = mediaType === '0' ? '4' : '5'
+            } else {
+              this.inviteType = mediaType
+            }
+            this.title = mediaType === '0' ? '语音' : '视频'
+            if (inviteType === '0') {
+              let msg = content === 'help' ? '寻求求助' : (mediaType === '0' ? '语音' : '视频')
 
-            this.msg = nickName + '邀请你' + msg
+              this.msg = nickName + '邀请你' + msg
+
+              const type = content === 'help' ? VOICE_TYPE.HELP_REMIND : (mediaType === '0' ? VOICE_TYPE.AUDIO_REMIND : VOICE_TYPE.VIDEO_REMIND)
+
+              // console.log('type', type)
+              this.$EventBus.$emit('map-voice-alert', { type, loop: true }) //通知播放提示音
+              this.timeout = setTimeout(()=>{
+                this.refuse('2')
+              }, this.overtime)
+            }
+            this.invitedHandelMsg({ channelId, mediaType, inviteType })
           }
-          this.invitedHandelMsg({ channelId, mediaType, inviteType })
         }
       } else {
         console.log('普通消息')
       }
     },
     exitHandel({ nickName, isExit }) {
+      this.$EventBus.$emit('map-voice-end') //通知停止播放提示音
       if (this.live.joined) {
-        this.$message.warning(nickName + '已经挂断')
+        this.$message.warning(nickName + '退出')
+        console.log('isExit - rtc.remoteStreams', this.live.rtc.remoteStreams)
+        if (this.live.rtc.remoteStreams.length === 0) {
+          this.leaveChannel()
+        }
       }
       if (isExit === '1' || (this.inviteType === '4' || this.inviteType === '5')) {
         console.log('结束视频')
@@ -233,6 +303,18 @@ export default {
     },
     //邀请方处理回来的信息
     inviteHandelMsg( agree, nickName) {
+      if (agree === '3') {
+        this.$message.warning(nickName + '正在忙')
+
+        if (this.inviteType === '4' || this.inviteType === '5' || this.inviteType === '3' || this.inviteType === '2') {
+          setTimeout(()=>{
+            this.leaveChannel()
+          }, 2000)
+        }
+
+        return
+      }
+
       if (this.live.joined) {
         if (agree === '1') {
           this.$message.success(nickName + '同意接听')
@@ -276,17 +358,25 @@ export default {
     },
     //同意加入频道
     agree() {
+      if (this.timeout) {
+        clearTimeout(this.timeout)
+      }
+      this.$EventBus.$emit('map-voice-end') //通知停止播放提示音
       this.joinChannel()
       this.invitedButton = false
       this.msg = ''
     },
     //拒绝加入频道
-    refuse() {
+    refuse(agree = '0') {
+      if (this.timeout) {
+        clearTimeout(this.timeout)
+      }
+      this.$EventBus.$emit('map-voice-end') //通知停止播放提示音
       this.im.sendSingleMsg(this.fromUsername, {
         msgType: '1',
         nickName: this.user.userName,
         channelId: this.channelId,
-        agree: '0' // "0":拒绝邀请, "1":接受邀请
+        agree // "0":拒绝邀请, "1":接受邀请
       })
       this.invitedButton = false
       this.leaveChannel()
@@ -329,12 +419,18 @@ export default {
       }
 
       const content = contents[this.inviteType] || ''
+
+      let inviteDevice = '3'
+
+      if (this.inviteType === '2' || this.inviteType === '3') {
+        inviteDevice = '2'
+      }
       const msg = {
         content,
         msgType: '1',
         nickName: this.user.userName,
         channelId: this.channelId,
-        inviteDevice: '3', //"0":pc端, "1":移动端, "2":执法仪 , "3":全部
+        inviteDevice, //"0":pc端, "1":移动端, "2":执法仪 , "3":全部
         inviteType, //"0":正常,"1":强拉 2":强制观摩(拉执法仪)
         mediaType, //"0":音频,"1":视频,
         users: this.users
@@ -344,6 +440,10 @@ export default {
     },
     //离开频道
     async leaveChannel() {
+      if (this.isSendScreen) {
+        this.$EventBus.$emit('screen-message-channel', { type: MESSAGE_DATA_TYPES.CLOSR, closeType: MESSAGE_DATA_TYPES.LIVE })
+        this.isSendScreen = false
+      }
       if (this.timeout) {
         clearTimeout(this.timeout)
       }
@@ -365,12 +465,11 @@ export default {
     },
     //结束按钮操作
     exit() {
-      this.$confirm('确认退出房间', '提示', { type: 'warning' }).then( () => {
+      this.$confirm('确认退出', '提示', { type: 'warning' }).then( () => {
         this.confirmExit()
       }).catch(() => {})
     },
     confirmExit() {
-      // console.log('rtc.remoteStreams', this.live.rtc.remoteStreams)
       const isExit = (this.invited || this.inviteType === '4' || this.inviteType === '5') ? '1' : '0'
       const msg = {
         msgType: '1',
@@ -380,6 +479,10 @@ export default {
       }
 
       if (this.invited) {
+        // console.log('rtc.remoteStreams', this.live.rtc.remoteStreams)
+        // this.live.rtc.remoteStreams.forEach(item=>{
+        //   this.im.sendSingleMsg(item.split('_')[0], msg)
+        // })
         this.params.users.forEach(item=>{
           this.im.sendSingleMsg(item.userId, msg)
         })

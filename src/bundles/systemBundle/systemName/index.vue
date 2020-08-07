@@ -12,14 +12,44 @@
       <el-table :data="list" v-loading="loading" row-key="id" class="jc-table" @selection-change="tableSelect">
         <el-table-column type="selection" width="40"></el-table-column>
         <el-table-column type="index" :index="indexMethod" label="序号" width="50"></el-table-column>
-        <el-table-column prop="domain" label="域名" width="200"></el-table-column>
-        <el-table-column prop="systemName" label="系统名称" width="200"></el-table-column>
+        <el-table-column prop="domain" label="域名" width="120"></el-table-column>
+        <el-table-column prop="systemName" label="系统名称"></el-table-column>
         <el-table-column prop="domainLogo" label="系统logo">
           <template slot-scope="scope">
             <img :src="scope.row.domainLogo" alt="">
           </template>
         </el-table-column>
-        <el-table-column prop="createTime" label="创建时间" :formatter="formatTime" width="140"></el-table-column>
+        <!-- <el-table-column prop="createTime" label="创建时间" :formatter="formatTime" width="140"></el-table-column> -->
+
+        <!-- 登录页面背景和窗口图 -->
+        <el-table-column prop="firstPageLogo" label="登录页背景图">
+          <template slot-scope="scope">
+            <img :src="scope.row.firstPageLogo" alt="">
+          </template>
+        </el-table-column>
+        <el-table-column prop="firstPageLoginLogo" label="登录窗口背景图">
+          <template slot-scope="scope">
+            <img :src="scope.row.firstPageLoginLogo" alt="">
+          </template>
+        </el-table-column>
+        <!-- 窗口位置 -->
+        <el-table-column prop="loginLogoLocation" label="登录窗口位置" :formatter="formatLocation"></el-table-column>
+        <!-- 入口路由 -->
+        <el-table-column prop="entranceRouter" label="入口路由"></el-table-column>
+        <!--  滚动开关-->
+        <el-table-column prop="scrollSwitch" label="滚动开关">
+          <template slot-scope="scope">
+            <el-switch
+              v-model="scope.row.enableRollingMessage"
+              active-color="#409EFF"
+              inactive-color="#cccccc"
+              :active-value="1"
+              :inactive-value="0"
+              @change="scrollSwitchChange(scope.row)"
+            >
+            </el-switch>
+          </template>
+        </el-table-column>
         <el-table-column width="60" label="操作">
           <template slot-scope="scope">
             <el-button type="text" size="mini" icon="el-icon-edit-outline" @click="manage(scope.row)" title="编辑"></el-button>
@@ -34,8 +64,11 @@
 </template>
 <script>
 import PaginationMixins from '@/mixins/PaginationMixins'
-import { listByPage, del } from '@/api/domainLogo'
+import { listByPage, del, updEnableRolling } from '@/api/domainLogo'
 import { formatDate } from '@/libs/util'
+
+import { LOGIN_WINDOWS_POSITION } from '@/constant/Dictionaries'
+console.log(LOGIN_WINDOWS_POSITION )
 
 export default {
   name: 'SystemNameIndex',
@@ -51,13 +84,45 @@ export default {
       visible: false,
       info: null,
       ids: [],
-      filter: {}
+      filter: {},
+      loginLogoLocation: LOGIN_WINDOWS_POSITION.VALUES
     }
   },
   created() {
     this.initData()
   },
   methods: {
+    // 滚动开关切换
+    scrollSwitchChange(row) {
+      // 获取更新需要的id和enableRollingMessage值
+      let { id, enableRollingMessage } = row
+
+      // 弹窗显示内容
+      let isSwitchVal = enableRollingMessage ? '关闭' : '开启'
+
+      // 开关旧值,如果用户现金取消或更新失败, 回复到旧值状态
+      let oldVal = enableRollingMessage ? 0 : 1
+
+      // 弹窗提示用户是否更新
+      this.$confirm(`确认${isSwitchVal}滚动内容`, '提示', { type: 'warning', dangerouslyUseHTMLString: true })
+        .then(() => {
+          updEnableRolling({ id, enableRollingMessage })
+            .then(() => {
+              this.$message.success('设置成功')
+            }).catch(() => {
+              console.log(22)
+              row.enableRollingMessage = oldVal
+            })
+        })
+        .catch(() => {
+          console.log(11)
+          row.enableRollingMessage = oldVal
+        })
+    },
+    // 处理窗口位置
+    formatLocation(row, column, cellValue) {
+      return LOGIN_WINDOWS_POSITION.toString(cellValue)
+    },
     formatTime(row, column, cellValue) {
       return formatDate(cellValue)
     },
@@ -67,6 +132,7 @@ export default {
         try {
           const { total, resultList } = await listByPage({ ...this.filter, ...this.page })
 
+          console.log(resultList)
           this.list = resultList
           this.page.total = total
           this.loading = false

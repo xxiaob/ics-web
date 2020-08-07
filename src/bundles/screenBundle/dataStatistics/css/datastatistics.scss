@@ -1,160 +1,129 @@
-.jc-screen-warp,
-.jc-screen-space {
-  position: relative;
-  width: 100%;
-  height: 100%;
-  z-index: 5;
-  overflow: hidden;
-  transform: translateZ(0);
-  font-family: "微软雅黑";
-  color: white;
-}
-
-@mixin jc-row-flex {
-  display: flex;
-  flex-direction: row;
-
-  .jc-row-flex1 {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    box-sizing: border-box;
-    padding: 5px;
-
-    .jc-column-flex1 {
-      flex: 1;
-      box-sizing: border-box;
-    }
-
-    .jc-column-flex1:first-child {
-      margin-bottom: 10px;
-    }
-
-    .jc-column-flex1:last-child {
-      margin-bottom: 1px;
-    }
-  }
-
-  .jc-row-flex2 {
-    flex: 2;
-    position: relative;
-    box-sizing: border-box;
-    padding: 5px;
-    // margin-right: 1px;
-  }
-}
-
 .jc-screen-warp {
-  background: url(../assets/bg.jpg) no-repeat;
-  background-size: 100% 100%;
-  padding: 0 5px 10px;
-  box-sizing: border-box;
+  position: relative;
+  height: 100%;
+  min-width: 3200px;
+  // margin-left: -1000px; // 开发调试大屏右侧区域使用,
+  background: url(../assets/screen-bg.png) no-repeat center;
+  background-size: cover;
+
+  &.jc-no-docking {
+    min-width: 2400px;
+  }
+}
+
+.jc-flex-con,
+.jc-flex-con-2,
+.jc-flex-con-3 {
+  margin: 0 $jc-default-dis/2;
+}
+
+.jc-screen-content {
+  position: absolute;
+  top: 70px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 8;
   display: flex;
-  flex-direction: column;
+  padding: 0 0 $jc-default-dis;
+}
 
-  .jc-container {
-    flex: auto;
-    display: flex;
-    flex-direction: column;
+/deep/ {
+  .jc-title {
+    height: 40px;
+    line-height: 40px;
+    background: url(../assets/title.png) no-repeat left center;
+    padding-left: 16px;
 
-    .jc-top {
-      flex: 2;
-      @include jc-row-flex;
+    .jc-title-sign {
+      position: relative;
+      top: 2px;
     }
 
-    .jc-bottom {
-      flex: 1;
-      @include jc-row-flex;
+    .jc-title-content {
+      color: rgb(139, 193, 252);
+      font-size: 18px;
+      font-weight: bold;
+      margin-left: 10px;
     }
 
-    .jc-item-out {
-      width: 100%;
-      height: 100%;
-      box-sizing: border-box;
-      padding: 5px 10px;
-      background: linear-gradient(#1292f6, #1292f6) left top,
-        linear-gradient(#1292f6, #1292f6) left top,
-        linear-gradient(#1292f6, #1292f6) right top,
-        linear-gradient(#1292f6, #1292f6) right top,
-        linear-gradient(#1292f6, #1292f6) left bottom,
-        linear-gradient(#1292f6, #1292f6) left bottom,
-        linear-gradient(#1292f6, #1292f6) right bottom,
-        linear-gradient(#1292f6, #1292f6) right bottom;
-      background-repeat: no-repeat;
-      background-size: 1px 100%, 10% 1px;
+    .jc-right-box {
+      float: right;
+      font-size: 12px;
+      color: rgb(5, 114, 189);
 
-      .jc-item {
-        width: 100%;
-        height: 100%;
-        border: 1px solid rgba($color: #1292f6, $alpha: 0.3);
-        background: rgba($color: #011128, $alpha: 0.7);
-        padding: 10px;
+      .jc-activated {
+        color: rgb(20, 237, 252);
+      }
 
-        .jc-item-1,
-        .jc-item-2 {
-          width: 50%;
-          height: 100%;
-          float: left;
-          box-sizing: border-box;
-        }
-        .jc-item-1 {
-          padding-right: 2%;
-        }
-        .jc-item-2 {
-          padding-left: 2%;
-        }
+      .jc-right-item {
+        margin: 0 10px;
+        cursor: pointer;
+      }
+
+      .jc-right-item:last-child {
+        margin-right: 0;
       }
     }
   }
 }
 
-//子组件的样式
-/deep/ .jc-item-content {
-  height: 100%;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  .title {
-    color: white;
-    border-left: 2px solid rgb(18, 146, 246);
-    padding-left: 10px;
-    margin: 5px 0 10px;
-    height: 20px;
-    line-height: 20px;
-    font-size: 16px;
+/deep/ {
+  .jc-category {
+    flex-wrap: wrap;
+    justify-content: space-between;
+    padding: 6px 16px 16px;
 
-    .type {
-      float: right;
-      font-size: 12px;
-      margin-left: 10px;
-      cursor: pointer;
-    }
+    .jc-category-item {
+      justify-content: center;
+      align-items: center;
+      width: 50%;
+      height: 50%;
 
-    .selected {
-      color: #1292f6;
-      font-weight: bold;
-      font-size: 14px;
+      .jc-category-title {
+        font-size: 12px;
+        letter-spacing: 1px;
+        color: #11e7ff;
+        margin-right: 14px;
+      }
+
+      .jc-category-count {
+        font-size: 16px;
+        letter-spacing: 1px;
+        color: #ffffff;
+      }
     }
   }
-  .echarts {
-    flex: 1;
+}
+
+// 通用的边框及内
+/deep/ .data-statistics-border {
+  border: 1px solid rgb(32, 73, 154);
+  box-shadow: inset 0 0 10px 0 rgb(32, 73, 154);
+}
+
+//大屏滚动条样式
+/deep/ .data-statistics-scrollbar {
+  // 滚动条
+  &::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
   }
 
-  .dateType {
-    position: absolute;
-    right: 2px;
-    top: 36px;
-    font-size: 12px;
-    z-index: 10;
-    span {
-      margin-left: 5px;
-      cursor: pointer;
-    }
+  /*内层滚动槽*/
+  &::-webkit-scrollbar-track-piece {
+    background-color: #00185b;
+    border-radius: 8px;
+  }
 
-    .selected {
-      color: #1292f6;
-      font-weight: bold;
-      font-size: 14px;
-    }
+  /*滚动的滑块*/
+  &::-webkit-scrollbar-thumb {
+    background-color: #055ab8;
+    border-radius: 10px;
+  }
+
+  /*滚动的滑块,鼠标放上时*/
+  &::-webkit-scrollbar-thumb:hover {
+    background: #055ab8;
   }
 }

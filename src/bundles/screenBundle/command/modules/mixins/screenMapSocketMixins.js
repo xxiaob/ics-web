@@ -1,17 +1,20 @@
 /**
  * 大屏socket 连接
  */
-import { screenMapSocket } from '@/api/socket'
+import { screenMapSocket, screenMessageChannelSocket } from '@/api/socket'
+import { SOCKET_MESSAGE_TYPES } from '@/constant/Dictionaries'
 
 export default {
   data() {
     return {
       screenSocketOrg: null,
-      screenSocket: null
+      screenSocket: null,
+      screenMessageChannelSocket: null
     }
   },
   created() {
     this.$EventBus.$on('org-change', this.initScreenMapSocket) //监听行级别切换，进行socket 连接
+    this.$EventBus.$on('screen-message-channel', this.sendScreenMessageChannelSocket) //监听消息发送
   },
   methods: {
     initScreenMapSocket(org) {
@@ -24,7 +27,7 @@ export default {
         console.log('screenMapSocket message data:', data)
         /**
          * 根据 消息type 区分消息类型
-         * 0为用户信息, 1为组织消息, 2为一开始订阅所有, 3为事件问题任务消息, 4为一键采集, 5为任务结束, 6人员考勤, 7岗点考勤，8异常临时任务
+         * 0为用户信息,2为一开始订阅所有,3为事件问题任务消息,4为一键采集,5为任务结束,6人员考勤,7岗点考勤,8异常临时任务 9.临时任务推送
          */
         if (data.type == 0) {
           //数据类型为用户信息变更
@@ -53,8 +56,33 @@ export default {
         } else if (data.type == 8) {
           //异常临时任务
           this.$EventBus.$emit('map-task-change', { type: 1, tasks: data.abnormalTasks }) //通知临时任务考勤状态
+        } else if (data.type == 5) {
+          //为任务结束
+          this.$EventBus.$emit('map-task-change', { type: 2, taskId: data.taskId }) //通知临时任务结束
+        } else if (data.type == 9) {
+          //临时任务推送
+          this.$EventBus.$emit('map-task-change', { type: 3, task: data.messageDTO }) //通知新增临时任务
         }
       })
+
+      this.sendScreenMessageChannelSocket() //发送消息
+    },
+    sendScreenMessageChannelSocket(message) {
+      //如果消息通道不存在，则去连接
+      if (!this.screenMessageChannelSocket) {
+        this.screenMessageChannelSocket = screenMessageChannelSocket({
+          subOrgId: this.screenSocketOrg.orgId,
+          subProjectId: this.project.projectId,
+          type: SOCKET_MESSAGE_TYPES.COMMAND
+        })
+        this.screenMessageChannelSocket.connect((data) => {
+          console.log('指挥大屏，收到推送操作消息', data)
+        })
+      }
+      if (message) {
+        //如果消息存在，则去发送消息
+        this.screenMessageChannelSocket.send(JSON.stringify({ sendType: SOCKET_MESSAGE_TYPES.DATA_STATISTICS, data: message }))
+      }
     }
   },
   beforeDestroy() {
@@ -62,7 +90,12 @@ export default {
       this.screenSocket.disconnect() //如果已经存在，则断开连接
       this.screenSocket = null
     }
+    if (this.screenMessageChannelSocket) {
+      this.screenMessageChannelSocket.disconnect() //如果已经存在，则断开连接
+      this.screenMessageChannelSocket = null
+    }
     //去除监听
     this.$EventBus.$off('org-change', this.initScreenMapSocket)
+    this.$EventBus.$off('screen-message-channel', this.sendScreenMessageChannelSocket)
   }
 }

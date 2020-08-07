@@ -76,10 +76,11 @@ export function getUsableAdCodeList() {
 
 /**
  * 网格列表
+ * @param {String} projectId
  * @returns {Object} axios 对象
  */
-export function areaGridList() {
-  return axios.post(API.area.gridList)
+export function areaGridList(projectId) {
+  return axios.post(API.area.gridList + '?projectId=' + projectId)
 }
 
 /**

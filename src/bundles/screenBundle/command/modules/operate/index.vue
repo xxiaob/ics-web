@@ -1,7 +1,7 @@
 <template>
   <div class="jc-screen-opreate no-select">
     <div class="jc-opreate-item">
-      <router-link :to="{name: 'index'}" class="jc-main" tag="i" title="首页"></router-link>
+      <router-link :to="{name: 'main'}" class="jc-main" tag="i" title="首页"></router-link>
     </div>
     <div class="jc-opreate-item" :class="{'jc-active': isSelect}">
       <i class="jc-select" title="框选" @click="userSelect"></i>
@@ -92,6 +92,7 @@ export default {
     this.initData() //初始化基础数据
     this.$EventBus.$on('message-num-change', this.messageNumChange) //监听通知消息
     this.$EventBus.$on('map-grid-types-change', this.mapGridTypesChange) //监听 地图存在类型
+    this.$EventBus.$on('screen-opera-control', this.opreaControl) //操作按钮控制
   },
   computed: {
     controlAreaTypes() {
@@ -120,6 +121,14 @@ export default {
         this.togetherType = allCheckIds
       } catch (error) {
         console.log(error)
+      }
+    },
+    opreaControl(data) {
+      if (data.type == 'select') {
+        //如果框选状态不同，则设置框选状态
+        if (this.isSelect != data.isSelect) {
+          this.userSelect()
+        }
       }
     },
     userSelect() {
@@ -174,6 +183,7 @@ export default {
     //去除事件监听
     this.$EventBus.$off('message-num-change', this.messageNumChange)
     this.$EventBus.$off('map-grid-types-change', this.mapGridTypesChange)
+    this.$EventBus.$$off('screen-opera-control', this.opreaControl)
   }
 }
 </script>

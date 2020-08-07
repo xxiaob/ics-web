@@ -6,9 +6,11 @@ export class Live {
    * @param {String} userId 用户id
    * @param {String} localId 本地流播放的容器id
    * @param {String} remoteId 远端流播放的容器id
+   * @param {Function} cb
+   * @param {Function} remoteStremCb
    * @param {Boolean} debug
   */
-  constructor(userId, localId = 'live', remoteId = 'tolive', debug = true) {
+  constructor(userId, localId = 'live', remoteId = 'tolive', cb, remoteStremCb, debug = true) {
     this.userId = userId
     this.debug = debug
     this.localId = localId
@@ -38,7 +40,7 @@ export class Live {
     }
 
     this.init()
-    this.on()
+    this.on(cb, remoteStremCb)
   }
 
   //sdk初始化
@@ -53,8 +55,14 @@ export class Live {
     })
   }
 
-  //监听事件
-  on() {
+  noop() { }
+
+  /**
+   * 监听事件
+   * @param {Function} cb 监听回调
+   * @param {Function} remoteStremCb 监听回调
+   */
+  on(cb = this.noop, remoteStremCb = this.noop) {
     //报错信息
     this.rtc.client.on('error', (err) => {
       this.console('error', err)
@@ -96,7 +104,7 @@ export class Live {
 
       //订阅远端流，触发订阅事件
       this.rtc.client.subscribe(e.stream, err => {
-        this.console('Subscribe stream failed 失败', err)
+        this.console('Subscribe stream failed 失败', e.stream, e.stream.getId(), err)
       })
     })
 
@@ -109,7 +117,40 @@ export class Live {
       this.console('remoteId', remoteId)
       // e.stream.play(this.remoteId)
       e.stream.play(remoteId)
+
+      if (!this.interval) {
+        this.interval = setInterval(() => {
+          this.rtc.client.getRemoteVideoStats(remoteVideoStatsMap => {
+            /**
+             * End2EndDelay 端到端延迟（ms）从远端采集视频到本地播放视频的延迟。
+             * TotalFreezeTime  视频卡顿总时间，单位为秒
+             * PacketLossRate  远端视频的丢包率（%）
+             * TransportDelay  传输延迟（ms） 从远端发送视频到本地接收视频的延迟。
+             *
+             * MuteState  视频画面是否开启 "1"：视频画面开启 "0"：视频画面关闭
+             * RecvBitrate  视频接收码率，单位 Kbps
+             * RecvResolutionHeight  视频接收分辨率高度，单位为像素
+             * RecvResolutionWidth  视频接收分辨率宽度，单位为像素
+             * RenderFrameRate  视频解码输出帧率（渲染帧率），单位 fps
+             * RenderResolutionHeight  视频渲染分辨率高度，单位为像素
+             * RenderResolutionWidth  视频渲染分辨率宽度，单位为像素
+             * TotalPlayDuration  视频播放总时间，单位为秒
+             */
+            const badStreams = []
+
+            this.console('getRemoteVideoStats 监听 远端流的情况', remoteVideoStatsMap)
+
+            for (const key in remoteVideoStatsMap) {
+              if (remoteVideoStatsMap[key].PacketLossRate > 0) {
+                badStreams.push(key.split('_')[0])
+              }
+            }
+            remoteStremCb(badStreams)
+          })
+        }, 2000)
+      }
     })
+
 
     //监听远端流移除
     this.rtc.client.on('stream-removed', e => {
@@ -144,6 +185,16 @@ export class Live {
     this.rtc.client.on('liveTranscodingUpdated', e => {
       this.console('liveTranscodingUpdated 直播更新', e)
     })
+
+    //网络质量统计数据
+    this.rtc.client.on('network-quality', e => {
+      this.console('network-quality 本地网络数据', e)
+      if (e.downlinkNetworkQuality > 3 || e.uplinkNetworkQuality > 3) {
+        cb(true)
+      } else {
+        cb(false)
+      }
+    })
   }
 
   /**
@@ -151,12 +202,14 @@ export class Live {
    * @param {String} id
   */
   removeRemoteId(id) {
+    // this.console('removeRemoteId', id)
     const index = this.rtc.remoteStreams.findIndex(v => v === id)
 
     if (index > -1) {
       this.rtc.remoteStreams.splice(index, 1)
       // this.setPublish()
     }
+    // this.console('this.rtc.remoteStreams', this.rtc.remoteStreams)
   }
 
   /**
@@ -235,6 +288,11 @@ export class Live {
 
   //离开房间
   leaveChannel() {
+    // this.console('this.interval', this.interval)
+    if (this.interval) {
+      clearInterval(this.interval)
+      this.interval = null
+    }
     if (this.recordParams.recorded) {
       endRecord(this.recordParams)
     }

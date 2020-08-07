@@ -71,6 +71,7 @@
     <div class="jc-footer">
       <el-button @click="handleTask(true)" size="small" type="primary">流转任务</el-button>
       <el-button @click="handleTask(false)" size="small" type="primary">添加备注</el-button>
+      <el-button @click="sendScreen" type="primary" size="small">{{isSendScreen?'关闭投屏':'投屏'}}</el-button>
     </div>
 
     <el-dialog :title="taskForm.ifUpload?'流转任务':'添加备注'" :visible.sync="dialogVisibleHandle" :close-on-click-modal="false" width="600px" append-to-body>
@@ -95,7 +96,7 @@
 import { taskGetDaily, taskFinish, taskAddRemark } from '@/api/task'
 import { projectsList } from '@/api/projects'
 import { organizationList } from '@/api/organization'
-import { PROJECT_TYPES, TASK_PEOPLE_TYPES } from '@/constant/Dictionaries'
+import { PROJECT_TYPES, TASK_PEOPLE_TYPES, MESSAGE_DATA_TYPES } from '@/constant/Dictionaries'
 import { formatDate } from '@/libs/util'
 import { NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
 import moment from 'moment'
@@ -137,7 +138,8 @@ export default {
         remark: '',
         orgIds: [],
         userIds: []
-      }
+      },
+      isSendScreen: false
     }
   },
   watch: {
@@ -210,6 +212,17 @@ export default {
     }
   },
   methods: {
+    sendScreen() {
+      if (this.isSendScreen) {
+        this.isSendScreen = false
+        this.$EventBus.$emit('screen-message-channel', { type: MESSAGE_DATA_TYPES.CLOSR, closeType: MESSAGE_DATA_TYPES.TASK })
+        this.$message.success('关闭投屏成功')
+      } else {
+        this.isSendScreen = true
+        this.$EventBus.$emit('screen-message-channel', { type: MESSAGE_DATA_TYPES.TASK, data: { id: this.info.id } })
+        this.$message.success('投屏发送成功')
+      }
+    },
     changeActivate(val) {
       this.activate = val
     },
@@ -267,7 +280,7 @@ export default {
       if (res && res.length) {
         return res.map(item=>({ value: item.projectId, label: item.projectName }))
       } else {
-        return null
+        return []
       }
     },
     async getDetail() {

@@ -1,10 +1,10 @@
 <template>
   <div class="jc-screen-header no-select">
     <div class="jc-header-left">
-      <div class="jc-weather" v-if="weather" :class="getWeatherStyle()">
+      <div class="jc-weather" v-if="weather" :style="`background-image: url(${weather.source});`">
         <span v-text="weather.temperature + '℃'"></span>
         <div class="jc-weather-detail">
-          <div class="jc-w-detail" :class="getWeatherStyle()">{{weather.weather}}<br />{{weather.temperature + '℃'}}</div>
+          <div class="jc-w-detail" :style="`background-image: url(${weather.source});`">{{weather.weather}}<br />{{weather.temperature + '℃'}}</div>
           <div class="jc-weather-item">风向：{{weather.windDirection}}</div>
           <div class="jc-weather-item">风力：{{weather.windPower}}</div>
           <div class="jc-weather-item">空气湿度：{{weather.humidity}}</div>
@@ -31,20 +31,10 @@ import moment from 'moment'
 import JcWeather from '@/components/JcWeather'
 import { organizationList } from '@/api/organization'
 import { PROJECT_TYPES } from '@/constant/Dictionaries'
-import { JC_WEATHER } from '@/constant/Dictionaries'
 import { getAreaCodeByOrgId } from '@/api/area'
 import { getUser } from '@/libs/storage'
 
 let weeks = ['周日', '周一', '周二', '周三', '周四', '周五', '周六'] //周数据
-
-//天气和样式映射
-let weatherStyleMapping = {
-  [JC_WEATHER.SUNNY]: 'jc-weather-sunny',
-  [JC_WEATHER.OVERCAST]: 'jc-weather-overcast',
-  [JC_WEATHER.SMOG]: 'jc-weather-smog',
-  [JC_WEATHER.RAIN]: 'jc-weather-rain',
-  [JC_WEATHER.SNOW]: 'jc-weather-snow'
-}
 
 let orgMap = {} //存储组织id和住址信息的对应关系
 
@@ -120,9 +110,6 @@ export default {
         return orgs
       }
       return []
-    },
-    getWeatherStyle(type) {
-      return weatherStyleMapping[type || this.weather.type]
     },
     orgChange(orgId) {
       //行政区域切换

@@ -74,6 +74,7 @@ export default {
       const index = selecteds.indexOf(tag.id)
 
       selecteds.splice(index, 1)
+      this.$refs.tree.setCheckedKeys(selecteds)
       this.$emit('change', selecteds)
       this.$parent.$emit('el.form.change')
     },

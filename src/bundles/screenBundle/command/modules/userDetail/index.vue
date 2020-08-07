@@ -5,12 +5,12 @@
       <component :is="tabComponent" :options="options" :project="project"></component>
     </keep-alive>
     <div class="jc-user-detail-footer">
-      <div class="jc-user-detail-item jc-audio" title="对讲" @click="goMediaLive(videoTypes.DOUBLEAUDIO)"></div>
-      <div class="jc-user-detail-item jc-command" title="指挥" @click="goMediaLive(videoTypes.DOUBLEVIDEO)"></div>
-      <div class="jc-user-detail-item jc-video" title="观摩" @click="goMediaLive(videoTypes.OBSERVE)"></div>
-      <div class="jc-user-detail-item jc-force-video" title="强制观摩" @click="goMediaLive(videoTypes.FORCEOBSERVE)"></div>
-      <div class="jc-user-detail-item jc-trajectory" title="轨迹" @click="userTrajectory"></div>
-      <div class="jc-user-detail-item jc-screen" title="投屏"></div>
+      <div class="jc-user-detail-item" @click="goMediaLive(videoTypes.DOUBLEAUDIO)">音频指挥</div>
+      <div class="jc-user-detail-item" @click="goMediaLive(videoTypes.DOUBLEVIDEO)">视频指挥</div>
+      <div class="jc-user-detail-item" @click="goMediaLive(videoTypes.OBSERVE)">观摩</div>
+      <div class="jc-user-detail-item" @click="goMediaLive(videoTypes.FORCEOBSERVE)">强制观摩</div>
+      <div class="jc-user-detail-item" @click="userTrajectory">轨迹</div>
+      <!-- <div class="jc-user-detail-item">投屏</div> -->
     </div>
   </view-warp>
 </template>
@@ -64,50 +64,22 @@ export default {
 <style lang="scss" scoped>
 .jc-user-detail-footer {
   position: relative;
-  height: 40px;
   display: flex;
   .jc-user-detail-item {
-    position: relative;
     flex: 1;
     cursor: pointer;
-    background-position: center;
-    background-repeat: no-repeat;
-    background-size: auto 50%;
-    &.jc-audio {
-      background-image: url(./assets/audio.png);
-      &:hover {
-        background-image: url(./assets/audio-on.png);
-      }
+    margin: 12px 0;
+    height: 20px;
+    color: $jc-color-text-secondary;
+    font-size: $jc-font-size-smaller;
+    @include jc-vhcenter;
+    border-right: solid 1px $jc-color-line-primary;
+    &:last-child {
+      border-right: none;
     }
-    &.jc-command {
-      background-image: url(./assets/command.png);
-      &:hover {
-        background-image: url(./assets/command-on.png);
-      }
-    }
-    &.jc-video {
-      background-image: url(./assets/video.png);
-      &:hover {
-        background-image: url(./assets/video-on.png);
-      }
-    }
-    &.jc-force-video {
-      background-image: url(./assets/force-video.png);
-      &:hover {
-        background-image: url(./assets/force-video-on.png);
-      }
-    }
-    &.jc-trajectory {
-      background-image: url(./assets/trajectory.png);
-      &:hover {
-        background-image: url(./assets/trajectory-on.png);
-      }
-    }
-    &.jc-screen {
-      background-image: url(./assets/screen.png);
-      &:hover {
-        background-image: url(./assets/screen-on.png);
-      }
+
+    &:hover {
+      color: $jc-color-primary;
     }
   }
 }

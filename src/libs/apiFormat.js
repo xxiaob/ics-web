@@ -112,3 +112,56 @@ export function signEditDataFormat(data = {}) {
 
   return result
 }
+
+/**
+ *  数据大屏 Api边界转换
+ * @param { Object } boundaries 后台返回的数组
+ * @param {AMap} AMap 高德地图对象
+ * @returns {Object} 返回处理过的数据
+ */
+
+export function orgBoundariesFormat(boundaries = [], AMap = null) {
+  let result = []
+
+  //处理矩形
+  if (boundaries && boundaries.length) {
+    boundaries.forEach(item => {
+      if (item.areaInCoordinates && item.areaInCoordinates.length &&
+        item.areaInCoordinates[0].areaInOutCoordinates && item.areaInCoordinates[0].areaInOutCoordinates.length) {
+        let resultItem = { hasInPath: false, path: [] }
+
+        //处理外部区域
+        let outPath = []
+
+        let areaInCoordinates = item.areaInCoordinates[0].areaInOutCoordinates
+
+        for (let i = 0; i < areaInCoordinates.length; i++) {
+          outPath.push(AMap ? new AMap.LngLat(areaInCoordinates[i].n, areaInCoordinates[i].a) : [areaInCoordinates[i].n, areaInCoordinates[i].a])
+        }
+        //处理内部区域
+        if (item.areaOutCoordinates && item.areaOutCoordinates.length) {
+          let inPaths = []
+
+          for (let i = 0; i < item.areaOutCoordinates.length; i++) {
+            let inPath = []
+
+            let areaInOutCoordinates = item.areaOutCoordinates[i].areaInOutCoordinates
+
+            for (let j = 0; j < areaInOutCoordinates.length; j++) {
+              inPath.push(AMap ? new AMap.LngLat(areaInOutCoordinates[j].n, areaInOutCoordinates[j].a) : [areaInOutCoordinates[j].n, areaInOutCoordinates[j].a])
+            }
+            inPaths.push(inPath)
+          }
+          resultItem.path = [outPath, ...inPaths]
+          resultItem.hasInPath = true //设置该区域有飞地
+        } else {
+          resultItem.path = outPath
+        }
+
+        result.push(resultItem)
+      }
+    })
+  }
+
+  return result
+}

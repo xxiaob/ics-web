@@ -3,6 +3,7 @@
  */
 import { getMarkerCluster, getMouseTool } from '@/map/aMap/aMapUtil'
 import { JcUserIcons } from '@/config/JcIconConfig'
+import { VOICE_TYPE } from '@/config/JcVoiceAlertConfig'
 
 let usersData = { markerCluster: null, users: {}, lnglats: [] } //存储用户信息
 
@@ -110,6 +111,8 @@ export default {
       } else if (data.type == 5) {
         //用户考勤状态更新
         if (data.attendance && data.attendance.length) {
+          let hasAbnormalUser = false //记录获取的批量用户里是否有新增，如果有，则通知播放提示音
+
           data.attendance.forEach(item => {
             let index = this.abnormalUserIds.indexOf(item.id)
 
@@ -120,8 +123,13 @@ export default {
               }
             } else if (item.status == 1) {
               this.abnormalUserIds.push(item.id)
+              hasAbnormalUser = true
             }
           })
+
+          if (hasAbnormalUser) {
+            this.$EventBus.$emit('map-voice-alert', { type: VOICE_TYPE.USER_ABNORMAL }) //通知播放提示音
+          }
         }
       }
       //处理用户信息
@@ -230,6 +238,7 @@ export default {
         context.marker.setzIndex(18)
       }
 
+      context.marker.setPosition(userItem.center)
       context.marker.setContent(content)
     },
     markerUserClusterClick(context) {
@@ -275,7 +284,7 @@ export default {
           this.locationUserId = data.id
           let myJcMap = this.getMyJcMap() //获取地图对象
 
-          myJcMap.map.setZoomAndCenter(20, lnglat.key.split(','))
+          myJcMap.map.setZoomAndCenter(20, lnglat.lnglat)
           noUser = false //设置查找到该用户
         }
       }

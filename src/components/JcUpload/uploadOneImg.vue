@@ -3,6 +3,7 @@
     <el-upload drag :action="uploadUrl" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg" :headers="uploadHeaders" :before-upload="handleBeforeUpload" :on-success="handleSuccess" :show-file-list="false">
       <i v-show="!url" class="el-icon-upload"></i>
       <div v-show="!url" class="el-upload__text">将文件拖到此处，或<em>点击上传</em></div>
+      <div class="advice" v-if="isShowAdvice">建议上传图片规格：60px png 透明</div>
       <img class="myImg" v-show="url" :src="url" alt="">
     </el-upload>
   </div>
@@ -15,7 +16,11 @@ import { getToken } from '@/libs/storage'
 export default {
   name: 'UploadOneImg',
   props: {
-    url: ''
+    url: '',
+    isShowAdvice: {
+      type: Boolean,
+      default: false
+    }
   },
   data() {
     return {
@@ -49,10 +54,16 @@ export default {
   display: flex;
   flex-direction: column;
   justify-content: center;
+  .el-icon-upload{
+    margin-top:16px;
+  }
   .myImg {
     max-width: 100%;
     max-height: 180px;
     object-fit: contain;
+  }
+  .advice{
+    color:#ccc;
   }
 }
 </style>

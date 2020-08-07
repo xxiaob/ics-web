@@ -7,6 +7,7 @@ import { apiBoundariesFormat } from '@/libs/apiFormat'
 import { JcMapSign } from '@/map'
 import { getMarkerCluster } from '@/map/aMap/aMapUtil'
 import { JcIcons } from '@/config/JcIconConfig'
+import { VOICE_TYPE } from '@/config/JcVoiceAlertConfig'
 
 let gridData = {} //存储已经请求的组织数据
 
@@ -37,6 +38,8 @@ export default {
       if (data.type == 1) {
         //岗点考勤状态更新
         if (data.attendance && data.attendance.length) {
+          let hasAbnormalGrid = false //记录获取的批量岗点里是否有新增，如果有，则通知播放提示音
+
           data.attendance.forEach(item => {
             let index = this.abnormalGridIds.indexOf(item.id)
 
@@ -47,8 +50,13 @@ export default {
               }
             } else if (item.status == 1) {
               this.abnormalGridIds.push(item.id)
+              hasAbnormalGrid = true
             }
           })
+
+          if (hasAbnormalGrid) {
+            this.$EventBus.$emit('map-voice-alert', { type: VOICE_TYPE.GRID_ABNORMAL }) //通知播放提示音
+          }
         }
       }
       this.fitGrids()

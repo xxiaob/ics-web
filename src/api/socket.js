@@ -21,3 +21,16 @@ export function screenMapSocket(data) {
   return new JcSocket(baseUrl + API.screen.command.screenMap + '?' + qs.stringify(data))
 }
 
+/**
+ * 指挥大屏和数据大屏通信
+ * @param {*} data 参数
+ * @param {String} data.token token
+ * @param {String} data.subOrgId 组织id
+ * @param {String} data.subProjectId 项目id
+ * @param {String} data.type 类型标识
+ * @returns {Object} JcSocket 对象
+ */
+export function screenMessageChannelSocket(data) {
+  data.token = getToken() // 设置请求用户token
+  return new JcSocket(baseUrl + API.screen.messageChannel + '?' + qs.stringify(data))
+}

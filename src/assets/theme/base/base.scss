@@ -74,6 +74,36 @@ input::-webkit-input-placeholder {
   font-size: $jc-font-size-smaller;
 }
 
+/*flex布局*/
+.jc-flex-warp {
+  display: flex;
+}
+
+.jc-content-warp {
+  height: 100%;
+}
+
+.jc-flex-con {
+  flex: 1;
+}
+
+.jc-flex-con-2 {
+  flex: 2;
+}
+
+.jc-flex-con-3 {
+  flex: 3;
+}
+
+.jc-flex-con-4 {
+  flex: 4;
+}
+
+.jc-flex-vertical {
+  -webkit-box-orient: vertical;
+  flex-flow: column;
+}
+
 //字体样式
 .jc-link {
   color: $jc-color-primary;
@@ -204,13 +234,13 @@ input::-webkit-input-placeholder {
   }
 
   .el-form-item__content {
-    &>.el-range-editor {
+    & > .el-range-editor {
       width: 350px;
     }
 
-    &>.el-input,
-    &>.el-cascader,
-    &>.el-select {
+    & > .el-input,
+    & > .el-cascader,
+    & > .el-select {
       width: 160px;
     }
   }
@@ -265,7 +295,7 @@ input::-webkit-input-placeholder {
 }
 
 .jc-table {
-  .el-button+.el-button {
+  .el-button + .el-button {
     margin-left: 0;
   }
 
@@ -286,7 +316,6 @@ input::-webkit-input-placeholder {
 }
 
 .jc-manage-form {
-
   .el-select,
   .el-cascader,
   .el-date-editor {
@@ -375,8 +404,8 @@ input::-webkit-input-placeholder {
 
 .jc-trajectory-content {
   position: relative;
-  width: 24px;
-  height: 36px;
+  width: 46px;
+  height: 46px;
   background-position: center;
   background-repeat: no-repeat;
   background-size: 100% 100%;

@@ -17,15 +17,15 @@
       <el-form-item>
         <div class="jc-map-tip">右键点击地图选中位置</div>
         <div class="jc-map">
-          <map-user-marker v-model="position"></map-user-marker>
+          <map-user-marker v-model="position" :isGetUser="false"></map-user-marker>
         </div>
       </el-form-item>
       <el-form-item label="问题描述" prop="problemDesc" :rules="rules.NOT_NULL">
         <!-- <el-input v-model="form.problemDesc" placeholder="请输入问题描述" type="textarea"></el-input> -->
         <jc-editor v-model="form.problemDesc"></jc-editor>
       </el-form-item>
-      <el-form-item label="附件" prop="uploadFilePaths" :rules="[{required: true, message: '请上传文件'}]">
-        <upload :show="dialogVisible" :urls.sync="form.uploadFilePaths" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg,video/*,audio/*"></upload>
+      <el-form-item label="附件" prop="uploadFilePaths">
+        <upload :show="dialogVisible" :urls.sync="form.uploadFilePaths"></upload>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -144,12 +144,12 @@ export default {
   line-height: normal;
   position: relative;
 
-  /deep/ {
-    .el-radio-group,
-    .jc-select-warp {
-      display: none;
-    }
-  }
+  // /deep/ {
+  //   .el-radio-group,
+  //   .jc-select-warp {
+  //     display: none;
+  //   }
+  // }
 }
 .jc-map-tip {
   color: red;

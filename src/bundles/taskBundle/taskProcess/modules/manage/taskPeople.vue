@@ -53,7 +53,8 @@ export default {
       filterText: '',
       filterArr: [],
       filterArrPeople: [],
-      checkedNodes: []
+      checkedNodes: [],
+      first: true
     }
   },
   computed: {
@@ -73,7 +74,7 @@ export default {
     const res = await getOrgUserList({})
 
     this.orgPeople = this.formatPeopleTree(res)
-    this.getProjectUsers('')
+    // this.getProjectUsers('')
     setTimeout(()=>{
       if (this.peopleType === TASK_PEOPLE_TYPES.PEOPLE) {
         this.checkedNodes = this.$refs.tree.getCheckedNodes().filter(item=>item.org === false)
@@ -94,6 +95,7 @@ export default {
       immediate: true,
       handler(val) {
         this.$nextTick(()=>{
+          // console.log('this.edit', val, this.tree)
           if (this.edit) {
             this.$refs.tree.setCheckedKeys(val)
             this.$emit('update:edit', false)
@@ -127,8 +129,11 @@ export default {
 
       if (this.peopleType === TASK_PEOPLE_TYPES.PEOPLE) {
         this.filterArr = Object.keys(this.formatTreeToObj(this.projectPeople, true))
-        this.$emit('update:selecteds', [])
+        if (!this.first) {
+          this.$emit('update:selecteds', [])
+        }
       }
+      this.first = false
     },
     formatPeopleTree(tree) {
       let trees = []

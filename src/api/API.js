@@ -192,14 +192,25 @@ export default {
     uptStatus: 'task-service/userAttendanceCfg/uptStatus'
   },
   screen: {
+    messageChannel: 'message-service/icsServer/command',
     //大屏接口
     command: {
       getCommandScreenData: 'data-service/largeScreen/getCommandScreenData',
       screenMap: 'message-service/icsServer/screenMap', //大屏推送接口
       getScreenData: 'task-service/taskScreen/getScreenData',
+      getScreenTask: 'task-service/task/getScreenTask', //最近两天未完成的临时任务
       getTaskPostLine: 'task-service/taskAttendance/getTaskPostLine', //岗点考勤事件流水
       getTaskPersonalLine: 'task-service/taskAttendance/getTaskPersonalLine', //个人考勤事件流水
-      getUserHistoryPosition: 'message-srv/message/getUserHistoryPosition' //获取用户历史定位
+      getUserHistoryPosition: 'message-srv/message/getUserHistoryPosition', //获取用户历史定位
+      getScreenOverallData: 'task-service/taskScreen/getScreenOverallData' //根据用户和网格查询综合数据
+    },
+    dataStatistics: {
+      accumulateInfo: 'data-service/largeScreen/accumulateInfo',
+      transactionType: 'data-service/largeScreen/transactionType',
+      getAreaService: 'data-service/largeScreen/getAreaServiceStatistics', // 数据大屏区域出勤
+      getOverallAttendance: 'data-service/largeScreen/getOverallAttendanceStatistics', // 数据大屏总体出勤
+      getEventGroupByEventType: 'data-service/intelligentAnalysis/getEventGroupByEventType', // AI智能分析数据
+      getAreaDataStatistics: 'data-service/largeScreen/getAreaDataStatistics' //数据大屏地图各区域数据统计
     }
   },
   domainLogo: {
@@ -208,7 +219,8 @@ export default {
     listByPage: 'user-service/domainLogo/getSystemDomainLogoByPage',
     add: 'user-service/domainLogo/addSystemDomainLogo',
     del: 'user-service/domainLogo/delSystemDomainLogo',
-    upd: 'user-service/domainLogo/updSystemDomainLogo'
+    upd: 'user-service/domainLogo/updSystemDomainLogo',
+    updEnableRolling: 'user-service/domainLogo/updEnableRollingMessage' // 滚动开关
   },
   systemIndex: {
     //首页设置 配置欢迎页图标

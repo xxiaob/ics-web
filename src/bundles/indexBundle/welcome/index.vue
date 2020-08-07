@@ -1,10 +1,14 @@
 <template>
   <div class="jc-welcome-warp">
     <img src="./assets/bg.png" class="jc-welcome-bg" />
+    <div class="jc-marquee" v-if="marqueeText">
+      <div class="jc-marquee-item jc-marquee-first" v-text="marqueeText"></div>
+      <div class="jc-marquee-item jc-marquee-second" v-text="marqueeText"></div>
+    </div>
     <div class="jc-welcome-content" :style="welcomeLogo">
       <div class="jc-welcome-item" v-for="item in list" :key="item.id" :style="item.logo" @click="goLink(item)"></div>
       <template v-if="list.length < 1">
-        <router-link :to="{name: 'specialControl'}" tag="div" class="jc-welcome-item jc-icon1"></router-link>
+        <router-link :to="{name: 'main'}" tag="div" class="jc-welcome-item jc-icon1"></router-link>
         <div class="jc-welcome-item jc-icon2"></div>
         <div class="jc-welcome-item jc-icon3"></div>
         <div class="jc-welcome-item jc-icon4"></div>
@@ -16,12 +20,14 @@
 <script>
 import { mapState } from 'vuex'
 import { getByOrgId } from '@/api/systemIndex'
+import { getDomainLogoConfig } from '@/libs/storage'
 
 export default {
   name: 'IndexWelcome',
   data() {
     return {
-      list: []
+      list: [],
+      marqueeText: ''
     }
   },
   computed: {
@@ -34,6 +40,7 @@ export default {
   },
   created() {
     this.initData() //初始化内容
+    this.getConfig() //获取配置
   },
   methods: {
     async initData() {
@@ -69,11 +76,59 @@ export default {
           window.location.href = linkUrl
         }
       }
+    },
+    getConfig() {
+      let configs = getDomainLogoConfig()
+
+      if (configs && configs.length) {
+        let host = window.location.host
+
+        let config = configs.find(item => item.domain == host)
+
+        if (config) {
+          //如果设置存在，则开启文字滚动
+          this.marqueeText = ( config.enableRollingMessage == 1 && config.rollingMessage) ? config.rollingMessage : ''
+        }
+      }
     }
   }
 }
 </script>
 <style lang="scss" scoped>
+@keyframes jc-marquee-animation {
+  from {
+    transform: translateX(100%);
+  }
+  to {
+    transform: translateX(-100%);
+  }
+}
+.jc-marquee {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  height: 50px;
+  line-height: 50px;
+  width: 1000px;
+  transform: translateX(-50%);
+  font-size: $jc-font-size-large;
+  color: $jc-color-white;
+  overflow: hidden;
+  .jc-marquee-item {
+    text-align: center;
+    display: block;
+    white-space: nowrap;
+    position: absolute;
+    min-width: 100%;
+    transform: translateX(100%);
+    &.jc-marquee-first {
+      animation: jc-marquee-animation 20s linear infinite;
+    }
+    &.jc-marquee-second {
+      animation: jc-marquee-animation 20s linear infinite 10s;
+    }
+  }
+}
 .jc-welcome-warp {
   position: relative;
   width: 100%;
@@ -93,7 +148,7 @@ export default {
   right: 80px;
   max-width: 1600px;
   margin: 0 auto;
-  bottom: 80px;
+  bottom: 60px;
   padding: 120px 0 0 0;
   display: flex;
   background: url(/static/images/index-logo.png) no-repeat top center;

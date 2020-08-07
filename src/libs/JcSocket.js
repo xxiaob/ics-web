@@ -8,6 +8,7 @@ export default class JcSocket {
    */
   constructor(url) {
     this.url = url
+    this.lockReconnect = false
   }
 
   /**
@@ -30,10 +31,12 @@ export default class JcSocket {
         callback(data)
       }
       this.ws.onclose = () => {
-        // this.reconnect()
+        console.log('JcSocket onclose......')
+        this.reconnect()
       }
       this.ws.onerror = () => {
-        // this.reconnect()
+        console.log('JcSocket onerror......')
+        this.reconnect()
       }
     } catch (error) {
       console.log(error)
@@ -65,6 +68,14 @@ export default class JcSocket {
    * 重新连接
    */
   reconnect() {
-    this.connect(this.callback)
+    if (this.lockReconnect) {
+      return
+    }
+    this.lockReconnect = true
+    setTimeout(() => {
+      console.log('JcSocket 重连......')
+      this.connect(this.callback)
+      this.lockReconnect = false
+    }, 3000)
   }
 }

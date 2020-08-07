@@ -12,7 +12,7 @@ axios.defaults.baseURL = process.env.apiHostConfig.base /*eslint-disable-line*/
 //设置全局http请求
 let errorRun = () => {
   //这里处理请求出错的场景
-  Message.error('网络请求失败')
+  Message({ message: '网络请求失败', type: 'error', offset: 20 })
 }
 
 //拦截request请求，配置请求参数
@@ -34,7 +34,7 @@ axios.interceptors.response.use(function (res) {
       return res.data.resData
     } else {
       if (res.data.resMsg.msgCode === RESPONSE_CODE.AUTH_ERROR || res.data.resMsg.msgCode === RESPONSE_CODE.AUTH_EXPIRE) {
-        Message.error('您未登录或登录已失效')
+        Message({ message: '您未登录或登录已失效', type: 'error', offset: 20 })
         router.push({ name: 'login' })
       } else {
         Message.error(res.data.resMsg.msgText)

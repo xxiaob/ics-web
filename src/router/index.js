@@ -31,7 +31,14 @@ let routerOptions = {
     name: 'basePage',
     redirect: { name: 'index' },
     component: () => import('@/bundles/commonBundle/pageContent/basePage'),
-    children: [...systemRouter, ...taskRouter, ...projectRouter, ...attendRouter, ...overseeRouter]
+    children: [{
+      path: 'main',
+      name: 'main',
+      component: () => import('@/bundles/indexBundle/main'),
+      meta: {
+        title: '欢迎'
+      }
+    }, ...systemRouter, ...taskRouter, ...projectRouter, ...attendRouter, ...overseeRouter]
   }, {
     path: '/',
     name: 'fullPage',
@@ -73,7 +80,7 @@ let checkMenu = function (name, menus) {
  * 如果不需要登录就可以访问的，请在metia中设置 ignore 为true
  * meta: { title: '登录', ignore: true }
  */
-let excludeRouters = ['index', 'commandProjectScreen', 'dataProjectScreen']
+let excludeRouters = ['index', 'main', 'commandProjectScreen', 'dataProjectScreen']
 
 //设置router 跳转配置
 router.beforeEach((to, from, next) => {

@@ -20,14 +20,15 @@ class JcMap extends JcMapBase {
   /**
    *  初始化地图
    * @param {Dom|String} source 地图承接, 必填
+   * @param {*} options 地图额外参数
    * @returns {Promise} 返回Promise对象
    */
-  async init(source) {
+  async init(source, options = {}) {
     if (!this.map) {
       this.console('开始初始化地图...')
       try {
         this.AMap = await initAmap()
-        this.map = new this.AMap.Map(source, { ...MapOptions.mapOptions[this.mapStyle], zooms: this.zooms })
+        this.map = new this.AMap.Map(source, Object.assign({ ...MapOptions.mapOptions[this.mapStyle], zooms: this.zooms }, options))
 
         let complete = false //防止map complete事件触发多次
 

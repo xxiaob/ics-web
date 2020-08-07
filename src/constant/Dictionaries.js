@@ -48,6 +48,7 @@ export const QUESTION_STATES = new JcEnum([
   { key: 'NOTREPORTED', value: '0', label: '未上报' },
   { key: 'INPROGRESS', value: '1', label: '进行中' },
   { key: 'CLOSED', value: '2', label: '已关闭' }
+  // { key: 'TASK', value: '3', label: '转任务' },
 ])
 
 /**
@@ -99,7 +100,8 @@ export const TASK_REPEATS = new JcEnum([
   { key: 'HAIRDOWN', value: '1', label: '下发任务' },
   { key: 'FORWARD', value: '2', label: '转发任务' },
   { key: 'FINISHED', value: '3', label: '结束任务' },
-  { key: 'REMARK', value: '4', label: '添加备注' }
+  { key: 'REMARK', value: '4', label: '添加备注' },
+  { key: 'UPDATE', value: '5', label: '修改任务' }
 ])
 
 /**
@@ -169,17 +171,6 @@ export const ATTEND_CONFIGURE_STATUSES = new JcEnum([
 ])
 
 /**
- * 天气 字典
- */
-export const JC_WEATHER = new JcEnum([
-  { key: 'SUNNY', value: '0', label: '晴天' },
-  { key: 'OVERCAST', value: '1', label: '阴天' },
-  { key: 'SMOG', value: '2', label: '雾霾' },
-  { key: 'RAIN', value: '3', label: '下雨' },
-  { key: 'SNOW', value: '4', label: '下雪' }
-])
-
-/**
  * 事件推送类型 字典
  */
 export const MESSAGE_TYPE = new JcEnum([
@@ -207,4 +198,33 @@ export const VIDEO_INVITE_TYPES = new JcEnum([
   { key: 'OBSERVE', value: '3', label: '观摩' },
   { key: 'DOUBLEAUDIO', value: '4', label: '双人语音' },
   { key: 'DOUBLEVIDEO', value: '5', label: '双人视频' }
+])
+
+/**
+ * 推送类型 字典
+ */
+export const SOCKET_MESSAGE_TYPES = new JcEnum([
+  { key: 'COMMAND', value: 'command', label: '指挥大屏' },
+  { key: 'DATA_STATISTICS', value: 'datastatistics', label: '数据大屏' }
+])
+
+/**
+ * 推送数据 类型字典
+ */
+export const MESSAGE_DATA_TYPES = new JcEnum([
+  { key: 'TASK', value: 'task', label: '日常任务' },
+  { key: 'QUESTION', value: 'question', label: '问题' },
+  { key: 'EVENT', value: 'event', label: '事件' },
+  { key: 'TEMPORARY', value: 'temporary', label: '临时任务' },
+  { key: 'LIVE', value: 'live', label: '音视频' },
+  { key: 'CLOSR', value: 'close', label: '关闭投屏' }
+])
+
+/**
+ * 登陆页 窗口位置字典
+ */
+export const LOGIN_WINDOWS_POSITION = new JcEnum([
+  { key: 'LEFT', value: 1, label: '左' },
+  { key: 'CENTER', value: 2, label: '中' },
+  { key: 'RIGHT', value: 3, label: '右' }
 ])

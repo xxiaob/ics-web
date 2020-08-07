@@ -8,7 +8,39 @@
         <el-input v-model="form.systemName" placeholder="请输入系统名称"></el-input>
       </el-form-item>
       <el-form-item label="系统logo" prop="domainLogo" :rules="rules.NOT_NULL">
-        <upload-one-img :url.sync="form.domainLogo"></upload-one-img>
+        <upload-one-img :url.sync="form.domainLogo" :isShowAdvice="isShowAdvice"></upload-one-img>
+      </el-form-item>
+      <el-form-item label="登录页背景" prop="firstPageLogo">
+        <upload-one-img :url.sync="form.firstPageLogo"></upload-one-img>
+      </el-form-item>
+      <el-form-item label="登录窗背景" prop="firstPageLoginLogo">
+        <upload-one-img :url.sync="form.firstPageLoginLogo"></upload-one-img>
+      </el-form-item>
+      <el-form-item label="登录窗位置" prop="loginLogoLocation" :rules="rules.NOT_NULL">
+        <el-radio v-model="form.loginLogoLocation" v-for="item in loginPosition" :label="item.value" :key="item.key">{{item.label}}</el-radio>
+      </el-form-item>
+      <el-form-item label="入口路由" prop="entranceRouter">
+        <el-input v-model="form.entranceRouter" placeholder="非必填,默认index首页"></el-input>
+      </el-form-item>
+      <el-form-item label="滚动开关" prop="scrollSwitch">
+        <el-switch
+          v-model="form.enableRollingMessage"
+          active-color="#409EFF"
+          inactive-color="#cccccc"
+          :active-value="1"
+          :inactive-value="0"
+          >
+        </el-switch>
+      </el-form-item>
+      <el-form-item label="滚动文本" prop="scrollSwitch">
+        <el-input
+          type="textarea"
+          :rows="3"
+          placeholder="请输入内容"
+          v-model="form.rollingMessage"
+          resize ="none"
+        >
+        </el-input>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -21,8 +53,10 @@
 import { save } from '@/api/domainLogo'
 import { getStringRule, NOT_NULL } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
+import { LOGIN_WINDOWS_POSITION } from '@/constant/Dictionaries'
 
-let defaultForm = { systemName: '', domain: '', domainLogo: '' }
+
+let defaultForm = { systemName: '', domain: '', domainLogo: '', firstPageLogo: '', firstPageLoginLogo: '', loginLogoLocation: 3, rollingMessage: '', enableRollingMessage: 0 }
 
 export default {
   name: 'SystemNameManage',
@@ -33,7 +67,9 @@ export default {
       rules: {
         NOT_NULL,
         Len50: getStringRule(1, 50)
-      }
+      },
+      loginPosition: LOGIN_WINDOWS_POSITION.VALUES,
+      isShowAdvice: true // 显示提示文本
     }
   },
   components: {

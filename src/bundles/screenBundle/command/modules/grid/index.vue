@@ -9,6 +9,7 @@
           </div>
           <div class="jc-tree-options" v-on:click.stop>
             <el-button type="text" size="small" icon="el-icon-map-location" @click="goLocation(data)"></el-button>
+            <el-button type="text" size="small" icon="el-icon-view" v-if="data.areaId" @click="gridDetail(data)" title="详情"></el-button>
           </div>
         </div>
       </el-tree>
@@ -134,6 +135,9 @@ export default {
         node.isLeaf = false
       })
       return false
+    },
+    gridDetail(data) {
+      this.$EventBus.$emit('view-component-change', { component: 'GridDetail', options: { areaId: data.areaId, areaName: data.name, areaTypeId: data.areaTypeId, icon: data.icon } }) //通知窗口改变
     },
     goLocation(data) {
       //去定位

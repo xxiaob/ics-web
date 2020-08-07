@@ -13,7 +13,7 @@
       </div>
       <div class="jc-detail-warp">
         <div class="jc-detail-label">创建时间</div>
-        <div class="jc-detail-content">{{form.createTime|filterTime}}</div>
+        <div class="jc-detail-content">{{form.createDate|filterTime}}</div>
       </div>
       <div class="jc-detail-warp">
         <div class="jc-detail-label">项目名称</div>
@@ -60,7 +60,7 @@
       <div class="jc-detail-warp">
         <div class="jc-detail-label">附件</div>
         <div class="jc-detail-content">
-          <el-image v-for="url in imgs" :key="url" :src="url" :preview-src-list="imgs" class="jc-img"></el-image>
+          <img v-for="url in imgs" :key="url" :src="url" class="jc-img" @click="showFullImg(url)">
           <div class="jc-video" v-for="url in videos" :key="url" @click="showVideo(url)">
             <video :src="url"></video>
             <div class="hover">
@@ -87,9 +87,10 @@
     <div v-show="activate==='3'" class="jc-view-content jc-event" v-loading="loading" element-loading-background="rgba(0, 0, 0, 0)">
       <jc-event-list :taskId="form.businessKey" :small="true"></jc-event-list>
     </div>
-    <div class="jc-footer" v-if="form.auth">
-      <el-button @click="handleTask(true)" size="small" type="primary">流转任务</el-button>
-      <el-button @click="handleTask(false)" size="small">结束任务</el-button>
+    <div class="jc-footer">
+      <el-button v-if="form.auth" @click="handleTask(true)" size="small" type="primary">流转任务</el-button>
+      <el-button v-if="form.auth" @click="handleTask(false)" size="small">结束任务</el-button>
+      <el-button @click="sendScreen" type="primary" size="small">{{isSendScreen?'关闭投屏':'投屏'}}</el-button>
     </div>
 
     <el-dialog :title="taskForm.ifUpload?'流转任务':'结束任务'" :visible.sync="dialogVisibleHandle" :close-on-click-modal="false" width="600px" append-to-body>
@@ -121,7 +122,7 @@ import { taskGet, taskFinish, getTaskAuth } from '@/api/task'
 import { eventManageSelectList } from '@/api/eventManage'
 import { projectsList } from '@/api/projects'
 import { organizationList } from '@/api/organization'
-import { PROJECT_TYPES, TASK_SOURCES, TASK_PEOPLE_TYPES } from '@/constant/Dictionaries'
+import { PROJECT_TYPES, TASK_SOURCES, TASK_PEOPLE_TYPES, MESSAGE_DATA_TYPES } from '@/constant/Dictionaries'
 import { formatDate } from '@/libs/util'
 import { NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
 import moment from 'moment'
@@ -167,7 +168,8 @@ export default {
         orgIds: [],
         userIds: [],
         eventIds: []
-      }
+      },
+      isSendScreen: false
     }
   },
   watch: {
@@ -205,11 +207,7 @@ export default {
   },
   computed: {
     taskSourceName() {
-      if (this.form.taskSourceName) {
-        return this.form.taskSourceName
-      } else {
-        return TASK_SOURCES.toString(this.form.taskSource)
-      }
+      return TASK_SOURCES.toString(this.form.taskSource) + ' ' + this.form.taskSourceName
     },
     formatUsers() {
       if (this.form.assignees && this.form.assignees.length) {
@@ -248,6 +246,21 @@ export default {
     }
   },
   methods: {
+    showFullImg(url) {
+      // console.log('showFullImg', url, this.imgs)
+      this.$EventBus.$emit('show-full-img', { url, imgs: this.imgs })
+    },
+    sendScreen() {
+      if (this.isSendScreen) {
+        this.isSendScreen = false
+        this.$EventBus.$emit('screen-message-channel', { type: MESSAGE_DATA_TYPES.CLOSR, closeType: MESSAGE_DATA_TYPES.TEMPORARY })
+        this.$message.success('关闭投屏成功')
+      } else {
+        this.isSendScreen = true
+        this.$EventBus.$emit('screen-message-channel', { type: MESSAGE_DATA_TYPES.TEMPORARY, data: { id: this.info.id } })
+        this.$message.success('投屏发送成功')
+      }
+    },
     changeActivate(val) {
       this.activate = val
     },
@@ -315,7 +328,7 @@ export default {
       if (res && res.length) {
         return res.map(item=>({ value: item.projectId, label: item.projectName }))
       } else {
-        return null
+        return []
       }
     },
     async getDetail() {

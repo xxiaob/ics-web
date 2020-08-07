@@ -11,7 +11,7 @@
 $jc-screen-color: #142c79; //大屏颜色
 
 /*基础参数定义*/
-$jc-right-content-width: 300px; //右侧内容区域宽度
+$jc-right-content-width: 320px; //右侧内容区域宽度
 $jc-right-message-height: 150px; //右侧底部内容高度
 
 /* 大屏header */
@@ -81,7 +81,8 @@ $jc-screen-height: 56px;
       padding: $jc-default-dis;
       width: 180px;
       height: 168px;
-      background: url(../modules/header/assets/weather-bg.png) no-repeat center bottom;
+      background: url(../modules/header/assets/weather-bg.png) no-repeat center
+        bottom;
       background-size: 100% 160px;
       left: 0;
       visibility: hidden;
@@ -114,26 +115,6 @@ $jc-screen-height: 56px;
       line-height: 22px;
       font-size: $jc-font-size-small;
     }
-  }
-
-  .jc-weather-sunny {
-    background-image: url(../modules/header/assets/sunny.png);
-  }
-
-  .jc-weather-snow {
-    background-image: url(../modules/header/assets/snow.png);
-  }
-
-  .jc-weather-overcast {
-    background-image: url(../modules/header/assets/overcast.png);
-  }
-
-  .jc-weather-smog {
-    background-image: url(../modules/header/assets/smog.png);
-  }
-
-  .jc-weather-rain {
-    background-image: url(../modules/header/assets/rain.png);
   }
 
   .jc-time {
@@ -537,26 +518,6 @@ $jc-screen-height: 56px;
       line-height: 26px;
       border-top: solid 1px $jc-color-primary;
       color: $jc-color-text-regular;
-
-      .jc-talk-type {
-        float: right;
-        opacity: 0.8;
-        cursor: pointer;
-        padding: 0 6px;
-        height: 20px;
-        line-height: 16px;
-        margin-top: 3px;
-        color: $jc-screen-color;
-        font-size: $jc-font-size-smaller;
-        border: solid 2px $jc-screen-color;
-
-        &:hover,
-        &.jc-active {
-          opacity: 1;
-          color: $jc-color-white;
-          background-color: $jc-screen-color;
-        }
-      }
     }
 
     .jc-user-content {
@@ -593,31 +554,24 @@ $jc-screen-height: 56px;
     }
 
     .jc-user-footer {
-      text-align: right;
+      display: flex;
 
       .jc-opera-item {
-        display: inline-block;
+        flex: 1;
         cursor: pointer;
-        width: 24px;
-        height: 28px;
-        background-position: center;
-        background-repeat: no-repeat;
-        background-size: 16px auto;
+        margin: 8px 0;
+        height: 20px;
+        color: $jc-color-text-secondary;
+        @include jc-vhcenter;
+        font-size: $jc-font-size-smaller;
+        border-right: solid 1px $jc-color-line-primary;
 
-        &.jc-clear {
-          background-image: url(../modules/org/assets/clear.png);
-
-          &:hover {
-            background-image: url(../modules/org/assets/clear-on.png);
-          }
+        &:last-child {
+          border-right: none;
         }
 
-        &.jc-command {
-          background-image: url(../modules/org/assets/command.png);
-
-          &:hover {
-            background-image: url(../modules/org/assets/command-on.png);
-          }
+        &:hover {
+          color: $jc-color-primary;
         }
       }
     }
@@ -679,7 +633,7 @@ $jc-screen-height: 56px;
 
     .jc-node-icon {
       left: -6px;
-      content: '';
+      content: "";
       width: 12px;
       height: 12px;
       background: url(../assets/node.png) no-repeat center $jc-color-white;
@@ -726,7 +680,7 @@ $jc-screen-height: 56px;
         position: relative;
 
         &:after {
-          content: '';
+          content: "";
           display: inline-block;
           width: 16px;
           height: 16px;
@@ -814,7 +768,8 @@ $jc-screen-height: 56px;
 
   .jc-message-user {
     width: 68px;
-    background: url(../modules/message/assets/peportperson.png) no-repeat left center;
+    background: url(../modules/message/assets/peportperson.png) no-repeat left
+      center;
     background-size: 20px 20px;
     padding: 0 $jc-default-dis/2 0 24px;
     @include jc-text-warp;

@@ -1,19 +1,21 @@
 <template>
   <div class="jc-login-warp">
-    <img src="./assets/login-bg.png" class="jc-login-bg" />
+    <img :src="systemBg" class="jc-login-bg" />
     <div class="jc-login-header" :style="systemLogo"></div>
-    <div class="jc-login-space">
-      <div class="jc-login-title">欢迎登录</div>
-      <div class="jc-input-warp">
-        <input class="jc-login-input" type="text" v-model="form.userName" placeholder="请输入账号" maxlength="20" @keyup.enter="onSubmit" />
-      </div>
-      <div class="jc-input-warp">
-        <input class="jc-login-input" type="password" v-model="form.password" placeholder="请输入密码" maxlength="20" @keyup.enter="onSubmit" />
-      </div>
-      <div class="jc-tip" v-text="tip"></div>
-      <div class="jc-login-btn" @click="onSubmit">
-        <JcSpinner v-if="loading"></JcSpinner>
-        <span v-else>登 录</span>
+    <div class="jc-login-space" :style="loginBg" :class="loginPosition">
+      <div class="jc-logon-content">
+        <div class="jc-login-title">欢迎登录</div>
+        <div class="jc-input-warp">
+          <input class="jc-login-input" type="text" v-model="form.userName" placeholder="请输入账号" maxlength="20" @keyup.enter="onSubmit" />
+        </div>
+        <div class="jc-input-warp jc-last-child">
+          <input class="jc-login-input" type="password" v-model="form.password" placeholder="请输入密码" maxlength="20" @keyup.enter="onSubmit" />
+        </div>
+        <div class="jc-tip" v-text="tip"></div>
+        <div class="jc-login-btn" @click="onSubmit">
+          <JcSpinner v-if="loading"></JcSpinner>
+          <span v-else>登 录</span>
+        </div>
       </div>
     </div>
   </div>
@@ -24,6 +26,7 @@ import { login } from '@/api/auth'
 import md5 from 'md5'
 import { getDomainLogoConfig, setDomainLogoConfig } from '@/libs/storage'
 import { listAll } from '@/api/domainLogo'
+import { LOGIN_WINDOWS_POSITION } from '@/constant/Dictionaries'
 
 export default {
   name: 'Login',
@@ -34,13 +37,27 @@ export default {
     return {
       loading: false,
       tip: '',
-      logo: '', //系统logo
+      config: {}, //登录页配置信息
       form: { userName: '', password: '' }
     }
   },
   computed: {
     systemLogo() {
-      return this.logo ? `background-image: url(${this.logo});` : ''
+      return this.config.domainLogo ? `background-image: url(${this.config.domainLogo});` : ''
+    },
+    systemBg() {
+      return this.config.firstPageLogo ? this.config.firstPageLogo : require('./assets/login-bg.png')
+    },
+    loginBg() {
+      return this.config.firstPageLoginLogo ? `background-image: url(${this.config.firstPageLoginLogo});` : ''
+    },
+    loginPosition() {
+      if (this.config.loginLogoLocation == LOGIN_WINDOWS_POSITION.LEFT) {
+        return 'jc-left'
+      } else if (this.config.loginLogoLocation == LOGIN_WINDOWS_POSITION.CENTER) {
+        return 'jc-center'
+      }
+      return ''
     }
   },
   created() {
@@ -50,24 +67,26 @@ export default {
     async initData() {
       let configs = getDomainLogoConfig()
 
-      this.calcLogo(configs)
+      this.calcConfig(configs)
       try {
         configs = await listAll()
-        this.calcLogo(configs)
+        this.calcConfig(configs)
         setDomainLogoConfig(configs)
       } catch (error) {
         console.log(error)
       }
     },
-    calcLogo(configs) {
+    calcConfig(configs) {
       console.log('登录系统配置', configs)
       //根据配置设置系统logo
       if (configs && configs.length) {
         let host = window.location.host
 
-        let domain = configs.find(config => config.domain == host)
+        let config = configs.find(item => item.domain == host)
 
-        this.logo = domain ? domain.domainLogo : ''
+        this.config = config ? config : {}
+      } else {
+        this.config = {}
       }
     },
     onSubmit() {
@@ -77,7 +96,7 @@ export default {
           this.loading = true
           login({ userName: this.form.userName, password: md5(this.form.password) }).then((res) => {
             this.setUser(res)
-            let goUrl = '/'
+            let goUrl = { name: this.config.entranceRouter ? this.config.entranceRouter : 'index' }
 
             if (this.$route.query.callbackUrl && !this.$route.query.callbackUrl.includes('login')) {
               goUrl = this.$route.query.callbackUrl
@@ -119,26 +138,42 @@ export default {
   background-image: url(/static/images/login-logo.png);
   background-repeat: no-repeat;
   background-position: 60px center;
-  border-bottom: solid 1px #253270;
 }
 .jc-login-space {
   position: absolute;
   top: 0;
-  left: 60%;
   bottom: 0;
-  right: 0;
+  right: 60px;
   margin: auto 0 auto 0;
-  width: 560px;
-  height: 500px;
+  width: 420px;
+  height: 400px;
   background: url(./assets/login-warp.png) no-repeat center;
   background-size: 100% 100%;
-  padding: 60px 92px 84px 108px;
+  &.jc-center {
+    left: 0;
+    right: 0;
+    margin: auto;
+  }
+  &.jc-left {
+    left: 60px;
+    right: auto;
+  }
+}
+.jc-logon-content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+  width: 280px;
+  height: 300px;
 }
 .jc-login-title {
   text-align: center;
-  height: 110px;
-  line-height: 110px;
-  font-size: 34px;
+  height: 80px;
+  line-height: 60px;
+  font-size: 22px;
   letter-spacing: 5px;
   color: $jc-color-white;
 }
@@ -147,15 +182,12 @@ export default {
   position: relative;
   height: 40px;
   padding: 0 20px;
-  background-color: #0e6aae;
-  box-shadow: 0 0 2px #5bd0e8;
+  background-color: rgba(255, 255, 255, 0.2);
   border-radius: 20px;
   overflow: hidden;
-  margin-bottom: 24px;
-  transform: all 0.3s;
-  &:hover,
-  &:focus {
-    box-shadow: 0 0 3px #5bd0e8;
+  margin-bottom: 26px;
+  &.jc-last-child {
+    margin-bottom: 12px;
   }
   .jc-login-input {
     height: 40px;
@@ -164,11 +196,16 @@ export default {
     background-color: transparent;
     border: none;
     outline: none;
-    box-shadow: 0 0 0 1000px #0e6aae inset !important;
+    text-align: center;
+    font-size: $jc-font-size-medium;
+    box-shadow: 0 0 0 1000px transparent inset !important;
     color: $jc-color-white;
+    letter-spacing: 1px;
 
     &::-webkit-input-placeholder {
-      color: rgba($color: $jc-color-white, $alpha: 0.8);
+      color: rgba($color: $jc-color-white, $alpha: 0.2);
+      font-size: $jc-font-size-medium;
+      letter-spacing: 1px;
     }
     &:-webkit-autofill {
       color: $jc-color-white !important;
@@ -181,12 +218,14 @@ export default {
 .jc-tip {
   height: 24px;
   line-height: 20px;
+  text-align: center;
   color: $jc-color-danger;
+  font-size: $jc-font-size-smaller;
 }
 .jc-login-btn {
   position: relative;
   width: 100%;
-  background-color: #46b0e2;
+  background-color: #0096ff;
   color: $jc-color-white;
   text-align: center;
   font-size: 18px;
@@ -194,10 +233,10 @@ export default {
   line-height: 40px;
   margin-top: 10px;
   cursor: pointer;
-  opacity: 0.8;
+  opacity: 1;
   border-radius: 20px;
   &:hover {
-    opacity: 1;
+    opacity: 0.8;
   }
 }
 </style>

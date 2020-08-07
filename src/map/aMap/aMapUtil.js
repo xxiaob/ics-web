@@ -5,13 +5,13 @@ import AMapLoader from '@amap/amap-jsapi-loader'
 import { MAP_SIGN_TYPE } from '@/constant/CONST'
 import { MapOptions, PolygonStyle, CircleStyle, PolylineStyle } from './config'
 
-let AMap = null //地图对象
-
 /**
  * 初始化Amap对象
  * @returns {Amap} 对象
  */
 export async function initAmap() {
+  let AMap = window.AMap
+
   if (!AMap) {
     AMap = await AMapLoader.load(MapOptions.loadOptions)
   }
@@ -75,10 +75,10 @@ export function getCenter(boundary) {
  * @param {String} city 地区名称
  */
 export async function getLiveWeather(city) {
-  let map = await initAmap()
+  let AMap = await initAmap()
 
   let result = await new Promise(function (resolve, reject) {
-    map.plugin(['AMap.Weather'], function () {
+    AMap.plugin(['AMap.Weather'], function () {
       let amapWeather = new AMap.Weather()
 
       amapWeather.getLive(city, function (err, data) {
@@ -100,10 +100,10 @@ export async function getLiveWeather(city) {
  * @param {String} city 地区名称
  */
 export async function getForecastWeather(city) {
-  let map = await initAmap()
+  let AMap = await initAmap()
 
   let result = await new Promise(function (resolve, reject) {
-    map.plugin(['AMap.Weather'], function () {
+    AMap.plugin(['AMap.Weather'], function () {
       let amapWeather = new AMap.Weather()
 
       amapWeather.getForecast(city, function (err, data) {
@@ -126,10 +126,10 @@ export async function getForecastWeather(city) {
  * @param {String} position 坐标地址
  */
 export async function getAddressByPosition(position) {
-  let map = await initAmap()
+  let AMap = await initAmap()
 
   let result = await new Promise(function (resolve, reject) {
-    map.plugin(['AMap.Geocoder'], function () {
+    AMap.plugin(['AMap.Geocoder'], function () {
       let amapWeather = new AMap.Geocoder({ radius: 1000 })
 
       amapWeather.getAddress(position, function (status, res) {
@@ -153,10 +153,10 @@ export async function getAddressByPosition(position) {
  * 获取点聚合对象
  */
 export async function getMarkerCluster() {
-  let map = await initAmap()
+  let AMap = await initAmap()
 
   let result = await new Promise(function (resolve) {
-    map.plugin(['AMap.MarkerCluster'], function () {
+    AMap.plugin(['AMap.MarkerCluster'], function () {
       resolve(AMap.MarkerCluster)
     })
   })
@@ -168,10 +168,10 @@ export async function getMarkerCluster() {
  * 获取鼠标聚合工具
  */
 export async function getMouseTool() {
-  let map = await initAmap()
+  let AMap = await initAmap()
 
   let result = await new Promise(function (resolve) {
-    map.plugin(['AMap.MouseTool'], function () {
+    AMap.plugin(['AMap.MouseTool'], function () {
       resolve(AMap.MouseTool)
     })
   })
@@ -192,4 +192,12 @@ export async function initMoveAnimation() {
   })
 
   return result
+}
+
+/**
+ * 获取3D地图插件
+ * @returns {AMapLoader} AMapLoader
+ */
+export function getAMapLoader() {
+  return AMapLoader
 }
