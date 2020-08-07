@@ -98,7 +98,7 @@ export default {
       let { id, enableRollingMessage } = row
 
       // 弹窗显示内容
-      let isSwitchVal = enableRollingMessage ? '关闭' : '开启'
+      let isSwitchVal = enableRollingMessage ? '开启' : '关闭'
 
       // 开关旧值,如果用户现金取消或更新失败, 回复到旧值状态
       let oldVal = enableRollingMessage ? 0 : 1
