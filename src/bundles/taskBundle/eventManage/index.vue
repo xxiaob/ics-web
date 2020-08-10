@@ -170,18 +170,24 @@ export default {
     },
     async manage(row) {
       if (row) {
-        const res = await eventManageGet(row.id)
-
-        this.info = res
+        try {
+          this.info = await eventManageGet(row.id)
+        } catch (error) {
+          console.error(error)
+        }
       } else {
         this.info = null
       }
       this.orgId = this.user.orgId
       this.visible = true
     },
-    detail(row) {
-      this.detailInfo = row
-      this.detailVisible = true
+    async detail(row) {
+      try {
+        this.detailInfo = await eventManageGet(row.id)
+        this.detailVisible = true
+      } catch (error) {
+        console.error(error)
+      }
     }
   }
 }
