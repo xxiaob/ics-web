@@ -28,7 +28,7 @@
               <el-button type="text" size="mini" icon="el-icon-refresh-right" @click="handle(scope.row,true)" title="处理" v-if="filter.selectType===TASK_SELECT_TYPES.PENDING"></el-button>
               <el-button type="text" size="mini" icon="el-icon-arrow-down" @click="startTask(scope.row)" title="下发" v-if="filter.selectType===TASK_SELECT_TYPES.DEAFT"></el-button>
               <el-button type="text" size="mini" icon="el-icon-delete" @click="del(scope.row)" title="删除" v-if="filter.selectType===TASK_SELECT_TYPES.DEAFT"></el-button>
-              <el-button type="text" size="mini" icon="el-icon-finished" @click="del(scope.row,true)" title="结束任务" v-if="(filter.selectType===TASK_SELECT_TYPES.ISSUED&&scope.row.taskStatus!=TASK_STATES.FINISHED)"></el-button>
+              <el-button type="text" size="mini" icon="el-icon-finished" @click="del(scope.row,true)" title="关闭任务" v-if="(filter.selectType===TASK_SELECT_TYPES.ISSUED&&scope.row.taskStatus!=TASK_STATES.FINISHED)"></el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -210,14 +210,14 @@ export default {
       this.currentChange(1)
     },
     del(row, finished = false) {
-      this.$confirm(finished ? '确认结束该任务' : '确认删除该任务', '提示', { type: 'warning' }).then(() => {
+      this.$confirm(finished ? '确认关闭该任务' : '确认删除该任务', '提示', { type: 'warning' }).then(() => {
         this.remove(row.businessKey)
       }).catch(() => {})
     },
     async remove(id) {
       try {
         await taskDel(id)
-        this.$message.success('删除成功')
+        this.$message.success('操作成功')
         this.currentChange(this.page.pageNum - 1)
       } catch (error) {
         console.error(error)

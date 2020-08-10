@@ -90,10 +90,11 @@
     </el-card>
     <div class="jc-detail-footer">
       <el-button @click="handleTask(true)" size="small" v-if="form.handle">流转任务</el-button>
-      <el-button @click="handleTask(false)" size="small" v-if="form.handle">结束任务</el-button>
+      <el-button @click="handleTask(false)" size="small" v-if="form.handle">完成任务</el-button>
+      <el-button @click="closeTask" size="small" v-if="form.handle">关闭任务</el-button>
       <el-button size="small" type="primary" @click="$emit('update:detailShow', false)">返回</el-button>
     </div>
-    <el-dialog :title="taskForm.ifUpload?'流转任务':'结束任务'" :visible.sync="dialogVisibleHandle" :close-on-click-modal="false" width="600px" append-to-body>
+    <el-dialog :title="taskForm.ifUpload?'流转任务':'完成任务'" :visible.sync="dialogVisibleHandle" :close-on-click-modal="false" width="600px" append-to-body>
       <el-form ref="taskForm" label-width="80px" :model="taskForm" class="jc-manage-form" size="mini">
         <el-form-item label="任务人员" :prop="peopleProps[peopleType]" :rules="rules.SELECT_NOT_NULL" v-if="taskForm.ifUpload" class="jc-mb">
           <jc-task-people :peopleType.sync="peopleType" :selecteds.sync="peoples" :orgTree="orgTree"></jc-task-people>
@@ -116,7 +117,7 @@
   </div>
 </template>
 <script>
-import { taskFinish } from '@/api/task'
+import { taskFinish, taskDel } from '@/api/task'
 import { eventManageSelectList } from '@/api/eventManage'
 import { NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
 import { formatDate } from '@/libs/util'
@@ -252,6 +253,24 @@ export default {
       this.taskForm.orgIds = []
       this.taskForm.ifUpload = ifUpload
       this.dialogVisibleHandle = true
+    },
+    closeTask() {
+      this.$confirm('确认关闭任务', '提示', { type: 'warning' }).then(() => {
+        this.remove()
+      }).catch(() => {})
+    },
+    async remove() {
+      try {
+        await taskDel(this.form.businessKey)
+        this.$message.success('操作成功')
+        this.dialogVisible = false
+        this.dialogVisibleHandle = false
+        this.$emit('save-success')
+        this.loading = false
+        this.$emit('update:detailShow', false)
+      } catch (error) {
+        console.error(error)
+      }
     },
     onSubmitTask() {
       this.loading = true

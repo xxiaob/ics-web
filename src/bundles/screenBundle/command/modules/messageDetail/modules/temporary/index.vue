@@ -89,11 +89,12 @@
     </div>
     <div class="jc-footer">
       <el-button v-if="form.auth" @click="handleTask(true)" size="small" type="primary">流转任务</el-button>
-      <el-button v-if="form.auth" @click="handleTask(false)" size="small">结束任务</el-button>
+      <el-button v-if="form.auth" @click="handleTask(false)" size="small">完成任务</el-button>
+      <el-button v-if="form.auth" @click="closeTask" size="small">关闭任务</el-button>
       <el-button @click="sendScreen" type="primary" size="small">{{isSendScreen?'关闭投屏':'投屏'}}</el-button>
     </div>
 
-    <el-dialog :title="taskForm.ifUpload?'流转任务':'结束任务'" :visible.sync="dialogVisibleHandle" :close-on-click-modal="false" width="600px" append-to-body>
+    <el-dialog :title="taskForm.ifUpload?'流转任务':'完成任务'" :visible.sync="dialogVisibleHandle" :close-on-click-modal="false" width="600px" append-to-body>
       <el-form ref="taskForm" label-width="80px" :model="taskForm" class="jc-manage-form">
         <el-form-item label="任务人员" :prop="peopleProps[peopleType]" :rules="rules.SELECT_NOT_NULL" v-if="taskForm.ifUpload" class="jc-mb">
           <jc-task-people :peopleType.sync="peopleType" :selecteds.sync="peoples" :orgTree="orgTree"></jc-task-people>
@@ -118,7 +119,7 @@
 
 </template>
 <script>
-import { taskGet, taskFinish, getTaskAuth } from '@/api/task'
+import { taskGet, taskFinish, getTaskAuth, taskDel } from '@/api/task'
 import { eventManageSelectList } from '@/api/eventManage'
 import { projectsList } from '@/api/projects'
 import { organizationList } from '@/api/organization'
@@ -367,6 +368,22 @@ export default {
           this.loading = false
         }
       })
+    },
+    closeTask() {
+      this.$confirm('确认关闭任务', '提示', { type: 'warning' }).then(() => {
+        this.remove()
+      }).catch(() => {})
+    },
+    async remove() {
+      try {
+        await taskDel(this.form.businessKey)
+        this.$message.success('操作成功')
+        this.dialogVisibleHandle = false
+        this.loading = false
+        this.$EventBus.$emit('view-component-back')
+      } catch (error) {
+        console.error(error)
+      }
     },
     //流转
     async nextTo() {
