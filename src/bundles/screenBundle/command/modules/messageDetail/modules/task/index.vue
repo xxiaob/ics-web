@@ -62,13 +62,13 @@
         </div>
       </div>
     </div>
-    <div v-show="activate==='2'" class="jc-view-content jc-forward" v-loading="loading" element-loading-background="rgba(0, 0, 0, 0)">
+    <div v-show="activate==='2'" class="jc-view-content" v-loading="loading" element-loading-background="rgba(0, 0, 0, 0)">
       <jc-forward-list :taskId="form.businessKey" ref="forward"></jc-forward-list>
     </div>
     <div v-show="activate==='3'" class="jc-view-content jc-remark" v-loading="loading" element-loading-background="rgba(0, 0, 0, 0)">
       <jc-remark-list :taskId="form.businessKey" ref="remark" :small="true"></jc-remark-list>
     </div>
-    <div class="jc-footer">
+    <div class="jc-footer" v-show="activate==='1'">
       <el-button @click="handleTask(true)" size="small" type="primary">流转任务</el-button>
       <el-button @click="handleTask(false)" size="small" type="primary">添加备注</el-button>
       <el-button @click="sendScreen" type="primary" size="small">{{isSendScreen?'关闭投屏':'投屏'}}</el-button>
@@ -384,10 +384,12 @@ export default {
   flex-direction: column;
   overflow: auto;
 }
+
 .jc-footer {
   text-align: center;
   padding: 10px 0;
 }
+
 .jc-header {
   display: flex;
   padding: 5px 0;
@@ -406,10 +408,10 @@ export default {
   }
 }
 
-.jc-forward,
 .jc-remark {
   padding: 10px;
 }
+
 .el-textarea /deep/ textarea {
   font-family: "微软雅黑", "Microsoft Yahei", "Helvetica Naue", Helvetica,
     sans-serif !important;

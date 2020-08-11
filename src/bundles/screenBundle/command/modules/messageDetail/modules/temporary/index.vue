@@ -11,7 +11,6 @@ export default {
   name: 'ScreenCommandMessageDetailTemporary',
   props: ['info'],
   components: {
-    ViewWarp: () => import('../../../common/viewWarp'),
     ViewTabs: () => import('../../../common/viewTabs'),
     BaseInfo: () => import('./modules/baseInfo'),
     ForwardList: () => import('@/bundles/taskBundle/taskProcess/modules/detail/forwardList'),
