@@ -80,8 +80,10 @@ export default {
       }
     },
     detail(item) {
-      // console.log('view-component-change', item)
-      this.$EventBus.$emit('view-component-change', { component: 'MessageDetail', options: { ...item, type: MESSAGE_TYPE.EVENT } }) //通知窗口改变
+      this.$EventBus.$emit('view-component-change', {
+        component: 'MessageDetail',
+        options: { ...item, type: MESSAGE_TYPE.EVENT }
+      }) //通知窗口改变
     }
   }
 }

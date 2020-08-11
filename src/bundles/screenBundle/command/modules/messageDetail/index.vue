@@ -3,6 +3,7 @@
     <keep-alive>
       <component :is="types[options.type]" :info="options"></component>
     </keep-alive>
+    <!-- {id:'80964647959658496'} -->
   </view-warp>
 </template>
 <script>
