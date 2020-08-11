@@ -40,7 +40,6 @@ import OrgMixins from './modules/mixins/orgMixins' //组织显示处理
 import EventMixins from './modules/mixins/eventMixins' //事件显示处理
 import ProblemMixins from './modules/mixins/problemMixins' //问题显示处理
 import DeviceMixins from './modules/mixins/deviceMixins' //设备显示处理
-
 import TemporaryTasksMixins from './modules/mixins/temporaryTasksMixins' //临时任务下发
 import ScreenMapSocketMixins from './modules/mixins/screenMapSocketMixins' //大屏socket 连接
 import GridMixins from './modules/mixins/gridMixins' //网格处理
