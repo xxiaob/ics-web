@@ -1,6 +1,6 @@
 <template>
   <div class="jc-temporary">
-    <div class="jc-view-content" v-loading="loading" element-loading-background="rgba(0, 0, 0, 0)">
+    <div v-show="taskId" class="jc-view-content" v-loading="loading" element-loading-background="rgba(0, 0, 0, 0)">
       <div class="jc-detail-warp">
         <div class="jc-detail-label">任务名称</div>
         <div class="jc-detail-content">{{form.taskName}}</div>
@@ -76,12 +76,13 @@
       </div>
     </div>
 
-    <div class="jc-footer">
+    <div v-show="taskId" class="jc-footer">
       <el-button v-if="form.auth" @click="handleTask(true)" size="small" type="primary">流转任务</el-button>
       <el-button v-if="form.auth" @click="handleTask(false)" size="small">完成任务</el-button>
       <el-button v-if="form.auth" @click="closeTask" size="small">关闭任务</el-button>
       <el-button style="margin-top: 10px;" @click="sendScreen" type="primary" size="small">{{isSendScreen?'关闭投屏':'投屏'}}</el-button>
     </div>
+    <view-empty v-if="!taskId"></view-empty>
 
     <el-dialog :title="taskForm.ifUpload?'流转任务':'完成任务'" :visible.sync="dialogVisibleHandle" :close-on-click-modal="false" width="600px" append-to-body>
       <el-form ref="taskForm" label-width="80px" :model="taskForm" class="jc-manage-form">
@@ -128,7 +129,8 @@ export default {
   },
   mixins: [MediaMixins],
   components: {
-    JcTaskPeople: () => import('@/bundles/taskBundle/taskProcess/modules/manage/taskPeople')
+    JcTaskPeople: () => import('@/bundles/taskBundle/taskProcess/modules/manage/taskPeople'),
+    ViewEmpty: () =>import('@/bundles/screenBundle/command/modules/common/viewEmpty')
   },
   data() {
     return {
