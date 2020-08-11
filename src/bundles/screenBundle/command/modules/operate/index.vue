@@ -36,6 +36,11 @@
           <el-checkbox class="jc-work-item" label="problem">
             <div class="jc-work-content">问题</div>
           </el-checkbox>
+          <el-checkbox class="jc-work-item" label="device">
+            <div class="jc-work-content">设备</div>
+          </el-checkbox>
+
+          <!-- 动态实体 -->
           <el-checkbox class="jc-work-item" v-for="item in controlAreaTypes" :label="item.id" :key="item.id">
             <div class="jc-work-content" :style="getIconStyle(item.icon)">{{item.name}}</div>
           </el-checkbox>
