@@ -31,6 +31,8 @@
     <media-live></media-live>
     <!-- 人员轨迹处理 -->
     <user-trajectory></user-trajectory>
+    <!-- 多视频播放区域 -->
+    <video-warp></video-warp>
   </section>
 </template>
 <script>
@@ -72,7 +74,8 @@ export default {
     UserTrajectory: () => import('./modules/trajectory'), //人员轨迹
     EventDetail: () => import('./modules/eventDetail'), // 事件详情
     ProblemDetail: () => import('./modules/problemDetail'), // 问题详情
-    DeviceDetail: () => import('./modules/deviceDetail') // 问题详情
+    DeviceDetail: () => import('./modules/deviceDetail'), // 问题详情
+    VideoWarp: () =>import('./modules/videoWarp') //多屏视频播放
   },
   data() {
     return {

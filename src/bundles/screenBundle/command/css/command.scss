@@ -806,3 +806,13 @@ $jc-screen-height: 56px;
     transition: transform 0.6s;
   }
 }
+
+/deep/ .jc-video-warp {
+  position: absolute;
+  top: $jc-screen-height + $jc-default-dis;
+  left: $jc-default-dis;
+  bottom: $jc-default-dis;
+  z-index: 99;
+  width: 320px;
+  transform: translateX(-100%);
+}

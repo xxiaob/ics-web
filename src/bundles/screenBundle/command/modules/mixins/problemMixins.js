@@ -183,6 +183,7 @@ export default {
     }
   },
   beforeDestroy() {
+    this.clearProblems()
     this.$EventBus.$off('map-user-change', this.problemMap)
     this.$EventBus.$off('show-word-change', this.problemShowWordChange)
   }

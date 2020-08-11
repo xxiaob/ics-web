@@ -174,6 +174,7 @@ export default {
     }
   },
   beforeDestroy() {
+    this.clearDevices()
     this.$EventBus.$off('map-user-change', this.deviceMap)
     this.$EventBus.$off('show-word-change', this.deviceShowWordChange)
   }
