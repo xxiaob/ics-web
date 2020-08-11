@@ -17,6 +17,10 @@
     <div class="jc-header-right">
       <div class="jc-grid" title="网格" @click="viewChange('CommandGrid')"></div>
       <div class="jc-org" title="组织结构" @click="viewChange('CommandOrg')"></div>
+      <!-- 组织设备 -->
+      <div class="jc-device" title="组织设备" @click="viewChange('CommandDevice')"></div>
+
+      <!-- 组织层级 -->
       <div class="jc-org-switch">
         <div class="jc-org-text" v-text="org.name"></div>
         <div class="jc-org-cascader" v-if="orgs.length">

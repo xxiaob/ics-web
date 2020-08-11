@@ -37,6 +37,8 @@
 import { JcMap } from '@/map'
 import { projectGet } from '@/api/projects'
 import OrgMixins from './modules/mixins/orgMixins' //组织显示处理
+import eventMixins from './modules/mixins/eventMixins' //组织显示处理
+
 import TemporaryTasksMixins from './modules/mixins/temporaryTasksMixins' //临时任务下发
 import ScreenMapSocketMixins from './modules/mixins/screenMapSocketMixins' //大屏socket 连接
 import GridMixins from './modules/mixins/gridMixins' //网格处理
@@ -50,7 +52,7 @@ let myJcMap //个人 map 对象
 
 export default {
   name: 'ScreenCommand',
-  mixins: [OrgMixins, GridMixins, UserMixins, TaskMixins, TemporaryTasksMixins, ScreenMapSocketMixins, VoiceAlertMixins],
+  mixins: [OrgMixins, eventMixins, GridMixins, UserMixins, TaskMixins, TemporaryTasksMixins, ScreenMapSocketMixins, VoiceAlertMixins],
   components: {
     CommandHeader,
     CommandOperate: () => import('./modules/operate'), //功能操作区域
@@ -59,6 +61,9 @@ export default {
     CommandMessage, //任务等消息弹窗
     ImTalk: () => import('./modules/imTalk'), //聊天消息
     CommandOrg: () => import('./modules/org'), //组织架构
+
+    CommandDevice: () => import('./modules/device'), //组织设备
+
     CommandGrid: () => import('./modules/grid'), //网格
     MessageDetail: () => import('./modules/messageDetail'), //消息详情
     GridDetail: () => import('./modules/gridDetail'), //网格详情
