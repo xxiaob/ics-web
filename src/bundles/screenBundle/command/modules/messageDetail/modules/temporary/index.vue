@@ -84,14 +84,13 @@
     <div v-show="activate==='2'" class="jc-view-content jc-forward" v-loading="loading" element-loading-background="rgba(0, 0, 0, 0)">
       <jc-forward-list :taskId="form.businessKey" ref="forward"></jc-forward-list>
     </div>
-    <div v-show="activate==='3'" class="jc-view-content jc-event" v-loading="loading" element-loading-background="rgba(0, 0, 0, 0)">
-      <jc-event-list :taskId="form.businessKey" :small="true"></jc-event-list>
-    </div>
+    <jc-event-list v-show="activate==='3'" :taskId="form.businessKey"></jc-event-list>
+
     <div class="jc-footer">
       <el-button v-if="form.auth" @click="handleTask(true)" size="small" type="primary">流转任务</el-button>
       <el-button v-if="form.auth" @click="handleTask(false)" size="small">完成任务</el-button>
       <el-button v-if="form.auth" @click="closeTask" size="small">关闭任务</el-button>
-      <el-button @click="sendScreen" type="primary" size="small">{{isSendScreen?'关闭投屏':'投屏'}}</el-button>
+      <el-button style="margin-top: 10px;" @click="sendScreen" type="primary" size="small">{{isSendScreen?'关闭投屏':'投屏'}}</el-button>
     </div>
 
     <el-dialog :title="taskForm.ifUpload?'流转任务':'完成任务'" :visible.sync="dialogVisibleHandle" :close-on-click-modal="false" width="600px" append-to-body>
@@ -141,7 +140,7 @@ export default {
   components: {
     JcTaskPeople: () => import('@/bundles/taskBundle/taskProcess/modules/manage/taskPeople'),
     JcForwardList: () => import('@/bundles/taskBundle/taskProcess/modules/detail/forwardList'),
-    JcEventList: () => import('@/bundles/taskBundle/taskProcess/modules/detail/eventList')
+    JcEventList: () => import('./modules/eventList')
   },
   data() {
     return {
@@ -451,8 +450,7 @@ export default {
   }
 }
 
-.jc-forward,
-.jc-event {
+.jc-forward {
   padding: 10px;
 }
 .el-textarea /deep/ textarea {
