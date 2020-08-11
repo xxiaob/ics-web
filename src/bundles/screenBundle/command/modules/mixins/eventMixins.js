@@ -5,6 +5,8 @@ let eventData = { markerCluster: null, users: {}, lnglats: [] }
 
 let MarkerCluster //存储 MarkerCluster
 
+import { MESSAGE_TYPE } from '@/constant/Dictionaries'
+
 export default {
   data() {
     return {}
@@ -104,16 +106,23 @@ export default {
         myJcMap.map.setBounds(this.getAmapBundles(context.clusterData))
       } else {
         //获取信息去通知显示详情
-        let key = this.getKeyByLngLat(context.lnglat.lng, context.lnglat.lat)
+        // let key = this.getKeyByLngLat(context.lnglat.lng, context.lnglat.lat)
 
-        let userItem = eventData.users[key]
+        // let userItem = eventData.users[key]
+
+        // this.$EventBus.$emit('view-component-change', {
+        //   component: 'EventDetail', options: {
+        //     userId: userItem.userId, userName: '事件详情',
+        //     center: userItem.center
+        //   }
+        // }) //通知窗口改变
 
         this.$EventBus.$emit('view-component-change', {
-          component: 'UserDetail', options: {
-            userId: userItem.userId, userName: userItem.userName,
-            center: userItem.center
+          component: 'MessageDetail', options: {
+            id: '78571410770886656',
+            type: MESSAGE_TYPE.TEMPORARY
           }
-        }) //通知窗口改变
+        })
       }
     },
     getEventCenterAndKey(lng, lat, userId) {
@@ -144,11 +153,11 @@ export default {
         eventData.markerCluster.setMap(myJcMap.map)
 
         //处理是否进行聚合
-        if (this.togetherVisible) {
-          eventData.markerCluster.setMaxZoom(18)
-        } else {
-          eventData.markerCluster.setMaxZoom(0)
-        }
+        // if (this.togetherVisible) {
+        //   eventData.markerCluster.setMaxZoom(18)
+        // } else {
+        //   eventData.markerCluster.setMaxZoom(0)
+        // }
         //处理是否显示标题，以及状态
         eventData.markerCluster.setGridSize(120)
       } else {

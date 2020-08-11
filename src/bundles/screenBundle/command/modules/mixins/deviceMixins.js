@@ -111,8 +111,8 @@ export default {
         let userItem = deviceData.users[key]
 
         this.$EventBus.$emit('view-component-change', {
-          component: 'UserDetail', options: {
-            userId: userItem.userId, userName: userItem.userName,
+          component: 'DeviceDetail', options: {
+            userId: userItem.userId, userName: '设备详情',
             center: userItem.center
           }
         }) //通知窗口改变
@@ -146,11 +146,11 @@ export default {
         deviceData.markerCluster.setMap(myJcMap.map)
 
         //处理是否进行聚合
-        if (this.togetherVisible) {
-          deviceData.markerCluster.setMaxZoom(18)
-        } else {
-          deviceData.markerCluster.setMaxZoom(0)
-        }
+        // if (this.togetherVisible) {
+        //   deviceData.markerCluster.setMaxZoom(18)
+        // } else {
+        //   deviceData.markerCluster.setMaxZoom(0)
+        // }
         //处理是否显示标题，以及状态
         deviceData.markerCluster.setGridSize(120)
       } else {

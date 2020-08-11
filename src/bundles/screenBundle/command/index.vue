@@ -69,7 +69,10 @@ export default {
     UserDetail: () => import('./modules/userDetail'), //用户详情
     TemporaryTasksManage: () => import('@/bundles/taskBundle/taskProcess/modules/manage'), //临时任务
     MediaLive: () => import('./modules/mediaLive'), //音视频
-    UserTrajectory: () => import('./modules/trajectory') //人员轨迹
+    UserTrajectory: () => import('./modules/trajectory'), //人员轨迹
+    EventDetail: () => import('./modules/eventDetail'), // 事件详情
+    ProblemDetail: () => import('./modules/problemDetail'), // 问题详情
+    DeviceDetail: () => import('./modules/deviceDetail') // 问题详情
   },
   data() {
     return {
