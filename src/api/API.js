@@ -88,10 +88,8 @@ export default {
   upload: 'file-server-service/upload/upload',
   device: {
     //设备管理
-    add: 'device-service/deviceUpgPkg/add',
     list: 'device-service/deviceUpgPkg/listByPage',
-    update: 'device-service/deviceUpgPkg/upd',
-    del: 'device-service/deviceUpgPkg/del'
+    update: 'device-service/deviceUpgPkg/upd'
   },
   eventManage: {
     //事件管理
