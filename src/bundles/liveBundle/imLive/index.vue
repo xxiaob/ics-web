@@ -8,7 +8,7 @@
           <span>{{title}}</span>
           <div class="right">
             <span class="exit" @click="exit" title="挂断">挂断</span>
-            <span title="投屏" v-show="inviteType!='2'&&inviteType!='3'" @click="sendScreen">
+            <span title="投屏" @click="sendScreen">
               <img src="./assets/bigScreen1.png" alt="" width="20">
               <img src="./assets/bigScreen2.png" alt="" width="20">
             </span>

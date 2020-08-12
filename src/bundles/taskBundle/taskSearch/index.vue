@@ -36,7 +36,6 @@
 <script>
 import { taskList, taskGet, taskGetDaily } from '@/api/task'
 import { organizationList } from '@/api/organization'
-import { projectsTreeList } from '@/api/projects'
 
 import PaginationMixins from '@/mixins/PaginationMixins'
 import projectsMixins from '@/bundles/taskBundle/mixins/projectsMixins'
