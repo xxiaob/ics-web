@@ -225,8 +225,9 @@ export class Live {
    * @param {String} role 角色 主播(host)和观众(audience)
    * @param {Boolean} video 是否开启摄像头
    * @param {Boolean} recorded 是否录制
+   * @param {String} toUserId 邀请人的用户id  一人进多个频道
   */
-  async joinChannel(channelId = '123456', role = 'host', video = true, recorded = true) {
+  async joinChannel(channelId = '123456', role = 'host', video = true, recorded = true, toUserId = '') {
     //设置录制参数
     this.recordParams.channelName = channelId
     this.recordParams.recordingType = video ? 1 : 0 //录制类型  0对讲  1视频  2采集
@@ -236,8 +237,12 @@ export class Live {
     this.rtc.client.setClientRole(role)
 
     const recordingType = video ? '_Video' : '_Audio'
-    const userAccount = this.userId + '_web' + recordingType //用户加入频道的id = 视频流的id
 
+    let userAccount = this.userId + '_web' + recordingType //用户加入频道的id = 视频流的id
+
+    if (toUserId) {
+      userAccount += toUserId
+    }
     this.recordParams.userId = userAccount
     const { channelKey } = await getAgoraToken({ channelName: channelId, userAccount })
 

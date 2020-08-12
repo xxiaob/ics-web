@@ -1,17 +1,20 @@
 <template>
   <div>
     <!-- <el-button @click="start" type="primary">打开</el-button> -->
-    <el-button @click="start" type="primary">开始观摩</el-button>
-    <el-button @click="stop">结束观摩</el-button>
-    <!-- <im-live :params.sync="params" :visible.sync="visible"></im-live> -->
-    <div id="test"></div>
+    <el-button @click="start('56783818509516800')" type="primary">开始观摩1</el-button>
+    <el-button @click="stop('56783818509516800')">结束观摩1</el-button>
+    <el-button @click="start('56785471337922560')" type="primary">开始观摩2</el-button>
+    <el-button @click="stop('56785471337922560')">结束观摩2</el-button>
+    <im-live></im-live>
+    <!-- <div id="test"></div> -->
+    <div class="test" id="56783818509516800"></div>
+    <div class="test" id="56785471337922560"></div>
   </div>
 </template>
 
 <script>
 import imLive from './imLive'
-import { Foreign } from '@/live/foreign'
-// import Foreign from '@/live/jclive'
+// import { Foreign } from '@/live/foreign'
 
 export default {
   name: 'liveDemo',
@@ -25,10 +28,13 @@ export default {
     }
   },
   mounted() {
-    this.test = new Foreign('test', 'e8cf78c8bd6b49bcb60e65c1fc33973c', '3213123', '李向玉')
+    // this.test = new Foreign('test', 'e8cf78c8bd6b49bcb60e65c1fc33973c', '3213123', '李向玉')
+    this.$EventBus.$on('notice-compulsory-observation-leave', ({ type, userId })=>{
+      console.log('notice-compulsory-observation-leave', type, userId)
+    })
   },
   methods: {
-    start() {
+    start(userId) {
       // this.params = {
       //   users: [{
       //     userId: '56776731599568896',
@@ -43,18 +49,25 @@ export default {
       //   channelId: null //可选  采集观摩需要
       // }
       // this.visible = true
-      this.test.start('68707744802144256')
+      // this.test.start('68707744802144256')
+      console.log(userId)
+      this.$EventBus.$emit('notice-compulsory-observation', { type: 'start', userId })
     },
-    stop() {
-      this.test.stop()
+    stop(userId) {
+      console.log(userId)
+      this.$EventBus.$emit('notice-compulsory-observation', { type: 'stop', userId })
+
+      // this.test.stop()
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
-#test {
+#test,
+.test {
   width: 500px;
   height: 300px;
+  border: 1px solid red;
 }
 </style>

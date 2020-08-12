@@ -164,6 +164,16 @@ export default {
   created() {
     this.im = new IM(this.user.userId, this.user.userName)
     this.im.on(this.imMsgCb)
+
+    //一个人进多个频道强制观摩
+    this.$EventBus.$on('notice-compulsory-observation', ({ type, userId })=>{
+      console.log('notice-compulsory-observation', userId)
+      if (type === 'start') {
+        this.startObservation(userId)
+      } else if (type === 'stop') {
+        this.stopObservation(userId)
+      }
+    })
   },
   mounted() {
     if (this.live) {
@@ -173,6 +183,51 @@ export default {
     }
   },
   methods: {
+    //一个人进多个频道强制观摩-------------------------------------------
+    startObservation(userId) {
+      console.log(this['live' + userId])
+      if (!this['live' + userId]) {
+        console.log('创建直播客户端', userId)
+
+        this['live' + userId] = new Live(this.user.userId)
+        const channelId = userId + 'observation'
+
+        setTimeout(()=>{
+          this['live' + userId].joinChannel(channelId, 'audience', true, false, userId)
+        })
+
+        this.im.sendSingleMsg(userId, {
+          content: '',
+          msgType: '1',
+          nickName: this.user.userName,
+          channelId,
+          inviteDevice: '2', //"0":pc端, "1":移动端, "2":执法仪 , "3":全部
+          inviteType: '2', //"0":正常,"1":强拉 2":强制观摩(拉执法仪)
+          mediaType: '1' //"0":音频,"1":视频,
+        })
+      } else {
+        console.log('直播客户端已创建', userId)
+      }
+    },
+    stopObservation(userId) {
+      const channelId = userId + 'observation'
+
+      this.im.sendSingleMsg(userId, {
+        msgType: '1',
+        channelId,
+        nickName: this.user.userName,
+        isExit: '1'
+      })
+      this.leaveObservation(userId)
+    },
+    async leaveObservation(userId) {
+      if (this['live' + userId].joined) {
+        await this['live' + userId].leaveChannel()
+        this['live' + userId] = null
+      }
+    },
+    //一个人进多个频道强制观摩-------------------------------------------
+
     //当前网络监听
     liveNetworkCb(v) {
       console.log('liveCb', v)
@@ -231,6 +286,11 @@ export default {
           //退出消息
           if (this.fromUsername == fromUsername || this.userIds.includes(fromUsername)) {
             this.exitHandel({ nickName, isExit })
+          }
+          if (channelId.indexOf('observation') > -1) {
+            console.log('一进多 对方退出', fromUsername)
+            this.$EventBus.$emit('notice-compulsory-observation-leave', { type: 'leave', userId: fromUsername })
+            this.leaveObservation(fromUsername)
           }
         } else if ( agree) {
           //邀请消息 我是邀请方
