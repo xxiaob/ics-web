@@ -17,7 +17,7 @@
       </div>
       <div class="jc-detail-warp">
         <div class="jc-detail-label">项目名称</div>
-        <div class="jc-detail-content">{{formatProject}}</div>
+        <div class="jc-detail-content">{{form.projectName}}</div>
       </div>
       <div class="jc-detail-warp">
         <div class="jc-detail-label">任务周期</div>
@@ -94,9 +94,8 @@
 </template>
 <script>
 import { taskGetDaily, taskFinish, taskAddRemark } from '@/api/task'
-import { projectsList } from '@/api/projects'
 import { organizationList } from '@/api/organization'
-import { PROJECT_TYPES, TASK_PEOPLE_TYPES, MESSAGE_DATA_TYPES } from '@/constant/Dictionaries'
+import { TASK_PEOPLE_TYPES, MESSAGE_DATA_TYPES } from '@/constant/Dictionaries'
 import { formatDate } from '@/libs/util'
 import { NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
 import moment from 'moment'
@@ -128,7 +127,6 @@ export default {
       form: {},
       orgTree: [],
       orgObj: {},
-      projectListArr: [],
       rules: {
         SELECT_NOT_NULL,
         NOT_NULL
@@ -168,8 +166,6 @@ export default {
     this.orgTree = this.formatOrgTree(res)
     this.orgObj = this.formatOrgTreeToObj(res)
 
-    await this.formatProjectList()
-
     if (this.info && this.info.id) {
       this.getDetail()
     }
@@ -187,11 +183,6 @@ export default {
       } else {
         return ''
       }
-    },
-    formatProject() {
-      const project = this.projectListArr.filter(item=>item.value == this.form.projectId)
-
-      return (project[0] && project[0].label) || PROJECT_TYPES.toString(PROJECT_TYPES.NORMAL)
     }
   },
   filters: {
@@ -260,28 +251,6 @@ export default {
         })
       }
       return objs
-    },
-    async  formatProjectList() {
-      this.EmergencySupport = await this.getProjectList(PROJECT_TYPES.EmergencySupport)
-      this.SpecialControl = await this.getProjectList(PROJECT_TYPES.SpecialControl)
-
-      // this.projectListArr = [...PROJECT_TYPES.VALUES]
-      this.projectListArr = []
-      if (this.EmergencySupport) {
-        this.projectListArr = [...this.projectListArr, ...this.EmergencySupport]
-      }
-      if (this.SpecialControl) {
-        this.projectListArr = [...this.projectListArr, ...this.SpecialControl]
-      }
-    },
-    async getProjectList(projectType) {
-      const res = await projectsList({ projectType })
-
-      if (res && res.length) {
-        return res.map(item=>({ value: item.projectId, label: item.projectName }))
-      } else {
-        return []
-      }
     },
     async getDetail() {
       if (!this.loading) {
