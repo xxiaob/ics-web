@@ -48,18 +48,20 @@
 </template>
 <script>
 import { taskList, taskDel, taskStart, taskGet, taskUpdStatus, taskGetDaily } from '@/api/task'
-import { formatDate } from '@/libs/util'
-import PaginationMixins from '@/mixins/PaginationMixins'
 import { organizationList } from '@/api/organization'
-import { projectsTreeList } from '@/api/projects'
+
+import PaginationMixins from '@/mixins/PaginationMixins'
+import projectsMixins from '@/bundles/taskBundle/mixins/projectsMixins'
+
+import { formatDate } from '@/libs/util'
+import { TASK_SELECT_TYPES, TASK_STATES, TASK_TYPES } from '@/constant/Dictionaries'
+
 import { createNamespacedHelpers } from 'vuex'
 const { mapState } = createNamespacedHelpers('user')
 
-import { TASK_SELECT_TYPES, TASK_STATES, TASK_TYPES } from '@/constant/Dictionaries'
-
 export default {
   name: 'TaskProcessIndex',
-  mixins: [PaginationMixins],
+  mixins: [PaginationMixins, projectsMixins],
   components: {
     TabFilter: () => import('./modules/tabFilter'),
     JcManage: () => import('./modules/manage'),
@@ -86,9 +88,7 @@ export default {
       },
       orgId: '',
       detailShow: false,
-      dailyDetailShow: false,
-      projectList: [],
-      projectObj: []
+      dailyDetailShow: false
     }
   },
   computed: {
@@ -98,7 +98,6 @@ export default {
     await this.getOrgTree()
     await this.getProjects()
     this.initData()
-
 
     //问题页面 查看关联任务详情
     const { taskStatus, businessKey } = this.$route.query
@@ -113,31 +112,8 @@ export default {
     }
   },
   methods: {
-    async getProjects() {
-      const res = await projectsTreeList()
-
-      // console.log(res)
-      this.projectList = res
-      this.projectObj = this.formatProjectTreeToObj(res)
-    },
-    formatProjectTreeToObj(child) {
-      let objs = {}
-
-      if (child && child.length) {
-        child.forEach(item => {
-          if (item.sonProjects && item.sonProjects.length) {
-            objs = Object.assign(objs, this.formatProjectTreeToObj(item.sonProjects))
-          }
-          objs[item.id] = item.name
-        })
-      }
-      return objs
-    },
     formatTime(row, column, cellValue) {
       return formatDate(cellValue)
-    },
-    formatProject(row, column, cellValue) {
-      return this.projectObj[cellValue]
     },
     formatOrgTree(child) {
       let trees = []

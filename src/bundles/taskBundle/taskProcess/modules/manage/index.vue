@@ -60,9 +60,13 @@
 import { taskSave } from '@/api/task'
 import { organizationList } from '@/api/organization'
 import { projectsTreeList } from '@/api/projects'
-import { getStringRule, NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
+
 import FormMixins from '@/mixins/FormMixins'
+import projectsMixins from '@/bundles/taskBundle/mixins/projectsMixins'
+
+import { getStringRule, NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
 import { TASK_TYPES, TASK_SOURCES, TASK_PEOPLE_TYPES, TASK_SELECT_TYPES } from '@/constant/Dictionaries'
+
 import { createNamespacedHelpers } from 'vuex'
 const { mapState } = createNamespacedHelpers('user')
 
@@ -86,7 +90,7 @@ const defaultForm = {
 
 export default {
   name: 'TaskProcessManage',
-  mixins: [FormMixins],
+  mixins: [FormMixins, projectsMixins],
   props: {
     question: {
       required: false
@@ -121,7 +125,6 @@ export default {
       edit: false,
       taskSourceName: '',
       emergency: false,
-      projectList: [],
       EmergencySupport: [],
       peopleType: TASK_PEOPLE_TYPES.PEOPLE,
       peopleProps: {
@@ -169,11 +172,6 @@ export default {
     await this.getProjects()
   },
   methods: {
-    async getProjects() {
-      const res = await projectsTreeList()
-
-      this.projectList = res
-    },
     changeProject(val) {
       const res = this.EmergencySupport.filter(item=>item.value === val)
 

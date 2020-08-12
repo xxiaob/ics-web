@@ -4,7 +4,7 @@
       <div class="jc-title">任务</div>
     </div>
     <el-table :data="list" v-loading="loading" row-key="id" class="jc-table" size="mini">
-      <el-table-column prop="projectId" label="项目名称"></el-table-column>
+      <el-table-column prop="projectId" label="项目名称" :formatter="formatProject"></el-table-column>
       <el-table-column prop="taskTypeName" label="任务类型"></el-table-column>
       <el-table-column prop="startUser" label="下发人"></el-table-column>
       <el-table-column prop="startOrg" label="下发组织"></el-table-column>
@@ -23,9 +23,11 @@
 <script>
 import { listByProblemId } from '@/api/task'
 import { formatDate } from '@/libs/util'
+import projectsMixins from '@/bundles/taskBundle/mixins/projectsMixins'
 
 export default {
   name: 'TaskQuestionProcessDetailTask',
+  mixins: [projectsMixins],
   props: {
     problemId: {
       type: String,
@@ -44,6 +46,9 @@ export default {
         this.initData(newValue)
       }
     }
+  },
+  created() {
+    this.getProjects()
   },
   methods: {
     formatTime(row, column, cellValue) {

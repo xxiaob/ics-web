@@ -35,15 +35,18 @@
 </template>
 <script>
 import { taskList, taskGet, taskGetDaily } from '@/api/task'
-import { formatDate } from '@/libs/util'
-import PaginationMixins from '@/mixins/PaginationMixins'
 import { organizationList } from '@/api/organization'
 import { projectsTreeList } from '@/api/projects'
+
+import PaginationMixins from '@/mixins/PaginationMixins'
+import projectsMixins from '@/bundles/taskBundle/mixins/projectsMixins'
+
 import { TASK_TYPES } from '@/constant/Dictionaries'
+import { formatDate } from '@/libs/util'
 
 export default {
   name: 'TaskSearchIndex',
-  mixins: [PaginationMixins],
+  mixins: [PaginationMixins, projectsMixins],
   components: {
     TabFilter: () => import('./modules/tabFilter'),
     JcDetail: () => import('../taskProcess/modules/detail'),
@@ -60,9 +63,7 @@ export default {
       filter: {},
       orgId: '',
       detailShow: false,
-      dailyDetailShow: false,
-      projectList: [],
-      projectObj: []
+      dailyDetailShow: false
     }
   },
   async created() {
@@ -71,31 +72,8 @@ export default {
     this.initData()
   },
   methods: {
-    async getProjects() {
-      const res = await projectsTreeList()
-
-      // console.log(res)
-      this.projectList = res
-      this.projectObj = this.formatProjectTreeToObj(res)
-    },
-    formatProjectTreeToObj(child) {
-      let objs = {}
-
-      if (child && child.length) {
-        child.forEach(item => {
-          if (item.sonProjects && item.sonProjects.length) {
-            objs = Object.assign(objs, this.formatProjectTreeToObj(item.sonProjects))
-          }
-          objs[item.id] = item.name
-        })
-      }
-      return objs
-    },
     formatTime(row, column, cellValue) {
       return formatDate(cellValue)
-    },
-    formatProject(row, column, cellValue) {
-      return this.projectObj[cellValue]
     },
     formatOrgTree(child) {
       let trees = []
