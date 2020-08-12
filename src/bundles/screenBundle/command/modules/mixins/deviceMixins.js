@@ -139,18 +139,11 @@ export default {
       }
       let myJcMap = this.getMyJcMap() //获取地图对象
 
-      console.log('fitDevices', this.deviceTipVisible)
 
       //处理用户是否显示
       if (this.deviceTipVisible) {
         deviceData.markerCluster.setMap(myJcMap.map)
 
-        //处理是否进行聚合
-        // if (this.togetherVisible) {
-        //   deviceData.markerCluster.setMaxZoom(18)
-        // } else {
-        //   deviceData.markerCluster.setMaxZoom(0)
-        // }
         //处理是否显示标题，以及状态
         deviceData.markerCluster.setGridSize(120)
       } else {

@@ -54,6 +54,12 @@
           <el-checkbox class="jc-work-item" label="user">
             <div class="jc-work-content">人员</div>
           </el-checkbox>
+          <el-checkbox class="jc-work-item" label="event">
+            <div class="jc-work-content">事件</div>
+          </el-checkbox>
+          <el-checkbox class="jc-work-item" label="problem">
+            <div class="jc-work-content">问题</div>
+          </el-checkbox>
           <el-checkbox class="jc-work-item" v-for="item in controlAreaTypes" :label="item.id" :key="item.id">
             <div class="jc-work-content" :style="getIconStyle(item.icon)">{{item.name}}</div>
           </el-checkbox>
@@ -120,7 +126,7 @@ export default {
 
         let areaTypes = []
 
-        let allCheckIds = ['user']
+        let allCheckIds = ['user' ] // 默认选中
 
         if (areaResults && areaResults.length) {
           areaResults.forEach(item => {

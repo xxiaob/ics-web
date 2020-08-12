@@ -16,6 +16,7 @@ export default {
     this.$EventBus.$on('map-user-change', this.eventMap)
 
     this.$EventBus.$on('show-word-change', this.eventShowWordChange) //监听文字显示切换
+    this.$EventBus.$on('show-together-change', this.eventTogetherChange) // 监听是否聚合
   },
   methods: {
     async eventMap(data) {
@@ -110,19 +111,13 @@ export default {
 
         // let userItem = eventData.users[key]
 
-        // this.$EventBus.$emit('view-component-change', {
-        //   component: 'EventDetail', options: {
-        //     userId: userItem.userId, userName: '事件详情',
-        //     center: userItem.center
-        //   }
-        // }) //通知窗口改变
 
         this.$EventBus.$emit('view-component-change', {
           component: 'MessageDetail', options: {
             id: '78571410770886656',
             type: MESSAGE_TYPE.TEMPORARY
           }
-        })
+        }) // 通知窗口改变
       }
     },
     getEventCenterAndKey(lng, lat, userId) {
@@ -152,12 +147,13 @@ export default {
       if (this.eventTipVisible) {
         eventData.markerCluster.setMap(myJcMap.map)
 
+        console.log('eventTogetherVisible', this.eventTogetherVisible)
         //处理是否进行聚合
-        // if (this.togetherVisible) {
-        //   eventData.markerCluster.setMaxZoom(18)
-        // } else {
-        //   eventData.markerCluster.setMaxZoom(0)
-        // }
+        if (this.eventTogetherVisible) {
+          eventData.markerCluster.setMaxZoom(18)
+        } else {
+          eventData.markerCluster.setMaxZoom(0)
+        }
         //处理是否显示标题，以及状态
         eventData.markerCluster.setGridSize(120)
       } else {
@@ -177,6 +173,10 @@ export default {
     eventShowWordChange(words) {
       this.eventTipVisible = words.includes('event') //如果存在用户显示，则显示用户，否则不显示
       console.log(this.eventTipVisible)
+      this.fitEvents()
+    },
+    eventTogetherChange(togethers) {
+      this.eventTogetherVisible = togethers.includes('event') //如果存在用户聚合，则聚合用户，否则不显示
       this.fitEvents()
     }
   },

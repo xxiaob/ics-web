@@ -16,6 +16,7 @@ export default {
     this.$EventBus.$on('map-user-change', this.problemMap)
 
     this.$EventBus.$on('show-word-change', this.problemShowWordChange) //监听文字显示切换
+    this.$EventBus.$on('show-together-change', this.problemTogetherChange) // 监听是否聚合
   },
   methods: {
     async problemMap(data) {
@@ -155,11 +156,11 @@ export default {
         problemData.markerCluster.setMap(myJcMap.map)
 
         //处理是否进行聚合
-        // if (this.togetherVisible) {
-        //   problemData.markerCluster.setMaxZoom(18)
-        // } else {
-        //   problemData.markerCluster.setMaxZoom(0)
-        // }
+        if (this.problemTogetherVisible) {
+          problemData.markerCluster.setMaxZoom(18)
+        } else {
+          problemData.markerCluster.setMaxZoom(0)
+        }
         //处理是否显示标题，以及状态
         problemData.markerCluster.setGridSize(120)
       } else {
@@ -179,6 +180,10 @@ export default {
     problemShowWordChange(words) {
       this.problemTipVisible = words.includes('problem') //如果存在用户显示，则显示用户，否则不显示
       console.log('problemTipVisible', this.problemTipVisible)
+      this.fitProblems()
+    },
+    problemTogetherChange(togethers) {
+      this.problemTogetherVisible = togethers.includes('problem') //如果存在用户聚合，则聚合用户，否则不显示
       this.fitProblems()
     }
   },
