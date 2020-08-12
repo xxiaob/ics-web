@@ -4,7 +4,7 @@
       <div class="jc-title">任务</div>
     </div>
     <el-table :data="list" v-loading="loading" row-key="id" class="jc-table" size="mini">
-      <el-table-column prop="projectId" label="项目名称" :formatter="formatProject"></el-table-column>
+      <el-table-column prop="projectId" label="项目名称"></el-table-column>
       <el-table-column prop="taskTypeName" label="任务类型"></el-table-column>
       <el-table-column prop="startUser" label="下发人"></el-table-column>
       <el-table-column prop="startOrg" label="下发组织"></el-table-column>
@@ -23,8 +23,6 @@
 <script>
 import { listByProblemId } from '@/api/task'
 import { formatDate } from '@/libs/util'
-import { projectsList } from '@/api/projects'
-import { PROJECT_TYPES } from '@/constant/Dictionaries'
 
 export default {
   name: 'TaskQuestionProcessDetailTask',
@@ -36,9 +34,8 @@ export default {
   },
   data() {
     return {
-      list: [{ businessKey: '68793650535989248' }],
-      loading: false,
-      projectListArr: []
+      list: [],
+      loading: false
     }
   },
   watch: {
@@ -48,36 +45,7 @@ export default {
       }
     }
   },
-  created() {
-    this.formatProjectList()
-  },
   methods: {
-    formatProject(row, column, cellValue) {
-      const project = this.projectListArr.filter(item=>item.value == cellValue)
-
-      return (project[0] && project[0].label) || PROJECT_TYPES.toString(PROJECT_TYPES.NORMAL)
-    },
-    async  formatProjectList() {
-      this.EmergencySupport = await this.getProjectList(PROJECT_TYPES.EmergencySupport)
-      this.SpecialControl = await this.getProjectList(PROJECT_TYPES.SpecialControl)
-
-      this.projectListArr = []
-      if (this.EmergencySupport) {
-        this.projectListArr = [...this.projectListArr, ...this.EmergencySupport]
-      }
-      if (this.SpecialControl) {
-        this.projectListArr = [...this.projectListArr, ...this.SpecialControl]
-      }
-    },
-    async getProjectList(projectType) {
-      const res = await projectsList({ projectType })
-
-      if (res && res.length) {
-        return res.map(item=>({ value: item.projectId, label: item.projectName }))
-      } else {
-        return []
-      }
-    },
     formatTime(row, column, cellValue) {
       return formatDate(cellValue)
     },

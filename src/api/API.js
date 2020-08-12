@@ -149,6 +149,7 @@ export default {
     get: 'user-service/project/detail/',
     listByPage: 'user-service/project/listByPage',
     list: 'user-service/project/list',
+    tree: 'user-service/project/tree',
     update: 'user-service/project',
     del: 'user-service/project/',
     projectUserRef: {

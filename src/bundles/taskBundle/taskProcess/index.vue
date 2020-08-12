@@ -36,13 +36,13 @@
       </el-card>
     </div>
 
-    <jc-detail :orgTree="orgTree" :projectListArr="projectListArr" :orgObj="orgObj" :info="info" :detailShow.sync="detailShow" v-show="detailShow" @save-success="initData"></jc-detail>
+    <jc-detail :orgTree="orgTree" :orgObj="orgObj" :info="info" :detailShow.sync="detailShow" v-show="detailShow" @save-success="initData"></jc-detail>
 
-    <jc-manage :selectType="filter.selectType" :orgTree="orgTree" :projectList="projectList" :projectListArr="projectListArr" :user="user" :options="info" :visible.sync="visible" @save-success="initData"></jc-manage>
+    <jc-manage :selectType="filter.selectType" :orgTree="orgTree" :options="info" :visible.sync="visible" @save-success="initData"></jc-manage>
 
-    <jc-manage-daily :selectType="filter.selectType" :EmergencySupport="EmergencySupport" :orgTree="orgTree" :projectList="projectList" :projectListArr="projectListArr" :orgObj="orgObj" :orgId="orgId" :options="dailyInfo" :visible.sync="visibleDaily" @save-success="initData"></jc-manage-daily>
+    <jc-manage-daily :selectType="filter.selectType" :EmergencySupport="EmergencySupport" :orgTree="orgTree" :projectList="projectList" :orgObj="orgObj" :orgId="orgId" :options="dailyInfo" :visible.sync="visibleDaily" @save-success="initData"></jc-manage-daily>
 
-    <jc-detail-daily :orgTree="orgTree" :projectListArr="projectListArr" :orgObj="orgObj" :info="dailyInfo" :dailyDetailShow.sync="dailyDetailShow" v-show="dailyDetailShow" @save-success="initData"></jc-detail-daily>
+    <jc-detail-daily :orgTree="orgTree" :orgObj="orgObj" :info="dailyInfo" :dailyDetailShow.sync="dailyDetailShow" v-show="dailyDetailShow" @save-success="initData"></jc-detail-daily>
 
   </div>
 </template>
@@ -51,11 +51,11 @@ import { taskList, taskDel, taskStart, taskGet, taskUpdStatus, taskGetDaily } fr
 import { formatDate } from '@/libs/util'
 import PaginationMixins from '@/mixins/PaginationMixins'
 import { organizationList } from '@/api/organization'
-import { projectsList } from '@/api/projects'
+import { projectsTreeList } from '@/api/projects'
 import { createNamespacedHelpers } from 'vuex'
 const { mapState } = createNamespacedHelpers('user')
 
-import { TASK_SELECT_TYPES, TASK_STATES, TASK_TYPES, PROJECT_TYPES } from '@/constant/Dictionaries'
+import { TASK_SELECT_TYPES, TASK_STATES, TASK_TYPES } from '@/constant/Dictionaries'
 
 export default {
   name: 'TaskProcessIndex',
@@ -88,7 +88,7 @@ export default {
       detailShow: false,
       dailyDetailShow: false,
       projectList: [],
-      projectListArr: []
+      projectObj: []
     }
   },
   computed: {
@@ -96,7 +96,7 @@ export default {
   },
   async created() {
     await this.getOrgTree()
-    await this.formatProjectList()
+    await this.getProjects()
     this.initData()
 
 
@@ -113,41 +113,31 @@ export default {
     }
   },
   methods: {
+    async getProjects() {
+      const res = await projectsTreeList()
+
+      // console.log(res)
+      this.projectList = res
+      this.projectObj = this.formatProjectTreeToObj(res)
+    },
+    formatProjectTreeToObj(child) {
+      let objs = {}
+
+      if (child && child.length) {
+        child.forEach(item => {
+          if (item.sonProjects && item.sonProjects.length) {
+            objs = Object.assign(objs, this.formatProjectTreeToObj(item.sonProjects))
+          }
+          objs[item.id] = item.name
+        })
+      }
+      return objs
+    },
     formatTime(row, column, cellValue) {
       return formatDate(cellValue)
     },
     formatProject(row, column, cellValue) {
-      const project = this.projectListArr.filter(item=>item.value == cellValue)
-
-      return (project[0] && project[0].label) || PROJECT_TYPES.toString(PROJECT_TYPES.NORMAL)
-    },
-    async  formatProjectList() {
-      this.EmergencySupport = await this.getProjectList(PROJECT_TYPES.EmergencySupport)
-      this.SpecialControl = await this.getProjectList(PROJECT_TYPES.SpecialControl)
-
-      // this.projectListArr = [...PROJECT_TYPES.VALUES]
-      this.projectListArr = []
-      if (this.EmergencySupport) {
-        this.projectListArr = [...this.projectListArr, ...this.EmergencySupport]
-      }
-      if (this.SpecialControl) {
-        this.projectListArr = [...this.projectListArr, ...this.SpecialControl]
-      }
-
-      this.projectList = PROJECT_TYPES.VALUES.map(item=>{
-        const { value, label, key } = item
-
-        return { value, label, children: this[key] || null }
-      })
-    },
-    async getProjectList(projectType) {
-      const res = await projectsList({ projectType })
-
-      if (res && res.length) {
-        return res.map(item=>({ value: item.projectId, label: item.projectName }))
-      } else {
-        return []
-      }
+      return this.projectObj[cellValue]
     },
     formatOrgTree(child) {
       let trees = []

@@ -22,6 +22,14 @@ export function projectsList(data = {}) {
   return axios.post(API.projects.list, data)
 }
 /**
+ * 所有项目 树形结构
+ * @param {object} data
+ * @returns {Object} axios 对象
+ */
+export function projectsTreeList(data = {}) {
+  return axios.post(API.projects.tree, data)
+}
+/**
  * 添加
  * @param {object} data
  * @returns {Object} axios 对象

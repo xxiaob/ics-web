@@ -13,11 +13,8 @@
           <el-form-item label="创建时间：" class="jc-left-width25">
             <span>{{form.createTime|filterTime}}</span>
           </el-form-item>
-          <!-- <el-form-item label="项目类型" class="jc-left-width25">
-            <span>{{form.projectType}}</span>
-          </el-form-item> -->
           <el-form-item label="项目名称：" class="jc-left-width50">
-            <span>{{formatProject}}</span>
+            <span>{{form.projectId}}</span>
           </el-form-item>
         </div>
         <div class="jc-clearboth">
@@ -102,7 +99,7 @@ import { taskFinish, taskAddRemark } from '@/api/task'
 import { NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
 import { formatDate } from '@/libs/util'
 import moment from 'moment'
-import { TASK_PEOPLE_TYPES, PROJECT_TYPES, TASK_FREQUENCYS } from '@/constant/Dictionaries'
+import { TASK_PEOPLE_TYPES, TASK_FREQUENCYS } from '@/constant/Dictionaries'
 
 export default {
   name: 'TaskProcessDetailDaily',
@@ -110,9 +107,6 @@ export default {
     info: {
       type: Object,
       default: ()=>{}
-    },
-    projectListArr: {
-      type: Array
     },
     orgTree: {
       type: Array
@@ -169,11 +163,6 @@ export default {
       } else {
         return ''
       }
-    },
-    formatProject() {
-      const project = this.projectListArr.filter(item=>item.value == this.form.projectId)
-
-      return (project[0] && project[0].label) || PROJECT_TYPES.toString(PROJECT_TYPES.NORMAL)
     },
     formatWorkFrequency() {
       return TASK_FREQUENCYS.toString(this.form.workFrequency) || `${this.form.workFrequency}天`

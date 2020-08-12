@@ -26,7 +26,7 @@
 
 <script>
 import { TASK_AREA_TYPES } from '@/constant/Dictionaries'
-import { areaGridList, areaList } from '@/api/area'
+import { areaGridList } from '@/api/area'
 import { areaTypeList } from '@/api/areaType'
 
 export default {
@@ -34,7 +34,6 @@ export default {
   props: {
     edit: false,
     projectId: String,
-    // emergency: false,
     selectedAreas: {
       type: Array,
       default: ()=>[]
@@ -104,10 +103,7 @@ export default {
     projectId: {
       immediate: true,
       handler(val) {
-        // console.log('area projectId', val)
-        const projectId = val == '0' ? '' : val
-
-        this.getAreaGridList(projectId)
+        this.getAreaGridList(val)
       }
     }
   },
@@ -145,7 +141,7 @@ export default {
       }
       return trees
     },
-    check(checkedNode, { checkedKeys, checkedNodes }) {
+    check(checkedNode, { checkedNodes }) {
       const selecteds = checkedNodes.filter(item=>item.org === false).map(item=>item.id)
 
       this.$emit('update:selectedAreas', selecteds)

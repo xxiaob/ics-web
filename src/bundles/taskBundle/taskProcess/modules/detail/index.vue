@@ -13,11 +13,8 @@
           <el-form-item label="创建时间：" class="jc-left-width25">
             <span>{{form.createTime|filterTime}}</span>
           </el-form-item>
-          <!-- <el-form-item label="项目类型" class="jc-left-width25">
-            <span>{{form.projectType}}</span>
-          </el-form-item> -->
           <el-form-item label="项目名称：" class="jc-left-width50">
-            <span>{{formatProject}}</span>
+            <span>{{form.projectId}}</span>
           </el-form-item>
         </div>
         <div class="jc-clearboth">
@@ -52,7 +49,6 @@
         </div>
         <el-form-item label="任务描述：">
           <div v-html="form.taskDesc"></div>
-          <!-- {{form.taskDesc}} -->
         </el-form-item>
         <el-form-item label="附件：">
           <el-image v-for="url in imgs" :key="url" :src="url" :preview-src-list="imgs" class="jc-img"></el-image>
@@ -121,7 +117,7 @@ import { taskFinish, taskDel } from '@/api/task'
 import { eventManageSelectList } from '@/api/eventManage'
 import { NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
 import { formatDate } from '@/libs/util'
-import { TASK_SOURCES, TASK_STATES, TASK_PEOPLE_TYPES, PROJECT_TYPES } from '@/constant/Dictionaries'
+import { TASK_SOURCES, TASK_STATES, TASK_PEOPLE_TYPES } from '@/constant/Dictionaries'
 import MediaMixins from '../../../mixins/MediaMixins'
 
 export default {
@@ -134,9 +130,6 @@ export default {
       default: ()=>{}
     },
     orgTree: {
-      type: Array
-    },
-    projectListArr: {
       type: Array
     },
     orgObj: {
@@ -219,11 +212,6 @@ export default {
       } else {
         return ''
       }
-    },
-    formatProject() {
-      const project = this.projectListArr.filter(item=>item.value == this.form.projectId)
-
-      return (project[0] && project[0].label) || PROJECT_TYPES.toString(PROJECT_TYPES.NORMAL)
     }
   },
   filters: {

@@ -7,7 +7,7 @@
     </div>
     <el-form ref="form" :inline="true" :model="form" class="jc-tabfilter-form" size="small">
       <el-form-item prop="projectId" label="项目名称">
-        <el-cascader v-model="form.projectId" :options="projectList" :props="{expandTrigger:'hover',emitPath:false}"></el-cascader>
+        <el-cascader v-model="form.projectId" :options="projectList" :props="projectCascaderProps"></el-cascader>
       </el-form-item>
       <el-form-item prop="" label="时间">
         <el-date-picker v-model="date" @change="changeDate" value-format="timestamp" type="datetimerange" range-separator="-" start-placeholder="开始时间" end-placeholder="结束时间">
@@ -36,12 +36,18 @@ export default {
   },
   data() {
     return {
+      projectCascaderProps: {
+        expandTrigger: 'hover',
+        emitPath: false,
+        children: 'sonProjects',
+        label: 'name',
+        value: 'id'
+      },
       selectTypes: TASK_SELECT_TYPES.VALUES,
       status: TASK_SELECT_TYPES.PENDING,
       form: {
         selectType: TASK_SELECT_TYPES.PENDING,
         projectId: '',
-        // projectType: '',
         startDate: '',
         endDate: '',
         desc: ''
