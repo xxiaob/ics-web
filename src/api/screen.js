@@ -99,7 +99,7 @@ export function getScreenEventData(data) {
 
 
 /**
- * 最近两天未完成的临时任务
+ * 指挥大屏问题数据
  * @param {object} data
  * @param { String } data.orgId 组织id
  * @param { String } data.projectId 项目id

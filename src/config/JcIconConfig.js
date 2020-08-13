@@ -37,3 +37,21 @@ export const JcUserIcons = {
   gather: '/static/mapIcons/usergather.png', //采集图标
   abnormal: '/static/mapIcons/userabnormal.gif' //异常报警图标
 }
+
+
+/**
+ *  事件图标
+ */
+export const JcEventIcons = {
+  cluster: '/static/mapIcons/eventcluster.png', // 事件的聚合图标
+  plain: '/static/mapIcons/eventplain.png' // 事件简单图标
+}
+
+/**
+ *  问题图标
+ */
+export const JcProblemIcons = {
+  cluster: '/static/mapIcons/problemcluster.png', // 事件的聚合图标
+  plain: '/static/mapIcons/problemplain.png' // 事件简单图标
+}
+
