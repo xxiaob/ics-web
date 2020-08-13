@@ -1,20 +1,69 @@
 <template>
-  <div class="jc-video-warp"></div>
+  <div class="jc-video-warp" :class="{'jc-warp-show': show}">
+    <div class="jc-warp-title">视频播放<i class="jc-video-close el-icon-close" @click="closeVideos"></i></div>
+    <div class="jc-video-item" v-for="item in list" :key="item.id" :video-type="item.id == fullId ? 'full': 'base'">
+      <i class="jc-item-close el-icon-close" @click="videoClose(item)"></i>
+      <div class="jc-video-header">
+        <div class="jc-video-title" v-text="item.name"></div>
+        <i class="jc-controll-item el-icon-full-screen" @click="videoFull(item)"></i>
+      </div>
+      <div class="jc-video-play"></div>
+    </div>
+  </div>
 </template>
 <script>
 export default {
   name: 'ScreenCommandVideoWarp',
   data() {
     return {
-
+      show: false,
+      list: [],
+      fullId: null, //全屏的id
+      maxLength: 5 //设置最多显示5个
     }
   },
   created() {
     this.$EventBus.$on('device-video-play', this.videoPlay) //监听视频播放
+    let index = 0
+
+    setTimeout(() => {
+      this.show = true
+      let timeI = setInterval(() => {
+        this.list.splice(0, 0, { id: index++, name: '设备' + index })
+        if (this.list.length == 5) {
+          clearInterval(timeI)
+        }
+        //处理列表只显示最大数量的事件问题
+        if (this.list.length > this.maxLength) {
+          this.list.splice(this.maxLength, this.list.length - this.maxLength)
+        }
+      }, 15000)
+    }, 10000)
   },
   methods: {
     videoPlay(data) {
 
+    },
+    closeVideos() {
+      //关闭所有视频
+      this.show = false
+    },
+    videoClose(item) {
+      if (item.id == this.fullId) {
+        //如果是放大的视频则缩小
+        this.fullId = null
+      } else {
+        //关闭单个视频
+        let index = this.list.findIndex(videoItem => videoItem.id == item.id)
+
+        if (index > -1) {
+          this.list.splice(index, 1)
+        }
+      }
+    },
+    videoFull(item) {
+      //全屏播放
+      this.fullId = item.id
     }
   },
   beforeDestroy() {

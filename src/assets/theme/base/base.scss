@@ -234,13 +234,13 @@ input::-webkit-input-placeholder {
   }
 
   .el-form-item__content {
-    & > .el-range-editor {
+    &>.el-range-editor {
       width: 350px;
     }
 
-    & > .el-input,
-    & > .el-cascader,
-    & > .el-select {
+    &>.el-input,
+    &>.el-cascader,
+    &>.el-select {
       width: 160px;
     }
   }
@@ -295,7 +295,7 @@ input::-webkit-input-placeholder {
 }
 
 .jc-table {
-  .el-button + .el-button {
+  .el-button+.el-button {
     margin-left: 0;
   }
 
@@ -316,6 +316,7 @@ input::-webkit-input-placeholder {
 }
 
 .jc-manage-form {
+
   .el-select,
   .el-cascader,
   .el-date-editor {
@@ -334,12 +335,7 @@ input::-webkit-input-placeholder {
     transform: translateY(-50%);
 
     .el-dialog__close {
-      transform: rotate(0deg);
-      transition: transform 0.4s;
-
-      &:hover {
-        transform: rotate(180deg);
-      }
+      @include jc-close-animation;
     }
   }
 }
@@ -414,10 +410,5 @@ input::-webkit-input-placeholder {
 /* 重写图片预览 功能图片的样式 */
 .el-image-viewer__close {
   color: #fff;
-  transform: rotate(0deg);
-  transition: transform 0.4s;
-
-  &:hover {
-    transform: rotate(180deg);
-  }
+  @include jc-close-animation;
 }
