@@ -7,14 +7,16 @@
       </div>
       <el-table :data="list" v-loading="loading" row-key="roleId" class="jc-table">
         <el-table-column type="index" :index="indexMethod" label="序号" width="50"></el-table-column>
+        <el-table-column prop="deviceName" label="设备名称"></el-table-column>
         <el-table-column prop="orgName" label="所属组织"></el-table-column>
-        <el-table-column prop="roleName" label="角色名称"></el-table-column>
-        <el-table-column prop="createTime" label="创建时间"></el-table-column>
+        <el-table-column prop="deviceTypeName" label="设备类型"></el-table-column>
+        <el-table-column prop="treatyType" label="接入协议"></el-table-column>
+        <el-table-column prop="userName" label="绑定用户"></el-table-column>
         <el-table-column width="100" label="操作">
           <template slot-scope="scope">
             <el-button type="text" size="mini" icon="el-icon-view" @click="detail(scope.row)" title="详情"></el-button>
-            <el-button type="text" size="mini" icon="el-icon-setting" @click="manage(scope.row)" title="设置"></el-button>
             <el-button type="text" size="mini" icon="el-icon-video-camera" @click="showVideo(scope.row)" title="视频记录"></el-button>
+            <el-button v-if="scope.row.bindFlag" type="text" size="mini" icon="el-icon-setting" @click="manage(scope.row)" title="设置"></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -28,8 +30,8 @@
   </div>
 </template>
 <script>
-import { roleList } from '@/api/role'
-import { formatDate } from '@/libs/util'
+import { deviceList, deviceDetail } from '@/api/device'
+// import { formatDate } from '@/libs/util'
 import PaginationMixins from '@/mixins/PaginationMixins'
 
 export default {
@@ -60,17 +62,10 @@ export default {
       if (!this.loading) {
         this.loading = true
         try {
-          const { total, resultList } = await roleList({ ...this.filter, ...this.page, orgId: this.orgId })
+          const { total, data } = await deviceList({ ...this.filter, ...this.page, orgId: this.orgId })
 
           this.page.total = total
-          let list = []
-
-          if (resultList && resultList.length) {
-            resultList.forEach(item => {
-              list.push({ roleId: item.roleId, roleName: item.roleName, orgId: item.orgId, orgName: item.orgName, createTime: formatDate(item.createTime) })
-            })
-          }
-          this.list = list
+          this.list = data
           this.loading = false
         } catch (error) {
           console.error(error)
@@ -82,12 +77,12 @@ export default {
       this.filter = filter
       this.currentChange(1)
     },
-    detail(row) {
-      this.detailInfo = row
+    async detail({ deviceId }) {
+      this.detailInfo = await deviceDetail({ deviceId })
       this.detailVisible = true
     },
-    manage(row) {
-      this.info = row
+    manage({ deviceId }) {
+      this.info = { deviceId }
       this.visible = true
     },
     showVideo(row) {

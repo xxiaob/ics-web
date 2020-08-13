@@ -7,17 +7,25 @@ import API from './API'
 /*-------------------------------设备管理------------------------------------ */
 /**
  * 列表
- * @param {object} data
+ * @param {object} params
  * @returns {Object} axios 对象
  */
-export function deviceList(data) {
-  return axios.post(API.device.list, data)
+export function deviceList(params) {
+  return axios.get(API.device.list, { params })
 }
 /**
- * 更新
+ * 查询设备详情
+ * @param {object} params
+ * @returns {Object} axios 对象
+ */
+export function deviceDetail(params) {
+  return axios.get(API.device.detail, { params })
+}
+/**
+ * 设备绑定用户
  * @param {object} data
  * @returns {Object} axios 对象
  */
-export function deviceUpdate(data) {
-  return axios.post(API.device.update, data)
+export function deviceBind(data) {
+  return axios.post(API.device.bind, data)
 }

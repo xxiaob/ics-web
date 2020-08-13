@@ -88,8 +88,9 @@ export default {
   upload: 'file-server-service/upload/upload',
   device: {
     //设备管理
-    list: 'device-service/deviceUpgPkg/listByPage',
-    update: 'device-service/deviceUpgPkg/upd'
+    list: 'device-service/hikDevice/deviceList',
+    detail: 'device-service/hikDevice/deviceDetail',
+    bind: 'device-service/hikDevice/deviceBind'
   },
   eventManage: {
     //事件管理

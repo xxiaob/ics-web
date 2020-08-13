@@ -18,7 +18,7 @@
   </el-dialog>
 </template>
 <script>
-import { deviceUpdate } from '@/api/device'
+import { deviceBind } from '@/api/device'
 import { organizationList } from '@/api/organization'
 import { userListByOrg } from '@/api/user'
 import { SELECT_NOT_NULL } from '@/libs/rules'
@@ -83,7 +83,7 @@ export default {
     },
     formatFormData() {
       if (this.options) {
-        return { userId: '', id: this.options.id }
+        return { userId: '', deviceId: this.options.deviceId }
       } else {
         return { userId: '' }
       }
@@ -92,7 +92,7 @@ export default {
       this.loading = true
       this.$refs.form.validate(valid => {
         if (valid) {
-          deviceUpdate({ ...this.form }).then(() => {
+          deviceBind({ ...this.form }).then(() => {
             this.$message.success('操作成功')
             this.dialogVisible = false
             this.$emit('save-success')

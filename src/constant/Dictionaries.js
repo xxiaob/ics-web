@@ -228,3 +228,12 @@ export const LOGIN_WINDOWS_POSITION = new JcEnum([
   { key: 'CENTER', value: 2, label: '中' },
   { key: 'RIGHT', value: 3, label: '右' }
 ])
+
+/**
+ * 设备管理 设备类型
+ */
+export const DEVICE_TYPES = new JcEnum([
+  { key: 'CAMERA', value: 1, label: '摄像头' },
+  { key: 'UAV', value: 2, label: '无人机' },
+  { key: 'NETPATROLCAR', value: 3, label: '网巡车' }
+])
