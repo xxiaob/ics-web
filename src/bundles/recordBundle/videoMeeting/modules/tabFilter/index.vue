@@ -1,12 +1,11 @@
 <template>
   <el-card class="jc-tabfilter-card">
     <el-form ref="form" :inline="true" :model="form" class="jc-tabfilter-form" size="small">
-      <slot name="back"></slot>
-      <el-form-item label="设备名称">
-        <span>{{detail.name}}</span>
+      <el-form-item prop="orgId" label="所属组织">
+        <el-cascader :options="orgTree" v-model="form.orgId" :props="{expandTrigger: 'hover', checkStrictly: true,emitPath: false }" clearable @change="orgChange" ref="orgCascader"></el-cascader>
       </el-form-item>
-      <el-form-item label="位置信息">
-        <span>{{detail.name}}</span>
+      <el-form-item prop="desc" label="相关人员">
+        <el-input v-model="form.desc" placeholder="请输入相关人员"></el-input>
       </el-form-item>
       <el-form-item prop="" label="时间">
         <el-date-picker v-model="date" @change="changeDate" value-format="timestamp" type="datetimerange" range-separator="-" start-placeholder="开始时间" end-placeholder="结束时间">
@@ -21,23 +20,28 @@
 </template>
 <script>
 export default {
-  name: 'SystemDeviceVideoFilter',
+  name: 'RecordVideoMeetingFilter',
   props: {
-    detail: {
-      type: Object,
-      default: ()=>{}
+    orgTree: {
+      type: Array
     }
   },
   data() {
     return {
+      loading: false,
       form: {
         startDate: '',
-        endDate: ''
+        endDate: '',
+        desc: '',
+        orgId: ''
       },
       date: null
     }
   },
   methods: {
+    orgChange() {
+      this.$refs.orgCascader.dropDownVisible = false //级联选择器 选择任意一级后隐藏下拉框
+    },
     changeDate(value) {
       if (value) {
         this.form.startDate = value[0]
@@ -49,6 +53,7 @@ export default {
     },
     reset() {
       this.$refs.form.resetFields()
+      this.form.orgId = ''
       this.form.startDate = ''
       this.form.endDate = ''
       this.date = null

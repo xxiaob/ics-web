@@ -8,6 +8,7 @@ import taskRouter from './task'
 import projectRouter from './project'
 import attendRouter from './attend'
 import overseeRouter from './oversee'
+import recordRouter from './record'
 import screenRouter from './screen' //大屏路由
 import demoRouter from './demo' //demo 路由
 
@@ -38,7 +39,7 @@ let routerOptions = {
       meta: {
         title: '欢迎'
       }
-    }, ...systemRouter, ...taskRouter, ...projectRouter, ...attendRouter, ...overseeRouter]
+    }, ...systemRouter, ...taskRouter, ...projectRouter, ...attendRouter, ...overseeRouter, ...recordRouter]
   }, {
     path: '/',
     name: 'fullPage',
