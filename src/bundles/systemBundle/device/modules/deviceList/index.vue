@@ -20,7 +20,11 @@
       </el-table>
       <el-pagination @current-change="currentChange" @size-change="sizeChange" :current-page.sync="page.pageNum" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.total" class="text-right jc-mt"></el-pagination>
     </el-card>
+
     <jc-manage :options="info" :orgId="orgId" :visible.sync="visible" @save-success="initData"></jc-manage>
+
+    <jc-detail :options="detailInfo" :visible.sync="detailVisible"></jc-detail>
+
   </div>
 </template>
 <script>
@@ -33,7 +37,8 @@ export default {
   mixins: [PaginationMixins],
   components: {
     TabFilter: () => import('../tabFilter'),
-    JcManage: () => import('../manage')
+    JcManage: () => import('../manage'),
+    JcDetail: () => import('../detail')
   },
   data() {
     return {
@@ -41,6 +46,8 @@ export default {
       loading: false,
       visible: false,
       info: null,
+      detailInfo: null,
+      detailVisible: false,
       orgId: '',
       filter: { }
     }
@@ -76,14 +83,17 @@ export default {
       this.currentChange(1)
     },
     detail(row) {
-      console.log('detail', row)
+      this.detailInfo = row
+      this.detailVisible = true
     },
     manage(row) {
       this.info = row
       this.visible = true
     },
     showVideo(row) {
-      console.log('showVideo', row)
+      // const type = row.type === '1' ? 'camera' : 'law'
+
+      this.$parent.checkShow('law', row)
     }
   }
 }
