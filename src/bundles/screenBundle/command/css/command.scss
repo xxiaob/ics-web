@@ -812,6 +812,8 @@ $jc-screen-height: 56px;
   transition: transform .5s;
   box-shadow: $jc-box-shadow;
 
+  $jc-video-header-height: 36px;
+
   &.jc-warp-show {
     transform: translateX(0);
   }
@@ -881,7 +883,7 @@ $jc-screen-height: 56px;
     height: $jc-video-height;
     z-index: 2;
     margin-bottom: $jc-default-dis/2;
-    transition: all .4s;
+    transition: all 0.4s;
 
     @for $i from 1 through 4 {
       &.jc-video-#{$i} {
