@@ -1,8 +1,9 @@
 import { getMarkerCluster } from '@/map/aMap/aMapUtil'
-import { JcUserIcons } from '@/config/JcIconConfig'
+import { JcEventIcons } from '@/config/JcIconConfig'
 
 import { getScreenEventData } from '@/api/screen'
 import { getUser } from '@/libs/storage'
+import moment from 'moment'
 
 let eventData = { markerCluster: null, events: {}, lnglats: [] }
 
@@ -12,7 +13,9 @@ import { MESSAGE_TYPE } from '@/constant/Dictionaries'
 
 export default {
   data() {
-    return {}
+    return {
+      today: new Date(moment().format('YYYY-MM-DD') + ' 00:00:00').getTime() // 初始时间
+    }
   },
   created() {
     // 利用用户来模拟事件
@@ -28,7 +31,6 @@ export default {
 
       let endTime = new Date(this.today + 24 * 60 * 60 * 1000) // 结束时间
 
-
       let { orgId } = await getUser() // 获取用户orgId
 
       let { projectId } = this.project // 获取projectId
@@ -39,9 +41,6 @@ export default {
       // 发送请求获取数据
       let ScreenEventData = await getScreenEventData({ orgId, projectId })
 
-      console.log('ScreenEventData', ScreenEventData)
-
-
       MarkerCluster = await getMarkerCluster()
 
 
@@ -51,35 +50,27 @@ export default {
       // 处理用户信息
       if (ScreenEventData && ScreenEventData.length) {
         ScreenEventData.forEach(item => {
+          // 过滤没有坐标的事件
           if (!item.position) {
             return
           }
 
-          let position = item.position.split(',')
+          let position = item.position.split(',') // 切割坐标
 
-          item.lng = position[0]
-          item.lat = position[1]
-          console.log('screenEventPosition', position)
-          console.log('screenEventPosition', item)
+          item.lng = position[0] // 获取精度
+          item.lat = position[1] // 获取维度
+
           // 计算事件的中心点坐标和key, 处理坐标相同的情况
           let { center, key } = this.getEventCenterAndKey(item.lng, item.lat, item.id)
 
 
-          console.log('eventCenterAndKey', center, key)
-
-          console.log('eventCenterAndKey', eventData)
-          console.log('eventCenterAndKey', item)
-
           let lnglat = eventData.lnglats.find(event => event.eventId == item.id)
-
-          console.log('eventCenterAndKey', lnglat)
 
           if (lnglat) {
             delete eventData.events[lnglat.key]
           } else {
             eventData.lnglats.push({ lnglat: center, key, eventId: item.id })
           }
-          console.log('eventData', eventData)
           eventData.events[key] = { ...item, center }
         })
       }
@@ -98,20 +89,16 @@ export default {
       this.fitEvents() //控制用户显示
     },
     renderEventClusterMarker(context) {
-      console.log('绘制用户-聚合绘制', context)
+      console.log('绘制事件-聚合绘制', context)
       context.marker.setAnchor('center')
       context.marker.setzIndex(20)
-      context.marker.setContent(`<div class="jc-cluster-content" style="background-image: url(${JcUserIcons.cluster});">${context.count}</div>`)
+      context.marker.setContent(`<div class="jc-cluster-content" style="background-image: url(${JcEventIcons.cluster});">${context.count}</div>`)
     },
     renderEventMarker(context) {
-      console.log('绘制用户-单点绘制', context)
+      console.log('绘制事件-单点绘制', context)
       let key = this.getKeyByLngLat(context.data[0].lnglat.lng, context.data[0].lnglat.lat)
 
-      console.log('eventItem', key)
-
       let eventItem = eventData.events[key]
-
-      console.log('eventItem', eventItem)
 
       //过滤掉用户信息为空的场景
       if (!eventItem) {
@@ -120,11 +107,12 @@ export default {
 
       let content = '<div class="jc-marker-content jc-market-center">'
 
+      // 事件标题
       if (this.eventTipVisible) {
-        content += `<div class="jc-marker-title">${eventItem.orgName}</div>`
+        content += `<div class="jc-marker-title">${eventItem.eventTitle}</div>`
       }
       //处理用户图标显示
-      content += `<img src=${JcUserIcons.abnormal} class="jc-marker-icon"/></div>`
+      content += `<img src=${JcEventIcons.plain} class="jc-marker-icon"/></div>`
 
 
       context.marker.setPosition(eventItem.center)
@@ -138,34 +126,31 @@ export default {
       if (context.clusterData.length > 1) {
         myJcMap.map.setBounds(this.getAmapBundles(context.clusterData))
       } else {
-        //获取信息去通知显示详情
-        // let key = this.getKeyByLngLat(context.lnglat.lng, context.lnglat.lat)
+        //获取事件的key
+        let key = this.getKeyByLngLat(context.lnglat.lng, context.lnglat.lat)
 
-        // let userItem = eventData.users[key]
-
+        // 通过key获取当前事件
+        let eventItem = eventData.events[key]
 
         this.$EventBus.$emit('view-component-change', {
           component: 'MessageDetail', options: {
-            id: '78571410770886656',
-            type: MESSAGE_TYPE.TEMPORARY
+            id: eventItem.id,
+            type: MESSAGE_TYPE.EVENT
           }
         }) // 通知窗口改变
       }
     },
     getEventCenterAndKey(lng, lat, eventId) {
-      console.log('getEventCenterAndKey', lng, lat, eventId)
+      // 处理坐标
       let center = [parseFloat(lng).toFixed(6), parseFloat(lat).toFixed(6)]
 
       let key = center.join(',')
 
-      console.log('getEventCenterAndKey', center, key)
       //处理是已经有事件和当前事件位置完全相同，如果相同则进行处理偏差处理
-      console.log('event', eventData)
+
       let event = eventData.events[key]
 
-      console.log('event', event)
-
-      if (event && event.eventId != eventId) {
+      if (event && event.id != eventId) {
         //如果该坐标用户存在，且不是当前用户，则将该用户位置进行偏差，再次进行处理
         return this.getEventCenterAndKey(parseFloat(lng) + 0.000001, parseFloat(lat) + 0.000001, eventId)
       }
@@ -178,14 +163,12 @@ export default {
       }
       let myJcMap = this.getMyJcMap() //获取地图对象
 
-      console.log('fitEvents', this.eventTipVisible)
-
-      //处理用户是否显示
+      //处理事件是否显示
       if (this.eventTipVisible) {
         eventData.markerCluster.setMap(myJcMap.map)
 
-        console.log('eventTogetherVisible', this.eventTogetherVisible)
-        //处理是否进行聚合
+
+        //处理事件是否进行聚合
         if (this.eventTogetherVisible) {
           eventData.markerCluster.setMaxZoom(18)
         } else {
@@ -208,17 +191,16 @@ export default {
       eventData = { markerCluster: null, events: {}, lnglats: [] }
     },
     eventShowWordChange(words) {
-      this.eventTipVisible = words.includes('event') //如果存在用户显示，则显示用户，否则不显示
-      console.log(this.eventTipVisible)
+      this.eventTipVisible = words.includes('event') //如果存在，则显示事件，否则不显示
       this.fitEvents()
     },
     eventTogetherChange(togethers) {
-      this.eventTogetherVisible = togethers.includes('event') //如果存在用户聚合，则聚合用户，否则不显示
+      this.eventTogetherVisible = togethers.includes('event') //如果事件聚合，则聚合事件，否则不显示
       this.fitEvents()
     }
   },
   beforeDestroy() {
-    this.$EventBus.$off('map-user-change', this.eventMap)
     this.$EventBus.$off('show-word-change', this.eventShowWordChange)
+    this.$EventBus.$off('show-together-change', this.eventTogetherChange)
   }
 }
