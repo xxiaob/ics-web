@@ -166,7 +166,7 @@ export default {
     getUserCenterAndKey(lng, lat, userId) {
       let center = [parseFloat(lng).toFixed(6), parseFloat(lat).toFixed(6)]
 
-      let key = center.join(',')
+      // let key = center.join(',')
 
       //处理是已经有用户和当前用户位置完全相同，如果相同则进行处理偏差处理
       let user = usersData.users[key]
