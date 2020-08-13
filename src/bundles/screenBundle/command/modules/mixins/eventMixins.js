@@ -1,5 +1,8 @@
 import { getMarkerCluster } from '@/map/aMap/aMapUtil'
 import { JcUserIcons } from '@/config/JcIconConfig'
+import { getScreenEventData } from '@/api/screen'
+import { getUser } from '@/libs/storage'
+import moment from 'moment'
 
 let eventData = { markerCluster: null, users: {}, lnglats: [] }
 
@@ -9,19 +12,38 @@ import { MESSAGE_TYPE } from '@/constant/Dictionaries'
 
 export default {
   data() {
-    return {}
+    return {
+      today: new Date(moment().format('YYYY-MM-DD') + ' 00:00:00').getTime(), // 初始时间
+      ScreenEventData: {}
+    }
   },
   created() {
     // 利用用户来模拟事件
-    this.$EventBus.$on('map-user-change', this.eventMap)
+    this.$EventBus.$on('map-user-change', this.initEventData)
+    this.initEventData()
 
     this.$EventBus.$on('show-word-change', this.eventShowWordChange) //监听文字显示切换
     this.$EventBus.$on('show-together-change', this.eventTogetherChange) // 监听是否聚合
   },
   methods: {
-    async eventMap(data) {
-      console.log('--------------------------')
-      console.log('eventMap', data)
+    async initEventData(data) {
+      let beginTime = new Date(this.today) // 开始时间
+
+      let endTime = new Date(this.today + 24 * 60 * 60 * 1000) // 结束时间
+
+
+      let { orgId } = await getUser() // 获取用户orgId
+
+      let { projectId } = this.project // 获取projectId
+
+      console.log(beginTime, endTime, orgId, projectId)
+
+
+      // 发送请求获取数据
+      let ScreenEventData = await getScreenEventData({ orgId, projectId })
+
+      console.log('ScreenEventData', ScreenEventData)
+
 
       MarkerCluster = await getMarkerCluster()
 
