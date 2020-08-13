@@ -177,7 +177,7 @@ export default {
       this.form.workFrequency = val ? val : null
     },
     changeProject(val) {
-      const res = this.EmergencySupport.filter(item=>item.value === val)
+      const res = this.EmergencySupport.filter(item=>item.id === val)
 
       this.emergency = res.length ? true : false
     },

@@ -73,7 +73,6 @@ export default {
     return {
       TASK_TYPES,
       TASK_STATES,
-      EmergencySupport: [],
       TASK_SELECT_TYPES,
       orgTree: [],
       orgObj: {},

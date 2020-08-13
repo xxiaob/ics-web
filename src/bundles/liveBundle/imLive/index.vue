@@ -243,7 +243,9 @@ export default {
       const { userName, userId } = this.user
       const copyUsers = JSON.parse(JSON.stringify(users))
 
-      copyUsers.unshift({ userId, userName })
+      if (inviteType != '2' && inviteType != '3') {
+        copyUsers.unshift({ userId, userName })
+      }
       const data = {
         channelId: this.channelId,
         inviteType,
