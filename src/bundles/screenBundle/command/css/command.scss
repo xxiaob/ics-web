@@ -883,16 +883,13 @@ $jc-screen-height: 56px;
     height: $jc-video-height;
     z-index: 2;
     margin-bottom: $jc-default-dis/2;
+    transform: translateZ(0);
     transition: all 0.4s;
 
-    @for $i from 1 through 4 {
+    @for $i from 0 through 4 {
       &.jc-video-#{$i} {
-        top: $jc-video-header-height + $jc-default-dis/2 * $i + 160 * $i - 160;
+        top: $jc-video-header-height + $jc-default-dis/2 + $jc-default-dis/2 * $i + 160 * $i;
       }
-    }
-
-    &[video-type="full"] {
-      left: 320px;
     }
 
     .jc-item-close {
@@ -911,9 +908,15 @@ $jc-screen-height: 56px;
     }
 
     &.jc-video-full {
+      top: calc(50vh - 230px);
+      left: calc(50vw - 330px);
       width: 700px;
       height: 400px;
       z-index: 100;
+
+      .jc-controll-item {
+        display: none;
+      }
 
       .jc-item-close {
         width: 30px;
