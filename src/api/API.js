@@ -201,7 +201,9 @@ export default {
       getTaskPostLine: 'task-service/taskAttendance/getTaskPostLine', //岗点考勤事件流水
       getTaskPersonalLine: 'task-service/taskAttendance/getTaskPersonalLine', //个人考勤事件流水
       getUserHistoryPosition: 'message-srv/message/getUserHistoryPosition', //获取用户历史定位
-      getScreenOverallData: 'task-service/taskScreen/getScreenOverallData' //根据用户和网格查询综合数据
+      getScreenOverallData: 'task-service/taskScreen/getScreenOverallData', //根据用户和网格查询综合数据
+      getScreenEventData: 'task-service/event/screenSelect', // 指挥大屏的事件数据
+      getScreenProblemData: 'task-service/problem/selectScreenTask' // 指挥大屏问题数据
     },
     dataStatistics: {
       accumulateInfo: 'data-service/largeScreen/accumulateInfo',
