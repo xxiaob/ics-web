@@ -1,10 +1,12 @@
 import { projectsTreeList } from '@/api/projects'
+import { PROJECT_TYPES } from '@/constant/Dictionaries'
 
 export default {
   data() {
     return {
       projectList: [],
-      projectObj: {}
+      projectObj: {},
+      EmergencySupport: []
     }
   },
   methods: {
@@ -26,6 +28,11 @@ export default {
             objs = Object.assign(objs, this.formatProjectTreeToObj(item.sonProjects))
           }
           objs[item.id] = item.name
+
+          //应急项目
+          if (item.type == PROJECT_TYPES.EmergencySupport) {
+            this.EmergencySupport.push(item)
+          }
         })
       }
       return objs

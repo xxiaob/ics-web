@@ -125,7 +125,6 @@ export default {
       edit: false,
       taskSourceName: '',
       emergency: false,
-      EmergencySupport: [],
       peopleType: TASK_PEOPLE_TYPES.PEOPLE,
       peopleProps: {
         [TASK_PEOPLE_TYPES.ORG]: 'orgIds',
@@ -173,7 +172,7 @@ export default {
   },
   methods: {
     changeProject(val) {
-      const res = this.EmergencySupport.filter(item=>item.value === val)
+      const res = this.EmergencySupport.filter(item=>item.id === val)
 
       this.emergency = res.length ? true : false
     },
