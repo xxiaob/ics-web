@@ -46,6 +46,10 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.jc-main-full-container {
+  overflow: auto;
+}
+
 .jc-trees-warp {
   position: absolute;
   top: $jc-default-dis;
@@ -56,6 +60,7 @@ export default {
   border-radius: $jc-border-radius-base;
   z-index: 1;
 }
+
 .jc-trees-content {
   position: relative;
   width: 100%;
