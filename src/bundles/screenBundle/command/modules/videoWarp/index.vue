@@ -1,7 +1,7 @@
 <template>
   <div class="jc-video-warp" :class="{'jc-warp-show': show}">
     <div class="jc-warp-title">视频播放<i class="jc-video-close el-icon-close" @click="closeVideos"></i></div>
-    <div class="jc-video-item" v-for="item in list" :key="item.id" :video-type="item.id == fullId ? 'full': 'base'">
+    <div class="jc-video-item" v-for="(item,index) in list" :key="item.id" :class="item.id == fullId ? 'jc-video-full': `jc-video-${index}`">
       <i class="jc-item-close el-icon-close" @click="videoClose(item)"></i>
       <div class="jc-video-header">
         <div class="jc-video-title" v-text="item.name"></div>
@@ -19,7 +19,7 @@ export default {
       show: false,
       list: [],
       fullId: null, //全屏的id
-      maxLength: 5 //设置最多显示5个
+      maxLength: 4 //设置最多显示4个
     }
   },
   created() {
@@ -30,7 +30,7 @@ export default {
       this.show = true
       let timeI = setInterval(() => {
         this.list.splice(0, 0, { id: index++, name: '设备' + index })
-        if (this.list.length == 5) {
+        if (this.list.length == this.maxLength) {
           clearInterval(timeI)
         }
         //处理列表只显示最大数量的事件问题

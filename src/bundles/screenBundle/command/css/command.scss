@@ -797,17 +797,20 @@ $jc-screen-height: 56px;
 }
 
 /deep/ .jc-video-warp {
+  $jc-video-header-height: 36px;
+  $jc-video-width: 280px;
+  $jc-video-height: 160px;
+
   position: absolute;
   top: $jc-screen-height + $jc-default-dis;
   left: $jc-default-dis;
-  bottom: $jc-default-dis;
+  height: $jc-video-header-height + $jc-video-height * 4 + $jc-default-dis * 2.5;
   z-index: 99;
-  width: 320px;
+  width: $jc-video-width + $jc-default-dis * 2;
   background-color: $jc-color-white;
   transform: translateX(-110%);
   transition: transform .5s;
-
-  $jc-video-header-height: 36px;
+  box-shadow: $jc-box-shadow;
 
   &.jc-warp-show {
     transform: translateX(0);
@@ -874,15 +877,15 @@ $jc-screen-height: 56px;
     left: $jc-default-dis;
     top: $jc-video-header-height + $jc-default-dis/2;
     width: 0;
-    width: 280px;
-    height: 160px;
+    width: $jc-video-width;
+    height: $jc-video-height;
     z-index: 2;
     margin-bottom: $jc-default-dis/2;
     transition: all .4s;
 
-    @for $i from 1 through 5 {
-      .jc-video-item[video-type="base"]:nth-child(6n + #{$i}) {
-        top: $jc-video-header-height + $jc-default-dis * $i + 160 * $i - 160;
+    @for $i from 1 through 4 {
+      &.jc-video-#{$i} {
+        top: $jc-video-header-height + $jc-default-dis/2 * $i + 160 * $i - 160;
       }
     }
 
