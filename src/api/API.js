@@ -231,5 +231,9 @@ export default {
     getByOrgId: 'user-service/orgLinkLogo/getDetailByOrgId',
     list: 'user-service/orgLinkLogo/getList',
     update: 'user-service/orgLinkLogo/update'
+  },
+  record: {
+    //记录留痕
+    videoList: ''
   }
 }
