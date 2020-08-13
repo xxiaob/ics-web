@@ -84,8 +84,7 @@ $jc-screen-height: 56px;
       padding: $jc-default-dis;
       width: 180px;
       height: 168px;
-      background: url(../modules/header/assets/weather-bg.png) no-repeat center
-        bottom;
+      background: url(../modules/header/assets/weather-bg.png) no-repeat center bottom;
       background-size: 100% 160px;
       left: 0;
       visibility: hidden;
@@ -774,8 +773,7 @@ $jc-screen-height: 56px;
 
   .jc-message-user {
     width: 68px;
-    background: url(../modules/message/assets/peportperson.png) no-repeat left
-      center;
+    background: url(../modules/message/assets/peportperson.png) no-repeat left center;
     background-size: 20px 20px;
     padding: 0 $jc-default-dis/2 0 24px;
     @include jc-text-warp;
@@ -803,15 +801,20 @@ $jc-screen-height: 56px;
 }
 
 /deep/ .jc-video-warp {
+  $jc-video-header-height: 36px;
+  $jc-video-width: 280px;
+  $jc-video-height: 160px;
+
   position: absolute;
   top: $jc-screen-height + $jc-default-dis;
   left: $jc-default-dis;
-  bottom: $jc-default-dis;
+  height: $jc-video-header-height + $jc-video-height * 4 + $jc-default-dis * 2.5;
   z-index: 99;
-  width: 320px;
+  width: $jc-video-width + $jc-default-dis * 2;
   background-color: $jc-color-white;
   transform: translateX(-110%);
-  transition: transform 0.5s;
+  transition: transform .5s;
+  box-shadow: $jc-box-shadow;
 
   $jc-video-header-height: 36px;
 
@@ -880,20 +883,17 @@ $jc-screen-height: 56px;
     left: $jc-default-dis;
     top: $jc-video-header-height + $jc-default-dis/2;
     width: 0;
-    width: 280px;
-    height: 160px;
+    width: $jc-video-width;
+    height: $jc-video-height;
     z-index: 2;
     margin-bottom: $jc-default-dis/2;
+    transform: translateZ(0);
     transition: all 0.4s;
 
-    @for $i from 1 through 5 {
-      .jc-video-item[video-type="base"]:nth-child(6n + #{$i}) {
-        top: $jc-video-header-height + $jc-default-dis * $i + 160 * $i - 160;
+    @for $i from 0 through 4 {
+      &.jc-video-#{$i} {
+        top: $jc-video-header-height + $jc-default-dis/2 + $jc-default-dis/2 * $i + 160 * $i;
       }
-    }
-
-    &[video-type="full"] {
-      left: 320px;
     }
 
     .jc-item-close {
@@ -912,9 +912,15 @@ $jc-screen-height: 56px;
     }
 
     &.jc-video-full {
+      top: calc(50vh - 230px);
+      left: calc(50vw - 330px);
       width: 700px;
       height: 400px;
       z-index: 100;
+
+      .jc-controll-item {
+        display: none;
+      }
 
       .jc-item-close {
         width: 30px;

@@ -1,8 +1,8 @@
 import { getMarkerCluster } from '@/map/aMap/aMapUtil'
 import { JcUserIcons } from '@/config/JcIconConfig'
+
 import { getScreenEventData } from '@/api/screen'
 import { getUser } from '@/libs/storage'
-import moment from 'moment'
 
 let eventData = { markerCluster: null, events: {}, lnglats: [] }
 
@@ -12,10 +12,7 @@ import { MESSAGE_TYPE } from '@/constant/Dictionaries'
 
 export default {
   data() {
-    return {
-      today: new Date(moment().format('YYYY-MM-DD') + ' 00:00:00').getTime(), // 初始时间
-      ScreenEventData: {}
-    }
+    return {}
   },
   created() {
     // 利用用户来模拟事件
