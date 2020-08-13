@@ -16,29 +16,27 @@ export default {
   name: 'ScreenCommandVideoWarp',
   data() {
     return {
-      show: false,
       list: [],
       fullId: null, //全屏的id
       maxLength: 4 //设置最多显示4个
+    }
+  },
+  computed: {
+    show() {
+      return this.list.length > 0
     }
   },
   created() {
     this.$EventBus.$on('device-video-play', this.videoPlay) //监听视频播放
     let index = 0
 
-    setTimeout(() => {
-      this.show = true
-      let timeI = setInterval(() => {
-        this.list.splice(0, 0, { id: index++, name: '设备' + index })
-        if (this.list.length == this.maxLength) {
-          clearInterval(timeI)
-        }
-        //处理列表只显示最大数量的事件问题
-        if (this.list.length > this.maxLength) {
-          this.list.splice(this.maxLength, this.list.length - this.maxLength)
-        }
-      }, 15000)
-    }, 10000)
+    setInterval(() => {
+      this.list.splice(0, 0, { id: index++, name: '设备' + index })
+      //处理列表只显示最大数量的事件问题
+      if (this.list.length > this.maxLength) {
+        this.list.splice(this.maxLength, this.list.length - this.maxLength)
+      }
+    }, 15000)
   },
   methods: {
     videoPlay(data) {
@@ -46,7 +44,7 @@ export default {
     },
     closeVideos() {
       //关闭所有视频
-      this.show = false
+      this.list = []
     },
     videoClose(item) {
       if (item.id == this.fullId) {
