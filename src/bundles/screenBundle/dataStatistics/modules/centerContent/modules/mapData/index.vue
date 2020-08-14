@@ -24,6 +24,7 @@ import { AREAS_TYPE, AREAS_SEARCH_TYPE } from '@/constant/CONST'
 import { orgBoundariesFormat } from '@/libs/apiFormat'
 import CommandAreaMixins from './modules/mixins/commandAreaMixins'
 import EventHotMapMixins from './modules/mixins/eventHotMapMixins'
+import EventClusterMixins from './modules/mixins/eventClusterMixins'
 
 let myJcMap, AMap //个人 map 对象,存储Amap对象,存储3D图层，存储点标记
 
@@ -31,7 +32,7 @@ let orgAreas = {} //存储区域信息
 
 export default {
   name: 'ScreenDataCenterContentMapData',
-  mixins: [CommandAreaMixins, EventHotMapMixins],
+  mixins: [CommandAreaMixins, EventHotMapMixins, EventClusterMixins],
   data() {
     return {
       project: null,
@@ -152,7 +153,7 @@ export default {
 
           console.log('数据大屏，组织边界信息', orgAreas)
 
-          this.switchModel(1)
+          this.switchModel(1) //默认显示指挥区域
         }
       } catch (error) {
         console.log(error)
@@ -214,11 +215,15 @@ export default {
       if (this.switchType == 1) {
         this.initCommandArea() //显示指挥区域显示
         this.hideEventHotMap() //隐藏热力图
+        this.hideEventCluster() //隐藏 聚合图
       } else if (this.switchType == 2) {
         this.initEventHotMap() //显示热力图
         this.hideCommandArea() //隐藏指挥区域显示
+        this.hideEventCluster() //隐藏 聚合图
       } else {
-
+        this.initEventCluster() //显示聚合图
+        this.hideEventHotMap() //隐藏热力图
+        this.hideCommandArea() //隐藏指挥区域显示
       }
     },
     getMyJcMap() {

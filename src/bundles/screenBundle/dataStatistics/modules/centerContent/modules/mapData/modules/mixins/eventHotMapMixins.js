@@ -27,7 +27,7 @@ export default {
       } else {
         let AMap = this.getAMap()
 
-        eventHotMap = new AMap.Heatmap(myJcMap, { radius: 30, opacity: [0, 1] })
+        eventHotMap = new AMap.Heatmap(myJcMap, { radius: 20, opacity: [0, 1] })
       }
       this.switchHotType(this.eventHotType)
     },
@@ -65,5 +65,9 @@ export default {
 
       eventHotMap.setDataSet({ data })
     }
+  },
+  beforeDestroy() {
+    eventHotMap.setMap(null)
+    eventHotMap = null
   }
 }
