@@ -13,6 +13,13 @@
       <div class="jc-dimension-item" :class="{'jc-active': eventHotType == 'quarter'}" @click="switchHotType('quarter')">季度</div>
       <div class="jc-dimension-item" :class="{'jc-active': eventHotType == 'year'}" @click="switchHotType('year')">月</div>
     </div>
+    <template v-show="switchType == 3">
+      <div class="jc-dimension-switch">
+        <div class="jc-dimension-item" :class="{'jc-active': eventClusterType == 'month'}" @click="switchEventClusterType('month')">月</div>
+        <div class="jc-dimension-item" :class="{'jc-active': eventClusterType == 'quarter'}" @click="switchEventClusterType('quarter')">季度</div>
+        <div class="jc-dimension-item" :class="{'jc-active': eventClusterType == 'year'}" @click="switchEventClusterType('year')">月</div>
+      </div>
+    </template>
   </div>
 </template>
 <script>
@@ -57,7 +64,7 @@ export default {
       //初始化地图设置
       let AMapLoader = getAMapLoader() //获取amap 对象
 
-      AMap = await AMapLoader.load({ key: process.env.aMapConfig.accessKey, plugins: ['Map3D', 'AMap.Marker', 'AMap.GeometryUtil', 'AMap.Heatmap'] })
+      AMap = await AMapLoader.load({ key: process.env.aMapConfig.accessKey, plugins: ['Map3D', 'AMap.Marker', 'AMap.GeometryUtil', 'AMap.Heatmap', 'AMap.Polygon'] })
 
       myJcMap = new AMap.Map(this.$refs.myMap, {
         mapStyle: 'amap://styles/1b8b05391432855bd2473c0d1d3628b5', viewMode: '3D', features: ['bg', 'road'], pitch: 40, skyColor: 'rgba(0,0,0,0)'
@@ -212,19 +219,9 @@ export default {
     },
     switchModel(type) {
       this.switchType = type
-      if (this.switchType == 1) {
-        this.initCommandArea() //显示指挥区域显示
-        this.hideEventHotMap() //隐藏热力图
-        this.hideEventCluster() //隐藏 聚合图
-      } else if (this.switchType == 2) {
-        this.initEventHotMap() //显示热力图
-        this.hideCommandArea() //隐藏指挥区域显示
-        this.hideEventCluster() //隐藏 聚合图
-      } else {
-        this.initEventCluster() //显示聚合图
-        this.hideEventHotMap() //隐藏热力图
-        this.hideCommandArea() //隐藏指挥区域显示
-      }
+      this.initCommandArea() //显示指挥区域显示
+      this.initEventHotMap() //显示热力图
+      this.initEventCluster() //显示聚合图
     },
     getMyJcMap() {
       return myJcMap//获取地图

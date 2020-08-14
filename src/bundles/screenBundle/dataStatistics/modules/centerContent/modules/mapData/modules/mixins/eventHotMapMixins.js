@@ -18,6 +18,11 @@ export default {
   },
   methods: {
     initEventHotMap() {
+      //处理如果不是当前显示，则去隐藏自己
+      if (this.switchType != 2) {
+        this.hideEventHotMap()
+        return
+      }
       let myJcMap = this.getMyJcMap()
 
       myJcMap.setPitch(0)

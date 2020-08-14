@@ -28,6 +28,11 @@ export default {
   },
   methods: {
     initCommandArea() {
+      //处理如果不是当前显示，则去隐藏自己
+      if (this.switchType != 1) {
+        this.hideCommandArea()
+        return
+      }
       myJcMap = this.getMyJcMap()
       myJcMap.setPitch(40)
       myJcMap.setFeatures(['bg', 'road'])
