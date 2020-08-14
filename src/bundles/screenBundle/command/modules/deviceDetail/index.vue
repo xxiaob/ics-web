@@ -1,14 +1,15 @@
 <template>
-  <view-warp :title="options.userName">
+  <view-warp :title="options.deviceName"  v-loading="loading">
     <view-tabs v-model="tabComponent" :options="tabs"></view-tabs>
     <keep-alive>
-      <component :is="tabComponent" :options="options" :project="project"></component>
+      <component :is="tabComponent" :deviceDetaillData="deviceDetaillData"></component>
     </keep-alive>
   </view-warp>
 </template>
 <script>
 import { VIDEO_INVITE_TYPES } from '@/constant/Dictionaries'
-// import { getChannelByUserId } from '@/api/live'
+import { deviceDetail } from '@/api/device'
+
 
 export default {
   name: 'ScreenCommandDeviceDetail',
@@ -22,19 +23,40 @@ export default {
   },
   data() {
     return {
+      loading: false,
       tabComponent: 'BaseInfo',
       videoTypes: VIDEO_INVITE_TYPES,
       tabs: [{ label: '基础信息', value: 'BaseInfo' }, { label: '运行信息', value: 'WorkingInfo' }]
     }
   },
-  mounted() {
-    console.log(this.options, this.project)
+  watch: {
+    options() {
+      this.initDeviceDetail()
+    }
+  },
+  created() {
+    console.log('deviceDetail', this.options, this.project)
+    // 初始化数据
+    this.initDeviceDetail()
   },
   methods: {
+    async initDeviceDetail() {
+      this.loading = true
 
+      // 获取设备id
+      let { deviceId } = this.options
+
+      try {
+        // 请求数据
+        let deviceDetaillData = await deviceDetail({ deviceId })
+
+        this.deviceDetaillData = deviceDetaillData
+      } catch (err) {
+        console.log(err)
+      }
+
+      this.loading = false
+    }
   }
 }
 </script>
-<style lang="scss" scoped>
-
-</style>

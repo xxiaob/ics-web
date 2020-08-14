@@ -55,3 +55,12 @@ export const JcProblemIcons = {
   plain: '/static/mapIcons/problemplain.png' // 事件简单图标
 }
 
+
+/**
+ *  设备图标
+ */
+export const JcDeviceIcons = {
+  uav: '/static/mapIcons/uavdevice.png', // 无人机图标
+  camera: '/static/mapIcons/cameradevice.png', // 摄像头图标
+  netpatrolcar: '/static/mapIcons/netpatrolcar.png' // 网巡车图标
+}

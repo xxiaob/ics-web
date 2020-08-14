@@ -89,7 +89,7 @@ export default {
   device: {
     //设备管理
     list: 'device-service/hikDevice/deviceList',
-    detail: 'device-service/hikDevice/deviceDetail',
+    detail: 'device-service/hikDevice/deviceDetail', // 获取设备详情数据
     bind: 'device-service/hikDevice/deviceBind'
   },
   eventManage: {

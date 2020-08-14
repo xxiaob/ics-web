@@ -1,7 +1,8 @@
 import { getMarkerCluster } from '@/map/aMap/aMapUtil'
-import { JcUserIcons } from '@/config/JcIconConfig'
+import { JcDeviceIcons } from '@/config/JcIconConfig'
 
 import { getScreenDeviceData } from '@/api/screen'
+import { getUser } from '@/libs/storage'
 let deviceData = { markerCluster: null, devices: {}, lnglats: [] }
 
 let MarkerCluster //存储 MarkerCluster
@@ -18,6 +19,7 @@ export default {
     //type 1 设备在线， device {id，type，name，location} 在线
     //type 2 设备离线 deviceId
     //设备变更，处理完之后，知道在线的设备id，取出id数组
+    // [{id:设备id, type: 设备类型, online: 设备在线与否(true) , name: 设备名称, location: 设备地址}]
     //this.$EventBus.$emit('map-device-online-change', onlineDevices)
 
     // 初始化数据
@@ -26,8 +28,10 @@ export default {
     this.$EventBus.$on('show-word-change', this.deviceShowWordChange) //监听文字显示切换
   },
   methods: {
-    async initDeviceData(data) {
-      let { projectId, orgId } = this.project // 获取projectId orgId
+    async initDeviceData() {
+      let { orgId } = await getUser() //获取用户orgId
+
+      let { projectId } = this.project // 获取projectId orgId
 
       console.log('project')
 
@@ -35,30 +39,47 @@ export default {
       let ScreenDeviceData = await getScreenDeviceData({ orgId, projectId })
 
       console.log('ScreenDeviceData', ScreenDeviceData)
-      MarkerCluster = await getMarkerCluster()
 
+      this.deviceMap(ScreenDeviceData)
+    },
+    async deviceMap(data) {
+      // 处理地图数据
+
+      MarkerCluster = await getMarkerCluster()
 
       this.clearDevices() // 清除之前的记录
 
 
       // 处理用户信息
-      if (data.users && data.users.length) {
-        data.users.forEach(item => {
+      if (data && data.length) {
+        data.forEach(item => {
+          // 过滤没有坐标的设备
+          if (!item.position) {
+            return
+          }
+
+          let position = item.position.split(',') // 切割坐标
+
+          item.lng = position[0] // 获取精度
+          item.lat = position[1] // 获取维度
           // 计算事件的中心点坐标和key, 处理坐标相同的情况
-          let { center, key } = this.getDeviceCenterAndKey(item.lng, item.lat, item.userId)
+          let { center, key } = this.getDeviceCenterAndKey(item.lng, item.lat, item.deviceId)
 
           console.log('deviceCenterAndKey', center, key)
+          console.log('deviceCenterAndKey', deviceData)
 
-          let lnglat = deviceData.lnglats.find(user => user.userId == item.userId)
+          let lnglat = deviceData.lnglats.find(device => device.deviceId == item.deviceId)
+
+          console.log('device', lnglat)
 
           if (lnglat) {
-            delete deviceData.users[lnglat.key]
-            lnglat.lnglat = center
+            delete deviceData.devices[lnglat.key]
+            // lnglat.lnglat = center
           } else {
-            deviceData.lnglats.push({ lnglat: center, key, userId: item.userId })
+            deviceData.lnglats.push({ lnglat: center, key, deviceId: item.deviceId })
           }
           console.log('deviceData', deviceData)
-          deviceData.users[key] = { ...item, center }
+          deviceData.devices[key] = { ...item, center }
         })
       }
 
@@ -68,45 +89,47 @@ export default {
       } else {
         deviceData.markerCluster = new MarkerCluster(null, deviceData.lnglats, {
           userSize: 60,
-          renderClusterMarker: this.renderDeviceClusterMarker,
+          // renderClusterMarker: this.renderDeviceClusterMarker,  // 设备不需要聚合
           renderMarker: this.renderDeviceMarker
         })
         deviceData.markerCluster.on('click', this.markerDeviceClusterClick)
       }
       this.fitDevices() //控制用户显示
     },
-    renderDeviceClusterMarker(context) {
-      console.log('绘制用户-聚合绘制', context)
-      context.marker.setAnchor('center')
-      context.marker.setzIndex(20)
-      context.marker.setContent(`<div class="jc-cluster-content" style="background-image: url(${JcUserIcons.cluster});">${context.count}</div>`)
-    },
+
+    // renderDeviceClusterMarker(context) {
+    //   console.log('绘制用户-聚合绘制', context)
+    //   context.marker.setAnchor('center')
+    //   context.marker.setzIndex(20)
+    //   context.marker.setContent(`<div class="jc-cluster-content" style="background-image: url(${JcUserIcons.cluster});">${context.count}</div>`)
+    // },
     renderDeviceMarker(context) {
       console.log('绘制用户-单点绘制', context)
       let key = this.getKeyByLngLat(context.data[0].lnglat.lng, context.data[0].lnglat.lat)
 
-      let userItem = deviceData.users[key]
+      let deviceItem = deviceData.devices[key]
 
       //过滤掉用户信息为空的场景
-      if (!userItem) {
+      if (!deviceItem) {
         return
       }
 
       let content = '<div class="jc-marker-content jc-market-center">'
 
       if (this.deviceTipVisible) {
-        content += `<div class="jc-marker-title">${userItem.userName}</div>`
+        content += `<div class="jc-marker-title">${deviceItem.resourceTypeName}</div>`
       }
       //处理用户图标显示
-      if (this.abnormalUserIds.includes(userItem.userId)) {
-        content += `<img src=${JcUserIcons.abnormal} class="jc-marker-icon"/></div>`
-      } else if (this.gatherUserIds.includes(userItem.userId)) {
-        content += `<img src=${JcUserIcons.gather} class="jc-marker-icon"/></div>`
+      if (deviceItem.resourceType == 1) {
+        content += `<img src=${JcDeviceIcons.camera} class="jc-marker-icon"/></div>`
+      } else if (deviceItem.resourceType == 2) {
+        content += `<img src=${JcDeviceIcons.uav} class="jc-marker-icon"/></div>`
       } else {
-        content += `<img src=${JcUserIcons.online} class="jc-marker-icon"/></div>`
+        content += `<img src=${JcDeviceIcons.netpatrolcar} class="jc-marker-icon"/></div>`
       }
 
-      context.marker.setPosition(userItem.center)
+
+      context.marker.setPosition(deviceItem.center)
       context.marker.setContent(content)
     },
 
@@ -122,27 +145,31 @@ export default {
         //获取信息去通知显示详情
         let key = this.getKeyByLngLat(context.lnglat.lng, context.lnglat.lat)
 
-        let userItem = deviceData.users[key]
+        let deviceItem = deviceData.devices[key]
 
         this.$EventBus.$emit('view-component-change', {
           component: 'DeviceDetail', options: {
-            userId: userItem.userId, userName: '设备详情',
-            center: userItem.center
+            deviceId: deviceItem.deviceId, deviceName: '设备详情',
+            center: deviceItem.center
           }
         }) //通知窗口改变
       }
     },
-    getDeviceCenterAndKey(lng, lat, userId) {
+    getDeviceCenterAndKey(lng, lat, deviceId) {
       let center = [parseFloat(lng).toFixed(6), parseFloat(lat).toFixed(6)]
 
       let key = center.join(',')
 
+      console.log('device', deviceData)
+      console.log('device', deviceId)
+      console.log('device', key)
       //处理是已经有事件和当前事件位置完全相同，如果相同则进行处理偏差处理
-      let user = deviceData.users[key]
+      let device = deviceData.devices[key]
 
-      if (user && user.userId != userId) {
+      console.log('device', device)
+      if (device && device.deviceId != deviceId) {
         //如果该坐标用户存在，且不是当前用户，则将该用户位置进行偏差，再次进行处理
-        return this.getDeviceCenterAndKey(parseFloat(lng) + 0.000001, parseFloat(lat) + 0.000001, userId)
+        return this.getDeviceCenterAndKey(parseFloat(lng) + 0.000001, parseFloat(lat) + 0.000001, deviceId)
       }
 
       return { center, key }

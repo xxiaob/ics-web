@@ -114,13 +114,11 @@ export function getScreenProblemData(data) {
 
 /**
  * 指挥大屏设备数据
- * @param {object} data
- * @param { String } data.orgId 组织id
- * @param { String } data.projectId 项目id
+ * @param {object} params
  * @returns {Object} axios 对象
  */
-export function getScreenDeviceData(data) {
-  return axios.post(API.screen.command.getScreenDeviceData, data)
+export function getScreenDeviceData(params) {
+  return axios.get(API.screen.command.getScreenDeviceData, { params })
 }
 
 
