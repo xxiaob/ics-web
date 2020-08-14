@@ -30,11 +30,16 @@ export default {
     initCommandArea() {
       myJcMap = this.getMyJcMap()
       AMap = this.getAMap()
-      object3Dlayer = new AMap.Object3DLayer({ opacity: 1, zIndex: 8 })
+      //如果对象已经创建，则去显示，否则进行初始化显示
+      if (object3Dlayer && labelsLayer) {
 
-      labelsLayer = new AMap.LabelsLayer({ visible: true, zIndex: 9, collision: false })
+      } else {
+        object3Dlayer = new AMap.Object3DLayer({ opacity: 1, zIndex: 8 })
 
-      this.drawMapAreas()
+        labelsLayer = new AMap.LabelsLayer({ visible: true, zIndex: 9, collision: false })
+
+        this.drawMapAreas()
+      }
     },
     drawMapAreas() {
       let orgAreas = this.getOrgAreasData()

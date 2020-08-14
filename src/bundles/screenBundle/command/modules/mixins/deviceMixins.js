@@ -8,11 +8,17 @@ let MarkerCluster //存储 MarkerCluster
 
 export default {
   data() {
-    return {}
+    return {
+
+    }
   },
   created() {
     // 利用用户来模拟事件
-    // this.$EventBus.$on('map-user-change', this.deviceMap)
+    // this.$EventBus.$on('map-device-change', this.deviceMap)
+    //type 1 设备在线， device {id，type，name，location} 在线
+    //type 2 设备离线 deviceId
+    //设备变更，处理完之后，知道在线的设备id，取出id数组
+    //this.$EventBus.$emit('map-device-online-change', onlineDevices)
 
     // 初始化数据
     this.initDeviceData()

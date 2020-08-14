@@ -1,6 +1,14 @@
 <template>
   <div class="jc-map-space">
     <div class="jc-map-warp" ref="myMap"></div>
+    <!-- 地图模块切换 -->
+    <div class="jc-model-switch">
+      <div class="jc-model-item">指挥区域</div>
+      <div class="jc-model-item">事件热力</div>
+      <div class="jc-model-item">事件聚合</div>
+    </div>
+    <!-- 维度切换 -->
+    <div class="jc-dimension-switch"></div>
   </div>
 </template>
 <script>
@@ -229,6 +237,10 @@ export default {
   position: relative;
   width: 100%;
   height: 100%;
+  z-index: 1;
+}
+.jc-model-switch {
+  position: absolute;
 }
 </style>
 <style lang="scss">

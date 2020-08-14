@@ -3,12 +3,12 @@
     <el-input v-model="filterText" prefix-icon="el-icon-search" class="jc-filter-input" clearable size="mini" placeholder="输入关键字进行过滤"></el-input>
     <div class="jc-view-content" v-loading="loading">
       <el-tree ref="tree" :default-expanded-keys="expandedKeys" :data="trees" :props="props" :show-checkbox="true" node-key="id" :filter-node-method="filterNode" @check="checkChange">
-        <div class="custom-tree-node" slot-scope="{ node,data}">
-          <div class="jc-tree-label no-select" :class="{'jc-user': data.type=='user'}" >
+        <div class="custom-tree-node" slot-scope="{ node,data}" :class="{'jc-devices-online': onlineDevices.includes(data.id)}">
+          <div class="jc-tree-label no-select" :class="{'jc-user': data.type=='user'}">
             <div class="jc-text-warp" v-text="node.label"></div>
           </div>
           <div class="jc-tree-options" v-on:click.stop>
-            <el-button type="text" size="small" icon="el-icon-map-location"  @click="goLocation(data)" title="定位"></el-button>
+            <el-button type="text" size="small" icon="el-icon-map-location" @click="goLocation(data)" title="定位"></el-button>
             <el-button type="text" size="small" icon="el-icon-view" v-if="data.type=='user'" @click="userDetail(data)" title="详情"></el-button>
           </div>
         </div>
@@ -59,13 +59,18 @@ export default {
       trees: [],
       expandedKeys: [],
       props: { children: 'children', label: 'label' },
-      checkKeys: []
+      checkKeys: [],
+      onlineDevices: []
     }
   },
   created() {
     this.initData()
+    this.$EventBus.$on('map-device-online-change', this.onlineDevicesChange) //监听在线设备变化
   },
   methods: {
+    onlineDevicesChange(onlineDevices) {
+      this.onlineDevices = onlineDevices
+    },
     async initData() {
       this.loading = true
       try {
@@ -164,6 +169,9 @@ export default {
       }
       return trees
     }
+  },
+  beforeDestroy() {
+    this.$EventBus.$off('map-device-online-change', this.onlineDevicesChange)
   }
 }
 </script>
