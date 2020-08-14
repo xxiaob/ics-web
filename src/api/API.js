@@ -205,7 +205,8 @@ export default {
       getUserHistoryPosition: 'message-srv/message/getUserHistoryPosition', //获取用户历史定位
       getScreenOverallData: 'task-service/taskScreen/getScreenOverallData', //根据用户和网格查询综合数据
       getScreenEventData: 'task-service/event/screenSelect', // 指挥大屏的事件数据
-      getScreenProblemData: 'task-service/problem/selectScreenTask' // 指挥大屏问题数据
+      getScreenProblemData: 'task-service/problem/selectScreenTask', // 指挥大屏问题数据
+      getScreenDeviceData: 'device-service/hikDevice/screenDataDevice' // 指挥大屏设备数据
     },
     dataStatistics: {
       accumulateInfo: 'data-service/largeScreen/accumulateInfo',
