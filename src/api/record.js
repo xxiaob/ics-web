@@ -11,5 +11,5 @@ import API from './API'
  * @returns {Object} axios 对象
  */
 export function videoList(data) {
-  return axios.post(API.record.videoList, data)
+  return axios.post(API.record.list, data)
 }

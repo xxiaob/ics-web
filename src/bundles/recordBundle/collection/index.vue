@@ -9,10 +9,11 @@
       </div>
       <el-table :data="list" v-loading="loading" row-key="id" class="jc-table">
         <el-table-column type="index" :index="indexMethod" label="序号" width="50"></el-table-column>
-        <el-table-column prop="reportUserName" label="上报人"></el-table-column>
-        <el-table-column prop="orgId" label="所属组织" :formatter="formatOrg"></el-table-column>
-        <el-table-column prop="positionName" label="上报地点" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="createTime" label="创建时间" :formatter="formatTime"></el-table-column>
+        <el-table-column prop="initiatorName" label="采集人员" width="150"></el-table-column>
+        <el-table-column prop="orgId" label="所属组织" :formatter="formatOrg" width="200"></el-table-column>
+        <el-table-column prop="createTime" label="采集时间" width="150" :formatter="formatTime"></el-table-column>
+        <el-table-column prop="videoDuration" label="采集时长" width="150"></el-table-column>
+        <el-table-column prop="locationName" label="采集地点" show-overflow-tooltip></el-table-column>
         <el-table-column width="60" label="操作">
           <template slot-scope="scope">
             <el-button type="text" size="mini" icon="el-icon-video-camera" @click="showVideo(scope.row)" title="播放"></el-button>
@@ -29,7 +30,7 @@
   </div>
 </template>
 <script>
-import { eventManageList } from '@/api/eventManage'
+import { videoList } from '@/api/record'
 import { formatDate } from '@/libs/util'
 import PaginationMixins from '@/mixins/PaginationMixins'
 import { organizationList } from '@/api/organization'
@@ -38,7 +39,7 @@ export default {
   name: 'RecordCollectionIndex',
   mixins: [PaginationMixins],
   components: {
-    TabFilter: () => import('../videoMeeting/modules/tabFilter')
+    TabFilter: () => import('./modules/tabFilter')
   },
   data() {
     return {
@@ -107,7 +108,7 @@ export default {
       if (!this.loading) {
         this.loading = true
         try {
-          const { total, resultList } = await eventManageList({ ...this.filter, ...this.page })
+          const { total, resultList } = await videoList({ ...this.filter, ...this.page, videoType: 'CAPTURE' })
 
           this.page.total = total
           this.list = resultList
@@ -123,7 +124,7 @@ export default {
       this.currentChange(1)
     },
     showVideo(row) {
-      this.dialogVideoUrl = row.url
+      this.dialogVideoUrl = row.videoUrl
       this.dialogVideoVisible = true
     }
   }

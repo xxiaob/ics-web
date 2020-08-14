@@ -237,6 +237,6 @@ export default {
   },
   record: {
     //记录留痕
-    videoList: ''
+    list: 'device-service/video/getVideoByPage'
   }
 }
