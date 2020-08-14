@@ -8,7 +8,11 @@
       <div class="jc-model-item" :class="{'jc-active': switchType == 3}" @click="switchModel(3)">事件聚合</div>
     </div>
     <!-- 维度切换，月 季度 年-->
-    <div class="jc-dimension-switch"></div>
+    <div class="jc-dimension-switch" v-show="switchType == 2">
+      <div class="jc-dimension-item" :class="{'jc-active': eventHotType == 'month'}" @click="switchHotType('month')">月</div>
+      <div class="jc-dimension-item" :class="{'jc-active': eventHotType == 'quarter'}" @click="switchHotType('quarter')">季度</div>
+      <div class="jc-dimension-item" :class="{'jc-active': eventHotType == 'year'}" @click="switchHotType('year')">月</div>
+    </div>
   </div>
 </template>
 <script>
@@ -19,6 +23,7 @@ import { PROJECT_TYPES } from '@/constant/Dictionaries'
 import { AREAS_TYPE, AREAS_SEARCH_TYPE } from '@/constant/CONST'
 import { orgBoundariesFormat } from '@/libs/apiFormat'
 import CommandAreaMixins from './modules/mixins/commandAreaMixins'
+import EventHotMapMixins from './modules/mixins/eventHotMapMixins'
 
 let myJcMap, AMap //个人 map 对象,存储Amap对象,存储3D图层，存储点标记
 
@@ -26,7 +31,7 @@ let orgAreas = {} //存储区域信息
 
 export default {
   name: 'ScreenDataCenterContentMapData',
-  mixins: [CommandAreaMixins],
+  mixins: [CommandAreaMixins, EventHotMapMixins],
   data() {
     return {
       project: null,
@@ -207,9 +212,13 @@ export default {
     switchModel(type) {
       this.switchType = type
       if (this.switchType == 1) {
-        this.initCommandArea() //去初始化指挥区域显示
+        this.initCommandArea() //显示指挥区域显示
+        this.hideEventHotMap() //隐藏热力图
+      } else if (this.switchType == 2) {
+        this.initEventHotMap() //显示热力图
+        this.hideCommandArea() //隐藏指挥区域显示
       } else {
-        this.hideCommandArea() //隐藏显示
+
       }
     },
     getMyJcMap() {
@@ -267,6 +276,30 @@ export default {
     &.jc-active {
       background-image: url(./assets/switch-on.png);
       color: $jc-color-white;
+    }
+  }
+}
+.jc-dimension-switch {
+  position: absolute;
+  z-index: 5;
+  right: 20px;
+  top: 20px;
+  text-align: center;
+  padding: 10px 0;
+  .jc-dimension-item {
+    display: inline-block;
+    width: 50px;
+    height: 20px;
+    line-height: 20px;
+    cursor: pointer;
+    color: #0572bd;
+    &:not(:last-child) {
+      border-right: solid 1px #0572bd;
+    }
+
+    &:hover,
+    &.jc-active {
+      color: #14edfc;
     }
   }
 }

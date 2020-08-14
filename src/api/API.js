@@ -215,7 +215,7 @@ export default {
       getOverallAttendance: 'data-service/largeScreen/getOverallAttendanceStatistics', // 数据大屏总体出勤
       getEventGroupByEventType: 'data-service/intelligentAnalysis/getEventGroupByEventType', // AI智能分析数据
       getAreaDataStatistics: 'data-service/largeScreen/getAreaDataStatistics', //数据大屏地图各区域数据统计
-      eventHeatMap: '/largeScreen/eventHeatMap' //事件热力图
+      eventHeatMap: 'data-service/largeScreen/eventHeatMap' //事件热力图
     }
   },
   domainLogo: {
