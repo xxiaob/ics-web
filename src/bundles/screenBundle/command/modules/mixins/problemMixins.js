@@ -2,7 +2,6 @@ import { getMarkerCluster } from '@/map/aMap/aMapUtil'
 import { JcProblemIcons } from '@/config/JcIconConfig'
 
 import { getScreenProblemData } from '@/api/screen'
-import { getUser } from '@/libs/storage'
 import moment from 'moment'
 
 let problemData = { markerCluster: null, problems: {}, lnglats: [] }
@@ -32,9 +31,7 @@ export default {
 
       let endTime = new Date(this.today + 24 * 60 * 60 * 1000) // 结束时间
 
-      let { orgId } = await getUser() // 获取用户orgId
-
-      let { projectId } = this.project // 获取projectId
+      let { projectId, orgId } = this.project // 获取projectId orgId
 
       console.log(beginTime, endTime, orgId, projectId)
 
@@ -72,7 +69,6 @@ export default {
           } else {
             problemData.lnglats.push({ lnglat: center, key, problemId: item.businessKey })
           }
-          console.log('problemData', problemData)
           problemData.problems[key] = { ...item, center }
         })
       }

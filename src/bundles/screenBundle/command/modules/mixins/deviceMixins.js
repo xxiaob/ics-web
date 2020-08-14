@@ -1,7 +1,8 @@
 import { getMarkerCluster } from '@/map/aMap/aMapUtil'
 import { JcUserIcons } from '@/config/JcIconConfig'
 
-let deviceData = { markerCluster: null, users: {}, lnglats: [] }
+import { getScreenDeviceData } from '@/api/screen'
+let deviceData = { markerCluster: null, devices: {}, lnglats: [] }
 
 let MarkerCluster //存储 MarkerCluster
 
@@ -11,21 +12,28 @@ export default {
   },
   created() {
     // 利用用户来模拟事件
-    this.$EventBus.$on('map-user-change', this.deviceMap)
+    // this.$EventBus.$on('map-user-change', this.deviceMap)
+
+    // 初始化数据
+    this.initDeviceData()
 
     this.$EventBus.$on('show-word-change', this.deviceShowWordChange) //监听文字显示切换
   },
   methods: {
-    async deviceMap(data) {
-      console.log('--------------------------')
-      console.log('deviceMap', data)
+    async initDeviceData(data) {
+      let { projectId, orgId } = this.project // 获取projectId orgId
 
+      console.log('project')
+
+      // 发送请求获取数据
+      let ScreenDeviceData = await getScreenDeviceData({ orgId, projectId })
+
+      console.log('ScreenDeviceData', ScreenDeviceData)
       MarkerCluster = await getMarkerCluster()
 
-      if (data.type == 1) {
-        // 如果是重新开始,则清除之前的用户显示
-        this.clearDevices()
-      }
+
+      this.clearDevices() // 清除之前的记录
+
 
       // 处理用户信息
       if (data.users && data.users.length) {
@@ -158,7 +166,7 @@ export default {
       this.gatherUserIds = [] //重置用户聚合id数组
       this.abnormalUserIds = [] //重置用户异常id数组
 
-      deviceData = { markerCluster: null, users: {}, lnglats: [] }
+      deviceData = { markerCluster: null, devices: {}, lnglats: [] }
     },
     deviceShowWordChange(words) {
       this.deviceTipVisible = words.includes('device') //如果存在用户显示，则显示用户，否则不显示
@@ -168,7 +176,7 @@ export default {
   },
   beforeDestroy() {
     this.clearDevices()
-    this.$EventBus.$off('map-user-change', this.deviceMap)
+    // this.$EventBus.$off('map-user-change', this.deviceMap)
     this.$EventBus.$off('show-word-change', this.deviceShowWordChange)
   }
 }
