@@ -213,7 +213,8 @@ export default {
       getAreaService: 'data-service/largeScreen/getAreaServiceStatistics', // 数据大屏区域出勤
       getOverallAttendance: 'data-service/largeScreen/getOverallAttendanceStatistics', // 数据大屏总体出勤
       getEventGroupByEventType: 'data-service/intelligentAnalysis/getEventGroupByEventType', // AI智能分析数据
-      getAreaDataStatistics: 'data-service/largeScreen/getAreaDataStatistics' //数据大屏地图各区域数据统计
+      getAreaDataStatistics: 'data-service/largeScreen/getAreaDataStatistics', //数据大屏地图各区域数据统计
+      eventHeatMap: 'data-service/largeScreen/eventHeatMap' //事件热力图
     }
   },
   domainLogo: {
@@ -236,6 +237,6 @@ export default {
   },
   record: {
     //记录留痕
-    videoList: ''
+    list: 'device-service/video/getVideoByPage'
   }
 }

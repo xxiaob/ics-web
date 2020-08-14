@@ -81,14 +81,15 @@ export default {
       this.detailInfo = await deviceDetail({ deviceId })
       this.detailVisible = true
     },
-    manage({ deviceId }) {
-      this.info = { deviceId }
+    manage(row) {
+      this.info = row
       this.visible = true
     },
-    showVideo(row) {
-      // const type = row.type === '1' ? 'camera' : 'law'
+    async showVideo({ deviceId, cameraId }) {
+      const type = cameraId ? 'camera' : 'law'
+      const detail = await deviceDetail({ deviceId })
 
-      this.$parent.checkShow('law', row)
+      this.$parent.checkShow(type, detail)
     }
   }
 }

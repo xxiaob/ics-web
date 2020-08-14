@@ -29,10 +29,18 @@ export default {
   methods: {
     initCommandArea() {
       myJcMap = this.getMyJcMap()
+      myJcMap.setPitch(40)
+      myJcMap.setFeatures(['bg', 'road'])
       AMap = this.getAMap()
       //如果对象已经创建，则去显示，否则进行初始化显示
       if (object3Dlayer && labelsLayer) {
-
+        myJcMap.add(object3Dlayer)//添加到地图
+        myJcMap.add(labelsLayer) //添加点标记
+        myJcMap.setFitView(null, true, [0, 1, 1, 1]) //设置自适应显示
+        this.loopAreasStart() //开始循环显示区域和信息
+        if (this.index > 0) {
+          this.showNextMarkerAndInfo(this.index % this.loopAreas.length)
+        }
       } else {
         object3Dlayer = new AMap.Object3DLayer({ opacity: 1, zIndex: 8 })
 
@@ -40,6 +48,14 @@ export default {
 
         this.drawMapAreas()
       }
+    },
+    hideCommandArea() {
+      if (this.loopInterval) {
+        clearInterval(this.loopInterval)
+      }
+      this.hidePreMarkerAndInfo(this.index % this.loopAreas.length)
+      myJcMap.remove(object3Dlayer)
+      myJcMap.remove(labelsLayer)
     },
     drawMapAreas() {
       let orgAreas = this.getOrgAreasData()
@@ -164,9 +180,9 @@ export default {
       console.log('转至后的显示loopAreas：', this.loopAreas)
 
       this.loopAreasStart() //开始循环显示区域和信息
+      this.orgInterval = setInterval(this.getOrgDatas, 1000 * 55) //定时调用数据
     },
     async loopAreasStart() {
-      this.orgInterval = setInterval(this.getOrgDatas, 1000 * 55) //定时调用数据
       await this.getOrgDatas() //先去获取数据信息
       //高亮显示区域
       if (this.loopAreas.length < 2) {
@@ -180,7 +196,9 @@ export default {
           this.boundaryActiveShow(nowIndex, nextIndex) //边界布局显示
           this.hidePreMarkerAndInfo(nowIndex)
           setTimeout(() => {
-            this.showNextMarkerAndInfo(nextIndex) //显示信息
+            if (this.switchType == 1) {
+              this.showNextMarkerAndInfo(nextIndex) //显示信息
+            }
           }, 1200)
         }, this.loopTimes)
       }

@@ -4,8 +4,8 @@
       <el-form-item prop="orgId" label="所属组织">
         <el-cascader :options="orgTree" v-model="form.orgId" :props="{expandTrigger: 'hover', checkStrictly: true,emitPath: false }" clearable @change="orgChange" ref="orgCascader"></el-cascader>
       </el-form-item>
-      <el-form-item prop="participantName" label="相关人员">
-        <el-input v-model="form.participantName" placeholder="请输入相关人员"></el-input>
+      <el-form-item prop="capturePerson" label="采集人员">
+        <el-input v-model="form.capturePerson" placeholder="请输入采集人员"></el-input>
       </el-form-item>
       <el-form-item prop="" label="时间">
         <el-date-picker v-model="date" @change="changeDate" type="datetimerange" range-separator="-" start-placeholder="开始时间" end-placeholder="结束时间">
@@ -20,7 +20,7 @@
 </template>
 <script>
 export default {
-  name: 'RecordVideoMeetingFilter',
+  name: 'RecordCollectionFilter',
   props: {
     orgTree: {
       type: Array
@@ -32,7 +32,7 @@ export default {
       form: {
         startTime: '',
         endTime: '',
-        participantName: '',
+        capturePerson: '',
         orgId: ''
       },
       date: null

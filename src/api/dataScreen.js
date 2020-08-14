@@ -62,3 +62,12 @@ export function getEventGroupByEventType(data) {
 export function getAreaDataStatistics(data) {
   return axios.get(API.screen.dataStatistics.getAreaDataStatistics + '?' + qs.stringify(data, { indices: false }))
 }
+
+/**
+ * 事件热力图
+ * @param {object} data
+ * @returns {Object} axios 对象
+ */
+export function eventHeatMap(data) {
+  return axios.post(API.screen.dataStatistics.eventHeatMap, data)
+}
