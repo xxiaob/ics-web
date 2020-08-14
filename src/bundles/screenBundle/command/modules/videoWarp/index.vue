@@ -30,15 +30,13 @@ export default {
     this.$EventBus.$on('device-video-play', this.videoPlay) //监听视频播放
     let index = 0
 
-    let a = setInterval(() => {
+    setInterval(() => {
       this.list.splice(0, 0, { id: index++, name: '设备' + index })
       //处理列表只显示最大数量的事件问题
       if (this.list.length > this.maxLength) {
         this.list.splice(this.maxLength, this.list.length - this.maxLength)
       }
     }, 15000)
-
-    clearInterval(a)//要删除的
   },
   methods: {
     videoPlay(data) {
