@@ -29,3 +29,11 @@ export function deviceDetail(params) {
 export function deviceBind(data) {
   return axios.post(API.device.bind, data)
 }
+/**
+ * 获取回放流
+ * @param {object} params
+ * @returns {Object} axios 对象
+ */
+export function getRelay(params) {
+  return axios.get(API.device.relay, { params })
+}

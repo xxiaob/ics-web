@@ -26,6 +26,7 @@
 </template>
 <script>
 import PaginationMixins from '@/mixins/PaginationMixins'
+import { getRelay } from '@/api/device'
 
 export default {
   name: 'SystemDeviceLawVideo',
@@ -42,7 +43,7 @@ export default {
       dialogVideoVisible: false,
       dialogVideoUrl: '',
       filter: {},
-      list: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+      list: [1, 2]
     }
   },
   components: {
@@ -61,12 +62,15 @@ export default {
     this.page.pageSize = 12
   },
   methods: {
-    initData() {
+    async initData() {
       if (this.page.pageSize === 10) {
         this.page.pageSize = 12
       }
-      if (this.detail && this.detail.id) {
-        console.log('initData', this.detail.id)
+      if (this.detail && this.detail.deviceId && this.filter && this.filter.startTime) {
+        const { deviceId, cameraId } = this.detail
+        const res = await getRelay({ deviceId, cameraId, ...this.filter })
+
+        console.log('LawVideo initData', res)
       }
     },
     goFilter(filter) {

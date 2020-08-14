@@ -83,7 +83,9 @@ export default {
     },
     formatFormData() {
       if (this.options) {
-        return { userId: '', deviceId: this.options.deviceId }
+        const { deviceId, deviceType } = this.options
+
+        return { userId: '', deviceId, deviceType }
       } else {
         return { userId: '' }
       }

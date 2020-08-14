@@ -11,6 +11,8 @@
   </div>
 </template>
 <script>
+import { getRelay } from '@/api/device'
+
 export default {
   name: 'SystemDeviceCameraVideo',
   props: {
@@ -37,10 +39,16 @@ export default {
       }
     }
   },
+  // created() {
+  //   getRelay({ deviceId: '1', cameraId: '1', startTime: '1', endTime: '1' })
+  // },
   methods: {
-    initData() {
-      if (this.detail && this.detail.id) {
-        console.log('initData', this.detail.id)
+    async initData() {
+      if (this.detail && this.detail.deviceId && this.filter && this.filter.startTime) {
+        const { deviceId, cameraId } = this.detail
+        const res = await getRelay({ deviceId, cameraId, ...this.filter })
+
+        console.log('CameraVideo initData', res)
       }
     },
     goFilter(filter) {

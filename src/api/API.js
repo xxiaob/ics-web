@@ -90,7 +90,8 @@ export default {
     //设备管理
     list: 'device-service/hikDevice/deviceList',
     detail: 'device-service/hikDevice/deviceDetail',
-    bind: 'device-service/hikDevice/deviceBind'
+    bind: 'device-service/hikDevice/deviceBind',
+    relay: 'device-service/hikDevice/getRelayStreaming'
   },
   eventManage: {
     //事件管理
