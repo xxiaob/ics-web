@@ -56,7 +56,7 @@ export default {
       //初始化地图设置
       let AMapLoader = getAMapLoader() //获取amap 对象
 
-      AMap = await AMapLoader.load({ key: process.env.aMapConfig.accessKey, plugins: ['Map3D', 'AMap.Marker', 'AMap.GeometryUtil'] })
+      AMap = await AMapLoader.load({ key: process.env.aMapConfig.accessKey, plugins: ['Map3D', 'AMap.Marker', 'AMap.GeometryUtil', 'AMap.Heatmap'] })
 
       myJcMap = new AMap.Map(this.$refs.myMap, {
         mapStyle: 'amap://styles/1b8b05391432855bd2473c0d1d3628b5', viewMode: '3D', features: ['bg', 'road'], pitch: 40, skyColor: 'rgba(0,0,0,0)'

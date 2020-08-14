@@ -29,6 +29,8 @@ export default {
   methods: {
     initCommandArea() {
       myJcMap = this.getMyJcMap()
+      myJcMap.setPitch(40)
+      myJcMap.setFeatures(['bg', 'road'])
       AMap = this.getAMap()
       //如果对象已经创建，则去显示，否则进行初始化显示
       if (object3Dlayer && labelsLayer) {
