@@ -3,11 +3,11 @@
     <div class="jc-map-warp" ref="myMap"></div>
     <!-- 地图模块切换 -->
     <div class="jc-model-switch">
-      <div class="jc-model-item">指挥区域</div>
-      <div class="jc-model-item">事件热力</div>
-      <div class="jc-model-item">事件聚合</div>
+      <div class="jc-model-item" :class="{'jc-active': switchType == 1}" @click="switchModel(1)">指挥区域</div>
+      <div class="jc-model-item" :class="{'jc-active': switchType == 2}" @click="switchModel(2)">事件热力</div>
+      <div class="jc-model-item" :class="{'jc-active': switchType == 3}" @click="switchModel(3)">事件聚合</div>
     </div>
-    <!-- 维度切换 -->
+    <!-- 维度切换，月 季度 年-->
     <div class="jc-dimension-switch"></div>
   </div>
 </template>
@@ -30,7 +30,8 @@ export default {
   data() {
     return {
       project: null,
-      orgId: null
+      orgId: null,
+      switchType: 1
     }
   },
   created() {
@@ -146,7 +147,7 @@ export default {
 
           console.log('数据大屏，组织边界信息', orgAreas)
 
-          this.initCommandArea() //去初始化指挥区域显示
+          this.switchModel(1)
         }
       } catch (error) {
         console.log(error)
@@ -203,6 +204,14 @@ export default {
         }
       })
     },
+    switchModel(type) {
+      this.switchType = type
+      if (this.switchType == 1) {
+        this.initCommandArea() //去初始化指挥区域显示
+      } else {
+        this.hideCommandArea() //隐藏显示
+      }
+    },
     getMyJcMap() {
       return myJcMap//获取地图
     },
@@ -241,6 +250,25 @@ export default {
 }
 .jc-model-switch {
   position: absolute;
+  z-index: 5;
+  right: 30px;
+  bottom: 30px;
+  text-align: center;
+  .jc-model-item {
+    float: left;
+    width: 100px;
+    height: 40px;
+    line-height: 40px;
+    cursor: pointer;
+    color: #0572bd;
+    background: url(./assets/switch-off.png) no-repeat center;
+    background-size: 100%;
+    &:hover,
+    &.jc-active {
+      background-image: url(./assets/switch-on.png);
+      color: $jc-color-white;
+    }
+  }
 }
 </style>
 <style lang="scss">
