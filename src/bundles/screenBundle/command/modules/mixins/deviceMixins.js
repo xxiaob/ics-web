@@ -16,8 +16,9 @@ export default {
   created() {
     // 利用用户来模拟事件
     // this.$EventBus.$on('map-device-change', this.deviceMap)
-    //type 1 设备在线， device {id，type，name，location} 在线
-    //type 2 设备离线 deviceId
+    //type 1 设备初始化在线， devices {deviceId，type，name，lng, lat} 在线
+    //type 2 新增设备在线， devices {deviceId，type，name，lng, lat} 在线
+    //type 3 设备离线 deviceId
     //设备变更，处理完之后，知道在线的设备id，取出id数组
     // [{id:设备id, type: 设备类型, online: 设备在线与否(true) , name: 设备名称, location: 设备地址}]
     //this.$EventBus.$emit('map-device-online-change', onlineDevices)

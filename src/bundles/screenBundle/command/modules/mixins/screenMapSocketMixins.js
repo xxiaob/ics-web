@@ -17,6 +17,21 @@ export default {
     this.$EventBus.$on('screen-message-channel', this.sendScreenMessageChannelSocket) //监听消息发送
   },
   methods: {
+    getUserAndDevices(locations) {
+      //用于区分用户和设备
+      let users = [], devices = []
+
+      if (locations && locations.length) {
+        locationslocations.forEach(item => {
+          if (item.userType == 0) {
+            users.push(item)
+          } else {
+            devices.push({ deviceId: item.userId, type: item.userType, name: item.userName, lng: item.lng, lat: item.lat })
+          }
+        })
+      }
+      return { users, devices }
+    },
     initScreenMapSocket(org) {
       this.screenSocketOrg = org
       if (this.screenSocket) {
@@ -31,15 +46,33 @@ export default {
          */
         if (data.type == 0) {
           //数据类型为用户信息变更
-          this.$EventBus.$emit('map-user-change', { type: 2, users: data.locations }) //通知用户上线
+          let { users, devices } = this.getUserAndDevices(data.locations)
+
+          if (users.length) {
+            this.$EventBus.$emit('map-user-change', { type: 2, users }) //通知用户上线
+          }
+          if (devices.length) {
+            this.$EventBus.$emit('map-device-change', { type: 2, devices }) //通知设备上线
+          }
         } else if (data.type == 1) {
-          //数据类型为组织人员信息变更
+          //用户离线，如果类型是用户，则通知用户离线，如果是设备则通知设备离线
           if (data.offlineUserId) {
-            this.$EventBus.$emit('map-user-change', { type: 3, offUserId: data.offlineUserId }) //通知用户离线
+            if (data.userType == 0) {
+              this.$EventBus.$emit('map-user-change', { type: 3, offUserId: data.offlineUserId }) //通知用户离线
+            } else {
+              this.$EventBus.$emit('map-device-change', { type: 3, deviceId: data.offlineUserId }) //通知设备离线
+            }
           }
         } else if (data.type == 2) {
           //数据类型为第一次连接的数据
-          this.$EventBus.$emit('map-user-change', { type: 1, users: data.locations }) //通知用户初始化
+          let { users, devices } = this.getUserAndDevices(data.locations)
+
+          if (users.length) {
+            this.$EventBus.$emit('map-user-change', { type: 1, users }) //通知用户初始化
+          }
+          if (devices.length) {
+            this.$EventBus.$emit('map-device-change', { type: 1, devices }) //通知设备初始化
+          }
           this.$EventBus.$emit('screen-message-init', data.tasks) //通知消息初始化
         } else if (data.type == 3) {
           //数据类型为问题，任务消息
