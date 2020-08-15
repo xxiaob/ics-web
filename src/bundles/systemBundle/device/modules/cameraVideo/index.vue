@@ -51,11 +51,13 @@ export default {
           const { deviceId, cameraId } = this.detail
           const res = await getRelay({ deviceId, cameraId, ...this.filter })
 
-          this.src = res[0].url1
+          // this.src = res[0].url1
+          this.src = 'https://192.168.0.150:9000/group1/M00/00/28/wKgAeF80qX2AAUSIBGwc-DEbYQ8509.mp4'
           // console.log('CameraVideo initData', res)
           this.$nextTick(()=>{
             this.video = videojs('myVideo', {
-              controls: true
+              controls: true,
+              autoplay: true
             })
           })
         } catch (error) {
@@ -80,7 +82,10 @@ export default {
 }
 .jc-video {
   width: 80%;
-  height: 70vh;
+  // height: 70vh;
   position: relative;
+  video {
+    width: 100%;
+  }
 }
 </style>
