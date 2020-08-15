@@ -10,58 +10,99 @@ let MarkerCluster //存储 MarkerCluster
 export default {
   data() {
     return {
-
+      hkDeviceIds: [],
+      deviceOrgId: ''
     }
   },
   created() {
     // 利用用户来模拟事件
     // this.$EventBus.$on('map-device-change', this.deviceMap)
-    //type 1 设备在线， device {id，type，name，location} 在线
-    //type 2 设备离线 deviceId
+    //type 1 设备初始化在线， devices [{deviceId，type，name，lng, lat}] 在线
+    //type 2 新增设备在线， devices {deviceId，type，name，lng, lat} 在线
+    //type 3 设备离线 deviceIds
     //设备变更，处理完之后，知道在线的设备id，取出id数组
-    // [{id:设备id, type: 设备类型, online: 设备在线与否(true) , name: 设备名称, location: 设备地址}]
-    //this.$EventBus.$emit('map-device-online-change', onlineDevices)
 
-    // 初始化数据
-    this.initDeviceData()
 
+    //  推送设备(网巡车,无人机)初始化
+    this.$EventBus.$on('map-device-change', this.initDeviceMap)
+    this.$EventBus.$on('org-change', this.deviceOrgChange) //监听第一次组织级别切换
     this.$EventBus.$on('show-word-change', this.deviceShowWordChange) //监听文字显示切换
   },
   methods: {
+    deviceOrgChange(org) {
+      this.deviceOrgId = org.orgId
+    },
     async initDeviceData() {
-      let { orgId } = await getUser() //获取用户orgId
-
-      let { projectId } = this.project // 获取projectId orgId
-
-      console.log('project')
-
       // 发送请求获取数据
-      let ScreenDeviceData = await getScreenDeviceData({ orgId, projectId })
+      let screenDeviceData = await getScreenDeviceData({ orgId: this.deviceOrgId, projectId: this.project.projectId })
 
-      console.log('ScreenDeviceData', ScreenDeviceData)
+      let hkDeviceIds = [], devices = []
 
-      this.deviceMap(ScreenDeviceData)
+      if (screenDeviceData && screenDeviceData.length) {
+        //去处理离线和在线
+        for (let i = 0; i < screenDeviceData.length; i++) {
+          let deviceItem = screenDeviceData[i]
+
+          if (deviceItem.position) {
+            hkDeviceIds.push(deviceItem.deviceId)
+            let position = deviceItem.position.split(',') // 切割坐标
+
+            devices.push({ deviceId: deviceItem.deviceId, type: deviceItem.type, name: deviceItem.name, lng: position[0], lat: position[1] })
+          }
+
+          let index = this.hkDeviceIds.findIndex(deviceId => deviceId == deviceItem.deviceId)
+
+          if (index > -1) {
+            this.hkDeviceIds.splice(index, 1)
+          }
+        }
+      }
+
+      this.formatClearDevices(this.hkDeviceIds)
+      this.deviceMap(devices)
+      this.hkDeviceIds = hkDeviceIds
+    },
+    formatClearDevices(deviceIds) {
+      //清除离线设备
+      deviceIds.forEach(deviceId => {
+        // 清理devices
+        for (let key in deviceData.devices) {
+          if (deviceData.devices[key].deviceId == deviceId) {
+            delete deviceData.devices[key]
+            break
+          }
+        }
+
+        // 清理lnglats
+        for (let i = 0; i < deviceData.lnglats.length; i++) {
+          if (deviceData.lnglats[i].deviceId == deviceId) {
+            deviceData.lnglats.splice(i, 1)
+            break
+          }
+        }
+      })
+    },
+    async initDeviceMap(data) {
+      if (data.type == 3) {
+        // 如果类型为3, 删除离线设备
+        this.formatClearDevices(data.deviceIds)
+      } else if (data.type == 1) {
+        // 如果推荐设备类型为1 清空之前数据, 初始化
+        this.clearDevices() // 清除之前的记录
+
+        // 初始化后重新执行固定设备
+        this.initDeviceData()
+      }
+
+      this.deviceMap(data.devices) // 将推送设备列表传递deviceMap处理
     },
     async deviceMap(data) {
       // 处理地图数据
-
       MarkerCluster = await getMarkerCluster()
-
-      this.clearDevices() // 清除之前的记录
-
 
       // 处理用户信息
       if (data && data.length) {
         data.forEach(item => {
-          // 过滤没有坐标的设备
-          if (!item.position) {
-            return
-          }
-
-          let position = item.position.split(',') // 切割坐标
-
-          item.lng = position[0] // 获取精度
-          item.lat = position[1] // 获取维度
           // 计算事件的中心点坐标和key, 处理坐标相同的情况
           let { center, key } = this.getDeviceCenterAndKey(item.lng, item.lat, item.deviceId)
 
@@ -160,9 +201,7 @@ export default {
 
       let key = center.join(',')
 
-      console.log('device', deviceData)
-      console.log('device', deviceId)
-      console.log('device', key)
+
       //处理是已经有事件和当前事件位置完全相同，如果相同则进行处理偏差处理
       let device = deviceData.devices[key]
 
@@ -203,13 +242,13 @@ export default {
     },
     deviceShowWordChange(words) {
       this.deviceTipVisible = words.includes('device') //如果存在用户显示，则显示用户，否则不显示
-      console.log('deviceTipVisible', this.deviceTipVisible)
       this.fitDevices()
     }
   },
   beforeDestroy() {
     this.clearDevices()
-    // this.$EventBus.$off('map-user-change', this.deviceMap)
+    this.$EventBus.$off('map-device-change', this.initDeviceMap)
+    this.$EventBus.$off('org-change', this.deviceOrgChange)
     this.$EventBus.$off('show-word-change', this.deviceShowWordChange)
   }
 }
