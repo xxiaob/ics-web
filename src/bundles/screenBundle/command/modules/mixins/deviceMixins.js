@@ -36,51 +36,56 @@ export default {
       // 发送请求获取数据
       let screenDeviceData = await getScreenDeviceData({ orgId: this.deviceOrgId, projectId: this.project.projectId })
 
-      // 处理数据的经纬度问题
-      screenDeviceData = screenDeviceData.reduce((prev, current) => {
-        // 过滤没有坐标的设备
-        if (!current.position) {
-          return prev
-        }
-        // 处理坐标
-        let position = current.position.split(',') // 切割坐标
+      let hkDeviceIds = [], devices = []
 
-        current.lng = position[0] // 获取精度
-        current.lat = position[1] // 获取维度
-
-        prev.push(current)
-        return prev
-      }, [])
-
-      console.log('ScreenDeviceData', screenDeviceData)
-
-      //
       if (screenDeviceData && screenDeviceData.length) {
         //去处理离线和在线
+        for (let i = 0; i < screenDeviceData.length; i++) {
+          let deviceItem = screenDeviceData[i]
+
+          if (deviceItem.position) {
+            hkDeviceIds.push(deviceItem.deviceId)
+            let position = deviceItem.position.split(',') // 切割坐标
+
+            devices.push({ deviceId: deviceItem.deviceId, type: deviceItem.type, name: deviceItem.name, lng: position[0], lat: position[1] })
+          }
+
+          let index = this.hkDeviceIds.findIndex(deviceId => deviceId == deviceItem.deviceId)
+
+          if (index > -1) {
+            this.hkDeviceIds.splice(index, 1)
+          }
+        }
       }
 
-      this.deviceMap(screenDeviceData)
+      this.formatClearDevices(this.hkDeviceIds)
+      this.deviceMap(devices)
+      this.hkDeviceIds = hkDeviceIds
+    },
+    formatClearDevices(deviceIds) {
+      //清除离线设备
+      deviceIds.forEach(deviceId => {
+        // 清理devices
+        for (let key in deviceData.devices) {
+          if (deviceData.devices[key].deviceId == deviceId) {
+            delete deviceData.devices[key]
+            break
+          }
+        }
+
+        // 清理lnglats
+        for (let i = 0; i < deviceData.lnglats.length; i++) {
+          if (deviceData.lnglats[i].deviceId == deviceId) {
+            deviceData.lnglats.splice(i, 1)
+            break
+          }
+        }
+      })
     },
     async initDeviceMap(data) {
       if (data.type == 3) {
         // 如果类型为3, 删除离线设备
-        data.deviceIds.forEach(deviceId => {
-          // 清理devices
-          for (let key in deviceData.devices) {
-            if (deviceData.devices[key].deviceId == deviceId) {
-              delete deviceData.devices[key]
-              break
-            }
-          }
-
-          // 清理lnglats
-          for (let i = 0; i < deviceData.lnglats.length; i++) {
-            if (deviceData.lnglats[i].deviceId == deviceId) {
-              deviceData.lnglats.splice(i, 1)
-              break
-            }
-          }
-        })
+        this.formatClearDevices(data.deviceIds)
       } else if (data.type == 1) {
         // 如果推荐设备类型为1 清空之前数据, 初始化
         this.clearDevices() // 清除之前的记录
@@ -91,7 +96,6 @@ export default {
 
       this.deviceMap(data.devices) // 将推送设备列表传递deviceMap处理
     },
-
     async deviceMap(data) {
       // 处理地图数据
       MarkerCluster = await getMarkerCluster()
