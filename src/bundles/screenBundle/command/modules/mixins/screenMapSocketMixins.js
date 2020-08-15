@@ -22,7 +22,7 @@ export default {
       let users = [], devices = []
 
       if (locations && locations.length) {
-        locationslocations.forEach(item => {
+        locations.forEach(item => {
           if (item.userType == 0) {
             users.push(item)
           } else {
