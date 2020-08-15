@@ -91,6 +91,7 @@ export default {
     list: 'device-service/hikDevice/deviceList',
     detail: 'device-service/hikDevice/deviceDetail', // 获取设备详情数据
     bind: 'device-service/hikDevice/deviceBind',
+    deviceList: 'device-service/hikDevice/deviceAndOrgList', // 组织设备列表
     relay: 'device-service/hikDevice/getRelayStreaming'
   },
   eventManage: {
