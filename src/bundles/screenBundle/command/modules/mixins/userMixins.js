@@ -81,23 +81,25 @@ export default {
         this.clearUsers()
       } else if (data.type == 3) {
         //如果是用户离线，则从用户列表里删除
-        for (let key in usersData.users) {
-          if (usersData.users[key].userId == data.offUserId) {
-            delete usersData.users[key]
-            break
+        data.offUserIds.forEach(offUserId => {
+          for (let key in usersData.users) {
+            if (usersData.users[key].userId == offUserId) {
+              delete usersData.users[key]
+              break
+            }
           }
-        }
-        for (let i = 0; i < usersData.lnglats.length; i++) {
-          if (usersData.lnglats[i].userId == data.offUserId) {
-            usersData.lnglats.splice(i, 1)
-            break
+          for (let i = 0; i < usersData.lnglats.length; i++) {
+            if (usersData.lnglats[i].userId == offUserId) {
+              usersData.lnglats.splice(i, 1)
+              break
+            }
           }
-        }
-        let index = this.gatherUserIds.indexOf(data.offUserId)
+          let index = this.gatherUserIds.indexOf(offUserId)
 
-        if (index > -1) {
-          this.gatherUserIds.splice(index, 1)
-        }
+          if (index > -1) {
+            this.gatherUserIds.splice(index, 1)
+          }
+        })
       } else if (data.type == 4) {
         //是否再一键采集中，如果正在一键采集则显示状态，结束采集则恢复状态
         let index = this.gatherUserIds.indexOf(data.collectUser.userId)

@@ -10,7 +10,8 @@ let MarkerCluster //存储 MarkerCluster
 export default {
   data() {
     return {
-
+      hkDeviceIds: [],
+      deviceOrgId: ''
     }
   },
   created() {
@@ -18,28 +19,25 @@ export default {
     // this.$EventBus.$on('map-device-change', this.deviceMap)
     //type 1 设备初始化在线， devices [{deviceId，type，name，lng, lat}] 在线
     //type 2 新增设备在线， devices {deviceId，type，name，lng, lat} 在线
-    //type 3 设备离线 deviceId
+    //type 3 设备离线 deviceIds
     //设备变更，处理完之后，知道在线的设备id，取出id数组
 
 
     //  推送设备(网巡车,无人机)初始化
     this.$EventBus.$on('map-device-change', this.initDeviceMap)
-
+    this.$EventBus.$on('org-change', this.deviceOrgChange) //监听第一次组织级别切换
     this.$EventBus.$on('show-word-change', this.deviceShowWordChange) //监听文字显示切换
   },
   methods: {
+    deviceOrgChange(org) {
+      this.deviceOrgId = org.orgId
+    },
     async initDeviceData() {
-      let { orgId } = await getUser() //获取用户orgId
-
-      let { projectId } = this.project // 获取projectId orgId
-
-      console.log('project')
-
       // 发送请求获取数据
-      let ScreenDeviceData = await getScreenDeviceData({ orgId, projectId })
+      let screenDeviceData = await getScreenDeviceData({ orgId: this.deviceOrgId, projectId: this.project.projectId })
 
       // 处理数据的经纬度问题
-      ScreenDeviceData = ScreenDeviceData.reduce((prev, current) => {
+      screenDeviceData = screenDeviceData.reduce((prev, current) => {
         // 过滤没有坐标的设备
         if (!current.position) {
           return prev
@@ -54,27 +52,34 @@ export default {
         return prev
       }, [])
 
-      console.log('ScreenDeviceData', ScreenDeviceData)
+      console.log('ScreenDeviceData', screenDeviceData)
 
-      this.deviceMap(ScreenDeviceData)
+      //
+      if (screenDeviceData && screenDeviceData.length) {
+        //去处理离线和在线
+      }
+
+      this.deviceMap(screenDeviceData)
     },
     async initDeviceMap(data) {
       if (data.type == 3) {
         // 如果类型为3, 删除离线设备
-        data.forEach(item => {
+        data.deviceIds.forEach(deviceId => {
           // 清理devices
           for (let key in deviceData.devices) {
-            if (deviceData.devices[key].deviceId == item) {
+            if (deviceData.devices[key].deviceId == deviceId) {
               delete deviceData.devices[key]
+              break
             }
           }
 
           // 清理lnglats
-          deviceData.lnglats.forEach((item2, index) => {
-            if (item2.deviceId == item) {
-              deviceData.lnglats.splice(index, 1)
+          for (let i = 0; i < deviceData.lnglats.length; i++) {
+            if (deviceData.lnglats[i].deviceId == deviceId) {
+              deviceData.lnglats.splice(i, 1)
+              break
             }
-          })
+          }
         })
       } else if (data.type == 1) {
         // 如果推荐设备类型为1 清空之前数据, 初始化
@@ -90,7 +95,6 @@ export default {
     async deviceMap(data) {
       // 处理地图数据
       MarkerCluster = await getMarkerCluster()
-
 
       // 处理用户信息
       if (data && data.length) {
@@ -240,6 +244,7 @@ export default {
   beforeDestroy() {
     this.clearDevices()
     this.$EventBus.$off('map-device-change', this.initDeviceMap)
+    this.$EventBus.$off('org-change', this.deviceOrgChange)
     this.$EventBus.$off('show-word-change', this.deviceShowWordChange)
   }
 }

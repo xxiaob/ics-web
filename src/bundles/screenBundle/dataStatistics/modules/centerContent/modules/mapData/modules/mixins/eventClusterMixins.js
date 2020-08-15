@@ -26,8 +26,12 @@ export default {
 
       myJcMap.setPitch(0)
       myJcMap.setFeatures(['bg', 'road'])
+      this.showPolygons()
     },
     hideEventCluster() {
+
+    },
+    showPolygons() {
 
     },
     switchEventClusterType(type) {

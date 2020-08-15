@@ -58,9 +58,9 @@ export default {
           //用户离线，如果类型是用户，则通知用户离线，如果是设备则通知设备离线
           if (data.offlineUserId) {
             if (data.userType == 0) {
-              this.$EventBus.$emit('map-user-change', { type: 3, offUserId: data.offlineUserId }) //通知用户离线
+              this.$EventBus.$emit('map-user-change', { type: 3, offUserIds: [data.offlineUserId] }) //通知用户离线
             } else {
-              this.$EventBus.$emit('map-device-change', { type: 3, deviceId: data.offlineUserId }) //通知设备离线
+              this.$EventBus.$emit('map-device-change', { type: 3, deviceIds: [data.offlineUserId] }) //通知设备离线
             }
           }
         } else if (data.type == 2) {
