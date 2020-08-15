@@ -2,7 +2,6 @@ import { getMarkerCluster } from '@/map/aMap/aMapUtil'
 import { JcDeviceIcons } from '@/config/JcIconConfig'
 
 import { getScreenDeviceData } from '@/api/screen'
-import { getUser } from '@/libs/storage'
 let deviceData = { markerCluster: null, devices: {}, lnglats: [] }
 
 let MarkerCluster //存储 MarkerCluster
@@ -29,39 +28,57 @@ export default {
     this.$EventBus.$on('show-word-change', this.deviceShowWordChange) //监听文字显示切换
   },
   methods: {
+    // 获取ordID
     deviceOrgChange(org) {
       this.deviceOrgId = org.orgId
     },
+
+    // 获取摄像头固定设备数据
     async initDeviceData() {
       // 发送请求获取数据
-      let screenDeviceData = await getScreenDeviceData({ orgId: this.deviceOrgId, projectId: this.project.projectId })
+      try {
+        let screenDeviceData = await getScreenDeviceData({ orgId: this.deviceOrgId, projectId: this.project.projectId })
 
-      let hkDeviceIds = [], devices = []
 
-      if (screenDeviceData && screenDeviceData.length) {
-        //去处理离线和在线
-        for (let i = 0; i < screenDeviceData.length; i++) {
-          let deviceItem = screenDeviceData[i]
+        console.log('screenDeviceData', screenDeviceData)
 
-          if (deviceItem.position) {
-            hkDeviceIds.push(deviceItem.deviceId)
-            let position = deviceItem.position.split(',') // 切割坐标
+        let hkDeviceIds = [], devices = []
 
-            devices.push({ deviceId: deviceItem.deviceId, type: deviceItem.type, name: deviceItem.name, lng: position[0], lat: position[1] })
-          }
+        if (screenDeviceData && screenDeviceData.length) {
+          //去处理离线和在线
+          for (let i = 0; i < screenDeviceData.length; i++) {
+            let deviceItem = screenDeviceData[i] // 取出数据
 
-          let index = this.hkDeviceIds.findIndex(deviceId => deviceId == deviceItem.deviceId)
+            console.log('screenDeviceData', deviceItem)
 
-          if (index > -1) {
-            this.hkDeviceIds.splice(index, 1)
+            // 处理经纬度
+            if (deviceItem.position) {
+              hkDeviceIds.push(deviceItem.deviceId)
+              let position = deviceItem.position.split(',') // 切割坐标
+
+              devices.push({ deviceId: deviceItem.deviceId, type: deviceItem.resourceType, name: deviceItem.resourceTypeName, lng: position[0], lat: position[1] })
+            }
+
+            // 轮询获取在线的索引
+            let index = this.hkDeviceIds.findIndex(deviceId => deviceId == deviceItem.deviceId)
+
+            // 获取离线设备id集合
+            if (index > -1) {
+              this.hkDeviceIds.splice(index, 1)
+            }
           }
         }
-      }
 
-      this.formatClearDevices(this.hkDeviceIds)
-      this.deviceMap(devices)
-      this.hkDeviceIds = hkDeviceIds
+        this.formatClearDevices(this.hkDeviceIds) // 清理离线设备
+        this.deviceMap(devices) // 处理数据
+        this.hkDeviceIds = hkDeviceIds // 保存当前所有在线摄像头的设备Id
+      } catch (error) {
+        // 请求出错
+        console.log(error)
+      }
     },
+
+    // 清理离线设备
     formatClearDevices(deviceIds) {
       //清除离线设备
       deviceIds.forEach(deviceId => {
@@ -82,6 +99,9 @@ export default {
         }
       })
     },
+
+
+    // 处理推送设备数据
     async initDeviceMap(data) {
       if (data.type == 3) {
         // 如果类型为3, 删除离线设备
@@ -138,12 +158,6 @@ export default {
       this.fitDevices() //控制用户显示
     },
 
-    // renderDeviceClusterMarker(context) {
-    //   console.log('绘制用户-聚合绘制', context)
-    //   context.marker.setAnchor('center')
-    //   context.marker.setzIndex(20)
-    //   context.marker.setContent(`<div class="jc-cluster-content" style="background-image: url(${JcUserIcons.cluster});">${context.count}</div>`)
-    // },
     renderDeviceMarker(context) {
       console.log('绘制用户-单点绘制', context)
       let key = this.getKeyByLngLat(context.data[0].lnglat.lng, context.data[0].lnglat.lat)
@@ -158,10 +172,10 @@ export default {
       let content = '<div class="jc-marker-content jc-market-center">'
 
       if (this.deviceTipVisible) {
-        content += `<div class="jc-marker-title">${deviceItem.resourceTypeName}</div>`
+        content += `<div class="jc-marker-title">${deviceItem.name}</div>`
       }
       //处理用户图标显示
-      if (deviceItem.resourceType == 1) {
+      if (deviceItem.type == 1) {
         content += `<img src=${JcDeviceIcons.camera} class="jc-marker-icon"/></div>`
       } else if (deviceItem.resourceType == 2) {
         content += `<img src=${JcDeviceIcons.uav} class="jc-marker-icon"/></div>`

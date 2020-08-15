@@ -18,7 +18,7 @@
     </div>
     <div class="jc-detail-warp">
       <div class="jc-detail-label" title="IP地址及端口">IP地址及端口：</div>
-      <div class="jc-detail-content" v-text="deviceDetaillData.positionName || '--'"></div>
+      <div class="jc-detail-content" v-text="deviceDetaillData.ip || '--'"></div>
     </div>
     <div class="jc-detail-warp">
       <div class="jc-detail-label">接入协议：</div>
@@ -28,10 +28,10 @@
       <div class="jc-detail-label" title="设备序列号">设备序列号：</div>
       <div class="jc-detail-content" v-text="deviceDetaillData.deviceSeriNum || '--'"></div>
     </div>
-    <div class="jc-detail-warp">
+    <!-- <div class="jc-detail-warp">
       <div class="jc-detail-label">设备描述：</div>
       <div class="jc-detail-content" v-text="deviceDetaillData.descript || '--'"></div>
-    </div>
+    </div> -->
   </div>
 </template>
 <script>

@@ -37,3 +37,14 @@ export function deviceBind(data) {
 export function getRelay(params) {
   return axios.get(API.device.relay, { params })
 }
+
+/**
+ * 获取组织设备列表
+ * @param {object} params
+ * @returns {Object} axios 对象
+ */
+export function getDeviceList(params) {
+  return axios.get(API.device.deviceList, { params })
+}
+
+
