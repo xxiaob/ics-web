@@ -6,12 +6,14 @@
       </template>
     </video-filter>
     <el-card class="jc-table-card jc-mt">
-      <video class="jc-video" controls :src="src"></video>
+      <video id="myVideo" class="jc-video" controls :src="src"></video>
     </el-card>
   </div>
 </template>
 <script>
 import { getRelay } from '@/api/device'
+import videojs from 'video.js'
+import 'video.js/dist/video-js.css'
 
 export default {
   name: 'SystemDeviceCameraVideo',
@@ -24,7 +26,7 @@ export default {
   data() {
     return {
       filter: {},
-      src: 'https://192.168.0.150:9000/group1/M00/00/28/wKgAeF80qX2AAUSIBGwc-DEbYQ8509.mp4'
+      src: ''
     }
   },
   components: {
@@ -39,16 +41,26 @@ export default {
       }
     }
   },
-  // created() {
-  //   getRelay({ deviceId: '1', cameraId: '1', startTime: '1', endTime: '1' })
-  // },
+  mounted() {
+
+  },
   methods: {
     async initData() {
       if (this.detail && this.detail.deviceId && this.filter && this.filter.startTime) {
-        const { deviceId, cameraId } = this.detail
-        const res = await getRelay({ deviceId, cameraId, ...this.filter })
+        try {
+          const { deviceId, cameraId } = this.detail
+          const res = await getRelay({ deviceId, cameraId, ...this.filter })
 
-        console.log('CameraVideo initData', res)
+          this.src = res[0].url1
+          // console.log('CameraVideo initData', res)
+          this.$nextTick(()=>{
+            this.video = videojs('myVideo', {
+              controls: true
+            })
+          })
+        } catch (error) {
+          console.error(error)
+        }
       }
     },
     goFilter(filter) {
@@ -69,5 +81,6 @@ export default {
 .jc-video {
   width: 80%;
   height: 70vh;
+  position: relative;
 }
 </style>

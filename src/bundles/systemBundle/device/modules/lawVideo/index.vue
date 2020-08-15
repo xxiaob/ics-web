@@ -9,9 +9,9 @@
 
     <el-card class="jc-table-card jc-mt">
       <div class="jc-video-container">
-        <div class="jc-video-item" v-for="item in list" :key="item">
-          <div class="jc-video-item-time">2020-08-10 15:03:23</div>
-          <video class="jc-video" src="https://192.168.0.150:9000/group1/M00/00/28/wKgAeF80qX2AAUSIBGwc-DEbYQ8509.mp4" @click="showVideo('https://192.168.0.150:9000/group1/M00/00/28/wKgAeF80qX2AAUSIBGwc-DEbYQ8509.mp4')"></video>
+        <div class="jc-video-item" v-for="item in list" :key="item.url1">
+          <div class="jc-video-item-time">{{item.time}}</div>
+          <video class="jc-video" :src="item.url1" @click="showVideo(item.url1)"></video>
         </div>
         <div v-show="list.length===0">暂无数据</div>
       </div>
@@ -67,10 +67,15 @@ export default {
         this.page.pageSize = 12
       }
       if (this.detail && this.detail.deviceId && this.filter && this.filter.startTime) {
-        const { deviceId, cameraId } = this.detail
-        const res = await getRelay({ deviceId, cameraId, ...this.filter })
+        try {
+          const { deviceId, cameraId } = this.detail
 
-        console.log('LawVideo initData', res)
+          this.list = await getRelay({ deviceId, cameraId, ...this.filter })
+
+          // console.log('LawVideo initData', res)
+        } catch (error) {
+          console.error(error)
+        }
       }
     },
     goFilter(filter) {

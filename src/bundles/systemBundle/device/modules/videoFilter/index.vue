@@ -9,7 +9,7 @@
         <span>{{detail.positionName}}</span>
       </el-form-item>
       <el-form-item label="时间" prop="startTime" :rules="rules.SELECT_NOT_NULL">
-        <el-date-picker v-model="date" @change="changeDate" format="timestamp" type="datetimerange" range-separator="-" start-placeholder="开始时间" end-placeholder="结束时间">
+        <el-date-picker v-model="date" @change="changeDate" value-format="timestamp" type="datetimerange" range-separator="-" start-placeholder="开始时间" end-placeholder="结束时间">
         </el-date-picker>
       </el-form-item>
       <el-form-item class="jc-tabfilter-btns">
@@ -45,8 +45,8 @@ export default {
     }
   },
   created() {
-    this.form.startTime = new Date(this.today) // 开始时间
-    this.form.endTime = new Date(this.today + 24 * 60 * 60 * 1000) // 结束时间
+    this.form.startTime = this.today // 开始时间
+    this.form.endTime = this.today + 24 * 60 * 60 * 1000 // 结束时间
     this.date = [this.form.startTime, this.form.endTime]
     this.$emit('filter', this.form)
   },
