@@ -13,11 +13,14 @@
       <div class="jc-dimension-item" :class="{'jc-active': eventHotType == 'quarter'}" @click="switchHotType('quarter')">季度</div>
       <div class="jc-dimension-item" :class="{'jc-active': eventHotType == 'year'}" @click="switchHotType('year')">月</div>
     </div>
-    <template v-show="switchType == 3">
+    <template v-if="switchType == 3">
       <div class="jc-dimension-switch">
         <div class="jc-dimension-item" :class="{'jc-active': eventClusterType == 'month'}" @click="switchEventClusterType('month')">月</div>
         <div class="jc-dimension-item" :class="{'jc-active': eventClusterType == 'quarter'}" @click="switchEventClusterType('quarter')">季度</div>
         <div class="jc-dimension-item" :class="{'jc-active': eventClusterType == 'year'}" @click="switchEventClusterType('year')">月</div>
+      </div>
+      <div class="jc-types-enum">
+        <div class="jc-types-item" v-for="(item,key) in eventTypes" :key="key"><i class="jc-types-icon" :style="`background-color: ${item.color};`"></i>{{item.name}}</div>
       </div>
     </template>
   </div>
@@ -303,6 +306,25 @@ export default {
     &.jc-active {
       color: #14edfc;
     }
+  }
+}
+.jc-types-enum {
+  position: absolute;
+  z-index: 5;
+  right: 30px;
+  bottom: 90px;
+  .jc-types-item {
+    height: 22px;
+    line-height: 22px;
+    color: #8bc1fc;
+  }
+  .jc-types-icon {
+    display: inline-block;
+    border-radius: 2px;
+    width: 12px;
+    height: 12px;
+    margin-right: 8px;
+    letter-spacing: 2px;
   }
 }
 </style>
