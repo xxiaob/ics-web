@@ -6,7 +6,7 @@
       </template>
     </video-filter>
     <el-card class="jc-table-card jc-mt">
-      <video id="myVideo" class="jc-video" controls :src="src"></video>
+      <video id="myVideo" class="jc-video video-js vjs-default-skin"></video>
     </el-card>
   </div>
 </template>
@@ -23,8 +23,7 @@ export default {
   },
   data() {
     return {
-      filter: {},
-      src: ''
+      filter: {}
     }
   },
   components: {
@@ -49,11 +48,14 @@ export default {
           const { deviceId, cameraId } = this.detail
           const res = await getRelay({ deviceId, cameraId, ...this.filter })
 
-          // this.src = res[0].url1
-          this.src = 'https://192.168.0.150:9000/group1/M00/00/28/wKgAeF80qX2AAUSIBGwc-DEbYQ8509.mp4'
-          // console.log('CameraVideo initData', res)
+          // 'http://ivi.bupt.edu.cn/hls/cctv1hd.m3u8'
           this.$nextTick(()=>{
             this.video = videojs('myVideo', {
+              sources: [
+                {
+                  src: res[0].url1
+                }
+              ],
               controls: true,
               autoplay: true
             })
@@ -76,14 +78,16 @@ export default {
 <style lang="scss" scoped>
 .jc-table-card /deep/ .el-card__body {
   padding: 20px;
-  text-align: center;
 }
 .jc-video {
-  width: 80%;
-  // height: 70vh;
+  margin: 0 auto;
+  width: 100vh;
   position: relative;
   video {
     width: 100%;
   }
+}
+.myVideo-dimensions {
+  max-height: 70vh;
 }
 </style>
