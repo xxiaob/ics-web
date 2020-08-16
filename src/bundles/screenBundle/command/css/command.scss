@@ -84,7 +84,8 @@ $jc-screen-height: 56px;
       padding: $jc-default-dis;
       width: 180px;
       height: 168px;
-      background: url(../modules/header/assets/weather-bg.png) no-repeat center bottom;
+      background: url(../modules/header/assets/weather-bg.png) no-repeat center
+        bottom;
       background-size: 100% 160px;
       left: 0;
       visibility: hidden;
@@ -515,6 +516,16 @@ $jc-screen-height: 56px;
         float: right;
       }
     }
+
+    // 设备
+    // 设备离线
+    &.jc-devices-offline {
+      color: #cccccc;
+    }
+
+    .jc-devices-offline {
+      color: #cccccc;
+    }
   }
 
   /*用户信息*/
@@ -773,7 +784,8 @@ $jc-screen-height: 56px;
 
   .jc-message-user {
     width: 68px;
-    background: url(../modules/message/assets/peportperson.png) no-repeat left center;
+    background: url(../modules/message/assets/peportperson.png) no-repeat left
+      center;
     background-size: 20px 20px;
     padding: 0 $jc-default-dis/2 0 24px;
     @include jc-text-warp;
@@ -813,7 +825,7 @@ $jc-screen-height: 56px;
   width: $jc-video-width + $jc-default-dis * 2;
   background-color: $jc-color-white;
   transform: translateX(-110%);
-  transition: transform .5s;
+  transition: transform 0.5s;
   box-shadow: $jc-box-shadow;
 
   $jc-video-header-height: 36px;
@@ -892,7 +904,12 @@ $jc-screen-height: 56px;
 
     @for $i from 0 through 4 {
       &.jc-video-#{$i} {
-        top: $jc-video-header-height + $jc-default-dis/2 + $jc-default-dis/2 * $i + 160 * $i;
+        top: $jc-video-header-height +
+          $jc-default-dis/2 +
+          $jc-default-dis/2 *
+          $i +
+          160 *
+          $i;
       }
     }
 

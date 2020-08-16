@@ -24,8 +24,10 @@ export default {
 
     //  推送设备(网巡车,无人机)初始化
     this.$EventBus.$on('map-device-change', this.initDeviceMap)
+    this.$EventBus.$on('screen-device-location', this.deviceLocation) //监听设备定位
     this.$EventBus.$on('org-change', this.deviceOrgChange) //监听第一次组织级别切换
     this.$EventBus.$on('show-word-change', this.deviceShowWordChange) //监听文字显示切换
+    this.initDeviceData()
   },
   methods: {
     // 获取ordID
@@ -135,7 +137,7 @@ export default {
 
           if (lnglat) {
             delete deviceData.devices[lnglat.key]
-            // lnglat.lnglat = center
+            lnglat.lnglat = center
           } else {
             deviceData.lnglats.push({ lnglat: center, key, deviceId: item.deviceId })
           }
@@ -227,6 +229,24 @@ export default {
 
       return { center, key }
     },
+
+    //监听设备位置
+    deviceLocation(data) {
+      if (this.deviceTipVisible) {
+        console.log('devicedata', data)
+        console.log('devicedata', deviceData)
+        // 查看设备是否是否存在,存在更行,不存在则添加
+        let lnglat = deviceData.lnglats.find(device => device.deviceId == data.id)
+
+        if (lnglat) {
+          this.locationDeviceId = data.id
+          let myJcMap = this.getMyJcMap() //获取地图对象
+
+          myJcMap.map.setZoomAndCenter(20, lnglat.lnglat)
+        }
+      }
+    },
+
     fitDevices() {
       if (!deviceData.markerCluster) {
         return

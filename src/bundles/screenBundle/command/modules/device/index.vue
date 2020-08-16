@@ -3,13 +3,13 @@
     <el-input v-model="filterText" prefix-icon="el-icon-search" class="jc-filter-input" clearable size="mini" placeholder="输入关键字进行过滤"></el-input>
     <div class="jc-view-content" v-loading="loading">
       <el-tree ref="tree" :default-expanded-keys="expandedKeys" :data="trees" :props="props" :show-checkbox="true" node-key="id" :filter-node-method="filterNode" @check="checkChange">
-        <div class="custom-tree-node" slot-scope="{ node,data}" :class="{'jc-devices-online': onlineDevices.includes(data.id)}">
-          <div class="jc-tree-label no-select" :class="{'jc-user': data.type=='user'}">
+        <div class="custom-tree-node" slot-scope="{ node,data}">
+          <div class="jc-tree-label no-select"  :class="{'jc-devices-offline': data.type=='device' && !data.online}" >
             <div class="jc-text-warp" v-text="node.label"></div>
           </div>
           <div class="jc-tree-options" v-on:click.stop>
-            <el-button type="text" size="small" icon="el-icon-map-location" @click="goLocation(data)" title="定位"></el-button>
-            <el-button type="text" size="small" icon="el-icon-view" v-if="data.type=='user'" @click="userDetail(data)" title="详情"></el-button>
+            <el-button type="text" size="small" icon="el-icon-map-location" :class="{'jc-devices-offline': data.type=='device' && !data.online}" @click="goLocation(data)" title="定位"></el-button>
+            <el-button type="text" size="small" icon="el-icon-view" :class="{'jc-devices-offline': data.type=='device' && !data.online}" v-if="data.type=='device'" @click="deviceDetail(data)" title="详情"></el-button>
           </div>
         </div>
       </el-tree>
@@ -19,20 +19,20 @@
         已选用户
       </div>
       <div class="jc-user-content">
-        <div class="jc-user-item" v-for="(user,index) in users" :key="user.id">
-          {{user.name}}
-          <i class="el-icon-close" @click="deleteUser(index)"></i>
+        <div class="jc-user-item" v-for="(device,index) in devices" :key="device.id">
+          {{device.name}}
+          <i class="el-icon-close" @click="deleteDevice(index)"></i>
         </div>
       </div>
       <div class="jc-user-footer">
-        <div class="jc-opera-item" @click="clearUsers">清除</div>
+        <div class="jc-opera-item" @click="clearDevices">清除</div>
         <div class="jc-opera-item">多屏视频</div>
       </div>
     </div>
   </view-warp>
 </template>
 <script>
-import { getOrgUserListByProject } from '@/api/user'
+import { getDeviceList } from '@/api/device'
 import TreesFilterMixins from '@/mixins/TreesFilterMixins'
 // import { VIDEO_INVITE_TYPES } from '@/constant/Dictionaries'
 
@@ -54,7 +54,7 @@ export default {
   data() {
     return {
       loading: false,
-      users: [],
+      devices: [],
       filterText: '',
       trees: [],
       expandedKeys: [],
@@ -71,12 +71,16 @@ export default {
     onlineDevicesChange(onlineDevices) {
       this.onlineDevices = onlineDevices
     },
+
+    // 初始数据
     async initData() {
       this.loading = true
       try {
-        const orgsAndUsers = await getOrgUserListByProject({ projectId: this.project.projectId })
+        const orgsAndDevice = await getDeviceList({ projectId: this.project.projectId })
 
-        this.trees = this.formatUserOrgTrees(orgsAndUsers) // 处理组织和用户
+        console.log('orgsAndUsers', orgsAndDevice)
+
+        this.trees = this.formatDeviceOrgTrees(orgsAndDevice) // 处理组织和用户
         this.expandedKeys = this.trees.length ? [this.trees[0].id] : [] // 设置第一级默认展开
 
         this.initOptionsUsers() // 初始传入的用户
@@ -85,6 +89,7 @@ export default {
       }
       this.loading = false
     },
+
     initOptionsUsers() {
       console.log('deviceInitOptions', this.options)
       if (this.options && this.options.lenght) {
@@ -97,20 +102,20 @@ export default {
         })
       }
     },
-    deleteUser(index) {
-      this.users.splice(index, 1) // 删除用户
+    deleteDevice(index) {
+      this.devices.splice(index, 1) // 删除用户
       this.updateTreesChecked() // 更新树结构
     },
-    clearUsers() {
+    clearDevices() {
       // 清空选中的用户
-      this.users = []
+      this.devices = []
       this.updateTreesChecked() // 更新树结构
     },
     updateTreesChecked() {
       // 更新树结构
       let keys = []
 
-      this.users.forEach(item => {
+      this.devices.forEach(item => {
         keys.push(item.id)
       })
 
@@ -119,54 +124,61 @@ export default {
     checkChange() {
       let selectNodes = this.$refs.tree.getCheckedNodes()
 
-      console.log(selectNodes)
-      let users = []
+      console.log('selectNodes', selectNodes)
+      let devices = []
 
       if (selectNodes && selectNodes.length) {
         selectNodes.forEach(item => {
-          if (item.type == 'user') {
-            users.push({ id: item.id, name: item.label, pid: item.pid })
+          if (item.type == 'device') {
+            devices.push({ id: item.id, name: item.label })
           }
         })
       }
+      console.log('devices', devices)
 
-      this.users = users
+      this.devices = devices
     },
-    userDetail(userItem) {
+    deviceDetail(deviceItem) {
+      console.log('deviceItem', deviceItem)
       // 详情
       this.$EventBus.$emit('view-component-change', {
         component: 'DeviceDetail', options: {
-          userId: userItem.userId, userName: '设备详情',
-          center: userItem.center
+          deviceId: deviceItem.id, deviceName: '设备详情',
+          center: deviceItem.center
         }
       })
     },
+
     goLocation(data) {
       // 定位
       console.log('screen-org-location-data', data)
-      if (data.type == 'user') {
-        this.$EventBus.$emit('screen-user-location', { id: data.id }) // 通知网格定位
+      if (data.type == 'device') {
+        console.log('device', data)
+        this.$EventBus.$emit('screen-device-location', { id: data.id }) // 通知网格定位
       } else {
         this.$EventBus.$emit('screen-org-location', { id: data.id }) // 通知组织定位
       }
     },
-    formatUserOrgTrees(child) {
+
+    // 处理数据
+    formatDeviceOrgTrees(child) {
       let trees = []
 
       if (child && child.length) {
         child.forEach(item => {
-          let node = { id: item.orgId, label: item.orgName, pid: item.pid, type: 'org' }
+          let node = { id: item.orgId, label: item.orgName, type: 'org' }
 
-          let nodeChildren = this.formatUserOrgTrees(item.children)
+          let nodeChildren = this.formatDeviceOrgTrees(item.orgResps)
 
-          if (item.userRespDTOList && item.userRespDTOList.length) {
-            item.userRespDTOList.forEach(user => {
-              nodeChildren.push({ id: user.userId, label: user.userName, pid: user.orgId, type: 'user' })
+          if (item.devices && item.devices.length) {
+            item.devices.forEach(device => {
+              nodeChildren.push({ id: device.deviceId, label: device.deviceName, type: 'device', online: device.online, disabled: !device.online })
             })
           }
           trees.push(nodeChildren && nodeChildren.length ? { ...node, children: nodeChildren } : node)
         })
       }
+      console.log('trees----------', trees)
       return trees
     }
   },
