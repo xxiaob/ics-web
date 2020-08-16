@@ -4,7 +4,8 @@
     <div class="jc-view-content" v-loading="loading">
       <el-tree ref="tree" :default-expanded-keys="expandedKeys" :data="trees" :props="props" :show-checkbox="true" node-key="id" :filter-node-method="filterNode" @check="checkChange">
         <div class="custom-tree-node" slot-scope="{ node,data}">
-          <div class="jc-tree-label no-select"  :class="{'jc-devices-offline': data.type=='device' && !data.online}" >
+          <div class="jc-tree-label no-select jc-flex-warp"  :class="{'jc-devices-offline': data.type=='device' && !data.online, 'jc-device':data.type=='device'}" >
+            <i  class="iconfont" :class="{'iconshexiangtou':data.deviceType==1,'iconwurenji-':data.deviceType==2,'iconmap_policecar':data.deviceType==3,'online':data.online}" v-if="data.type=='device'"></i>
             <div class="jc-text-warp" v-text="node.label"></div>
           </div>
           <div class="jc-tree-options" v-on:click.stop>
@@ -172,13 +173,12 @@ export default {
 
           if (item.devices && item.devices.length) {
             item.devices.forEach(device => {
-              nodeChildren.push({ id: device.deviceId, label: device.deviceName, type: 'device', online: device.online, disabled: !device.online })
+              nodeChildren.push({ id: device.deviceId, label: device.deviceName, type: 'device', online: device.online, disabled: !device.online, deviceType: 1 })
             })
           }
           trees.push(nodeChildren && nodeChildren.length ? { ...node, children: nodeChildren } : node)
         })
       }
-      console.log('trees----------', trees)
       return trees
     }
   },
