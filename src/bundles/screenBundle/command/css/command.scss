@@ -495,14 +495,30 @@ $jc-screen-height: 56px;
 
     .jc-tree-label {
       flex: 1;
+      align-items: center;
       width: 0;
       font-size: $jc-font-size-small;
       padding-left: 14px;
       background: url(/static/areaicons/organization.png) no-repeat left center;
       background-size: 11px auto;
 
+      &.jc-device {
+        padding-left: 0;
+        background: none;
+      }
+
       &.jc-user {
         background-image: url(../assets/user.png);
+      }
+
+      .iconfont {
+        font-size: 11px;
+        padding: 3px 2px 0 0;
+        color: #c0c4cc;
+
+        &.online {
+          color: #409eff;
+        }
       }
     }
 
