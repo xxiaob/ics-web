@@ -17,7 +17,7 @@
     </div>
     <div class="jc-user-warp">
       <div class="jc-user-header">
-        已选用户
+        已选设备
       </div>
       <div class="jc-user-content">
         <div class="jc-user-item" v-for="(device,index) in devices" :key="device.id">
@@ -27,7 +27,7 @@
       </div>
       <div class="jc-user-footer">
         <div class="jc-opera-item" @click="clearDevices">清除</div>
-        <div class="jc-opera-item">多屏视频</div>
+        <div class="jc-opera-item" @click="devicevideoPlay">多屏视频</div>
       </div>
     </div>
   </view-warp>
@@ -75,9 +75,8 @@ export default {
     onlineDevicesChange(onlineDevices) {
       this.onlineDevices = onlineDevices
     },
-
-    // 初始数据
     async initData() {
+      // 初始数据
       this.loading = true
       try {
         const orgsAndDevice = await getDeviceList({ projectId: this.project.projectId })
@@ -183,6 +182,13 @@ export default {
         })
       }
       return trees
+    },
+    devicevideoPlay() {
+    // 多屏设备播放
+      console.log('device', this.devices)
+      let devices = this.devices.map(item => item.deviceId)
+
+      this.$EventBus.$emit('device-video-play', devices)
     }
   },
   beforeDestroy() {
