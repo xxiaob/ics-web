@@ -106,18 +106,12 @@ export default {
             children: item.children && this.onlineChange(item.children)
           }
         } else {
-          if (this.onlineDevices.includes(item.id)) {
-            return {
-              ...item,
-              online: true,
-              disabled: false
-            }
-          } else {
-            return {
-              ...item,
-              online: false,
-              disabled: true
-            }
+          let isOnline = this.onlineDevices.includes(item.id) // 判断是否在线
+
+          return {
+            ...item,
+            online: isOnline,
+            disabled: !isOnline
           }
         }
       })
