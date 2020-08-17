@@ -36,7 +36,7 @@ export default {
     }
   },
   created() {
-    console.log('deviceDetail', this.options, this.project)
+    // console.log('deviceDetail', this.options, this.project)
     // 初始化数据
     this.initDeviceDetail()
   },
