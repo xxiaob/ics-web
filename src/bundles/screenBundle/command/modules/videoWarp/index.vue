@@ -13,7 +13,6 @@
 </template>
 <script>
 import { getLiveStreaming } from '@/api/device'
-import { DEVICE_TYPES } from '@/constant/Dictionaries'
 
 let videos = {} //用于存储所有video，方便清除
 
@@ -33,15 +32,6 @@ export default {
   },
   created() {
     this.$EventBus.$on('device-video-play', this.videoPlay) //监听视频播放
-    // let index = 0
-
-    // setInterval(() => {
-    //   this.list.splice(0, 0, { id: index++, name: '设备' + index })
-    //   //处理列表只显示最大数量的事件问题
-    //   if (this.list.length > this.maxLength) {
-    //     this.list.splice(this.maxLength, this.list.length - this.maxLength)
-    //   }
-    // }, 15000)
   },
   methods: {
     async videoPlay(devices) {
@@ -52,30 +42,91 @@ export default {
       }
 
       try {
-        let deviceIds = [], playList = {} //存储id 数组，需要重新播放的列表
-
-        //处理该设备id 是否已经在播放列表，如果已经在则不进行请求查询
-        devices.forEach(item => {
-          if (!videos[item.deviceId]) {
-            deviceIds.push(item.deviceId)
-            playList[item.deviceId] = { deviceId: item.deviceId, name: item.name }
-          }
-        })
-
-        let result = await getLiveStreaming({ deviceIds })
+        let result = await getLiveStreaming({ deviceIds: devices.map(device => device.deviceId) })
 
         if (result && result.length) {
-          result.forEach(item => {
+          let list = []
 
+          result.forEach(item => {
+            let device = devices.find(deviceItem => deviceItem.deviceId == item.deviceId)
+
+            list.push({ ...item, name: device.name })
+          })
+          //对增加的和需要播放的进行合并
+          for (let i = 0; i < this.list.length; i++) {
+            let item = this.list[i]
+
+            //查看是否已经存在，如果不存在，则添加，否则不处理
+            let index = list.findIndex(device => device.deviceId == item.deviceId)
+
+            if (index < 0) {
+              list.push({ ...item })
+            }
+            //如果达到播放数量，则剩余的抛弃
+            if (list.length >= this.maxLength) {
+              break
+            }
+          }
+          this.list = list
+          this.$nextTick(() => {
+            this.goVideoPlay()
           })
         }
       } catch (error) {
         console.log(error)
       }
     },
+    goVideoPlay() {
+      /**
+       * 播放视频，先处理已经失效的视频
+       * 然后去循环播放列表视频
+       */
+      for (let deviceId in videos) {
+        let index = this.list.findIndex(device => device.deviceId == deviceId)
+
+        if (index > -1) {
+          let device = videos[deviceId]
+
+          device.player.dispose()
+          device.player = null
+          delete videos[deviceId]
+        }
+      }
+      this.list.forEach(item => {
+        if (!item[item.deviceId]) {
+          let playItem = { ...item }
+
+          playItem.player = videojs(item.userId || item.deviceId, {
+            sources: [ {
+              src: item.hls
+            }],
+            controls: false,
+            autoplay: true
+            // techOrder: ['flash'],
+            // children: ['loadingSpinner']
+          }, function () {
+            console.log('执行 播放回调方法')
+            this.one('play', () => {
+              console.log('开始播放')
+              this.addClass('vjs-seeking')
+            })
+
+            this.one('loadeddata', () => {
+              setTimeout(() => {
+                this.el().style.width = '100%'
+                this.removeClass('vjs-seeking')
+              }, 1000)
+            })
+          })
+        }
+      })
+    },
     closeVideos() {
       //关闭所有视频
       this.list = []
+      this.$nextTick(() => {
+        this.goVideoPlay()
+      })
     },
     videoClose(item) {
       if (item.id == this.fullId) {
@@ -87,6 +138,9 @@ export default {
 
         if (index > -1) {
           this.list.splice(index, 1)
+          this.$nextTick(() => {
+            this.goVideoPlay()
+          })
         }
       }
     },
@@ -97,6 +151,7 @@ export default {
   },
   beforeDestroy() {
     this.$EventBus.$off('device-video-play', this.videoPlay) //监听视频播放
+    videos = {} //清空所有的视频数据
   }
 }
 </script>
