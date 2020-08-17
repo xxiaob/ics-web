@@ -182,14 +182,14 @@ export default {
         })
       }
       return trees
-    }
-  },
-  // 多屏设备播放
-  devicevideoPlay() {
-    console.log('device', this.devices)
-    let devices = this.devices.map(item => item.deviceId)
+    },
+    devicevideoPlay() {
+    // 多屏设备播放
+      console.log('device', this.devices)
+      let devices = this.devices.map(item => item.deviceId)
 
-    this.$EventBus.$emit('device-video-play', devices)
+      this.$EventBus.$emit('device-video-play', devices)
+    }
   },
   beforeDestroy() {
     this.$EventBus.$off('map-device-online-change', this.onlineDevicesChange)
