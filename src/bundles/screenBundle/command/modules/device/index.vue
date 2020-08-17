@@ -5,8 +5,8 @@
       <el-tree ref="tree" :default-expanded-keys="expandedKeys" :data="trees" :props="props" :show-checkbox="true" node-key="id" :filter-node-method="filterNode" @check="checkChange">
         <div class="custom-tree-node" slot-scope="{ node,data}">
           <div class="jc-tree-label no-select jc-flex-warp"  :class="{'jc-devices-offline': data.type=='device' && !data.online, 'jc-device':data.type=='device'}" >
-            <i  class="iconfont" :class="{'iconshexiangtou':data.deviceType==1,'iconwurenji-':data.deviceType==2,'iconmap_policecar':data.deviceType==3,'online':data.online}" v-if="data.type=='device'"></i>
-            <div class="jc-text-warp" v-text="node.label"></div>
+            <i  class="iconfont" :class="{'iconshexiangtou':data.deviceType==DEVICE_TYPES.CAMERA,'iconwurenji':data.deviceType==DEVICE_TYPES.UAV,'iconmap_policecar':data.deviceType==DEVICE_TYPES,'online':data.online}" v-if="data.type=='device'"></i>
+            <div class="jc-text-warp.NETPATROLCAR" v-text="node.label"></div>
           </div>
           <div class="jc-tree-options" v-on:click.stop>
             <el-button type="text" size="small" icon="el-icon-map-location" :class="{'jc-devices-offline': data.type=='device' && !data.online}" @click="goLocation(data)" title="定位"></el-button>
@@ -35,6 +35,8 @@
 <script>
 import { getDeviceList } from '@/api/device'
 import TreesFilterMixins from '@/mixins/TreesFilterMixins'
+import { DEVICE_TYPES } from '@/constant/Dictionaries'
+
 // import { VIDEO_INVITE_TYPES } from '@/constant/Dictionaries'
 
 export default {
@@ -61,7 +63,8 @@ export default {
       expandedKeys: [],
       props: { children: 'children', label: 'label' },
       checkKeys: [],
-      onlineDevices: []
+      onlineDevices: [],
+      DEVICE_TYPES: DEVICE_TYPES
     }
   },
   created() {
