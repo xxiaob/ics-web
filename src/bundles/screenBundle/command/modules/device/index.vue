@@ -4,8 +4,8 @@
     <div class="jc-view-content" v-loading="loading">
       <el-tree ref="tree" :default-expanded-keys="expandedKeys" :data="trees" :props="props" :show-checkbox="true" node-key="id" :filter-node-method="filterNode" @check="checkChange">
         <div class="custom-tree-node" slot-scope="{ node,data}">
-          <div class="jc-tree-label no-select jc-flex-warp"  :class="{'jc-devices-offline': data.type=='device' && !data.online, 'jc-device':data.type=='device'}" >
-            <i  class="iconfont" :class="{'iconshexiangtou':data.deviceType==DEVICE_TYPES.CAMERA,'iconwurenji':data.deviceType==DEVICE_TYPES.UAV,'iconmap_policecar':data.deviceType==DEVICE_TYPES,'online':data.online}" v-if="data.type=='device'"></i>
+          <div class="jc-tree-label no-select jc-flex-warp" :class="{'jc-devices-offline': data.type=='device' && !data.online, 'jc-device':data.type=='device'}">
+            <i class="iconfont" :class="{'iconshexiangtou':data.deviceType==DEVICE_TYPES.CAMERA,'iconwurenji':data.deviceType==DEVICE_TYPES.UAV,'iconmap_policecar':data.deviceType==DEVICE_TYPES,'online':data.online}" v-if="data.type=='device'"></i>
             <div class="jc-text-warp.NETPATROLCAR" v-text="node.label"></div>
           </div>
           <div class="jc-tree-options" v-on:click.stop>

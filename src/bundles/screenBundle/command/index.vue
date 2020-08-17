@@ -32,7 +32,7 @@
     <!-- 人员轨迹处理 -->
     <user-trajectory></user-trajectory>
     <!-- 多视频播放区域 -->
-    <!-- <video-warp></video-warp> -->
+    <video-warp></video-warp>
   </section>
 </template>
 <script>

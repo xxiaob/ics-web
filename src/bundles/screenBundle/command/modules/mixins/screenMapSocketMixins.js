@@ -69,9 +69,7 @@ export default {
           if (users.length) {
             this.$EventBus.$emit('map-user-change', { type: 1, users }) //通知用户初始化
           }
-          if (devices.length) {
-            this.$EventBus.$emit('map-device-change', { type: 1, devices }) //通知设备初始化
-          }
+          this.$EventBus.$emit('map-device-change', { type: 1, devices }) //通知设备初始化
           this.$EventBus.$emit('screen-message-init', data.tasks) //通知消息初始化
         } else if (data.type == 3) {
           //数据类型为问题，任务消息

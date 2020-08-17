@@ -33,19 +33,29 @@ export default {
   },
   created() {
     this.$EventBus.$on('device-video-play', this.videoPlay) //监听视频播放
-    let index = 0
+    // let index = 0
 
-    setInterval(() => {
-      this.list.splice(0, 0, { id: index++, name: '设备' + index })
-      //处理列表只显示最大数量的事件问题
-      if (this.list.length > this.maxLength) {
-        this.list.splice(this.maxLength, this.list.length - this.maxLength)
-      }
-    }, 15000)
+    // setInterval(() => {
+    //   this.list.splice(0, 0, { id: index++, name: '设备' + index })
+    //   //处理列表只显示最大数量的事件问题
+    //   if (this.list.length > this.maxLength) {
+    //     this.list.splice(this.maxLength, this.list.length - this.maxLength)
+    //   }
+    // }, 15000)
   },
   methods: {
-    videoPlay(data) {
+    async videoPlay(deviceIds) {
       //播放内容
+      console.log('video-warp-deviceIds', deviceIds)
+      if (!deviceIds || deviceIds.length < 1) {
+        return
+      }
+
+      try {
+        let result = await getLiveStreaming(deviceIds)
+      } catch (error) {
+        console.log(error)
+      }
     },
     closeVideos() {
       //关闭所有视频
