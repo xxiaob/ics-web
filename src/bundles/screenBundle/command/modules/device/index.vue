@@ -95,14 +95,15 @@ export default {
       }
 
       this.trees = this.onlineChange(this.trees) // 调用方法从新处理数据
+      console.log('this.trees', this.trees)
     },
     onlineChange(trees) {
       // 处理离线/在线切换的方法
       return trees.map(item => {
-        if (item.children && item.children.length > 0) {
+        if (item.type == 'org') {
           return {
             ...item,
-            children: this.onlineChange(item.children)
+            children: item.children && this.onlineChange(item.children)
           }
         } else {
           if (this.onlineDevices.includes(item.id)) {
