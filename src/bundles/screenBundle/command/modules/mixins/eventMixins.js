@@ -80,7 +80,7 @@ export default {
         eventData.markerCluster.setData(eventData.lnglats)
       } else {
         eventData.markerCluster = new MarkerCluster(null, eventData.lnglats, {
-          userSize: 60,
+          gridSize: 120,
           renderClusterMarker: this.renderEventClusterMarker,
           renderMarker: this.renderEventMarker
         })

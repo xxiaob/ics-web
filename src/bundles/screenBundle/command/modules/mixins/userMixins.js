@@ -157,7 +157,7 @@ export default {
         usersData.markerCluster.setData(usersData.lnglats)
       } else {
         usersData.markerCluster = new MarkerCluster(null, usersData.lnglats, {
-          userSize: 60,
+          gridSize: 120,
           renderClusterMarker: this.renderUserClusterMarker,
           renderMarker: this.renderUserMarker
         })
