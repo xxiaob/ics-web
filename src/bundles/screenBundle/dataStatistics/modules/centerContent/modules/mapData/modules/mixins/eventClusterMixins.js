@@ -1,6 +1,7 @@
 /**
  * 事件聚合显示
  */
+import { getEventAggregation } from '@/api/dataScreen'
 let eventClusterData = {} //存储已经请求的数据
 
 let timeDis = { month: 1000 * 60 * 60 * 24 * 30, quarter: 1000 * 60 * 60 * 24 * 90, year: 1000 * 60 * 60 * 24 * 365 }
