@@ -59,13 +59,12 @@
 <script>
 import { taskSave } from '@/api/task'
 import { organizationList } from '@/api/organization'
-import { projectsTreeList } from '@/api/projects'
 
 import FormMixins from '@/mixins/FormMixins'
 import projectsMixins from '@/bundles/taskBundle/mixins/projectsMixins'
 
 import { getStringRule, NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
-import { TASK_TYPES, TASK_SOURCES, TASK_PEOPLE_TYPES, TASK_SELECT_TYPES } from '@/constant/Dictionaries'
+import { TASK_TYPES, TASK_SOURCES, TASK_PEOPLE_TYPES, TASK_SELECT_TYPES, PROJECT_TYPES } from '@/constant/Dictionaries'
 
 import { createNamespacedHelpers } from 'vuex'
 const { mapState } = createNamespacedHelpers('user')
@@ -278,9 +277,9 @@ export default {
         let newProjectId = this.initProjectId
 
         this.emergency = false
-        if (this.projectId) {
-          newProjectId = this.projectId
-          this.changeProject(this.projectId)
+        if (this.projectId && this.EmergencySupport) {
+          newProjectId = this.projectId === PROJECT_TYPES.NORMAL ? this.projectList[0].id : this.projectId
+          this.changeProject(newProjectId)
         }
 
         return { ...defaultForm, taskSource: questionTaskSource, projectId: newProjectId, beginTime, endTime, date: [beginTime, endTime], uploadFilePaths: paths, taskSourceId, taskPosition: position,
