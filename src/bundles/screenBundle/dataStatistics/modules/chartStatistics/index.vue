@@ -27,7 +27,7 @@ export default {
   },
   data() {
     return {
-      activated: 7,
+      activated: 1,
       loading: false,
       project: {},
       today: new Date(moment().format('YYYY-MM-DD') + ' 00:00:00').getTime(),
