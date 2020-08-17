@@ -116,7 +116,7 @@ export default {
           }
         }
       })
-      myJcMap.setFitView()
+      myJcMap.setFitView(null, true, [0, 0, 0, 0]) //设置自适应显示
     },
     getEventClusterContent(events) {
       //获取marker数据
