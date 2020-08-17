@@ -92,7 +92,6 @@ export default {
       }
       this.loading = false
     },
-
     initOptionsUsers() {
       console.log('deviceInitOptions', this.options)
       if (this.options && this.options.lenght) {
@@ -125,9 +124,9 @@ export default {
       this.$refs.tree.setCheckedKeys(keys)
     },
     checkChange() {
+      // 选中设备
       let selectNodes = this.$refs.tree.getCheckedNodes()
 
-      console.log('selectNodes', selectNodes)
       let devices = []
 
       if (selectNodes && selectNodes.length) {
@@ -137,13 +136,11 @@ export default {
           }
         })
       }
-      console.log('devices', devices)
 
       this.devices = devices
     },
     deviceDetail(deviceItem) {
-      console.log('deviceItem', deviceItem)
-      // 详情
+      // 设备详情
       this.$EventBus.$emit('view-component-change', {
         component: 'DeviceDetail', options: {
           deviceId: deviceItem.id, deviceName: '设备详情',
@@ -151,24 +148,21 @@ export default {
         }
       })
     },
-
     goLocation(data) {
-      // 定位
+      // 网格设备定位
       console.log('screen-org-location-data', data)
       if (!data.online) {
         this.$message.error('当前设备为离线状态')
         return
       }
       if (data.type == 'device') {
-        console.log('device', data)
         this.$EventBus.$emit('screen-device-location', { id: data.id }) // 通知网格定位
       } else {
         this.$EventBus.$emit('screen-org-location', { id: data.id }) // 通知组织定位
       }
     },
-
-    // 处理数据
     formatDeviceOrgTrees(child) {
+      // 处理数据
       let trees = []
 
       if (child && child.length) {
