@@ -7,11 +7,15 @@
         <div class="jc-video-title" v-text="item.name"></div>
         <i class="jc-controll-item el-icon-full-screen" @click="videoFull(item)"></i>
       </div>
-      <div class="jc-video-play"></div>
+      <div class="jc-video-play video-js vjs-default-skin" :id="item.userId"></div>
     </div>
   </div>
 </template>
 <script>
+import { DEVICE_TYPES } from '@/constant/Dictionaries'
+
+let videos = {} //用于存储所有video，方便清除
+
 export default {
   name: 'ScreenCommandVideoWarp',
   data() {
@@ -40,7 +44,7 @@ export default {
   },
   methods: {
     videoPlay(data) {
-
+      //播放内容
     },
     closeVideos() {
       //关闭所有视频
