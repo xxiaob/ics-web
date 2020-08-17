@@ -11,16 +11,16 @@
     <div class="jc-dimension-switch" v-show="switchType == 2">
       <div class="jc-dimension-item" :class="{'jc-active': eventHotType == 'month'}" @click="switchHotType('month')">月</div>
       <div class="jc-dimension-item" :class="{'jc-active': eventHotType == 'quarter'}" @click="switchHotType('quarter')">季度</div>
-      <div class="jc-dimension-item" :class="{'jc-active': eventHotType == 'year'}" @click="switchHotType('year')">月</div>
+      <div class="jc-dimension-item" :class="{'jc-active': eventHotType == 'year'}" @click="switchHotType('year')">年</div>
     </div>
     <template v-if="switchType == 3">
       <div class="jc-dimension-switch">
         <div class="jc-dimension-item" :class="{'jc-active': eventClusterType == 'month'}" @click="switchEventClusterType('month')">月</div>
         <div class="jc-dimension-item" :class="{'jc-active': eventClusterType == 'quarter'}" @click="switchEventClusterType('quarter')">季度</div>
-        <div class="jc-dimension-item" :class="{'jc-active': eventClusterType == 'year'}" @click="switchEventClusterType('year')">月</div>
+        <div class="jc-dimension-item" :class="{'jc-active': eventClusterType == 'year'}" @click="switchEventClusterType('year')">年</div>
       </div>
       <div class="jc-types-enum">
-        <div class="jc-types-item" v-for="(item,key) in eventTypes" :key="key"><i class="jc-types-icon" :style="`background-color: ${item.color};`"></i>{{item.name}}</div>
+        <div class="jc-types-item" v-for="item in eventTypes" :key="item.name"><i class="jc-types-icon" :style="`background-color: ${item.color};`"></i>{{item.name}}</div>
       </div>
     </template>
   </div>
@@ -470,7 +470,39 @@ export default {
 }
 .jc-event-cluster {
   position: relative;
-  width: 75px;
-  height: 98px;
+  width: 120px;
+  height: 150px;
+  background: url(./assets/data-statictis-event.png) no-repeat center;
+  background-size: 100% 100%;
+  .jc-event-warp {
+    position: relative;
+    width: 100px;
+    height: 100px;
+    top: 10px;
+    left: 10px;
+    background-repeat: no-repeat;
+    border-radius: 50%;
+    overflow: hidden;
+    color: $jc-color-white;
+    font-weight: bold;
+  }
+  .jc-event-item-0 {
+    text-align: center;
+    line-height: 40px;
+  }
+  .jc-event-item-1 {
+    width: 49%;
+    display: inline-block;
+    text-align: left;
+    line-height: 50px;
+    padding-left: 15px;
+  }
+  .jc-event-item-2 {
+    width: 49%;
+    display: inline-block;
+    text-align: right;
+    line-height: 50px;
+    padding-right: 15px;
+  }
 }
 </style>
