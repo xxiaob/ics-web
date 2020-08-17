@@ -22,6 +22,15 @@
   <!-- video播放器sdk -->
   <link href="/static/videojs/video-js.min.css" rel="stylesheet">
   <script src="/static/videojs/video.min.js"></script>
+  <script src="/static/videojs/videojs-flash.min.js?v=1.0.0"></script>
+  <style>
+    .video-js.vjs-seeking .vjs-tech {
+      visibility: hidden;
+    }
+  </style>
+  <script>
+    videojs.options.flash.swf = '/static/videojs/video-js.swf'
+  </script>
 </head>
 
 <body>

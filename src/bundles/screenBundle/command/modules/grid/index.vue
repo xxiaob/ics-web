@@ -5,7 +5,7 @@
       <el-tree ref="tree" :default-expanded-keys="expandedKeys" :load="loadNode" lazy :props="props" :filter-node-method="filterNode" node-key="id">
         <div class="custom-tree-node" slot-scope="{ node, data }">
           <div class="jc-tree-label no-select" :style="getIconStyle(data.icon)">
-            <div class="jc-text-warp" v-text="data.name"></div>
+            <div class="jc-text-warp" v-text="data.name" :title="data.name"></div>
           </div>
           <div class="jc-tree-options" v-on:click.stop>
             <el-button type="text" size="small" icon="el-icon-map-location" @click="goLocation(data)"></el-button>

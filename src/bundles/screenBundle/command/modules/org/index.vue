@@ -6,7 +6,7 @@
         <div class="custom-tree-node" slot-scope="{ node,data }">
           <div class="jc-tree-label no-select jc-flex-warp" :class="{'jc-user': data.type=='user'}">
             <i class="iconfont online" :class="{'iconrenyuan-5': data.type=='user'}"></i>
-            <div class="jc-text-warp" v-text="node.label"></div>
+            <div class="jc-text-warp" v-text="node.label" :title="node.label"></div>
           </div>
           <div class="jc-tree-options" v-on:click.stop>
             <el-button type="text" size="small" icon="el-icon-map-location" @click="goLocation(data)" title="定位"></el-button>
