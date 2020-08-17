@@ -71,3 +71,11 @@ export function getAreaDataStatistics(data) {
 export function eventHeatMap(data) {
   return axios.post(API.screen.dataStatistics.eventHeatMap, data)
 }
+/**
+ * 查询事件聚合
+ * @param {object} data
+ * @returns {Object} axios 对象
+ */
+export function getEventAggregation(data) {
+  return axios.post(API.screen.dataStatistics.getEventAggregation, data)
+}

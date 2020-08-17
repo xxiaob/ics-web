@@ -468,4 +468,7 @@ export default {
     }
   }
 }
+.jc-event-cluster {
+  position: relative;
+}
 </style>

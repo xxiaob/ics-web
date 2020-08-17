@@ -32,6 +32,7 @@ export default {
   },
   created() {
     this.$EventBus.$on('device-video-play', this.videoPlay) //监听视频播放
+    this.$EventBus.$on('notice-compulsory-observation-leave', this.userLeave) //设备用户离开
   },
   methods: {
     async videoPlay(devices) {
@@ -87,35 +88,45 @@ export default {
         if (index < 0) {
           let device = videos[deviceId]
 
-          device.player.dispose()
-          device.player = null
-          delete videos[deviceId]
+          if (device.userId) {
+            this.$EventBus.$emit('notice-compulsory-observation', { type: 'stop', userId: device.userId })
+          } else {
+            device.player.dispose()
+            device.player = null
+            delete videos[deviceId]
+          }
         }
       }
       this.list.forEach(item => {
         if (!item[item.deviceId]) {
           let playItem = { ...item }
 
-          playItem.player = videojs(item.userId || item.deviceId, {
-            sources: [{ src: item.hls }],
-            controls: false,
-            autoplay: true
+          //如果用户id 存在
+          if (item.userId) {
+            playItem.player = item.userId
+            this.$EventBus.$emit('notice-compulsory-observation', { type: 'start', userId: item.userId })
+          } else {
+            playItem.player = videojs(item.deviceId, {
+              sources: [{ src: item.hls }],
+              controls: false,
+              autoplay: true
             // techOrder: ['flash'],
             // children: ['loadingSpinner']
-          }, function () {
-            console.log('执行 播放回调方法')
-            this.one('play', () => {
-              console.log('开始播放')
-              this.addClass('vjs-seeking')
-            })
+            }, function () {
+              console.log('执行 播放回调方法')
+              this.one('play', () => {
+                console.log('开始播放')
+                this.addClass('vjs-seeking')
+              })
 
-            this.one('loadeddata', () => {
-              setTimeout(() => {
-                this.el().style.width = '100%'
-                this.removeClass('vjs-seeking')
-              }, 1000)
+              this.one('loadeddata', () => {
+                setTimeout(() => {
+                  this.el().style.width = '100%'
+                  this.removeClass('vjs-seeking')
+                }, 1000)
+              })
             })
-          })
+          }
         }
       })
     },
@@ -125,6 +136,16 @@ export default {
       this.$nextTick(() => {
         this.goVideoPlay()
       })
+    },
+    userLeave(data) {
+      let index = this.list.findIndex(videoItem => videoItem.userId == data.userId)
+
+      if (index > -1) {
+        this.list.splice(index, 1)
+        this.$nextTick(() => {
+          this.goVideoPlay()
+        })
+      }
     },
     videoClose(item) {
       if (item.deviceId == this.fullId) {
@@ -149,6 +170,7 @@ export default {
   },
   beforeDestroy() {
     this.$EventBus.$off('device-video-play', this.videoPlay) //监听视频播放
+    this.$EventBus.$off('notice-compulsory-observation-leave', this.userLeave) //设备用户离开
     videos = {} //清空所有的视频数据
   }
 }

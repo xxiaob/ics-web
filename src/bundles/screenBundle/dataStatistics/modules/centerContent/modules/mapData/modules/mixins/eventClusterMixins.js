@@ -1,6 +1,9 @@
 /**
  * 事件聚合显示
  */
+import { getEventAggregation } from '@/api/dataScreen'
+import { formatDate } from '@/libs/util'
+
 let eventClusterData = {} //存储已经请求的数据
 
 let timeDis = { month: 1000 * 60 * 60 * 24 * 30, quarter: 1000 * 60 * 60 * 24 * 90, year: 1000 * 60 * 60 * 24 * 365 }
@@ -27,15 +30,105 @@ export default {
       myJcMap.setPitch(0)
       myJcMap.setFeatures(['bg', 'road'])
       this.showPolygons()
+      this.switchEventClusterType(this.eventClusterType)
     },
     hideEventCluster() {
+      //先隐藏布局
+      let orgAreas = this.getOrgAreasData()
 
+      for (let orgId in orgAreas) {
+        if (orgId != this.orgId) {
+          let areaItem = orgAreas[orgId]
+
+          if (areaItem.polygons) {
+            areaItem.polygons.forEach(item => {
+              item.setMap(null)
+            })
+          }
+        }
+      }
     },
     showPolygons() {
+      let myJcMap = this.getMyJcMap()
 
+      let AMap = this.getAMap()
+
+      let orgAreas = this.getOrgAreasData()
+
+      for (let orgId in orgAreas) {
+        if (orgId != this.orgId) {
+          let areaItem = orgAreas[orgId]
+
+          if (areaItem.polygons) {
+            areaItem.polygons.forEach(item => {
+              item.setMap(myJcMap)
+            })
+          } else {
+            let polygons = []
+
+            areaItem.boundaries.forEach(item => {
+              let polygon = new AMap.Polygon({ map: myJcMap, strokeWeight: 1, strokeColor: '#006cff', strokeOpacity: 0.5, fillColor: '#001e86', fillOpacity: 0.3, path: item.path })
+
+              polygons.push(polygon)
+            })
+            areaItem.polygons = polygons
+          }
+        }
+      }
+    },
+    async showEventClusterMarker() {
+      //显示标记
+      let data = await this.getEventClusterata()
+
+      let AMap = this.getAMap()
+
+      let myJcMap = this.getMyJcMap()
+
+      let orgAreas = this.getOrgAreasData()
+
+      for (let orgId in orgAreas) {
+        if (orgId != this.orgId) {
+          let areaItem = orgAreas[orgId], content = this.getEventClusterContent()
+
+          if (areaItem.eventClusterMarker) {
+            areaItem.eventClusterMarker.setContent(content)
+            areaItem.eventClusterMarker.setMap(myJcMap)
+          } else {
+            areaItem.eventClusterMarker = new AMap.Marker({ position: areaItem.center, anchor: 'bottom-center', offset: new AMap.Pixel(0, 0), content })
+          }
+        }
+      }
+    },
+    getEventClusterContent() {
+      //获取marker数据
+      return '<div class="jc-event-cluster"></div>'
+    },
+    async getEventClusterata() {
+      //获取热力图数据
+      if (eventClusterData[this.eventClusterType]) {
+        return eventClusterData[this.eventClusterType]
+      }
+      let endTime = new Date().getTime()
+
+      let beginTime = endTime - timeDis[this.eventClusterType]
+
+      let list = []
+
+      try {
+        let result = await getEventAggregation({ beginTime: formatDate(beginTime), endTime: formatDate(endTime), projectId: this.project.projectId })
+
+        if (result && result.length) {
+          //处理数据
+        }
+        eventClusterData[this.eventClusterType] = list
+      } catch (error) {
+        console.log(error)
+      }
+      return list
     },
     switchEventClusterType(type) {
       this.eventClusterType = type
+      this.showEventClusterMarker()
     }
   }
 }
