@@ -12,6 +12,7 @@
   </div>
 </template>
 <script>
+import { getLiveStreaming } from '@/api/device'
 import { DEVICE_TYPES } from '@/constant/Dictionaries'
 
 let videos = {} //用于存储所有video，方便清除
