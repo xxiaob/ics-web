@@ -24,20 +24,20 @@
       <div class="jc-opera-work">
         <el-checkbox-group v-model="wordType" @change="wordChange">
           <el-checkbox class="jc-work-item" label="user">
-            <div class="jc-work-content">人员</div>
+            <div class="jc-work-content jc-work-nobg"><i class="iconfont iconrenyuan-5"></i>人员</div>
           </el-checkbox>
           <el-checkbox class="jc-work-item" label="org">
             <div class="jc-work-content">组织</div>
           </el-checkbox>
           <!-- 新增事件与问题实体控件 -->
           <el-checkbox class="jc-work-item" label="event">
-            <div class="jc-work-content">事件</div>
+            <div class="jc-work-content jc-work-nobg"><i class="iconfont iconshijian-2"></i>事件</div>
           </el-checkbox>
           <el-checkbox class="jc-work-item" label="problem">
-            <div class="jc-work-content">问题</div>
+            <div class="jc-work-content jc-work-nobg"><i class="iconfont iconwenti"></i>问题</div>
           </el-checkbox>
           <el-checkbox class="jc-work-item" label="device">
-            <div class="jc-work-content">设备</div>
+            <div class="jc-work-content jc-work-nobg"><i class="iconfont iconshexiangtou"></i>设备</div>
           </el-checkbox>
 
           <!-- 动态实体 -->
@@ -52,13 +52,13 @@
       <div class="jc-opera-work">
         <el-checkbox-group v-model="togetherType" @change="togetherChange">
           <el-checkbox class="jc-work-item" label="user">
-            <div class="jc-work-content">人员</div>
+            <div class="jc-work-content jc-work-nobg"><i class="iconfont iconrenyuan-5"></i>人员</div>
           </el-checkbox>
           <el-checkbox class="jc-work-item" label="event">
-            <div class="jc-work-content">事件</div>
+            <div class="jc-work-content jc-work-nobg"><i class="iconfont iconshijian-2"></i>事件</div>
           </el-checkbox>
           <el-checkbox class="jc-work-item" label="problem">
-            <div class="jc-work-content">问题</div>
+            <div class="jc-work-content jc-work-nobg"><i class="iconfont iconwenti"></i>问题</div>
           </el-checkbox>
           <el-checkbox class="jc-work-item" v-for="item in controlAreaTypes" :label="item.id" :key="item.id">
             <div class="jc-work-content" :style="getIconStyle(item.icon)">{{item.name}}</div>

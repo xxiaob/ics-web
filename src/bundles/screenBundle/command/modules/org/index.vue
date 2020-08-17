@@ -4,7 +4,8 @@
     <div class="jc-view-content" v-loading="loading" element-loading-background="rgba(0, 0, 0, 0)">
       <el-tree ref="tree" :default-expanded-keys="expandedKeys" :data="trees" :show-checkbox="true" :props="props" @check="checkChange" :filter-node-method="filterNode" node-key="id">
         <div class="custom-tree-node" slot-scope="{ node,data }">
-          <div class="jc-tree-label no-select" :class="{'jc-user': data.type=='user'}">
+          <div class="jc-tree-label no-select jc-flex-warp" :class="{'jc-user': data.type=='user'}">
+            <i class="iconfont online" :class="{'iconrenyuan-5': data.type=='user'}"></i>
             <div class="jc-text-warp" v-text="node.label"></div>
           </div>
           <div class="jc-tree-options" v-on:click.stop>

@@ -109,6 +109,7 @@ export default {
 
         // 初始化后重新执行固定设备
         this.initDeviceData()
+        this.deviceTimer = window.setInterval(this.initDeviceData, 5 * 60 * 1000) // 固定摄像头轮询
       }
 
       this.deviceMap(data.devices) // 将推送设备列表传递deviceMap处理
@@ -265,5 +266,6 @@ export default {
     this.$EventBus.$off('map-device-change', this.initDeviceMap)
     this.$EventBus.$off('org-change', this.deviceOrgChange)
     this.$EventBus.$off('show-word-change', this.deviceShowWordChange)
+    clearInterval(this.deviceTimer) // 清理固定摄像头轮询
   }
 }

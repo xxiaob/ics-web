@@ -367,6 +367,16 @@ $jc-screen-height: 56px;
       background: url(/static/areaicons/organization.png) no-repeat left center;
       background-size: 12px auto;
       @include jc-text-warp;
+
+      &.jc-work-nobg {
+        background: none;
+        padding-left: 0;
+        .iconfont {
+          font-size: 13px;
+          padding-right: 2px;
+          color: $jc-color-primary;
+        }
+      }
     }
 
     .jc-map-switch-item {
@@ -508,7 +518,8 @@ $jc-screen-height: 56px;
       }
 
       &.jc-user {
-        background-image: url(../assets/user.png);
+        padding-left: 0;
+        background: none;
       }
 
       .iconfont {
@@ -517,7 +528,7 @@ $jc-screen-height: 56px;
         color: #c0c4cc;
 
         &.online {
-          color: #409eff;
+          color: $jc-color-primary;
         }
       }
     }
