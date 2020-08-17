@@ -470,5 +470,7 @@ export default {
 }
 .jc-event-cluster {
   position: relative;
+  width: 75px;
+  height: 98px;
 }
 </style>

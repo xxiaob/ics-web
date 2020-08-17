@@ -7,7 +7,10 @@
         <div class="jc-video-title" v-text="item.name"></div>
         <i class="jc-controll-item el-icon-full-screen" @click="videoFull(item)"></i>
       </div>
-      <div class="jc-video-play video-js vjs-default-skin" :id="item.userId || item.deviceId"></div>
+      <div class="jc-video-play" v-if="item.userId" :id="item.userId"></div>
+      <div class="jc-video-play" v-else>
+        <video class="video-js vjs-default-skin" :id="item.deviceId"></video>
+      </div>
     </div>
   </div>
 </template>
@@ -110,23 +113,9 @@ export default {
               sources: [{ src: item.hls }],
               controls: false,
               autoplay: true
-            // techOrder: ['flash'],
-            // children: ['loadingSpinner']
-            }, function () {
-              console.log('执行 播放回调方法')
-              this.one('play', () => {
-                console.log('开始播放')
-                this.addClass('vjs-seeking')
-              })
-
-              this.one('loadeddata', () => {
-                setTimeout(() => {
-                  this.el().style.width = '100%'
-                  this.removeClass('vjs-seeking')
-                }, 1000)
-              })
             })
           }
+          videos[item.deviceId] = playItem
         }
       })
     },
