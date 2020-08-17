@@ -69,11 +69,57 @@ export default {
   },
   created() {
     this.initData()
-    this.$EventBus.$on('map-device-online-change', this.onlineDevicesChange) //监听在线设备变化
+    // this.$EventBus.$on('map-device-online-change', this.onlineDevicesChange) //监听在线设备变化
+    this.$EventBus.$on('map-device-change', this.onlineDevicesChange)
   },
   methods: {
     onlineDevicesChange(onlineDevices) {
-      this.onlineDevices = onlineDevices
+      console.log('onlineDevicesChange', onlineDevices)
+      console.log('devices', this.trees)
+
+      if (onlineDevices.type == 2) {
+        // type 2  为推送在线
+        onlineDevices.devices.forEach(device => {
+          if (!this.onlineDevices.includes(device.deviceId)) {
+            this.onlineDevices.push(device.deviceId) // 新增在线id
+          }
+        })
+        console.log('online', this.onlineDevices)
+      } else if (onlineDevices.type == 3) {
+        // type 3 为推送 离线
+        onlineDevices.deviceIds.forEach(device => {
+          let index = this.onlineDevices.findIndex(onlineId => onlineId == device ) // 查询离线索引
+
+          this.onlineDevices.splice(index, 1) // 删除离线id
+        })
+      }
+
+      this.trees = this.onlineChange(this.trees) // 调用方法从新处理数据
+    },
+    onlineChange(trees) {
+      // 处理离线/在线切换的方法
+      return trees.map(item => {
+        if (item.children && item.children.length > 0) {
+          return {
+            ...item,
+            children: this.onlineChange(item.children)
+          }
+        } else {
+          if (this.onlineDevices.includes(item.id)) {
+            return {
+              ...item,
+              online: true,
+              disabled: false
+            }
+          } else {
+            return {
+              ...item,
+              online: false,
+              disable: true
+            }
+          }
+        }
+      })
     },
     async initData() {
       // 初始数据
@@ -150,7 +196,6 @@ export default {
     },
     goLocation(data) {
       // 网格设备定位
-      console.log('screen-org-location-data', data)
       if (!data.online) {
         this.$message.error('当前设备为离线状态')
         return

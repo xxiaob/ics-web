@@ -37,8 +37,6 @@ export default {
         // 发送请求获取数据
         let ScreenProblemData = await getScreenProblemData({ orgId: this.problemOrgId, projectId: this.project.projectId, beginTime, endTime })
 
-        console.log('ScreenProblemData', ScreenProblemData)
-
         MarkerCluster = await getMarkerCluster()
 
         this.clearProblems() // 清除之前的记录

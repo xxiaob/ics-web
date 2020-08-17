@@ -51,6 +51,9 @@ export default {
         // 请求数据
         let deviceDetaillData = await deviceDetail({ deviceId })
 
+
+        console.log('deviceDetaillData', deviceDetaillData)
+
         this.deviceDetaillData = deviceDetaillData
       } catch (err) {
         console.log(err)

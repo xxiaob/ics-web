@@ -99,6 +99,7 @@ export default {
       })
     },
     async initDeviceMap(data) {
+      console.log('推送设备数据', data)
       // 处理推送设备数据
       if (data.type == 3) {
         // 如果类型为3, 删除离线设备
