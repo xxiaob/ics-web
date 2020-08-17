@@ -26,7 +26,8 @@ export default {
       loading: false,
       tabComponent: 'BaseInfo',
       videoTypes: VIDEO_INVITE_TYPES,
-      tabs: [{ label: '基础信息', value: 'BaseInfo' }, { label: '运行信息', value: 'WorkingInfo' }]
+      tabs: [{ label: '基础信息', value: 'BaseInfo' }, { label: '运行信息', value: 'WorkingInfo' }],
+      deviceDetaillData: []
     }
   },
   watch: {

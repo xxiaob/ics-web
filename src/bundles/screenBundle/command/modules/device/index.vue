@@ -155,6 +155,10 @@ export default {
     goLocation(data) {
       // 定位
       console.log('screen-org-location-data', data)
+      if (!data.online) {
+        this.$message.error('当前设备为离线状态')
+        return
+      }
       if (data.type == 'device') {
         console.log('device', data)
         this.$EventBus.$emit('screen-device-location', { id: data.id }) // 通知网格定位
@@ -185,9 +189,13 @@ export default {
     },
     devicevideoPlay() {
     // 多屏设备播放
-      let devices = this.devices.map(item => item.id)
+      if (this.devices && this.devices.length > 0) {
+        let devices = this.devices.map(item => item.id)
 
-      this.$EventBus.$emit('device-video-play', devices)
+        this.$EventBus.$emit('device-video-play', devices)
+      } else {
+        this.$message.error('请选择设备')
+      }
     }
   },
   beforeDestroy() {
