@@ -37,7 +37,9 @@ export default {
       this.switchHotType(this.eventHotType)
     },
     hideEventHotMap() {
-      eventHotMap.setMap(null)
+      if (eventHotMap) {
+        eventHotMap.setMap(null)
+      }
     },
     async getEventHotMapData() {
       //获取热力图数据
