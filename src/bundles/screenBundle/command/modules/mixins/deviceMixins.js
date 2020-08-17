@@ -27,7 +27,7 @@ export default {
     this.$EventBus.$on('screen-device-location', this.deviceLocation) //监听设备定位
     this.$EventBus.$on('org-change', this.deviceOrgChange) //监听第一次组织级别切换
     this.$EventBus.$on('show-word-change', this.deviceShowWordChange) //监听文字显示切换
-    this.initDeviceData()
+    // this.initDeviceData()
   },
   methods: {
     // 获取ordID
@@ -37,6 +37,7 @@ export default {
 
     // 获取摄像头固定设备数据
     async initDeviceData() {
+      console.log('----------------------')
       // 发送请求获取数据
       try {
         let screenDeviceData = await getScreenDeviceData({ orgId: this.deviceOrgId, projectId: this.project.projectId })
@@ -105,6 +106,8 @@ export default {
 
     // 处理推送设备数据
     async initDeviceMap(data) {
+      console.log('aa------------------', data)
+
       if (data.type == 3) {
         // 如果类型为3, 删除离线设备
         this.formatClearDevices(data.deviceIds)
@@ -112,6 +115,8 @@ export default {
         // 如果推荐设备类型为1 清空之前数据, 初始化
         this.clearDevices() // 清除之前的记录
 
+
+        console.log('************************************************')
         // 初始化后重新执行固定设备
         this.initDeviceData()
       }

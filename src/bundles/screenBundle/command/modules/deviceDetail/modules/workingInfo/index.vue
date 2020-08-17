@@ -10,7 +10,10 @@
     </div>
     <div class="jc-detail-warp" v-if="deviceDetaillData.online">
       <div class="jc-detail-label">视频信息：</div>
-      <div class="jc-detail-content"></div>
+      <div class="jc-detail-content">
+        <el-button @click="videoplay(deviceDetaillData.deviceId)">点击</el-button>
+      </div>
+
     </div>
   </div>
 </template>
@@ -23,6 +26,11 @@ export default {
   data() {
     return {
 
+    }
+  },
+  methods: {
+    videoplay(deviceId) {
+      this.$EventBus.$emit('device-video-play', [deviceId])
     }
   }
 }
