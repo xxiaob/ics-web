@@ -17,9 +17,6 @@ export default {
     }
   },
   created() {
-    //  初始化数据
-    this.initProblemData()
-
     this.$EventBus.$on('show-word-change', this.problemShowWordChange) //监听文字显示切换
     this.$EventBus.$on('org-change', this.problemOrgChange) //监听第一次组织级别切换
     this.$EventBus.$on('show-together-change', this.problemTogetherChange) // 监听是否聚合
@@ -28,6 +25,8 @@ export default {
     problemOrgChange(org) {
       // 获取ordID
       this.problemOrgId = org.orgId
+      //  初始化数据
+      this.initProblemData()
     },
     async initProblemData() {
       let beginTime = new Date(this.today) // 开始时间
