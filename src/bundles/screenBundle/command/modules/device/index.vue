@@ -193,7 +193,7 @@ export default {
         let devices = this.devices.map(item => (
           {
             deviceId: item.id,
-            name: item.label
+            name: item.name
           }
         ))
 
