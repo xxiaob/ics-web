@@ -6,7 +6,7 @@
         <div class="custom-tree-node" slot-scope="{ node,data}">
           <div class="jc-tree-label no-select jc-flex-warp" :class="{'jc-devices-offline': data.type=='device' && !data.online, 'jc-device':data.type=='device'}">
             <i class="iconfont" :class="{'iconshexiangtou':data.deviceType==DEVICE_TYPES.CAMERA,'iconwurenji':data.deviceType==DEVICE_TYPES.UAV,'iconmap_policecar':data.deviceType==DEVICE_TYPES,'online':data.online}" v-if="data.type=='device'"></i>
-            <div class="jc-text-warp.NETPATROLCAR" v-text="node.label"></div>
+            <div class="jc-text-warp.NETPATROLCAR" v-text="node.label" :title="node.label"></div>
           </div>
           <div class="jc-tree-options" v-on:click.stop>
             <el-button type="text" size="small" icon="el-icon-map-location" :class="{'jc-devices-offline': data.type=='device' && !data.online}" @click="goLocation(data)" title="定位"></el-button>
