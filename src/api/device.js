@@ -3,6 +3,7 @@
  */
 import axios from 'axios'
 import API from './API'
+import qs from 'qs'
 
 /*-------------------------------设备管理------------------------------------ */
 /**
@@ -47,4 +48,11 @@ export function getDeviceList(params) {
   return axios.get(API.device.deviceList, { params })
 }
 
-
+/**
+ * 获取实时流
+ * @param {object} deviceIds 设备id数组
+ * @returns {Object} axios 对象
+ */
+export function getLiveStreaming(deviceIds) {
+  return axios.get(API.device.getLiveStreaming + '?' + qs.stringify(deviceIds, { indices: false }))
+}

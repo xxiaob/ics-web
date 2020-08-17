@@ -82,7 +82,7 @@ export default {
         problemData.markerCluster.setData(problemData.lnglats)
       } else {
         problemData.markerCluster = new MarkerCluster(null, problemData.lnglats, {
-          userSize: 60,
+          gridSize: 120,
           renderClusterMarker: this.renderProblemClusterMarker,
           renderMarker: this.renderProblemMarker
         })

@@ -156,7 +156,7 @@ export default {
         deviceData.markerCluster.setData(deviceData.lnglats)
       } else {
         deviceData.markerCluster = new MarkerCluster(null, deviceData.lnglats, {
-          userSize: 60,
+          gridSize: 120,
           // renderClusterMarker: this.renderDeviceClusterMarker,  // 设备不需要聚合
           renderMarker: this.renderDeviceMarker
         })
