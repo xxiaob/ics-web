@@ -2,7 +2,6 @@ import { getMarkerCluster } from '@/map/aMap/aMapUtil'
 import { JcProblemIcons } from '@/config/JcIconConfig'
 
 import { getScreenProblemData } from '@/api/screen'
-import { getUser } from '@/libs/storage'
 import moment from 'moment'
 
 let problemData = { markerCluster: null, problems: {}, lnglats: [] }
@@ -18,77 +17,78 @@ export default {
     }
   },
   created() {
-    // 利用用户来模拟事件
-    // this.$EventBus.$on('map-user-change', this.problemMap)
     //  初始化数据
     this.initProblemData()
 
     this.$EventBus.$on('show-word-change', this.problemShowWordChange) //监听文字显示切换
+    this.$EventBus.$on('org-change', this.problemOrgChange) //监听第一次组织级别切换
     this.$EventBus.$on('show-together-change', this.problemTogetherChange) // 监听是否聚合
   },
   methods: {
+    problemOrgChange(org) {
+      // 获取ordID
+      this.problemOrgId = org.orgId
+    },
     async initProblemData() {
       let beginTime = new Date(this.today) // 开始时间
 
       let endTime = new Date(this.today + 24 * 60 * 60 * 1000) // 结束时间
 
-      let { orgId } = await getUser() // 获取用户orgId
+      try {
+        // 发送请求获取数据
+        let ScreenProblemData = await getScreenProblemData({ orgId: this.problemOrgId, projectId: this.project.projectId, beginTime, endTime })
 
-      let { projectId } = this.project // 获取projectId
+        console.log('ScreenProblemData', ScreenProblemData)
 
-      console.log(beginTime, endTime, orgId, projectId)
+        MarkerCluster = await getMarkerCluster()
 
+        this.clearProblems() // 清除之前的记录
 
-      // 发送请求获取数据
-      let ScreenProblemData = await getScreenProblemData({ orgId, projectId })
+        // 处理用户信息
+        if (ScreenProblemData && ScreenProblemData.length) {
+          ScreenProblemData.forEach(item => {
+            // 过滤没有坐标的事件
+            if (!item.position) {
+              return
+            }
 
-      console.log('ScreenProblemData', ScreenProblemData)
+            let position = item.position.split(',') // 切割坐标
 
-      MarkerCluster = await getMarkerCluster()
+            item.lng = position[0] // 获取精度
+            item.lat = position[1] // 获取维度
 
-      this.clearProblems() // 清除之前的记录
+            // 计算事件的中心点坐标和key, 处理坐标相同的情况
+            let { center, key } = this.getProblemCenterAndKey(item.lng, item.lat, item.businessKey)
 
+            let lnglat = problemData.lnglats.find(problem => problem.problemId == item.businessKey)
 
-      // 处理用户信息
-      if (ScreenProblemData && ScreenProblemData.length) {
-        ScreenProblemData.forEach(item => {
-          // 过滤没有坐标的事件
-          if (!item.position) {
-            return
-          }
+            if (lnglat) {
+              delete problemData.users[lnglat.key]
+            } else {
+              problemData.lnglats.push({ lnglat: center, key, problemId: item.businessKey })
+            }
 
-          let position = item.position.split(',') // 切割坐标
+            problemData.problems[key] = { ...item, center }
+          })
+        }
 
-          item.lng = position[0] // 获取精度
-          item.lat = position[1] // 获取维度
+        if (problemData.markerCluster) {
+          //如果已经存在，则去调整数据显示
+          problemData.markerCluster.setData(problemData.lnglats)
+        } else {
+          let myJcMap = this.getMyJcMap()
 
-          // 计算事件的中心点坐标和key, 处理坐标相同的情况
-          let { center, key } = this.getProblemCenterAndKey(item.lng, item.lat, item.businessKey)
-
-          let lnglat = problemData.lnglats.find(problem => problem.problemId == item.businessKey)
-
-          if (lnglat) {
-            delete problemData.users[lnglat.key]
-          } else {
-            problemData.lnglats.push({ lnglat: center, key, problemId: item.businessKey })
-          }
-          console.log('problemData', problemData)
-          problemData.problems[key] = { ...item, center }
-        })
+          problemData.markerCluster = new MarkerCluster(myJcMap.map, problemData.lnglats, {
+            gridSize: 120,
+            renderClusterMarker: this.renderProblemClusterMarker,
+            renderMarker: this.renderProblemMarker
+          })
+          problemData.markerCluster.on('click', this.markerProblemClusterClick)
+        }
+        this.fitProblems() //控制用户显示
+      } catch (error) {
+        console.log(error)
       }
-
-      if (problemData.markerCluster) {
-        //如果已经存在，则去调整数据显示
-        problemData.markerCluster.setData(problemData.lnglats)
-      } else {
-        problemData.markerCluster = new MarkerCluster(null, problemData.lnglats, {
-          gridSize: 120,
-          renderClusterMarker: this.renderProblemClusterMarker,
-          renderMarker: this.renderProblemMarker
-        })
-        problemData.markerCluster.on('click', this.markerProblemClusterClick)
-      }
-      this.fitProblems() //控制用户显示
     },
     renderProblemClusterMarker(context) {
       console.log('绘制用户-聚合绘制', context)
@@ -120,9 +120,8 @@ export default {
       context.marker.setPosition(problemItem.center)
       context.marker.setContent(content)
     },
-
-    //  点击弹窗
     markerProblemClusterClick(context) {
+      //  点击弹窗
       console.log('绘制用户-点击', context)
       let myJcMap = this.getMyJcMap() //获取地图对象
 
@@ -134,7 +133,6 @@ export default {
         let key = this.getKeyByLngLat(context.lnglat.lng, context.lnglat.lat)
 
         let problemItem = problemData.problems[key]
-
 
         this.$EventBus.$emit('view-component-change', {
           component: 'MessageDetail', options: {
@@ -165,7 +163,6 @@ export default {
         return
       }
       let myJcMap = this.getMyJcMap() //获取地图对象
-
 
       //处理问题是否显示
       if (this.problemTipVisible) {
@@ -203,6 +200,7 @@ export default {
     }
   },
   beforeDestroy() {
+    this.clearProblems()
     this.$EventBus.$off('show-word-change', this.problemShowWordChange)
     this.$EventBus.$off('show-together-change', this.problemTogetherChange) // 监听是否聚合
   }

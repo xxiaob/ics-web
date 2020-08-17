@@ -30,14 +30,12 @@ export default {
     // this.initDeviceData()
   },
   methods: {
-    // 获取ordID
     deviceOrgChange(org) {
+      // 获取ordID
       this.deviceOrgId = org.orgId
     },
-
-    // 获取摄像头固定设备数据
     async initDeviceData() {
-      console.log('----------------------')
+      // 获取摄像头固定设备数据
       // 发送请求获取数据
       try {
         let screenDeviceData = await getScreenDeviceData({ orgId: this.deviceOrgId, projectId: this.project.projectId })
@@ -80,8 +78,6 @@ export default {
         console.log(error)
       }
     },
-
-    // 清理离线设备
     formatClearDevices(deviceIds) {
       //清除离线设备
       deviceIds.forEach(deviceId => {
@@ -102,12 +98,8 @@ export default {
         }
       })
     },
-
-
-    // 处理推送设备数据
     async initDeviceMap(data) {
-      console.log('aa------------------', data)
-
+      // 处理推送设备数据
       if (data.type == 3) {
         // 如果类型为3, 删除离线设备
         this.formatClearDevices(data.deviceIds)
@@ -115,8 +107,6 @@ export default {
         // 如果推荐设备类型为1 清空之前数据, 初始化
         this.clearDevices() // 清除之前的记录
 
-
-        console.log('************************************************')
         // 初始化后重新执行固定设备
         this.initDeviceData()
       }
@@ -133,12 +123,8 @@ export default {
           // 计算事件的中心点坐标和key, 处理坐标相同的情况
           let { center, key } = this.getDeviceCenterAndKey(item.lng, item.lat, item.deviceId)
 
-          console.log('deviceCenterAndKey', center, key)
-          console.log('deviceCenterAndKey', deviceData)
-
+          // 判断
           let lnglat = deviceData.lnglats.find(device => device.deviceId == item.deviceId)
-
-          console.log('device', lnglat)
 
           if (lnglat) {
             delete deviceData.devices[lnglat.key]
@@ -146,7 +132,6 @@ export default {
           } else {
             deviceData.lnglats.push({ lnglat: center, key, deviceId: item.deviceId })
           }
-          console.log('deviceData', deviceData)
           deviceData.devices[key] = { ...item, center }
         })
       }
@@ -166,7 +151,6 @@ export default {
       }
       this.fitDevices() //控制设备显示
     },
-
     renderDeviceMarker(context) {
       console.log('绘制用户-单点绘制', context)
       let key = this.getKeyByLngLat(context.data[0].lnglat.lng, context.data[0].lnglat.lat)
@@ -196,9 +180,8 @@ export default {
       context.marker.setPosition(deviceItem.center)
       context.marker.setContent(content)
     },
-
-    //  点击弹窗
     markerDeviceClusterClick(context) {
+      //  点击弹窗
       console.log('绘制用户-点击', context)
       let myJcMap = this.getMyJcMap() //获取地图对象
 
@@ -224,7 +207,6 @@ export default {
 
       let key = center.join(',')
 
-
       //处理是已经有事件和当前事件位置完全相同，如果相同则进行处理偏差处理
       let device = deviceData.devices[key]
 
@@ -236,12 +218,9 @@ export default {
 
       return { center, key }
     },
-
-    //监听设备位置
     deviceLocation(data) {
+      //监听设备位置
       if (this.deviceTipVisible) {
-        console.log('devicedata', data)
-        console.log('devicedata', deviceData)
         // 查看设备是否是否存在,存在更行,不存在则添加
         let lnglat = deviceData.lnglats.find(device => device.deviceId == data.id)
 
@@ -253,13 +232,8 @@ export default {
         }
       }
     },
-
     fitDevices() {
-      if (!deviceData.markerCluster) {
-        return
-      }
       let myJcMap = this.getMyJcMap() //获取地图对象
-
 
       //处理用户是否显示
       if (this.deviceTipVisible) {

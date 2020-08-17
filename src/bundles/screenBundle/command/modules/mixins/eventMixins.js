@@ -2,7 +2,6 @@ import { getMarkerCluster } from '@/map/aMap/aMapUtil'
 import { JcEventIcons } from '@/config/JcIconConfig'
 
 import { getScreenEventData } from '@/api/screen'
-import { getUser } from '@/libs/storage'
 import moment from 'moment'
 
 let eventData = { markerCluster: null, events: {}, lnglats: [] }
@@ -18,75 +17,78 @@ export default {
     }
   },
   created() {
-    // 利用用户来模拟事件
-    // this.$EventBus.$on('map-user-change', this.initEventData)
+    // 初始化数据
     this.initEventData()
 
     this.$EventBus.$on('show-word-change', this.eventShowWordChange) //监听文字显示切换
+    this.$EventBus.$on('org-change', this.eventOrgChange) //监听第一次组织级别切换
     this.$EventBus.$on('show-together-change', this.eventTogetherChange) // 监听是否聚合
   },
   methods: {
+    eventOrgChange(org) {
+      // 获取ordID
+      this.eventOrgId = org.orgId
+    },
     async initEventData() {
       let beginTime = new Date(this.today) // 开始时间
 
       let endTime = new Date(this.today + 24 * 60 * 60 * 1000) // 结束时间
 
-      let { orgId } = await getUser() // 获取用户orgId
+      try {
+        // 发送请求获取数据
+        let ScreenEventData = await getScreenEventData({ orgId: this.eventOrgId, projectId: this.project.projectId, beginTime, endTime })
 
-      let { projectId } = this.project // 获取projectId
-
-      console.log(beginTime, endTime, orgId, projectId)
-
-
-      // 发送请求获取数据
-      let ScreenEventData = await getScreenEventData({ orgId, projectId })
-
-      MarkerCluster = await getMarkerCluster()
+        MarkerCluster = await getMarkerCluster()
 
 
-      this.clearEvents() // 清除之前的记录
+        this.clearEvents() // 清除之前的记录
 
 
-      // 处理用户信息
-      if (ScreenEventData && ScreenEventData.length) {
-        ScreenEventData.forEach(item => {
-          // 过滤没有坐标的事件
-          if (!item.position) {
-            return
-          }
+        // 处理用户信息
+        if (ScreenEventData && ScreenEventData.length) {
+          ScreenEventData.forEach(item => {
+            // 过滤没有坐标的事件
+            if (!item.position) {
+              return
+            }
 
-          let position = item.position.split(',') // 切割坐标
+            let position = item.position.split(',') // 切割坐标
 
-          item.lng = position[0] // 获取精度
-          item.lat = position[1] // 获取维度
+            item.lng = position[0] // 获取精度
+            item.lat = position[1] // 获取维度
 
-          // 计算事件的中心点坐标和key, 处理坐标相同的情况
-          let { center, key } = this.getEventCenterAndKey(item.lng, item.lat, item.id)
+            // 计算事件的中心点坐标和key, 处理坐标相同的情况
+            let { center, key } = this.getEventCenterAndKey(item.lng, item.lat, item.id)
 
 
-          let lnglat = eventData.lnglats.find(event => event.eventId == item.id)
+            let lnglat = eventData.lnglats.find(event => event.eventId == item.id)
 
-          if (lnglat) {
-            delete eventData.events[lnglat.key]
-          } else {
-            eventData.lnglats.push({ lnglat: center, key, eventId: item.id })
-          }
-          eventData.events[key] = { ...item, center }
-        })
+            if (lnglat) {
+              delete eventData.events[lnglat.key]
+            } else {
+              eventData.lnglats.push({ lnglat: center, key, eventId: item.id })
+            }
+            eventData.events[key] = { ...item, center }
+          })
+        }
+
+        if (eventData.markerCluster) {
+          //如果已经存在，则去调整数据显示
+          eventData.markerCluster.setData(eventData.lnglats)
+        } else {
+          let myJcMap = this.getMyJcMap()
+
+          eventData.markerCluster = new MarkerCluster(myJcMap.map, eventData.lnglats, {
+            gridSize: 120,
+            renderClusterMarker: this.renderEventClusterMarker,
+            renderMarker: this.renderEventMarker
+          })
+          eventData.markerCluster.on('click', this.markerEventClusterClick)
+        }
+        this.fitEvents() //控制用户显示
+      } catch (error) {
+        console.log(error)
       }
-
-      if (eventData.markerCluster) {
-        //如果已经存在，则去调整数据显示
-        eventData.markerCluster.setData(eventData.lnglats)
-      } else {
-        eventData.markerCluster = new MarkerCluster(null, eventData.lnglats, {
-          gridSize: 120,
-          renderClusterMarker: this.renderEventClusterMarker,
-          renderMarker: this.renderEventMarker
-        })
-        eventData.markerCluster.on('click', this.markerEventClusterClick)
-      }
-      this.fitEvents() //控制用户显示
     },
     renderEventClusterMarker(context) {
       console.log('绘制事件-聚合绘制', context)
@@ -200,6 +202,7 @@ export default {
     }
   },
   beforeDestroy() {
+    this.clearEvents()
     this.$EventBus.$off('show-word-change', this.eventShowWordChange)
     this.$EventBus.$off('show-together-change', this.eventTogetherChange)
   }
