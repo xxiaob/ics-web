@@ -1,13 +1,13 @@
 <template>
   <div class="jc-video-warp" :class="{'jc-warp-show': show}">
     <div class="jc-warp-title">视频播放<i class="jc-video-close el-icon-close" @click="closeVideos"></i></div>
-    <div class="jc-video-item" v-for="(item,index) in list" :key="item.id" :class="item.id == fullId ? 'jc-video-full': `jc-video-${index}`">
+    <div class="jc-video-item" v-for="(item,index) in list" :key="item.deviceId" :class="item.deviceId == fullId ? 'jc-video-full': `jc-video-${index}`">
       <i class="jc-item-close el-icon-close" @click="videoClose(item)"></i>
       <div class="jc-video-header">
         <div class="jc-video-title" v-text="item.name"></div>
         <i class="jc-controll-item el-icon-full-screen" @click="videoFull(item)"></i>
       </div>
-      <div class="jc-video-play video-js vjs-default-skin" :id="item.userId"></div>
+      <div class="jc-video-play video-js vjs-default-skin" :id="item.userId || item.deviceId"></div>
     </div>
   </div>
 </template>
@@ -44,15 +44,31 @@ export default {
     // }, 15000)
   },
   methods: {
-    async videoPlay(deviceIds) {
+    async videoPlay(devices) {
       //播放内容
-      console.log('video-warp-deviceIds', deviceIds)
-      if (!deviceIds || deviceIds.length < 1) {
+      console.log('video-warp-deviceIds', devices)
+      if (!devices || devices.length < 1) {
         return
       }
 
       try {
+        let deviceIds = [], playList = {} //存储id 数组，需要重新播放的列表
+
+        //处理该设备id 是否已经在播放列表，如果已经在则不进行请求查询
+        devices.forEach(item => {
+          if (!videos[item.deviceId]) {
+            deviceIds.push(item.deviceId)
+            playList[item.deviceId] = { deviceId: item.deviceId, name: item.name }
+          }
+        })
+
         let result = await getLiveStreaming({ deviceIds })
+
+        if (result && result.length) {
+          result.forEach(item => {
+
+          })
+        }
       } catch (error) {
         console.log(error)
       }

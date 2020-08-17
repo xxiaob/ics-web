@@ -155,14 +155,16 @@ export default {
         //如果已经存在，则去调整数据显示
         deviceData.markerCluster.setData(deviceData.lnglats)
       } else {
-        deviceData.markerCluster = new MarkerCluster(null, deviceData.lnglats, {
+        let myJcMap = this.getMyJcMap() //获取地图对象
+
+        deviceData.markerCluster = new MarkerCluster(myJcMap.map, deviceData.lnglats, {
           gridSize: 120,
           // renderClusterMarker: this.renderDeviceClusterMarker,  // 设备不需要聚合
           renderMarker: this.renderDeviceMarker
         })
         deviceData.markerCluster.on('click', this.markerDeviceClusterClick)
       }
-      this.fitDevices() //控制用户显示
+      this.fitDevices() //控制设备显示
     },
 
     renderDeviceMarker(context) {
