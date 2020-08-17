@@ -52,7 +52,7 @@ export default {
       }
 
       try {
-        let result = await getLiveStreaming(deviceIds)
+        let result = await getLiveStreaming({ deviceIds })
       } catch (error) {
         console.log(error)
       }

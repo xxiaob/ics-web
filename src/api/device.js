@@ -50,9 +50,9 @@ export function getDeviceList(params) {
 
 /**
  * 获取实时流
- * @param {object} deviceIds 设备id数组
+ * @param {object} data 设备id数组
  * @returns {Object} axios 对象
  */
-export function getLiveStreaming(deviceIds) {
-  return axios.get(API.device.getLiveStreaming + '?' + qs.stringify(deviceIds, { indices: false }))
+export function getLiveStreaming(data) {
+  return axios.get(API.device.getLiveStreaming + '?' + qs.stringify(data, { indices: false }))
 }
