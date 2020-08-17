@@ -84,7 +84,7 @@ export default {
       for (let deviceId in videos) {
         let index = this.list.findIndex(device => device.deviceId == deviceId)
 
-        if (index > -1) {
+        if (index < 0) {
           let device = videos[deviceId]
 
           device.player.dispose()
@@ -97,9 +97,7 @@ export default {
           let playItem = { ...item }
 
           playItem.player = videojs(item.userId || item.deviceId, {
-            sources: [ {
-              src: item.hls
-            }],
+            sources: [{ src: item.hls }],
             controls: false,
             autoplay: true
             // techOrder: ['flash'],
@@ -129,12 +127,12 @@ export default {
       })
     },
     videoClose(item) {
-      if (item.id == this.fullId) {
+      if (item.deviceId == this.fullId) {
         //如果是放大的视频则缩小
         this.fullId = null
       } else {
         //关闭单个视频
-        let index = this.list.findIndex(videoItem => videoItem.id == item.id)
+        let index = this.list.findIndex(videoItem => videoItem.deviceId == item.deviceId)
 
         if (index > -1) {
           this.list.splice(index, 1)
@@ -146,7 +144,7 @@ export default {
     },
     videoFull(item) {
       //全屏播放
-      this.fullId = item.id
+      this.fullId = item.deviceId
     }
   },
   beforeDestroy() {
