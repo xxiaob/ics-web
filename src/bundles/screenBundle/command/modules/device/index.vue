@@ -115,7 +115,7 @@ export default {
             return {
               ...item,
               online: false,
-              disable: true
+              disabled: true
             }
           }
         }
