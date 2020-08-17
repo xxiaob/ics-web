@@ -185,8 +185,7 @@ export default {
     },
     devicevideoPlay() {
     // 多屏设备播放
-      console.log('device', this.devices)
-      let devices = this.devices.map(item => item.deviceId)
+      let devices = this.devices.map(item => item.id)
 
       this.$EventBus.$emit('device-video-play', devices)
     }
