@@ -70,11 +70,12 @@ export default {
   created() {
     this.initData()
     this.$EventBus.$on('map-device-online-change', this.onlineDevicesChange) //监听在线设备变化
+    this.$EventBus.$on('show-word-change', this.deviceShowWordChange) //监听实体显示切换
   },
   methods: {
 
     onlineDevicesChange(onlineDevices) {
-      console.log('onlineDevices', onlineDevices)
+      // 设备变化推送
       this.onlineDevices = onlineDevices
 
       this.onlineChange(this.trees) // 调用方法从新处理数据
@@ -173,6 +174,11 @@ export default {
         this.$message.error('当前设备为离线状态')
         return
       }
+
+      if (!this.deviceTipVisible) {
+        this.$message.error('当前设备未在大屏显示')
+        return
+      }
       if (data.type == 'device') {
         this.$EventBus.$emit('screen-device-location', { id: data.id }) // 通知网格定位
       } else {
@@ -213,10 +219,14 @@ export default {
       } else {
         this.$message.error('请选择设备')
       }
+    },
+    deviceShowWordChange(words) {
+      this.deviceTipVisible = words.includes('device') //如果存在用户显示，则显示用户，否则不显示
     }
   },
   beforeDestroy() {
-    this.$EventBus.$off('map-device-online-change', this.onlineDevicesChange)
+    this.$EventBus.$off('map-device-online-change', this.onlineDevicesChange) //解绑监听在线
+    this.$EventBus.$off('show-word-change', this.deviceShowWordChange) //解绑监听实体
   }
 }
 </script>
