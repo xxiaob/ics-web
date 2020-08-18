@@ -135,11 +135,13 @@ export default {
         this.deviceTimer = window.setInterval(this.initDeviceData, 5 * 60 * 1000) // 固定摄像头轮询
       }
 
-      data.devices && data.devices.forEach(device => {
-        if (!this.hkDeviceIds.includes(device.deviceId)) {
-          this.hkDeviceIds.push(device.deviceId)
-        }
-      })
+      if (data.devices) {
+        data.devices.forEach(device => {
+          if (!this.hkDeviceIds.includes(device.deviceId)) {
+            this.hkDeviceIds.push(device.deviceId)
+          }
+        })
+      }
 
 
       this.$EventBus.$emit('map-device-online-change', this.hkDeviceIds)

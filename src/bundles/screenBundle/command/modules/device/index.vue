@@ -70,36 +70,29 @@ export default {
   created() {
     this.initData()
     this.$EventBus.$on('map-device-online-change', this.onlineDevicesChange) //监听在线设备变化
-    // this.$EventBus.$on('map-device-change', this.onlineDevicesChange)
   },
   methods: {
-    // onlineDevicesChange(onlineData) {
-    //   console.log('onlineData', onlineData)
-    // },
+
     onlineDevicesChange(onlineDevices) {
+      console.log('onlineDevices', onlineDevices)
       this.onlineDevices = onlineDevices
 
-      this.trees = this.onlineChange(this.trees) // 调用方法从新处理数据
-      console.log('this.trees', this.trees)
+      this.onlineChange(this.trees) // 调用方法从新处理数据
     },
     onlineChange(trees) {
       // 处理离线/在线切换的方法
-      return trees.map(item => {
-        if (item.type == 'org') {
-          return {
-            ...item,
-            children: item.children && this.onlineChange(item.children)
-          }
-        } else {
-          let isOnline = this.onlineDevices.includes(item.id) // 判断是否在线
+      for (let i = 0; i < trees.length; i++) {
+        let treesItem = trees[i]
 
-          return {
-            ...item,
-            online: isOnline,
-            disabled: !isOnline
-          }
+        if (treesItem.type == 'org') {
+          this.onlineChange(treesItem.children || [])
+        } else {
+          let isOnline = this.onlineDevices.includes(treesItem.id) // 判断是否在线
+
+          treesItem.online = isOnline
+          treesItem.disabled = !isOnline
         }
-      })
+      }
     },
     async initData() {
       // 初始数据
