@@ -26,8 +26,7 @@ export default {
     this.$EventBus.$on('map-device-change', this.initDeviceMap)
     this.$EventBus.$on('screen-device-location', this.deviceLocation) //监听设备定位
     this.$EventBus.$on('org-change', this.deviceOrgChange) //监听第一次组织级别切换
-    this.$EventBus.$on('show-word-change', this.deviceShowWordChange) //监听文字显示切换
-    // this.$EventBus.$on('map-device-online-change', this.onlineDevicesChange)
+    this.$EventBus.$on('show-word-change', this.deviceShowWordChange) //监听实体显示切换
     // this.initDeviceData()
   },
   methods: {
@@ -41,13 +40,6 @@ export default {
       try {
         let screenDeviceData = await getScreenDeviceData({ orgId: this.deviceOrgId, projectId: this.project.projectId })
 
-
-        // console.log('screenDeviceData', screenDeviceData)
-        // // 推送设备列表
-        // // this.$EventBus.$emit('map-device-change', {
-        // //   type: 2,
-        // //   devices: screenDeviceData
-        // // })
 
         let devices = [] // hkDeviceIds = []
 
@@ -143,9 +135,7 @@ export default {
         })
       }
 
-
-      this.$EventBus.$emit('map-device-online-change', this.hkDeviceIds)
-
+      this.$EventBus.$emit('map-device-online-change', this.hkDeviceIds) // 将在线设备推送给设备列表
 
       this.deviceMap(data.devices) // 将推送设备列表传递deviceMap处理
     },
