@@ -80,8 +80,8 @@
                 <span class="jc-flex-con-2 jc-omit-cell text-center">{{ item.onGuardUserCount }}</span>
                 <span class="jc-flex-con-2 jc-omit-cell text-center">{{ item.journey }}</span>
                 <span class="jc-flex-con-2 jc-omit-cell text-center">{{ item.eventReportCount }}</span>
-                <span class="jc-flex-con-2 jc-omit-cell text-center">{{ item.temporaryTaskCount }}</span>
-                <span class="jc-flex-con-2 jc-omit-cell text-center">{{ item.problemCount}}</span>
+                <span class="jc-flex-con-2 jc-omit-cell text-center">{{ item.problemCount }}</span>
+                <span class="jc-flex-con-2 jc-omit-cell text-center">{{ item.temporaryTaskCount}}</span>
                 <span class="jc-flex-con-2 jc-omit-cell text-center">{{ item.inoutCount}}</span>
               </div>
             </div>
