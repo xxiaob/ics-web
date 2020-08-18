@@ -69,30 +69,15 @@ export default {
   },
   created() {
     this.initData()
-    // this.$EventBus.$on('map-device-online-change', this.onlineDevicesChange) //监听在线设备变化
-    this.$EventBus.$on('map-device-change', this.onlineDevicesChange)
+    this.$EventBus.$on('map-device-online-change', this.onlineDevicesChange) //监听在线设备变化
+    // this.$EventBus.$on('map-device-change', this.onlineDevicesChange)
   },
   methods: {
+    // onlineDevicesChange(onlineData) {
+    //   console.log('onlineData', onlineData)
+    // },
     onlineDevicesChange(onlineDevices) {
-      console.log('onlineDevicesChange', onlineDevices)
-      console.log('devices', this.trees)
-
-      if (onlineDevices.type == 2) {
-        // type 2  为推送在线
-        onlineDevices.devices.forEach(device => {
-          if (!this.onlineDevices.includes(device.deviceId)) {
-            this.onlineDevices.push(device.deviceId) // 新增在线id
-          }
-        })
-        console.log('online', this.onlineDevices)
-      } else if (onlineDevices.type == 3) {
-        // type 3 为推送 离线
-        onlineDevices.deviceIds.forEach(device => {
-          let index = this.onlineDevices.findIndex(onlineId => onlineId == device ) // 查询离线索引
-
-          this.onlineDevices.splice(index, 1) // 删除离线id
-        })
-      }
+      this.onlineDevices = onlineDevices
 
       this.trees = this.onlineChange(this.trees) // 调用方法从新处理数据
       console.log('this.trees', this.trees)
