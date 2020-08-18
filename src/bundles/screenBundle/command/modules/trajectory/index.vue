@@ -163,9 +163,9 @@ export default {
 
         let speed = parseFloat(pathData[key].s)
 
-        if (speed > 36 ) {
+        if (speed > 20 ) {
           style = 'jc-trajectory-car'
-        } else if (speed > 8) {
+        } else if (speed > 5) {
           style = 'jc-trajectory-elcicle'
         }
         this.runInfo = { addr: pathData[key].d, speed: pathData[key].s, key, style, time: pathData[key].t } //设置运行信息
@@ -193,9 +193,9 @@ export default {
 
             let p = new myJcMap.AMap.LngLat(item.ln, item.la)
 
-            if (lastP.distance(p) > 10) {
+            if (lastP.distance(p) > 20) {
               lastP = p
-              if (activeDot.p.distance(p) >= 200) {
+              if (activeDot.p.distance(p) >= 1000) {
                 activeDot = { p: lastP, s: item.s, t: formatDate(item.t) }
                 activeDot.d = await getAddressByPosition(lastP)
                 pathData[this.getKeyByLngLat(item.ln, item.la)] = activeDot
