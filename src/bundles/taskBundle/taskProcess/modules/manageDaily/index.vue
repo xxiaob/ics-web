@@ -11,11 +11,13 @@
       </div>
       <!-- assigneeAreaPOS -->
       <el-form-item label="任务区域" prop="" :rules="rules.NOT_NULL">
-        <jc-task-area :edit.sync="editArea" :projectId="form.projectId" :areaType.sync="form.workAreaType" :selectedAreas.sync="form.assigneeAreaPOS" :orgTree="orgTree"></jc-task-area>
+        <!-- projectId 后期重写 -->
+        <jc-task-area :edit.sync="editArea" :projectId="form.projectId==initProjectId?'':form.projectId" :areaType.sync="form.workAreaType" :selectedAreas.sync="form.assigneeAreaPOS" :orgTree="orgTree"></jc-task-area>
       </el-form-item>
       <!-- peopleProps[peopleType] -->
       <el-form-item label="任务人员" prop="" :rules="rules.SELECT_NOT_NULL">
-        <jc-task-people :edit.sync="edit" :projectId="form.projectId" :emergency="emergency" :peopleType.sync="peopleType" :selecteds.sync="peoples" :orgTree="orgTree"></jc-task-people>
+        <!-- projectId 后期重写 -->
+        <jc-task-people :edit.sync="edit" :projectId="form.projectId==initProjectId?'':form.projectId" :emergency="emergency" :peopleType.sync="peopleType" :selecteds.sync="peoples" :orgTree="orgTree"></jc-task-people>
       </el-form-item>
       <el-form-item label="任务时间" prop="date" :rules="rules.SELECT_NOT_NULL">
         <el-date-picker style="width:40%" v-model="form.date" @change="changeDate" value-format="timestamp" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期">
