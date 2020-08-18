@@ -37,7 +37,6 @@ import { getDeviceList } from '@/api/device'
 import TreesFilterMixins from '@/mixins/TreesFilterMixins'
 import { DEVICE_TYPES } from '@/constant/Dictionaries'
 
-// import { VIDEO_INVITE_TYPES } from '@/constant/Dictionaries'
 
 export default {
   name: 'ScreenCommandOrg',
@@ -70,12 +69,11 @@ export default {
   created() {
     this.initData()
     this.$EventBus.$on('map-device-online-change', this.onlineDevicesChange) //监听在线设备变化
-    this.$EventBus.$on('show-word-change', this.deviceShowWordChange) //监听实体显示切换
   },
   methods: {
 
     onlineDevicesChange(onlineDevices) {
-      // 设备变化推送
+      // 获取所有在线设备的id
       this.onlineDevices = onlineDevices
 
       this.onlineChange(this.trees) // 调用方法从新处理数据
@@ -86,7 +84,7 @@ export default {
         let treesItem = trees[i]
 
         if (treesItem.type == 'org') {
-          this.onlineChange(treesItem.children || [])
+          this.onlineChange(treesItem.children || []) // 递归调用处理在线离线设备方法
         } else {
           let isOnline = this.onlineDevices.includes(treesItem.id) // 判断是否在线
 
@@ -106,14 +104,13 @@ export default {
         this.trees = this.formatDeviceOrgTrees(orgsAndDevice) // 处理组织和用户
         this.expandedKeys = this.trees.length ? [this.trees[0].id] : [] // 设置第一级默认展开
 
-        this.initOptionsUsers() // 初始传入的用户
+        this.initOptionsDevice() // 初始设备
       } catch (err) {
         console.log(err)
       }
       this.loading = false
     },
-    initOptionsUsers() {
-      console.log('deviceInitOptions', this.options)
+    initOptionsDevice() {
       if (this.options && this.options.lenght) {
         // 如果传入option有选中
         let checkKeys = this.$refs.tree.getCheckedKeys()
@@ -125,7 +122,7 @@ export default {
       }
     },
     deleteDevice(index) {
-      this.devices.splice(index, 1) // 删除用户
+      this.devices.splice(index, 1) // 删除设备
       this.updateTreesChecked() // 更新树结构
     },
     clearDevices() {
@@ -175,10 +172,6 @@ export default {
         return
       }
 
-      if (!this.deviceTipVisible) {
-        this.$message.error('当前设备未在大屏显示')
-        return
-      }
       if (data.type == 'device') {
         this.$EventBus.$emit('screen-device-location', { id: data.id }) // 通知网格定位
       } else {
@@ -219,14 +212,11 @@ export default {
       } else {
         this.$message.error('请选择设备')
       }
-    },
-    deviceShowWordChange(words) {
-      this.deviceTipVisible = words.includes('device') //如果存在用户显示，则显示用户，否则不显示
     }
+
   },
   beforeDestroy() {
     this.$EventBus.$off('map-device-online-change', this.onlineDevicesChange) //解绑监听在线
-    this.$EventBus.$off('show-word-change', this.deviceShowWordChange) //解绑监听实体
   }
 }
 </script>

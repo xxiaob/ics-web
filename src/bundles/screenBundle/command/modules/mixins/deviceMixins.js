@@ -9,7 +9,9 @@ let MarkerCluster //存储 MarkerCluster
 export default {
   data() {
     return {
-      hkDeviceIds: [],
+      hkDeviceIds: [], // 所有在线设备ids
+      fixedDeviceIds: [], // 固定在线设备ids
+      pushDeviceIds: [], // 所有推送在线设备ids
       deviceOrgId: ''
     }
   },
@@ -27,7 +29,6 @@ export default {
     this.$EventBus.$on('screen-device-location', this.deviceLocation) //监听设备定位
     this.$EventBus.$on('org-change', this.deviceOrgChange) //监听第一次组织级别切换
     this.$EventBus.$on('show-word-change', this.deviceShowWordChange) //监听实体显示切换
-    // this.initDeviceData()
   },
   methods: {
     deviceOrgChange(org) {
@@ -40,47 +41,65 @@ export default {
       try {
         let screenDeviceData = await getScreenDeviceData({ orgId: this.deviceOrgId, projectId: this.project.projectId })
 
-
-        let devices = [] // hkDeviceIds = []
+        let devices = [], fixedDeviceIds = []
 
         if (screenDeviceData && screenDeviceData.length) {
           //去处理离线和在线
           for (let i = 0; i < screenDeviceData.length; i++) {
             let deviceItem = screenDeviceData[i] // 取出数据
 
-            console.log('screenDeviceData', deviceItem)
-
             // 处理经纬度
             if (deviceItem.position) {
-              // hkDeviceIds.push(deviceItem.deviceId)
+              fixedDeviceIds.push(deviceItem.deviceId) // 获取所有在线固定设备id
               let position = deviceItem.position.split(',') // 切割坐标
 
               devices.push({ deviceId: deviceItem.deviceId, type: deviceItem.resourceType, name: deviceItem.resourceTypeName, lng: position[0], lat: position[1] })
-
-              let index = this.hkDeviceIds.findIndex(deviceId => deviceId == deviceItem.deviceId)
-
-              // 获取离线设备id集合
-              if (index > -1) {
-                this.hkDeviceIds.splice(index, 1)
-              } else {
-                this.hkDeviceIds.push(deviceItem.deviceId)
-              }
             }
-
-            // 轮询获取在线的索引
           }
-          console.log('this.hkDeviceIds', this.hkDeviceIds)
         }
 
-        this.formatClearDevices(this.hkDeviceIds) // 清理离线设备
+        this.formatClearDevices(this.fixedDeviceIds) // 清理离线设备
+        this.fixedDeviceIds = fixedDeviceIds // 保存当前所有在线摄像头的设备Id
         this.deviceMap(devices) // 处理数据
-        // this.hkDeviceIds = hkDeviceIds // 保存当前所有在线摄像头的设备Id
-
-        // console.log('hkDeviceIds', hkDeviceIds)
       } catch (error) {
         // 请求出错
         console.log(error)
       }
+    },
+    async initDeviceMap(data) {
+      console.log('推送设备数据', data)
+      // 处理推送设备数据
+      if (data.type == 3) {
+        // 如果类型为3, 删除离线设备
+        this.formatClearDevices(data.deviceIds)
+
+        // 清理离线设备的id
+        data.deviceIds.forEach(ddeviceId => {
+          let index = this.pushDeviceIds.findIndex(deviceId => deviceId == ddeviceId)
+
+          if (index > -1) {
+            this.pushDeviceIds.splice(index, 1)
+          }
+        })
+      } else if (data.type == 1) {
+        // 如果推荐设备类型为1 清空之前数据, 初始化
+        this.clearDevices() // 清除之前的记录
+
+        // 初始化后重新执行固定设备
+        this.initDeviceData()
+        this.deviceTimer = window.setInterval(this.initDeviceData, 5 * 60 * 1000) // 固定摄像头轮询
+      }
+
+      // 获取所有在线推送设备id集合
+      if (data.devices) {
+        data.devices.forEach(device => {
+          if (!this.pushDeviceIds.includes(device.deviceId)) {
+            this.pushDeviceIds.push(device.deviceId)
+          }
+        })
+      }
+
+      this.deviceMap(data.devices) // 将推送设备列表传递deviceMap处理
     },
     formatClearDevices(deviceIds) {
       //清除离线设备
@@ -102,44 +121,11 @@ export default {
         }
       })
     },
-    async initDeviceMap(data) {
-      console.log('推送设备数据', data)
-      // 处理推送设备数据
-      if (data.type == 3) {
-        // 如果类型为3, 删除离线设备
-        this.formatClearDevices(data.deviceIds)
-
-        // 清理离线设备的id
-
-        data.deviceIds.forEach(ddeviceId => {
-          let index = this.hkDeviceIds.findIndex(deviceId => deviceId == ddeviceId)
-
-          if (index > -1) {
-            this.hkDeviceIds.splice(index, 1)
-          }
-        })
-      } else if (data.type == 1) {
-        // 如果推荐设备类型为1 清空之前数据, 初始化
-        this.clearDevices() // 清除之前的记录
-
-        // 初始化后重新执行固定设备
-        this.initDeviceData()
-        this.deviceTimer = window.setInterval(this.initDeviceData, 5 * 60 * 1000) // 固定摄像头轮询
-      }
-
-      if (data.devices) {
-        data.devices.forEach(device => {
-          if (!this.hkDeviceIds.includes(device.deviceId)) {
-            this.hkDeviceIds.push(device.deviceId)
-          }
-        })
-      }
-
-      this.$EventBus.$emit('map-device-online-change', this.hkDeviceIds) // 将在线设备推送给设备列表
-
-      this.deviceMap(data.devices) // 将推送设备列表传递deviceMap处理
-    },
     async deviceMap(data) {
+      // 所有在线设备推送给设备列表展示
+      this.hkDeviceIds = [...this.pushDeviceIds, ...this.fixedDeviceIds]
+      this.$EventBus.$emit('map-device-online-change', this.hkDeviceIds)
+
       // 处理地图数据
       MarkerCluster = await getMarkerCluster()
 
@@ -229,6 +215,7 @@ export default {
       }
     },
     getDeviceCenterAndKey(lng, lat, deviceId) {
+      // 处理坐标
       let center = [parseFloat(lng).toFixed(6), parseFloat(lat).toFixed(6)]
 
       let key = center.join(',')
@@ -256,6 +243,9 @@ export default {
 
           myJcMap.map.setZoomAndCenter(20, lnglat.lnglat)
         }
+      } else {
+        // 设备未在指挥大屏显示
+        this.$message.error('当前设备未在大屏显示')
       }
     },
     fitDevices() {
@@ -291,6 +281,7 @@ export default {
     this.$EventBus.$off('map-device-change', this.initDeviceMap)
     this.$EventBus.$off('org-change', this.deviceOrgChange)
     this.$EventBus.$off('show-word-change', this.deviceShowWordChange)
+    this.$EventBus.$off('screen-device-location', this.deviceLocation) //监听设备定位
     clearInterval(this.deviceTimer) // 清理固定摄像头轮询
   }
 }
