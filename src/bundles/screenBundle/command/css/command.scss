@@ -65,6 +65,7 @@ $jc-screen-height: 56px;
     height: $jc-screen-height;
     line-height: $jc-screen-height;
     vertical-align: middle;
+
     .iconfont {
       font-size: 18px;
     }
@@ -84,8 +85,7 @@ $jc-screen-height: 56px;
       padding: $jc-default-dis;
       width: 180px;
       height: 168px;
-      background: url(../modules/header/assets/weather-bg.png) no-repeat center
-        bottom;
+      background: url(../modules/header/assets/weather-bg.png) no-repeat center bottom;
       background-size: 100% 160px;
       left: 0;
       visibility: hidden;
@@ -371,6 +371,7 @@ $jc-screen-height: 56px;
       &.jc-work-nobg {
         background: none;
         padding-left: 0;
+
         .iconfont {
           font-size: 13px;
           padding-right: 2px;
@@ -820,8 +821,7 @@ $jc-screen-height: 56px;
 
   .jc-message-user {
     width: 68px;
-    background: url(../modules/message/assets/peportperson.png) no-repeat left
-      center;
+    background: url(../modules/message/assets/peportperson.png) no-repeat left center;
     background-size: 20px 20px;
     padding: 0 $jc-default-dis/2 0 24px;
     @include jc-text-warp;
@@ -924,6 +924,7 @@ $jc-screen-height: 56px;
     width: 100%;
     height: 100%;
     background-color: $jc-screen-color;
+
     .video-js {
       width: 100%;
       height: 100%;
@@ -944,12 +945,7 @@ $jc-screen-height: 56px;
 
     @for $i from 0 through 4 {
       &.jc-video-#{$i} {
-        top: $jc-video-header-height +
-          $jc-default-dis/2 +
-          $jc-default-dis/2 *
-          $i +
-          160 *
-          $i;
+        top: $jc-video-header-height + $jc-default-dis/2 + $jc-default-dis/2 * $i + 160 * $i;
       }
     }
 
@@ -969,10 +965,10 @@ $jc-screen-height: 56px;
     }
 
     &.jc-video-full {
-      top: calc(50vh - 230px);
-      left: calc(50vw - 330px);
-      width: 700px;
-      height: 400px;
+      top: calc(50vh - 260px);
+      left: calc(50vw - 380px);
+      width: 800px;
+      height: 450px;
       z-index: 100;
 
       .jc-controll-item {

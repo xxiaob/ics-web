@@ -9,7 +9,7 @@
       </div>
       <div class="jc-video-play" v-if="item.userId" :id="item.userId"></div>
       <div class="jc-video-play" v-else>
-        <video class="video-js vjs-default-skin" :id="item.deviceId"></video>
+        <video class="video-js vjs-default-skin" :id="`device${item.deviceId}`"></video>
       </div>
     </div>
   </div>
@@ -72,9 +72,7 @@ export default {
             }
           }
           this.list = list
-          this.$nextTick(() => {
-            this.goVideoPlay()
-          })
+          this.goVideoPlay()
         }
       } catch (error) {
         console.log(error)
@@ -100,40 +98,38 @@ export default {
           }
         }
       }
-      this.list.forEach(item => {
-        if (!item[item.deviceId]) {
-          let playItem = { ...item }
+      this.$nextTick(() => {
+        this.list.forEach(item => {
+          if (!item[item.deviceId]) {
+            let playItem = { ...item }
 
-          //如果用户id 存在
-          if (item.userId) {
-            playItem.player = item.userId
-            this.$EventBus.$emit('notice-compulsory-observation', { type: 'start', userId: item.userId })
-          } else {
-            playItem.player = videojs(item.deviceId, {
-              sources: [{ src: item.hls }],
-              controls: false,
-              autoplay: true
-            })
+            //如果用户id 存在
+            if (item.userId) {
+              playItem.player = item.userId
+              this.$EventBus.$emit('notice-compulsory-observation', { type: 'start', userId: item.userId })
+            } else {
+              playItem.player = videojs('device' + item.deviceId, {
+                sources: [{ src: item.hls }],
+                controls: false,
+                autoplay: true
+              })
+            }
+            videos[item.deviceId] = playItem
           }
-          videos[item.deviceId] = playItem
-        }
+        })
       })
     },
     closeVideos() {
       //关闭所有视频
       this.list = []
-      this.$nextTick(() => {
-        this.goVideoPlay()
-      })
+      this.goVideoPlay()
     },
     userLeave(data) {
       let index = this.list.findIndex(videoItem => videoItem.userId == data.userId)
 
       if (index > -1) {
         this.list.splice(index, 1)
-        this.$nextTick(() => {
-          this.goVideoPlay()
-        })
+        this.goVideoPlay()
       }
     },
     videoClose(item) {
@@ -146,9 +142,7 @@ export default {
 
         if (index > -1) {
           this.list.splice(index, 1)
-          this.$nextTick(() => {
-            this.goVideoPlay()
-          })
+          this.goVideoPlay()
         }
       }
     },

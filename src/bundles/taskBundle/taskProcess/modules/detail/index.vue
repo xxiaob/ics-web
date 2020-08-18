@@ -78,7 +78,7 @@
       </div>
       <jc-forward-list :taskId="form.businessKey" ref="forward"></jc-forward-list>
     </el-card>
-    <el-card class="jc-table-card jc-mt" v-if="TASK_STATES.FINISHED==form.taskStatus">
+    <el-card class="jc-table-card jc-mt" v-if="TASK_STATES.FINISHED==form.state">
       <div slot="header">
         <div class="jc-title">关联事件</div>
       </div>
