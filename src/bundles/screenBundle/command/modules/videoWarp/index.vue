@@ -109,9 +109,22 @@ export default {
               this.$EventBus.$emit('notice-compulsory-observation', { type: 'start', userId: item.userId })
             } else {
               playItem.player = videojs('device' + item.deviceId, {
-                sources: [{ src: item.hls }],
+                sources: [{ src: item.hls }], //'rtmp://58.200.131.2:1935/livetv/hunantv'
                 controls: false,
                 autoplay: true
+              }, function () {
+                console.log('执行 播放回调方法')
+                this.one('play', () => {
+                  console.log('开始播放')
+                  this.addClass('vjs-seeking')
+                })
+
+                this.one('loadeddata', () => {
+                  setTimeout(() => {
+                    this.el().style.width = '100%'
+                    this.removeClass('vjs-seeking')
+                  }, 1000)
+                })
               })
             }
             videos[item.deviceId] = playItem
