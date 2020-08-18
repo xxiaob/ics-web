@@ -39,7 +39,7 @@ export default {
 
           if (areaItem.polygons) {
             areaItem.polygons.forEach(item => {
-              item.setMap(null)
+              item.hide()
             })
           }
           if (areaItem.eventClusterMarker) {
@@ -61,7 +61,7 @@ export default {
 
           if (areaItem.polygons) {
             areaItem.polygons.forEach(item => {
-              item.setMap(myJcMap)
+              item.show()
             })
           } else {
             let polygons = []
@@ -102,6 +102,7 @@ export default {
             let content = this.getEventClusterContent(item.eventGroupByEventTypeRespList)
 
             if (areaItem.eventClusterMarker) {
+              areaItem.eventClusterMarker.setPosition(areaItem.center)
               areaItem.eventClusterMarker.setContent(content)
               areaItem.eventClusterMarker.setMap(myJcMap)
             } else {
@@ -116,7 +117,7 @@ export default {
           }
         }
       })
-      myJcMap.setFitView(null, true, [0, 0, 0, 0]) //设置自适应显示
+      this.setFitView() //设置自适应显示
     },
     getEventClusterContent(events) {
       //获取marker数据

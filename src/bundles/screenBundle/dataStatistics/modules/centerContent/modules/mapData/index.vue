@@ -226,6 +226,11 @@ export default {
       this.initEventHotMap() //显示热力图
       this.initEventCluster() //显示聚合图
     },
+    setFitView() {
+      if (orgAreas[this.orgId].rectangle) {
+        myJcMap.setFitView(orgAreas[this.orgId].rectangle, true, [0, 1, 1, 1]) //设置自适应显示
+      }
+    },
     getMyJcMap() {
       return myJcMap//获取地图
     },
