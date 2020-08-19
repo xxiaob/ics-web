@@ -53,7 +53,7 @@ export default {
               fixedDeviceIds.push(deviceItem.deviceId) // 获取所有在线固定设备id
               let position = deviceItem.position.split(',') // 切割坐标
 
-              devices.push({ deviceId: deviceItem.deviceId, type: deviceItem.resourceType, name: deviceItem.resourceTypeName, lng: position[0], lat: position[1] })
+              devices.push({ deviceId: deviceItem.deviceId, type: deviceItem.resourceType, name: deviceItem.deviceName, lng: position[0], lat: position[1] })
             }
           }
         }
