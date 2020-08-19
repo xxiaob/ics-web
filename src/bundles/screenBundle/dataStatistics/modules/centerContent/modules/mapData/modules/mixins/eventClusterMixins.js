@@ -37,47 +37,12 @@ export default {
         if (orgId != this.orgId) {
           let areaItem = orgAreas[orgId]
 
-          if (areaItem.polygons) {
-            areaItem.polygons.forEach(item => {
-              item.hide()
-            })
-          }
           if (areaItem.eventClusterMarker) {
             areaItem.eventClusterMarker.setMap(null)
           }
         }
       }
-    },
-    showPolygons() {
-      let myJcMap = this.getMyJcMap()
-
-      let AMap = this.getAMap()
-
-      let orgAreas = this.getOrgAreasData()
-
-      for (let orgId in orgAreas) {
-        if (orgId != this.orgId) {
-          let areaItem = orgAreas[orgId]
-
-          if (areaItem.polygons) {
-            areaItem.polygons.forEach(item => {
-              item.show()
-            })
-          } else {
-            let polygons = []
-
-            areaItem.boundaries.forEach(item => {
-              let polygon = new AMap.Polygon({
-                map: myJcMap, strokeWeight: 1, strokeColor: '#006cff', strokeOpacity: 0.5,
-                fillColor: '#001e86', fillOpacity: 0.3, path: item.path
-              })
-
-              polygons.push(polygon)
-            })
-            areaItem.polygons = polygons
-          }
-        }
-      }
+      this.hidePolygons()
     },
     async showEventClusterMarker() {
       //显示标记

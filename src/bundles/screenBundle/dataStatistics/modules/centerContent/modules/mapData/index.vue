@@ -239,6 +239,48 @@ export default {
     },
     getOrgAreasData() {
       return orgAreas
+    },
+    showPolygons() {
+      for (let orgId in orgAreas) {
+        if (orgId != this.orgId) {
+          let areaItem = orgAreas[orgId]
+
+          if (areaItem.polygons) {
+            areaItem.polygons.forEach(item => {
+              item.show()
+            })
+          } else {
+            let polygons = []
+
+            for (let i = 0; i < areaItem.boundaries.length; i++) {
+              let polygon = new AMap.Polygon({
+                map: myJcMap, strokeWeight: 1, strokeColor: '#006cff', strokeOpacity: 0.5,
+                fillColor: '#001e86', fillOpacity: 0.3, path: areaItem.boundaries[i].path
+              })
+
+              polygons.push(polygon)
+            }
+            areaItem.polygons = polygons
+          }
+        }
+      }
+    },
+    hidePolygons() {
+      //如果
+      if (this.switchType != 1) {
+        return
+      }
+      for (let orgId in orgAreas) {
+        if (orgId != this.orgId) {
+          let areaItem = orgAreas[orgId]
+
+          if (areaItem.polygons) {
+            areaItem.polygons.forEach(item => {
+              item.hide()
+            })
+          }
+        }
+      }
     }
   },
   beforeDestroy() {
