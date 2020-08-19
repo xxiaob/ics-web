@@ -53,7 +53,8 @@ export default {
             this.video = videojs('myVideo', {
               sources: [
                 {
-                  src: res[0].url1
+                  src: res[0].url2
+                  // type: 'rtmp/flv'
                 }
               ],
               controls: true,
