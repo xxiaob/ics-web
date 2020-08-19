@@ -19,7 +19,7 @@ export default {
       gatherUserIds: [], //正在采集的用户id 数组
       abnormalUserIds: [], //异常的用户id 数组
       userTipVisible: true, //用户是否显示
-      togetherVisible: true, //用户是否聚合
+      togetherVisible: false, //用户是否聚合
       locationUserId: null //定位的用户id
     }
   },
@@ -224,8 +224,11 @@ export default {
       if (this.userTipVisible) {
         content += `<div class="jc-marker-title">${userItem.userName}</div>`
       }
+      let zIndex = 18 //设置位置
+
       //处理用户图标显示
       if (this.abnormalUserIds.includes(userItem.userId)) {
+        zIndex = 19
         content += `<img src=${JcUserIcons.abnormal} class="jc-marker-icon"/></div>`
       } else if (this.gatherUserIds.includes(userItem.userId)) {
         content += `<img src=${JcUserIcons.gather} class="jc-marker-icon"/></div>`
@@ -236,10 +239,8 @@ export default {
       //如果是定位的用户，则突出显示
       if (userItem.userId == this.locationUserId) {
         context.marker.setzIndex(20)
-      } else {
-        context.marker.setzIndex(18)
       }
-
+      context.marker.setzIndex(zIndex)
       context.marker.setPosition(userItem.center)
       context.marker.setContent(content)
     },
