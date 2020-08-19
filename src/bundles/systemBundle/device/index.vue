@@ -1,27 +1,55 @@
 <template>
   <div class="jc-main-full-container">
-    <org-trees class="jc-trees-warp" @node-change="nodeChange"></org-trees>
-    <div class="jc-trees-content">
+
+    <org-trees v-show="show==='index'" class="jc-trees-warp" @node-change="nodeChange"></org-trees>
+    <div v-show="show==='index'" class="jc-trees-content">
       <device-list ref="deviceList" class="jc-main-container-warp"></device-list>
     </div>
+
+    <camera-video v-show="show==='camera'" :detail="cameraDetail"></camera-video>
+
+    <law-video v-show="show==='law'" :detail="lawDetail"></law-video>
+
   </div>
 </template>
 <script>
 export default {
   name: 'SystemDeviceIndex',
+  data() {
+    return {
+      show: 'index',
+      cameraDetail: {},
+      lawDetail: {}
+    }
+  },
   components: {
     OrgTrees: () => import('@/bundles/systemBundle/organization/modules/orgTrees'),
-    DeviceList: () => import('./modules/deviceList')
+    DeviceList: () => import('./modules/deviceList'),
+    CameraVideo: () => import('./modules/cameraVideo'),
+    LawVideo: () => import('./modules/lawVideo')
   },
   methods: {
     nodeChange(data) {
       console.log('设备管理，树节点change：', data)
       this.$refs.deviceList.initData(data.orgId)
+    },
+    checkShow(type, detail) {
+      console.log('checkShow', type)
+      if (type === 'camera') {
+        this.cameraDetail = detail
+      } else if (type === 'law') {
+        this.lawDetail = detail
+      }
+      this.show = type
     }
   }
 }
 </script>
 <style lang="scss" scoped>
+.jc-main-full-container {
+  overflow: auto;
+}
+
 .jc-trees-warp {
   position: absolute;
   top: $jc-default-dis;
@@ -32,6 +60,7 @@ export default {
   border-radius: $jc-border-radius-base;
   z-index: 1;
 }
+
 .jc-trees-content {
   position: relative;
   width: 100%;

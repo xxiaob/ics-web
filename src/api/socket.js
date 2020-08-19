@@ -3,10 +3,17 @@
  */
 import API from './API'
 import qs from 'qs'
-
-const baseUrl = process.env.apiHostConfig.ws /*eslint-disable-line*/
 import JcSocket from '@/libs/JcSocket'
 import { getToken } from '@/libs/storage'
+
+let baseUrl = process.env.apiHostConfig.ws /*eslint-disable-line*/
+
+//如果地址不包含协议，则更具浏览器判断
+if (baseUrl.indexOf('ws') < 0) {
+  let protocol = window.location.protocol.indexOf('https') > -1 ? 'wss://' : 'ws://'
+
+  baseUrl = protocol + window.location.host + baseUrl
+}
 
 /**
  * 实时事件问题推送

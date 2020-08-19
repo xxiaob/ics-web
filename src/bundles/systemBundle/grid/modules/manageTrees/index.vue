@@ -6,7 +6,7 @@
       <el-tree ref="tree" :default-expanded-keys="expandedKeys" :load="loadNode" lazy :props="props" :filter-node-method="filterNode" node-key="id" :expand-on-click-node="false" :highlight-current="true">
         <div class="custom-tree-node" slot-scope="{ node, data }" @click.stop="nodeChange(data)">
           <div class="jc-tree-label no-select" :style="getIconStyle(data.icon)" @dblclick="goEdit(data)">
-            <div class="jc-text-warp" v-text="data.name"></div>
+            <div class="jc-text-warp" v-text="data.name" :title="data.name"></div>
           </div>
           <div class="jc-tree-options" :class="{'jc-area': data.areaId}" v-on:click.stop>
             <el-button type="text" size="small" icon="el-icon-delete" class="jc-area-btn" @click="del(data)"></el-button>

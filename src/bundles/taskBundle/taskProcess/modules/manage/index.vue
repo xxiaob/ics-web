@@ -6,7 +6,7 @@
           <span>{{user.userName}}</span>
         </el-form-item>
         <el-form-item label="项目名称" prop="projectId" :rules="rules.SELECT_NOT_NULL" class="jc-right-width45">
-          <el-cascader v-model="form.projectId" :options="projectList" :props="{expandTrigger:'hover',emitPath:false}" :disabled="!!projectId" @change="changeProject"></el-cascader>
+          <el-cascader v-model="form.projectId" :options="projectList" :props="projectCascaderProps" :disabled="!!projectId" @change="changeProject"></el-cascader>
         </el-form-item>
       </div>
       <div class="jc-clearboth">
@@ -21,7 +21,6 @@
       <div class="jc-clearboth">
         <el-form-item label="任务位置" prop="taskPosition" :rules="rules.NOT_NULL" class="jc-left-width45">
           <el-input v-model="form.taskPosition" placeholder="请点击地图选择任务位置" style="display:none"></el-input>
-          <!-- <el-input v-model="form.taskPositionName" placeholder="请输入任务位置" disabled=""></el-input> -->
           <span>{{form.taskPositionName}}</span>
         </el-form-item>
         <el-form-item label="任务来源" prop="taskSource" :rules="rules.SELECT_NOT_NULL" class="jc-right-width45">
@@ -39,7 +38,8 @@
       </el-form-item>
       <!-- peopleProps[peopleType] -->
       <el-form-item label="任务人员" prop="" :rules="rules.SELECT_NOT_NULL">
-        <jc-task-people :edit.sync="edit" :projectId="form.projectId" :emergency="emergency" :peopleType.sync="peopleType" :selecteds.sync="peoples" :orgTree="orgTree"></jc-task-people>
+        <!-- projectId 后期重写 -->
+        <jc-task-people :edit.sync="edit" :projectId="form.projectId==initProjectId?'':form.projectId" :emergency="emergency" :peopleType.sync="peopleType" :selecteds.sync="peoples" :orgTree="orgTree"></jc-task-people>
       </el-form-item>
       <el-form-item label="任务描述" prop="taskDesc" :rules="rules.NOT_NULL">
         <jc-editor v-model="form.taskDesc"></jc-editor>
@@ -51,9 +51,6 @@
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="dialogVisible = false" size="small">取 消</el-button>
-      <!-- <el-button type="primary" :loading="loading" @click="onSubmit(false)" v-if="!question" size="small">暂 存</el-button>
-      <el-button type="primary" :loading="loading" @click="onSubmit(true)" size="small">下 发</el-button> -->
-
       <el-button type="primary" :loading="loading" @click="onSubmit(false)" size="small" v-show="(selectType!=TASK_SELECT_TYPES.ISSUED||!options) && !question">暂 存</el-button>
       <el-button type="primary" :loading="loading" @click="onSubmit(true)" size="small" v-show="selectType!=TASK_SELECT_TYPES.ISSUED||!options">下 发</el-button>
       <el-button type="primary" :loading="loading" @click="onSubmit(false)" size="small" v-show="selectType===TASK_SELECT_TYPES.ISSUED&&options">保 存</el-button>
@@ -63,10 +60,13 @@
 <script>
 import { taskSave } from '@/api/task'
 import { organizationList } from '@/api/organization'
-import { projectsList } from '@/api/projects'
-import { getStringRule, NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
+
 import FormMixins from '@/mixins/FormMixins'
-import { TASK_TYPES, TASK_SOURCES, TASK_PEOPLE_TYPES, PROJECT_TYPES, TASK_SELECT_TYPES } from '@/constant/Dictionaries'
+import projectsMixins from '@/bundles/taskBundle/mixins/projectsMixins'
+
+import { getStringRule, NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
+import { TASK_TYPES, TASK_SOURCES, TASK_PEOPLE_TYPES, TASK_SELECT_TYPES, PROJECT_TYPES } from '@/constant/Dictionaries'
+
 import { createNamespacedHelpers } from 'vuex'
 const { mapState } = createNamespacedHelpers('user')
 
@@ -74,7 +74,6 @@ const defaultForm = {
   businessKey: '',
   taskId: '',
   projectId: '',
-  // projectType: '',
   taskName: '',
   taskSource: '',
   taskSourceId: '',
@@ -91,7 +90,7 @@ const defaultForm = {
 
 export default {
   name: 'TaskProcessManage',
-  mixins: [FormMixins],
+  mixins: [FormMixins, projectsMixins],
   props: {
     question: {
       required: false
@@ -108,16 +107,24 @@ export default {
     JcEditor: () => import('@/components/JcForm/JcEditor')
   },
   computed: {
-    ...mapState(['user'])
+    ...mapState(['user']),
+    initProjectId() {
+      return this.projectList.length ? this.projectList[0].id : ''
+    }
   },
   data() {
     return {
+      projectCascaderProps: {
+        expandTrigger: 'hover',
+        emitPath: false,
+        children: 'sonProjects',
+        label: 'name',
+        value: 'id'
+      },
       TASK_SELECT_TYPES,
       edit: false,
       taskSourceName: '',
       emergency: false,
-      projectListArr: [],
-      projectList: [],
       peopleType: TASK_PEOPLE_TYPES.PEOPLE,
       peopleProps: {
         [TASK_PEOPLE_TYPES.ORG]: 'orgIds',
@@ -161,14 +168,13 @@ export default {
     const res = await organizationList()
 
     this.orgTree = this.formatOrgTree(res)
-    await this.formatProjectList()
+    await this.getProjects()
   },
   methods: {
     changeProject(val) {
-      const res = this.EmergencySupport.filter(item=>item.value === val)
+      const res = this.EmergencySupport.filter(item=>item.id === val)
 
       this.emergency = res.length ? true : false
-      // console.log('changeProject', this.emergency)
     },
     userChange(val) {
       if (this.peopleType === TASK_PEOPLE_TYPES.ORG) {
@@ -176,34 +182,6 @@ export default {
         this.peopleType = TASK_PEOPLE_TYPES.PEOPLE
       } else {
         this.peoples = [...new Set([...this.peoples, ...val])]
-      }
-    },
-    async formatProjectList() {
-      this.EmergencySupport = await this.getProjectList(PROJECT_TYPES.EmergencySupport)
-      this.SpecialControl = await this.getProjectList(PROJECT_TYPES.SpecialControl)
-
-      // this.projectListArr = [...PROJECT_TYPES.VALUES]
-      this.projectListArr = []
-      if (this.EmergencySupport) {
-        this.projectListArr = [...this.projectListArr, ...this.EmergencySupport]
-      }
-      if (this.SpecialControl) {
-        this.projectListArr = [...this.projectListArr, ...this.SpecialControl]
-      }
-
-      this.projectList = PROJECT_TYPES.VALUES.map(item=>{
-        const { value, label, key } = item
-
-        return { value, label, children: this[key] && this[key].length ? this[key] : null }
-      })
-    },
-    async getProjectList(projectType) {
-      const res = await projectsList({ projectType })
-
-      if (res && res.length) {
-        return res.map(item=>({ value: item.projectId, label: item.projectName }))
-      } else {
-        return []
       }
     },
     formatOrgTree(child) {
@@ -258,17 +236,13 @@ export default {
         // console.log(this.options)
         const { taskId, orgIds, assignees, detailViewVO: { businessKey, projectId, taskDesc, taskName, endDate, startDate }, taskDetailVO: { taskPosition, taskPositionName, taskSource, uploadFilePaths } } = this.options
 
-        const project = this.projectListArr.filter(item=>item.value == projectId)
-        const newProjectId = (project[0] && project[0].value) || PROJECT_TYPES.NORMAL
-
         this.changeProject(projectId)
 
         this.position = { position: taskPosition, name: taskPositionName }
         const form = {
           businessKey,
           taskId,
-          projectId: newProjectId,
-          // projectType: projectId,
+          projectId,
           taskName,
           taskSource,
           beginTime: startDate,
@@ -301,17 +275,14 @@ export default {
         const beginTime = new Date().getTime()
         const endTime = beginTime + 2 * 60 * 60 * 1000
 
-        let newProjectId = this.projectId
+        let newProjectId = this.initProjectId
 
-        if (this.projectId && this.projectListArr && this.projectListArr.length) {
-          const project = this.projectListArr.filter(item=>item.value == this.projectId)
-
-          newProjectId = (project[0] && project[0].value) || PROJECT_TYPES.NORMAL
-          this.changeProject(this.projectId)
-        } else {
-          newProjectId = PROJECT_TYPES.NORMAL
-          this.emergency = false
+        this.emergency = false
+        if (this.projectId && this.EmergencySupport) {
+          newProjectId = this.projectId === PROJECT_TYPES.NORMAL ? this.projectList[0].id : this.projectId
+          this.changeProject(newProjectId)
         }
+
         return { ...defaultForm, taskSource: questionTaskSource, projectId: newProjectId, beginTime, endTime, date: [beginTime, endTime], uploadFilePaths: paths, taskSourceId, taskPosition: position,
           taskPositionName: positionName }
       }

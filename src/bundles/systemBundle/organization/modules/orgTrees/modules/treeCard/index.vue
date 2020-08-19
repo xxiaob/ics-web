@@ -2,7 +2,7 @@
   <div class="jc-tree-card" v-loading="loading">
     <el-tree ref="tree" :default-expanded-keys="expandedKeys" :data="trees" :props="props" :filter-node-method="filterNode" node-key="orgId" @node-click="nodeClick" :expand-on-click-node="false" :highlight-current="true">
       <div class="custom-tree-node" slot-scope="{ node }">
-        <div class="jc-text-warp" v-text="node.label"></div>
+        <div class="jc-text-warp" v-text="node.label" :title="node.label"></div>
       </div>
     </el-tree>
   </div>

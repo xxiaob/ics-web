@@ -88,10 +88,12 @@ export default {
   upload: 'file-server-service/upload/upload',
   device: {
     //设备管理
-    add: 'device-service/deviceUpgPkg/add',
-    list: 'device-service/deviceUpgPkg/listByPage',
-    update: 'device-service/deviceUpgPkg/upd',
-    del: 'device-service/deviceUpgPkg/del'
+    list: 'device-service/hikDevice/deviceList',
+    detail: 'device-service/hikDevice/deviceDetail', // 获取设备详情数据
+    bind: 'device-service/hikDevice/deviceBind',
+    deviceList: 'device-service/hikDevice/deviceAndOrgList', // 组织设备列表
+    relay: 'device-service/hikDevice/getRelayStreaming',
+    getLiveStreaming: 'device-service/hikDevice/getLiveStreaming' //获取实时流
   },
   eventManage: {
     //事件管理
@@ -151,6 +153,7 @@ export default {
     get: 'user-service/project/detail/',
     listByPage: 'user-service/project/listByPage',
     list: 'user-service/project/list',
+    tree: 'user-service/project/tree',
     update: 'user-service/project',
     del: 'user-service/project/',
     projectUserRef: {
@@ -202,7 +205,10 @@ export default {
       getTaskPostLine: 'task-service/taskAttendance/getTaskPostLine', //岗点考勤事件流水
       getTaskPersonalLine: 'task-service/taskAttendance/getTaskPersonalLine', //个人考勤事件流水
       getUserHistoryPosition: 'message-srv/message/getUserHistoryPosition', //获取用户历史定位
-      getScreenOverallData: 'task-service/taskScreen/getScreenOverallData' //根据用户和网格查询综合数据
+      getScreenOverallData: 'task-service/taskScreen/getScreenOverallData', //根据用户和网格查询综合数据
+      getScreenEventData: 'task-service/event/screenSelect', // 指挥大屏的事件数据
+      getScreenProblemData: 'task-service/problem/selectScreenTask', // 指挥大屏问题数据
+      getScreenDeviceData: 'device-service/hikDevice/screenDataDevice' // 指挥大屏设备数据
     },
     dataStatistics: {
       accumulateInfo: 'data-service/largeScreen/accumulateInfo',
@@ -210,7 +216,9 @@ export default {
       getAreaService: 'data-service/largeScreen/getAreaServiceStatistics', // 数据大屏区域出勤
       getOverallAttendance: 'data-service/largeScreen/getOverallAttendanceStatistics', // 数据大屏总体出勤
       getEventGroupByEventType: 'data-service/intelligentAnalysis/getEventGroupByEventType', // AI智能分析数据
-      getAreaDataStatistics: 'data-service/largeScreen/getAreaDataStatistics' //数据大屏地图各区域数据统计
+      getAreaDataStatistics: 'data-service/largeScreen/getAreaDataStatistics', //数据大屏地图各区域数据统计
+      eventHeatMap: 'data-service/largeScreen/eventHeatMap', //事件热力图
+      getEventAggregation: 'data-service/eventAggregation/getEventAggregation '//查询事件聚合
     }
   },
   domainLogo: {
@@ -230,5 +238,9 @@ export default {
     getByOrgId: 'user-service/orgLinkLogo/getDetailByOrgId',
     list: 'user-service/orgLinkLogo/getList',
     update: 'user-service/orgLinkLogo/update'
+  },
+  record: {
+    //记录留痕
+    list: 'device-service/video/getVideoByPage'
   }
 }

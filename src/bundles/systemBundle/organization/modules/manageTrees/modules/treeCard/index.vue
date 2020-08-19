@@ -3,7 +3,7 @@
     <el-tree ref="tree" :default-expanded-keys="expandedKeys" :data="trees" :props="props" :filter-node-method="filterNode" node-key="orgId" @node-click="nodeClick" :expand-on-click-node="false" :highlight-current="true">
       <div class="custom-tree-node" slot-scope="{ node,data }">
         <div class="jc-tree-label">
-          <div class="jc-text-warp" v-text="node.label"></div>
+          <div class="jc-text-warp" v-text="node.label" :title="node.label"></div>
         </div>
         <div class="jc-tree-options" v-if="edit" v-on:click.stop>
           <template v-if="node.level > 1">

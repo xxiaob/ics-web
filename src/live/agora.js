@@ -1,3 +1,6 @@
+
+//https://docs.agora.io/cn/Voice/API%20Reference/web/v3.1.1/index.html
+
 import AgoraRTC from 'agora-rtc-sdk'
 import { getAgoraToken, startRecord, endRecord } from '@/api/live'
 
@@ -16,15 +19,17 @@ export class Live {
     this.localId = localId
     this.remoteId = remoteId
 
+    //当前用户客户端的相关信息
     this.rtc = {
       client: null,
-      joined: false,
-      published: false,
-      localStream: null,
-      remoteStreams: [],
-      params: {}
+      joined: false, //是否加入频道
+      published: false, //是否已经发布流
+      localStream: null, //本地流
+      remoteStreams: [], //远端流的id 数组
+      params: {} // params.uid 本地流的id
     }
 
+    //声网应用信息 加入频道信息
     this.option = {
       appID: process.env.agoraConfig.appID,
       channel: 'Channel name',
@@ -32,6 +37,7 @@ export class Live {
       token: 'Your token'
     }
 
+    //录制参数
     this.recordParams = {
       channelName: '',
       recordingType: 0,
@@ -45,16 +51,17 @@ export class Live {
 
   //sdk初始化
   init() {
-    this.console('init')
+    this.console('agora init')
     // mode 用于设置频道场景。一对一或多人通话中，建议设为 "rtc" ，使用通信场景；互动直播中，建议设为 "live"，使用直播场景。
     this.rtc.client = AgoraRTC.createClient({ mode: 'live', codec: 'h264' })
     this.rtc.client.init(this.option.appID, () => {
-      this.console('init success')
+      this.console('agora init success')
     }, err => {
-      this.console('init err', err)
+      this.console('agora init err', err)
     })
   }
 
+  //空函数
   noop() { }
 
   /**
@@ -64,8 +71,8 @@ export class Live {
    */
   on(cb = this.noop, remoteStremCb = this.noop) {
     //报错信息
-    this.rtc.client.on('error', (err) => {
-      this.console('error', err)
+    this.rtc.client.on('error', err => {
+      this.console('监听报错信息 error', err)
     })
 
     //本地流已发布
@@ -74,16 +81,6 @@ export class Live {
       if (this.recordParams.recorded) {
         startRecord(this.recordParams)
       }
-      //是否 需要直播推流
-      // if (this.fromUsername) {
-      //   this.console('不用推流')
-      // } else {
-      //   this.console('推流')
-      //   setTimeout(() => {
-      //     this.setPublish()
-      //     this.publishStreamUrl('lxyada')
-      //   })
-      // }
     })
 
     //本地音视频流已取消发布
@@ -100,7 +97,6 @@ export class Live {
     this.rtc.client.on('stream-added', e => {
       this.console('stream-added 监听客户端的新增流 成功', e, e.stream.getId())
       this.rtc.remoteStreams.push(e.stream.getId())
-      // this.setPublish()
 
       //订阅远端流，触发订阅事件
       this.rtc.client.subscribe(e.stream, err => {
@@ -207,7 +203,6 @@ export class Live {
 
     if (index > -1) {
       this.rtc.remoteStreams.splice(index, 1)
-      // this.setPublish()
     }
     // this.console('this.rtc.remoteStreams', this.rtc.remoteStreams)
   }
@@ -230,8 +225,9 @@ export class Live {
    * @param {String} role 角色 主播(host)和观众(audience)
    * @param {Boolean} video 是否开启摄像头
    * @param {Boolean} recorded 是否录制
+   * @param {String} toUserId 邀请人的用户id  一人进多个频道
   */
-  async joinChannel(channelId = '123456', role = 'host', video = true, recorded = true) {
+  async joinChannel(channelId = '123456', role = 'host', video = true, recorded = true, toUserId = '') {
     //设置录制参数
     this.recordParams.channelName = channelId
     this.recordParams.recordingType = video ? 1 : 0 //录制类型  0对讲  1视频  2采集
@@ -241,8 +237,12 @@ export class Live {
     this.rtc.client.setClientRole(role)
 
     const recordingType = video ? '_Video' : '_Audio'
-    const userAccount = this.userId + '_web' + recordingType
 
+    let userAccount = this.userId + '_web' + recordingType //用户加入频道的id = 视频流的id
+
+    if (toUserId) {
+      userAccount += toUserId
+    }
     this.recordParams.userId = userAccount
     const { channelKey } = await getAgoraToken({ channelName: channelId, userAccount })
 
@@ -271,7 +271,8 @@ export class Live {
       video,
       screen: false
     })
-
+    //设置视频属性
+    this.rtc.localStream.setVideoProfile('720p_1')
     //本地流初始化
     this.rtc.localStream.init(() => {
       this.console('localStream.init 本地流初始化 成功')
@@ -311,7 +312,6 @@ export class Live {
       //   let stream = rtc.remoteStreams.shift()
       //   let id = stream.getId()
       //   stream.stop()
-      //   removeView(id)
       // }
     }, err => {
       this.console('leaveChannel 离开房间 报错: ', err)

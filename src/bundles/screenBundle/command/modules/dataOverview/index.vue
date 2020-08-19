@@ -145,13 +145,9 @@ $jc-overview-color: #3783fb;
       border-radius: 50%;
       text-indent: 0;
       background-color: $jc-overview-color;
-      transform: rotate(0deg);
-      transition: transform 0.4s;
       color: $jc-color-white;
       font-size: $jc-font-size-smaller;
-      &:hover {
-        transform: rotate(180deg);
-      }
+      @include jc-close-animation;
     }
   }
 }

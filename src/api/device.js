@@ -3,45 +3,56 @@
  */
 import axios from 'axios'
 import API from './API'
+import qs from 'qs'
 
-/*-------------------------------设备升级------------------------------------ */
+/*-------------------------------设备管理------------------------------------ */
 /**
  * 列表
+ * @param {object} params
+ * @returns {Object} axios 对象
+ */
+export function deviceList(params) {
+  return axios.get(API.device.list, { params })
+}
+/**
+ * 查询设备详情
+ * @param {object} params
+ * @returns {Object} axios 对象
+ */
+export function deviceDetail(params) {
+  return axios.get(API.device.detail, { params })
+}
+/**
+ * 设备绑定用户
  * @param {object} data
  * @returns {Object} axios 对象
  */
-export function deviceList(data) {
-  return axios.post(API.device.list, data)
+export function deviceBind(data) {
+  return axios.post(API.device.bind, data)
 }
 /**
- * 添加
- * @param {object} data
+ * 获取回放流
+ * @param {object} params
  * @returns {Object} axios 对象
  */
-export function deviceAdd(data) {
-  return axios.post(API.device.add, data)
+export function getRelay(params) {
+  return axios.get(API.device.relay, { params })
 }
+
 /**
- * 更新
- * @param {object} data
+ * 获取组织设备列表
+ * @param {object} params
  * @returns {Object} axios 对象
  */
-export function deviceUpdate(data) {
-  return axios.post(API.device.update, data)
+export function getDeviceList(params) {
+  return axios.get(API.device.deviceList, { params })
 }
+
 /**
- * 保存
- * @param {object} data
+ * 获取实时流
+ * @param {object} data 设备id数组
  * @returns {Object} axios 对象
  */
-export function deviceSave(data) {
-  return data.id ? deviceUpdate(data) : deviceAdd(data)
-}
-/**
- * 删除
- * @param {Array} deviceUpgPkgIds
- * @returns {Object} axios 对象
- */
-export function deviceDel(deviceUpgPkgIds) {
-  return axios.post(API.device.del, { deviceUpgPkgIds })
+export function getLiveStreaming(data) {
+  return axios.get(API.device.getLiveStreaming + '?' + qs.stringify(data, { indices: false }))
 }

@@ -8,7 +8,7 @@
         <span>{{form.createTime|filterTime}}</span>
       </el-form-item>
       <el-form-item label="项目名称 : ">
-        <span>{{formatProject}}</span>
+        <span>{{form.projectName}}</span>
       </el-form-item>
       <el-form-item label="任务时间 : ">
         <span>{{form.startDate|filterTime}} - {{form.endDate|filterTime}}</span>
@@ -45,8 +45,7 @@
 <script>
 import { formatDate } from '@/libs/util'
 import { taskGet } from '@/api/task'
-import { projectsList } from '@/api/projects'
-import { PROJECT_TYPES, TASK_SOURCES } from '@/constant/Dictionaries'
+import { TASK_SOURCES } from '@/constant/Dictionaries'
 import JcMedia from '../../components/media'
 import { MESSAGE_DATA_TYPES } from '@/constant/Dictionaries'
 
@@ -61,8 +60,7 @@ export default {
   },
   data() {
     return {
-      form: {},
-      projectListArr: []
+      form: {}
     }
   },
   filters: {
@@ -86,11 +84,6 @@ export default {
       } else {
         return ''
       }
-    },
-    formatProject() {
-      const project = this.projectListArr.filter(item=>item.value == this.form.projectId)
-
-      return (project[0] && project[0].label) || PROJECT_TYPES.toString(PROJECT_TYPES.NORMAL)
     }
   },
   watch: {
@@ -104,8 +97,6 @@ export default {
     }
   },
   async created() {
-    await this.formatProjectList()
-    // console.log('projectListArr', this.projectListArr)
     if (this.options && this.options.id && this.options.type === MESSAGE_DATA_TYPES.TEMPORARY) {
       this.getDetail()
     }
@@ -123,28 +114,6 @@ export default {
           this.form = {}
           this.loading = false
         }
-      }
-    },
-    async  formatProjectList() {
-      this.EmergencySupport = await this.getProjectList(PROJECT_TYPES.EmergencySupport)
-      this.SpecialControl = await this.getProjectList(PROJECT_TYPES.SpecialControl)
-
-      // this.projectListArr = [...PROJECT_TYPES.VALUES]
-      this.projectListArr = []
-      if (this.EmergencySupport) {
-        this.projectListArr = [...this.projectListArr, ...this.EmergencySupport]
-      }
-      if (this.SpecialControl) {
-        this.projectListArr = [...this.projectListArr, ...this.SpecialControl]
-      }
-    },
-    async getProjectList(projectType) {
-      const res = await projectsList({ projectType })
-
-      if (res && res.length) {
-        return res.map(item=>({ value: item.projectId, label: item.projectName }))
-      } else {
-        return []
       }
     }
   }

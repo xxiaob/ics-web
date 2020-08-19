@@ -49,7 +49,7 @@ const options = {
     top: 35,
     left: 0,
     right: 0,
-    bottom: -18,
+    bottom: -10,
     containLabel: true
   },
   xAxis: [

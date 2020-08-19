@@ -28,7 +28,7 @@
               <el-button type="text" size="mini" icon="el-icon-refresh-right" @click="handle(scope.row,true)" title="处理" v-if="filter.selectType===TASK_SELECT_TYPES.PENDING"></el-button>
               <el-button type="text" size="mini" icon="el-icon-arrow-down" @click="startTask(scope.row)" title="下发" v-if="filter.selectType===TASK_SELECT_TYPES.DEAFT"></el-button>
               <el-button type="text" size="mini" icon="el-icon-delete" @click="del(scope.row)" title="删除" v-if="filter.selectType===TASK_SELECT_TYPES.DEAFT"></el-button>
-              <el-button type="text" size="mini" icon="el-icon-finished" @click="del(scope.row,true)" title="结束任务" v-if="(filter.selectType===TASK_SELECT_TYPES.ISSUED&&scope.row.taskStatus!=TASK_STATES.FINISHED)"></el-button>
+              <el-button type="text" size="mini" icon="el-icon-finished" @click="del(scope.row,true)" title="关闭任务" v-if="(filter.selectType===TASK_SELECT_TYPES.ISSUED&&scope.row.taskStatus!=TASK_STATES.FINISHED)"></el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -36,30 +36,32 @@
       </el-card>
     </div>
 
-    <jc-detail :orgTree="orgTree" :projectListArr="projectListArr" :orgObj="orgObj" :info="info" :detailShow.sync="detailShow" v-show="detailShow" @save-success="initData"></jc-detail>
+    <jc-detail :orgTree="orgTree" :orgObj="orgObj" :info="info" :detailShow.sync="detailShow" v-show="detailShow" @save-success="initData"></jc-detail>
 
-    <jc-manage :selectType="filter.selectType" :orgTree="orgTree" :projectList="projectList" :projectListArr="projectListArr" :user="user" :options="info" :visible.sync="visible" @save-success="initData"></jc-manage>
+    <jc-manage :selectType="filter.selectType" :orgTree="orgTree" :options="info" :visible.sync="visible" @save-success="initData"></jc-manage>
 
-    <jc-manage-daily :selectType="filter.selectType" :EmergencySupport="EmergencySupport" :orgTree="orgTree" :projectList="projectList" :projectListArr="projectListArr" :orgObj="orgObj" :orgId="orgId" :options="dailyInfo" :visible.sync="visibleDaily" @save-success="initData"></jc-manage-daily>
+    <jc-manage-daily :selectType="filter.selectType" :EmergencySupport="EmergencySupport" :orgTree="orgTree" :projectList="projectList" :orgObj="orgObj" :orgId="orgId" :options="dailyInfo" :visible.sync="visibleDaily" @save-success="initData"></jc-manage-daily>
 
-    <jc-detail-daily :orgTree="orgTree" :projectListArr="projectListArr" :orgObj="orgObj" :info="dailyInfo" :dailyDetailShow.sync="dailyDetailShow" v-show="dailyDetailShow" @save-success="initData"></jc-detail-daily>
+    <jc-detail-daily :orgTree="orgTree" :orgObj="orgObj" :info="dailyInfo" :dailyDetailShow.sync="dailyDetailShow" v-show="dailyDetailShow" @save-success="initData"></jc-detail-daily>
 
   </div>
 </template>
 <script>
 import { taskList, taskDel, taskStart, taskGet, taskUpdStatus, taskGetDaily } from '@/api/task'
-import { formatDate } from '@/libs/util'
-import PaginationMixins from '@/mixins/PaginationMixins'
 import { organizationList } from '@/api/organization'
-import { projectsList } from '@/api/projects'
+
+import PaginationMixins from '@/mixins/PaginationMixins'
+import projectsMixins from '@/bundles/taskBundle/mixins/projectsMixins'
+
+import { formatDate } from '@/libs/util'
+import { TASK_SELECT_TYPES, TASK_STATES, TASK_TYPES } from '@/constant/Dictionaries'
+
 import { createNamespacedHelpers } from 'vuex'
 const { mapState } = createNamespacedHelpers('user')
 
-import { TASK_SELECT_TYPES, TASK_STATES, TASK_TYPES, PROJECT_TYPES } from '@/constant/Dictionaries'
-
 export default {
   name: 'TaskProcessIndex',
-  mixins: [PaginationMixins],
+  mixins: [PaginationMixins, projectsMixins],
   components: {
     TabFilter: () => import('./modules/tabFilter'),
     JcManage: () => import('./modules/manage'),
@@ -71,7 +73,6 @@ export default {
     return {
       TASK_TYPES,
       TASK_STATES,
-      EmergencySupport: [],
       TASK_SELECT_TYPES,
       orgTree: [],
       orgObj: {},
@@ -86,9 +87,7 @@ export default {
       },
       orgId: '',
       detailShow: false,
-      dailyDetailShow: false,
-      projectList: [],
-      projectListArr: []
+      dailyDetailShow: false
     }
   },
   computed: {
@@ -96,9 +95,8 @@ export default {
   },
   async created() {
     await this.getOrgTree()
-    await this.formatProjectList()
+    await this.getProjects()
     this.initData()
-
 
     //问题页面 查看关联任务详情
     const { taskStatus, businessKey } = this.$route.query
@@ -115,39 +113,6 @@ export default {
   methods: {
     formatTime(row, column, cellValue) {
       return formatDate(cellValue)
-    },
-    formatProject(row, column, cellValue) {
-      const project = this.projectListArr.filter(item=>item.value == cellValue)
-
-      return (project[0] && project[0].label) || PROJECT_TYPES.toString(PROJECT_TYPES.NORMAL)
-    },
-    async  formatProjectList() {
-      this.EmergencySupport = await this.getProjectList(PROJECT_TYPES.EmergencySupport)
-      this.SpecialControl = await this.getProjectList(PROJECT_TYPES.SpecialControl)
-
-      // this.projectListArr = [...PROJECT_TYPES.VALUES]
-      this.projectListArr = []
-      if (this.EmergencySupport) {
-        this.projectListArr = [...this.projectListArr, ...this.EmergencySupport]
-      }
-      if (this.SpecialControl) {
-        this.projectListArr = [...this.projectListArr, ...this.SpecialControl]
-      }
-
-      this.projectList = PROJECT_TYPES.VALUES.map(item=>{
-        const { value, label, key } = item
-
-        return { value, label, children: this[key] || null }
-      })
-    },
-    async getProjectList(projectType) {
-      const res = await projectsList({ projectType })
-
-      if (res && res.length) {
-        return res.map(item=>({ value: item.projectId, label: item.projectName }))
-      } else {
-        return []
-      }
     },
     formatOrgTree(child) {
       let trees = []
@@ -210,14 +175,14 @@ export default {
       this.currentChange(1)
     },
     del(row, finished = false) {
-      this.$confirm(finished ? '确认结束该任务' : '确认删除该任务', '提示', { type: 'warning' }).then(() => {
+      this.$confirm(finished ? '确认关闭该任务' : '确认删除该任务', '提示', { type: 'warning' }).then(() => {
         this.remove(row.businessKey)
       }).catch(() => {})
     },
     async remove(id) {
       try {
         await taskDel(id)
-        this.$message.success('删除成功')
+        this.$message.success('操作成功')
         this.currentChange(this.page.pageNum - 1)
       } catch (error) {
         console.error(error)

@@ -19,7 +19,7 @@ export default {
       gatherUserIds: [], //正在采集的用户id 数组
       abnormalUserIds: [], //异常的用户id 数组
       userTipVisible: true, //用户是否显示
-      togetherVisible: true, //用户是否聚合
+      togetherVisible: false, //用户是否聚合
       locationUserId: null //定位的用户id
     }
   },
@@ -81,23 +81,25 @@ export default {
         this.clearUsers()
       } else if (data.type == 3) {
         //如果是用户离线，则从用户列表里删除
-        for (let key in usersData.users) {
-          if (usersData.users[key].userId == data.offUserId) {
-            delete usersData.users[key]
-            break
+        data.offUserIds.forEach(offUserId => {
+          for (let key in usersData.users) {
+            if (usersData.users[key].userId == offUserId) {
+              delete usersData.users[key]
+              break
+            }
           }
-        }
-        for (let i = 0; i < usersData.lnglats.length; i++) {
-          if (usersData.lnglats[i].userId == data.offUserId) {
-            usersData.lnglats.splice(i, 1)
-            break
+          for (let i = 0; i < usersData.lnglats.length; i++) {
+            if (usersData.lnglats[i].userId == offUserId) {
+              usersData.lnglats.splice(i, 1)
+              break
+            }
           }
-        }
-        let index = this.gatherUserIds.indexOf(data.offUserId)
+          let index = this.gatherUserIds.indexOf(offUserId)
 
-        if (index > -1) {
-          this.gatherUserIds.splice(index, 1)
-        }
+          if (index > -1) {
+            this.gatherUserIds.splice(index, 1)
+          }
+        })
       } else if (data.type == 4) {
         //是否再一键采集中，如果正在一键采集则显示状态，结束采集则恢复状态
         let index = this.gatherUserIds.indexOf(data.collectUser.userId)
@@ -155,7 +157,7 @@ export default {
         usersData.markerCluster.setData(usersData.lnglats)
       } else {
         usersData.markerCluster = new MarkerCluster(null, usersData.lnglats, {
-          userSize: 60,
+          gridSize: 120,
           renderClusterMarker: this.renderUserClusterMarker,
           renderMarker: this.renderUserMarker
         })
@@ -222,8 +224,11 @@ export default {
       if (this.userTipVisible) {
         content += `<div class="jc-marker-title">${userItem.userName}</div>`
       }
+      let zIndex = 18 //设置位置
+
       //处理用户图标显示
       if (this.abnormalUserIds.includes(userItem.userId)) {
+        zIndex = 19
         content += `<img src=${JcUserIcons.abnormal} class="jc-marker-icon"/></div>`
       } else if (this.gatherUserIds.includes(userItem.userId)) {
         content += `<img src=${JcUserIcons.gather} class="jc-marker-icon"/></div>`
@@ -234,10 +239,8 @@ export default {
       //如果是定位的用户，则突出显示
       if (userItem.userId == this.locationUserId) {
         context.marker.setzIndex(20)
-      } else {
-        context.marker.setzIndex(18)
       }
-
+      context.marker.setzIndex(zIndex)
       context.marker.setPosition(userItem.center)
       context.marker.setContent(content)
     },

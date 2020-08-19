@@ -112,12 +112,7 @@ export default {
     projectId: {
       immediate: true,
       handler(val) {
-        // console.log('projectId', val)
-        if (val === '0') {
-          this.getProjectUsers('')
-        } else {
-          this.getProjectUsers(val)
-        }
+        this.getProjectUsers(val)
       }
     }
   },

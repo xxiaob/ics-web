@@ -4,32 +4,34 @@
     <el-card class="jc-table-card jc-mt">
       <div slot="header" class="jc-card-header">
         <div class="jc-card-title">列表内容</div>
-        <div class="jc-button-group">
-          <el-button type="primary" icon="el-icon-plus" size="small" @click="manage(null)">添加</el-button>
-          <el-button type="danger" icon="el-icon-delete" size="small" @click="removeAll">删除</el-button>
-        </div>
       </div>
-      <el-table :data="list" v-loading="loading" row-key="roleId" class="jc-table" @selection-change="tableSelect">
-        <el-table-column type="selection" width="40"></el-table-column>
+      <el-table :data="list" v-loading="loading" row-key="roleId" class="jc-table">
         <el-table-column type="index" :index="indexMethod" label="序号" width="50"></el-table-column>
+        <el-table-column prop="deviceName" label="设备名称"></el-table-column>
         <el-table-column prop="orgName" label="所属组织"></el-table-column>
-        <el-table-column prop="roleName" label="角色名称"></el-table-column>
-        <el-table-column prop="createTime" label="创建时间"></el-table-column>
-        <el-table-column width="60" label="操作">
+        <el-table-column prop="deviceTypeName" label="设备类型"></el-table-column>
+        <el-table-column prop="treatyType" label="接入协议"></el-table-column>
+        <el-table-column prop="userName" label="绑定用户"></el-table-column>
+        <el-table-column width="100" label="操作">
           <template slot-scope="scope">
-            <el-button type="text" size="mini" icon="el-icon-edit-outline" @click="manage(scope.row)" title="编辑"></el-button>
-            <el-button type="text" size="mini" icon="el-icon-delete" @click="del(scope.row)" title="删除"></el-button>
+            <el-button type="text" size="mini" icon="el-icon-view" @click="detail(scope.row)" title="详情"></el-button>
+            <el-button type="text" size="mini" icon="el-icon-video-camera" @click="showVideo(scope.row)" title="视频记录"></el-button>
+            <el-button v-if="scope.row.bindFlag" type="text" size="mini" icon="el-icon-setting" @click="manage(scope.row)" title="设置"></el-button>
           </template>
         </el-table-column>
       </el-table>
       <el-pagination @current-change="currentChange" @size-change="sizeChange" :current-page.sync="page.pageNum" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.total" class="text-right jc-mt"></el-pagination>
     </el-card>
+
     <jc-manage :options="info" :orgId="orgId" :visible.sync="visible" @save-success="initData"></jc-manage>
+
+    <jc-detail :options="detailInfo" :visible.sync="detailVisible"></jc-detail>
+
   </div>
 </template>
 <script>
-import { roleList, roleDel } from '@/api/role'
-import { formatDate } from '@/libs/util'
+import { deviceList, deviceDetail } from '@/api/device'
+// import { formatDate } from '@/libs/util'
 import PaginationMixins from '@/mixins/PaginationMixins'
 
 export default {
@@ -37,7 +39,8 @@ export default {
   mixins: [PaginationMixins],
   components: {
     TabFilter: () => import('../tabFilter'),
-    JcManage: () => import('../manage')
+    JcManage: () => import('../manage'),
+    JcDetail: () => import('../detail')
   },
   data() {
     return {
@@ -45,8 +48,9 @@ export default {
       loading: false,
       visible: false,
       info: null,
+      detailInfo: null,
+      detailVisible: false,
       orgId: '',
-      ids: [],
       filter: { }
     }
   },
@@ -58,17 +62,10 @@ export default {
       if (!this.loading) {
         this.loading = true
         try {
-          const { total, resultList } = await roleList({ ...this.filter, ...this.page, orgId: this.orgId })
+          const { total, data } = await deviceList({ ...this.filter, ...this.page, orgId: this.orgId })
 
           this.page.total = total
-          let list = []
-
-          if (resultList && resultList.length) {
-            resultList.forEach(item => {
-              list.push({ roleId: item.roleId, roleName: item.roleName, orgId: item.orgId, orgName: item.orgName, createTime: formatDate(item.createTime) })
-            })
-          }
-          this.list = list
+          this.list = data
           this.loading = false
         } catch (error) {
           console.error(error)
@@ -80,44 +77,19 @@ export default {
       this.filter = filter
       this.currentChange(1)
     },
-    tableSelect(selections) {
-      let ids = []
-
-      if (selections && selections.length) {
-        selections.forEach(item=> {
-          ids.push(item.roleId)
-        })
-      }
-      this.ids = ids
-    },
-    del(row) {
-      this.$confirm('确认删除该角色', '提示', { type: 'warning' }).then(() => {
-        this.remove([row.roleId])
-      }).catch(() => {})
-    },
-    removeAll() {
-      if (this.ids.length) {
-        this.$confirm('确认删除选中的角色', '提示', { type: 'warning' }).then(() => {
-          this.remove(this.ids)
-        }).catch(() => {})
-      } else {
-        this.$message.error('请先选择删除项')
-      }
-    },
-    remove(ids) {
-      roleDel(ids).then(() => {
-        this.$message.success('删除成功')
-        this.currentChange(this.page.pageNum - 1)
-      })
+    async detail({ deviceId }) {
+      this.detailInfo = await deviceDetail({ deviceId })
+      this.detailVisible = true
     },
     manage(row) {
-      if (row) {
-        this.info = row
-        this.visible = true
-      } else {
-        this.info = null
-        this.visible = true
-      }
+      this.info = row
+      this.visible = true
+    },
+    async showVideo({ deviceId, cameraId }) {
+      const type = cameraId ? 'camera' : 'law'
+      const detail = await deviceDetail({ deviceId })
+
+      this.$parent.checkShow(type, detail)
     }
   }
 }

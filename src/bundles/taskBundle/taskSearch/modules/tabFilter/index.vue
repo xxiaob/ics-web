@@ -2,7 +2,7 @@
   <el-card class="jc-tabfilter-card">
     <el-form ref="form" :inline="true" :model="form" class="jc-tabfilter-form" size="small">
       <el-form-item prop="projectId" label="项目名称">
-        <el-cascader v-model="form.projectId" :options="projectList" :props="{expandTrigger:'hover',emitPath:false}"></el-cascader>
+        <el-cascader v-model="form.projectId" :options="projectList" :props="projectCascaderProps"></el-cascader>
       </el-form-item>
       <el-form-item prop="orgId" label="所属组织">
         <el-cascader :options="orgTree" v-model="form.orgId" :props="{expandTrigger: 'hover', emitPath: false,checkStrictly:true }" clearable @change="orgChange" ref="orgCascader"></el-cascader>
@@ -29,7 +29,7 @@
 <script>
 import { TASK_STATES } from '@/constant/Dictionaries'
 export default {
-  name: 'SystemTaskProcessFilter',
+  name: 'TaskSearchFilter',
   props: {
     projectList: {
       type: Array,
@@ -43,6 +43,13 @@ export default {
   data() {
     return {
       states: TASK_STATES.VALUES,
+      projectCascaderProps: {
+        expandTrigger: 'hover',
+        emitPath: false,
+        children: 'sonProjects',
+        label: 'name',
+        value: 'id'
+      },
       form: {
         projectId: '',
         orgId: '',

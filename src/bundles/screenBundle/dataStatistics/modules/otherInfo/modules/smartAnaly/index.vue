@@ -6,7 +6,7 @@
         <div class="smart-analy-left jc-flex-con-2 jc-flex-warp jc-flex-vertical">
 
           <div class="smart-analy-item jc-flex-con jc-flex-warp" :class="{actived:item.isActived}" v-for="(item,index) in eventGroupLeftData" :key="index" @click="currentEventGroup(item,index)">
-            <span class="smart-analy-title jc-flex-con">{{ item.typeName && item.typeName}}</span>
+            <span class="smart-analy-title jc-flex-con" :title="item.typeName">{{ item.typeName && item.typeName}}</span>
             <span class="smart-analy-count">
               <count-to :startVal="0" :endVal="item.typeCount || 0" />件
             </span>
@@ -26,7 +26,7 @@
 
         <div class="smart-analy-right jc-flex-con-2 jc-flex-warp jc-flex-vertical">
           <div class="smart-analy-item jc-flex-con jc-flex-warp" :class="{actived:item.isActived}" v-for="(item,index) in eventGroupRightData" :key="index" @click="currentEventGroup(item,index+4)">
-            <span class="smart-analy-title jc-flex-con">{{ item.typeName && item.typeName}}</span>
+            <span class="smart-analy-title jc-flex-con" :title="item.typeName">{{ item.typeName && item.typeName}}</span>
             <span class="smart-analy-count">
               <count-to :startVal="0" :endVal="item.typeCount || 0" />件
             </span>
@@ -397,4 +397,5 @@ export default {
     }
   }
 }
+
 </style>

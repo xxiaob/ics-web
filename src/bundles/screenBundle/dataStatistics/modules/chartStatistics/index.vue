@@ -27,10 +27,10 @@ export default {
   },
   data() {
     return {
-      activated: 7,
+      activated: 1,
       loading: false,
       project: {},
-      today: new Date(moment().format('YYYY-MM-DD') + ' 00:00:00').getTime(),
+      today: new Date(moment().format('YYYY-MM-DD')).getTime(),
       date: {
         beginTime: null,
         endTime: null
@@ -53,7 +53,7 @@ export default {
     }
   },
   created() {
-    this.date.beginTime = new Date(this.today - 6 * 24 * 60 * 60 * 1000)
+    this.date.beginTime = new Date(this.today)
     this.date.endTime = new Date(this.today + 24 * 60 * 60 * 1000)
 
     this.$EventBus.$on('data-statistics-init-success', val=>{

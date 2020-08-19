@@ -20,15 +20,27 @@
       </div>
     </div>
     <div class="jc-opreate-item">
-      <i class="jc-show-word" title="显示文字"></i>
+      <i class="jc-show-word" title="显示实体"></i>
       <div class="jc-opera-work">
         <el-checkbox-group v-model="wordType" @change="wordChange">
           <el-checkbox class="jc-work-item" label="user">
-            <div class="jc-work-content">人员</div>
+            <div class="jc-work-content jc-work-nobg"><i class="iconfont iconrenyuan-5"></i>人员</div>
           </el-checkbox>
           <el-checkbox class="jc-work-item" label="org">
             <div class="jc-work-content">组织</div>
           </el-checkbox>
+          <!-- 新增事件与问题实体控件 -->
+          <el-checkbox class="jc-work-item" label="event">
+            <div class="jc-work-content jc-work-nobg"><i class="iconfont iconshijian-2"></i>事件</div>
+          </el-checkbox>
+          <el-checkbox class="jc-work-item" label="problem">
+            <div class="jc-work-content jc-work-nobg"><i class="iconfont iconwenti"></i>问题</div>
+          </el-checkbox>
+          <el-checkbox class="jc-work-item" label="device">
+            <div class="jc-work-content jc-work-nobg"><i class="iconfont iconshexiangtou"></i>设备</div>
+          </el-checkbox>
+
+          <!-- 动态实体 -->
           <el-checkbox class="jc-work-item" v-for="item in controlAreaTypes" :label="item.id" :key="item.id">
             <div class="jc-work-content" :style="getIconStyle(item.icon)">{{item.name}}</div>
           </el-checkbox>
@@ -40,7 +52,13 @@
       <div class="jc-opera-work">
         <el-checkbox-group v-model="togetherType" @change="togetherChange">
           <el-checkbox class="jc-work-item" label="user">
-            <div class="jc-work-content">人员</div>
+            <div class="jc-work-content jc-work-nobg"><i class="iconfont iconrenyuan-5"></i>人员</div>
+          </el-checkbox>
+          <el-checkbox class="jc-work-item" label="event">
+            <div class="jc-work-content jc-work-nobg"><i class="iconfont iconshijian-2"></i>事件</div>
+          </el-checkbox>
+          <el-checkbox class="jc-work-item" label="problem">
+            <div class="jc-work-content jc-work-nobg"><i class="iconfont iconwenti"></i>问题</div>
           </el-checkbox>
           <el-checkbox class="jc-work-item" v-for="item in controlAreaTypes" :label="item.id" :key="item.id">
             <div class="jc-work-content" :style="getIconStyle(item.icon)">{{item.name}}</div>
@@ -108,7 +126,7 @@ export default {
 
         let areaTypes = []
 
-        let allCheckIds = ['user']
+        let allCheckIds = [] // 默认选中
 
         if (areaResults && areaResults.length) {
           areaResults.forEach(item => {
@@ -117,7 +135,7 @@ export default {
           })
         }
         this.areaTypes = areaTypes
-        this.wordType = allCheckIds
+        this.wordType = ['user', ...allCheckIds]
         this.togetherType = allCheckIds
       } catch (error) {
         console.log(error)
@@ -172,7 +190,7 @@ export default {
     },
     wordChange(words) {
       console.log('operate文字显示切换', words)
-      this.$EventBus.$emit('show-word-change', words) //通知文字显示改变
+      this.$EventBus.$emit('show-word-change', words) //通知实体显示改变
     },
     togetherChange(togethers) {
       //聚合显示切换
@@ -183,7 +201,7 @@ export default {
     //去除事件监听
     this.$EventBus.$off('message-num-change', this.messageNumChange)
     this.$EventBus.$off('map-grid-types-change', this.mapGridTypesChange)
-    this.$EventBus.$$off('screen-opera-control', this.opreaControl)
+    this.$EventBus.$off('screen-opera-control', this.opreaControl)
   }
 }
 </script>

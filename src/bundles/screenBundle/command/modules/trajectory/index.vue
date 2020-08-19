@@ -163,9 +163,9 @@ export default {
 
         let speed = parseFloat(pathData[key].s)
 
-        if (speed > 36 ) {
+        if (speed > 20 ) {
           style = 'jc-trajectory-car'
-        } else if (speed > 8) {
+        } else if (speed > 5) {
           style = 'jc-trajectory-elcicle'
         }
         this.runInfo = { addr: pathData[key].d, speed: pathData[key].s, key, style, time: pathData[key].t } //设置运行信息
@@ -175,7 +175,7 @@ export default {
       console.log('UserHistoryPosition', res)
       /**
        * 位置转换和处理绘图
-       * 如果两点间的距离低于10米则进行丢弃，距离超过200米，则进行位置查询
+       * 如果两点间的距离低于20米则进行丢弃，距离超过1000米，则进行位置查询
        */
       let activeDot = null //记录查询位置的点数据
 
@@ -193,9 +193,9 @@ export default {
 
             let p = new myJcMap.AMap.LngLat(item.ln, item.la)
 
-            if (lastP.distance(p) > 10) {
+            if (lastP.distance(p) > 20) {
               lastP = p
-              if (activeDot.p.distance(p) >= 200) {
+              if (activeDot.p.distance(p) >= 1000) {
                 activeDot = { p: lastP, s: item.s, t: formatDate(item.t) }
                 activeDot.d = await getAddressByPosition(lastP)
                 pathData[this.getKeyByLngLat(item.ln, item.la)] = activeDot

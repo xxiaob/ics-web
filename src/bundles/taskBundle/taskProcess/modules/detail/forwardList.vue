@@ -1,14 +1,5 @@
 <template>
-  <!-- <ul class="jc-ul">
-    <li v-for="item in list" :key="item.id">
-      <span>{{item.createTime|filterTime}}</span>
-      <span>{{item.creatorId}}</span>
-      <span>{{item.eventType|filterType}}</span>
-      <span v-show="item.eventData">至</span>
-      <template v-show="item.eventData">{{item|filterEventData}}</template>
-    </li>
-  </ul> -->
-  <el-timeline>
+  <el-timeline class="jc-forward">
     <el-timeline-item v-for="item in list" :key="item.id" :timestamp="item.createTime|filterTime" placement="top">
       <div>
         <span>{{item.creatorId}}</span>
@@ -91,13 +82,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.jc-ul {
-  list-style: none;
-  li {
-    line-height: 28px;
-    span {
-      margin-right: 10px;
-    }
-  }
+.jc-forward {
+  padding: 10px;
 }
 </style>

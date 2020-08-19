@@ -83,3 +83,42 @@ export function getUserHistoryPosition(data) {
 export function getScreenTask(data) {
   return axios.post(API.screen.command.getScreenTask + '?' + qs.stringify(data))
 }
+
+/**
+ * 指挥大屏事件数据
+ * @param {object} data
+ * @param { String } data.orgId 组织id
+ * @param { String } data.projectId 项目id
+ * @param { String } data.startTime 开始时间
+ * @param { String } data.endTime 结束时间
+ * @returns {Object} axios 对象
+ */
+export function getScreenEventData(data) {
+  return axios.post(API.screen.command.getScreenEventData, data)
+}
+
+
+/**
+ * 指挥大屏问题数据
+ * @param {object} data
+ * @param { String } data.orgId 组织id
+ * @param { String } data.projectId 项目id
+ * @param { String } data.startTime 开始时间
+ * @param { String } data.endTime 结束时间
+ * @returns {Object} axios 对象
+ */
+export function getScreenProblemData(data) {
+  return axios.post(API.screen.command.getScreenProblemData, data)
+}
+
+
+/**
+ * 指挥大屏设备数据
+ * @param {object} params
+ * @returns {Object} axios 对象
+ */
+export function getScreenDeviceData(params) {
+  return axios.get(API.screen.command.getScreenDeviceData, { params })
+}
+
+

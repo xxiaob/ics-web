@@ -27,23 +27,25 @@
       </el-card>
     </div>
 
-    <jc-detail :orgTree="orgTree" :orgObj="orgObj" :projectListArr="projectListArr" :info="info" :detailShow.sync="detailShow" v-show="detailShow" @save-success="initData"></jc-detail>
+    <jc-detail :orgTree="orgTree" :orgObj="orgObj" :info="info" :detailShow.sync="detailShow" v-show="detailShow" @save-success="initData"></jc-detail>
 
-    <jc-detail-daily :orgTree="orgTree" :orgObj="orgObj" :projectListArr="projectListArr" :info="dailyInfo" :dailyDetailShow.sync="dailyDetailShow" v-show="dailyDetailShow" @save-success="initData"></jc-detail-daily>
+    <jc-detail-daily :orgTree="orgTree" :orgObj="orgObj" :info="dailyInfo" :dailyDetailShow.sync="dailyDetailShow" v-show="dailyDetailShow" @save-success="initData"></jc-detail-daily>
 
   </div>
 </template>
 <script>
 import { taskList, taskGet, taskGetDaily } from '@/api/task'
-import { formatDate } from '@/libs/util'
-import PaginationMixins from '@/mixins/PaginationMixins'
 import { organizationList } from '@/api/organization'
-import { projectsList } from '@/api/projects'
-import { TASK_TYPES, PROJECT_TYPES } from '@/constant/Dictionaries'
+
+import PaginationMixins from '@/mixins/PaginationMixins'
+import projectsMixins from '@/bundles/taskBundle/mixins/projectsMixins'
+
+import { TASK_TYPES } from '@/constant/Dictionaries'
+import { formatDate } from '@/libs/util'
 
 export default {
-  name: 'SystemTaskSearchIndex',
-  mixins: [PaginationMixins],
+  name: 'TaskSearchIndex',
+  mixins: [PaginationMixins, projectsMixins],
   components: {
     TabFilter: () => import('./modules/tabFilter'),
     JcDetail: () => import('../taskProcess/modules/detail'),
@@ -60,52 +62,17 @@ export default {
       filter: {},
       orgId: '',
       detailShow: false,
-      dailyDetailShow: false,
-      projectList: [],
-      projectListArr: []
+      dailyDetailShow: false
     }
   },
   async created() {
     await this.getOrgTree()
-    await this.formatProjectList()
-
+    await this.getProjects()
     this.initData()
   },
   methods: {
     formatTime(row, column, cellValue) {
       return formatDate(cellValue)
-    },
-    formatProject(row, column, cellValue) {
-      const project = this.projectListArr.filter(item=>item.value == cellValue)
-
-      return (project[0] && project[0].label) || PROJECT_TYPES.toString(PROJECT_TYPES.NORMAL)
-    },
-    async formatProjectList() {
-      this.EmergencySupport = await this.getProjectList(PROJECT_TYPES.EmergencySupport)
-      this.SpecialControl = await this.getProjectList(PROJECT_TYPES.SpecialControl)
-
-      // this.projectListArr = [...PROJECT_TYPES.VALUES]
-      if (this.EmergencySupport) {
-        this.projectListArr = [...this.projectListArr, ...this.EmergencySupport]
-      }
-      if (this.SpecialControl) {
-        this.projectListArr = [...this.projectListArr, ...this.SpecialControl]
-      }
-
-      this.projectList = PROJECT_TYPES.VALUES.map(item=>{
-        const { value, label, key } = item
-
-        return { value, label, children: this[key] || null }
-      })
-    },
-    async getProjectList(projectType) {
-      const res = await projectsList({ projectType })
-
-      if (res && res.length) {
-        return res.map(item=>({ value: item.projectId, label: item.projectName }))
-      } else {
-        return []
-      }
     },
     formatOrgTree(child) {
       let trees = []

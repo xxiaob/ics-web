@@ -3,7 +3,7 @@
     <el-form ref="form" label-width="80px" :model="form" class="jc-manage-form" size="small">
       <div class="jc-clearboth">
         <el-form-item label="项目名称" prop="projectId" :rules="rules.SELECT_NOT_NULL" class="jc-left-width45">
-          <el-cascader v-model="form.projectId" :options="projectList" :props="{expandTrigger:'hover',emitPath:false}" @change="changeProject"></el-cascader>
+          <el-cascader v-model="form.projectId" :options="projectList" :props="projectCascaderProps" @change="changeProject"></el-cascader>
         </el-form-item>
         <el-form-item label="任务名称" prop="taskName" :rules="rules.Len50" class="jc-right-width45">
           <el-input v-model="form.taskName" placeholder="请输入任务名称"></el-input>
@@ -11,11 +11,13 @@
       </div>
       <!-- assigneeAreaPOS -->
       <el-form-item label="任务区域" prop="" :rules="rules.NOT_NULL">
-        <jc-task-area :edit.sync="editArea" :projectId="form.projectId" :emergency="emergency" :areaType.sync="form.workAreaType" :selectedAreas.sync="form.assigneeAreaPOS" :orgTree="orgTree"></jc-task-area>
+        <!-- projectId 后期重写 -->
+        <jc-task-area :edit.sync="editArea" :projectId="form.projectId==initProjectId?'':form.projectId" :areaType.sync="form.workAreaType" :selectedAreas.sync="form.assigneeAreaPOS" :orgTree="orgTree"></jc-task-area>
       </el-form-item>
       <!-- peopleProps[peopleType] -->
       <el-form-item label="任务人员" prop="" :rules="rules.SELECT_NOT_NULL">
-        <jc-task-people :edit.sync="edit" :projectId="form.projectId" :emergency="emergency" :peopleType.sync="peopleType" :selecteds.sync="peoples" :orgTree="orgTree"></jc-task-people>
+        <!-- projectId 后期重写 -->
+        <jc-task-people :edit.sync="edit" :projectId="form.projectId==initProjectId?'':form.projectId" :emergency="emergency" :peopleType.sync="peopleType" :selecteds.sync="peoples" :orgTree="orgTree"></jc-task-people>
       </el-form-item>
       <el-form-item label="任务时间" prop="date" :rules="rules.SELECT_NOT_NULL">
         <el-date-picker style="width:40%" v-model="form.date" @change="changeDate" value-format="timestamp" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期">
@@ -69,10 +71,9 @@
 </template>
 <script>
 import { taskSave } from '@/api/task'
-// import { userListByOrg } from '@/api/user'
 import { getStringRule, getNumberRule, NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
-import { TASK_TYPES, TASK_AREA_TYPES, TASK_PEOPLE_TYPES, PROJECT_TYPES, TASK_FREQUENCYS, TASK_SELECT_TYPES } from '@/constant/Dictionaries'
+import { TASK_TYPES, TASK_AREA_TYPES, TASK_PEOPLE_TYPES, TASK_FREQUENCYS, TASK_SELECT_TYPES } from '@/constant/Dictionaries'
 
 const defaultForm = {
   workAreaType: TASK_AREA_TYPES.GRID,
@@ -106,9 +107,6 @@ export default {
     projectList: {
       type: Array
     },
-    projectListArr: {
-      type: Array
-    },
     orgTree: {
       type: Array
     },
@@ -126,6 +124,13 @@ export default {
   },
   data() {
     return {
+      projectCascaderProps: {
+        expandTrigger: 'hover',
+        emitPath: false,
+        children: 'sonProjects',
+        label: 'name',
+        value: 'id'
+      },
       TASK_SELECT_TYPES,
       editArea: false,
       edit: false,
@@ -150,6 +155,11 @@ export default {
       taskTimes: [null]
     }
   },
+  computed: {
+    initProjectId() {
+      return this.projectList.length ? this.projectList[0].id : ''
+    }
+  },
   watch: {
     peoples: {
       handler(val) {
@@ -169,10 +179,9 @@ export default {
       this.form.workFrequency = val ? val : null
     },
     changeProject(val) {
-      const res = this.EmergencySupport.filter(item=>item.value === val)
+      const res = this.EmergencySupport.filter(item=>item.id === val)
 
       this.emergency = res.length ? true : false
-      // console.log('changeProject', this.emergency, this.EmergencySupport, val)
     },
     delTime() {
       const len = this.taskTimes.length
@@ -203,10 +212,7 @@ export default {
 
         this.changeProject(projectId)
 
-        const project = this.projectListArr.filter(item=>item.value == projectId)
-        const newProjectId = (project[0] && project[0].value) || PROJECT_TYPES.NORMAL
-
-        const form = { businessKey, projectId: newProjectId, taskName, beginTime: startDate, endTime: endDate, taskDesc, date: [startDate, endDate], taskTimePOS, workPeopleNbr, workTime: Number(workTime), workAreaType,
+        const form = { businessKey, projectId, taskName, beginTime: startDate, endTime: endDate, taskDesc, date: [startDate, endDate], taskTimePOS, workPeopleNbr, workTime: Number(workTime), workAreaType,
           assigneeAreaPOS: assigneeAreaPOS.map(item=>item.areaId), ifOnTime, workFrequency }
 
         const res = TASK_FREQUENCYS.VALUES.filter(item=>item.value === workFrequency)
@@ -241,7 +247,7 @@ export default {
         this.peopleType = TASK_PEOPLE_TYPES.PEOPLE
         this.peoples = []
         this.workFrequency = null
-        return { ...defaultForm, projectId: PROJECT_TYPES.NORMAL }
+        return { ...defaultForm, projectId: this.initProjectId }
       }
     },
     onSubmit(ifStart) {

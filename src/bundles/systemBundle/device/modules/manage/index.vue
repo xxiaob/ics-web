@@ -1,14 +1,14 @@
 <template>
-  <el-dialog :title="options ? '编辑角色':'新增角色'" :visible.sync="dialogVisible" width="600px" :close-on-click-modal="false" :append-to-body="true" @close="dialogClose">
+  <el-dialog title="绑定用户" :visible.sync="dialogVisible" width="600px" :close-on-click-modal="false" :append-to-body="true" @close="dialogClose">
     <el-form ref="form" label-width="80px" :model="form" class="jc-manage-form">
-      <el-form-item label="角色名称" prop="roleName" :rules="rules.Len50">
-        <el-input v-model="form.roleName" placeholder="请输入角色名称"></el-input>
+      <el-form-item label="所属组织">
+        <el-cascader v-model="manageOrgId" :options="orgTree" filterable :props="{ expandTrigger: 'hover',checkStrictly: true, emitPath: false }" @change="orgChange" ref="orgCascader"></el-cascader>
       </el-form-item>
-      <el-form-item label="所属组织" prop="orgId" :rules="rules.SELECT_NOT_NULL">
-        <el-cascader v-model="form.orgId" :options="orgTree" filterable :props="{ expandTrigger: 'hover',checkStrictly: true,emitPath: false }" :disabled="isEdit"></el-cascader>
-      </el-form-item>
-      <el-form-item label="菜单权限">
-        <el-tree ref="tree" :default-checked-keys="checkedKeys" :data="menuTree" :props="props" node-key="resId" :default-expand-all="true" :show-checkbox="true"></el-tree>
+      <el-form-item label="用户名称" prop="userId" :rules="rules.SELECT_NOT_NULL">
+        <el-select v-model="form.userId" placeholder="请选择用户" filterable>
+          <el-option v-for="item in users" :key="item.userId" :label="item.userName" :value="item.userId">
+          </el-option>
+        </el-select>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -18,13 +18,11 @@
   </el-dialog>
 </template>
 <script>
-import { roleSave } from '@/api/role'
-import { menusGet } from '@/api/menus'
+import { deviceBind } from '@/api/device'
 import { organizationList } from '@/api/organization'
-import { getStringRule, SELECT_NOT_NULL } from '@/libs/rules'
+import { userListByOrg } from '@/api/user'
+import { SELECT_NOT_NULL } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
-
-let defaultForm = { roleName: '' }
 
 export default {
   name: 'SystemDeviceManage',
@@ -32,28 +30,35 @@ export default {
   props: ['orgId'],
   data() {
     return {
+      manageOrgId: '',
       loading: false,
       orgTree: [],
-      menuTree: [],
-      checkedKeys: [],
       props: {
         children: 'children',
         label: 'resName'
       },
       rules: {
-        Len50: getStringRule(1, 50),
         SELECT_NOT_NULL
-      }
+      },
+      users: []
     }
   },
   methods: {
+    orgChange(v) {
+      console.log('orgChange', v)
+      this.getUsers(v)
+      this.$refs.orgCascader.dropDownVisible = false //级联选择器 选择任意一级后隐藏下拉框
+    },
     initData() {
       organizationList().then(res => {
         this.orgTree = this.formatOrgTree(res)
+        this.manageOrgId = this.orgId
+        this.getUsers(this.orgId)
       })
-      menusGet().then(res => {
-        this.menuTree = this.formatMenuTree(res)
-      })
+    },
+    async getUsers(orgId) {
+      this.users = await userListByOrg([orgId])
+      this.form.userId = ''
     },
     formatOrgTree(child) {
       let trees = []
@@ -76,44 +81,20 @@ export default {
       }
       return trees
     },
-    formatMenuTree(child) {
-      let trees = []
-
-      if (child && child.length) {
-        child.forEach(item => {
-          let node = {
-            resId: item.resId,
-            resName: item.resName
-          }
-
-          let children = this.formatMenuTree(item.children)
-
-          if (children && children.length) {
-            node.children = children
-          }
-
-          trees.push(node)
-        })
-      }
-      return trees
-    },
     formatFormData() {
       if (this.options) {
-        this.checkedKeys = this.options.resIds || []
-        return {
-          roleId: this.options.roleId,
-          roleName: this.options.roleName,
-          orgId: this.options.orgId
-        }
+        const { deviceId, deviceType } = this.options
+
+        return { userId: '', deviceId, deviceType }
       } else {
-        return { ...defaultForm, orgId: this.orgId }
+        return { userId: '' }
       }
     },
     onSubmit() {
       this.loading = true
       this.$refs.form.validate(valid => {
         if (valid) {
-          roleSave({ ...this.form, resIds: this.$refs.tree.getCheckedKeys() }).then(() => {
+          deviceBind({ ...this.form }).then(() => {
             this.$message.success('操作成功')
             this.dialogVisible = false
             this.$emit('save-success')
