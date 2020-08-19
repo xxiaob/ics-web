@@ -175,7 +175,7 @@ export default {
       console.log('UserHistoryPosition', res)
       /**
        * 位置转换和处理绘图
-       * 如果两点间的距离低于10米则进行丢弃，距离超过200米，则进行位置查询
+       * 如果两点间的距离低于20米则进行丢弃，距离超过1000米，则进行位置查询
        */
       let activeDot = null //记录查询位置的点数据
 

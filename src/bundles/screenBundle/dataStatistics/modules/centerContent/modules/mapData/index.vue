@@ -226,6 +226,11 @@ export default {
       this.initEventHotMap() //显示热力图
       this.initEventCluster() //显示聚合图
     },
+    setFitView() {
+      if (orgAreas[this.orgId].rectangle) {
+        myJcMap.setFitView(orgAreas[this.orgId].rectangle, true, [0, 1, 1, 1]) //设置自适应显示
+      }
+    },
     getMyJcMap() {
       return myJcMap//获取地图
     },
@@ -470,39 +475,40 @@ export default {
 }
 .jc-event-cluster {
   position: relative;
-  width: 120px;
-  height: 150px;
+  width: 80px;
+  height: 105px;
   background: url(./assets/data-statictis-event.png) no-repeat center;
   background-size: 100% 100%;
   .jc-event-warp {
     position: relative;
-    width: 100px;
-    height: 100px;
-    top: 10px;
-    left: 10px;
+    width: 70px;
+    height: 70px;
+    top: 5px;
+    left: 5px;
     background-repeat: no-repeat;
     border-radius: 50%;
     overflow: hidden;
     color: $jc-color-white;
     font-weight: bold;
+    font-size: $jc-font-size-smaller;
   }
   .jc-event-item-0 {
     text-align: center;
-    line-height: 40px;
+    line-height: 32px;
   }
   .jc-event-item-1 {
-    width: 49%;
+    width: 49.9%;
     display: inline-block;
     text-align: left;
-    line-height: 50px;
-    padding-left: 15px;
+    line-height: 32px;
+    padding-left: 12px;
   }
   .jc-event-item-2 {
-    width: 49%;
+    width: 49.9%;
     display: inline-block;
     text-align: right;
-    line-height: 50px;
-    padding-right: 15px;
+    line-height: 32px;
+    padding-right: 12px;
   }
 }
 </style>

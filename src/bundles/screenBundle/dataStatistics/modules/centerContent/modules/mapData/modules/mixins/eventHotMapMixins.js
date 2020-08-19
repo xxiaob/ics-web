@@ -71,6 +71,7 @@ export default {
       let data = await this.getEventHotMapData()
 
       eventHotMap.setDataSet({ data })
+      this.setFitView() //设置自适应显示
     }
   },
   beforeDestroy() {

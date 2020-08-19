@@ -41,7 +41,7 @@ export default {
       if (object3Dlayer && labelsLayer) {
         myJcMap.add(object3Dlayer)//添加到地图
         myJcMap.add(labelsLayer) //添加点标记
-        myJcMap.setFitView(null, true, [0, 1, 1, 1]) //设置自适应显示
+        this.setFitView() //设置自适应显示
         this.loopAreasStart() //开始循环显示区域和信息
         if (this.index > 0) {
           this.showNextMarkerAndInfo(this.index % this.loopAreas.length)
@@ -141,8 +141,7 @@ export default {
       myJcMap.add(object3Dlayer)//添加到地图
       myJcMap.add(labelsLayer) //添加点标记
 
-      //设置自适应显示
-      myJcMap.setFitView(null, true, [0, 1, 1, 1]) //设置自适应显示
+      this.setFitView() //设置自适应显示
 
       //对显示的数组做排序
       this.showAreas.sort((a, b) => a.dis - b.dis) //先进行记录小到大排序
