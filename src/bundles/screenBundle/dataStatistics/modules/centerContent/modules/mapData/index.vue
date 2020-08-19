@@ -475,16 +475,16 @@ export default {
 }
 .jc-event-cluster {
   position: relative;
-  width: 80px;
-  height: 105px;
+  width: 76px;
+  height: 98px;
   background: url(./assets/data-statictis-event.png) no-repeat center;
   background-size: 100% 100%;
   .jc-event-warp {
     position: relative;
-    width: 70px;
-    height: 70px;
-    top: 5px;
-    left: 5px;
+    width: 60px;
+    height: 60px;
+    top: 8px;
+    left: 8px;
     background-repeat: no-repeat;
     border-radius: 50%;
     overflow: hidden;
@@ -494,20 +494,20 @@ export default {
   }
   .jc-event-item-0 {
     text-align: center;
-    line-height: 32px;
+    line-height: 26px;
   }
   .jc-event-item-1 {
     width: 49.9%;
     display: inline-block;
     text-align: left;
-    line-height: 32px;
+    line-height: 28px;
     padding-left: 12px;
   }
   .jc-event-item-2 {
     width: 49.9%;
     display: inline-block;
     text-align: right;
-    line-height: 32px;
+    line-height: 28px;
     padding-right: 12px;
   }
 }
