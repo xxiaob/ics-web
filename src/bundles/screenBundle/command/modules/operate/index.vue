@@ -126,7 +126,7 @@ export default {
 
         let areaTypes = []
 
-        let allCheckIds = ['user' ] // 默认选中
+        let allCheckIds = [] // 默认选中
 
         if (areaResults && areaResults.length) {
           areaResults.forEach(item => {
@@ -135,7 +135,7 @@ export default {
           })
         }
         this.areaTypes = areaTypes
-        this.wordType = allCheckIds
+        this.wordType = ['user', ...allCheckIds]
         this.togetherType = allCheckIds
       } catch (error) {
         console.log(error)

@@ -1,7 +1,7 @@
 <template>
-  <section class="jc-screen-warp no-select" :class="{'jc-no-docking': project.projectId}">
+  <section class="jc-screen-warp no-select" :class="{'jc-no-docking': project.projectId}" :style="{'transform': calcWindow}">
     <!-- 大屏头部 -->
-    <screen-header></screen-header>
+    <screen-header @window-size-change="changeWindowSize"></screen-header>
     <div class="jc-screen-content">
       <!-- 最右侧数据显示，如果是常态则显示，应急和专项则不显示 -->
       <data-docking class="jc-flex-con" v-if="!project.projectId"></data-docking>
@@ -20,6 +20,7 @@
 import { projectGet } from '@/api/projects'
 import { screenMessageChannelSocket } from '@/api/socket'
 import { SOCKET_MESSAGE_TYPES } from '@/constant/Dictionaries'
+import { amountFormatter } from '@/libs/dataFormatter'
 
 import ScreenHeader from './modules/header' //顶部header
 import DataDocking from './modules/dataDocking' //最左侧，数据对接，在应急和专项大屏不显示
@@ -34,7 +35,18 @@ export default {
   data() {
     return {
       project: { projectId: this.$route.params.projectId || '', projectName: '', orgId: '', projectType: '' },
-      screenMessageChannelSocket: null
+      screenMessageChannelSocket: null,
+      autoSetSize: false
+    }
+  },
+  computed: {
+    baseWidth() {
+      return this.project.projectId ? 2400 : 3000
+    },
+    calcWindow() {
+      let wScale = this.autoSetSize && window.innerWidth <= this.baseWidth ? amountFormatter(window.innerWidth / this.baseWidth, 2) : 1
+
+      return `scale3d(${wScale}, 1, 1)`
     }
   },
   created() {
@@ -68,6 +80,9 @@ export default {
         //如果消息存在，则去发送消息
         this.screenMessageChannelSocket.send(JSON.stringify({ sendType: SOCKET_MESSAGE_TYPES.COMMAND, data: message }))
       }
+    },
+    changeWindowSize(autoSetSize) {
+      this.autoSetSize = autoSetSize
     }
   },
   beforeDestroy() {
