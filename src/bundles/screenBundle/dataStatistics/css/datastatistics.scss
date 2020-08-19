@@ -1,10 +1,11 @@
 .jc-screen-warp {
   position: relative;
   height: 100%;
-  min-width: 3200px;
+  min-width: 3000px;
   // margin-left: -1000px; // 开发调试大屏右侧区域使用,
   background: url(../assets/screen-bg.png) no-repeat center;
   background-size: cover;
+  transform-origin: 0 0;
 
   &.jc-no-docking {
     min-width: 2400px;

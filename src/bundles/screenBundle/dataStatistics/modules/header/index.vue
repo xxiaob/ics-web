@@ -1,6 +1,6 @@
 <template>
   <div class="jc-screen-header">
-    <div class="jc-screen-title" v-text="title"></div>
+    <div class="jc-screen-title" v-text="title" @dblclick="changeWindowSize"></div>
   </div>
 </template>
 <script>
@@ -12,7 +12,8 @@ export default {
   data() {
     return {
       title: '--',
-      project: null
+      project: null,
+      autoSetSize: false
     }
   },
   created() {
@@ -33,6 +34,10 @@ export default {
           this.title = `${this.project.projectName}常态数据大屏`
         }
       }
+    },
+    changeWindowSize() {
+      this.autoSetSize = !this.autoSetSize
+      this.$emit('window-size-change', this.autoSetSize)
     }
   },
   beforeDestroy() {
