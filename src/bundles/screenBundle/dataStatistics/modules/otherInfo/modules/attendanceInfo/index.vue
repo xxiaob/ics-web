@@ -73,7 +73,7 @@
           </div>
 
           <!-- 区域出勤数据 -->
-          <div class="regional-attendance-tbody jc-flex-con data-statistics-scrollbar">
+          <div class="regional-attendance-tbody jc-flex-con data-statistics-scrollbar" ref="regionalscroll">
             <div>
               <div class="regional-attendance-tr jc-flex-warp" v-for="item in arearService" :key="item.orgId">
                 <span class="jc-flex-con-3 jc-omit-cell text-center">{{ item.orgName }}</span>
@@ -105,7 +105,12 @@ export default {
     return {
       arearService: [],
       overallAttendance: {},
-      project: {}
+      project: {},
+      regionalscroll: null,
+      scrollTop: 0,
+      scrollHeight: 0,
+      clientHeight: 0,
+      isStartScroll: true
     }
   },
   created() {
@@ -121,7 +126,21 @@ export default {
       }, 25000)
     })
   },
+  mounted() {
+    this.$nextTick(() => {
+      this.regionalscroll = this.$refs.regionalscroll // 获取滚动元素
+      this.scrollTop = this.regionalscroll.scrollTop // 获取滚动元素卷起高度
+      this.clientHeight = this.regionalscroll.clientHeight // 获取滚动元素容器高度
+
+      this.regionalscroll.addEventListener('scroll', this.regionalscrollhandle) // 绑定滚动事件,实时获取最新的卷起高度
+      this.regionalscroll.addEventListener('mouseenter', this.setIntervalEnd) // 鼠标移入清理定时器
+      this.regionalscroll.addEventListener('mouseleave', this.mouseenterHandle) // 鼠标离开开启定时器
+    })
+  },
   methods: {
+    regionalscrollhandle(ev) {
+      this.scrollTop = ev.target.scrollTop // 获取罪行的定时器
+    },
     async getAreaServiceData() {
       let { orgId } = await getUser() // 获取用户orgId
 
@@ -132,11 +151,45 @@ export default {
       let overallAttendance = await getOverallAttendance({ orgId, projectId })// 总体出勤数据Array
 
       this.overallAttendance = overallAttendance[0] // 取出总体数据 Object
+
+      this.$nextTick(() => {
+        this.scrollHeight = this.regionalscroll.scrollHeight // 数据加载完毕后获取元素滚动高度
+        this.timer = 1
+        this.setIntervalStart() // 开启定时器滚动
+      })
+    },
+    setIntervalStart() { // 滚动定时器开始的方法
+      if (this.isStartScroll) { // 判断用于处理在数据轮询更新是不重新开启定时器
+        clearInterval(this.scrollTimer)
+        this.scrollTimer = setInterval(this.scrollHandle, 50)
+      }
+    },
+    setIntervalEnd() { // 结束定时器方法
+      this.isStartScroll = false
+      clearInterval(this.scrollTimer)
+    },
+    mouseenterHandle() { // 鼠标移出开始定时器
+      this.isStartScroll = true
+      this.setIntervalStart()
+    },
+    scrollHandle() { // 滚动函数
+      let scrollTop = this.scrollTop + 1
+
+      this.regionalscroll.scrollTo(0, scrollTop)
+
+      if ((scrollTop + this.clientHeight) > this.scrollHeight) {
+        this.scrollTop = 0
+      }
     }
   },
   beforeDestroy() {
     // 清理定时器
     clearInterval(this.attendanceTimer)
+    clearInterval(this.scrollTimer)
+    // 清理事件
+    this.regionalscroll.removeEventListener('scroll', this.regionalscrollhandle)
+    this.regionalscroll.removeEventListener('mouseenter', this.setIntervalEnd)
+    this.regionalscroll.removeEventListener('mouseleave', this.mouseenterHandle)
   }
 
 }
