@@ -23,7 +23,7 @@
       <el-pagination @current-change="currentChange" @size-change="sizeChange" :current-page.sync="page.pageNum" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.total" class="text-right jc-mt"></el-pagination>
     </el-card>
 
-    <jc-manage :visible.sync="visible"></jc-manage>
+    <jc-manage :options="info" :visible.sync="visible"></jc-manage>
 
     <jc-third-detail :visible.sync="detailVisible"></jc-third-detail>
 
@@ -31,7 +31,7 @@
 </template>
 
 <script>
-
+import { videoList } from '@/api/record' // 待删除 , 替换第三方管理接口
 import { formatDate } from '@/libs/util'
 import PaginationMixins from '@/mixins/PaginationMixins'
 
@@ -46,6 +46,7 @@ export default {
       loading: false,
       list: [],
       filter: {},
+      info: null,
       visible: false,
       detailVisible: false
     }
@@ -109,10 +110,10 @@ export default {
       if (!this.loading) {
         this.loading = true
         try {
-          // const { total, resultList } = await videoList({ ...this.filter, ...this.page, videoType: 'VIDEO' })
+          const { total, resultList } = await videoList({ ...this.filter, ...this.page, videoType: 'VIDEO' })
 
-          // this.page.total = total
-          // this.list = resultList
+          this.page.total = total
+          this.list = resultList
           this.loading = false
 
           // 请求数据
@@ -137,6 +138,7 @@ export default {
         // 如果row有值为编辑
         // 发送请求获取数据, 将数据复制给info
         // this.info = res
+        this.info = {}
         this.visible = true
       } else {
         // 新增
