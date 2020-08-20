@@ -12,6 +12,7 @@
         </el-date-picker>
       </el-form-item>
       <el-form-item class="jc-tabfilter-btns">
+        <el-button type="primary" @click="addHandle">新增</el-button>
         <el-button type="primary" @click="onSubmit">查询</el-button>
         <el-button @click="reset">重置</el-button>
       </el-form-item>
@@ -60,7 +61,10 @@ export default {
       this.date = null
     },
     onSubmit() { // 提交
-      this.$emit('filter', this.form)
+      this.$emit('filter', this.form) // 查询信息
+    },
+    addHandle() {
+      this.$emit('addopeartion')
     }
   }
 }
