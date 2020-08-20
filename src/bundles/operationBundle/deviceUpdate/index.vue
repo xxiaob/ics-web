@@ -41,7 +41,7 @@ import { deviceTypes, states } from './const'
 import PaginationMixins from '@/mixins/PaginationMixins'
 
 export default {
-  name: 'SystemDeviceUpdateIndex',
+  name: 'OperationDeviceUpdateIndex',
   mixins: [PaginationMixins],
   components: {
     TabFilter: () => import('./modules/tabFilter'),

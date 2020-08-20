@@ -35,7 +35,7 @@ import { menusList, menusDel } from '@/api/menus'
 import { stringSearch } from '@/libs/util'
 
 export default {
-  name: 'SystemMenusIndex',
+  name: 'OperationMenusIndex',
   components: {
     TabFilter: () => import('./modules/tabFilter'),
     JcManage: () => import('./modules/manage')

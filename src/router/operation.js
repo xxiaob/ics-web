@@ -8,7 +8,7 @@ export default [
     name: 'operationMenus',
     component: () => import('@/bundles/operationBundle/menus'),
     meta: {
-      title: '系统设置-菜单管理'
+      title: '运维管理-菜单管理'
     }
   },
   {
@@ -16,7 +16,14 @@ export default [
     name: 'operationDeviceUpdate',
     component: () => import('@/bundles/operationBundle/deviceUpdate'),
     meta: {
-      title: '系统设置-设备升级'
+      title: '运维管理-设备升级'
+    }
+  }, {
+    path: 'operation/thirdManage',
+    name: 'operationThirdManage',
+    component: () => import('@/bundles/operationBundle/thirdManage'),
+    meta: {
+      title: '运维管理-第三方管理'
     }
   }
 ]

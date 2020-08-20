@@ -166,13 +166,12 @@ export default {
       })
     },
     goLocation(data) {
-      // 网格设备定位
-      if (!data.online) {
-        this.$message.error('当前设备为离线状态')
-        return
-      }
-
       if (data.type == 'device') {
+        // 网格设备定位
+        if (!data.online) {
+          this.$message.error('当前设备为离线状态')
+          return
+        }
         this.$EventBus.$emit('screen-device-location', { id: data.id }) // 通知网格定位
       } else {
         this.$EventBus.$emit('screen-org-location', { id: data.id }) // 通知组织定位

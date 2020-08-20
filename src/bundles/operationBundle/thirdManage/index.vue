@@ -1,0 +1,99 @@
+<template>
+  <div class="jc-main-container-warp">
+    <tab-filter :orgTree="orgTree" @filter="goFilter"></tab-filter>
+
+    <el-card class="jc-table-card jc-mt">
+      <div slot="header" class="jc-card-header">
+        <div class="jc-card-title">列表内容</div>
+      </div>
+      <el-table :data="list" v-loading="loading" row-key="id" class="jc-table">
+        <el-table-column type="index" :index="indexMethod" label="序号" width="50"></el-table-column>
+        <el-table-column prop="initiatorName" label="第三方名称"></el-table-column>
+        <el-table-column prop="orgId" label="所属组织" :formatter="formatOrg"></el-table-column>
+        <el-table-column prop="createTime" label="授权截止时间" :formatter="formatTime"></el-table-column>
+        <el-table-column prop="participants" label="appkey" show-overflow-tooltip></el-table-column>
+        <el-table-column width="60" label="操作">
+          <template slot-scope="scope">
+            <el-button type="text" size="mini" icon="el-icon-video-camera" @click="showVideo(scope.row)" title="播放"></el-button>
+            <el-button type="text" size="mini" icon="el-icon-video-camera" @click="showVideo(scope.row)" title="播放"></el-button>
+            <el-button type="text" size="mini" icon="el-icon-video-camera" @click="showVideo(scope.row)" title="播放"></el-button>
+          </template>
+        </el-table-column>
+      </el-table>
+      <el-pagination @current-change="currentChange" @size-change="sizeChange" :current-page.sync="page.pageNum" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.total" class="text-right jc-mt"></el-pagination>
+    </el-card>
+
+  </div>
+</template>
+
+<script>
+import { organizationList } from '@/api/organization'
+export default {
+  name: 'OperationThirdManage',
+  data() {
+    return {
+      orgTree: [],
+      orgObj: {},
+      loading: false,
+      list: [],
+      filter: {}
+    }
+  },
+  components: {
+    TabFilter: () => import('./modules/tabFilter')
+  },
+  async created() {
+    await this.getOrgTree()
+  },
+  methods: {
+    formatOrgTree(child) {
+      let trees = []
+
+      if (child && child.length) {
+        child.forEach(item => {
+          let node = {
+            value: item.orgId,
+            label: item.orgName
+          }
+
+          let children = this.formatOrgTree(item.children)
+
+          if (children && children.length) {
+            node.children = children
+          }
+
+          trees.push(node)
+        })
+      }
+      return trees
+    },
+    formatOrgTreeToObj(child) {
+      let objs = {}
+
+      if (child && child.length) {
+        child.forEach(item => {
+          if (item.children && item.children.length) {
+            objs = Object.assign(objs, this.formatOrgTreeToObj(item.children))
+          }
+          objs[item.orgId] = item.orgName
+        })
+      }
+      return objs
+    },
+    async getOrgTree() {
+      const res = await organizationList()
+
+      this.orgTree = this.formatOrgTree(res)
+      this.orgObj = this.formatOrgTreeToObj(res)
+    },
+    goFilter(filter) {
+      this.filter = filter
+      this.currentChange(1)
+    }
+  }
+
+}
+</script>
+
+<style>
+</style>
