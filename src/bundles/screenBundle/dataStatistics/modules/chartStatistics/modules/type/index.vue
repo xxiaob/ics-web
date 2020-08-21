@@ -149,6 +149,7 @@ export default {
         itemWidth: 10,
         itemHeight: 10,
         itemGap: 8,
+        selectedMode: false,
         textStyle: {
           color: 'rgb(139,193,252)',
           padding: [2, 0, 0, 0],
