@@ -13,7 +13,7 @@ export default {
     return {
       title: '--',
       project: null,
-      autoSetSize: false
+      autoSetSize: true
     }
   },
   created() {

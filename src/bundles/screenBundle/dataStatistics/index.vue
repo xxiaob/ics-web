@@ -67,6 +67,7 @@ export default {
 
       console.log('emit-data-statistics-init-success')
       this.$EventBus.$emit('data-statistics-init-success', this.project) //通知基础数据初始化完成
+      this.changeWindowSize(true)
     },
     initScreenMessageChannelSocket(orgId) {
       this.screenMessageChannelSocket = screenMessageChannelSocket({ subOrgId: orgId, subProjectId: this.project.projectId, type: SOCKET_MESSAGE_TYPES.DATA_STATISTICS })
