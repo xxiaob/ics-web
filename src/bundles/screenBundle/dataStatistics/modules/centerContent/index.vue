@@ -29,7 +29,7 @@ export default {
 }
 .jc-map-footer {
   position: relative;
-  height: 70px;
+  height: 60px;
 }
 .jc-map-img {
   position: absolute;
@@ -37,7 +37,7 @@ export default {
   left: 50%;
   bottom: -10px;
   transform: translateX(-50%);
-  width: 320px;
+  width: 300px;
   z-index: 3;
 }
 </style>

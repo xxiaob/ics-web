@@ -75,7 +75,7 @@ export default {
       })
       this.clearMapSign() //清除地图标记
       // 设置光照
-      myJcMap.AmbientLight = new AMap.Lights.AmbientLight([1, 1, 1], 0.6)
+      myJcMap.AmbientLight = new AMap.Lights.AmbientLight([1, 1, 1], 0.8)
       myJcMap.DirectionLight = new AMap.Lights.DirectionLight([0, 0, 1], [1, 1, 1], 1)
 
       this.$EventBus.$emit('data-statistics-amap-success', this.orgId) //通知地图加载完成
@@ -254,8 +254,8 @@ export default {
 
             for (let i = 0; i < areaItem.boundaries.length; i++) {
               let polygon = new AMap.Polygon({
-                map: myJcMap, strokeWeight: 1, strokeColor: '#006cff', strokeOpacity: 0.5,
-                fillColor: '#001e86', fillOpacity: 0.3, path: areaItem.boundaries[i].path
+                map: myJcMap, strokeWeight: 1, strokeColor: '#00a8ff', strokeOpacity: 1,
+                fillColor: '#0090ff', fillOpacity: 0.4, path: areaItem.boundaries[i].path
               })
 
               polygons.push(polygon)
@@ -321,7 +321,7 @@ export default {
     height: 40px;
     line-height: 40px;
     cursor: pointer;
-    color: #0572bd;
+    color: #14edfc;
     background: url(./assets/switch-off.png) no-repeat center;
     background-size: 100%;
     &:hover,
@@ -344,7 +344,7 @@ export default {
     height: 20px;
     line-height: 20px;
     cursor: pointer;
-    color: #0572bd;
+    color: #ffffff;
     &:not(:last-child) {
       border-right: solid 1px #0572bd;
     }
