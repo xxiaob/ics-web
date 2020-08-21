@@ -233,13 +233,13 @@ export default {
           align-items: center;
           font-size: 16px;
           font-weight: bold;
-          color: #11e7ff;
+          color: #ffffff;
         }
         .jc-summary-title {
           justify-content: center;
           align-items: flex-start;
-          font-size: 12px;
-          color: #11e7ff;
+          font-size: 14px;
+          color: #ffffff;
         }
       }
     }
@@ -256,8 +256,8 @@ export default {
     .jc-summary-center-count {
       justify-content: center;
       align-items: center;
-      font-size: 12px;
-      color: #11e7ff;
+      font-size: 14px;
+      color: #ffffff;
 
       .jc-center-count {
         font-size: 28px;
@@ -269,6 +269,7 @@ export default {
       align-items: flex-start;
       font-weight: bold;
       color: #ffffff;
+      font-size: 16px;
     }
   }
 }

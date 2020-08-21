@@ -2,25 +2,25 @@
   <!--  建筑违法  -->
   <abstract-area title="建筑违法">
     <div class="jc-category jc-flex-con jc-flex-warp">
-      <div class="jc-category-item jc-flex-warp">
+      <div class="jc-category-item jc-flex-warp jc-build-1">
         <span class="jc-category-title">违法建筑</span>
         <span class="jc-category-count">
           <count-to :startVal="0" :endVal="0" :duration="3000" separator="" />件
         </span>
       </div>
-      <div class="jc-category-item jc-flex-warp">
+      <div class="jc-category-item jc-flex-warp jc-build-2">
         <span class="jc-category-title">建筑面积</span>
         <span class="jc-category-count">
           <count-to :startVal="0" :endVal="0" :duration="3000" separator="" />m<sup>2</sup>
         </span>
       </div>
-      <div class="jc-category-item jc-flex-warp">
+      <div class="jc-category-item jc-flex-warp jc-build-3">
         <span class="jc-category-title">拆除面积</span>
         <span class="jc-category-count">
           <count-to :startVal="0" :endVal="0" :duration="3000" separator="" />m<sup>2</sup>
         </span>
       </div>
-      <div class="jc-category-item jc-flex-warp">
+      <div class="jc-category-item jc-flex-warp jc-build-4">
         <span class="jc-category-title">拆除比率</span>
         <span class="jc-category-count">
           <count-to :startVal="0" :endVal="0" :decimals="2" :duration="3000" separator="" />%
@@ -48,20 +48,29 @@ export default {
   position: relative;
 
   .jc-category-item {
-    background: url("./assets/building-bg.png") no-repeat center/100% 100%;
-    background-origin: content-box;
+    background-repeat: no-repeat;
+    background-size: calc(100% - 5px) 100%;
+    .jc-category-title {
+      color: #ffffff;
+    }
 
-    &:nth-child(odd) {
-      padding-right: 5px;
+    &.jc-build-1 {
+      background-image: url("./assets/building-bg1.png");
+      background-position: left center;
     }
-    &:nth-child(even) {
-      padding-left: 5px;
+    &.jc-build-2 {
+      background-image: url("./assets/building-bg2.png");
+      background-position: right center;
     }
-    &:nth-child(n + 3) {
-      padding-top: 6px;
+    &.jc-build-3 {
+      background-image: url("./assets/building-bg3.png");
+      margin-top: 10px;
+      background-position: left center;
     }
-    &:nth-child(-n + 2) {
-      padding-bottom: 6px;
+    &.jc-build-4 {
+      background-image: url("./assets/building-bg4.png");
+      margin-top: 10px;
+      background-position: right center;
     }
   }
 
