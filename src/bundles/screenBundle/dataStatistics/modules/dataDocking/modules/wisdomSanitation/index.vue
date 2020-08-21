@@ -99,6 +99,7 @@ export default {
     justify-content: center;
     width: 33%;
     padding: 10px 10px 0;
+    font-weight: bold;
 
     .jc-sanitation-img {
       width: 40px;
@@ -110,16 +111,15 @@ export default {
       padding-left: 14px;
 
       .jc-sanitation-title {
-        font-size: 12px;
         letter-spacing: 1px;
         color: #8bc1fc;
       }
 
       .jc-sanitation-count {
-        font-size: 16px;
+        font-size: 18px;
         letter-spacing: 1px;
         margin-top: 6px;
-        color: #11e7ff;
+        color: #ffffff;
       }
     }
   }
