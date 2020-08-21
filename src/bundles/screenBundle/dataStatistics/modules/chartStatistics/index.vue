@@ -222,6 +222,7 @@ export default {
     text-align: center;
     line-height: 40px;
     border-bottom: 1px solid rgb(32, 73, 154);
+    font-weight: bold;
 
     & > div {
       cursor: pointer;

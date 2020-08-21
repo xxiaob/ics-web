@@ -133,6 +133,9 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.weather-info {
+  background: #00125d;
+}
 .jc-current-weather {
   padding: 0 16px;
 
@@ -199,7 +202,7 @@ export default {
       margin: 4px 12px;
     }
     .future-weather-content {
-      color: #8bc1fc;
+      color: #ffffff;
       font-size: 12px;
 
       .future-top-info {

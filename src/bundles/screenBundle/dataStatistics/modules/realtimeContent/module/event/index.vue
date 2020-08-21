@@ -120,13 +120,13 @@ export default {
       width: 0;
 
       .jc-list-item-content-title {
-        color: #11e7ff;
+        color: #ffffff;
         font-size: 16px;
         @include jc-text-warp;
       }
 
       .jc-list-item-content-position {
-        color: #8bc1fc;
+        color: #ffffff;
         font-size: 16px;
         @include jc-text-warp;
         margin-bottom: 10px;
@@ -135,7 +135,7 @@ export default {
       .jc-list-item-content-detail {
         color: #8bc1fc;
         justify-content: space-between;
-        font-size: 12px;
+        font-size: 14px;
       }
     }
   }

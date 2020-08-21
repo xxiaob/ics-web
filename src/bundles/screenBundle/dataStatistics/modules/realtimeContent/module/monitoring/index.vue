@@ -117,7 +117,7 @@ export default {
           height: 38px;
           line-height: 38px;
           font-size: 14px;
-          color: #11e7ff;
+          color: #ffffff;
         }
 
         .montitoring {

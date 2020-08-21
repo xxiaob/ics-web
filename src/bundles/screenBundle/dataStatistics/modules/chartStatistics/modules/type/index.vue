@@ -41,9 +41,9 @@ export default {
       problems: null,
       tasks: null,
       colors: [
+        ['#ee761e', '#ffbc07'],
         ['#112adf', '#3b7afd'],
         ['#0f89d2', '#19cfed'],
-        ['#ee761e', '#ffbc07'],
         ['#5f1eee', '#9e4bfb'],
         ['#d21fff', '#ff4b9b']
       ]

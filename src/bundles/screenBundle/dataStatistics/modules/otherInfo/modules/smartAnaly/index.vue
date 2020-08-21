@@ -355,7 +355,7 @@ export default {
         right: 0;
         justify-content: center;
         align-items: center;
-        color: #11e7ff;
+        color: #ffffff;
         font-size: 14px;
 
         .count-to-wrap {
@@ -369,7 +369,7 @@ export default {
     .smart-analy-item {
       justify-content: center;
       align-items: center;
-      color: #11e7ff;
+      color: #ffffff;
       background: url("./assets/smartanaly-bg.png") no-repeat 0 0 / 100% 100%;
       cursor: pointer;
 
@@ -397,5 +397,4 @@ export default {
     }
   }
 }
-
 </style>

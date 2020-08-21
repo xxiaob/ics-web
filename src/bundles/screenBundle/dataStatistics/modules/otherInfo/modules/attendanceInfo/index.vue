@@ -254,16 +254,22 @@ export default {
         }
 
         .regional-attendance-tr {
-          background-color: rgba(0, 46, 138, 0.2);
+          background-color: #082c93;
           height: 30px;
           line-height: 30px;
-
+          &:nth-of-type(2n) {
+            background-color: #114ebc;
+          }
           & span:first-child {
             padding-left: 8px;
           }
 
+          .jc-omit-cell:first-child {
+            color: #ffffff;
+          }
+
           .jc-omit-cell:not(:first-child) {
-            color: #4ee2fd;
+            color: #fdfefe;
           }
 
           &:not(:first-child) {
