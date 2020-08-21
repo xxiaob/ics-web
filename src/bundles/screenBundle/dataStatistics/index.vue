@@ -20,7 +20,6 @@
 import { projectGet } from '@/api/projects'
 import { screenMessageChannelSocket } from '@/api/socket'
 import { SOCKET_MESSAGE_TYPES } from '@/constant/Dictionaries'
-import { amountFormatter } from '@/libs/dataFormatter'
 
 import ScreenHeader from './modules/header' //顶部header
 import DataDocking from './modules/dataDocking' //最左侧，数据对接，在应急和专项大屏不显示
@@ -41,10 +40,10 @@ export default {
   },
   computed: {
     baseWidth() {
-      return this.project.projectId ? 2400 : 3000
+      return this.project.projectId ? 2800 : 3200
     },
     calcWindow() {
-      let wScale = this.autoSetSize && window.innerWidth <= this.baseWidth ? amountFormatter(window.innerWidth / this.baseWidth, 2) : 1
+      let wScale = this.autoSetSize && window.innerWidth <= this.baseWidth ? window.innerWidth / this.baseWidth : 1
 
       return `scale3d(${wScale}, 1, 1)`
     }
