@@ -42,7 +42,7 @@ const options = {
     right: 20,
     selectedMode: false,
     textStyle: {
-      color: 'rgb(139,193,252)',
+      color: 'white',
       fontSize: 12
     }
   },
@@ -66,7 +66,7 @@ const options = {
       axisLabel: {
         interval: 0,
         rotate: -30,
-        fontSize: 10
+        fontSize: 12
       }
     }
   ],
