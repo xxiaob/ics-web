@@ -344,14 +344,14 @@ export default {
     height: 20px;
     line-height: 20px;
     cursor: pointer;
-    color: #ffffff;
+    color: #14edfc;
     &:not(:last-child) {
-      border-right: solid 1px #0572bd;
+      border-right: solid 1px #14edfc;
     }
 
     &:hover,
     &.jc-active {
-      color: #14edfc;
+      color: #ffffff;
     }
   }
 }
