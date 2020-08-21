@@ -34,6 +34,7 @@ export default {
 .jc-data-warp {
   position: relative;
   padding: $jc-default-dis/2 $jc-default-dis;
+  margin-top: 30px;
 }
 .jc-data-item {
   flex: 1;

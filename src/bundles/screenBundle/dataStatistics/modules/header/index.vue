@@ -1,6 +1,6 @@
 <template>
   <div class="jc-screen-header">
-    <div class="jc-screen-title" v-text="title" @dblclick="changeWindowSize"></div>
+    <div class="jc-screen-title" :class="{'jc-title-short': title.length < 16}" :text="title" v-text="title" @dblclick="changeWindowSize"></div>
   </div>
 </template>
 <script>
@@ -58,8 +58,20 @@ export default {
   text-align: center;
   color: $jc-color-white;
   font-weight: bold;
-  line-height: 70px;
-  font-size: 30px;
+  line-height: 86px;
+  font-size: 50px;
   letter-spacing: 2px;
+  text-shadow: #007eff 0 0 12px;
+  &.jc-title-short {
+    letter-spacing: 10px;
+    font-size: 52px;
+  }
+  &:before {
+    content: attr(text);
+    position: absolute;
+    z-index: 10;
+    color: #a4bfff;
+    -webkit-mask: linear-gradient(transparent, transparent, #a4bfff);
+  }
 }
 </style>
