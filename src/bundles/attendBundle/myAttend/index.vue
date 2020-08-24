@@ -1,6 +1,6 @@
 <template>
   <div class="jc-main-container-warp">
-    <tab-filter :userId="user.userId" :self="true" @filter="goFilter"></tab-filter>
+    <tab-filter :userId="user.userId" @filter="goFilter"></tab-filter>
     <el-card class="jc-table-card jc-mt">
       <div slot="header" class="jc-card-header">
         <div class="jc-card-title">列表内容</div>
@@ -37,7 +37,7 @@ export default {
   name: 'MyAttendIndex',
   mixins: [PaginationMixins],
   components: {
-    TabFilter: () => import('../peopleAttend/modules/tabFilter')
+    TabFilter: () => import('./modules/tabFilter')
   },
   data() {
     return {

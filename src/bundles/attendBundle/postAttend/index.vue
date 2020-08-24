@@ -1,6 +1,6 @@
 <template>
   <div class="jc-main-container-warp">
-    <tab-filter :userId="user.userId" :post="true" :orgTree="orgTree" @filter="goFilter"></tab-filter>
+    <tab-filter :userId="user.userId" :orgTree="orgTree" @filter="goFilter"></tab-filter>
     <el-card class="jc-table-card jc-mt">
       <div slot="header" class="jc-card-header">
         <div class="jc-card-title">列表内容</div>
@@ -9,6 +9,7 @@
         <el-table-column type="index" :index="indexMethod" label="序号" width="50"></el-table-column>
         <el-table-column prop="time" label="时间" width="140"></el-table-column>
         <el-table-column prop="orgName" label="所属组织"></el-table-column>
+        <el-table-column prop="areaName" label="岗点类型"></el-table-column>
         <el-table-column prop="areaName" label="岗点名称"></el-table-column>
         <el-table-column prop="onguardDuration" label="在岗时长(h)"></el-table-column>
         <el-table-column prop="journey" label="在岗里程(km)"></el-table-column>
@@ -34,7 +35,7 @@ export default {
   name: 'PostAttendIndex',
   mixins: [PaginationMixins],
   components: {
-    TabFilter: () => import('../peopleAttend/modules/tabFilter')
+    TabFilter: () => import('./modules/tabFilter')
   },
   data() {
     return {
