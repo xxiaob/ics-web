@@ -3,6 +3,7 @@
  */
 import axios from 'axios'
 import API from './API'
+import qs from 'qs'
 
 /*-------------------------------问题管理------------------------------------ */
 /**
@@ -84,4 +85,12 @@ export function questionTypeList() {
  */
 export function getProblemAuth(id) {
   return axios.post(API.question.getProblemAuth + '?businessKey=' + id)
+}
+
+/**
+ * 导出
+ * @param {object} data
+ */
+export function exportList(data) {
+  window.open(process.env.apiHostConfig.base + API.question.exportList + '?' + qs.stringify(data))
 }

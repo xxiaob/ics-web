@@ -3,6 +3,7 @@
  */
 import axios from 'axios'
 import API from './API'
+import qs from 'qs'
 
 /*-------------------------------任务管理------------------------------------ */
 /**
@@ -133,4 +134,12 @@ export function listByProblemId(id) {
  */
 export function getTaskAuth(id) {
   return axios.post(API.task.getTaskAuth + '?businessKey=' + id)
+}
+
+/**
+ * 导出
+ * @param {object} data
+ */
+export function exportList(data) {
+  window.open(process.env.apiHostConfig.base + API.task.exportList + '?' + qs.stringify(data))
 }
