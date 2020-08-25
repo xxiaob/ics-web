@@ -2,7 +2,7 @@
   <el-card class="jc-tabfilter-card">
     <el-form ref="form" :inline="true" :model="form" class="jc-tabfilter-form" size="small">
       <el-form-item prop="lawsType" label="法规类型">
-        <el-select v-model="form.lawsType" placeholder="选择问题类型">
+        <el-select v-model="form.lawsType" placeholder="选择法规类型">
           <el-option v-for="item in types" :key="item.id" :label="item.typeName" :value="item.id"></el-option>
         </el-select>
       </el-form-item>

@@ -4,23 +4,23 @@
     <div class="jc-user-content">
       <div class="jc-info-item">
         <label class="jc-info-label">第三方名称：</label>
-        <div class="jc-info-content">aa</div>
+        <div class="jc-info-content" v-text="info && info.thirdPartyName"></div>
       </div>
       <div class="jc-info-item">
         <label class="jc-info-label">组织名称：</label>
-        <div class="jc-info-content">aa</div>
+        <div class="jc-info-content" v-text="info && info.orgName"></div>
       </div>
       <div class="jc-info-item">
         <label class="jc-info-label">授权截止时间：</label>
-        <div class="jc-info-content">aa</div>
+        <div class="jc-info-content" v-text="info && info.endTime"></div>
       </div>
       <div class="jc-info-item">
         <label class="jc-info-label">appkey：</label>
-        <div class="jc-info-content">aa</div>
+        <div class="jc-info-content" v-text="info && info.appKey"></div>
       </div>
       <div class="jc-info-item">
         <label class="jc-info-label">appsecret：</label>
-        <div class="jc-info-content">aa</div>
+        <div class="jc-info-content" v-text="info && info.appSecret"></div>
       </div>
     </div>
     <div slot="footer" class="dialog-footer">
@@ -37,7 +37,9 @@ export default {
   name: 'OperationThirdDetail',
   mixins: [FormMixins],
   props: {
-    userId: String,
+    info: {
+      type: Object
+    },
     title: {
       type: String,
       default: '第三方详情'
@@ -45,36 +47,13 @@ export default {
   },
   data() {
     return {
-      user: {}
+
     }
   },
-  computed: {
-    // userRoles() {
-    //   if (this.user.roles && this.user.roles.length) {
-    //     let rolesName = []
-
-    //     this.user.roles.forEach(item => {
-    //       rolesName.push(item.roleName)
-    //     })
-    //     return rolesName.join('，')
-    //   }
-    //   return '--'
-    // }
-  },
   methods: {
-    // async initData() {
-    //   try {
-    //     this.user = await userGet({ userId: this.userId })
-    //   } catch (error) {
-    //     console.log(error)
-    //   }
-    // },
     formatFormData() {
       return {}
     }
-    // dialogClose() {
-    //   this.dialogVisible = false
-    // }
   }
 }
 </script>
