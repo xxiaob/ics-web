@@ -9,13 +9,13 @@
       <el-form-item prop="orgId" label="所属组织">
         <el-cascader :options="orgTree" v-model="form.orgId" :props="{expandTrigger: 'hover', emitPath: false,checkStrictly:true }" clearable @change="orgChange" ref="orgCascader"></el-cascader>
       </el-form-item>
-      <el-form-item prop="areaType" label="岗点类型">
-        <el-select v-model="form.areaType" placeholder="请选择岗点类型">
-          <el-option v-for="item in areaTypes" :key="item.areaId" :label="item.areaName" :value="item.areaId"></el-option>
+      <el-form-item prop="postTypeId" label="岗点类型">
+        <el-select v-model="form.postTypeId" placeholder="请选择岗点类型">
+          <el-option v-for="item in postTypes" :key="item.areaTypeId" :label="item.areaTypeName" :value="item.areaTypeId"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item prop="areaName" label="岗点名称">
-        <el-input v-model="form.areaName" placeholder="请输入岗点名称"></el-input>
+      <el-form-item prop="postName" label="岗点名称">
+        <el-input v-model="form.postName" placeholder="请输入岗点名称"></el-input>
       </el-form-item>
       <el-form-item prop="" label="时间">
         <el-date-picker v-if="status===ATTEND_PERIODS.DAY" v-model="date" @change="changeDate" value-format="yyyy-MM-dd" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期">
@@ -39,6 +39,7 @@
 <script>
 import { ATTEND_PERIODS } from '@/constant/Dictionaries'
 import { exportPostAttend } from '@/api/attend'
+import { areaTypeList } from '@/api/areaType'
 import moment from 'moment'
 
 export default {
@@ -54,18 +55,21 @@ export default {
     return {
       ATTEND_PERIODS,
       status: ATTEND_PERIODS.DAY,
-      areaTypes: [],
+      postTypes: [],
       form: {
         type: ATTEND_PERIODS.DAY,
         startTime: '',
         endTime: '',
         orgId: '',
-        areaName: '',
-        areaType: ''
+        postName: '',
+        postTypeId: ''
       },
       date: null,
       endWeek: null
     }
+  },
+  async created() {
+    this.postTypes = await areaTypeList({})
   },
   methods: {
     orgChange() {
