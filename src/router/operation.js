@@ -25,5 +25,12 @@ export default [
     meta: {
       title: '运维管理-第三方管理'
     }
+  }, {
+    path: 'operation/name',
+    name: 'operationName',
+    component: () => import('@/bundles/operationBundle/systemName'),
+    meta: {
+      title: '运维管理-系统名称'
+    }
   }
 ]
