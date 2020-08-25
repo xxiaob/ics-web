@@ -9,7 +9,7 @@
         <el-table-column type="index" :index="indexMethod" label="序号" width="50"></el-table-column>
         <el-table-column prop="time" label="时间" width="140"></el-table-column>
         <el-table-column prop="orgName" label="所属组织"></el-table-column>
-        <el-table-column prop="areaName" label="岗点类型"></el-table-column>
+        <el-table-column prop="postTypeName" label="岗点类型"></el-table-column>
         <el-table-column prop="areaName" label="岗点名称"></el-table-column>
         <el-table-column prop="onguardDuration" label="在岗时长(h)"></el-table-column>
         <el-table-column prop="journey" label="在岗里程(km)"></el-table-column>
