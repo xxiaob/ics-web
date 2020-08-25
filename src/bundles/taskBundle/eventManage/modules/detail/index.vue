@@ -1,6 +1,6 @@
 <template>
   <el-dialog title="事件详情" :visible.sync="dialogVisible" width="600px" :append-to-body="true" :close-on-click-modal="false" @close="dialogClose" top="5vh">
-    <el-form ref="form" label-width="100px" :model="form" class="jc-manage-form" size="small">
+    <el-form ref="form" label-width="100px" :model="form" class="jc-manage-form" size="mini">
       <el-form-item label="事件ID：">
         <span>{{form.eventNumber}}</span>
       </el-form-item>
@@ -48,7 +48,11 @@
         <audio v-if="dialogVisible" ref="audio" :src="audioUrl" style="width:0;height:0" @ended="audioEnded"></audio>
       </el-form-item>
     </el-form>
-
+    <div slot="footer" class="dialog-footer">
+      <el-button type="primary" @click="download">文件下载</el-button>
+      <el-button type="primary" @click="download">报表下载</el-button>
+      <el-button @click="dialogVisible = false">关闭窗口</el-button>
+    </div>
     <el-dialog title="视频播放" :visible.sync="dialogVideoVisible" width="800px" :close-on-click-modal="false" :append-to-body="true">
       <video v-if="dialogVideoVisible" :src="dialogVideoUrl" autoplay controls width="100%"></video>
     </el-dialog>
@@ -107,10 +111,16 @@ export default {
     },
     dialogClose() {
       this.$emit('update:visible', false)
+    },
+    download() {
+      console.log('download')
     }
   }
 }
 </script>
 <style lang="scss" scoped>
 @import "../../../css/media.scss";
+.dialog-footer {
+  text-align: center;
+}
 </style>

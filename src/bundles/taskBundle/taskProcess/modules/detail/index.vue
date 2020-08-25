@@ -88,6 +88,8 @@
       <el-button @click="handleTask(true)" size="small" v-if="form.handle">流转任务</el-button>
       <el-button @click="handleTask(false)" size="small" v-if="form.handle">完成任务</el-button>
       <el-button @click="closeTask" size="small" v-if="form.handle">关闭任务</el-button>
+      <el-button size="small" type="primary" @click="download">文件下载</el-button>
+      <el-button size="small" type="primary" @click="download">报表下载</el-button>
       <el-button size="small" type="primary" @click="$emit('update:detailShow', false)">返回</el-button>
     </div>
     <el-dialog :title="taskForm.ifUpload?'流转任务':'完成任务'" :visible.sync="dialogVisibleHandle" :close-on-click-modal="false" width="600px" append-to-body>
@@ -303,6 +305,9 @@ export default {
         this.loading = false
         console.error(e)
       }
+    },
+    download() {
+      console.log('download')
     }
   }
 }

@@ -3,6 +3,7 @@
  */
 import axios from 'axios'
 import API from './API'
+import qs from 'qs'
 
 /*-------------------------------事件上报------------------------------------ */
 /**
@@ -77,4 +78,12 @@ export function eventManageSelectList(title) {
  */
 export function eventManageListByTask(taskId) {
   return axios.post(API.eventManage.listByTask + '?taskId=' + taskId)
+}
+
+/**
+ * 导出
+ * @param {object} data
+ */
+export function exportList(data) {
+  window.open(process.env.apiHostConfig.base + API.eventManage.exportList + '?' + qs.stringify(data))
 }

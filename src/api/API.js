@@ -104,7 +104,8 @@ export default {
     update: 'task-service/event/upd',
     del: 'task-service/event/del',
     typeList: 'task-service/event/typeList',
-    listByTask: 'task-service/eventBind/getEvents'
+    listByTask: 'task-service/eventBind/getEvents',
+    exportList: ''
   },
   task: {
     //任务管理
@@ -122,7 +123,8 @@ export default {
     listRecord: 'task-service/task/getTaskRecord',
     postArea: 'task-service/task/getTaskPostArea',
     listByProblemId: 'task-service/task/getTaskByProblemId',
-    getTaskAuth: 'task-service/task/getTaskAuth'
+    getTaskAuth: 'task-service/task/getTaskAuth',
+    exportList: ''
   },
   question: {
     //问题管理
@@ -134,7 +136,8 @@ export default {
     report: 'task-service/problem/report',
     get: 'task-service/problem/getProblemTask',
     typeList: 'task-service/problem/getProblemTypes',
-    getProblemAuth: 'task-service/problem/getProblemAuth'
+    getProblemAuth: 'task-service/problem/getProblemAuth',
+    exportList: ''
   },
   pttGroup: {
     //PTT群组
