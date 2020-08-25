@@ -9,8 +9,8 @@
       <el-form-item prop="orgId" label="所属组织">
         <el-cascader :options="orgTree" v-model="form.orgId" :props="{expandTrigger: 'hover', emitPath: false,checkStrictly:true }" clearable @change="orgChange" ref="orgCascader"></el-cascader>
       </el-form-item>
-      <el-form-item prop="name" label="人员姓名">
-        <el-input v-model="form.name" placeholder="请输入人员姓名"></el-input>
+      <el-form-item prop="userName" label="人员姓名">
+        <el-input v-model="form.userName" placeholder="请输入人员姓名"></el-input>
       </el-form-item>
       <el-form-item prop="" label="时间">
         <el-date-picker v-if="status===ATTEND_PERIODS.DAY" v-model="date" @change="changeDate" value-format="yyyy-MM-dd" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期">
@@ -54,7 +54,7 @@ export default {
         startTime: '',
         endTime: '',
         orgId: '',
-        name: ''
+        userName: ''
       },
       date: null,
       endWeek: null
