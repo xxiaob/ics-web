@@ -6,8 +6,7 @@
       <div slot="header" class="jc-card-header">
         <div class="jc-card-title">列表内容</div>
         <div class="jc-button-group">
-          <el-button type="primary" size="small" @click="manageDaily(null)">导入</el-button>
-          <el-button type="primary" size="small" @click="manageTemporary(null)">新增</el-button>
+          <el-button type="primary" size="small" @click="manage(null)">新增</el-button>
         </div>
       </div>
       <el-table :data="list" v-loading="loading" row-key="id" class="jc-table">
@@ -27,6 +26,8 @@
       </el-table>
       <el-pagination @current-change="currentChange" @size-change="sizeChange" :current-page.sync="page.pageNum" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.total" class="text-right jc-mt"></el-pagination>
     </el-card>
+
+    <jc-manage :visible.sync="visible"></jc-manage>
   </div>
 </template>
 
@@ -38,14 +39,20 @@ export default {
   data() {
     return {
       loading: false,
-      list: []
+      list: [],
+      visible: false,
+      info: {}
     }
   },
   components: {
-    TabFilter: () => import('./modules/tabFilter')
+    TabFilter: () => import('./modules/tabFilter'),
+    JcManage: () => import('./modules/manage')
   },
   methods: {
-    goFilter() {}
+    goFilter() {},
+    manage() {
+      this.visible = true
+    }
   }
 
 }

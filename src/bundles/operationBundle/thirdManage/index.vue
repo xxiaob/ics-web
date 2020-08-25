@@ -8,10 +8,10 @@
       </div>
       <el-table :data="list" v-loading="loading" row-key="id" class="jc-table">
         <el-table-column type="index" :index="indexMethod" label="序号" width="50"></el-table-column>
-        <el-table-column prop="thridName" label="第三方名称"></el-table-column>
-        <el-table-column prop="orgId" label="所属组织" :formatter="formatOrg"></el-table-column>
-        <el-table-column prop="endTime" label="授权截止时间" :formatter="formatTime"></el-table-column>
-        <el-table-column prop="appkey" label="appkey" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="thirdPartyName" label="第三方名称"></el-table-column>
+        <el-table-column prop="orgName" label="所属组织"></el-table-column>
+        <el-table-column prop="endTime" label="授权截止时间"></el-table-column>
+        <el-table-column prop="appKey" label="appkey" show-overflow-tooltip></el-table-column>
         <el-table-column width="100" label="操作">
           <template slot-scope="scope">
             <el-button type="text" size="mini" icon="el-icon-view" @click="detail(scope.row)" title="查看详情"></el-button>
@@ -23,15 +23,15 @@
       <el-pagination @current-change="currentChange" @size-change="sizeChange" :current-page.sync="page.pageNum" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.total" class="text-right jc-mt"></el-pagination>
     </el-card>
 
-    <jc-manage :options="info" :visible.sync="visible"></jc-manage>
+    <jc-manage :options="info" :visible.sync="visible" @save-success="initData"></jc-manage>
 
-    <jc-third-detail :visible.sync="detailVisible"></jc-third-detail>
+    <jc-third-detail :info="info" :visible.sync="detailVisible"></jc-third-detail>
 
   </div>
 </template>
 
 <script>
-import { videoList } from '@/api/record' // 待删除 , 替换第三方管理接口
+import { operationList, operationDel } from '@/api/operation'
 import { formatDate } from '@/libs/util'
 import PaginationMixins from '@/mixins/PaginationMixins'
 
@@ -54,11 +54,12 @@ export default {
   components: {
     TabFilter: () => import('./modules/tabFilter'),
     JcManage: () => import('./modules/manage'),
-    JcThirdDetail: () => import('./detail')
+    JcThirdDetail: () => import('./modules/detail')
 
   },
   async created() {
     await this.getOrgTree()
+    this.initData()
   },
   methods: {
     formatOrgTree(child) {
@@ -109,8 +110,10 @@ export default {
     async initData() {
       if (!this.loading) {
         this.loading = true
+        console.log('this.page', this.page)
         try {
-          const { total, resultList } = await videoList({ ...this.filter, ...this.page, videoType: 'VIDEO' })
+          const { total, resultList } = await operationList({ ...this.filter, ...this.page })
+
 
           this.page.total = total
           this.list = resultList
@@ -123,22 +126,17 @@ export default {
         }
       }
     },
-    formatTime(row, column, cellValue) {
-      // 格式化日期
-      return formatDate(cellValue)
-    },
-    formatOrg(row, column, cellValue) {
-      // 处理组织信息
-      return this.orgObj[cellValue]
-    },
-
+    // formatTime(row, column, cellValue) {
+    //   // 格式化日期
+    //   return formatDate(cellValue)
+    // },
     manage(row) {
       // 新增弹窗
       if (row) {
         // 如果row有值为编辑
         // 发送请求获取数据, 将数据复制给info
         // this.info = res
-        this.info = {}
+        this.info = row
         this.visible = true
       } else {
         // 新增
@@ -147,29 +145,25 @@ export default {
       }
     },
 
-    detail() {
+    detail(row) {
       // 查看详情
-      console.log(11)
+      console.log('row', row)
+      this.info = row
       this.detailVisible = true
     },
     del(row) {
+      // console.log('row', row)
       // 删除信息
-      this.$confirm('确认删除该用户', '提示', { type: 'warning' }).then(() => {
-        // 确认删除将id传给this.remove, 删除
-        // this.remove([row.userId])
-
-        this.remove(123) // 123替换为row中的id
-        console.log('删除')
+      this.$confirm('确认删除该信息', '提示', { type: 'warning' }).then(() => {
+        this.remove(row.id)
       }).catch(() => {})
     },
     remove(ids) {
       // 处理删除信息的路径
-      console.log(ids)
-
-      // userDel(ids).then(() => {
-      //   this.$message.success('删除成功')
-      //   this.currentChange(this.page.pageNum - 1)
-      // })
+      operationDel(ids).then(() => {
+        this.$message.success('删除成功')
+        this.currentChange(this.page.pageNum - 1)
+      })
     }
   }
 

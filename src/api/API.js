@@ -245,5 +245,13 @@ export default {
   record: {
     //记录留痕
     list: 'device-service/video/getVideoByPage'
+  },
+  operation: {
+    // 运维管理
+    list: 'open-service/thirdPartyAuth/getList', // 第三方管理信息列表
+    add: 'open-service/thirdPartyAuth/add', // 第三方管理信息新增
+    update: 'open-service/thirdPartyAuth/update', // 第三方管理更新数据
+    delete: 'open-service/thirdPartyAuth/delete/'
+
   }
 }
