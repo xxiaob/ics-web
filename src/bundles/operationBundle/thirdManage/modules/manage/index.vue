@@ -19,7 +19,7 @@
   </el-dialog>
 </template>
 <script>
-import { operationSave, operationUpdate } from '@/api/operation'
+import { operationSave } from '@/api/operation'
 import { organizationList } from '@/api/organization'
 import { getStringRule, SELECT_NOT_NULL, getTelRule } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'

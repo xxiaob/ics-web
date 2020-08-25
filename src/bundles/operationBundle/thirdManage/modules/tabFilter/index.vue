@@ -2,7 +2,7 @@
   <el-card class="jc-tabfilter-card">
     <el-form ref="form" :inline="true" :model="form" class="jc-tabfilter-form" size="small">
       <el-form-item prop="thridName" label="第三方名称">
-        <el-input v-model="form.thridName" placeholder="请输入第三方名称"></el-input>
+        <el-input v-model="form.thirdPartyName" placeholder="请输入第三方名称"></el-input>
       </el-form-item>
       <el-form-item prop="orgId" label="组织名称">
         <el-cascader :options="orgTree" v-model="form.orgId" :props="{expandTrigger: 'hover', checkStrictly: true,emitPath: false }" clearable @change="orgChange" ref="orgCascader"></el-cascader>
@@ -31,7 +31,7 @@ export default {
   data() {
     return {
       form: {
-        thridName: '',
+        thirdPartyName: '',
         orgId: '',
         startTime: '',
         endTime: ''
@@ -46,8 +46,8 @@ export default {
     changeDate(value) { // 时间切换
       console.log('value', value)
       if (value) {
-        this.form.startTime = value[0].getTime()
-        this.form.endTime = value[1].getTime()
+        this.form.startTime = value[0]
+        this.form.endTime = value[1]
       } else {
         this.form.startTime = ''
         this.form.endTime = ''
