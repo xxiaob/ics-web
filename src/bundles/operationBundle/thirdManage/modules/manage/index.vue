@@ -4,12 +4,16 @@
       <el-form-item label="第三方名称" prop="thirdPartyName" :rules="rules.Len50">
         <el-input v-model.trim="form.thirdPartyName" placeholder="请输入第三方名称"></el-input>
       </el-form-item>
-      <el-form-item label="所属组织" prop="orgId" :rules="rules.SELECT_NOT_NULL">
+      <el-form-item label="所属组织" prop="orgId" :rules="rules.SELECT_NOT_NULL" v-if="!isEdit">
         <el-cascader v-model="form.orgId" :options="orgTree" formatter="data" filterable @change="orgChange" :props="{ expandTrigger: 'hover',checkStrictly: true,emitPath: false }"></el-cascader>
       </el-form-item>
-      <el-form-item label="授权截止时间" prop="endTime">
+      <el-form-item label="授权截止时间" prop="endTime" :rules="rules.SELECT_NOT_NULL">
         <el-date-picker v-model="form.endTime" type="datetime" placeholder="选择日期时间">
         </el-date-picker>
+      </el-form-item>
+      <el-form-item label="" class="thirdTip">
+        <span v-if="isEdit">修改后将生成新的appsecret</span>
+        <span v-else>设置后将生成appkey和appsecret</span>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -71,15 +75,15 @@ export default {
     },
     orgChange(orgId) {
       //组织变化
-      console.log('orgChange', orgId)
-      console.log('this.form', this.form)
+      // console.log('orgChange', orgId)
+      // console.log('this.form', this.form)
       if (orgId != this.form.orgId) {
         this.form.roleIds = []
       }
     },
     formatFormData() {
       // 处理新增和编辑的数据
-      console.log('this.options', this.options)
+      // console.log('this.options', this.options)
       if (this.options) {
         return {
           id: this.options.id,
@@ -119,3 +123,12 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.thirdTip {
+  color: #999;
+  margin-bottom: 0;
+  & >>> .el-form-item__content {
+    line-height: 1.1;
+  }
+}
+</style>

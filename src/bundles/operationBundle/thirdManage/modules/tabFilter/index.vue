@@ -4,8 +4,9 @@
       <el-form-item prop="thridName" label="第三方名称">
         <el-input v-model="form.thirdPartyName" placeholder="请输入第三方名称"></el-input>
       </el-form-item>
-      <el-form-item prop="orgId" label="组织名称">
-        <el-cascader :options="orgTree" v-model="form.orgId" :props="{expandTrigger: 'hover', checkStrictly: true,emitPath: false }" clearable @change="orgChange" ref="orgCascader"></el-cascader>
+      <el-form-item prop="orgName" label="组织名称">
+        <!-- <el-cascader :options="orgTree" v-model="form.orgId" :props="{expandTrigger: 'hover', checkStrictly: true,emitPath: false }" clearable @change="orgChange" ref="orgCascader"></el-cascader> -->
+        <el-input v-model="form.orgName" placeholder="请输入组织名称"></el-input>
       </el-form-item>
       <el-form-item prop="" label="截止日期范围">
         <el-date-picker v-model="date" @change="changeDate" type="datetimerange" range-separator="-" start-placeholder="开始时间" end-placeholder="结束时间">
@@ -20,19 +21,15 @@
   </el-card>
 </template>
 <script>
+import { formatDate } from '@/libs/util'
 
 export default {
   name: 'OperationThirdManageFilter',
-  props: {
-    orgTree: {
-      type: Array
-    }
-  },
   data() {
     return {
       form: {
         thirdPartyName: '',
-        orgId: '',
+        orgName: '',
         startTime: '',
         endTime: ''
       },
@@ -40,14 +37,12 @@ export default {
     }
   },
   methods: {
-    orgChange() {
-      this.$refs.orgCascader.dropDownVisible = false //级联选择器 选择任意一级后隐藏下拉框
-    },
     changeDate(value) { // 时间切换
       console.log('value', value)
+      console.log('date', this.date)
       if (value) {
-        this.form.startTime = value[0]
-        this.form.endTime = value[1]
+        this.form.startTime = formatDate(value[0])
+        this.form.endTime = formatDate(value[1])
       } else {
         this.form.startTime = ''
         this.form.endTime = ''
@@ -55,7 +50,8 @@ export default {
     },
     reset() { // 重置
       this.$refs.form.resetFields()
-      this.form.orgId = ''
+      this.form.thirdPartyName = ''
+      this.form.orgName = ''
       this.form.startTime = ''
       this.form.endTime = ''
       this.date = null

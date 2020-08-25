@@ -23,10 +23,6 @@
         <div class="jc-info-content" v-text="info && info.appSecret"></div>
       </div>
     </div>
-    <div slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="dialogVisible=false">关闭窗口</el-button>
-    </div>
-
   </el-dialog>
 </template>
 <script>

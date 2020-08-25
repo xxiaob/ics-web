@@ -1,6 +1,6 @@
 <template>
   <div class="jc-main-container-warp">
-    <tab-filter :orgTree="orgTree" @filter="goFilter" @addopeartion="manage(null)"></tab-filter>
+    <tab-filter @filter="goFilter" @addopeartion="manage(null)"></tab-filter>
 
     <el-card class="jc-table-card jc-mt">
       <div slot="header" class="jc-card-header">
@@ -32,17 +32,15 @@
 
 <script>
 import { operationList, operationDel } from '@/api/operation'
-// import { formatDate } from '@/libs/util'
 import PaginationMixins from '@/mixins/PaginationMixins'
-
 import { organizationList } from '@/api/organization'
+
 export default {
   name: 'OperationThirdManageIndex',
   mixins: [PaginationMixins],
   data() {
     return {
       orgTree: [],
-      orgObj: {},
       loading: false,
       list: [],
       filter: {},
@@ -62,6 +60,13 @@ export default {
     this.initData()
   },
   methods: {
+    async getOrgTree() {
+      // 获取组织列表
+      const res = await organizationList()
+
+      console.log('res', res)
+      this.orgTree = this.formatOrgTree(res)
+    },
     formatOrgTree(child) {
       let trees = []
 
@@ -81,36 +86,19 @@ export default {
           trees.push(node)
         })
       }
+      console.log('trees', trees)
       return trees
     },
-    formatOrgTreeToObj(child) {
-      let objs = {}
 
-      if (child && child.length) {
-        child.forEach(item => {
-          if (item.children && item.children.length) {
-            objs = Object.assign(objs, this.formatOrgTreeToObj(item.children))
-          }
-          objs[item.orgId] = item.orgName
-        })
-      }
-      return objs
-    },
-    async getOrgTree() {
-      const res = await organizationList()
-
-      this.orgTree = this.formatOrgTree(res)
-      this.orgObj = this.formatOrgTreeToObj(res)
-    },
 
     goFilter(filter) {
       this.filter = filter // 获取查询信息
       this.currentChange(1) // 切换页面方法,在切换页面方法中调用initData初始化数据
     },
     async initData() {
+      // 初始数据
       if (!this.loading) {
         this.loading = true
-        console.log('this.page', this.page)
         try {
           const { total, resultList } = await operationList({ ...this.filter, ...this.page })
 
@@ -126,10 +114,6 @@ export default {
         }
       }
     },
-    // formatTime(row, column, cellValue) {
-    //   // 格式化日期
-    //   return formatDate(cellValue)
-    // },
     manage(row) {
       // 新增弹窗
       if (row) {
@@ -147,12 +131,10 @@ export default {
 
     detail(row) {
       // 查看详情
-      console.log('row', row)
       this.info = row
       this.detailVisible = true
     },
     del(row) {
-      // console.log('row', row)
       // 删除信息
       this.$confirm('确认删除该信息', '提示', { type: 'warning' }).then(() => {
         this.remove(row.id)

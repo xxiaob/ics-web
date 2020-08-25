@@ -12,9 +12,7 @@ import API from './API'
  */
 
 export function operationList(data) {
-  return axios.get(API.operation.list, {
-    params: data
-  })
+  return axios.post(API.operation.list, data)
 }
 
 /**
