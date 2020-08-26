@@ -5,9 +5,6 @@
     <el-card class="jc-table-card jc-mt">
       <div slot="header" class="jc-card-header">
         <div class="jc-card-title">列表内容</div>
-        <div class="jc-button-group">
-          <el-button type="primary" size="small" @click="manageTemporary(null)">新增</el-button>
-        </div>
       </div>
       <el-table :data="list" v-loading="loading" row-key="id" class="jc-table">
         <el-table-column type="index" :index="indexMethod" label="序号" width="50"></el-table-column>

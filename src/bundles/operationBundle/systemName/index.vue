@@ -39,14 +39,7 @@
         <!--  滚动开关-->
         <el-table-column prop="scrollSwitch" label="滚动开关">
           <template slot-scope="scope">
-            <el-switch
-              v-model="scope.row.enableRollingMessage"
-              active-color="#409EFF"
-              inactive-color="#cccccc"
-              :active-value="1"
-              :inactive-value="0"
-              @change="scrollSwitchChange(scope.row)"
-            >
+            <el-switch v-model="scope.row.enableRollingMessage" active-color="#409EFF" inactive-color="#cccccc" :active-value="1" :inactive-value="0" @change="scrollSwitchChange(scope.row)">
             </el-switch>
           </template>
         </el-table-column>
