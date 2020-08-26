@@ -5,7 +5,10 @@
     <el-card class="jc-table-card jc-mt">
       <div slot="header" class="jc-card-header">
         <div class="jc-card-title">列表内容</div>
-        <div class="jc-button-group">
+        <div class="jc-button-group jc-flex-warp">
+          <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-success="uploadSuccess" :on-error="uploadError" :show-file-list="false">
+            <el-button size="small" type="primary">导入</el-button>
+          </el-upload>
           <el-button type="primary" size="small" @click="manage(null)">新增</el-button>
         </div>
       </div>
@@ -52,11 +55,22 @@ export default {
     goFilter() {},
     manage() {
       this.visible = true
+    },
+    uploadSuccess() {
+      // 上传成功函数
+      console.log('上传成功')
+    },
+    uploadError() {
+      // 上传失败函数
+      console.log('上传失败')
     }
   }
 
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
+.upload-demo {
+  margin-right: 10px;
+}
 </style>

@@ -5,9 +5,6 @@
     <el-card class="jc-table-card jc-mt">
       <div slot="header" class="jc-card-header">
         <div class="jc-card-title">列表内容</div>
-        <div class="jc-button-group">
-          <el-button type="primary" size="small" @click="manage(null)">新增</el-button>
-        </div>
       </div>
       <el-table :data="list" v-loading="loading" row-key="id" class="jc-table">
         <el-table-column type="index" :index="indexMethod" label="序号" width="50"></el-table-column>
@@ -19,8 +16,6 @@
         <el-table-column width="90" label="操作">
           <template slot-scope="scope">
             <el-button type="text" size="mini" icon="el-icon-view" title="查看"></el-button>
-            <el-button type="text" size="mini" icon="el-icon-edit-outline" title="编辑"></el-button>
-            <el-button type="text" size="mini" icon="el-icon-refresh-right" title="处理"></el-button>
           </template>
         </el-table-column>
       </el-table>
