@@ -39,4 +39,12 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.el-tabs /deep/ {
+  .el-tabs__header {
+    background: white;
+    .el-tabs__item.is-top {
+      padding-left: 20px;
+    }
+  }
+}
 </style>
