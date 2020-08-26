@@ -1,5 +1,6 @@
 <template>
-  <div class="jc-main-container-warp">
+  <!-- class="jc-main-container-warp" -->
+  <div>
     <tab-filter @filter="goFilter"></tab-filter>
     <el-card class="jc-table-card jc-mt">
       <div slot="header" class="jc-card-header">
@@ -41,7 +42,7 @@ import { list, del as delSystemIndex } from '@/api/systemIndex'
 import { formatDate } from '@/libs/util'
 
 export default {
-  name: 'SystemIndexIndex',
+  name: 'SystemBaseBusinessSystem',
   mixins: [PaginationMixins],
   components: {
     TabFilter: () => import('./modules/tabFilter'),
