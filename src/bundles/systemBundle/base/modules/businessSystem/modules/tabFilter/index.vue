@@ -13,7 +13,7 @@
 </template>
 <script>
 export default {
-  name: 'SystemIndexFilter',
+  name: 'SystemBaseBusinessSystemFilter',
   data() {
     return {
       form: {

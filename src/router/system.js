@@ -56,10 +56,10 @@ export default [{
     title: '系统设置-PTT群组'
   }
 }, {
-  path: 'system/index',
-  name: 'systemIndex',
-  component: () => import('@/bundles/systemBundle/systemIndex'),
+  path: 'system/base',
+  name: 'systemBase',
+  component: () => import('@/bundles/systemBundle/base'),
   meta: {
-    title: '系统设置-首页设置'
+    title: '系统设置-基础配置'
   }
 }]

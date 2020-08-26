@@ -41,7 +41,7 @@ let defaultForm = {
 }
 
 export default {
-  name: 'SystemIndexManage',
+  name: 'SystemBaseBusinessSystemManage',
   mixins: [FormMixins],
   data() {
     return {
