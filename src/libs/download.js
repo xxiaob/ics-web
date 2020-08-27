@@ -36,7 +36,7 @@ export async function download(fileName, url, data = {}) {
   try {
     const res = await downloadAxios.post(url, data)
 
-    console.log(res)
+    // console.log(res)
     if (res.status === 200) {
       downloadBlob(res.data, fileName)
     } else {

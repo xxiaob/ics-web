@@ -14,6 +14,14 @@ export function getDetail(data) {
   return axios.post(API.baseConfig.get, data)
 }
 
+/**
+ * 更新基础信息
+ * @param {Object} data 参数
+ * @returns {Object} axios 对象
+ */
+export function updateBase(data) {
+  return axios.post(API.baseConfig.updateBase, data)
+}
 
 /**
  * 获取廉政提醒列表
