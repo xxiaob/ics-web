@@ -24,3 +24,32 @@ export function getRollingMessage(data) {
   return axios.post(API.baseConfig.list, data)
 }
 
+/**
+ * 新增廉政提醒
+ * @param {Object} data 参数
+ * @returns {Object} axios 对象
+ */
+export function rollingMessageAdd(data) {
+  return axios.post(API.baseConfig.add, data)
+}
+
+
+/**
+ * 更新廉政提醒
+ * @param {Object} data 参数
+ * @returns {Object} axios 对象
+ */
+export function rollingMessageUpdate(data) {
+  return axios.post(API.baseConfig.add, data)
+}
+
+/**
+ * 更新廉政提醒
+ * @param {Object} data 参数
+ * @returns {Object} axios 对象
+ */
+export function rollingMessageSave(data) {
+  return data.messageId ? rollingMessageUpdate(data) : rollingMessageAdd(data)
+}
+
+

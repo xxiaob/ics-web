@@ -42,7 +42,7 @@
 </template>
 <script>
 import PaginationMixins from '@/mixins/PaginationMixins'
-import { list, del as delSystemIndex } from '@/api/systemIndex'
+import { getRollingMessage } from '@/api/baseConfig'
 import { formatDate } from '@/libs/util'
 
 export default {
@@ -71,7 +71,11 @@ export default {
   created() {
     this.initData()
   },
+  mounted() {
+    console.log(user)
+  },
   methods: {
+
     formatTime(row, column, cellValue) {
       return formatDate(cellValue)
     },
@@ -82,7 +86,10 @@ export default {
       if (!this.loading) {
         this.loading = true
         try {
-          const { total, resultList } = await list({ ...this.filter, ...this.page })
+          const list = await getRollingMessage({ ...this.filter, ...this.page })
+
+          console.log('list', list)
+          let { total, resultList } = list
 
           this.list = resultList
           this.page.total = total
@@ -113,10 +120,10 @@ export default {
       }).catch(() => {})
     },
     remove(ids) {
-      delSystemIndex(ids).then(() => {
-        this.$message.success('删除成功')
-        this.currentChange(this.page.pageNum - 1)
-      })
+      // delSystemIndex(ids).then(() => {
+      //   this.$message.success('删除成功')
+      //   this.currentChange(this.page.pageNum - 1)
+      // })
     },
     manage(row) {
       if (row) {

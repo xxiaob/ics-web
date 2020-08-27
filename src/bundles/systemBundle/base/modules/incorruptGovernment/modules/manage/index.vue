@@ -17,7 +17,7 @@
   </el-dialog>
 </template>
 <script>
-import { save } from '@/api/systemIndex'
+import { rollingMessageSave } from '@/api/baseConfig'
 import { getStringRule, NOT_NULL, getIntegerRule } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
 
@@ -50,10 +50,11 @@ export default {
       }
     },
     onSubmit() {
+      console.log('aa', this.form)
       this.loading = true
       this.$refs.form.validate(valid => {
         if (valid) {
-          save(this.form).then(() => {
+          rollingMessageSave(this.form).then(() => {
             this.$message.success('操作成功')
             this.dialogVisible = false
             this.$emit('save-success')
@@ -61,6 +62,7 @@ export default {
           }).catch(() => {
             this.loading = false
           })
+          this.loading = false
         } else {
           this.loading = false
         }

@@ -72,10 +72,7 @@ export default {
               delete filter[key]
             }
           })
-          const list = await getCheckList({ ...this.filter, ...this.page })
-
-          console.log('list', list)
-          let { total, resultList } = list
+          const { total, resultList } = await getCheckList({ ...this.filter, ...this.page })
 
           this.page.total = total
           this.list = resultList
