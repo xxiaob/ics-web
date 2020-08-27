@@ -11,12 +11,13 @@
       <el-table :data="list" v-loading="loading" row-key="id" class="jc-table">
         <el-table-column type="index" :index="indexMethod" label="序号" width="50"></el-table-column>
         <el-table-column prop="eventTitle" label="事件标题"></el-table-column>
-        <el-table-column prop="typeName" label="事件类型"></el-table-column>
-        <el-table-column prop="reportUserName" label="上报人"></el-table-column>
+        <el-table-column prop="carNumber" label="车牌号"></el-table-column>
+        <!-- <el-table-column prop="typeName" label="事件类型"></el-table-column> -->
+        <el-table-column prop="reportUserName" label="处置人"></el-table-column>
         <el-table-column prop="orgId" label="所属组织" :formatter="formatOrg"></el-table-column>
-        <el-table-column prop="positionName" label="上报地点" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="positionName" label="处置地点" show-overflow-tooltip></el-table-column>
         <el-table-column prop="desc" label="事件描述" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="createTime" label="创建时间" :formatter="formatTime"></el-table-column>
+        <el-table-column prop="createTime" label="处置时间" :formatter="formatTime"></el-table-column>
         <el-table-column width="60" label="操作">
           <template slot-scope="scope">
             <el-button type="text" size="mini" icon="el-icon-view" @click="detail(scope.row)" title="查看"></el-button>
@@ -130,6 +131,7 @@ export default {
             resultList.forEach(item=>{
               list.push({
                 createTime: item.createTime,
+                carNumber: item.carNumber,
                 desc: item.desc,
                 positionName: item.positionName,
                 eventTitle: item.eventTitle,

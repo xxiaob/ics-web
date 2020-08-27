@@ -7,7 +7,7 @@
       <el-form-item label="系统名称" prop="systemName" :rules="rules.Len50">
         <el-input v-model="form.systemName" placeholder="请输入系统名称"></el-input>
       </el-form-item>
-      <el-form-item label="系统logo" prop="domainLogo" :rules="rules.NOT_NULL">
+      <el-form-item label="登录页logo" prop="domainLogo" :rules="rules.NOT_NULL">
         <upload-one-img :url.sync="form.domainLogo" :isShowAdvice="isShowAdvice"></upload-one-img>
       </el-form-item>
       <el-form-item label="登录页背景" prop="firstPageLogo">
