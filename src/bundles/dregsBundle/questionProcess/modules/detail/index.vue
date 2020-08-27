@@ -9,29 +9,56 @@
       </div>
       <div class="jc-detail">
         <el-form ref="form" label-width="100px" :model="form" class="jc-manage-form" size="small">
-          <el-form-item label="问题ID">
+          <!-- <el-form-item label="问题ID">
             <span>{{form.id}}</span>
+          </el-form-item> -->
+          <el-form-item label="问题标题：">
+            <span>{{form.problemTitle}}</span>
           </el-form-item>
-          <el-form-item label="上报人">
+          <el-form-item label="车牌号：">
+            <span>{{form.carNumber}}</span>
+          </el-form-item>
+          <el-form-item label="上报人：">
             <span>{{form.userName}}</span>
           </el-form-item>
-          <el-form-item label="所属组织">
+          <!-- <el-form-item label="所属组织">
             <span>{{form.orgName}}</span>
-          </el-form-item>
-          <el-form-item label="问题标题">
-            <span>{{form.problemTitle}}</span>
           </el-form-item>
           <el-form-item label="问题类型">
             <span>{{formatType(form.problemType)}}</span>
-          </el-form-item>
-          <el-form-item label="问题位置">
-            <span>{{form.positionName}}</span>
-          </el-form-item>
-          <el-form-item label="问题描述">
+          </el-form-item> -->
+          <el-form-item label="问题描述：">
             <!-- <span>{{form.problemDesc}}</span> -->
             <div v-html="form.problemDesc"></div>
           </el-form-item>
-          <el-form-item label="附件">
+          <el-form-item label="查处地址：">
+            <span>{{form.positionName}}</span>
+          </el-form-item>
+          <el-form-item label="运输公司：">
+            <span>{{form.transportCompany}}</span>
+          </el-form-item>
+          <el-form-item label="现在照片：">
+            <el-image v-for="url in form.filePO&&form.filePO.photos" :key="url" :src="url" :preview-src-list="form.filePO&&form.filePO.photos" class="jc-img"></el-image>
+          </el-form-item>
+          <el-form-item label="视频：">
+            <div class="jc-video" v-for="url in form.filePO&&form.filePO.videoAddrs" :key="url" @click="showVideo(url)">
+              <video :src="url"></video>
+              <div class="hover">
+                <img class="jc-video-play" src="@/bundles/taskBundle/assets/play.png" alt="">
+              </div>
+            </div>
+          </el-form-item>
+          <el-form-item label="音频：">
+            <div v-for="(url,index) in form.filePO&&form.filePO.audioAddrs" :key="url" class="jc-audio" @click="playAudio(url,index)">
+              <img class="jc-audio-mike" src="@/bundles/taskBundle/assets/mike.png" alt="">
+              <div class="hover">
+                <img class="jc-video-play" src="@/bundles/taskBundle/assets/play.png" alt="" v-show="audioPlayShows[index]">
+                <img class="jc-video-play" src="@/bundles/taskBundle/assets/pause.png" alt="" v-show="!audioPlayShows[index]">
+              </div>
+            </div>
+            <audio v-if="detailShow" ref="audio" :src="audioUrl" style="width:0;height:0" @ended="audioEnded"></audio>
+          </el-form-item>
+          <!-- <el-form-item label="附件">
             <el-image v-for="url in imgs" :key="url" :src="url" :preview-src-list="imgs" class="jc-img"></el-image>
             <div class="jc-video" v-for="url in videos" :key="url" @click="showVideo(url)">
               <video :src="url"></video>
@@ -50,15 +77,13 @@
             <a class="jc-other" v-for="url in others" :key="url" :href="url" download="" title="点击下载">
               <img class="jc-other-down" src="@/bundles/taskBundle/assets/down.png" alt="">
             </a>
-          </el-form-item>
+          </el-form-item> -->
         </el-form>
         <div class="jc-detail-footer">
           <el-button v-if="form.handle" @click="toSuperior" :loading="loading" type="primary" size="small">反馈至上级</el-button>
           <!-- v-if="!firstOrgIds.includes(form.orgId)" -->
           <el-button v-if="form.handle" @click="generateTask" :loading="loading" type="primary" size="small">生成任务</el-button>
           <el-button v-if="form.handle" @click="closeQuestion" :loading="loading" size="small">关闭问题</el-button>
-          <!-- <el-button size="small" type="primary" @click="download">文件下载</el-button>
-          <el-button size="small" type="primary" @click="download">报表下载</el-button> -->
         </div>
 
         <task-manage :projectId="form.projectId" :orgTree="orgTree" :user="user" :question="question" :visible.sync="TaskManageShow" @save-success="generateTaskSuccess"></task-manage>
@@ -204,9 +229,6 @@ export default {
         this.loading = false
         console.error(error)
       }
-    },
-    download() {
-      console.log('download')
     }
   }
 }

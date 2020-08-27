@@ -1,27 +1,33 @@
 <template>
   <el-dialog title="事件详情" :visible.sync="dialogVisible" width="600px" :append-to-body="true" :close-on-click-modal="false" @close="dialogClose" top="5vh">
     <el-form ref="form" label-width="100px" :model="form" class="jc-manage-form" size="mini">
-      <el-form-item label="事件ID：">
+      <!-- <el-form-item label="事件ID：">
         <span>{{form.eventNumber}}</span>
-      </el-form-item>
-      <el-form-item label="上报人：">
-        <span>{{form.reportUserName}}</span>
-      </el-form-item>
-      <el-form-item label="所属组织：">
-        <span>{{form.orgName}}</span>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="事件标题：">
         <span>{{form.eventTitle}}</span>
       </el-form-item>
-      <el-form-item label="上报地点：">
-        <span>{{form.positionName}}</span>
+      <el-form-item label="车牌号：">
+        <span>{{form.carNumber}}</span>
       </el-form-item>
-      <el-form-item label="事件类型：">
+      <el-form-item label="处置人：">
+        <span>{{form.reportUserName}}</span>
+      </el-form-item>
+      <!-- <el-form-item label="所属组织：">
+        <span>{{form.orgName}}</span>
+      </el-form-item> -->
+      <!-- <el-form-item label="事件类型：">
         <span>{{form.typeName}}</span>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="事件描述：">
         <!-- <span>{{form.desc}}</span> -->
         <div v-html="form.desc"></div>
+      </el-form-item>
+      <el-form-item label="处置地点：">
+        <span>{{form.positionName}}</span>
+      </el-form-item>
+      <el-form-item label="处置意见：">
+        <span>{{form.desc}}</span>
       </el-form-item>
       <el-form-item label="处理前图片：">
         <el-image v-for="url in form.beforePhotos" :key="url" :src="url" :preview-src-list="form.beforePhotos" class="jc-img"></el-image>

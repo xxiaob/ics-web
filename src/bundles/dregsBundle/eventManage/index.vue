@@ -181,13 +181,15 @@ export default {
       this.orgId = this.user.orgId
       this.visible = true
     },
-    async detail(row) {
-      try {
-        this.detailInfo = await eventManageGet(row.id)
-        this.detailVisible = true
-      } catch (error) {
-        console.error(error)
-      }
+    detail(row) {
+      this.detailInfo = row
+      this.detailVisible = true
+      // try {
+      //   this.detailInfo = await eventManageGet(row.id)
+      //   this.detailVisible = true
+      // } catch (error) {
+      //   console.error(error)
+      // }
     }
   }
 }
