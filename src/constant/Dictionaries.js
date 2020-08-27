@@ -242,5 +242,5 @@ export const DEVICE_TYPES = new JcEnum([
  * 法律法规和渣土告警类型
  */
 export const LAWS_TYPES = new JcEnum([
-  { key: '2', value: 'statuteType', label: '法律法规类型' }
+  { key: 'STATUTE', value: 'statuteType', label: '法律法规类型' }
 ])

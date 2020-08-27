@@ -55,6 +55,7 @@ export default {
   },
   methods: {
     formatFormData() {
+      console.log('this.options', this.options)
       if (this.options) {
         return {
           statuteType: this.options.statuteType,
