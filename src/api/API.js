@@ -273,5 +273,6 @@ export default {
   },
   baseConfig: {
     //基础配置
+    updateBase: 'user-service/orgBaseInfo/updOrgBaseInfo'
   }
 }

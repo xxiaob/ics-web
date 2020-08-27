@@ -20,6 +20,8 @@
 </template>
 
 <script>
+import { updateBase } from '@/api/baseConfig'
+
 export default {
   name: 'SystemBaseLogoConfigure',
   props: {
@@ -45,8 +47,15 @@ export default {
     this.form.orgId = this.user.orgId
   },
   methods: {
-    onSubmit() {
-
+    async onSubmit() {
+      this.loading = true
+      try {
+        await updateBase(this.form)
+        this.loading = false
+      } catch (error) {
+        console.error(error)
+        this.loading = false
+      }
     }
   }
 }

@@ -1,14 +1,14 @@
 <template>
   <div>
     <el-card v-loading="loading">
-      <el-form ref="form" label-width="120px" :model="form" class="jc-manage-form">
+      <el-form ref="form" label-width="140px" :model="form" class="jc-manage-form">
         <el-form-item label="当前组织">
           <span v-text="user.orgName"></span>
         </el-form-item>
-        <el-form-item label="指挥大屏标题">
+        <el-form-item label="常态指挥大屏标题">
           <el-input v-model="form.commandScreenLogo" placeholder="请输入指挥大屏标题"></el-input>
         </el-form-item>
-        <el-form-item label="数据大屏标题">
+        <el-form-item label="常态数据大屏标题">
           <el-input v-model="form.dataScreenLogo" placeholder="请输入数据大屏标题"></el-input>
         </el-form-item>
       </el-form>
@@ -20,6 +20,8 @@
 </template>
 
 <script>
+import { updateBase } from '@/api/baseConfig'
+
 export default {
   name: 'SystemBaseScreenConfigure',
   props: {
@@ -45,8 +47,15 @@ export default {
     this.form.orgId = this.user.orgId
   },
   methods: {
-    onSubmit() {
-
+    async onSubmit() {
+      this.loading = true
+      try {
+        await updateBase(this.form)
+        this.loading = false
+      } catch (error) {
+        console.error(error)
+        this.loading = false
+      }
     }
   }
 }

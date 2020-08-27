@@ -11,8 +11,6 @@
 
 <script>
 import { getPOrgIdWithSameLevelAuth } from '@/api/organization'
-// import { createNamespacedHelpers } from 'vuex'
-// const { mapState } = createNamespacedHelpers('user')
 
 export default {
   name: 'SystemBaseIndex',
@@ -36,9 +34,6 @@ export default {
       ]
     }
   },
-  // computed: {
-  //   ...mapState(['user'])
-  // },
   async created() {
     this.authorityOrg = await getPOrgIdWithSameLevelAuth()
   }
