@@ -3,7 +3,7 @@
  */
 import axios from 'axios'
 import API from './API'
-import qs from 'qs'
+import { download } from '@/libs/download'
 
 /*-------------------------------事件上报------------------------------------ */
 /**
@@ -84,6 +84,7 @@ export function eventManageListByTask(taskId) {
  * 导出
  * @param {object} data
  */
+
 export function exportList(data) {
-  window.open(process.env.apiHostConfig.base + API.eventManage.exportList + '?' + qs.stringify(data))
+  download(API.eventManage.exportList, data)
 }

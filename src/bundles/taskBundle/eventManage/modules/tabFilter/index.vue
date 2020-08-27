@@ -86,7 +86,6 @@ export default {
       this.$emit('filter', this.form)
     },
     exportData() {
-      console.log('event exportList')
       exportList(this.form)
     }
   }
