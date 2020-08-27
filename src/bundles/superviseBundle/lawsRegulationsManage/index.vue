@@ -34,7 +34,7 @@
       <el-pagination @current-change="currentChange" @size-change="sizeChange" :current-page.sync="page.pageNum" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.total" class="text-right jc-mt"></el-pagination>
     </el-card>
 
-    <jc-manage :types="types" :options="info" :visible.sync="visible"></jc-manage>
+    <jc-manage :types="types" :options="info" :visible.sync="visible" @save-success="getStatuteList"></jc-manage>
 
     <!-- 详情 -->
     <jc-Laws-detail :info="info" :visible.sync="detailVisible"></jc-Laws-detail>
@@ -43,12 +43,12 @@
 
 <script>
 import PaginationMixins from '@/mixins/PaginationMixins'
-import { getByType, getStatuteList } from '@/api/supervise'
+import { getByType, getStatuteList, statuteDel } from '@/api/supervise'
 import { LAWS_TYPES } from '@/constant/Dictionaries'
 import API from '@/api/API'
 import { getToken } from '@/libs/storage'
 import { formatDate } from '@/libs/util'
-console.log('formatDate', formatDate)
+
 
 export default {
   name: 'superviseLawsAndRegulationsManage',
@@ -105,7 +105,10 @@ export default {
     formatDate(row) {
       return formatDate(row.createTime)
     },
-    goFilter() {},
+    goFilter(filter) {
+      this.filter = filter // 获取查询信息
+      this.currentChange(1)
+    },
     manage(row) {
       // 新增弹窗
       if (row) {
@@ -124,6 +127,19 @@ export default {
       // 查看详情
       this.info = row
       this.detailVisible = true
+    },
+    del(row) {
+      // 删除法规
+      this.$confirm('确认删除该法规', '提示', { type: 'warning' }).then(() => {
+        this.remove(row.id)
+      }).catch(() => {})
+    },
+    remove(ids) {
+      // 处理删除信息的路径
+      statuteDel({ id: ids }).then(() => {
+        this.$message.success('删除成功')
+        this.currentChange(this.page.pageNum - 1)
+      })
     },
     beforeUpload() {
       // 文件上传前弹窗

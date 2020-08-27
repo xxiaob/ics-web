@@ -267,6 +267,8 @@ export default {
     getByType: 'user-service/systemConfig/getByType', // 获取法规类型
     add: 'user-service/statute/add', // 法规新增
     import: 'user-service/statute/import', // 导入法规地址
-    list: 'user-service/statute/select' // 查询法规列表
+    list: 'user-service/statute/select', // 查询法规列表
+    del: 'user-service/statute/delete', // 删除法规
+    update: 'user-service/statute/update'
   }
 }

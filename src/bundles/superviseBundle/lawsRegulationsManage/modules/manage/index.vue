@@ -25,7 +25,7 @@
   </el-dialog>
 </template>
 <script>
-import { statuteAdd } from '@/api/supervise'
+import { statuteSave } from '@/api/supervise'
 import { getStringRule, SELECT_NOT_NULL, getTelRule } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
 
@@ -61,7 +61,8 @@ export default {
           statuteType: this.options.statuteType,
           statuteName: this.options.statuteName,
           statuteDesc: this.options.statuteDesc,
-          statuteText: this.options.statuteText
+          statuteText: this.options.statuteText,
+          id: this.options.id
         }
       } else {
         return { ...defaultForm }
@@ -75,7 +76,7 @@ export default {
 
         console.log('this.form', this.form)
         if (valid) {
-          statuteAdd(this.form).then(() => {
+          statuteSave(this.form).then(() => {
             this.$message.success('操作成功')
             this.dialogVisible = false
             this.$emit('save-success')
