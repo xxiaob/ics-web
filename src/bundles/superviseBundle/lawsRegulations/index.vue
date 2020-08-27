@@ -65,6 +65,13 @@ export default {
       if (!this.loading) {
         this.loading = true
         try {
+          let filter = this.filter
+
+          Object.keys(filter).map(key => {
+            if (!filter[key]) {
+              delete filter[key]
+            }
+          })
           const list = await getCheckList({ ...this.filter, ...this.page })
 
           console.log('list', list)

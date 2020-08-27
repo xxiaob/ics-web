@@ -80,7 +80,14 @@ export default {
       if (!this.loading) {
         this.loading = true
         try {
-          const list = await getStatuteList({ ...this.filter, ...this.page })
+          let filter = this.filter
+
+          Object.keys(filter).map(key => {
+            if (!filter[key]) {
+              delete filter[key]
+            }
+          })
+          const list = await getStatuteList({ ...filter, ...this.page })
 
           console.log('list', list)
           let { total, resultList } = list

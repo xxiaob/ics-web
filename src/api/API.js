@@ -274,5 +274,6 @@ export default {
   },
   baseConfig: {
     //基础配置
+    list: 'user-service/rollingMessage/getRollingMessageByPage'
   }
 }
