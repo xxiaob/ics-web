@@ -253,5 +253,12 @@ export default {
     update: 'open-service/thirdPartyAuth/update', // 第三方管理更新数据
     delete: 'open-service/thirdPartyAuth/delete/'
 
+  },
+  supervise: {
+    // 法律法规和权利清单
+    getByType: 'user-service/systemConfig/getByType', // 获取法规类型
+    add: 'user-service/statute/add', // 法规新增
+    import: 'user-service/statute/import', // 导入法规地址
+    list: 'user-service/statute/select' // 查询法规列表
   }
 }

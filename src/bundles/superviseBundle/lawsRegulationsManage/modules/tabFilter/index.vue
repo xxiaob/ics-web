@@ -3,7 +3,7 @@
     <el-form ref="form" :inline="true" :model="form" class="jc-tabfilter-form" size="small">
       <el-form-item prop="lawsType" label="法规类型">
         <el-select v-model="form.lawsType" placeholder="选择法规类型">
-          <el-option v-for="item in types" :key="item.id" :label="item.typeName" :value="item.id"></el-option>
+          <el-option v-for="item in types" :key="item.id" :label="item.configName" :value="item.configValue"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item prop="lawsTime" label="事件">
@@ -22,33 +22,15 @@
 </template>
 <script>
 
+
 export default {
   name: 'OperationThirdManageFilter',
   props: {
     types: {
       type: Array,
-      default: [
-        {
-          id: 1,
-          typeName: '国家法律'
-        },
-        {
-          id: 2,
-          typeName: '行政法规'
-        },
-        {
-          id: 3,
-          typeName: '地方性法规'
-        },
-        {
-          id: 4,
-          typeName: '政府规章'
-        },
-        {
-          id: 5,
-          typeName: '其他'
-        }
-      ]
+      default() {
+        return []
+      }
     },
     orgTree: {
       type: Array

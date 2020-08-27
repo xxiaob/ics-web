@@ -12,11 +12,11 @@
       </div>
       <div class="jc-info-item">
         <label class="jc-info-label">法规描述：</label>
-        <div class="jc-info-content" v-text="info && info.three"></div>
+        <div class="jc-info-content" v-text="info && info.eight"></div>
       </div>
       <div class="jc-info-item">
         <label class="jc-info-label">法规内容：</label>
-        <div class="jc-info-content" v-text="info && info.four"></div>
+        <div class="jc-info-content" v-text="info && info.seven"></div>
       </div>
     </div>
   </el-dialog>

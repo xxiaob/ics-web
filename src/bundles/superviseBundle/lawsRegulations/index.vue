@@ -8,11 +8,15 @@
       </div>
       <el-table :data="list" v-loading="loading" row-key="id" class="jc-table">
         <el-table-column type="index" :index="indexMethod" label="序号" width="50"></el-table-column>
-        <el-table-column prop="one" label="法规类型"></el-table-column>
-        <el-table-column prop="one" label="文件名称"></el-table-column>
-        <el-table-column prop="one" label="创建人"></el-table-column>
+        <el-table-column prop="one" label="法规类型" width="120"></el-table-column>
+        <el-table-column prop="one" label="文件名称" width="120"></el-table-column>
+        <el-table-column prop="one" label="创建人" width="120"></el-table-column>
         <el-table-column prop="one" label="创建时间" width="140"></el-table-column>
-        <el-table-column prop="one" label="法规描述"></el-table-column>
+        <el-table-column prop="eight" label="法规描述">
+          <template slot-scope="scope">
+            <span class="desc" v-text="scope.row.eight" :title="scope.row.eight"></span>
+          </template>
+        </el-table-column>
         <el-table-column width="90" label="操作">
           <template slot-scope="scope">
             <el-button type="text" size="mini" icon="el-icon-view" @click="detail(scope.row)" title="查看"></el-button>
@@ -44,7 +48,7 @@ export default {
         five: 202341000,
         six: 202341000,
         seven: 202341000,
-        eight: 202341000
+        eight: '你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好'
       }],
       visible: false,
       info: {}
@@ -67,8 +71,8 @@ export default {
         four: 202341000,
         five: 202341000,
         six: 202341000,
-        seven: 202341000,
-        eight: 202341000
+        seven: '<span style="color:red;">你好你好你好你好你好你</span>你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好',
+        eight: '你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好'
       }
       this.detailVisible = true
     }
@@ -77,5 +81,15 @@ export default {
 }
 </script>
 
-<style>
+<style lang="scss" scoped>
+// .jc-main-container-warp {
+//   & >>> .cell {
+//     @include jc-text-warp(4);
+//   }
+// }
+
+.desc {
+  @include jc-text-warp(4);
+  width: 100%;
+}
 </style>

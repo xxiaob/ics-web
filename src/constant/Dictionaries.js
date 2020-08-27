@@ -237,3 +237,10 @@ export const DEVICE_TYPES = new JcEnum([
   { key: 'UAV', value: 2, label: '无人机' },
   { key: 'NETPATROLCAR', value: 3, label: '网巡车' }
 ])
+
+/**
+ * 法律法规和渣土告警类型
+ */
+export const LAWS_TYPES = new JcEnum([
+  { key: '2', value: 'statuteType', label: '法律法规类型' }
+])
