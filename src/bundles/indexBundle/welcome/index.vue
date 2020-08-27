@@ -1,9 +1,13 @@
 <template>
   <div class="jc-welcome-warp">
     <img src="./assets/bg.png" class="jc-welcome-bg" />
-    <div class="jc-marquee" v-if="marqueeText">
-      <div class="jc-marquee-item jc-marquee-first" v-text="marqueeText"></div>
-      <div class="jc-marquee-item jc-marquee-second" v-text="marqueeText"></div>
+    <div class="jc-marquee" v-if="marquees.length">
+      <div class="jc-marquee-item" :style="{'animation-duration': marquees.length * 20 + 's' }">
+        <span class="jc-marquee-text" v-for="(marqueeText,index) in marquees" :key="index" v-text="marqueeText"></span>
+      </div>
+      <div class="jc-marquee-item" :style="{'animation-duration': marquees.length * 20 + 's','animation-delay': marquees.length * 10 + 's'}">
+        <span class="jc-marquee-text" v-for="(marqueeText,index) in marquees" :key="index" v-text="marqueeText"></span>
+      </div>
     </div>
     <div class="jc-welcome-content" :style="welcomeLogo">
       <div class="jc-welcome-item" v-for="item in list" :key="item.id" :style="item.logo" @click="goLink(item)"></div>
@@ -27,7 +31,7 @@ export default {
   data() {
     return {
       list: [],
-      marqueeText: ''
+      marquees: []
     }
   },
   computed: {
@@ -87,7 +91,7 @@ export default {
 
         if (config) {
           //如果设置存在，则开启文字滚动
-          this.marqueeText = ( config.enableRollingMessage == 1 && config.rollingMessage) ? config.rollingMessage : ''
+          this.marquees = ( config.enableRollingMessage == 1 && config.rollingMessage) ? [config.rollingMessage] : []
         }
       }
     }
@@ -103,29 +107,29 @@ export default {
     transform: translateX(-100%);
   }
 }
+$jc-marquee-width: 1000px;
 .jc-marquee {
   position: absolute;
   top: 0;
   left: 50%;
   height: 50px;
   line-height: 50px;
-  width: 1000px;
+  width: $jc-marquee-width;
   transform: translateX(-50%);
   font-size: $jc-font-size-large;
   color: $jc-color-white;
   overflow: hidden;
   .jc-marquee-item {
-    text-align: center;
     display: block;
     white-space: nowrap;
     position: absolute;
-    min-width: 100%;
     transform: translateX(100%);
-    &.jc-marquee-first {
-      animation: jc-marquee-animation 20s linear infinite;
-    }
-    &.jc-marquee-second {
-      animation: jc-marquee-animation 20s linear infinite 10s;
+    animation-name: jc-marquee-animation;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    .jc-marquee-text {
+      display: inline-block;
+      min-width: $jc-marquee-width;
     }
   }
 }
