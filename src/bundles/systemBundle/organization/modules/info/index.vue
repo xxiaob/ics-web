@@ -12,11 +12,11 @@
       <div class="jc-detail-item">是否设置区域： {{info.setArea}}</div>
       <div class="jc-detail-item">添加时间： {{info.createTime}}</div>
     </div>
-    <div class="jc-detail-line">
+    <!-- <div class="jc-detail-line">
       <div class="jc-detail-item">指挥大屏标题： {{info.commandScreenLogo}}</div>
       <div class="jc-detail-item">数据大屏标题： {{info.dataScreenLogo}}</div>
     </div>
-    <!-- <div class="jc-detail-line-logo">
+    <div class="jc-detail-line-logo">
       <div>
         <p>首页logo：</p>
         <img :src="info.welcomeLogo" alt="">
@@ -73,12 +73,12 @@ export default {
   color: $jc-color-text-regular;
   .jc-detail-item {
     display: inline-block;
-    width: 50%;
+    width: 60%;
     height: 30px;
     line-height: 30px;
     @include jc-text-warp;
     &:first-child {
-      width: 49%;
+      width: 39%;
     }
   }
 }

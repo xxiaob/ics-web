@@ -268,5 +268,8 @@ export default {
     add: 'user-service/statute/add', // 法规新增
     import: 'user-service/statute/import', // 导入法规地址
     list: 'user-service/statute/select' // 查询法规列表
+  },
+  baseConfig: {
+    //基础配置
   }
 }
