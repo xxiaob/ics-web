@@ -92,12 +92,12 @@ export function exportList(data) {
  * @param {String} id
  */
 export function exportDetail(id) {
-  download('事件详情.xlsx', API.eventManage.exportDetail + '?id=' + id)
+  download(`事件详情${id}.xlsx`, API.eventManage.exportDetail + '?id=' + id)
 }
 /**
  * 导出文件
  * @param {String} id
  */
 export function fileDownload(id) {
-  download('事件文件.zip', API.eventManage.fileDownload + '?id=' + id)
+  download(`事件文件${id}.zip`, API.eventManage.fileDownload + '?id=' + id)
 }

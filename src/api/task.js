@@ -148,19 +148,19 @@ export function exportList(data) {
  * @param {String} id
  */
 export function exportTemporaryDetail(id) {
-  download('临时任务详情.xlsx', API.task.exportTemporaryDetail + '?businessKey=' + id)
+  download(`临时任务详情${id}.xlsx`, API.task.exportTemporaryDetail + '?businessKey=' + id)
 }
 /**
  * 导出日常任务详情
  * @param {String} id
  */
 export function exportDailyDetailExport(id) {
-  download('日常任务详情.xlsx', API.task.exportDailyDetailExport + '?businessKey=' + id)
+  download(`日常任务详情${id}.xlsx`, API.task.exportDailyDetailExport + '?businessKey=' + id)
 }
 /**
- * 导出文件
+ * 导出临时任务文件
  * @param {String} id
  */
 export function fileDownload(id) {
-  download('任务文件.zip', API.task.fileDownload + '?businessKey=' + id)
+  download(`临时任务文件${id}.zip`, API.task.fileDownload + '?businessKey=' + id)
 }

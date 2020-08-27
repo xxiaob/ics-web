@@ -99,12 +99,12 @@ export function exportList(data) {
  * @param {String} id
  */
 export function exportDetail(id) {
-  download('问题详情.xlsx', API.question.exportDetail + '?businessKey=' + id)
+  download(`问题详情${id}.xlsx`, API.question.exportDetail + '?businessKey=' + id)
 }
 /**
  * 导出文件
  * @param {String} id
  */
 export function fileDownload(id) {
-  download('问题文件.zip', API.question.fileDownload + '?businessKey=' + id)
+  download(`问题文件${id}.zip`, API.question.fileDownload + '?businessKey=' + id)
 }
