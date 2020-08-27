@@ -2,13 +2,11 @@ import axios from 'axios'
 import { getToken } from '@/libs/storage'
 import { Message } from 'element-ui'
 
-function downloadAxios() {
-  return axios.create({
-    baseURL: process.env.apiHostConfig.base,
-    headers: { token: getToken() },
-    responseType: 'blob'
-  })
-}
+const downloadAxios = axios.create({
+  baseURL: process.env.apiHostConfig.base,
+  headers: { token: getToken() },
+  responseType: 'blob'
+})
 
 function downloadBlob(content) {
   const blob = new Blob([content])
@@ -22,8 +20,8 @@ function downloadBlob(content) {
 }
 
 //文件下载
-export async function download(url, data) {
-  const res = await downloadAxios().post(url, data)
+export async function download(url, data = {}) {
+  const res = await downloadAxios.post(url, data)
 
   console.log(res)
   if (res.status === 200) {

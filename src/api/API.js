@@ -105,7 +105,8 @@ export default {
     del: 'task-service/event/del',
     typeList: 'task-service/event/typeList',
     listByTask: 'task-service/eventBind/getEvents',
-    exportList: 'task-service/event/listExport'
+    exportList: 'task-service/event/listExport',
+    exportDetail: 'task-service/event/detailExport'
   },
   task: {
     //任务管理

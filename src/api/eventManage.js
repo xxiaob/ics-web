@@ -81,10 +81,16 @@ export function eventManageListByTask(taskId) {
 }
 
 /**
- * 导出
+ * 导出列表
  * @param {object} data
  */
-
 export function exportList(data) {
   download(API.eventManage.exportList, data)
+}
+/**
+ * 导出详情
+ * @param {String} id
+ */
+export function exportDetail(id) {
+  download(API.eventManage.exportDetail + '?id=' + id)
 }

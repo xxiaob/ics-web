@@ -59,7 +59,7 @@
   </el-dialog>
 </template>
 <script>
-import { eventManageGet } from '@/api/eventManage'
+import { eventManageGet, exportDetail } from '@/api/eventManage'
 import MediaMixins from '../../../mixins/MediaMixins'
 
 export default {
@@ -114,6 +114,7 @@ export default {
     },
     download() {
       console.log('download')
+      exportDetail(this.info.id)
     }
   }
 }

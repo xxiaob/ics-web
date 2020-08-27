@@ -7,11 +7,11 @@
       <slot name="manage"></slot>
     </div>
     <el-form ref="form" :inline="true" :model="form" class="jc-tabfilter-form" size="small">
-      <el-form-item prop="problemType" label="问题类型">
+      <!-- <el-form-item prop="problemType" label="问题类型">
         <el-select v-model="form.problemType" placeholder="选择问题类型">
           <el-option v-for="item in types" :key="item.id" :label="item.typeName" :value="item.id"></el-option>
         </el-select>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item prop="" label="时间">
         <el-date-picker v-model="date" @change="changeDate" value-format="timestamp" type="datetimerange" range-separator="-" start-placeholder="开始时间" end-placeholder="结束时间">
         </el-date-picker>
@@ -38,7 +38,7 @@ export default {
   },
   data() {
     return {
-      selectTypes: QUESTION_TYPES.VALUES,
+      selectTypes: QUESTION_TYPES.VALUES.slice(0, 2),
       status: QUESTION_TYPES.PENDING,
       form: {
         selectType: QUESTION_TYPES.PENDING,

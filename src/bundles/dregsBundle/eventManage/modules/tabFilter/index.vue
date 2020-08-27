@@ -1,7 +1,7 @@
 <template>
   <el-card class="jc-tabfilter-card">
     <el-form ref="form" :inline="true" :model="form" class="jc-tabfilter-form" size="small">
-      <el-form-item prop="orgId" label="所属组织">
+      <!-- <el-form-item prop="orgId" label="所属组织">
         <el-cascader :options="orgTree" v-model="form.orgId" :props="{expandTrigger: 'hover', checkStrictly: true,emitPath: false }" clearable @change="orgChange" ref="orgCascader"></el-cascader>
       </el-form-item>
       <el-form-item prop="eventType" label="事件类型">
@@ -9,8 +9,8 @@
           <el-option v-for="item in eventTypes" :key="item.id" :label="item.typeName" :value="item.id">
           </el-option>
         </el-select>
-      </el-form-item>
-      <el-form-item prop="desc" label="事件描述">
+      </el-form-item> -->
+      <el-form-item prop="desc" label="处置信息">
         <el-input v-model="form.desc" placeholder="请输入事件描述"></el-input>
       </el-form-item>
       <el-form-item prop="" label="时间">
