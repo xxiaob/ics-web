@@ -1,22 +1,22 @@
 <template>
-  <el-dialog :title="title" :visible.sync="dialogVisible" width="600px" :append-to-body="true" :close-on-click-modal="false" @close="dialogClose">
+  <el-dialog :title="title" :visible.sync="dialogVisible" width="800px" :append-to-body="true" :close-on-click-modal="false" @close="dialogClose">
 
     <div class="jc-user-content">
       <div class="jc-info-item">
         <label class="jc-info-label">法规类型：</label>
-        <div class="jc-info-content" v-text="info && info.one"></div>
+        <div class="jc-info-content" v-text="info && info.statuteTypeName"></div>
       </div>
       <div class="jc-info-item">
         <label class="jc-info-label">法规名称：</label>
-        <div class="jc-info-content" v-text="info && info.two"></div>
+        <div class="jc-info-content" v-text="info && info.statuteName"></div>
       </div>
       <div class="jc-info-item">
         <label class="jc-info-label">法规描述：</label>
-        <div class="jc-info-content" v-text="info && info.eight"></div>
+        <div class="jc-info-content" v-text="info && info.statuteDesc"></div>
       </div>
       <div class="jc-info-item">
         <label class="jc-info-label">法规内容：</label>
-        <div class="jc-info-content" v-text="info && info.seven"></div>
+        <div class="jc-info-content jc-info-editor" v-html="info && info.statuteText"></div>
       </div>
     </div>
   </el-dialog>
@@ -26,7 +26,7 @@
 import FormMixins from '@/mixins/FormMixins'
 
 export default {
-  name: 'OperationThirdDetail',
+  name: 'superviseLawsAndRegulationsDetail',
   mixins: [FormMixins],
   props: {
     info: {
@@ -71,6 +71,12 @@ $jc-info-item-height: 20px;
   .jc-info-content {
     min-height: $jc-info-item-height;
     line-height: $jc-info-item-height;
+  }
+  .jc-info-editor {
+    padding-left: 16px;
+    img {
+      width: 100%;
+    }
   }
 }
 </style>

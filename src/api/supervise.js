@@ -44,6 +44,15 @@ export function getStatuteList(data) {
   return axios.post(API.supervise.list, data)
 }
 
+/**
+ * 法规台账列表
+ * @param {object} data
+ * @returns {Object} axios 对象
+ */
+export function getCheckList(data) {
+  return axios.post(API.supervise.checkList, data)
+}
+
 
 /**
  * 保存法规
