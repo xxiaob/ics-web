@@ -37,11 +37,6 @@ export default {
       default: '法规详情'
     }
   },
-  data() {
-    return {
-
-    }
-  },
   methods: {
     formatFormData() {
       return {}
