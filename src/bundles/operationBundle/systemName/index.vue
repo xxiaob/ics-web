@@ -14,7 +14,7 @@
         <el-table-column type="index" :index="indexMethod" label="序号" width="50"></el-table-column>
         <el-table-column prop="domain" label="域名" width="120"></el-table-column>
         <el-table-column prop="systemName" label="系统名称"></el-table-column>
-        <el-table-column prop="domainLogo" label="系统logo">
+        <el-table-column prop="domainLogo" label="登录页logo">
           <template slot-scope="scope">
             <img :src="scope.row.domainLogo" alt="">
           </template>
