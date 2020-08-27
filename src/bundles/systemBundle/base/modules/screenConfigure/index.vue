@@ -1,15 +1,15 @@
 <template>
   <div>
     <el-card v-loading="loading">
-      <el-form ref="form" label-width="80px" :model="form" class="jc-manage-form">
+      <el-form ref="form" label-width="120px" :model="form" class="jc-manage-form">
         <el-form-item label="当前组织">
           <span v-text="user.orgName"></span>
         </el-form-item>
-        <el-form-item label="首页logo">
-          <upload-one-img :url.sync="form.welcomeLogo"></upload-one-img>
+        <el-form-item label="指挥大屏标题">
+          <el-input v-model="form.commandScreenLogo" placeholder="请输入指挥大屏标题"></el-input>
         </el-form-item>
-        <el-form-item label="系统logo">
-          <upload-one-img :url.sync="form.homePageLogo"></upload-one-img>
+        <el-form-item label="数据大屏标题">
+          <el-input v-model="form.dataScreenLogo" placeholder="请输入数据大屏标题"></el-input>
         </el-form-item>
       </el-form>
       <div class="jc-footer">
@@ -21,7 +21,7 @@
 
 <script>
 export default {
-  name: 'SystemBaseLogoConfigure',
+  name: 'SystemBaseScreenConfigure',
   props: {
     user: {
       type: Object,
@@ -35,8 +35,8 @@ export default {
     return {
       form: {
         orgId: '',
-        welcomeLogo: '',
-        homePageLogo: ''
+        commandScreenLogo: '',
+        dataScreenLogo: ''
       },
       loading: false
     }

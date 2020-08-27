@@ -270,5 +270,8 @@ export default {
     list: 'user-service/statute/select', // 查询法规列表
     del: 'user-service/statute/delete', // 删除法规
     update: 'user-service/statute/update'
+  },
+  baseConfig: {
+    //基础配置
   }
 }
