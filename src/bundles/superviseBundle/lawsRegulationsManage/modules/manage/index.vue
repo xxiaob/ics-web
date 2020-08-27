@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="options? '编辑法律法规': '新增法律法规'" :visible.sync="dialogVisible" width="600px" :append-to-body="true" :close-on-click-modal="false" @close="dialogClose">
+  <el-dialog :title="options? '编辑法律法规': '新增法律法规'" :visible.sync="dialogVisible" width="800px" :append-to-body="true" :close-on-click-modal="false" @close="dialogClose">
     <el-form ref="form" label-width="120px" :model="form" class="jc-manage-form">
       <el-form-item label="法规类型" prop="statuteType" :rules="rules.SELECT_NOT_NULL">
         <el-select v-model="form.statuteType" placeholder="选择法规类型">
@@ -14,7 +14,7 @@
       </el-form-item>
 
       <el-form-item label="法规内容" prop="statuteText">
-        <el-input v-model="form.statuteText" type="textarea" :rows="4" resize="none" placeholder="请输入法规内容"></el-input>
+        <jc-editor v-model="form.statuteText"></jc-editor>
       </el-form-item>
 
     </el-form>
@@ -52,6 +52,9 @@ export default {
         Tel: getTelRule()
       }
     }
+  },
+  components: {
+    JcEditor: () => import('@/components/JcForm/JcEditor')
   },
   methods: {
     formatFormData() {

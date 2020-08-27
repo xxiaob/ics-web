@@ -1,6 +1,6 @@
 <template>
   <div class="jc-main-container-warp">
-    <tab-filter @filter="goFilter"></tab-filter>
+    <tab-filter :types="types" @filter="goFilter"></tab-filter>
 
     <el-card class="jc-table-card jc-mt">
       <div slot="header" class="jc-card-header">
@@ -8,13 +8,13 @@
       </div>
       <el-table :data="list" v-loading="loading" row-key="id" class="jc-table">
         <el-table-column type="index" :index="indexMethod" label="序号" width="50"></el-table-column>
-        <el-table-column prop="one" label="法规类型" width="120"></el-table-column>
-        <el-table-column prop="one" label="文件名称" width="120"></el-table-column>
-        <el-table-column prop="one" label="创建人" width="120"></el-table-column>
-        <el-table-column prop="one" label="创建时间" width="140"></el-table-column>
+        <el-table-column prop="statuteTypeName" label="法规类型" width="120"></el-table-column>
+        <el-table-column prop="statuteName" label="文件名称" width="120"></el-table-column>
+        <el-table-column prop="userName" label="创建人" width="120"></el-table-column>
+        <el-table-column prop="createTime" label="创建时间" width="140" :formatter="formatDate"></el-table-column>
         <el-table-column prop="eight" label="法规描述">
           <template slot-scope="scope">
-            <span class="desc" v-text="scope.row.eight" :title="scope.row.eight"></span>
+            <span class="desc" v-text="scope.row.statuteDesc" :title="scope.row.statuteDesc"></span>
           </template>
         </el-table-column>
         <el-table-column width="90" label="操作">
@@ -33,25 +33,22 @@
 </template>
 
 <script>
+import { getCheckList, getByType } from '@/api/supervise'
+import { LAWS_TYPES } from '@/constant/Dictionaries'
 import PaginationMixins from '@/mixins/PaginationMixins'
+import { formatDate } from '@/libs/util'
 export default {
   name: 'superviseLawsAndRegulations',
   mixins: [PaginationMixins],
   data() {
     return {
       loading: false,
-      list: [{
-        one: 202341000,
-        two: 202341000,
-        three: 202341000,
-        four: 202341000,
-        five: 202341000,
-        six: 202341000,
-        seven: 202341000,
-        eight: '你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好'
-      }],
+      list: [],
+      info: {},
+      filter: {},
       visible: false,
-      info: {}
+      detailVisible: false,
+      types: []
     }
   },
   components: {
@@ -59,21 +56,44 @@ export default {
     JcLawsDetail: () => import('./modules/detail')
 
   },
+  mounted() {
+    this.getStatuteTypes()
+    this.initData()
+  },
   methods: {
-    goFilter() {},
+    async initData() {
+      if (!this.loading) {
+        this.loading = true
+        try {
+          const list = await getCheckList({ ...this.filter, ...this.page })
 
+          console.log('list', list)
+          let { total, resultList } = list
+
+          this.page.total = total
+          this.list = resultList
+          this.loading = false
+
+          // 请求数据
+        } catch (error) {
+          console.error(error)
+          this.loading = false
+        }
+      }
+    },
+    async getStatuteTypes() {
+      this.types = await getByType({ type: LAWS_TYPES.STATUTE }) // 获取法规类型
+    },
+    formatDate(row) {
+      return formatDate(row.createTime)
+    },
+    goFilter(filter) {
+      this.filter = filter // 获取查询信息
+      this.currentChange(1)
+    },
     detail(row) {
       // 查看详情
-      this.info = {
-        one: 202341000,
-        two: 202341000,
-        three: 202341000,
-        four: 202341000,
-        five: 202341000,
-        six: 202341000,
-        seven: '<span style="color:red;">你好你好你好你好你好你</span>你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好',
-        eight: '你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好你好'
-      }
+      this.info = row
       this.detailVisible = true
     }
   }
@@ -82,12 +102,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-// .jc-main-container-warp {
-//   & >>> .cell {
-//     @include jc-text-warp(4);
-//   }
-// }
-
 .desc {
   @include jc-text-warp(4);
   width: 100%;

@@ -72,17 +72,11 @@ export default {
     JcLawsDetail: () => import('./modules/detail')
   },
   mounted() {
+    this.getStatuteTypes()
     this.initData()
   },
   methods: {
     async initData() {
-      this.types = await getByType({ type: LAWS_TYPES.STATUTE }) // 获取法规类型
-
-      console.log('types', this.types)
-
-      this.getStatuteList()
-    },
-    async getStatuteList() {
       if (!this.loading) {
         this.loading = true
         try {
@@ -101,6 +95,9 @@ export default {
           this.loading = false
         }
       }
+    },
+    async getStatuteTypes() {
+      this.types = await getByType({ type: LAWS_TYPES.STATUTE }) // 获取法规类型
     },
     formatDate(row) {
       return formatDate(row.createTime)

@@ -1,16 +1,16 @@
 <template>
   <el-card class="jc-tabfilter-card">
     <el-form ref="form" :inline="true" :model="form" class="jc-tabfilter-form" size="small">
-      <el-form-item prop="lawsType" label="法规类型">
+      <el-form-item prop="statuteType" label="法规类型">
         <el-select v-model="form.statuteType" placeholder="选择法规类型">
           <el-option v-for="item in types" :key="item.id" :label="item.configName" :value="item.configValue"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item prop="lawsTime" label="事件">
+      <el-form-item prop="" label="时间">
         <el-date-picker v-model="date" @change="changeDate" type="datetimerange" range-separator="-" start-placeholder="开始时间" end-placeholder="结束时间">
         </el-date-picker>
       </el-form-item>
-      <el-form-item prop="lawsInfo" label="法规信息">
+      <el-form-item prop="desc" label="法规信息">
         <el-input v-model="form.desc" placeholder="请输入法规名称或创建人姓名"></el-input>
       </el-form-item>
       <el-form-item class="jc-tabfilter-btns">
@@ -22,7 +22,6 @@
 </template>
 <script>
 
-
 export default {
   name: 'OperationThirdManageFilter',
   props: {
@@ -31,9 +30,6 @@ export default {
       default() {
         return []
       }
-    },
-    orgTree: {
-      type: Array
     }
   },
   data() {
@@ -54,8 +50,8 @@ export default {
     changeDate(value) { // 时间切换
       console.log('value', value)
       if (value) {
-        this.form.startDate = value[0].getTime()
-        this.form.endDate = value[1].getTime()
+        this.form.startDate = value[0]
+        this.form.endDate = value[1]
       } else {
         this.form.startDate = ''
         this.form.endDate = ''

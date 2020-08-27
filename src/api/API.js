@@ -269,7 +269,8 @@ export default {
     import: 'user-service/statute/import', // 导入法规地址
     list: 'user-service/statute/select', // 查询法规列表
     del: 'user-service/statute/delete', // 删除法规
-    update: 'user-service/statute/update'
+    update: 'user-service/statute/update', // 更新法规
+    checkList: 'user-service/statute/selectForStandBook' // 法规台账
   },
   baseConfig: {
     //基础配置
