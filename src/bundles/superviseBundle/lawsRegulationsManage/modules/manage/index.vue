@@ -1,20 +1,20 @@
 <template>
-  <el-dialog title="新增法律法规" :visible.sync="dialogVisible" width="600px" :append-to-body="true" :close-on-click-modal="false" @close="dialogClose">
+  <el-dialog :title="options? '编辑法律法规': '新增法律法规'" :visible.sync="dialogVisible" width="600px" :append-to-body="true" :close-on-click-modal="false" @close="dialogClose">
     <el-form ref="form" label-width="120px" :model="form" class="jc-manage-form">
       <el-form-item label="法规类型" prop="thridName" :rules="rules.Len50">
         <el-select v-model="form.lawsType" placeholder="选择法规类型">
           <el-option v-for="item in types" :key="item.id" :label="item.typeName" :value="item.id"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="法规名称" prop="orgId" :rules="rules.SELECT_NOT_NULL">
+      <el-form-item label="法规名称" prop="orgId">
         <el-input v-model="form.lawsInfo" placeholder="请输入法规名称"></el-input>
       </el-form-item>
-      <el-form-item label="法规描述" prop="orgId" :rules="rules.SELECT_NOT_NULL">
-        <el-input v-model="form.lawsInfo" type="textarea" :rows="2" resize="none" placeholder="请输入法规描述"></el-input>
+      <el-form-item label="法规描述" prop="orgId">
+        <el-input v-model="form.lawsInfo" resize="none" placeholder="请输入法规描述"></el-input>
       </el-form-item>
 
-      <el-form-item label="上传文档" prop="orgId" :rules="rules.SELECT_NOT_NULL">
-
+      <el-form-item label="法规内容" prop="orgId">
+        <el-input v-model="form.lawsInfo" type="textarea" :rows="4" resize="none" placeholder="请输入法规内容"></el-input>
       </el-form-item>
 
     </el-form>

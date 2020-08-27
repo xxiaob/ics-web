@@ -57,10 +57,10 @@ export default {
   data() {
     return {
       form: {
-        thridName: '',
-        orgId: '',
+        lawsType: '',
         startTime: '',
-        endTime: ''
+        endTime: '',
+        lawsInfo: ''
       },
       date: null
     }
@@ -87,6 +87,7 @@ export default {
       this.date = null
     },
     onSubmit() { // 提交
+      console.log('this.form', this.form)
       this.$emit('filter', this.form) // 查询信息
     },
     addHandle() {
