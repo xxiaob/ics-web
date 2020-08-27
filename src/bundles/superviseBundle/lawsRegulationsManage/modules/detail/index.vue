@@ -4,19 +4,19 @@
     <div class="jc-user-content">
       <div class="jc-info-item">
         <label class="jc-info-label">法规类型：</label>
-        <div class="jc-info-content" v-text="info && info.one"></div>
+        <div class="jc-info-content" v-text="info && info.statuteTypeName"></div>
       </div>
       <div class="jc-info-item">
         <label class="jc-info-label">法规名称：</label>
-        <div class="jc-info-content" v-text="info && info.two"></div>
+        <div class="jc-info-content" v-text="info && info.statuteName"></div>
       </div>
       <div class="jc-info-item">
         <label class="jc-info-label">法规描述：</label>
-        <div class="jc-info-content" v-text="info && info.eight"></div>
+        <div class="jc-info-content" v-text="info && info.statuteDesc"></div>
       </div>
       <div class="jc-info-item">
         <label class="jc-info-label">法规内容：</label>
-        <div class="jc-info-content" v-text="info && info.even"></div>
+        <div class="jc-info-content" v-html="info && info.statuteText"></div>
       </div>
     </div>
   </el-dialog>

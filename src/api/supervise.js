@@ -26,10 +26,41 @@ export function statuteAdd(data) {
 }
 
 /**
+ * 更新法规
+ * @param {object} data
+ * @returns {Object} axios 对象
+ */
+export function statuteUpdate(data) {
+  return axios.post(API.supervise.update, data)
+}
+
+
+/**
  * 法规列表
  * @param {object} data
  * @returns {Object} axios 对象
  */
 export function getStatuteList(data) {
   return axios.post(API.supervise.list, data)
+}
+
+
+/**
+ * 保存法规
+ * @param {object} data
+ * @returns {Object} axios 对象
+ */
+export function statuteSave(data) {
+  return data.id ? statuteUpdate(data) : statuteAdd(data)
+}
+
+/**
+ * 删除法规
+ * @param {object} data
+ * @returns {Object} axios 对象
+ */
+export function statuteDel(data) {
+  return axios.post(API.supervise.del, {}, {
+    params: data
+  })
 }
