@@ -88,8 +88,8 @@
       <el-button @click="handleTask(true)" size="small" v-if="form.handle">流转任务</el-button>
       <el-button @click="handleTask(false)" size="small" v-if="form.handle">完成任务</el-button>
       <el-button @click="closeTask" size="small" v-if="form.handle">关闭任务</el-button>
-      <el-button size="small" type="primary" @click="download">文件下载</el-button>
-      <el-button size="small" type="primary" @click="download">报表下载</el-button>
+      <el-button size="small" type="primary" @click="downloadFile">文件下载</el-button>
+      <el-button size="small" type="primary" @click="downloadDetail">报表下载</el-button>
       <el-button size="small" type="primary" @click="$emit('update:detailShow', false)">返回</el-button>
     </div>
     <el-dialog :title="taskForm.ifUpload?'流转任务':'完成任务'" :visible.sync="dialogVisibleHandle" :close-on-click-modal="false" width="600px" append-to-body>
@@ -115,7 +115,7 @@
   </div>
 </template>
 <script>
-import { taskFinish, taskDel } from '@/api/task'
+import { taskFinish, taskDel, exportTemporaryDetail, fileDownload } from '@/api/task'
 import { eventManageSelectList } from '@/api/eventManage'
 import { NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
 import { formatDate } from '@/libs/util'
@@ -306,8 +306,13 @@ export default {
         console.error(e)
       }
     },
-    download() {
-      console.log('download')
+    downloadDetail() {
+      console.log('downloadDetail')
+      exportTemporaryDetail(this.form.businessKey)
+    },
+    downloadFile() {
+      console.log('downloadFile')
+      fileDownload(this.form.businessKey)
     }
   }
 }

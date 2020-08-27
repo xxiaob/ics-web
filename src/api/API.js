@@ -106,7 +106,8 @@ export default {
     typeList: 'task-service/event/typeList',
     listByTask: 'task-service/eventBind/getEvents',
     exportList: 'task-service/event/listExport',
-    exportDetail: 'task-service/event/detailExport'
+    exportDetail: 'task-service/event/detailExport',
+    fileDownload: 'task-service/event/fileDownload'
   },
   task: {
     //任务管理
@@ -125,7 +126,10 @@ export default {
     postArea: 'task-service/task/getTaskPostArea',
     listByProblemId: 'task-service/task/getTaskByProblemId',
     getTaskAuth: 'task-service/task/getTaskAuth',
-    exportList: ''
+    exportList: 'task-service/task/listExport',
+    exportTemporaryDetail: 'task-service/task/temporaryDetailExport',
+    exportDailyDetailExport: 'task-service/task/dailyDetailExport',
+    fileDownload: 'task-service/task/fileDownload'
   },
   question: {
     //问题管理
@@ -138,7 +142,9 @@ export default {
     get: 'task-service/problem/getProblemTask',
     typeList: 'task-service/problem/getProblemTypes',
     getProblemAuth: 'task-service/problem/getProblemAuth',
-    exportList: ''
+    exportList: 'task-service/problem/listExport',
+    exportDetail: 'task-service/problem/detailExport',
+    fileDownload: 'task-service/problem/fileDownload'
   },
   pttGroup: {
     //PTT群组

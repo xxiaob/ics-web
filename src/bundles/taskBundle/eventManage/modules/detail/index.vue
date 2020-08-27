@@ -49,8 +49,8 @@
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="download">文件下载</el-button>
-      <el-button type="primary" @click="download">报表下载</el-button>
+      <el-button type="primary" @click="downloadFile">文件下载</el-button>
+      <el-button type="primary" @click="downloadDetail">报表下载</el-button>
       <el-button @click="dialogVisible = false">关闭窗口</el-button>
     </div>
     <el-dialog title="视频播放" :visible.sync="dialogVideoVisible" width="800px" :close-on-click-modal="false" :append-to-body="true">
@@ -59,7 +59,7 @@
   </el-dialog>
 </template>
 <script>
-import { eventManageGet, exportDetail } from '@/api/eventManage'
+import { eventManageGet, exportDetail, fileDownload } from '@/api/eventManage'
 import MediaMixins from '../../../mixins/MediaMixins'
 
 export default {
@@ -112,9 +112,13 @@ export default {
     dialogClose() {
       this.$emit('update:visible', false)
     },
-    download() {
-      console.log('download')
+    downloadDetail() {
+      console.log('downloadDetail')
       exportDetail(this.info.id)
+    },
+    downloadFile() {
+      console.log('downloadFile')
+      fileDownload(this.info.id)
     }
   }
 }

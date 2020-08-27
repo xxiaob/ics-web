@@ -85,12 +85,19 @@ export function eventManageListByTask(taskId) {
  * @param {object} data
  */
 export function exportList(data) {
-  download(API.eventManage.exportList, data)
+  download('事件列表.xlsx', API.eventManage.exportList, data)
 }
 /**
  * 导出详情
  * @param {String} id
  */
 export function exportDetail(id) {
-  download(API.eventManage.exportDetail + '?id=' + id)
+  download('事件详情.xlsx', API.eventManage.exportDetail + '?id=' + id)
+}
+/**
+ * 导出文件
+ * @param {String} id
+ */
+export function fileDownload(id) {
+  download('事件文件.zip', API.eventManage.fileDownload + '?id=' + id)
 }

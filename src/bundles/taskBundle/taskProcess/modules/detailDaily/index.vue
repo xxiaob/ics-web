@@ -76,6 +76,7 @@
     <div class="jc-detail-footer">
       <el-button @click="handleTask(true)" size="small" v-if="form.handle">流转任务</el-button>
       <el-button @click="handleTask(false)" size="small" v-if="form.handle">添加备注</el-button>
+      <el-button size="small" type="primary" @click="downloadDetail">报表下载</el-button>
       <el-button size="small" type="primary" @click="$emit('update:dailyDetailShow', false)">返回</el-button>
     </div>
     <el-dialog :title="taskForm.ifUpload?'流转任务':'添加备注'" :visible.sync="dialogVisibleHandle" :close-on-click-modal="false" width="600px" append-to-body>
@@ -95,7 +96,7 @@
   </div>
 </template>
 <script>
-import { taskFinish, taskAddRemark } from '@/api/task'
+import { taskFinish, taskAddRemark, exportDailyDetailExport } from '@/api/task'
 import { NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
 import { formatDate } from '@/libs/util'
 import moment from 'moment'
@@ -278,6 +279,10 @@ export default {
         this.loading = false
         console.error(e)
       }
+    },
+    downloadDetail() {
+      console.log('downloadDetail')
+      exportDailyDetailExport(this.form.businessKey)
     }
   }
 }

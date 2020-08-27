@@ -3,7 +3,7 @@
  */
 import axios from 'axios'
 import API from './API'
-import qs from 'qs'
+import { download } from '@/libs/download'
 
 /*-------------------------------问题管理------------------------------------ */
 /**
@@ -88,9 +88,23 @@ export function getProblemAuth(id) {
 }
 
 /**
- * 导出
+ * 导出列表
  * @param {object} data
  */
 export function exportList(data) {
-  window.open(process.env.apiHostConfig.base + API.question.exportList + '?' + qs.stringify(data))
+  download('问题列表.xlsx', API.question.exportList, data)
+}
+/**
+ * 导出详情
+ * @param {String} id
+ */
+export function exportDetail(id) {
+  download('问题详情.xlsx', API.question.exportDetail + '?businessKey=' + id)
+}
+/**
+ * 导出文件
+ * @param {String} id
+ */
+export function fileDownload(id) {
+  download('问题文件.zip', API.question.fileDownload + '?businessKey=' + id)
 }
