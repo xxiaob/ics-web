@@ -29,7 +29,8 @@ export default {
     list: 'user-service/org/list',
     update: 'user-service/org/upd',
     del: 'user-service/org/del',
-    getOrgLogo: 'user-service/org/getOrgLogoByOrgId'
+    getOrgLogo: 'user-service/org/getOrgLogoByOrgId',
+    getPOrgIdWithSameLevelAuth: 'user-service/org/getPOrgIdWithSameLevelAuth' //根据同级查看获取组织信息或者上级组织信息
   },
   role: {
     //角色管理

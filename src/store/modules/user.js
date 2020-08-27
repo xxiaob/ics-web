@@ -32,11 +32,11 @@ const mutations = {
   setUser(state, user) {
     if (user) {
       setToken(user.token)
-      setUser(user)
       //处理菜单
       state.menus = formatMenus(user.resources)
       setUserMenus(state.menus)
       delete user.resources
+      setUser(user)
     } else {
       //如果设置用户信息为空，则清空数据
       setToken('')

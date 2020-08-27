@@ -27,7 +27,7 @@
 </template>
 <script>
 import { getAMapLoader } from '@/map/aMap/aMapUtil'
-import { organizationList } from '@/api/organization'
+import { getPOrgIdWithSameLevelAuth } from '@/api/organization'
 import { areaList } from '@/api/area'
 import { PROJECT_TYPES } from '@/constant/Dictionaries'
 import { AREAS_TYPE, AREAS_SEARCH_TYPE } from '@/constant/CONST'
@@ -60,9 +60,9 @@ export default {
       this.orgId = this.project.orgId
 
       if (!this.orgId) {
-        const res = await organizationList()
+        const res = await getPOrgIdWithSameLevelAuth()
 
-        this.orgId = res[0].orgId
+        this.orgId = res.orgId
       }
       //初始化地图设置
       let AMapLoader = getAMapLoader() //获取amap 对象
