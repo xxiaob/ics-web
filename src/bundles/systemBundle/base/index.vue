@@ -4,13 +4,14 @@
       <el-tab-pane v-for="tab in tabs" :label="tab.label" :name="tab.value" :key="tab.value"></el-tab-pane>
     </el-tabs>
     <keep-alive>
-      <component :is="tabComponent" :user="authorityOrg"></component>
+      <component :is="tabComponent" :user="authorityOrg" :baseInfo="baseInfo" @success-save="getBase"></component>
     </keep-alive>
   </div>
 </template>
 
 <script>
 import { getPOrgIdWithSameLevelAuth } from '@/api/organization'
+import { getBase } from '@/api/baseConfig'
 
 export default {
   name: 'SystemBaseIndex',
@@ -24,6 +25,7 @@ export default {
   data() {
     return {
       authorityOrg: {},
+      baseInfo: {},
       tabComponent: 'IncorruptGovernment',
       tabs: [
         { label: '廉政提醒', value: 'IncorruptGovernment' },
@@ -34,8 +36,25 @@ export default {
       ]
     }
   },
-  async created() {
-    this.authorityOrg = await getPOrgIdWithSameLevelAuth()
+  created() {
+    this.getAuthorityOrg()
+    this.getBase()
+  },
+  methods: {
+    async getAuthorityOrg() {
+      try {
+        this.authorityOrg = await getPOrgIdWithSameLevelAuth()
+      } catch (error) {
+        console.error(error)
+      }
+    },
+    async getBase() {
+      try {
+        this.baseInfo = await getBase()
+      } catch (error) {
+        console.error(error)
+      }
+    }
   }
 }
 </script>

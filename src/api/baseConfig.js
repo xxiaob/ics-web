@@ -6,12 +6,11 @@ import API from './API'
 
 /*-------------------------------基础配置------------------------------------ */
 /**
- * 详情
- * @param {Object} data 参数
+ * 获取基础信息
  * @returns {Object} axios 对象
  */
-export function getDetail(data) {
-  return axios.post(API.baseConfig.get, data)
+export function getBase() {
+  return axios.post(API.baseConfig.getBase)
 }
 
 /**
