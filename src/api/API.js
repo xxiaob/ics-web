@@ -279,5 +279,9 @@ export default {
     del: 'user-service/rollingMessage/delRollingMessage', // 廉政提醒删除
     updateBase: 'user-service/orgBaseInfo/updOrgBaseInfo',
     getBase: 'user-service/orgBaseInfo/getOrgBaseInfo'
+  },
+  dregsAlarm: {
+    // 渣土告警
+    list: 'task-service/alarm/select' // 渣土告警列表
   }
 }

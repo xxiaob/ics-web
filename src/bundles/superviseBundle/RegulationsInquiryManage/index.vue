@@ -10,7 +10,7 @@
             <span>当前组织: </span>
             <span class="jc-organization" v-text="user && user.orgName"></span>
           </div>
-          <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :on-success="uploadSuccess" :before-upload="beforeUpload" :show-file-list="false">
+          <el-upload class="upload-demo" action="https://jsonplaceholder.typicode.com/posts/" :before-upload="beforeUpload" :on-success="uploadSuccess" :show-file-list="false">
             <el-button size="small" type="primary">导入</el-button>
           </el-upload>
         </div>
@@ -126,6 +126,8 @@ export default {
     },
     uploadSuccess() {
       // 上传成功函数
+      console.log(22222)
+      this.initData()
       this.loading = false
     }
   }

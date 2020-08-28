@@ -1,19 +1,20 @@
 <template>
   <el-card class="jc-tabfilter-card">
     <el-form ref="form" :inline="true" :model="form" class="jc-tabfilter-form" size="small">
-      <el-form-item prop="thridName" label="告警类型">
-        <el-input v-model="form.thirdPartyName" placeholder="请输入第三方名称"></el-input>
+      <el-form-item prop="subTypeCode" label="告警类型">
+        <el-select v-model="form.subTypeCode" placeholder="选择告警类型">
+          <el-option v-for="item in types" :key="item.id" :label="item.configName" :value="item.configValue"></el-option>
+        </el-select>
       </el-form-item>
       <el-form-item prop="orgName" label="状态">
-        <!-- <el-cascader :options="orgTree" v-model="form.orgId" :props="{expandTrigger: 'hover', checkStrictly: true,emitPath: false }" clearable @change="orgChange" ref="orgCascader"></el-cascader> -->
-        <el-input v-model="form.orgName" placeholder="请输入组织名称"></el-input>
+        <el-input v-model="form.orgName" placeholder="请输入状态"></el-input>
       </el-form-item>
-      <el-form-item prop="" label="事件">
+      <el-form-item prop="" label="时间">
         <el-date-picker v-model="date" @change="changeDate" type="datetimerange" range-separator="-" start-placeholder="开始时间" end-placeholder="结束时间">
         </el-date-picker>
       </el-form-item>
-      <el-form-item prop="orgName" label="告警信息">
-        <el-input v-model="form.orgName" placeholder="输入企业名称或车牌号"></el-input>
+      <el-form-item prop="desc" label="告警信息">
+        <el-input v-model="form.desc" placeholder="输入企业名称或车牌号"></el-input>
       </el-form-item>
       <el-form-item class="jc-tabfilter-btns">
         <el-button type="primary" @click="onSubmit">查询</el-button>
@@ -26,12 +27,18 @@
 import { formatDate } from '@/libs/util'
 
 export default {
-  name: 'OperationThirdManageFilter',
+  name: 'dregsWaringIndexFilter',
+  props: {
+    types: {
+      type: Array,
+      default: () => []
+    }
+  },
   data() {
     return {
       form: {
-        thirdPartyName: '',
-        orgName: '',
+        subTypeCode: '',
+        desc: '',
         startTime: '',
         endTime: ''
       },
@@ -52,13 +59,14 @@ export default {
     },
     reset() { // 重置
       this.$refs.form.resetFields()
-      this.form.thirdPartyName = ''
-      this.form.orgName = ''
+      this.form.subTypeCode = ''
+      this.form.desc = ''
       this.form.startTime = ''
       this.form.endTime = ''
       this.date = null
     },
     onSubmit() { // 提交
+      console.log('this.form', this.form)
       this.$emit('filter', this.form) // 查询信息
     }
   }

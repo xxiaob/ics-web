@@ -34,7 +34,7 @@
       <el-pagination @current-change="currentChange" @size-change="sizeChange" :current-page.sync="page.pageNum" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.total" class="text-right jc-mt"></el-pagination>
     </el-card>
 
-    <jc-manage :types="types" :options="info" :visible.sync="visible" @save-success="getStatuteList"></jc-manage>
+    <jc-manage :types="types" :options="info" :visible.sync="visible" @save-success="initData"></jc-manage>
 
     <!-- 详情 -->
     <jc-Laws-detail :info="info" :visible.sync="detailVisible"></jc-Laws-detail>
@@ -161,6 +161,8 @@ export default {
     },
     uploadSuccess() {
       // 上传成功函数
+      console.log('1111111')
+      this.initData()
       this.loading = false
     }
   }

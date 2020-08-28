@@ -7,12 +7,12 @@
       </div>
       <div class="jc-info jc-router">
         <span class="jc-info-label">入口路由: </span>
-        <el-input class="jc-router-input" v-model="entranceRouter" placeholder="您可以输入登录后跳转的页面地址，若您忽略，默认登录后显示一级页面">
+        <el-input class="jc-router-input" v-model="form.entranceRouter" placeholder="您可以输入登录后跳转的页面地址，若您忽略，默认登录后显示一级页面">
         </el-input>
       </div>
     </div>
     <div class="jc-router-btns jc-flex-warp">
-      <el-button type="primary" size="mini" @click="save">保存</el-button>
+      <el-button type="primary" :loading="loading" @click="onSubmit">保存</el-button>
     </div>
   </el-card>
 </template>
@@ -24,22 +24,49 @@ export default {
   name: 'SystemBaseEntryRoute',
   data() {
     return {
-      entranceRouter: ''
+      loading: false,
+      form: {
+        entranceRouter: ''
+      }
     }
   },
   props: {
     user: {
       type: Object,
       default: ()=>{}
+    },
+    baseInfo: {
+      type: Object,
+      default: () => {}
     }
   },
-  mounted() {
-    console.log('user', this.user)
+  watch: {
+    baseInfo: {
+      handler() {
+        this.form.entranceRouter = this.baseInfo.entranceRouter
+      },
+      immediate: true
+    }
   },
   methods: {
-    save() {
-      console.log('user', this.user)
-      console.log('entranceRouter', this.entranceRouter)
+    onSubmit() {
+      this.form.orgId = this.user.orgId
+
+
+      this.$confirm('是否确认修改入口路由, 是否继续?', '提示', {
+        confirmButtonText: '确定',
+        cancelButtonText: '取消',
+        type: 'warning'
+      }).then(async () => {
+        this.loading = true
+        try {
+          await updateBase(this.form)
+          this.loading = false
+        } catch (error) {
+          console.error(error)
+          this.loading = false
+        }
+      })
     }
   }
 }

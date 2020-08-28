@@ -2,7 +2,7 @@
   <el-card class="jc-tabfilter-card">
     <el-form ref="form" :inline="true" :model="form" class="jc-tabfilter-form" size="small">
       <el-form-item prop="statuteType" label="条例类型">
-        <el-select v-model="form.statuteType" placeholder="选择问题类型">
+        <el-select v-model="form.statuteType" placeholder="选择条例类型">
           <el-option v-for="item in types" :key="item.id" :label="item.configName" :value="item.configValue"></el-option>
         </el-select>
       </el-form-item>
@@ -36,9 +36,7 @@ export default {
   props: {
     types: {
       type: Array,
-      default() {
-        return []
-      }
+      default: () => []
     },
     orgTree: {
       type: Array
