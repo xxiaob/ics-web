@@ -75,5 +75,5 @@ export function rollingMessageSave(data) {
  * @returns {Object} axios 对象
  */
 export function getEnabledRollingMessage() {
-  return axios.post(API.baseConfig.getEnabledRollingMessage)
+  return axios.get(API.baseConfig.getEnabledRollingMessage)
 }

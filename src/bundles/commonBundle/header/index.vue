@@ -21,7 +21,6 @@
 
 <script>
 import { mapState, mapGetters, mapMutations } from 'vuex'
-import { getDomainLogoConfig } from '@/libs/storage'
 
 export default {
   name: 'CommonHeader',
@@ -32,7 +31,6 @@ export default {
   data() {
     return {
       visible: false,
-      logoRouter: 'index',
       resetPwdVisible: false
     }
   },
@@ -44,8 +42,10 @@ export default {
       user: state => state.user
     }),
     systemLogo() {
-      console.log(this.user)
       return this.user && this.user.userRespInnerDTO && this.user.userRespInnerDTO.homePageLogo ? this.user.userRespInnerDTO.homePageLogo : '/static/images/header-logo.png'
+    },
+    logoRouter() {
+      return this.user && this.user.userRespInnerDTO && this.user.userRespInnerDTO.entranceRouter ? this.user.userRespInnerDTO.entranceRouter : 'index'
     },
     ...mapGetters('user', { isLogin: 'isLogin' })
   },
@@ -54,20 +54,6 @@ export default {
     logout() {
       this.loginOut()
       this.$router.push({ name: 'login' })
-    },
-    getConfig() {
-      let configs = getDomainLogoConfig()
-
-      if (configs && configs.length) {
-        let host = window.location.host
-
-        let config = configs.find(item => item.domain == host)
-
-        if (config) {
-          //如果router配置了，且不是index，则点击logo 进入main
-          this.logoRouter = (config.entranceRouter && config.entranceRouter != 'index') ? 'main' : 'index'
-        }
-      }
     }
   }
 }

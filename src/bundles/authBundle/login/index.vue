@@ -96,7 +96,7 @@ export default {
           this.loading = true
           login({ userName: this.form.userName, password: md5(this.form.password) }).then((res) => {
             this.setUser(res)
-            let goUrl = { name: this.config.entranceRouter ? this.config.entranceRouter : 'index' }
+            let goUrl = { name: res.userRespInnerDTO && res.userRespInnerDTO.entranceRouter ? res.userRespInnerDTO.entranceRouter : 'index' }
 
             if (this.$route.query.callbackUrl && !this.$route.query.callbackUrl.includes('login')) {
               goUrl = this.$route.query.callbackUrl
