@@ -1,26 +1,26 @@
 <template>
   <el-card class="jc-tabfilter-card">
     <el-form ref="form" :inline="true" :model="form" class="jc-tabfilter-form" size="small">
-      <el-form-item prop="lawsType" label="条例类型">
-        <el-select v-model="form.lawsType" placeholder="选择问题类型">
-          <el-option v-for="item in types" :key="item.id" :label="item.typeName" :value="item.id"></el-option>
+      <el-form-item prop="statuteType" label="条例类型">
+        <el-select v-model="form.statuteType" placeholder="选择问题类型">
+          <el-option v-for="item in types" :key="item.id" :label="item.configName" :value="item.configValue"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item prop="lawsInfo" label="权利名称常用">
-        <el-input v-model="form.lawsInfo" placeholder="请输入常用权利名称"></el-input>
+      <el-form-item prop="lawsName" label="权利名称常用">
+        <el-input v-model="form.lawsName" placeholder="请输入常用权利名称"></el-input>
       </el-form-item>
-      <el-form-item prop="lawsInfo" label="设定依据">
-        <el-input v-model="form.lawsInfo" placeholder="请输入设定依据"></el-input>
+      <el-form-item prop="lawsBasis" label="设定依据">
+        <el-input v-model="form.lawsBasis" placeholder="请输入设定依据"></el-input>
       </el-form-item>
-      <el-form-item prop="lawsInfo" label="罚则">
-        <el-input v-model="form.lawsInfo" placeholder="请输入设定依据"></el-input>
+      <el-form-item prop="lawsPenalty" label="罚则">
+        <el-input v-model="form.lawsPenalty" placeholder="请输入设定依据"></el-input>
       </el-form-item>
       <el-form-item prop="lawsTime" label="时间">
         <el-date-picker v-model="date" @change="changeDate" type="datetimerange" range-separator="-" start-placeholder="开始时间" end-placeholder="结束时间">
         </el-date-picker>
       </el-form-item>
-      <el-form-item prop="lawsInfo" label="查询信息">
-        <el-input v-model="form.lawsInfo" placeholder="请输入您想查询的信息"></el-input>
+      <el-form-item prop="desc" label="查询信息">
+        <el-input v-model="form.desc" placeholder="请输入您想查询的信息"></el-input>
       </el-form-item>
       <el-form-item class="jc-tabfilter-btns">
         <el-button type="primary" @click="onSubmit">查询</el-button>
@@ -36,28 +36,9 @@ export default {
   props: {
     types: {
       type: Array,
-      default: [
-        {
-          id: 1,
-          typeName: '国家法律'
-        },
-        {
-          id: 2,
-          typeName: '行政法规'
-        },
-        {
-          id: 3,
-          typeName: '地方性法规'
-        },
-        {
-          id: 4,
-          typeName: '政府规章'
-        },
-        {
-          id: 5,
-          typeName: '其他'
-        }
-      ]
+      default() {
+        return []
+      }
     },
     orgTree: {
       type: Array
@@ -66,10 +47,13 @@ export default {
   data() {
     return {
       form: {
-        thridName: '',
-        orgId: '',
+        statuteType: '',
+        lawsName: '',
+        lawsBasis: '',
+        lawsPenalty: '',
         startTime: '',
-        endTime: ''
+        endTime: '',
+        desc: ''
       },
       date: null
     }
@@ -90,16 +74,17 @@ export default {
     },
     reset() { // 重置
       this.$refs.form.resetFields()
-      this.form.orgId = ''
+      this.form.statuteType = ''
+      this.form.lawsName = ''
+      this.form.lawsBasis = ''
+      this.form.lawsPenalty = ''
       this.form.startTime = ''
       this.form.endTime = ''
+      this.form.desc = ''
       this.date = null
     },
     onSubmit() { // 提交
       this.$emit('filter', this.form) // 查询信息
-    },
-    addHandle() {
-      this.$emit('addopeartion')
     }
   }
 }

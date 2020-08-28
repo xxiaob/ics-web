@@ -2,18 +2,18 @@
   <el-card class="jc-tabfilter-card">
     <el-form ref="form" :inline="true" :model="form" class="jc-tabfilter-form" size="small">
       <el-form-item prop="statuteType" label="条例类型">
-        <el-select v-model="form.lawsType" placeholder="选择条例类型">
+        <el-select v-model="form.statuteType" placeholder="选择条例类型">
           <el-option v-for="item in types" :key="item.id" :label="item.configName" :value="item.configValue"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item prop="lawsName" label="权利名称常用">
-        <el-input v-model="form.lawsInfo" placeholder="请输入常用权利名称"></el-input>
+        <el-input v-model="form.lawsName" placeholder="请输入常用权利名称"></el-input>
       </el-form-item>
       <el-form-item prop="lawsBasis" label="设定依据">
-        <el-input v-model="form.lawsInfo" placeholder="请输入设定依据"></el-input>
+        <el-input v-model="form.lawsBasis" placeholder="请输入设定依据"></el-input>
       </el-form-item>
       <el-form-item prop="lawsPenalty" label="罚则">
-        <el-input v-model="form.lawsInfo" placeholder="请输入设定依据"></el-input>
+        <el-input v-model="form.lawsPenalty" placeholder="请输入设定依据"></el-input>
       </el-form-item>
       <el-form-item prop="" label="时间">
         <el-date-picker v-model="date" @change="changeDate" type="datetimerange" range-separator="-" start-placeholder="开始时间" end-placeholder="结束时间">
@@ -84,6 +84,7 @@ export default {
       this.date = null
     },
     onSubmit() { // 提交
+      console.log('this.form', this.form)
       this.$emit('filter', this.form) // 查询信息
     }
   }

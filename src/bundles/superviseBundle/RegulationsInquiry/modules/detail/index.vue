@@ -4,35 +4,35 @@
     <div class="jc-user-content">
       <div class="jc-info-item">
         <label class="jc-info-label">权利编码：</label>
-        <div class="jc-info-content" v-text="info && info.one"></div>
+        <div class="jc-info-content" v-text="info && info.statuteTypeName"></div>
       </div>
       <div class="jc-info-item">
         <label class="jc-info-label">权利名称常用：</label>
-        <div class="jc-info-content" v-text="info && info.two"></div>
+        <div class="jc-info-content" v-text="info && info.statuteTypeName"></div>
       </div>
       <div class="jc-info-item">
         <label class="jc-info-label">设定依据：</label>
-        <div class="jc-info-content" v-text="info && info.three"></div>
+        <div class="jc-info-content" v-text="info && info.statuteTypeName"></div>
       </div>
       <div class="jc-info-item">
         <label class="jc-info-label">罚则：</label>
-        <div class="jc-info-content" v-text="info && info.four"></div>
+        <div class="jc-info-content" v-text="info && info.statuteTypeName"></div>
       </div>
       <div class="jc-info-item">
         <label class="jc-info-label">法律适用情形：</label>
-        <div class="jc-info-content" v-text="info && info.five"></div>
+        <div class="jc-info-content" v-text="info && info.statuteTypeName"></div>
       </div>
       <div class="jc-info-item">
         <label class="jc-info-label">裁量情节描述: </label>
-        <div class="jc-info-content" v-text="info && info.six"></div>
+        <div class="jc-info-content" v-text="info && info.statuteTypeName"></div>
       </div>
       <div class="jc-info-item">
         <label class="jc-info-label">裁量结果：</label>
-        <div class="jc-info-content" v-text="info && info.seven"></div>
+        <div class="jc-info-content" v-text="info && info.statuteTypeName"></div>
       </div>
       <div class="jc-info-item">
         <label class="jc-info-label">适用建议：</label>
-        <div class="jc-info-content" v-text="info && info.eight"></div>
+        <div class="jc-info-content" v-text="info && info.statuteTypeName"></div>
       </div>
     </div>
   </el-dialog>

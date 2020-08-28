@@ -77,6 +77,7 @@ export default {
   },
   methods: {
     async initData() {
+      // 初始获取数据
       if (!this.loading) {
         this.loading = true
         try {
