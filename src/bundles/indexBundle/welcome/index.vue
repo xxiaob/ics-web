@@ -2,10 +2,7 @@
   <div class="jc-welcome-warp">
     <img src="./assets/bg.png" class="jc-welcome-bg" />
     <div class="jc-marquee" v-if="marquees.length">
-      <div class="jc-marquee-item" :style="{'animation-duration': marquees.length * 20 + 's' }">
-        <span class="jc-marquee-text" v-for="(marqueeText,index) in marquees" :key="index" v-text="marqueeText"></span>
-      </div>
-      <div class="jc-marquee-item" :style="{'animation-duration': marquees.length * 20 + 's','animation-delay': marquees.length * 10 + 's'}">
+      <div class="jc-marquee-item" :style="{'animation-duration': marquees.length * 10 + 10 + 's' }">
         <span class="jc-marquee-text" v-for="(marqueeText,index) in marquees" :key="index" v-text="marqueeText"></span>
       </div>
     </div>
@@ -24,7 +21,7 @@
 <script>
 import { mapState } from 'vuex'
 import { getByOrgId } from '@/api/systemIndex'
-import { getDomainLogoConfig } from '@/libs/storage'
+import { getEnabledRollingMessage } from '@/api/baseConfig'
 
 export default {
   name: 'IndexWelcome',
@@ -81,33 +78,26 @@ export default {
         }
       }
     },
-    getConfig() {
-      let configs = getDomainLogoConfig()
-
-      if (configs && configs.length) {
-        let host = window.location.host
-
-        let config = configs.find(item => item.domain == host)
-
-        if (config) {
-          //如果设置存在，则开启文字滚动
-          this.marquees = ( config.enableRollingMessage == 1 && config.rollingMessage) ? [config.rollingMessage] : []
-        }
+    async getConfig() {
+      try {
+        this.marquees = await getEnabledRollingMessage() || []
+      } catch (error) {
+        console.log(error)
       }
     }
   }
 }
 </script>
 <style lang="scss" scoped>
+$jc-marquee-width: 1000px;
 @keyframes jc-marquee-animation {
   from {
-    transform: translateX(100%);
+    transform: translateX($jc-marquee-width);
   }
   to {
     transform: translateX(-100%);
   }
 }
-$jc-marquee-width: 1000px;
 .jc-marquee {
   position: absolute;
   top: 0;
@@ -123,7 +113,7 @@ $jc-marquee-width: 1000px;
     display: block;
     white-space: nowrap;
     position: absolute;
-    transform: translateX(100%);
+    transform: translateX($jc-marquee-width);
     animation-name: jc-marquee-animation;
     animation-timing-function: linear;
     animation-iteration-count: infinite;

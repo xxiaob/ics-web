@@ -70,4 +70,10 @@ export function rollingMessageSave(data) {
   return data.messageId ? rollingMessageUpdate(data) : rollingMessageAdd(data)
 }
 
-
+/**
+ * 根据组织获取滚动消息
+ * @returns {Object} axios 对象
+ */
+export function getEnabledRollingMessage() {
+  return axios.get(API.baseConfig.getEnabledRollingMessage)
+}
