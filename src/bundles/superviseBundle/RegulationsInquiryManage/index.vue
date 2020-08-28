@@ -1,6 +1,6 @@
 <template>
   <div class="jc-main-container-warp">
-    <tab-filter @filter="goFilter"></tab-filter>
+    <tab-filter :types="types" @filter="goFilter"></tab-filter>
 
     <el-card class="jc-table-card jc-mt">
       <div slot="header" class="jc-card-header">
@@ -36,6 +36,10 @@
 </template>
 
 <script>
+// 使用的是法律法规的接口,后期接口出来需要调整
+import { getByType, getStatuteList, statuteDel } from '@/api/supervise'
+
+import { LAWS_TYPES } from '@/constant/Dictionaries'
 import PaginationMixins from '@/mixins/PaginationMixins'
 import { createNamespacedHelpers } from 'vuex'
 const { mapState } = createNamespacedHelpers('user')
@@ -46,20 +50,12 @@ export default {
   data() {
     return {
       loading: false,
-      list: [{
-        one: 202341000,
-        two: 202341000,
-        three: 202341000,
-        four: 202341000,
-        five: 202341000,
-        six: 202341000,
-        seven: 202341000,
-        eight: 202341000
-      }],
+      list: [],
       filter: {},
       info: null,
       visible: false,
-      detailVisible: false
+      detailVisible: false,
+      types: []
     }
   },
   components: {
@@ -69,7 +65,13 @@ export default {
   computed: {
     ...mapState(['user'])
   },
+  mounted() {
+    this.getStatuteTypes()
+  },
   methods: {
+    async getStatuteTypes() {
+      this.types = await getByType({ type: LAWS_TYPES.STATUTE }) // 获取法规类型
+    },
     goFilter() {},
     detail(row) {
       // 查看详情

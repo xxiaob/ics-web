@@ -1,9 +1,9 @@
 <template>
   <el-card class="jc-tabfilter-card">
     <el-form ref="form" :inline="true" :model="form" class="jc-tabfilter-form" size="small">
-      <el-form-item prop="lawsType" label="条例类型">
-        <el-select v-model="form.lawsType" placeholder="选择问题类型">
-          <el-option v-for="item in types" :key="item.id" :label="item.typeName" :value="item.id"></el-option>
+      <el-form-item prop="statuteType" label="条例类型">
+        <el-select v-model="form.lawsType" placeholder="选择条例类型">
+          <el-option v-for="item in types" :key="item.id" :label="item.configName" :value="item.configValue"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item prop="lawsInfo" label="权利名称常用">
@@ -15,12 +15,12 @@
       <el-form-item prop="lawsInfo" label="罚则">
         <el-input v-model="form.lawsInfo" placeholder="请输入设定依据"></el-input>
       </el-form-item>
-      <el-form-item prop="lawsTime" label="时间">
+      <el-form-item prop="" label="时间">
         <el-date-picker v-model="date" @change="changeDate" type="datetimerange" range-separator="-" start-placeholder="开始时间" end-placeholder="结束时间">
         </el-date-picker>
       </el-form-item>
-      <el-form-item prop="lawsInfo" label="查询信息">
-        <el-input v-model="form.lawsInfo" placeholder="请输入您想查询的信息"></el-input>
+      <el-form-item prop="desc" label="查询信息">
+        <el-input v-model="form.desc" placeholder="请输入您想查询的信息"></el-input>
       </el-form-item>
       <el-form-item class="jc-tabfilter-btns">
         <el-button type="primary" @click="onSubmit">查询</el-button>
@@ -36,28 +36,9 @@ export default {
   props: {
     types: {
       type: Array,
-      default: [
-        {
-          id: 1,
-          typeName: '国家法律'
-        },
-        {
-          id: 2,
-          typeName: '行政法规'
-        },
-        {
-          id: 3,
-          typeName: '地方性法规'
-        },
-        {
-          id: 4,
-          typeName: '政府规章'
-        },
-        {
-          id: 5,
-          typeName: '其他'
-        }
-      ]
+      default() {
+        return []
+      }
     },
     orgTree: {
       type: Array
@@ -81,8 +62,8 @@ export default {
     changeDate(value) { // 时间切换
       console.log('value', value)
       if (value) {
-        this.form.startTime = value[0].getTime()
-        this.form.endTime = value[1].getTime()
+        this.form.startTime = value[0]
+        this.form.endTime = value[1]
       } else {
         this.form.startTime = ''
         this.form.endTime = ''
