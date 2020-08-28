@@ -8,10 +8,10 @@
       </div>
       <el-table :data="list" v-loading="loading" row-key="id" class="jc-table">
         <el-table-column type="index" :index="indexMethod" label="序号" width="50"></el-table-column>
-        <el-table-column prop="statuteTypeName" label="条例类型"></el-table-column>
-        <el-table-column prop="statuteName" label="权利编码"></el-table-column>
-        <el-table-column prop="userName" label="权利名称常用"></el-table-column>
-        <el-table-column prop="statuteDesc" label="设定依据" width="140"></el-table-column>
+        <el-table-column prop="powerType" width="160" label="条例类型" :formatter="formatterPowser"></el-table-column>
+        <el-table-column prop="powerEncode" width="160" label="权利编码"></el-table-column>
+        <el-table-column prop="powerName" width="160" label="权利名称常用"></el-table-column>
+        <el-table-column prop="powerGist" label="设定依据"></el-table-column>
         <el-table-column width="90" label="操作">
           <template slot-scope="scope">
             <el-button type="text" size="mini" icon="el-icon-view" @click="detail(scope.row)" title="查看"></el-button>
@@ -27,11 +27,13 @@
 </template>
 
 <script>
-// 使用的是法律法规的接口,后期接口出来需要调整
-import { getCheckList, getByType } from '@/api/supervise'
+import { getByType, getPowerList } from '@/api/supervise'
 import { LAWS_TYPES } from '@/constant/Dictionaries'
 
 import PaginationMixins from '@/mixins/PaginationMixins'
+import { createNamespacedHelpers } from 'vuex'
+const { mapState } = createNamespacedHelpers('user')
+
 export default {
   name: 'superviseRegulationsInquiry',
   mixins: [PaginationMixins],
@@ -50,6 +52,9 @@ export default {
     this.getStatuteTypes()
     this.initData()
   },
+  computed: {
+    ...mapState(['user'])
+  },
   components: {
     TabFilter: () => import('./modules/tabFilter'),
     JcRegulationDetail: () => import('./modules/detail')
@@ -67,7 +72,8 @@ export default {
               delete filter[key]
             }
           })
-          const { total, resultList } = await getCheckList({ ...this.filter, ...this.page })
+          filter.orgId = this.user.orgId
+          const { total, resultList } = await getPowerList({ ...this.filter, ...this.page, type: 1 })
 
           this.page.total = total
           this.list = resultList
@@ -82,7 +88,15 @@ export default {
     },
     async getStatuteTypes() {
       // 获取类型
-      this.types = await getByType({ type: LAWS_TYPES.STATUTE }) // 获取法规类型
+      this.types = await getByType({ type: LAWS_TYPES.POWER }) // 获取条例类型
+    },
+    formatterPowser(row, column, cellValue) {
+      // 格式化类型
+      let types = this.types
+
+      let index = types.findIndex(type => type.configValue == cellValue)
+
+      return types[index].configName
     },
     goFilter(filter) {
       this.filter = filter // 获取查询信息

@@ -243,5 +243,6 @@ export const DEVICE_TYPES = new JcEnum([
  */
 export const LAWS_TYPES = new JcEnum([
   { key: 'STATUTE', value: 'statuteType', label: '法律法规类型' },
+  { key: 'POWER', value: 'powerListType', label: '条例类型' },
   { key: 'ALARM', value: 'alarm', label: '告警类型' }
 ])

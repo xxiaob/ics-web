@@ -161,9 +161,8 @@ export default {
     },
     uploadSuccess() {
       // 上传成功函数
-      console.log('1111111')
-      this.initData()
       this.loading = false
+      this.initData()
     }
   }
 

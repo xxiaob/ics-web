@@ -73,3 +73,16 @@ export function statuteDel(data) {
     params: data
   })
 }
+
+
+/**
+ * 法规列表
+ * @param {object} data
+ * @returns {Object} axios 对象
+ */
+export function getPowerList(data) {
+  return axios.get(API.supervise.powerList, {
+    params: data
+  })
+}
+
