@@ -34,9 +34,6 @@ export default {
       resetPwdVisible: false
     }
   },
-  created() {
-    this.getConfig() //获取配置
-  },
   computed: {
     ...mapState('user', {
       user: state => state.user
