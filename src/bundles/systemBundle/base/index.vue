@@ -4,7 +4,7 @@
       <el-tab-pane v-for="tab in tabs" :label="tab.label" :name="tab.value" :key="tab.value"></el-tab-pane>
     </el-tabs>
     <keep-alive>
-      <component :is="tabComponent" :user="authorityOrg" :baseInfo="baseInfo" @success-save="getBase"></component>
+      <component :is="tabComponent" :user="authorityOrg" :baseInfo="baseInfo"></component>
     </keep-alive>
   </div>
 </template>

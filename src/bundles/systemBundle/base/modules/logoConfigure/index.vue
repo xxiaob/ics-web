@@ -28,6 +28,10 @@ export default {
     user: {
       type: Object,
       default: ()=>{}
+    },
+    baseInfo: {
+      type: Object,
+      default: ()=>{}
     }
   },
   components: {
@@ -45,6 +49,8 @@ export default {
   },
   created() {
     this.form.orgId = this.user.orgId
+    this.form.welcomeLogo = this.baseInfo.welcomeLogo
+    this.form.homePageLogo = this.baseInfo.homePageLogo
   },
   methods: {
     async onSubmit() {
