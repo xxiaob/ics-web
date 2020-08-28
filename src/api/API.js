@@ -277,6 +277,7 @@ export default {
     list: 'user-service/rollingMessage/getRollingMessageByPage', // 廉政提醒列表
     add: 'user-service/rollingMessage/addRollingMessage', // 廉政提醒新增
     update: 'user-service/rollingMessage/updRollingMessage', // 廉政提醒更新
+    del: 'user-service/rollingMessage/delRollingMessage', // 廉政提醒删除
     updateBase: 'user-service/orgBaseInfo/updOrgBaseInfo'
   }
 }

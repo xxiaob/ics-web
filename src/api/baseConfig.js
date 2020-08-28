@@ -48,7 +48,18 @@ export function rollingMessageAdd(data) {
  * @returns {Object} axios 对象
  */
 export function rollingMessageUpdate(data) {
-  return axios.post(API.baseConfig.add, data)
+  return axios.post(API.baseConfig.update, data)
+}
+
+/**
+ * 删除廉政提醒
+ * @param {Object} data 参数
+ * @returns {Object} axios 对象
+ */
+export function rollingMessageDel(data) {
+  return axios.get(API.baseConfig.del, {
+    params: data
+  })
 }
 
 /**
