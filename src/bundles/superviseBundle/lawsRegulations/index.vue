@@ -62,6 +62,7 @@ export default {
   },
   methods: {
     async initData() {
+      // 初始获取数据
       if (!this.loading) {
         this.loading = true
         try {
@@ -86,6 +87,7 @@ export default {
       }
     },
     async getStatuteTypes() {
+      // 获取类型
       this.types = await getByType({ type: LAWS_TYPES.STATUTE }) // 获取法规类型
     },
     formatDate(row) {

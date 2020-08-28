@@ -6,13 +6,13 @@
           <el-option v-for="item in types" :key="item.id" :label="item.configName" :value="item.configValue"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item prop="lawsInfo" label="权利名称常用">
+      <el-form-item prop="lawsName" label="权利名称常用">
         <el-input v-model="form.lawsInfo" placeholder="请输入常用权利名称"></el-input>
       </el-form-item>
-      <el-form-item prop="lawsInfo" label="设定依据">
+      <el-form-item prop="lawsBasis" label="设定依据">
         <el-input v-model="form.lawsInfo" placeholder="请输入设定依据"></el-input>
       </el-form-item>
-      <el-form-item prop="lawsInfo" label="罚则">
+      <el-form-item prop="lawsPenalty" label="罚则">
         <el-input v-model="form.lawsInfo" placeholder="请输入设定依据"></el-input>
       </el-form-item>
       <el-form-item prop="" label="时间">
@@ -47,10 +47,13 @@ export default {
   data() {
     return {
       form: {
-        thridName: '',
-        orgId: '',
+        statuteType: '',
+        lawsName: '',
+        lawsBasis: '',
+        lawsPenalty: '',
         startTime: '',
-        endTime: ''
+        endTime: '',
+        desc: ''
       },
       date: null
     }
@@ -71,9 +74,13 @@ export default {
     },
     reset() { // 重置
       this.$refs.form.resetFields()
-      this.form.orgId = ''
+      this.form.statuteType = ''
+      this.form.lawsName = ''
+      this.form.lawsBasis = ''
+      this.form.lawsPenalty = ''
       this.form.startTime = ''
       this.form.endTime = ''
+      this.form.desc = ''
       this.date = null
     },
     onSubmit() { // 提交

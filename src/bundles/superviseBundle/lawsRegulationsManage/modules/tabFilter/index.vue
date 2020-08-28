@@ -67,10 +67,8 @@ export default {
     },
     onSubmit() { // 提交
       this.$emit('filter', this.form) // 查询信息
-    },
-    addHandle() {
-      this.$emit('addopeartion')
     }
+
   }
 }
 </script>

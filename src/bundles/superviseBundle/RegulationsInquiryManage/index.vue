@@ -69,7 +69,33 @@ export default {
     this.getStatuteTypes()
   },
   methods: {
+    async initData() {
+      // 初始获取数据
+      if (!this.loading) {
+        this.loading = true
+        try {
+          let filter = this.filter
+
+          Object.keys(filter).map(key => {
+            if (!filter[key]) {
+              delete filter[key]
+            }
+          })
+          const { total, resultList } = await getCheckList({ ...this.filter, ...this.page })
+
+          this.page.total = total
+          this.list = resultList
+          this.loading = false
+
+          // 请求数据
+        } catch (error) {
+          console.error(error)
+          this.loading = false
+        }
+      }
+    },
     async getStatuteTypes() {
+      // 获取类型
       this.types = await getByType({ type: LAWS_TYPES.STATUTE }) // 获取法规类型
     },
     goFilter() {},
