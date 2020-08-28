@@ -7,20 +7,26 @@
       </div>
       <div class="jc-info jc-router">
         <span class="jc-info-label">入口路由: </span>
-        <el-input class="jc-router-input" placeholder="您可以输入登录后跳转的页面地址，若您忽略，默认登录后显示一级页面">
+        <el-input class="jc-router-input" v-model="entranceRouter" placeholder="您可以输入登录后跳转的页面地址，若您忽略，默认登录后显示一级页面">
         </el-input>
       </div>
     </div>
     <div class="jc-router-btns jc-flex-warp">
-      <el-button type="primary" size="mini" @click="manage(scope.row)">保存</el-button>
-      <el-button size="mini" @click="del(scope.row)">取消</el-button>
+      <el-button type="primary" size="mini" @click="save">保存</el-button>
     </div>
   </el-card>
 </template>
 
 <script>
+import { updateBase } from '@/api/baseConfig'
+console.log('updateBase', updateBase)
 export default {
   name: 'SystemBaseEntryRoute',
+  data() {
+    return {
+      entranceRouter: ''
+    }
+  },
   props: {
     user: {
       type: Object,
@@ -29,6 +35,12 @@ export default {
   },
   mounted() {
     console.log('user', this.user)
+  },
+  methods: {
+    save() {
+      console.log('user', this.user)
+      console.log('entranceRouter', this.entranceRouter)
+    }
   }
 }
 </script>

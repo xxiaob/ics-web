@@ -238,8 +238,7 @@ export default {
     listByPage: 'user-service/domainLogo/getSystemDomainLogoByPage',
     add: 'user-service/domainLogo/addSystemDomainLogo',
     del: 'user-service/domainLogo/delSystemDomainLogo',
-    upd: 'user-service/domainLogo/updSystemDomainLogo',
-    updEnableRolling: 'user-service/domainLogo/updEnableRollingMessage' // 滚动开关
+    upd: 'user-service/domainLogo/updSystemDomainLogo'
   },
   systemIndex: {
     //首页设置 配置欢迎页图标

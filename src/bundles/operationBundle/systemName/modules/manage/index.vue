@@ -19,29 +19,6 @@
       <el-form-item label="登录窗位置" prop="loginLogoLocation" :rules="rules.NOT_NULL">
         <el-radio v-model="form.loginLogoLocation" v-for="item in loginPosition" :label="item.value" :key="item.key">{{item.label}}</el-radio>
       </el-form-item>
-      <el-form-item label="入口路由" prop="entranceRouter">
-        <el-input v-model="form.entranceRouter" placeholder="非必填,默认index首页"></el-input>
-      </el-form-item>
-      <el-form-item label="滚动开关" prop="scrollSwitch">
-        <el-switch
-          v-model="form.enableRollingMessage"
-          active-color="#409EFF"
-          inactive-color="#cccccc"
-          :active-value="1"
-          :inactive-value="0"
-          >
-        </el-switch>
-      </el-form-item>
-      <el-form-item label="滚动文本" prop="scrollSwitch">
-        <el-input
-          type="textarea"
-          :rows="3"
-          placeholder="请输入内容"
-          v-model="form.rollingMessage"
-          resize ="none"
-        >
-        </el-input>
-      </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="dialogVisible = false">取 消</el-button>
@@ -56,7 +33,7 @@ import FormMixins from '@/mixins/FormMixins'
 import { LOGIN_WINDOWS_POSITION } from '@/constant/Dictionaries'
 
 
-let defaultForm = { systemName: '', domain: '', domainLogo: '', firstPageLogo: '', firstPageLoginLogo: '', loginLogoLocation: 3, rollingMessage: '', enableRollingMessage: 0 }
+let defaultForm = { systemName: '', domain: '', domainLogo: '', firstPageLogo: '', firstPageLoginLogo: '', loginLogoLocation: 3 }
 
 export default {
   name: 'SystemNameManage',
