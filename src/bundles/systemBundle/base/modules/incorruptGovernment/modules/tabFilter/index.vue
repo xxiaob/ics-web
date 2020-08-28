@@ -2,7 +2,7 @@
   <el-card class="jc-tabfilter-card">
     <el-form ref="form" :inline="true" :model="form" class="jc-tabfilter-form" size="small" @submit.native.prevent>
       <el-form-item prop="systemName" label="廉政信息">
-        <el-input v-model="form.systemName" placeholder="请输入廉政信息" @keyup.enter.native="onSubmit"></el-input>
+        <el-input v-model="form.rollingMessage" placeholder="请输入廉政信息" @keyup.enter.native="onSubmit"></el-input>
       </el-form-item>
       <el-form-item prop="" label="截止日期范围">
         <el-date-picker v-model="date" @change="changeDate" type="datetimerange" range-separator="-" start-placeholder="开始时间" end-placeholder="结束时间">
@@ -16,13 +16,13 @@
   </el-card>
 </template>
 <script>
-import { formatDate } from '@/libs/util'
+
 export default {
   name: 'SystemBaseGovernmentFilter',
   data() {
     return {
       form: {
-        systemName: '',
+        rollingMessage: '',
         startTime: '',
         endTime: ''
       },
@@ -31,11 +31,9 @@ export default {
   },
   methods: {
     changeDate(value) { // 时间切换
-      console.log('value', value)
-      console.log('date', this.date)
       if (value) {
-        this.form.startTime = formatDate(value[0])
-        this.form.endTime = formatDate(value[1])
+        this.form.startTime = value[0]
+        this.form.endTime = value[1]
       } else {
         this.form.startTime = ''
         this.form.endTime = ''
@@ -43,6 +41,10 @@ export default {
     },
     reset() {
       this.$refs.form.resetFields()
+      this.form.rollingMessage = ''
+      this.form.startTime = ''
+      this.form.endTime = ''
+      this.date = null
     },
     onSubmit() {
       this.$emit('filter', this.form)

@@ -2,10 +2,10 @@
   <el-dialog :title="options ? '编辑语录':'新增语录'" :visible.sync="dialogVisible" width="600px" :close-on-click-modal="false" :append-to-body="true" @close="dialogClose">
     <el-form ref="form" label-width="100px" :model="form" class="jc-manage-form">
       <el-form-item label="是否启用" prop="scrollSwitch">
-        <el-switch v-model="form.enableRollingMessage" active-color="#409EFF" inactive-color="#cccccc" :active-value="1" :inactive-value="0">
+        <el-switch v-model="form.enableRolling" active-color="#409EFF" inactive-color="#cccccc" :active-value="1" :inactive-value="0">
         </el-switch>
       </el-form-item>
-      <el-form-item label="廉政语录" prop="scrollSwitch">
+      <el-form-item label="廉政语录" prop="scrollSwitch" :rules="rules.NOT_NULL">
         <el-input type="textarea" :rows="3" placeholder="请输入廉政语录" v-model="form.rollingMessage" resize="none">
         </el-input>
       </el-form-item>
@@ -18,11 +18,11 @@
 </template>
 <script>
 import { rollingMessageSave } from '@/api/baseConfig'
-import { getStringRule, NOT_NULL, getIntegerRule } from '@/libs/rules'
+import { NOT_NULL } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
 
 let defaultForm = {
-  rollingMessage: '', enableRollingMessage: 0
+  rollingMessage: '', enableRolling: 0
 }
 
 export default {
@@ -32,21 +32,20 @@ export default {
     return {
       loading: false,
       rules: {
-        NOT_NULL,
-        Len50: getStringRule(1, 50),
-        Int: getIntegerRule()
+        NOT_NULL
       }
     }
   },
   components: {
     uploadOneImg: () => import('@/components/JcUpload/uploadOneImg.vue')
   },
+  props: ['orgId'],
   methods: {
     formatFormData() {
       if (this.options) {
-        return { ...this.options, recordId: this.options.id }
+        return { ...this.options, orgId: this.orgId }
       } else {
-        return { ...defaultForm }
+        return { ...defaultForm, orgId: this.orgId }
       }
     },
     onSubmit() {
@@ -62,7 +61,6 @@ export default {
           }).catch(() => {
             this.loading = false
           })
-          this.loading = false
         } else {
           this.loading = false
         }
