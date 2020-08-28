@@ -5,9 +5,6 @@
       <div class="jc-marquee-item" :style="{'animation-duration': marquees.length * 10 + 10 + 's' }">
         <span class="jc-marquee-text" v-for="(marqueeText,index) in marquees" :key="index" v-text="marqueeText"></span>
       </div>
-      <div class="jc-marquee-item" :style="{'animation-duration': marquees.length * 10 + 10 + 's','animation-delay': marquees.length * 10 + 's'}">
-        <span class="jc-marquee-text" v-for="(marqueeText,index) in marquees" :key="index" v-text="marqueeText"></span>
-      </div>
     </div>
     <div class="jc-welcome-content" :style="welcomeLogo">
       <div class="jc-welcome-item" v-for="item in list" :key="item.id" :style="item.logo" @click="goLink(item)"></div>
