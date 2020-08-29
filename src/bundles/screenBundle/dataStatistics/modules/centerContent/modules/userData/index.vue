@@ -38,8 +38,10 @@ export default {
           for (let i = 0; i < result.length; i++) {
             let item = this.list[i + 3]
 
-            item.name = result[i].areaManualTypeName
-            item.end = result[i].areaManualTypeCount
+            if (item) {
+              item.name = result[i].areaManualTypeName
+              item.end = result[i].areaManualTypeCount
+            }
           }
         }
       } catch (error) {
