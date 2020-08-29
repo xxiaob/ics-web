@@ -8,10 +8,12 @@
       </div>
       <el-table :data="list" v-loading="loading" row-key="id" class="jc-table">
         <el-table-column type="index" :index="indexMethod" label="序号" width="50"></el-table-column>
-        <el-table-column prop="alarmTypeName" width="220" label="告警类型"></el-table-column>
-        <el-table-column prop="alarmDesc" label="告警信息"></el-table-column>
-        <el-table-column prop="alarmDate" width="300" label="时间"></el-table-column>
-        <el-table-column prop="status" width="160" label="状态" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="alarmTypeName" label="告警类型"></el-table-column>
+        <el-table-column prop="transportCompany" label="企业"></el-table-column>
+        <el-table-column prop="carNumber" label="车牌号"></el-table-column>
+        <el-table-column prop="carSpeed" label="车速"></el-table-column>
+        <el-table-column prop="status" label="状态"></el-table-column>
+        <el-table-column prop="alarmDate" label="时间"></el-table-column>
 
       </el-table>
       <el-pagination @current-change="currentChange" @size-change="sizeChange" :current-page.sync="page.pageNum" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.total" class="text-right jc-mt"></el-pagination>

@@ -286,6 +286,7 @@ export default {
   },
   dregsAlarm: {
     // 渣土告警
-    list: 'task-service/alarm/select' // 渣土告警列表
+    list: 'task-service/alarm/select', // 渣土告警列表
+    statusList: '/user-service/systemConfig/getByType?type=alarmStatus'
   }
 }

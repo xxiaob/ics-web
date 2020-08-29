@@ -6,8 +6,10 @@
           <el-option v-for="item in types" :key="item.id" :label="item.configName" :value="item.configValue"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item prop="orgName" label="状态">
-        <el-input v-model="form.orgName" placeholder="请输入状态"></el-input>
+      <el-form-item prop="status" label="状态">
+        <el-select v-model="form.status" placeholder="选择状态">
+          <el-option v-for="item in statuses" :key="item.id" :label="item.configName" :value="item.configValue"></el-option>
+        </el-select>
       </el-form-item>
       <el-form-item prop="" label="时间">
         <el-date-picker v-model="date" @change="changeDate" type="datetimerange" range-separator="-" start-placeholder="开始时间" end-placeholder="结束时间">
@@ -25,6 +27,7 @@
 </template>
 <script>
 import { formatDate } from '@/libs/util'
+import { getStatus } from '@/api/dregsAlarm'
 
 export default {
   name: 'dregsWaringIndexFilter',
@@ -40,10 +43,15 @@ export default {
         subTypeCode: '',
         desc: '',
         startTime: '',
-        endTime: ''
+        endTime: '',
+        status: ''
       },
+      statuses: [],
       date: null
     }
+  },
+  async created() {
+    this.statuses = await getStatus()
   },
   methods: {
     changeDate(value) { // 时间切换

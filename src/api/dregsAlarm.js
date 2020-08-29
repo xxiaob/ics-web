@@ -13,3 +13,10 @@ import API from './API'
 export function getDregsAlarmList(data) {
   return axios.post(API.dregsAlarm.list, data)
 }
+/**
+ * 获取状态
+ * @returns {Object} axios 对象
+ */
+export function getStatus() {
+  return axios.post(API.dregsAlarm.statusList)
+}
