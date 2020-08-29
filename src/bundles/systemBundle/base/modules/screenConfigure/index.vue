@@ -6,10 +6,10 @@
           <span v-text="user.orgName"></span>
         </el-form-item>
         <el-form-item label="常态指挥大屏标题">
-          <el-input v-model="form.commandScreenLogo" placeholder="请输入指挥大屏标题"></el-input>
+          <el-input class="jc-input" v-model="form.commandScreenLogo" placeholder="请输入指挥大屏标题"></el-input>
         </el-form-item>
         <el-form-item label="常态数据大屏标题">
-          <el-input v-model="form.dataScreenLogo" placeholder="请输入数据大屏标题"></el-input>
+          <el-input class="jc-input" v-model="form.dataScreenLogo" placeholder="请输入数据大屏标题"></el-input>
         </el-form-item>
       </el-form>
       <div class="jc-footer">
@@ -70,5 +70,8 @@ export default {
 <style lang="scss" scoped>
 .jc-footer {
   text-align: center;
+}
+.jc-input {
+  width: 500px;
 }
 </style>

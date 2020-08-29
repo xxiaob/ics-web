@@ -74,7 +74,7 @@ export default {
 
 <style lang="scss" scoped>
 .jc-enter-router {
-  padding: 20px 100px;
+  padding: 20px 0;
 
   .jc-router-info {
     padding-bottom: 50px;
