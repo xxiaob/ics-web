@@ -10,6 +10,7 @@
 </template>
 <script>
 import countTo from 'vue-count-to'
+import { getAreaManualTypeTop3 } from '@/api/dataScreen'
 
 export default {
   name: 'ScreenDataCenterContentUserData',
@@ -19,14 +20,32 @@ export default {
       list: [{ icon: 'jc-car', unit: '辆', name: '网巡车辆', key: 'first', start: 0, end: 0 },
         { icon: 'jc-camera', unit: '个', name: '视频监控', key: 'second', start: 0, end: 0 },
         { icon: 'jc-uav', unit: '架', name: '无人机', key: 'three', start: 0, end: 0 },
-        { icon: 'jc-sgg', unit: '个', name: '市管岗', key: 'four', start: 0, end: 0 },
-        { icon: 'jc-hxg', unit: '个', name: '护学岗', key: 'five', start: 0, end: 0 },
-        { icon: 'jc-zha', unit: '个', name: '渣土卡点', key: 'six', start: 0, end: 0 }],
+        { icon: 'jc-sgg', unit: '个', name: '--', key: 'four', start: 0, end: 0 },
+        { icon: 'jc-hxg', unit: '个', name: '--', key: 'five', start: 0, end: 0 },
+        { icon: 'jc-zha', unit: '个', name: '--', key: 'six', start: 0, end: 0 }],
       duration: 4000
     }
   },
   created() {
+    this.initData()
+  },
+  methods: {
+    async initData() {
+      try {
+        let result = await getAreaManualTypeTop3({ projectId: this.$route.params.projectId })
 
+        if (result && result.length) {
+          for (let i = 0; i < result.length; i++) {
+            let item = this.list[i + 3]
+
+            item.name = result[i].areaManualTypeName
+            item.end = result[i].areaManualTypeCount
+          }
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
   }
 }
 </script>

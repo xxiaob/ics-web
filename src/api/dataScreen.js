@@ -60,7 +60,9 @@ export function getEventGroupByEventType(data) {
  * @returns {Object} axios 对象
  */
 export function getAreaDataStatistics(data) {
-  return axios.get(API.screen.dataStatistics.getAreaDataStatistics + '?' + qs.stringify(data, { indices: false }))
+  return axios.get(API.screen.dataStatistics.getAreaDataStatistics + '?' + qs.stringify(data, {
+    indices: false
+  }))
 }
 
 /**
@@ -78,4 +80,12 @@ export function eventHeatMap(data) {
  */
 export function getEventAggregation(data) {
   return axios.post(API.screen.dataStatistics.getEventAggregation, data)
+}
+/**
+ * 获取岗点TOP3
+ * @param {object} data
+ * @returns {Object} axios 对象
+ */
+export function getAreaManualTypeTop3(data) {
+  return axios.post(API.screen.dataStatistics.getAreaManualTypeTop3, data)
 }

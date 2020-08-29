@@ -229,7 +229,8 @@ export default {
       getEventGroupByEventType: 'data-service/intelligentAnalysis/getEventGroupByEventType', // AI智能分析数据
       getAreaDataStatistics: 'data-service/largeScreen/getAreaDataStatistics', //数据大屏地图各区域数据统计
       eventHeatMap: 'data-service/largeScreen/eventHeatMap', //事件热力图
-      getEventAggregation: 'data-service/eventAggregation/getEventAggregation ' //查询事件聚合
+      getEventAggregation: 'data-service/eventAggregation/getEventAggregation', //查询事件聚合
+      getAreaManualTypeTop3: 'data-service/largeScreen/getAreaManualTypeTop3' //获取岗点TOP3
     }
   },
   domainLogo: {
