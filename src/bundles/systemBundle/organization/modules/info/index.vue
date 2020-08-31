@@ -12,7 +12,7 @@
       <div class="jc-detail-item">是否设置区域： {{info.setArea}}</div>
       <div class="jc-detail-item">添加时间： {{info.createTime}}</div>
     </div>
-    <div class="jc-detail-line">
+    <!-- <div class="jc-detail-line">
       <div class="jc-detail-item">指挥大屏标题： {{info.commandScreenLogo}}</div>
       <div class="jc-detail-item">数据大屏标题： {{info.dataScreenLogo}}</div>
     </div>
@@ -25,7 +25,7 @@
         <p>系统logo：</p>
         <img :src="info.homePageLogo" alt="">
       </div>
-    </div>
+    </div> -->
   </div>
 </template>
 <script>
@@ -71,29 +71,27 @@ export default {
 }
 .jc-detail-line {
   color: $jc-color-text-regular;
-  width: 60%;
-  float: left;
   .jc-detail-item {
     display: inline-block;
-    width: 50%;
-    min-height: 30px;
+    width: 60%;
+    height: 30px;
     line-height: 30px;
     @include jc-text-warp;
     &:first-child {
-      width: 49%;
+      width: 39%;
     }
   }
 }
-.jc-detail-line-logo {
-  width: 40%;
-  float: right;
-  position: absolute;
-  top: $jc-default-dis/2;
-  right: $jc-default-dis;
-  img {
-    max-width: 100%;
-    max-height: 40px;
-    margin: $jc-default-dis/4 0;
-  }
-}
+// .jc-detail-line-logo {
+//   width: 40%;
+//   float: right;
+//   position: absolute;
+//   top: $jc-default-dis/2;
+//   right: $jc-default-dis;
+//   img {
+//     max-width: 100%;
+//     max-height: 40px;
+//     margin: $jc-default-dis/4 0;
+//   }
+// }
 </style>

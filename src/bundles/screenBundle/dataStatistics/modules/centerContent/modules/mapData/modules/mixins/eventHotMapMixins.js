@@ -34,12 +34,14 @@ export default {
 
         eventHotMap = new AMap.Heatmap(myJcMap, { radius: 20, opacity: [0, 1] })
       }
+      this.showPolygons()
       this.switchHotType(this.eventHotType)
     },
     hideEventHotMap() {
       if (eventHotMap) {
         eventHotMap.setMap(null)
       }
+      this.hidePolygons()
     },
     async getEventHotMapData() {
       //获取热力图数据

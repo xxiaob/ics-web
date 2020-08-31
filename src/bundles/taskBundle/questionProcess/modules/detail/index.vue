@@ -52,11 +52,13 @@
             </a>
           </el-form-item>
         </el-form>
-        <div class="jc-detail-footer" v-if="form.handle">
-          <el-button @click="toSuperior" :loading="loading" type="primary" size="small">反馈至上级</el-button>
+        <div class="jc-detail-footer">
+          <el-button v-if="form.handle" @click="toSuperior" :loading="loading" type="primary" size="small">反馈至上级</el-button>
           <!-- v-if="!firstOrgIds.includes(form.orgId)" -->
-          <el-button @click="generateTask" :loading="loading" type="primary" size="small">生成任务</el-button>
-          <el-button @click="closeQuestion" :loading="loading" size="small">关闭问题</el-button>
+          <el-button v-if="form.handle" @click="generateTask" :loading="loading" type="primary" size="small">生成任务</el-button>
+          <el-button v-if="form.handle" @click="closeQuestion" :loading="loading" size="small">关闭问题</el-button>
+          <el-button size="small" type="primary" @click="downloadFile">文件下载</el-button>
+          <el-button size="small" type="primary" @click="downloadDetail">报表下载</el-button>
         </div>
 
         <task-manage :projectId="form.projectId" :orgTree="orgTree" :user="user" :question="question" :visible.sync="TaskManageShow" @save-success="generateTaskSuccess"></task-manage>
@@ -71,7 +73,7 @@
 
 </template>
 <script>
-import { questionReport } from '@/api/question'
+import { questionReport, exportDetail, fileDownload } from '@/api/question'
 import MediaMixins from '../../../mixins/MediaMixins'
 
 export default {
@@ -202,6 +204,14 @@ export default {
         this.loading = false
         console.error(error)
       }
+    },
+    downloadDetail() {
+      console.log('downloadDetail')
+      exportDetail(this.form.id)
+    },
+    downloadFile() {
+      console.log('downloadFile')
+      fileDownload(this.form.id)
     }
   }
 }

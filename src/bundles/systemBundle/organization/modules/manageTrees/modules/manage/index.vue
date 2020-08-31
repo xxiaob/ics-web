@@ -13,7 +13,7 @@
       <el-form-item label="是否同级查看" prop="sameLevelAuth">
         <el-switch v-model="form.sameLevelAuth" active-value="1" inactive-value="0"></el-switch>
       </el-form-item>
-      <el-form-item label="指挥大屏标题">
+      <!-- <el-form-item label="指挥大屏标题">
         <el-input v-model="form.commandScreenLogo" placeholder="请输入指挥大屏标题"></el-input>
       </el-form-item>
       <el-form-item label="数据大屏标题">
@@ -24,7 +24,7 @@
       </el-form-item>
       <el-form-item label="系统logo">
         <upload-one-img :url.sync="form.homePageLogo"></upload-one-img>
-      </el-form-item>
+      </el-form-item> -->
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="dialogVisible = false">取 消</el-button>
@@ -52,9 +52,9 @@ export default {
       }
     }
   },
-  components: {
-    uploadOneImg: () => import('@/components/JcUpload/uploadOneImg.vue')
-  },
+  // components: {
+  //   uploadOneImg: () => import('@/components/JcUpload/uploadOneImg.vue')
+  // },
   methods: {
     formatFormData() {
       if (this.options) {

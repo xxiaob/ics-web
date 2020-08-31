@@ -40,8 +40,9 @@ const options = {
     itemHeight: 10, // 设置高度
     itemGap: 20,
     right: 20,
+    selectedMode: false,
     textStyle: {
-      color: 'rgb(139,193,252)',
+      color: 'white',
       fontSize: 12
     }
   },
@@ -65,7 +66,7 @@ const options = {
       axisLabel: {
         interval: 0,
         rotate: -30,
-        fontSize: 10
+        fontSize: 12
       }
     }
   ],
@@ -88,6 +89,18 @@ const options = {
       axisLine: {
         show: false
       }
+    }
+  ],
+  dataZoom: [
+    {
+      type: 'inside',
+      // zoomOnMouseWheel: false,
+      startValue: 0,
+
+      // maxValueSpan: 5,
+      // endValue: 3
+      maxValueSpan: 11,
+      endValue: 7
     }
   ],
   series: []
@@ -113,6 +126,7 @@ const series1 = {
   },
   name: '新建问题',
   type: 'bar',
+  barWidth: 16,
   data: []
 }
 
@@ -132,7 +146,7 @@ const series1pictorialBar = {
     }
   },
   symbol: 'circle',
-  symbolSize: ['100%', '10'],
+  symbolSize: ['16', '10'],
   symbolPosition: 'end',
   data: [],
   z: 4
@@ -149,7 +163,7 @@ const series1pictorialBar2 = {
     }
   },
   symbol: 'circle',
-  symbolSize: ['100%', '10'],
+  symbolSize: ['16', '10'],
   symbolPosition: 'start',
   data: [],
   z: 3
@@ -176,6 +190,7 @@ const series2 = {
   },
   name: '已经处理',
   type: 'bar',
+  barWidth: 16,
   data: []
 }
 
@@ -200,6 +215,7 @@ const series3 = {
   },
   name: '转成任务',
   type: 'bar',
+  barWidth: 16,
   data: []
 }
 
@@ -219,7 +235,7 @@ const pictorialBarLeft1 = {
     }
   },
   symbol: 'circle',
-  symbolSize: ['28%', '5'],
+  symbolSize: ['16', '10'],
   symbolOffset: ['-130%', 0],
   symbolPosition: 'end',
   data: [],
@@ -237,7 +253,7 @@ const pictorialBarLeft2 = {
     }
   },
   symbol: 'circle',
-  symbolSize: ['28%', '5'],
+  symbolSize: ['16', '10'],
   symbolOffset: ['-130%', 0],
   symbolPosition: 'start',
   data: [],
@@ -260,7 +276,7 @@ const pictorialBarMiddle1 = {
     }
   },
   symbol: 'circle',
-  symbolSize: ['28%', '5'],
+  symbolSize: ['16', '10'],
   // symbolOffset: ['-130%', 0],
   symbolPosition: 'end',
   data: [],
@@ -278,7 +294,7 @@ const pictorialBarMiddle2 = {
     }
   },
   symbol: 'circle',
-  symbolSize: ['28%', '5'],
+  symbolSize: ['16', '10'],
   // symbolOffset: ['-130%', 0],
   symbolPosition: 'start',
   data: [],
@@ -301,7 +317,7 @@ const pictorialBarRight1 = {
     }
   },
   symbol: 'circle',
-  symbolSize: ['28%', '5'],
+  symbolSize: ['16', '10'],
   symbolOffset: ['130%', 0],
   symbolPosition: 'end',
   data: [],
@@ -319,7 +335,7 @@ const pictorialBarRight2 = {
     }
   },
   symbol: 'circle',
-  symbolSize: ['28%', '5'],
+  symbolSize: ['16', '10'],
   symbolOffset: ['130%', 0],
   symbolPosition: 'start',
   data: [],
@@ -371,6 +387,8 @@ export default {
           series1pictorialBar.data = this.infoAndArea.events
           series1pictorialBar2.data = this.infoAndArea.events
           options.series = [series1, series1pictorialBar, series1pictorialBar2]
+          options.dataZoom[0].endValue = 7
+          options.dataZoom[0].maxValueSpan = 11
         } else if (this.activated === 2) {
           // 进行中，已关闭，转任务
           series1.name = '进行中'
@@ -386,6 +404,8 @@ export default {
           pictorialBarRight1.data = this.infoAndArea.problems3
           pictorialBarRight2.data = this.infoAndArea.problems3
           options.series = [series1, series2, series3, pictorialBarLeft1, pictorialBarLeft2, pictorialBarMiddle1, pictorialBarMiddle2, pictorialBarRight1, pictorialBarRight2]
+          options.dataZoom[0].endValue = 4
+          options.dataZoom[0].maxValueSpan = 6
         } else if (this.activated === 3) {
           // 已下发，处理中，已完成
           series1.name = '已下发'
@@ -401,6 +421,8 @@ export default {
           pictorialBarRight1.data = this.infoAndArea.tasks3
           pictorialBarRight2.data = this.infoAndArea.tasks3
           options.series = [series1, series2, series3, pictorialBarLeft1, pictorialBarLeft2, pictorialBarMiddle1, pictorialBarMiddle2, pictorialBarRight1, pictorialBarRight2]
+          options.dataZoom[0].endValue = 4
+          options.dataZoom[0].maxValueSpan = 6
         }
         this.options = options
       }

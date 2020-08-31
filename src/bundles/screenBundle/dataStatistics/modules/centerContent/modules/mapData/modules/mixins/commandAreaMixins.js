@@ -5,9 +5,11 @@ import { getAreaDataStatistics } from '@/api/dataScreen'
 
 let myJcMap, AMap, object3Dlayer, labelsLayer //个人 map 对象,存储Amap对象,存储3D图层，存储点标记
 
-let baseOpacity = 0.6, activeOpacity = 0.8 //透明度
+let baseOpacity = 0.58, activeOpacity = 0.88 //透明度
 
-let colors = ['0083ff', '00c0ff', '00a9ff', '0072ff', '00fcff']
+// let colors = ['0083ff', '00c0ff', '00a9ff', '0072ff', '00fcff']
+
+let colors = ['ff5d5d', 'ffba00', '46e251', '0041fb', '00fcff', '00a9ff']
 
 let mapParams = { baseCoefficient: 0.0000046, activeCoefficient: 1.8, minHeight: 2800, animationTimes: 6 } //设置一些地图参数
 
@@ -339,7 +341,7 @@ export default {
           })
           nextOrg.infoMarker = new AMap.Marker({ position, content, anchor: 'center', offset: new AMap.Pixel(0, 0) })
 
-          nextOrg.infoPolyline = new AMap.Polyline({ path: [nextOrg.center, position], strokeOpacity: 1, strokeStyle: 'solid', strokeColor: '#14edfc', strokeWeight: 1.2 })
+          nextOrg.infoPolyline = new AMap.Polyline({ path: [nextOrg.center, position], strokeOpacity: 1, strokeStyle: 'solid', strokeColor: '#14edfc', strokeWeight: 1.5 })
           overlays.push(nextOrg.activeMarker)
           overlays.push(nextOrg.infoMarker)
         }

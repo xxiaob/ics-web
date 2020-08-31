@@ -1,9 +1,10 @@
 <template>
   <div class="jc-welcome-warp">
     <img src="./assets/bg.png" class="jc-welcome-bg" />
-    <div class="jc-marquee" v-if="marqueeText">
-      <div class="jc-marquee-item jc-marquee-first" v-text="marqueeText"></div>
-      <div class="jc-marquee-item jc-marquee-second" v-text="marqueeText"></div>
+    <div class="jc-marquee" v-if="marquees.length">
+      <div class="jc-marquee-item" :style="{'animation-duration': marquees.length * 10 + 10 + 's' }">
+        <span class="jc-marquee-text" v-for="(marqueeText,index) in marquees" :key="index" v-text="marqueeText"></span>
+      </div>
     </div>
     <div class="jc-welcome-content" :style="welcomeLogo">
       <div class="jc-welcome-item" v-for="item in list" :key="item.id" :style="item.logo" @click="goLink(item)"></div>
@@ -20,14 +21,14 @@
 <script>
 import { mapState } from 'vuex'
 import { getByOrgId } from '@/api/systemIndex'
-import { getDomainLogoConfig } from '@/libs/storage'
+import { getEnabledRollingMessage } from '@/api/baseConfig'
 
 export default {
   name: 'IndexWelcome',
   data() {
     return {
       list: [],
-      marqueeText: ''
+      marquees: []
     }
   },
   computed: {
@@ -77,27 +78,21 @@ export default {
         }
       }
     },
-    getConfig() {
-      let configs = getDomainLogoConfig()
-
-      if (configs && configs.length) {
-        let host = window.location.host
-
-        let config = configs.find(item => item.domain == host)
-
-        if (config) {
-          //如果设置存在，则开启文字滚动
-          this.marqueeText = ( config.enableRollingMessage == 1 && config.rollingMessage) ? config.rollingMessage : ''
-        }
+    async getConfig() {
+      try {
+        this.marquees = await getEnabledRollingMessage() || []
+      } catch (error) {
+        console.log(error)
       }
     }
   }
 }
 </script>
 <style lang="scss" scoped>
+$jc-marquee-width: 1000px;
 @keyframes jc-marquee-animation {
   from {
-    transform: translateX(100%);
+    transform: translateX($jc-marquee-width);
   }
   to {
     transform: translateX(-100%);
@@ -109,23 +104,22 @@ export default {
   left: 50%;
   height: 50px;
   line-height: 50px;
-  width: 1000px;
+  width: $jc-marquee-width;
   transform: translateX(-50%);
   font-size: $jc-font-size-large;
   color: $jc-color-white;
   overflow: hidden;
   .jc-marquee-item {
-    text-align: center;
     display: block;
     white-space: nowrap;
     position: absolute;
-    min-width: 100%;
-    transform: translateX(100%);
-    &.jc-marquee-first {
-      animation: jc-marquee-animation 20s linear infinite;
-    }
-    &.jc-marquee-second {
-      animation: jc-marquee-animation 20s linear infinite 10s;
+    transform: translateX($jc-marquee-width);
+    animation-name: jc-marquee-animation;
+    animation-timing-function: linear;
+    animation-iteration-count: infinite;
+    .jc-marquee-text {
+      display: inline-block;
+      min-width: $jc-marquee-width;
     }
   }
 }

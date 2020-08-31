@@ -3,6 +3,7 @@
  */
 import axios from 'axios'
 import API from './API'
+import { download } from '@/libs/download'
 
 /*-------------------------------任务管理------------------------------------ */
 /**
@@ -133,4 +134,33 @@ export function listByProblemId(id) {
  */
 export function getTaskAuth(id) {
   return axios.post(API.task.getTaskAuth + '?businessKey=' + id)
+}
+
+/**
+ * 导出列表
+ * @param {object} data
+ */
+export function exportList(data) {
+  download('任务列表.xlsx', API.task.exportList, data)
+}
+/**
+ * 导出临时任务详情
+ * @param {String} id
+ */
+export function exportTemporaryDetail(id) {
+  download(`临时任务详情${id}.xlsx`, API.task.exportTemporaryDetail + '?businessKey=' + id)
+}
+/**
+ * 导出日常任务详情
+ * @param {String} id
+ */
+export function exportDailyDetailExport(id) {
+  download(`日常任务详情${id}.xlsx`, API.task.exportDailyDetailExport + '?businessKey=' + id)
+}
+/**
+ * 导出临时任务文件
+ * @param {String} id
+ */
+export function fileDownload(id) {
+  download(`临时任务文件${id}.zip`, API.task.fileDownload + '?businessKey=' + id)
 }

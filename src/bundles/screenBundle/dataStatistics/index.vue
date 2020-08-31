@@ -1,7 +1,7 @@
 <template>
-  <section class="jc-screen-warp no-select" :class="{'jc-no-docking': project.projectId}">
+  <section class="jc-screen-warp no-select" :class="{'jc-no-docking': project.projectId}" :style="{'transform': calcWindow}">
     <!-- 大屏头部 -->
-    <screen-header></screen-header>
+    <screen-header @window-size-change="changeWindowSize"></screen-header>
     <div class="jc-screen-content">
       <!-- 最右侧数据显示，如果是常态则显示，应急和专项则不显示 -->
       <data-docking class="jc-flex-con" v-if="!project.projectId"></data-docking>
@@ -34,7 +34,18 @@ export default {
   data() {
     return {
       project: { projectId: this.$route.params.projectId || '', projectName: '', orgId: '', projectType: '' },
-      screenMessageChannelSocket: null
+      screenMessageChannelSocket: null,
+      autoSetSize: false
+    }
+  },
+  computed: {
+    baseWidth() {
+      return this.project.projectId ? 2800 : 3200
+    },
+    calcWindow() {
+      let wScale = this.autoSetSize && window.innerWidth <= this.baseWidth ? window.innerWidth / this.baseWidth : 1
+
+      return `scale3d(${wScale}, 1, 1)`
     }
   },
   created() {
@@ -55,6 +66,7 @@ export default {
 
       console.log('emit-data-statistics-init-success')
       this.$EventBus.$emit('data-statistics-init-success', this.project) //通知基础数据初始化完成
+      this.changeWindowSize(true)
     },
     initScreenMessageChannelSocket(orgId) {
       this.screenMessageChannelSocket = screenMessageChannelSocket({ subOrgId: orgId, subProjectId: this.project.projectId, type: SOCKET_MESSAGE_TYPES.DATA_STATISTICS })
@@ -68,6 +80,9 @@ export default {
         //如果消息存在，则去发送消息
         this.screenMessageChannelSocket.send(JSON.stringify({ sendType: SOCKET_MESSAGE_TYPES.COMMAND, data: message }))
       }
+    },
+    changeWindowSize(autoSetSize) {
+      this.autoSetSize = autoSetSize
     }
   },
   beforeDestroy() {

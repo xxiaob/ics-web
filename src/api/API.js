@@ -29,7 +29,8 @@ export default {
     list: 'user-service/org/list',
     update: 'user-service/org/upd',
     del: 'user-service/org/del',
-    getOrgLogo: 'user-service/org/getOrgLogoByOrgId'
+    getOrgLogo: 'user-service/org/getOrgLogoByOrgId',
+    getPOrgIdWithSameLevelAuth: 'user-service/org/getPOrgIdWithSameLevelAuth' //根据同级查看获取组织信息或者上级组织信息
   },
   role: {
     //角色管理
@@ -104,7 +105,10 @@ export default {
     update: 'task-service/event/upd',
     del: 'task-service/event/del',
     typeList: 'task-service/event/typeList',
-    listByTask: 'task-service/eventBind/getEvents'
+    listByTask: 'task-service/eventBind/getEvents',
+    exportList: 'task-service/event/listExport',
+    exportDetail: 'task-service/event/detailExport',
+    fileDownload: 'task-service/event/fileDownload'
   },
   task: {
     //任务管理
@@ -122,7 +126,11 @@ export default {
     listRecord: 'task-service/task/getTaskRecord',
     postArea: 'task-service/task/getTaskPostArea',
     listByProblemId: 'task-service/task/getTaskByProblemId',
-    getTaskAuth: 'task-service/task/getTaskAuth'
+    getTaskAuth: 'task-service/task/getTaskAuth',
+    exportList: 'task-service/task/listExport',
+    exportTemporaryDetail: 'task-service/task/temporaryDetailExport',
+    exportDailyDetailExport: 'task-service/task/dailyDetailExport',
+    fileDownload: 'task-service/task/fileDownload'
   },
   question: {
     //问题管理
@@ -134,7 +142,10 @@ export default {
     report: 'task-service/problem/report',
     get: 'task-service/problem/getProblemTask',
     typeList: 'task-service/problem/getProblemTypes',
-    getProblemAuth: 'task-service/problem/getProblemAuth'
+    getProblemAuth: 'task-service/problem/getProblemAuth',
+    exportList: 'task-service/problem/listExport',
+    exportDetail: 'task-service/problem/detailExport',
+    fileDownload: 'task-service/problem/fileDownload'
   },
   pttGroup: {
     //PTT群组
@@ -218,7 +229,8 @@ export default {
       getEventGroupByEventType: 'data-service/intelligentAnalysis/getEventGroupByEventType', // AI智能分析数据
       getAreaDataStatistics: 'data-service/largeScreen/getAreaDataStatistics', //数据大屏地图各区域数据统计
       eventHeatMap: 'data-service/largeScreen/eventHeatMap', //事件热力图
-      getEventAggregation: 'data-service/eventAggregation/getEventAggregation '//查询事件聚合
+      getEventAggregation: 'data-service/eventAggregation/getEventAggregation', //查询事件聚合
+      getAreaManualTypeTop3: 'data-service/largeScreen/getAreaManualTypeTop3' //获取岗点TOP3
     }
   },
   domainLogo: {
@@ -227,8 +239,7 @@ export default {
     listByPage: 'user-service/domainLogo/getSystemDomainLogoByPage',
     add: 'user-service/domainLogo/addSystemDomainLogo',
     del: 'user-service/domainLogo/delSystemDomainLogo',
-    upd: 'user-service/domainLogo/updSystemDomainLogo',
-    updEnableRolling: 'user-service/domainLogo/updEnableRollingMessage' // 滚动开关
+    upd: 'user-service/domainLogo/updSystemDomainLogo'
   },
   systemIndex: {
     //首页设置 配置欢迎页图标
@@ -242,5 +253,40 @@ export default {
   record: {
     //记录留痕
     list: 'device-service/video/getVideoByPage'
+  },
+  operation: {
+    // 运维管理
+    list: 'open-service/thirdPartyAuth/getList', // 第三方管理信息列表
+    add: 'open-service/thirdPartyAuth/add', // 第三方管理信息新增
+    update: 'open-service/thirdPartyAuth/update', // 第三方管理更新数据
+    delete: 'open-service/thirdPartyAuth/delete/'
+
+  },
+  supervise: {
+    // 法律法规和权利清单
+    getByType: 'user-service/systemConfig/getByType', // 获取法规类型
+    add: 'user-service/statute/add', // 法规新增
+    import: 'user-service/statute/import', // 导入法规地址
+    list: 'user-service/statute/select', // 查询法规列表
+    del: 'user-service/statute/delete', // 删除法规
+    update: 'user-service/statute/update', // 更新法规
+    checkList: 'user-service/statute/selectForStandBook', // 法规台账
+    powerList: 'user-service/powerList/list', // 权利清单列表
+    powerImport: 'user-service/powerList/import'
+  },
+  baseConfig: {
+    //基础配置
+    list: 'user-service/rollingMessage/getRollingMessageByPage', // 廉政提醒列表
+    add: 'user-service/rollingMessage/addRollingMessage', // 廉政提醒新增
+    update: 'user-service/rollingMessage/updRollingMessage', // 廉政提醒更新
+    del: 'user-service/rollingMessage/delRollingMessage', // 廉政提醒删除
+    getEnabledRollingMessage: 'user-service/rollingMessage/getEnabledRollingMessage', //根据组织获取滚动消息
+    updateBase: 'user-service/orgBaseInfo/updOrgBaseInfo',
+    getBase: 'user-service/orgBaseInfo/getOrgBaseInfo'
+  },
+  dregsAlarm: {
+    // 渣土告警
+    list: 'task-service/alarm/select', // 渣土告警列表
+    statusList: '/user-service/systemConfig/getByType?type=alarmStatus'
   }
 }

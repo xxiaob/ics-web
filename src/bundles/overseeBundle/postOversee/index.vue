@@ -69,7 +69,11 @@ export default {
   },
   methods: {
     formatResult(row, column, cellValue) {
-      return POST_OVERSEE_RESULTS.toString(cellValue.toString())
+      if (cellValue) {
+        return POST_OVERSEE_RESULTS.toString(cellValue.toString())
+      } else {
+        return ''
+      }
     },
     formatTime(row, column, cellValue) {
       return formatDate(cellValue)

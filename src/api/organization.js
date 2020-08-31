@@ -65,3 +65,11 @@ export function getOrgLogo(orgId) {
 export function organizationDel(orgId) {
   return axios.post(API.organization.del, { orgId })
 }
+
+/**
+ * 根据同级查看获取组织信息或者上级组织信息
+ * @returns {Object} axios 对象
+ */
+export function getPOrgIdWithSameLevelAuth() {
+  return axios.get(API.organization.getPOrgIdWithSameLevelAuth)
+}

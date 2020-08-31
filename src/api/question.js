@@ -3,6 +3,7 @@
  */
 import axios from 'axios'
 import API from './API'
+import { download } from '@/libs/download'
 
 /*-------------------------------问题管理------------------------------------ */
 /**
@@ -84,4 +85,26 @@ export function questionTypeList() {
  */
 export function getProblemAuth(id) {
   return axios.post(API.question.getProblemAuth + '?businessKey=' + id)
+}
+
+/**
+ * 导出列表
+ * @param {object} data
+ */
+export function exportList(data) {
+  download('问题列表.xlsx', API.question.exportList, data)
+}
+/**
+ * 导出详情
+ * @param {String} id
+ */
+export function exportDetail(id) {
+  download(`问题详情${id}.xlsx`, API.question.exportDetail + '?businessKey=' + id)
+}
+/**
+ * 导出文件
+ * @param {String} id
+ */
+export function fileDownload(id) {
+  download(`问题文件${id}.zip`, API.question.fileDownload + '?businessKey=' + id)
 }

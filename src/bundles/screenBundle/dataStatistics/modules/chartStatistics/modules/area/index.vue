@@ -107,18 +107,21 @@ export default {
         itemWidth: 10,
         itemHeight: 10,
         itemGap: 8,
+        selectedMode: false,
         textStyle: {
-          color: 'rgb(139,193,252)',
+          color: '#fcfcfd',
           padding: [2, 0, 0, 0],
-          fontSize: 12,
+          fontSize: 14,
           rich: {
             a: {
               width: 120,
-              color: 'rgb(139,193,252)'
+              fontSize: 14,
+              color: '#fcfcfd'
             },
             b: {
               width: 20,
-              color: 'rgb(139,193,252)',
+              fontSize: 14,
+              color: '#fcfcfd',
               align: 'right'
             }
           }

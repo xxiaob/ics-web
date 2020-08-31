@@ -28,13 +28,6 @@ export default [{
     title: '系统设置-职位管理'
   }
 }, {
-  path: 'system/menus',
-  name: 'systemMenus',
-  component: () => import('@/bundles/systemBundle/menus'),
-  meta: {
-    title: '系统设置-菜单管理'
-  }
-}, {
   path: 'system/areatype',
   name: 'systemAreaType',
   component: () => import('@/bundles/systemBundle/areaType'),
@@ -47,13 +40,6 @@ export default [{
   component: () => import('@/bundles/systemBundle/device'),
   meta: {
     title: '系统设置-设备管理'
-  }
-}, {
-  path: 'system/deviceUpdate',
-  name: 'systemDeviceUpdate',
-  component: () => import('@/bundles/systemBundle/deviceUpdate'),
-  meta: {
-    title: '系统设置-设备升级'
   }
 }, {
   path: 'system/grid',
@@ -70,17 +56,10 @@ export default [{
     title: '系统设置-PTT群组'
   }
 }, {
-  path: 'system/name',
-  name: 'systemName',
-  component: () => import('@/bundles/systemBundle/systemName'),
+  path: 'system/base',
+  name: 'systemBase',
+  component: () => import('@/bundles/systemBundle/base'),
   meta: {
-    title: '系统设置-系统名称'
-  }
-}, {
-  path: 'system/index',
-  name: 'systemIndex',
-  component: () => import('@/bundles/systemBundle/systemIndex'),
-  meta: {
-    title: '系统设置-首页设置'
+    title: '系统设置-基础配置'
   }
 }]

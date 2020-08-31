@@ -3,6 +3,7 @@
  */
 import axios from 'axios'
 import API from './API'
+import { download } from '@/libs/download'
 
 /*-------------------------------事件上报------------------------------------ */
 /**
@@ -77,4 +78,26 @@ export function eventManageSelectList(title) {
  */
 export function eventManageListByTask(taskId) {
   return axios.post(API.eventManage.listByTask + '?taskId=' + taskId)
+}
+
+/**
+ * 导出列表
+ * @param {object} data
+ */
+export function exportList(data) {
+  download('事件列表.xlsx', API.eventManage.exportList, data)
+}
+/**
+ * 导出详情
+ * @param {String} id
+ */
+export function exportDetail(id) {
+  download(`事件详情${id}.xlsx`, API.eventManage.exportDetail + '?id=' + id)
+}
+/**
+ * 导出文件
+ * @param {String} id
+ */
+export function fileDownload(id) {
+  download(`事件文件${id}.zip`, API.eventManage.fileDownload + '?id=' + id)
 }

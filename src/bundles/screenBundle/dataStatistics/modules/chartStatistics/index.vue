@@ -5,9 +5,9 @@
       <div class="jc-flex-con" :class="{'jc-activated':activated===7}" @click="changeCycle(7)">周</div>
       <div class="jc-flex-con" :class="{'jc-activated':activated===30}" @click="changeCycle(30)">月</div>
     </div>
-    <jc-info class="jc-chart-comp" :initActivated="itemActivated" :infoAndArea="infoAndArea"></jc-info>
     <jc-area class="jc-chart-comp" :initActivated="itemActivated" :infoAndArea="infoAndArea"></jc-area>
     <jc-type class="jc-chart-comp" :initActivated="itemActivated" :date="date"></jc-type>
+    <jc-info class="jc-chart-comp" :initActivated="itemActivated" :infoAndArea="infoAndArea"></jc-info>
   </div>
 </template>
 
@@ -222,6 +222,7 @@ export default {
     text-align: center;
     line-height: 40px;
     border-bottom: 1px solid rgb(32, 73, 154);
+    font-weight: bold;
 
     & > div {
       cursor: pointer;

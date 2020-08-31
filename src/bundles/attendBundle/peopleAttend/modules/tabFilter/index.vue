@@ -1,13 +1,16 @@
 <template>
   <el-card class="jc-tabfilter-card">
-    <div class="jc-status-group" v-if="!self">
+    <div class="jc-status-group">
       <el-radio-group v-model="status" size="medium" @change="changeStatus">
         <el-radio-button v-for="item in ATTEND_PERIODS.VALUES" :key="item.value" :label="item.value">{{item.label}}</el-radio-button>
       </el-radio-group>
     </div>
     <el-form ref="form" :inline="true" :model="form" class="jc-tabfilter-form" size="small">
-      <el-form-item prop="orgId" label="所属组织" v-if="!self">
+      <el-form-item prop="orgId" label="所属组织">
         <el-cascader :options="orgTree" v-model="form.orgId" :props="{expandTrigger: 'hover', emitPath: false,checkStrictly:true }" clearable @change="orgChange" ref="orgCascader"></el-cascader>
+      </el-form-item>
+      <el-form-item prop="userName" label="人员姓名">
+        <el-input v-model="form.userName" placeholder="请输入人员姓名"></el-input>
       </el-form-item>
       <el-form-item prop="" label="时间">
         <el-date-picker v-if="status===ATTEND_PERIODS.DAY" v-model="date" @change="changeDate" value-format="yyyy-MM-dd" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期">
@@ -30,25 +33,13 @@
 </template>
 <script>
 import { ATTEND_PERIODS } from '@/constant/Dictionaries'
-import { exportMyAttend, exportPeopleAttend, exportPostAttend } from '@/api/attend'
+import { exportPeopleAttend } from '@/api/attend'
 import moment from 'moment'
 
 export default {
   name: 'AttendFilter',
   props: {
     userId: String,
-    self: {
-      type: Boolean,
-      default: false
-    },
-    people: {
-      type: Boolean,
-      default: false
-    },
-    post: {
-      type: Boolean,
-      default: false
-    },
     orgTree: {
       type: Array,
       default: ()=>[]
@@ -62,7 +53,8 @@ export default {
         type: ATTEND_PERIODS.DAY,
         startTime: '',
         endTime: '',
-        orgId: ''
+        orgId: '',
+        userName: ''
       },
       date: null,
       endWeek: null
@@ -110,16 +102,8 @@ export default {
       this.$emit('filter', form)
     },
     exportData() {
-      console.log('exportData')
-      if (this.self) {
-        exportMyAttend({ userId: this.userId, ...this.form })
-      }
-      if (this.people) {
-        exportPeopleAttend({ userId: this.userId, ...this.form })
-      }
-      if (this.post) {
-        exportPostAttend({ userId: this.userId, ...this.form })
-      }
+      console.log('exportData People')
+      exportPeopleAttend({ userId: this.userId, ...this.form })
     },
     download(content) {
       const blob = new Blob([content])

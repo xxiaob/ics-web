@@ -27,7 +27,7 @@
 </template>
 <script>
 import { getAMapLoader } from '@/map/aMap/aMapUtil'
-import { organizationList } from '@/api/organization'
+import { getPOrgIdWithSameLevelAuth } from '@/api/organization'
 import { areaList } from '@/api/area'
 import { PROJECT_TYPES } from '@/constant/Dictionaries'
 import { AREAS_TYPE, AREAS_SEARCH_TYPE } from '@/constant/CONST'
@@ -60,9 +60,9 @@ export default {
       this.orgId = this.project.orgId
 
       if (!this.orgId) {
-        const res = await organizationList()
+        const res = await getPOrgIdWithSameLevelAuth()
 
-        this.orgId = res[0].orgId
+        this.orgId = res.orgId
       }
       //初始化地图设置
       let AMapLoader = getAMapLoader() //获取amap 对象
@@ -75,7 +75,7 @@ export default {
       })
       this.clearMapSign() //清除地图标记
       // 设置光照
-      myJcMap.AmbientLight = new AMap.Lights.AmbientLight([1, 1, 1], 0.6)
+      myJcMap.AmbientLight = new AMap.Lights.AmbientLight([1, 1, 1], 0.8)
       myJcMap.DirectionLight = new AMap.Lights.DirectionLight([0, 0, 1], [1, 1, 1], 1)
 
       this.$EventBus.$emit('data-statistics-amap-success', this.orgId) //通知地图加载完成
@@ -239,6 +239,48 @@ export default {
     },
     getOrgAreasData() {
       return orgAreas
+    },
+    showPolygons() {
+      for (let orgId in orgAreas) {
+        if (orgId != this.orgId) {
+          let areaItem = orgAreas[orgId]
+
+          if (areaItem.polygons) {
+            areaItem.polygons.forEach(item => {
+              item.show()
+            })
+          } else {
+            let polygons = []
+
+            for (let i = 0; i < areaItem.boundaries.length; i++) {
+              let polygon = new AMap.Polygon({
+                map: myJcMap, strokeWeight: 1, strokeColor: '#00a8ff', strokeOpacity: 1,
+                fillColor: '#0090ff', fillOpacity: 0.4, path: areaItem.boundaries[i].path
+              })
+
+              polygons.push(polygon)
+            }
+            areaItem.polygons = polygons
+          }
+        }
+      }
+    },
+    hidePolygons() {
+      //如果
+      if (this.switchType != 1) {
+        return
+      }
+      for (let orgId in orgAreas) {
+        if (orgId != this.orgId) {
+          let areaItem = orgAreas[orgId]
+
+          if (areaItem.polygons) {
+            areaItem.polygons.forEach(item => {
+              item.hide()
+            })
+          }
+        }
+      }
     }
   },
   beforeDestroy() {
@@ -279,7 +321,7 @@ export default {
     height: 40px;
     line-height: 40px;
     cursor: pointer;
-    color: #0572bd;
+    color: #14edfc;
     background: url(./assets/switch-off.png) no-repeat center;
     background-size: 100%;
     &:hover,
@@ -302,14 +344,14 @@ export default {
     height: 20px;
     line-height: 20px;
     cursor: pointer;
-    color: #0572bd;
+    color: #14edfc;
     &:not(:last-child) {
-      border-right: solid 1px #0572bd;
+      border-right: solid 1px #14edfc;
     }
 
     &:hover,
     &.jc-active {
-      color: #14edfc;
+      color: #ffffff;
     }
   }
 }

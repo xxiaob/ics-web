@@ -127,6 +127,7 @@ export default {
       this.dialogVideoUrl = row.videoUrl
       this.dialogVideoVisible = true
     }
+
   }
 }
 </script>
