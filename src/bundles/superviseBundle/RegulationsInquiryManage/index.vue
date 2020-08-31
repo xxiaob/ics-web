@@ -18,8 +18,8 @@
       <el-table :data="list" v-loading="loading" row-key="id" class="jc-table">
         <el-table-column type="index" :index="indexMethod" label="序号" width="50"></el-table-column>
         <el-table-column prop="powerType" width="160" label="条例类型" :formatter="formatterPowser"></el-table-column>
-        <el-table-column prop="powerEncode" width="160" label="权利编码"></el-table-column>
-        <el-table-column prop="powerName" width="160" label="权利名称常用"></el-table-column>
+        <el-table-column prop="powerEncode" width="160" label="权力编码"></el-table-column>
+        <el-table-column prop="powerName" width="160" label="权力名称常用"></el-table-column>
         <el-table-column prop="powerGist" label="设定依据"></el-table-column>
         <el-table-column width="90" label="操作">
           <template slot-scope="scope">

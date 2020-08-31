@@ -6,8 +6,8 @@
           <el-option v-for="item in types" :key="item.id" :label="item.configName" :value="item.configValue"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item prop="powerName" label="权利名称常用">
-        <el-input v-model="form.powerName" placeholder="请输入常用权利名称"></el-input>
+      <el-form-item prop="powerName" label="权力名称常用">
+        <el-input v-model="form.powerName" placeholder="请输入常用权力名称"></el-input>
       </el-form-item>
       <el-form-item prop="powerGist" label="设定依据">
         <el-input v-model="form.powerGist" placeholder="请输入设定依据"></el-input>

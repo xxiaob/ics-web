@@ -3,11 +3,11 @@
 
     <div class="jc-user-content">
       <div class="jc-info-item">
-        <label class="jc-info-label">权利编码：</label>
+        <label class="jc-info-label">权力编码：</label>
         <div class="jc-info-content" v-text="info && info.powerEncode"></div>
       </div>
       <div class="jc-info-item">
-        <label class="jc-info-label">权利名称常用：</label>
+        <label class="jc-info-label">权力名称常用：</label>
         <div class="jc-info-content" v-text="info && info.powerName"></div>
       </div>
       <div class="jc-info-item">
