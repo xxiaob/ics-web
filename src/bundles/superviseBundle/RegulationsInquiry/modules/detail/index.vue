@@ -23,7 +23,7 @@
         <div class="jc-info-content" v-text="info && info.lawApply"></div>
       </div>
       <div class="jc-info-item">
-        <label class="jc-info-label">裁量描述和结果: </label>
+        <label class="jc-info-label">裁量描述和结果：</label>
         <div class="jc-info-content" v-text="info && info.descResult"></div>
       </div>
       <div class="jc-info-item">
