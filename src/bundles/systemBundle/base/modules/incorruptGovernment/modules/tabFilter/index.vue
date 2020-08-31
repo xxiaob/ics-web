@@ -5,7 +5,7 @@
         <el-input v-model="form.rollingMessage" placeholder="请输入廉政信息" @keyup.enter.native="onSubmit"></el-input>
       </el-form-item>
       <el-form-item prop="" label="截止日期范围">
-        <el-date-picker v-model="date" @change="changeDate" type="datetimerange" range-separator="-" start-placeholder="开始时间" end-placeholder="结束时间">
+        <el-date-picker v-model="date" @change="changeDate" type="datetimerange" range-separator="-" start-placeholder="开始时间" end-placeholder="结束时间" value-format="yyyy-MM-ddTHH:mm:ssZ">
         </el-date-picker>
       </el-form-item>
       <el-form-item class="jc-tabfilter-btns">
@@ -23,7 +23,7 @@ export default {
     return {
       form: {
         rollingMessage: '',
-        startTime: '',
+        beginTime: '',
         endTime: ''
       },
       date: null
@@ -32,17 +32,17 @@ export default {
   methods: {
     changeDate(value) { // 时间切换
       if (value) {
-        this.form.startTime = value[0]
+        this.form.beginTime = value[0]
         this.form.endTime = value[1]
       } else {
-        this.form.startTime = ''
+        this.form.beginTime = ''
         this.form.endTime = ''
       }
     },
     reset() {
       this.$refs.form.resetFields()
       this.form.rollingMessage = ''
-      this.form.startTime = ''
+      this.form.beginTime = ''
       this.form.endTime = ''
       this.date = null
     },

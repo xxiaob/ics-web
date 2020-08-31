@@ -1,20 +1,21 @@
 <template>
   <div>
-    <!-- <el-button @click="start" type="primary">打开</el-button> -->
-    <el-button @click="start('56783818509516800')" type="primary">开始观摩1</el-button>
+    <el-button @click="start" type="primary">打开</el-button>
+    <el-button @click="stop">结束</el-button>
+    <!-- <el-button @click="start('56783818509516800')" type="primary">开始观摩1</el-button>
     <el-button @click="stop('56783818509516800')">结束观摩1</el-button>
     <el-button @click="start('56785471337922560')" type="primary">开始观摩2</el-button>
     <el-button @click="stop('56785471337922560')">结束观摩2</el-button>
-    <im-live></im-live>
-    <!-- <div id="test"></div> -->
-    <div class="test" id="56783818509516800"></div>
-    <div class="test" id="56785471337922560"></div>
+    <im-live></im-live> -->
+    <div id="test"></div>
+    <!-- <div class="test" id="56783818509516800"></div>
+    <div class="test" id="56785471337922560"></div> -->
   </div>
 </template>
 
 <script>
 import imLive from './imLive'
-// import { Foreign } from '@/live/foreign'
+import { Foreign } from '@/live/foreign'
 
 export default {
   name: 'liveDemo',
@@ -28,10 +29,10 @@ export default {
     }
   },
   mounted() {
-    // this.test = new Foreign('test', 'e8cf78c8bd6b49bcb60e65c1fc33973c', '3213123', '李向玉')
-    this.$EventBus.$on('notice-compulsory-observation-leave', ({ type, userId })=>{
-      console.log('notice-compulsory-observation-leave', type, userId)
-    })
+    this.test = new Foreign('test', '965e63f2489546c4881c8eed9964ac31', '3213123', '李向玉')
+    // this.$EventBus.$on('notice-compulsory-observation-leave', ({ type, userId })=>{
+    //   console.log('notice-compulsory-observation-leave', type, userId)
+    // })
   },
   methods: {
     start(userId) {
@@ -49,15 +50,15 @@ export default {
       //   channelId: null //可选  采集观摩需要
       // }
       // this.visible = true
-      // this.test.start('68707744802144256')
-      console.log(userId)
-      this.$EventBus.$emit('notice-compulsory-observation', { type: 'start', userId })
+      this.test.start('83613207578542080')
+      // console.log(userId)
+      // this.$EventBus.$emit('notice-compulsory-observation', { type: 'start', userId })
     },
     stop(userId) {
-      console.log(userId)
-      this.$EventBus.$emit('notice-compulsory-observation', { type: 'stop', userId })
+      // console.log(userId)
+      // this.$EventBus.$emit('notice-compulsory-observation', { type: 'stop', userId })
 
-      // this.test.stop()
+      this.test.stop()
     }
   }
 }

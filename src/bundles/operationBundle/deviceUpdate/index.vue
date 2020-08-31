@@ -17,6 +17,7 @@
         <el-table-column prop="version" label="版本号"></el-table-column>
         <el-table-column prop="url" label="设备包名称" show-overflow-tooltip></el-table-column>
         <el-table-column prop="state" label="状态" :formatter="formatState"></el-table-column>
+        <el-table-column prop="enableForced" label="强制升级" :formatter="formatEnableForced"></el-table-column>
         <el-table-column prop="createTime" label="创建时间" :formatter="formatTime"></el-table-column>
         <el-table-column width="100" label="操作">
           <template slot-scope="scope">
@@ -76,6 +77,9 @@ export default {
     formatState(row, column, cellValue) {
       return states[cellValue]
     },
+    formatEnableForced(row, column, cellValue) {
+      return cellValue == 1 ? '是' : '否'
+    },
     formatTime(row, column, cellValue) {
       return formatDate(cellValue)
     },
@@ -93,6 +97,7 @@ export default {
               list.push({
                 id: item.id,
                 deviceType: item.deviceType,
+                enableForced: item.enableForced,
                 pkgName: item.pkgName,
                 state: item.state,
                 updateInfo: item.updateInfo,
