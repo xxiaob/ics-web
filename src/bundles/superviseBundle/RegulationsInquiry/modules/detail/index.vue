@@ -70,7 +70,7 @@ $jc-info-item-height: 20px;
 .jc-info-item {
   position: relative;
   padding-left: 120px;
-  margin-bottom: 10px;
+  margin-bottom: 30px;
   .jc-info-label {
     position: absolute;
     text-align: right;
@@ -84,5 +84,8 @@ $jc-info-item-height: 20px;
     min-height: $jc-info-item-height;
     line-height: $jc-info-item-height;
   }
+}
+.el-dialog__body {
+  padding: 30px;
 }
 </style>

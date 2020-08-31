@@ -174,3 +174,12 @@ export default {
   }
 }
 </style>
+<style lang="scss">
+.el-dialog__body {
+  padding: 30px;
+
+  .jc-info-item {
+    margin-bottom: 30px;
+  }
+}
+</style>
