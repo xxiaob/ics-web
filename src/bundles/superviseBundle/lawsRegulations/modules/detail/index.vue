@@ -71,9 +71,10 @@ $jc-info-item-height: 20px;
   .jc-info-content {
     min-height: $jc-info-item-height;
     line-height: $jc-info-item-height;
-  }
-  .jc-info-editor {
-    padding-left: 16px;
+
+    > ol {
+      padding-left: 16px;
+    }
     img {
       width: 100%;
     }

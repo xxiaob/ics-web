@@ -68,7 +68,10 @@ $jc-info-item-height: 20px;
     line-height: $jc-info-item-height;
   }
   .jc-info-editor {
-    padding-left: 16px;
+    ol,
+    ul {
+      padding-left: 16px;
+    }
     img {
       width: 100%;
     }

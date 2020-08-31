@@ -1,11 +1,11 @@
 <template>
   <el-dialog :title="options ? '编辑语录':'新增语录'" :visible.sync="dialogVisible" width="600px" :close-on-click-modal="false" :append-to-body="true" @close="dialogClose">
     <el-form ref="form" label-width="100px" :model="form" class="jc-manage-form">
-      <el-form-item label="是否启用" prop="scrollSwitch">
+      <el-form-item label="是否启用">
         <el-switch v-model="form.enableRolling" active-color="#409EFF" inactive-color="#cccccc" :active-value="1" :inactive-value="0">
         </el-switch>
       </el-form-item>
-      <el-form-item label="廉政语录" prop="scrollSwitch" :rules="rules.NOT_NULL">
+      <el-form-item label="廉政语录" prop="rollingMessage" :rules="rules.NOT_NULL">
         <el-input type="textarea" :rows="3" placeholder="请输入廉政语录" v-model="form.rollingMessage" resize="none">
         </el-input>
       </el-form-item>
@@ -42,8 +42,13 @@ export default {
   props: ['orgId'],
   methods: {
     formatFormData() {
+      console.log('options', this.options)
       if (this.options) {
-        return { ...this.options, orgId: this.orgId }
+        return {
+          enableRolling: this.options.enableRolling,
+          rollingMessage: this.options.rollingMessage,
+          orgId: this.orgId
+        }
       } else {
         return { ...defaultForm, orgId: this.orgId }
       }
