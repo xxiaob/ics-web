@@ -68,13 +68,16 @@ $jc-info-item-height: 20px;
     line-height: $jc-info-item-height;
   }
   .jc-info-editor {
-    ol,
-    ul {
-      padding-left: 16px;
-    }
     img {
       width: 100%;
     }
+  }
+}
+</style>
+<style lang="scss">
+.jc-info-editor {
+  ol {
+    padding-left: 16px;
   }
 }
 </style>
