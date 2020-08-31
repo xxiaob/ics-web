@@ -15,6 +15,12 @@
       <el-form-item label="版本号" prop="version" :rules="rules.NOT_NULL">
         <el-input v-model="form.version" :disabled="view" placeholder="请输入版本号"></el-input>
       </el-form-item>
+      <el-form-item label="强制升级" prop="enableForced" :rules="rules.SELECT_NOT_NULL">
+        <el-switch v-model="form.enableForced"
+          :active-value="1"
+          :inactive-value="0">
+        </el-switch>
+      </el-form-item>
       <el-form-item label="应用文件" prop="url" :rules="[{required: true, message: '请上传文件'}]">
         <el-input v-model="form.url" :disabled="view" v-show="view"></el-input>
         <el-upload v-show="!view" class="upload-demo" :action="uploadUrl" :headers="uploadHeaders" :before-upload="handleBeforeUpload" :on-success="handleSuccess" :on-remove="handleRemove" :limit="1" :on-exceed="handleExceed" :file-list="fileList">
@@ -37,7 +43,7 @@ import api from '@/api/API'
 import { getToken } from '@/libs/storage'
 
 
-let defaultForm = { deviceType: '0', pkgName: '', updateInfo: '', url: '', version: '' }
+let defaultForm = { enableForced: '1', deviceType: '0', pkgName: '', updateInfo: '', url: '', version: '' }
 
 export default {
   name: 'SystemDeviceUpdateManage',
@@ -86,6 +92,7 @@ export default {
           id: this.options.id,
           deviceType: this.options.deviceType.toString(),
           pkgName: this.options.pkgName,
+          enableForced: this.options.enableForced,
           updateInfo: this.options.updateInfo,
           url: this.options.url,
           version: this.options.version
