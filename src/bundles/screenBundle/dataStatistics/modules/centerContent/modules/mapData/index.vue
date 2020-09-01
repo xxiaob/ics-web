@@ -94,6 +94,7 @@ export default {
           result = await areaList({ orgId, orgSearchType: AREAS_TYPE.OWN_AND_CHILD, searchType: AREAS_SEARCH_TYPE.ORG })
         }
 
+        orgAreas[this.orgId] = { orgId: this.orgId, center: null } //设置自己组织默认值，防止查询为空的情况
         if (result && result.length) {
           let lnglats //获取最父级边界
 
@@ -145,14 +146,15 @@ export default {
           if (parentOrg.totalLnglats) {
             let totalLnglats = parentOrg.totalLnglats
 
-            parentOrg.measureAreas = AMap.GeometryUtil.ringArea([[totalLnglats.lng.min, totalLnglats.lat.max], [totalLnglats.lng.max, totalLnglats.lat.max],
-              [totalLnglats.lng.max, totalLnglats.lat.min], [totalLnglats.lng.min, totalLnglats.lat.min]]) //计算边框的面积
+            parentOrg.measureAreas = AMap.GeometryUtil.ringArea([[totalLnglats.lng.min, totalLnglats.lat.max], [totalLnglats.lng.max, totalLnglats.lat.max], [totalLnglats.lng.max, totalLnglats.lat.min], [totalLnglats.lng.min, totalLnglats.lat.min]]) //计算边框的面积
 
             parentOrg.centerPosition = new AMap.LngLat((totalLnglats.lng.min + totalLnglats.lng.max) / 2, (totalLnglats.lat.min + totalLnglats.lat.max) / 2)
 
             //设置矩形将内容框起来，用于自适应显示
-            parentOrg.rectangle = new AMap.Rectangle({ map: myJcMap, strokeOpacity: 0, fillOpacity: 0, zIndex: 1,
-              bounds: new AMap.Bounds([totalLnglats.lng.min, totalLnglats.lat.min], [totalLnglats.lng.max, totalLnglats.lat.max]) })
+            parentOrg.rectangle = new AMap.Rectangle({
+              map: myJcMap, strokeOpacity: 0, fillOpacity: 0, zIndex: 1,
+              bounds: new AMap.Bounds([totalLnglats.lng.min, totalLnglats.lat.min], [totalLnglats.lng.max, totalLnglats.lat.max])
+            })
 
             //计算信息窗四个位置的坐标点
             this.orgInfoPosition.leftTop = [totalLnglats.lng.min, (totalLnglats.lat.max + parentOrg.centerPosition.lat) / 2]
