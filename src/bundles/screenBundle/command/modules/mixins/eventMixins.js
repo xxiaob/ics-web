@@ -13,7 +13,7 @@ import { MESSAGE_TYPE } from '@/constant/Dictionaries'
 export default {
   data() {
     return {
-      today: new Date(moment().format('YYYY-MM-DD') + ' 00:00:00').getTime() // 初始时间
+      today: new Date(moment().format('YYYY-MM-DD')).getTime() // 初始时间
     }
   },
   created() {

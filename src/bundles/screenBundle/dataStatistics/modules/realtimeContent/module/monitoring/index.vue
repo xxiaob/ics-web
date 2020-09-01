@@ -44,7 +44,7 @@ export default {
       videoDatas: [
         {
           name: '胜太路地铁站2号口',
-          url: 'https://192.168.0.150:9000/group1/M00/00/68/wKgAeF9MvWaAVzGBCT0gWmud8AA699.mp4',
+          url: 'https://192.168.0.150:9000/group1/M00/00/69/wKgAeF9N8vGAWaKDChIkd2gD1rs594.mp4',
           vid: 100001
         }, {
           name: '诚信大道与莱茵达路（球机）',
@@ -67,21 +67,57 @@ export default {
           url: 'https://192.168.0.150:9000/group1/M00/00/68/wKgAeF9MvCeAXbVKCT0gWmud8AA813.mp4',
           vid: 100006
         }, {
-          name: '双龙大道地铁口',
-          url: 'https://192.168.0.150:9000/group1/M00/00/68/wKgAeF9MvWaAVzGBCT0gWmud8AA699.mp4',
+          name: '胜太路假日百货西门',
+          url: 'https://192.168.0.150:9000/group1/M00/00/69/wKgAeF9N8y6AWMdfC0wnOqYK77c396.mp4',
           vid: 100007
         }, {
-          name: '诚信大道与莱茵达路（球机）',
-          url: 'https://192.168.0.150:9000/group1/M00/00/68/wKgAeF9MvWaAVzGBCT0gWmud8AA699.mp4',
+          name: '天印大道路口',
+          url: 'https://192.168.0.150:9000/group1/M00/00/69/wKgAeF9N82iAf-KBCl9y-QdgsMM599.mp4',
           vid: 100008
         }, {
-          name: '地铁3号线胜太路站停车点',
-          url: 'https://192.168.0.150:9000/group1/M00/00/68/wKgAeF9MvWaAVzGBCT0gWmud8AA699.mp4',
+          name: '胜太路与双龙大道交通银行',
+          url: 'https://192.168.0.150:9000/group1/M00/00/69/wKgAeF9N85aAZi5YC3cDAGvZPQc196.mp4',
           vid: 100009
         }, {
-          name: '弘景大道格致路球',
-          url: 'https://192.168.0.150:9000/group1/M00/00/68/wKgAeF9MvWaAVzGBCT0gWmud8AA699.mp4',
+          name: '金鹰与景枫交界路口',
+          url: 'https://192.168.0.150:9000/group1/M00/00/69/wKgAeF9N88mACiotDH7kZa697eo658.mp4',
           vid: 100010
+        }, {
+          name: '机场线翠屏山站2号出口',
+          url: 'https://192.168.0.150:9000/group1/M00/00/69/wKgAeF9N9BqAafs0Cvf-S_6V_FY015.mp4',
+          vid: 100011
+        }, {
+          name: '双龙大道地铁口',
+          url: 'https://192.168.0.150:9000/group1/M00/00/69/wKgAeF9N9ESAJfpnCssWUI2IIzM329.mp4',
+          vid: 100012
+        }, {
+          name: '地铁3号线胜太路站停车点4',
+          url: 'https://192.168.0.150:9000/group1/M00/00/69/wKgAeF9N9HyAY2HbCnepb9sCfTM723.mp4',
+          vid: 100013
+        }, {
+          name: '江宁区双龙大道金鹰东门违停球1',
+          url: 'https://192.168.0.150:9000/group1/M00/00/69/wKgAeF9N9NCAPD-wCsGZxZEnDyo257.mp4',
+          vid: 100014
+        }, {
+          name: '将军大道天元西路路口2',
+          url: 'https://192.168.0.150:9000/group1/M00/00/69/wKgAeF9N9RaAcq9pENFVtfREMP8755.mp4',
+          vid: 100015
+        }, {
+          name: '金箔路竹山路路口2',
+          url: 'https://192.168.0.150:9000/group1/M00/00/69/wKgAeF9N9T6ARwkvC4gntiowotA347.mp4',
+          vid: 100016
+        }, {
+          name: '龙眠大道月华路路口2',
+          url: 'https://192.168.0.150:9000/group1/M00/00/69/wKgAeF9N9WmAbqhFCz3hMlZIIPk517.mp4',
+          vid: 100017
+        }, {
+          name: '天印大道上元大街路口南抓拍机1',
+          url: 'https://192.168.0.150:9000/group1/M00/00/69/wKgAeF9N9Y-ANQySBFFP204XMW0529.mp4',
+          vid: 100018
+        }, {
+          name: '天印大道与金箔路',
+          url: 'https://192.168.0.150:9000/group1/M00/00/69/wKgAeF9N9b6AeZeCDCUhYeNj8XQ344.mp4',
+          vid: 100019
         }
       ]
     }
