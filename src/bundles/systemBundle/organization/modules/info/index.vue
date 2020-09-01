@@ -42,7 +42,7 @@ export default {
   methods: {
     initData(data) {
       this.loading = true
-      getOrgInfo(data.orgId).then(res=> {
+      getOrgInfo(data.orgId).then(res => {
         const { commandScreenLogo, dataScreenLogo, welcomeLogo, homePageLogo } = res
 
         Object.assign(this.info, {
@@ -73,12 +73,12 @@ export default {
   color: $jc-color-text-regular;
   .jc-detail-item {
     display: inline-block;
-    width: 60%;
     height: 30px;
     line-height: 30px;
+    vertical-align: middle;
     @include jc-text-warp;
     &:first-child {
-      width: 39%;
+      width: 30%;
     }
   }
 }
