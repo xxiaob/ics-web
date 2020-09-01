@@ -116,7 +116,7 @@ export default {
       this.detailVisible = true
     },
     cellStyle({ row, column, rowIndex, columnIndex }) {
-      console.log( row, column, rowIndex, columnIndex)
+      // console.log( row, column, rowIndex, columnIndex)
       // 调整列样式
       if (columnIndex == 3) {
         return 'padding-right:16px;'

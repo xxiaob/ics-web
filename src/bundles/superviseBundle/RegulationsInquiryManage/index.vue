@@ -149,7 +149,7 @@ export default {
       this.initData()
     },
     cellStyle({ row, column, rowIndex, columnIndex }) {
-      console.log( row, column, rowIndex, columnIndex)
+      // console.log( row, column, rowIndex, columnIndex)
 
       // 调整列样式
       if (columnIndex == 3) {
