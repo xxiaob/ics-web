@@ -7,9 +7,9 @@
         <div class="jc-card-title">列表内容</div>
       </div>
       <el-table :data="list" v-loading="loading" row-key="id" class="jc-table">
-        <el-table-column type="index" :index="indexMethod" label="序号" width="50"></el-table-column>
-        <el-table-column prop="alarmTypeName" label="告警类型"></el-table-column>
-        <el-table-column prop="transportCompany" label="企业"></el-table-column>
+        <el-table-column type="index" :index="indexMethod" label="序号" width="80"></el-table-column>
+        <el-table-column prop="alarmTypeName" label="告警类型" width="180"></el-table-column>
+        <el-table-column prop="transportCompany" label="企业" width="320"></el-table-column>
         <el-table-column prop="carNumber" label="车牌号"></el-table-column>
         <el-table-column prop="carSpeed" label="车速"></el-table-column>
         <el-table-column prop="status" label="状态"></el-table-column>
