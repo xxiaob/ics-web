@@ -1,5 +1,5 @@
 <template>
-  <el-dialog :title="title" :visible.sync="dialogVisible" width="800px" :append-to-body="true" :close-on-click-modal="false" @close="dialogClose">
+  <el-dialog :title="title" :visible.sync="dialogVisible" width="700px" :append-to-body="true" :close-on-click-modal="false" @close="dialogClose">
 
     <div class="jc-user-content">
       <div class="jc-info-item">
@@ -58,19 +58,20 @@ $jc-info-item-height: 20px;
 .jc-info-item {
   position: relative;
   padding-left: 120px;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
   .jc-info-label {
     position: absolute;
     text-align: right;
     width: 120px;
-    line-height: $jc-info-item-height;
+    line-height: $jc-info-item-height * 1.6;
     top: 0;
     left: 0;
     color: $jc-color-text-secondary;
   }
   .jc-info-content {
     min-height: $jc-info-item-height;
-    line-height: $jc-info-item-height;
+    line-height: $jc-info-item-height * 1.6;
+    padding-left: 1em;
 
     > ol {
       padding-left: 16px;

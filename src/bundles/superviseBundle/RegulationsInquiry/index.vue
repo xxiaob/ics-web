@@ -6,9 +6,9 @@
       <div slot="header" class="jc-card-header">
         <div class="jc-card-title">列表内容</div>
       </div>
-      <el-table :data="list" v-loading="loading" row-key="id" class="jc-table">
-        <el-table-column type="index" :index="indexMethod" label="序号" width="50"></el-table-column>
-        <el-table-column prop="powerType" width="160" label="条例类型" :formatter="formatterPowser"></el-table-column>
+      <el-table :data="list" v-loading="loading" row-key="id" class="jc-table" :cell-style="cellStyle">
+        <el-table-column type="index" :index="indexMethod" label="序号" width="80"></el-table-column>
+        <el-table-column prop="powerType" width="140" label="条例类型" :formatter="formatterPowser"></el-table-column>
         <el-table-column prop="powerEncode" width="160" label="权力编码"></el-table-column>
         <el-table-column prop="powerName" width="160" label="权力名称常用">
           <template slot-scope="scope">
@@ -20,7 +20,7 @@
             <span class="powerGist" v-text="scope.row.powerGist" :title="scope.row.powerGist"></span>
           </template>
         </el-table-column>
-        <el-table-column width="90" label="操作">
+        <el-table-column width="80" label="操作">
           <template slot-scope="scope">
             <el-button type="text" size="mini" icon="el-icon-view" @click="detail(scope.row)" title="查看"></el-button>
           </template>
@@ -114,6 +114,18 @@ export default {
       // 查看详情
       this.info = row
       this.detailVisible = true
+    },
+    cellStyle({ row, column, rowIndex, columnIndex }) {
+      // console.log( row, column, rowIndex, columnIndex)
+      // 调整列样式
+      if (columnIndex == 3) {
+        return 'padding-right:16px;'
+      }
+      if (columnIndex == 4) {
+        return 'padding-right:20px;'
+      }
+
+      return ''
     }
   }
 

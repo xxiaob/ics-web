@@ -12,18 +12,18 @@
           <el-button type="primary" size="small" @click="manage(null)">新增</el-button>
         </div>
       </div>
-      <el-table :data="list" v-loading="loading" row-key="id" class="jc-table">
-        <el-table-column type="index" :index="indexMethod" label="序号" width="50"></el-table-column>
+      <el-table :data="list" v-loading="loading" row-key="id" class="jc-table" :cell-style="cellStyle">
+        <el-table-column type="index" :index="indexMethod" label="序号" width="80"></el-table-column>
         <el-table-column prop="statuteTypeName" label="法规类型" width="120"></el-table-column>
-        <el-table-column prop="statuteName" label="文件名称" width="120"></el-table-column>
-        <el-table-column prop="userName" label="创建人" width="120"></el-table-column>
-        <el-table-column prop="createTime" label="创建时间" width="140" :formatter="formatDate"></el-table-column>
+        <el-table-column prop="statuteName" label="文件名称" width="160"></el-table-column>
+        <el-table-column prop="userName" label="创建人" width="100"></el-table-column>
+        <el-table-column prop="createTime" label="创建时间" width="180" :formatter="formatDate"></el-table-column>
         <el-table-column label="法规描述">
           <template slot-scope="scope">
             <span class="desc" v-text="scope.row.statuteDesc" :title="scope.row.statuteDesc"></span>
           </template>
         </el-table-column>
-        <el-table-column width="90" label="操作">
+        <el-table-column width="100" label="操作">
           <template slot-scope="scope">
             <el-button type="text" size="mini" icon="el-icon-view" @click="detail(scope.row)" title="查看"></el-button>
             <el-button type="text" size="mini" icon="el-icon-edit-outline" @click="manage(scope.row)" title="编辑"></el-button>
@@ -163,6 +163,17 @@ export default {
       // 上传成功函数
       this.loading = false
       this.initData()
+    },
+    cellStyle({ row, column, rowIndex, columnIndex }) {
+      // console.log(row, column, rowIndex, columnIndex )
+      // 调整列样式
+      if (columnIndex == 2) {
+        return 'padding-right:16px'
+      }
+      if (columnIndex == 5) {
+        return 'padding-right:16px'
+      }
+      return ''
     }
   }
 
@@ -176,5 +187,10 @@ export default {
 .desc {
   @include jc-text-warp(4);
   width: 100%;
+}
+</style>
+<style lang="scss">
+.el-dialog__body {
+  padding: 30px 70px 30px 40px;
 }
 </style>

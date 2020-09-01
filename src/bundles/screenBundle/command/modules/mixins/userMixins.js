@@ -19,7 +19,7 @@ export default {
       gatherUserIds: [], //正在采集的用户id 数组
       abnormalUserIds: [], //异常的用户id 数组
       userTipVisible: true, //用户是否显示
-      togetherVisible: false, //用户是否聚合
+      togetherVisible: true, //用户是否聚合
       locationUserId: null //定位的用户id
     }
   },

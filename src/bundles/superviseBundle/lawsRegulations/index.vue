@@ -6,12 +6,12 @@
       <div slot="header" class="jc-card-header">
         <div class="jc-card-title">列表内容</div>
       </div>
-      <el-table :data="list" v-loading="loading" row-key="id" class="jc-table">
-        <el-table-column type="index" :index="indexMethod" label="序号" width="50"></el-table-column>
+      <el-table :data="list" v-loading="loading" row-key="id" class="jc-table" :cell-style="cellStyle">
+        <el-table-column type="index" :index="indexMethod" label="序号" width="80"></el-table-column>
         <el-table-column prop="statuteTypeName" label="法规类型" width="120"></el-table-column>
-        <el-table-column prop="statuteName" label="文件名称" width="120"></el-table-column>
-        <el-table-column prop="userName" label="创建人" width="120"></el-table-column>
-        <el-table-column prop="createTime" label="创建时间" width="140" :formatter="formatDate"></el-table-column>
+        <el-table-column prop="statuteName" label="文件名称" width="160"></el-table-column>
+        <el-table-column prop="userName" label="创建人" width="100"></el-table-column>
+        <el-table-column prop="createTime" label="创建时间" width="180" :formatter="formatDate"></el-table-column>
         <el-table-column prop="eight" label="法规描述">
           <template slot-scope="scope">
             <span class="desc" v-text="scope.row.statuteDesc" :title="scope.row.statuteDesc"></span>
@@ -101,6 +101,17 @@ export default {
       // 查看详情
       this.info = row
       this.detailVisible = true
+    },
+    cellStyle({ row, column, rowIndex, columnIndex }) {
+      // console.log(row, column, rowIndex, columnIndex )
+      // 调整列样式
+      if (columnIndex == 2) {
+        return 'padding-right:16px'
+      }
+      if (columnIndex == 5) {
+        return 'padding-right:16px'
+      }
+      return ''
     }
   }
 
@@ -111,5 +122,10 @@ export default {
 .desc {
   @include jc-text-warp(4);
   width: 100%;
+}
+</style>
+<style lang="scss">
+.el-dialog__body {
+  padding: 30px 70px 30px 40px;
 }
 </style>

@@ -13,7 +13,7 @@ import { MESSAGE_TYPE } from '@/constant/Dictionaries'
 export default {
   data() {
     return {
-      today: new Date(moment().format('YYYY-MM-DD') + ' 00:00:00').getTime() // 初始时间
+      today: new Date(moment().format('YYYY-MM-DD')).getTime() // 初始时间
     }
   },
   created() {
@@ -29,13 +29,13 @@ export default {
       this.initEventData()
     },
     async initEventData() {
-      let beginTime = new Date(this.today) // 开始时间
+      let startTime = new Date(this.today) // 开始时间
 
       let endTime = new Date(this.today + 24 * 60 * 60 * 1000) // 结束时间
 
       try {
         // 发送请求获取数据
-        let ScreenEventData = await getScreenEventData({ orgId: this.eventOrgId, projectId: this.project.projectId, beginTime, endTime })
+        let ScreenEventData = await getScreenEventData({ orgId: this.eventOrgId, projectId: this.project.projectId, startTime, endTime })
 
         MarkerCluster = await getMarkerCluster()
 
