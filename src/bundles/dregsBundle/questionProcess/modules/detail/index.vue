@@ -37,7 +37,7 @@
           <el-form-item label="运输公司：">
             <span>{{form.transportCompany}}</span>
           </el-form-item>
-          <el-form-item label="现在照片：">
+          <el-form-item label="现场照片：">
             <el-image v-for="url in form.filePO&&form.filePO.photos" :key="url" :src="url" :preview-src-list="form.filePO&&form.filePO.photos" class="jc-img"></el-image>
           </el-form-item>
           <el-form-item label="视频：">

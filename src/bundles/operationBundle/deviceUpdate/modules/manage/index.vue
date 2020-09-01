@@ -43,7 +43,7 @@ import api from '@/api/API'
 import { getToken } from '@/libs/storage'
 
 
-let defaultForm = { enableForced: '1', deviceType: '0', pkgName: '', updateInfo: '', url: '', version: '' }
+let defaultForm = { enableForced: 1, deviceType: '0', pkgName: '', updateInfo: '', url: '', version: '' }
 
 export default {
   name: 'SystemDeviceUpdateManage',
