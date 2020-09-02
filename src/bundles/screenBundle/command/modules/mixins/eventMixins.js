@@ -75,9 +75,9 @@ export default {
           //如果已经存在，则去调整数据显示
           eventData.markerCluster.setData(eventData.lnglats)
         } else {
-          let myJcMap = this.getMyJcMap()
+          // let myJcMap = this.getMyJcMap()
 
-          eventData.markerCluster = new MarkerCluster(myJcMap.map, eventData.lnglats, {
+          eventData.markerCluster = new MarkerCluster(null, eventData.lnglats, {
             gridSize: 120,
             renderClusterMarker: this.renderEventClusterMarker,
             renderMarker: this.renderEventMarker
@@ -125,6 +125,7 @@ export default {
 
       //处理数据，如果是单个则去通知显示详情，是多个的聚合，则定位到显示
       if (context.clusterData.length > 1) {
+        console.log('event-点击')
         myJcMap.map.setBounds(this.getAmapBundles(context.clusterData))
       } else {
         //获取事件的key
