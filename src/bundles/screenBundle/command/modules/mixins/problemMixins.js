@@ -76,8 +76,6 @@ export default {
           //如果已经存在，则去调整数据显示
           problemData.markerCluster.setData(problemData.lnglats)
         } else {
-          // let myJcMap = this.getMyJcMap()
-
           problemData.markerCluster = new MarkerCluster(null, problemData.lnglats, {
             gridSize: 120,
             renderClusterMarker: this.renderProblemClusterMarker,

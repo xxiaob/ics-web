@@ -75,8 +75,6 @@ export default {
           //如果已经存在，则去调整数据显示
           eventData.markerCluster.setData(eventData.lnglats)
         } else {
-          // let myJcMap = this.getMyJcMap()
-
           eventData.markerCluster = new MarkerCluster(null, eventData.lnglats, {
             gridSize: 120,
             renderClusterMarker: this.renderEventClusterMarker,
