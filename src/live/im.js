@@ -42,13 +42,17 @@ export class IM {
       const authToken = await getImAuth()
       // const authToken = { appkey, random_str: randomStr, timestamp, signature }
 
-      this.JIM.init({ ...authToken }).onSuccess(data => {
-        this.console('init success', data)
-        this.login(this.username)
-      }).onFail(data => {
-        this.console('init error', data)
-        this.init()
-      })
+      if (authToken) {
+        this.JIM.init({ ...authToken }).onSuccess(data => {
+          this.console('init success', data)
+          this.login(this.username)
+        }).onFail(data => {
+          this.console('init error', data)
+          this.init()
+        })
+      } else {
+        this.console('获取authToken失败')
+      }
     }
   }
 
