@@ -16,18 +16,24 @@ export default {
     }
   },
   created() {
-    this.$EventBus.$on('show-full-img', data=>{
+    this.$EventBus.$on('show-full-img', this.showImages)
+  },
+  methods: {
+    showImages(data) {
       // console.log('show-full-img', data)
       this.show = false
       this.url = data.url
       this.srcList = data.imgs
-      setTimeout(()=>{
+      setTimeout(() => {
         this.show = true
-        this.$nextTick(()=>{
+        this.$nextTick(() => {
           this.$refs.previewImage.showViewer = true
         })
       })
-    })
+    }
+  },
+  beforeDestroy() {
+    this.$EventBus.$off('show-full-img', this.showImages)
   }
 }
 </script>

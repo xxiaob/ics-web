@@ -25,7 +25,7 @@ export default {
   name: 'ScreenCommandGridDetailTask',
   props: ['options', 'project'],
   components: {
-    ViewEmpty: () =>import('@/bundles/screenBundle/command/modules/common/viewEmpty')
+    ViewEmpty: () => import('@/bundles/screenBundle/command/modules/common/viewEmpty')
   },
   data() {
     return {
@@ -54,8 +54,10 @@ export default {
 
         if (result && result.length) {
           result.forEach(item => {
-            list.push({ id: item.id, type: item.type + '', title: item.title, typeName: item.typeName, userName: item.creatorName, orgName: item.orgName,
-              time: formatDate(item.createTime), positionName: item.positionName })
+            list.push({
+              id: item.id, type: item.type + '', title: item.title, typeName: item.typeName, userName: item.creatorName, orgName: item.orgName,
+              time: formatDate(item.createTime), positionName: item.positionName
+            })
           })
         }
 
