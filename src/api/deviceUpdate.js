@@ -54,3 +54,12 @@ export function deviceUpdatePublish(data) {
 export function deviceUpdateDel(deviceUpgPkgIds) {
   return axios.post(API.deviceUpdate.del, { deviceUpgPkgIds })
 }
+
+/**
+ * 获取升级包型号
+ * @param {object} data
+ * @returns {Object} axios 对象
+ */
+export function getModelList(data = {}) {
+  return axios.post(API.deviceUpdate.modelList, data)
+}

@@ -1,6 +1,6 @@
 <template>
   <div class="jc-main-container-warp">
-    <tab-filter @filter="goFilter"></tab-filter>
+    <tab-filter :models="models" @filter="goFilter"></tab-filter>
     <el-card class="jc-table-card jc-mt">
       <div slot="header" class="jc-card-header">
         <div class="jc-card-title">列表内容</div>
@@ -13,7 +13,7 @@
         <el-table-column type="selection" width="40"></el-table-column>
         <el-table-column type="index" :index="indexMethod" label="序号" width="50"></el-table-column>
         <el-table-column prop="pkgName" label="应用名称"></el-table-column>
-        <el-table-column prop="deviceType" label="设备类型" :formatter="formatDeviceType"></el-table-column>
+        <el-table-column prop="modelId" label="设备型号" :formatter="formatModel"></el-table-column>
         <el-table-column prop="version" label="版本号"></el-table-column>
         <el-table-column prop="url" label="设备包名称" show-overflow-tooltip></el-table-column>
         <el-table-column prop="state" label="状态" :formatter="formatState"></el-table-column>
@@ -32,13 +32,13 @@
       <el-pagination @current-change="currentChange" @size-change="sizeChange" :current-page.sync="page.pageNum" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.total" class="text-right jc-mt"></el-pagination>
 
     </el-card>
-    <jc-manage :options="info" :visible.sync="visible" @save-success="initData"></jc-manage>
+    <jc-manage :options="info" :models="models" :visible.sync="visible" @save-success="initData"></jc-manage>
   </div>
 </template>
 <script>
-import { deviceUpdateList, deviceUpdateDel, deviceUpdatePublish } from '@/api/deviceUpdate'
+import { deviceUpdateList, deviceUpdateDel, deviceUpdatePublish, getModelList } from '@/api/deviceUpdate'
 import { formatDate } from '@/libs/util'
-import { deviceTypes, states } from './const'
+import { states } from './const'
 import PaginationMixins from '@/mixins/PaginationMixins'
 
 export default {
@@ -55,10 +55,12 @@ export default {
       visible: false,
       info: null,
       ids: [],
-      filter: {}
+      filter: {},
+      models: []
     }
   },
-  created() {
+  async created() {
+    this.models = await getModelList()
     this.initData()
   },
   methods: {
@@ -71,8 +73,10 @@ export default {
         }
       }
     },
-    formatDeviceType(row, column, cellValue) {
-      return deviceTypes[cellValue]
+    formatModel(row, column, cellValue) {
+      const model = this.models.filter(item=>item.modelId == cellValue)
+
+      return model[0].description
     },
     formatState(row, column, cellValue) {
       return states[cellValue]
@@ -90,24 +94,24 @@ export default {
           const { total, resultList } = await deviceUpdateList({ ...this.filter, ...this.page })
 
           this.page.total = total
-          const list = []
+          // const list = []
 
-          if (resultList && resultList.length > 0) {
-            resultList.forEach(item=>{
-              list.push({
-                id: item.id,
-                deviceType: item.deviceType,
-                enableForced: item.enableForced,
-                pkgName: item.pkgName,
-                state: item.state,
-                updateInfo: item.updateInfo,
-                url: item.url,
-                createTime: item.createTime,
-                version: item.version
-              })
-            })
-          }
-          this.list = list
+          // if (resultList && resultList.length > 0) {
+          //   resultList.forEach(item=>{
+          //     list.push({
+          //       id: item.id,
+          //       deviceType: item.deviceType,
+          //       enableForced: item.enableForced,
+          //       pkgName: item.pkgName,
+          //       state: item.state,
+          //       updateInfo: item.updateInfo,
+          //       url: item.url,
+          //       createTime: item.createTime,
+          //       version: item.version
+          //     })
+          //   })
+          // }
+          this.list = resultList
           this.loading = false
         } catch (error) {
           console.error(error)
