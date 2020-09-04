@@ -37,6 +37,11 @@
           <label class="jc-info-label">角色：</label>
           <div class="jc-info-content" v-text="userRoles"></div>
         </div>
+        <div class="jc-info-item">
+          <div class="jc-info-label">用户描述：</div>
+          <div class="jc-info-content" v-html="user.description"></div>
+        </div>
+        <!-- <div class="jc-edit-content" v-html="user.description"></div> -->
       </div>
     </div>
   </el-dialog>

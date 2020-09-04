@@ -32,6 +32,10 @@
       <div class="jc-detail-label">角色：</div>
       <div class="jc-detail-content" v-text="userRoles"></div>
     </div>
+    <div class="jc-detail-warp">
+      <div class="jc-detail-label">用户描述：</div>
+    </div>
+    <div class="jc-edit-content" v-html="detail.description"></div>
   </div>
 </template>
 <script>

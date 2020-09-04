@@ -29,6 +29,9 @@
           <el-option v-for="item in roles" :key="item.roleId" :label="item.roleName" :value="item.roleId"></el-option>
         </el-select>
       </el-form-item>
+      <el-form-item label="用户描述" prop="description" :rules="rules.SELECT_NOT_NULL">
+        <jc-editor v-model="form.description"></jc-editor>
+      </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="dialogVisible = false">取 消</el-button>
@@ -44,7 +47,7 @@ import { positionListAll } from '@/api/position'
 import { getStringRule, SELECT_NOT_NULL, getTelRule } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
 
-let defaultForm = { userName: '', account: '', phone: '', positionId: '', chestNbr: '', lawNbr: '' }
+let defaultForm = { userName: '', account: '', phone: '', positionId: '', chestNbr: '', lawNbr: '', description: '' }
 
 export default {
   name: 'SystemUserManage',
@@ -63,6 +66,9 @@ export default {
         Tel: getTelRule()
       }
     }
+  },
+  components: {
+    JcEditor: () => import('@/components/JcForm/JcEditor')
   },
   methods: {
     initData() {
@@ -129,7 +135,8 @@ export default {
           lawNbr: this.options.lawNbr,
           roleIds: this.options.roleIds || [],
           orgId: this.options.orgId,
-          positionId: this.options.positionId
+          positionId: this.options.positionId,
+          description: this.options.description
         }
       } else {
         return { ...defaultForm, orgId: this.orgId, roleIds: [] }
