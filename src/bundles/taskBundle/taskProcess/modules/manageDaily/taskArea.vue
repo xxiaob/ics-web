@@ -32,7 +32,6 @@ import { areaTypeList } from '@/api/areaType'
 export default {
   name: 'TaskProcessManageDailyArea',
   props: {
-    edit: false,
     projectId: String,
     selectedAreas: {
       type: Array,
@@ -61,20 +60,12 @@ export default {
       first: true
     }
   },
-  // computed: {
-  //   tree() {
-  //     if (this.areaType === TASK_AREA_TYPES.ORG) {
-  //       return this.orgTree
-  //     } else {
-  //       return this.orgGrid
-  //     }
-  //   }
-  // },
   async created() {
     this.gridTypes = await areaTypeList({})
     // this.getAreaGridList('')
 
     this.interval = setInterval(() => {
+      console.log('this.orgGrid', this.orgGrid)
       // this.filterArr = Object.keys(this.formatTreeToObj(this.orgTree))
       this.checkedNodes = this.$refs.tree.getCheckedNodes().filter(item => item.org === false)
       if (this.orgGrid.length) {
@@ -88,16 +79,7 @@ export default {
       this.$refs.tree.filter(val)
     },
     selectedAreas: {
-      immediate: true,
-      handler(val) {
-        this.$nextTick(() => {
-          this.$refs.tree.setCheckedKeys(val)
-          // if (this.edit) {
-          //   this.$emit('update:edit', false)
-          // }
-          this.checkedNodes = this.$refs.tree.getCheckedNodes().filter(item => item.org === false)
-        })
-      },
+      handler: 'initData',
       deep: true
     },
     projectId: {
@@ -108,6 +90,12 @@ export default {
     }
   },
   methods: {
+    initData(val) {
+      this.$nextTick(() => {
+        this.$refs.tree.setCheckedKeys(val)
+        this.checkedNodes = this.$refs.tree.getCheckedNodes().filter(item => item.org === false)
+      })
+    },
     async getAreaGridList(val) {
       const res = await areaGridList(val)
 
@@ -117,6 +105,8 @@ export default {
         this.$emit('update:selectedAreas', [])
       }
       this.first = false
+
+      this.initData(this.selectedAreas)
     },
     formatGridTree(tree) {
       let trees = []

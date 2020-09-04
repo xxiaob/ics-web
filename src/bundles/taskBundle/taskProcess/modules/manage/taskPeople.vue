@@ -79,7 +79,6 @@ export default {
       this.$refs.tree.filter(val)
     },
     selecteds: {
-      // immediate: true,
       handler: 'initData',
       deep: true
     },
