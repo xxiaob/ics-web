@@ -4,9 +4,9 @@
       <el-form-item prop="pkgName" label="应用名称">
         <el-input v-model="form.pkgName" placeholder="请输入应用名称"></el-input>
       </el-form-item>
-      <el-form-item prop="deviceType" label="设备类型">
-        <el-select v-model="form.deviceType" placeholder="选择设备类型">
-          <el-option v-for="(value,key) in deviceTypes" :key="key" :label="value" :value="key"></el-option>
+      <el-form-item label="设备型号" prop="modelId">
+        <el-select v-model="form.modelId" placeholder="选择设备型号">
+          <el-option v-for="item in models" :key="item.modelId" :label="item.description" :value="item.modelId"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item prop="state" label="状态">
@@ -22,17 +22,22 @@
   </el-card>
 </template>
 <script>
-import { deviceTypes, states } from '../../const'
+import { states } from '../../const'
 export default {
+  props: {
+    models: {
+      type: Array,
+      default: ()=>[]
+    }
+  },
   name: 'SystemDeviceUpdateFilter',
   data() {
     return {
-      deviceTypes,
       states,
       form: {
         pkgName: '',
         state: '',
-        deviceType: ''
+        modelId: ''
       }
     }
   },

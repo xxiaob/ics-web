@@ -4,7 +4,6 @@ import { Message, Loading } from 'element-ui'
 
 const downloadAxios = axios.create({
   baseURL: process.env.apiHostConfig.base,
-  headers: { token: getToken() },
   responseType: 'blob'
 })
 
@@ -34,7 +33,9 @@ export async function download(fileName, url, data = {}) {
   const loading = Loading.service({ fullscreen: true })
 
   try {
-    const res = await downloadAxios.post(url, data)
+    const res = await downloadAxios.post(url, data, {
+      headers: { token: getToken() }
+    })
 
     // console.log(res)
     if (res.status === 200) {

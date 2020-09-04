@@ -88,7 +88,7 @@
       <el-button @click="handleTask(true)" size="small" v-if="form.handle">流转任务</el-button>
       <el-button @click="handleTask(false)" size="small" v-if="form.handle">完成任务</el-button>
       <el-button @click="closeTask" size="small" v-if="form.handle">关闭任务</el-button>
-      <el-button size="small" type="primary" @click="downloadFile">文件下载</el-button>
+      <el-button size="small" type="primary" @click="downloadFile" v-if="form.uploadFilePaths&&form.uploadFilePaths.length">文件下载</el-button>
       <el-button size="small" type="primary" @click="downloadDetail">报表下载</el-button>
       <el-button size="small" type="primary" @click="$emit('update:detailShow', false)">返回</el-button>
     </div>

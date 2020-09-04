@@ -50,6 +50,7 @@ import TaskMixins from './modules/mixins/taskMixins' //任务处理
 import VoiceAlertMixins from './modules/mixins/voiceAlertMixins' //音频播放
 import CommandHeader from './modules/header'//顶部
 import CommandMessage from './modules/message'//任务等消息弹窗
+import MapSearch from '@/components/JcMap/MapSearch' //地图搜索
 
 let myJcMap //个人 map 对象
 
@@ -59,7 +60,7 @@ export default {
   components: {
     CommandHeader,
     CommandOperate: () => import('./modules/operate'), //功能操作区域
-    MapSearch: () => import('@/components/JcMap/MapSearch'), //地图搜索
+    MapSearch,
     DataOverview: () => import('./modules/dataOverview'), //左下角的数据预览
     CommandMessage, //任务等消息弹窗
     ImTalk: () => import('./modules/imTalk'), //聊天消息
@@ -75,7 +76,7 @@ export default {
     EventDetail: () => import('./modules/eventDetail'), // 事件详情
     ProblemDetail: () => import('./modules/problemDetail'), // 问题详情
     DeviceDetail: () => import('./modules/deviceDetail'), // 问题详情
-    VideoWarp: () =>import('./modules/videoWarp') //多屏视频播放
+    VideoWarp: () => import('./modules/videoWarp') //多屏视频播放
   },
   data() {
     return {

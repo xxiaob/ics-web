@@ -34,7 +34,7 @@ export default {
     emergency: false,
     selecteds: {
       type: Array,
-      default: ()=>[]
+      default: () => []
     },
     peopleType: {
       type: String,
@@ -70,19 +70,6 @@ export default {
       }
     }
   },
-  async created() {
-    const res = await getOrgUserList({})
-
-    this.orgPeople = this.formatPeopleTree(res)
-    // this.getProjectUsers('')
-    setTimeout(()=>{
-      if (this.peopleType === TASK_PEOPLE_TYPES.PEOPLE) {
-        this.checkedNodes = this.$refs.tree.getCheckedNodes().filter(item=>item.org === false)
-      } else {
-        this.checkedNodes = this.$refs.tree.getCheckedNodes()
-      }
-    })
-  },
   watch: {
     peopleType(val) {
       this.selfPeopleType = val
@@ -92,21 +79,7 @@ export default {
       this.$refs.tree.filter(val)
     },
     selecteds: {
-      immediate: true,
-      handler(val) {
-        this.$nextTick(()=>{
-          // console.log('this.edit', val, this.tree)
-          if (this.edit) {
-            this.$refs.tree.setCheckedKeys(val)
-            this.$emit('update:edit', false)
-          }
-          if (this.peopleType === TASK_PEOPLE_TYPES.PEOPLE) {
-            this.checkedNodes = this.$refs.tree.getCheckedNodes().filter(item=>item.org === false)
-          } else {
-            this.checkedNodes = this.$refs.tree.getCheckedNodes()
-          }
-        })
-      },
+      handler: 'initData',
       deep: true
     },
     projectId: {
@@ -117,6 +90,28 @@ export default {
     }
   },
   methods: {
+    async initData(val) {
+      try {
+        if (this.orgPeople.length < 1) {
+          const res = await getOrgUserList({})
+
+          this.orgPeople = this.formatPeopleTree(res)
+        }
+        this.$nextTick(() => {
+          if (this.edit) {
+            this.$refs.tree.setCheckedKeys(val)
+            this.$emit('update:edit', false)
+          }
+          if (this.peopleType === TASK_PEOPLE_TYPES.PEOPLE) {
+            this.checkedNodes = this.$refs.tree.getCheckedNodes().filter(item => item.org === false)
+          } else {
+            this.checkedNodes = this.$refs.tree.getCheckedNodes()
+          }
+        })
+      } catch (error) {
+        console.log(error)
+      }
+    },
     async getProjectUsers(projectId) {
       const res = await getOrgUserListByProject({ projectId })
 
@@ -129,6 +124,7 @@ export default {
         }
       }
       this.first = false
+      this.initData(this.selecteds)
     },
     formatPeopleTree(tree) {
       let trees = []
@@ -161,7 +157,7 @@ export default {
     },
     check(checkedNode, { checkedKeys, checkedNodes }) {
       if (this.peopleType === TASK_PEOPLE_TYPES.PEOPLE) {
-        const selecteds = checkedNodes.filter(item=>item.org === false).map(item=>item.id)
+        const selecteds = checkedNodes.filter(item => item.org === false).map(item => item.id)
 
         this.$emit('update:selecteds', selecteds)
       } else {

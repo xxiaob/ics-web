@@ -1,9 +1,9 @@
 <template>
   <el-dialog :title="options ? options.view?'查看版本':'编辑版本' : '新增版本'" :visible.sync="dialogVisible" :close-on-click-modal="false" width="600px" :append-to-body="true" @close="dialogClose">
     <el-form ref="form" label-width="80px" :model="form" class="jc-manage-form">
-      <el-form-item label="设备类型" prop="deviceType" :rules="rules.SELECT_NOT_NULL">
-        <el-select v-model="form.deviceType" placeholder="选择设备类型" :disabled="view">
-          <el-option v-for="(value,key) in deviceTypes" :key="key" :label="value" :value="key"></el-option>
+      <el-form-item label="设备型号" prop="modelId" :rules="rules.SELECT_NOT_NULL">
+        <el-select v-model="form.modelId" placeholder="选择设备型号" :disabled="view">
+          <el-option v-for="item in models" :key="item.modelId" :label="item.description" :value="item.modelId"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="应用名称" prop="pkgName" :rules="rules.Len20">
@@ -16,9 +16,7 @@
         <el-input v-model="form.version" :disabled="view" placeholder="请输入版本号"></el-input>
       </el-form-item>
       <el-form-item label="强制升级" prop="enableForced" :rules="rules.SELECT_NOT_NULL">
-        <el-switch v-model="form.enableForced"
-          :active-value="1"
-          :inactive-value="0">
+        <el-switch v-model="form.enableForced" :active-value="1" :inactive-value="0">
         </el-switch>
       </el-form-item>
       <el-form-item label="应用文件" prop="url" :rules="[{required: true, message: '请上传文件'}]">
@@ -37,22 +35,26 @@
 <script>
 import { deviceUpdateSave } from '@/api/deviceUpdate'
 import { getStringRule, NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
-import { deviceTypes } from '../../const'
 import FormMixins from '@/mixins/FormMixins'
 import api from '@/api/API'
 import { getToken } from '@/libs/storage'
 
 
-let defaultForm = { enableForced: 1, deviceType: '0', pkgName: '', updateInfo: '', url: '', version: '' }
+let defaultForm = { enableForced: 1, modelId: '', pkgName: '', updateInfo: '', url: '', version: '' }
 
 export default {
+  props: {
+    models: {
+      type: Array,
+      default: ()=>[]
+    }
+  },
   name: 'SystemDeviceUpdateManage',
   mixins: [FormMixins],
   data() {
     return {
       uploadUrl: process.env.apiHostConfig.base + api.upload,
       uploadHeaders: { token: getToken() },
-      deviceTypes,
       loading: false,
       menus: [],
       rules: {
@@ -90,7 +92,7 @@ export default {
         this.view = this.options.view || false
         return {
           id: this.options.id,
-          deviceType: this.options.deviceType.toString(),
+          modelId: this.options.modelId,
           pkgName: this.options.pkgName,
           enableForced: this.options.enableForced,
           updateInfo: this.options.updateInfo,

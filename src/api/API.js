@@ -84,7 +84,8 @@ export default {
     list: 'device-service/deviceUpgPkg/listByPage',
     update: 'device-service/deviceUpgPkg/upd',
     del: 'device-service/deviceUpgPkg/del',
-    publish: 'device-service/deviceUpgPkg/publishedPkg'
+    publish: 'device-service/deviceUpgPkg/publishedPkg',
+    modelList: 'device-service/deviceUpgModel/getDeviceUpgradeModelList'
   },
   upload: 'file-server-service/upload/upload',
   device: {

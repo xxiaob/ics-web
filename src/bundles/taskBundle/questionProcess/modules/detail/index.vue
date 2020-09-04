@@ -57,7 +57,7 @@
           <!-- v-if="!firstOrgIds.includes(form.orgId)" -->
           <el-button v-if="form.handle" @click="generateTask" :loading="loading" type="primary" size="small">生成任务</el-button>
           <el-button v-if="form.handle" @click="closeQuestion" :loading="loading" size="small">关闭问题</el-button>
-          <el-button size="small" type="primary" @click="downloadFile">文件下载</el-button>
+          <el-button size="small" type="primary" @click="downloadFile" v-if="form.uploadFilePaths&&form.uploadFilePaths.length">文件下载</el-button>
           <el-button size="small" type="primary" @click="downloadDetail">报表下载</el-button>
         </div>
 

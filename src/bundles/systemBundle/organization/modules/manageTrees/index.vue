@@ -2,7 +2,8 @@
   <div class="jc-card jc-ph">
     <div class="jc-title">
       {{title}}
-      <el-button class="jc-edit-btn" type="text" size="small" :icon="treeEdit?'el-icon-finished':'el-icon-edit'" @click="treeEdit = !treeEdit"></el-button>
+      <!-- :icon="treeEdit?'el-icon-finished':'el-icon-edit'" -->
+      <el-button class="jc-edit-btn" type="text" size="small" @click="treeEdit = !treeEdit">{{treeEdit?'完成':'编辑'}}</el-button>
     </div>
     <el-input v-model="filterText" prefix-icon="el-icon-search" clearable size="mini" placeholder="输入关键字进行过滤"></el-input>
     <div class="jc-tree-warp">
