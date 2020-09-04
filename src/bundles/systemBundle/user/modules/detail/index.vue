@@ -37,13 +37,10 @@
           <label class="jc-info-label">角色：</label>
           <div class="jc-info-content" v-text="userRoles"></div>
         </div>
-        <div class="jc-info-item">
-          <div class="jc-info-label">用户描述：</div>
-          <div class="jc-info-content" v-html="user.description"></div>
-        </div>
-        <!-- <div class="jc-edit-content" v-html="user.description"></div> -->
+        <div class="jc-info-title">用户描述</div>
       </div>
     </div>
+    <div class="jc-user-description" v-html="user.description"></div>
   </el-dialog>
 </template>
 <script>
@@ -114,6 +111,24 @@ $jc-info-item-height: 20px;
   .jc-info-content {
     min-height: $jc-info-item-height;
     line-height: $jc-info-item-height;
+  }
+}
+.jc-info-title {
+  margin-bottom: 10px;
+  text-align: center;
+  font-size: $jc-font-size-medium;
+  font-weight: bold;
+  color: $jc-color-text-primary;
+}
+</style>
+<style lang="scss">
+.jc-user-description {
+  position: relative;
+  padding: 0 $jc-default-dis;
+
+  img {
+    max-width: 100%;
+    padding: 10px 0;
   }
 }
 </style>

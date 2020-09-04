@@ -29,7 +29,7 @@
           <el-option v-for="item in roles" :key="item.roleId" :label="item.roleName" :value="item.roleId"></el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="用户描述" prop="description" :rules="rules.SELECT_NOT_NULL">
+      <el-form-item label="用户描述" prop="description">
         <jc-editor v-model="form.description"></jc-editor>
       </el-form-item>
     </el-form>
