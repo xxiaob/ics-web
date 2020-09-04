@@ -12,7 +12,7 @@
       <!-- assigneeAreaPOS -->
       <el-form-item label="任务区域" prop="" :rules="rules.NOT_NULL">
         <!-- projectId 后期重写 -->
-        <jc-task-area :edit.sync="editArea" :projectId="form.projectId==initProjectId?'':form.projectId" :areaType.sync="form.workAreaType" :selectedAreas.sync="form.assigneeAreaPOS" :orgTree="orgTree"></jc-task-area>
+        <jc-task-area :projectId="form.projectId==initProjectId?'':form.projectId" :selectedAreas.sync="form.assigneeAreaPOS"></jc-task-area>
       </el-form-item>
       <!-- peopleProps[peopleType] -->
       <el-form-item label="任务人员" prop="" :rules="rules.SELECT_NOT_NULL">
@@ -132,7 +132,6 @@ export default {
         value: 'id'
       },
       TASK_SELECT_TYPES,
-      editArea: false,
       edit: false,
       workFrequency: null,
       emergency: false,
@@ -205,7 +204,6 @@ export default {
       }
     },
     formatFormData() {
-      this.editArea = true
       this.edit = true
       if (this.options) {
         const { orgIds, assignees, detailViewVO: { businessKey, projectId, taskDesc, taskName, endDate, startDate }, taskTimePOS, workPeopleNbr, workTime, workAreaType, assigneeAreaPOS, ifOnTime, workFrequency } = this.options
