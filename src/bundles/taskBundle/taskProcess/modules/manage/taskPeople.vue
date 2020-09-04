@@ -125,6 +125,7 @@ export default {
         }
       }
       this.first = false
+      this.initData(this.selecteds)
     },
     formatPeopleTree(tree) {
       let trees = []
