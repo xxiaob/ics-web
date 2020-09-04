@@ -36,7 +36,7 @@ export default {
     projectId: String,
     selectedAreas: {
       type: Array,
-      default: ()=>[]
+      default: () => []
     },
     areaType: {
       type: String,
@@ -74,9 +74,9 @@ export default {
     this.gridTypes = await areaTypeList({})
     // this.getAreaGridList('')
 
-    this.interval = setInterval(()=>{
+    this.interval = setInterval(() => {
       // this.filterArr = Object.keys(this.formatTreeToObj(this.orgTree))
-      this.checkedNodes = this.$refs.tree.getCheckedNodes().filter(item=>item.org === false)
+      this.checkedNodes = this.$refs.tree.getCheckedNodes().filter(item => item.org === false)
       if (this.orgGrid.length) {
         clearInterval(this.interval)
       }
@@ -90,12 +90,12 @@ export default {
     selectedAreas: {
       immediate: true,
       handler(val) {
-        this.$nextTick(()=>{
+        this.$nextTick(() => {
           this.$refs.tree.setCheckedKeys(val)
           // if (this.edit) {
           //   this.$emit('update:edit', false)
           // }
-          this.checkedNodes = this.$refs.tree.getCheckedNodes().filter(item=>item.org === false)
+          this.checkedNodes = this.$refs.tree.getCheckedNodes().filter(item => item.org === false)
         })
       },
       deep: true
@@ -142,7 +142,7 @@ export default {
       return trees
     },
     check(checkedNode, { checkedNodes }) {
-      const selecteds = checkedNodes.filter(item=>item.org === false).map(item=>item.id)
+      const selecteds = checkedNodes.filter(item => item.org === false).map(item => item.id)
 
       this.$emit('update:selectedAreas', selecteds)
     },
