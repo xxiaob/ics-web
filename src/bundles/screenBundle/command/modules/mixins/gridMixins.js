@@ -20,6 +20,7 @@ export default {
     return {
       gridOrg: null,
       abnormalGridIds: [], //异常的网格id 数组
+      signVisibles: [], //网格区域对应类型是否显示实体
       areaTipVisibles: [], //网格区域对应类型是否显示名称
       areaAreaVisibles: [], //网格区域对应类型是否显示区域
       togetherVisibles: [] //网格区域对应类型是否聚合显示区域
@@ -29,6 +30,7 @@ export default {
     this.$EventBus.$on('org-change', this.areaMap) //监听行级别切换
     this.$EventBus.$on('map-grid-change', this.mapGridChange) //岗点考勤状态变化
     this.$EventBus.$on('screen-grid-location', this.gridLocation) //监听网格定位
+    this.$EventBus.$on('show-sign-change', this.gridShowSignChange) //显示实体
     this.$EventBus.$on('show-area-change', this.gridShowAreaChange) //监听区域显示切换
     this.$EventBus.$on('show-word-change', this.gridShowWordChange) //监听文字显示切换
     this.$EventBus.$on('show-together-change', this.gridTogetherChange) //监听聚合显示改变
@@ -278,12 +280,15 @@ export default {
     gridShowWordChange(words) {
       //组织文字显示
       this.areaTipVisibles = [...words]
-
       this.fitGrids()
     },
     gridTogetherChange(togethers) {
       //聚合显示控制
       this.togetherVisibles = [...togethers]
+      this.fitGrids()
+    },
+    gridShowSignChange(signs) {
+      this.signVisibles = [...signs]
       this.fitGrids()
     }
   },
@@ -293,6 +298,7 @@ export default {
     this.$EventBus.$off('org-change', this.areaMap)
     this.$EventBus.$off('map-grid-change', this.mapGridChange)
     this.$EventBus.$off('screen-grid-location', this.gridLocation)
+    this.$EventBus.$off('show-sign-change', this.gridShowSignChange)
     this.$EventBus.$off('show-area-change', this.gridShowAreaChange)
     this.$EventBus.$off('show-word-change', this.gridShowWordChange)
     this.$EventBus.$off('show-together-change', this.gridTogetherChange)

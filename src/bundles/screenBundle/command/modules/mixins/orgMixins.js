@@ -94,6 +94,7 @@ export default {
               map: myJcMap,
               name: item.areaName,
               center: item.center.split(','),
+              signVisible: this.signVisible,
               tipVisible: this.orgTipVisible,
               areaVisible: this.orgAreaVisible,
               extData: { orgId: item.orgId, adcode: item.areaCode, areaId: item.areaId, areaName: item.areaName },
