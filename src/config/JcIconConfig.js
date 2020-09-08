@@ -27,7 +27,8 @@ export const JcIcons = {
   xnc: { name: '消纳场', icon: '/static/areaicons/xnc.png', cluster: '/static/areaicons/cluster1.png', abnormal: '/static/mapIcons/xnc-abnormal.png' },
   xcd: { name: '巡查点', icon: '/static/areaicons/xcd.png', cluster: '/static/areaicons/cluster4.png', abnormal: '/static/mapIcons/xcd-abnormal.png' },
   zjgd: { name: '在建工地', icon: '/static/areaicons/zjgd.png', cluster: '/static/areaicons/cluster1.png', abnormal: '/static/mapIcons/zjgd-abnormal.png' },
-  ztkd: { name: '渣土卡点', icon: '/static/areaicons/ztkd.png', cluster: '/static/areaicons/cluster1.png', abnormal: '/static/mapIcons/ztkd-abnormal.png' }
+  ztkd: { name: '渣土卡点', icon: '/static/areaicons/ztkd.png', cluster: '/static/areaicons/cluster1.png', abnormal: '/static/mapIcons/ztkd-abnormal.png' },
+  other: { name: '自建岗点', icon: '/static/areaicons/other.png', cluster: '/static/areaicons/other.png', abnormal: '/static/mapIcons/other-abnormal.png' }
 }
 
 /**
@@ -37,9 +38,8 @@ export const JcUserIcons = {
   cluster: '/static/mapIcons/usercluster.png', //聚合图标
   online: '/static/mapIcons/useronline.png', //在线图标
   gather: '/static/mapIcons/usergather.png', //采集图标
-  abnormal: '/static/mapIcons/userabnormal.gif' //异常报警图标
+  abnormal: '/static/mapIcons/userabnormal.png' //异常报警图标
 }
-
 
 /**
  *  事件图标
@@ -57,6 +57,13 @@ export const JcProblemIcons = {
   plain: '/static/mapIcons/problemplain.png' // 事件简单图标
 }
 
+/**
+ *  临时任务图标
+ */
+export const JcTemporaryTaskIcons = {
+  abnormal: '/static/mapIcons/temporarytaskswarn.gif',
+  plain: '/static/mapIcons/temporarytasks.gif'
+}
 
 /**
  *  设备图标

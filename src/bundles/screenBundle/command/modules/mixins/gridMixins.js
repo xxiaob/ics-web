@@ -188,7 +188,7 @@ export default {
     renderGridClusterMarker(gridTypeMap, context) {
       console.log('绘制网格-聚合绘制', context)
       context.marker.setAnchor('center')
-      context.marker.setContent(`<div class="jc-cluster-content" style="background-image: url(${JcIcons[gridTypeMap.icon].cluster});">${context.count}</div>`)
+      context.marker.setContent(`<div class="jc-marker-content jc-marker-cluster" style="background-image: url(${JcIcons[gridTypeMap.icon].cluster});">${context.count}</div>`)
     },
     renderGridMarker(gridTypeMap, context) {
       console.log('绘制网格-单点绘制', context)
@@ -198,17 +198,13 @@ export default {
 
       let isAbnormal = this.abnormalGridIds.includes(signItem.areaId) //当前岗点是否异常
 
-      let content = isAbnormal ? '<div class="jc-marker-content jc-market-center">' : '<div class="jc-marker-content">'
+      let content = `<div class="jc-marker-content" style="background-image: url(${isAbnormal ? JcIcons[signItem.icon].abnormal : JcIcons[signItem.icon].icon});">`
 
       if (this.areaTipVisibles.includes(signItem.areaTypeId)) {
         content += `<div class="jc-marker-title">${signItem.areaName}</div>`
       }
-      if (isAbnormal) {
-        content += `<img src=${JcIcons[signItem.icon].abnormal} class="jc-marker-icon"/></div>`
-      } else {
-        content += `<img src=${JcIcons[signItem.icon].icon} class="jc-marker-icon"/></div>`
-      }
 
+      context.marker.setAnchor('center')
       context.marker.setContent(content)
     },
     markerGridClusterClick(gridTypeMap, context) {
