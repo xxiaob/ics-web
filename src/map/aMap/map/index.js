@@ -30,6 +30,11 @@ class JcMap extends JcMapBase {
         this.AMap = await initAmap()
         this.map = new this.AMap.Map(source, Object.assign({ ...MapOptions.mapOptions[this.mapStyle], zooms: this.zooms }, options))
 
+        //设置地图 LabelsLayer
+        this.labelsLayer = new this.AMap.LabelsLayer({ collision: false, allowCollision: true })
+
+        this.map.add(this.labelsLayer) //添加到地图图层
+
         let complete = false //防止map complete事件触发多次
 
         this.map.on('complete', () => {

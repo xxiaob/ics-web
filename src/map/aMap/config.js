@@ -147,38 +147,3 @@ export const SearchOptions = {
     extensions: 'base' //返回信息详略，默认为base（基本信息）
   }
 }
-
-import { defaultMarker, centerMarker, trajectoryMasker } from './marker/template'
-//market配置参数
-export const markerOptions = {
-  [mapStyle.BASE]: {
-    base: {
-      anchor: [-9, -50]
-    },
-    getContent: defaultMarker
-  },
-  [mapStyle.DARK]: {
-    base: {
-      anchor: [-9, -50]
-    },
-    getContent: defaultMarker
-  },
-  [mapStyle.SATELLITE]: {
-    base: {
-      anchor: [-9, -50]
-    },
-    getContent: defaultMarker
-  },
-  [markerStyle.CENTER_MARKER]: {
-    base: {
-      anchor: [-15, -15]
-    },
-    getContent: centerMarker
-  },
-  [markerStyle.TRAJECTORY]: {
-    base: {
-      anchor: 'center'
-    },
-    getContent: trajectoryMasker
-  }
-}

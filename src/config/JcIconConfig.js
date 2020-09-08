@@ -5,27 +5,28 @@
 /**
   * 默认market icon
   */
-export const defaultMarkerIcon = '/static/areaicons/default.png'
+export const defaultOrgMarkerIcon = '/static/areaicons/org-default.png'
 
 /**
   * 图标icon
   */
 export const JcIcons = {
-  caichang: { name: '菜场', icon: '/static/areaicons/caichang.png', cluster: '/static/areaicons/cluster1.png', abnormal: '/static/mapIcons/gridabnormal.gif' },
-  putonggang: { name: '普通岗', icon: '/static/areaicons/putonggang.png', cluster: '/static/areaicons/cluster1.png', abnormal: '/static/mapIcons/gridabnormal.gif' },
-  shiguangang: { name: '市管岗', icon: '/static/areaicons/shiguangang.png', cluster: '/static/areaicons/cluster1.png', abnormal: '/static/mapIcons/gridabnormal.gif' },
-  fangxunbaozhang: { name: '防汛保障', icon: '/static/areaicons/fangxunbaozhang.png', cluster: '/static/areaicons/cluster2.png', abnormal: '/static/mapIcons/gridabnormal.gif' },
-  guojiagongji: { name: '国家公祭', icon: '/static/areaicons/guojiagongji.png', cluster: '/static/areaicons/cluster2.png', abnormal: '/static/mapIcons/gridabnormal.gif' },
-  jiyangang: { name: '积淹岗', icon: '/static/areaicons/jiyangang.png', cluster: '/static/areaicons/cluster2.png', abnormal: '/static/mapIcons/gridabnormal.gif' },
-  lingshirenwu: { name: '临时任务', icon: '/static/areaicons/lingshirenwu.png', cluster: '/static/areaicons/cluster3.png', abnormal: '/static/mapIcons/gridabnormal.gif' },
-  yinyuejie: { name: '音乐节', icon: '/static/areaicons/yinyuejie.png', cluster: '/static/areaicons/cluster3.png', abnormal: '/static/mapIcons/gridabnormal.gif' },
-  saoxuefangdong: { name: '扫雪防冻', icon: '/static/areaicons/saoxuefangdong.png', cluster: '/static/areaicons/cluster3.png', abnormal: '/static/mapIcons/gridabnormal.gif' },
-  saoxuegang: { name: '扫雪岗', icon: '/static/areaicons/saoxuegang.png', cluster: '/static/areaicons/cluster1.png', abnormal: '/static/mapIcons/gridabnormal.gif' },
-  shuangdenghuiyingjibaozhang: { name: '双城灯会应急保障', icon: '/static/areaicons/shuangdenghuiyingjibaozhang.png', cluster: '/static/areaicons/cluster1.png', abnormal: '/static/mapIcons/gridabnormal.gif' },
-  tongyongzhuangxiangfangkong: { name: '通用专项防控', icon: '/static/areaicons/tongyongzhuangxiangfangkong.png', cluster: '/static/areaicons/cluster2.png', abnormal: '/static/mapIcons/gridabnormal.gif' },
-  zaijiangongdi: { name: '在建工地', icon: '/static/areaicons/zaijiangongdi.png', cluster: '/static/areaicons/cluster2.png', abnormal: '/static/mapIcons/gridabnormal.gif' },
-  zhatu: { name: '渣土', icon: '/static/areaicons/zhatu.png', cluster: '/static/areaicons/cluster3.png', abnormal: '/static/mapIcons/gridabnormal.gif' },
-  zhatukakou: { name: '渣土卡口', icon: '/static/areaicons/zhatukakou.png', cluster: '/static/areaicons/cluster3.png', abnormal: '/static/mapIcons/gridabnormal.gif' }
+  caichang: { name: '菜场', icon: '/static/areaicons/caichang.png', cluster: '/static/areaicons/cluster3.png', abnormal: '/static/mapIcons/caichang-abnormal.png' },
+  shiguangang: { name: '市管岗', icon: '/static/areaicons/shiguangang.png', cluster: '/static/areaicons/cluster4.png', abnormal: '/static/mapIcons/shiguangang-abnormal.png' },
+  workspace: { name: '办公点', icon: '/static/areaicons/workspace.png', cluster: '/static/areaicons/cluster4.png', abnormal: '/static/mapIcons/workspace-abnormal.png' },
+  dhyjbz: { name: '灯会应急保障', icon: '/static/areaicons/dhyjbz.png', cluster: '/static/areaicons/cluster4.png', abnormal: '/static/mapIcons/dhyjbz-abnormal.png' },
+  fxd: { name: '防汛点', icon: '/static/areaicons/fxd.png', cluster: '/static/areaicons/cluster2.png', abnormal: '/static/mapIcons/fxd-abnormal.png' },
+  gkhkg: { name: '高考护考岗', icon: '/static/areaicons/gkhkg.png', cluster: '/static/areaicons/cluster3.png', abnormal: '/static/mapIcons/gkhkg-abnormal.png' },
+  gongce: { name: '公厕', icon: '/static/areaicons/gongce.png', cluster: '/static/areaicons/cluster3.png', abnormal: '/static/mapIcons/gongce-abnormal.png' },
+  gongji: { name: '公祭', icon: '/static/areaicons/gongji.png', cluster: '/static/areaicons/cluster5.png', abnormal: '/static/mapIcons/gongji-abnormal.png' },
+  hxg: { name: '护学岗', icon: '/static/areaicons/hxg.png', cluster: '/static/areaicons/cluster3.png', abnormal: '/static/mapIcons/hxg-abnormal.png' },
+  jxd: { name: '积雪点', icon: '/static/areaicons/jxd.png', cluster: '/static/areaicons/cluster2.png', abnormal: '/static/mapIcons/jxd-abnormal.png' },
+  jxg: { name: '街巷岗', icon: '/static/areaicons/jxg.png', cluster: '/static/areaicons/cluster4.png', abnormal: '/static/mapIcons/jxg-abnormal.png' },
+  tcd: { name: '停车点', icon: '/static/areaicons/tcd.png', cluster: '/static/areaicons/cluster3.png', abnormal: '/static/mapIcons/tcd-abnormal.png' },
+  xnc: { name: '消纳场', icon: '/static/areaicons/xnc.png', cluster: '/static/areaicons/cluster1.png', abnormal: '/static/mapIcons/xnc-abnormal.png' },
+  xcd: { name: '巡查点', icon: '/static/areaicons/xcd.png', cluster: '/static/areaicons/cluster4.png', abnormal: '/static/mapIcons/xcd-abnormal.png' },
+  zjgd: { name: '在建工地', icon: '/static/areaicons/zjgd.png', cluster: '/static/areaicons/cluster1.png', abnormal: '/static/mapIcons/zjgd-abnormal.png' },
+  ztkd: { name: '渣土卡点', icon: '/static/areaicons/ztkd.png', cluster: '/static/areaicons/cluster1.png', abnormal: '/static/mapIcons/ztkd-abnormal.png' }
 }
 
 /**

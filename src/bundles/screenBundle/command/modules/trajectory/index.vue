@@ -27,7 +27,6 @@
 <script>
 import { NOT_NULL } from '@/libs/rules'
 import { JcMap, JcMapMarker } from '@/map'
-import { markerStyle } from '@/map/mapConst'
 import { initMoveAnimation, getAddressByPosition } from '@/map/aMap/aMapUtil'
 import { getUserHistoryPosition } from '@/api/screen'
 import { formatDate } from '@/libs/util'
@@ -142,7 +141,7 @@ export default {
       }
       if (path.length) {
         //设置移动的对象
-        moveMarker = new JcMapMarker({ map: myJcMap, position: path[0], icon: '/static/mapIcons/trajectorysign.png', mapStyle: markerStyle.TRAJECTORY })
+        moveMarker = new JcMapMarker({ map: myJcMap, position: path[0], icon: '/static/mapIcons/trajectorysign.png' })
 
         moveMarker.marker.moveAlong(path, { duration: 400, autoRotation: true })
         moveMarker.marker.stopMove()//暂停动画
@@ -163,7 +162,7 @@ export default {
 
         let speed = parseFloat(pathData[key].s)
 
-        if (speed > 20 ) {
+        if (speed > 20) {
           style = 'jc-trajectory-car'
         } else if (speed > 5) {
           style = 'jc-trajectory-elcicle'

@@ -2,7 +2,6 @@
  * 任务显示混入
  */
 import { JcMapMarker } from '@/map'
-import { markerStyle } from '@/map/mapConst'
 import { MAP_EVENT } from '@/constant/CONST'
 import { MESSAGE_TYPE } from '@/constant/Dictionaries'
 import { VOICE_TYPE } from '@/config/JcVoiceAlertConfig'
@@ -41,7 +40,7 @@ export default {
     drawTask(task) {
       let myJcMap = this.getMyJcMap() //获取地图对象
 
-      let marker = new JcMapMarker({ map: myJcMap, name: task.taskName, icon: '/static/mapIcons/temporarytasks.gif', position: task.center, mapStyle: markerStyle.CENTER_MARKER })
+      let marker = new JcMapMarker({ map: myJcMap, name: task.taskName, icon: '/static/mapIcons/temporarytasks.gif', position: task.center })
 
       //添加监听
       marker.on(MAP_EVENT.CLICK, () => {

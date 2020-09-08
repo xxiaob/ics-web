@@ -2,7 +2,39 @@
  * 高德地图图标
  */
 import JcMapmarkerBase from '../../base/JcMapMarker'
-import { EventTrans, markerOptions } from '../config'
+import { EventTrans } from '../config'
+import { defaultOrgMarkerIcon, JcIcons } from '@/config/JcIconConfig'
+
+/**
+ * 返回url
+ * @param {String} icon 可以为url，也可以为JcIcons 的 key
+ * @returns {String} 标记地址
+ */
+let getIcon = function (icon) {
+  if (icon) {
+    let iconItem = JcIcons[icon]
+
+    return iconItem ? iconItem.icon : icon
+  }
+  return defaultOrgMarkerIcon
+}
+
+/**
+ * 默认的立标marker样式
+ * @param {*} options 参数
+ * @param {String} options.icon 中心点标记图标，可以为url，也可以为JcIcons 的 key
+ * @param {String} options.title 中心点名称
+ * @param {Boolean} options.titleVisible 标题是否可见
+ * @returns {String} html字符串
+ */
+let getMarker = function (options) {
+  let result = `<div class="jc-marker-content" style="background-image: url(${getIcon(options.icon)});">`
+
+  if (options.title && options.titleVisible) {
+    result += `<div class="jc-marker-title">${options.title}</div>`
+  }
+  return result + '</div>'
+}
 
 class JcMapmarker extends JcMapmarkerBase {
   /**
@@ -12,19 +44,24 @@ class JcMapmarker extends JcMapmarkerBase {
   constructor(options = {}) {
     super(options)
     //处理标记显示
-    this.marker = new this.map.AMap.Marker({
-      ...markerOptions[this.mapStyle || this.map.mapStyle],
-      zIndex: 10,
-      position: this.position,
-      draggable: this.draggable
-    })
+    if (this.draggable) {
+      this.marker = new this.map.AMap.Marker({
+        anchor: 'center',
+        zIndex: 1,
+        position: this.position,
+        draggable: true
+      })
+    } else {
+      this.marker = new this.map.AMap.LabelMarker({ zIndex: 1, position: this.position, text: { } })
+    }
     this.marker.on('mouseover', function (event) {
-      event.target.setzIndex(12)
+      event.target.setzIndex(2)
     })
     this.marker.on('mouseout', function (event) {
-      event.target.setzIndex(10)
+      event.target.setzIndex(1)
     })
     this.show()
+    window.marker = this
   }
 
   /**
@@ -32,9 +69,13 @@ class JcMapmarker extends JcMapmarkerBase {
    * @param {Array} position 中心点
    */
   show(position) {
-    this.marker.setContent(markerOptions[this.mapStyle || this.map.mapStyle].getContent({ icon: this.icon, title: this.name, titleVisible: this.titleVisible, extData: this.extData }))
     this.setPosition(position)
-    this.marker.setMap(this.map.map)
+    this.setContent()
+    if (this.draggable) {
+      this.marker.setMap(this.map.map)
+    } else {
+      this.map.labelsLayer.add(this.marker)
+    }
   }
 
   /**
@@ -60,14 +101,35 @@ class JcMapmarker extends JcMapmarkerBase {
    * 设置marker内容
    */
   setContent() {
-    this.marker.setContent(markerOptions[this.mapStyle || this.map.mapStyle].getContent({ icon: this.icon, title: this.name, titleVisible: this.titleVisible, extData: this.extData }))
+    if (this.draggable) {
+      this.marker.setContent(getMarker({ icon: this.icon, title: this.name, titleVisible: this.titleVisible }))
+    } else {
+      this.marker.setIcon({ image: getIcon(this.icon), anchor: 'center', size: [30, 30] })
+      this.marker.setText({
+        content: this.titleVisible ? this.name : '',
+        direction: 'top',
+        offset: [0, -3],
+        style: {
+          fontSize: 12,
+          fillColor: '#162F77',
+          padding: [3, 10],
+          backgroundColor: '#ffffff',
+          borderColor: '#DCDFE6',
+          borderWidth: 1
+        }
+      })
+    }
   }
 
   /**
    * 隐藏标记
    */
   hide() {
-    this.marker.setMap(null)
+    if (this.draggable) {
+      this.marker.setMap(null)
+    } else {
+      this.map.labelsLayer.remove(this.marker)
+    }
   }
 
   /**
