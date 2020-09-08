@@ -17,6 +17,7 @@ export default {
       org: null,
       zoomOrgs: {},
       nowOrgId: null,
+      orgSignVisible: false, //是否显示中心点标记
       orgTipVisible: false, //组织是否显示名称
       orgAreaVisible: true //组织是否显示区域
     }
@@ -24,6 +25,7 @@ export default {
   created() {
     this.$EventBus.$on('org-change', this.orgMap) //监听行级别切换
     this.$EventBus.$on('screen-org-location', this.orgLocation) //监听组织定位
+    this.$EventBus.$on('show-sign-change', this.orgShowSignChange) //显示组织实体
     this.$EventBus.$on('show-area-change', this.orgShowAreaChange) //监听区域显示切换
     this.$EventBus.$on('show-word-change', this.orgShowWordChange) //监听文字显示切换
   },
@@ -187,15 +189,26 @@ export default {
       })
     },
     orgShowWordChange(words) {
-      this.orgTipVisible = words.includes('org') //如果存在组织区域显示，则显示文字，否则不显示
+      this.orgTipVisible = words.includes('org')
       orgAreas.forEach(item => {
-        item.showTip(this.orgTipVisible)
+        item.tipVisible = this.orgTipVisible
+        item.showTip()
+      })
+    },
+    orgShowSignChange(signs) {
+      this.orgSignVisible = signs.includes('org')
+      this.orgAreaVisible = this.orgSignVisible
+      orgAreas.forEach(item => {
+        item.signVisible = this.orgSignVisible
+        item.showArea(this.orgAreaVisible)
+        item.showTip()
       })
     }
   },
   beforeDestroy() {
     //去除事件监听
     this.$EventBus.$off('org-change', this.orgMap)
+    this.$EventBus.$off('show-sign-change', this.orgShowSignChange)
     this.$EventBus.$off('show-area-change', this.orgShowAreaChange)
     this.$EventBus.$off('show-word-change', this.orgShowWordChange)
   }

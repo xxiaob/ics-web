@@ -3,86 +3,109 @@
     <div class="jc-opreate-item">
       <router-link :to="{name: 'main'}" class="jc-main" tag="i" title="首页"></router-link>
     </div>
+    <div class="jc-opreate-item">
+      <i class="jc-map-switch" title="地图切换"></i>
+      <div class="jc-opera-work jc-map-space">
+        <div class="jc-map-switch-item" v-for="item in maps" :key="item.key" :class="activeStyle == item.value ? `jc-active map-${item.value}` : `map-${item.value}`" @click="switchMap(item.value)"></div>
+      </div>
+    </div>
+    <div class="jc-opreate-item">
+      <i class="jc-show-area" title="显示设置"></i>
+      <div class="jc-opera-work">
+        <!-- 实体显示设置 -->
+        <div class="jc-oprea-check-warp">
+          <div class="jc-oprea-check-title">实体：</div>
+          <el-checkbox-group v-model="signType" @change="signChange">
+            <el-checkbox class="jc-work-item" label="org">
+              <div class="jc-work-content">组织</div>
+            </el-checkbox>
+            <el-checkbox class="jc-work-item" label="user">
+              <div class="jc-work-content jc-work-nobg"><i class="iconfont iconrenyuan-5"></i>人员</div>
+            </el-checkbox>
+            <!-- 新增事件与问题实体控件 -->
+            <el-checkbox class="jc-work-item" label="event">
+              <div class="jc-work-content jc-work-nobg"><i class="iconfont iconshijian-2"></i>事件</div>
+            </el-checkbox>
+            <el-checkbox class="jc-work-item" label="problem">
+              <div class="jc-work-content jc-work-nobg"><i class="iconfont iconwenti"></i>问题</div>
+            </el-checkbox>
+            <el-checkbox class="jc-work-item" label="device">
+              <div class="jc-work-content jc-work-nobg"><i class="iconfont iconshexiangtou"></i>设备</div>
+            </el-checkbox>
+            <el-checkbox class="jc-work-item" v-for="item in controlAreaTypes" :label="item.id" :key="item.id">
+              <div class="jc-work-content" :style="getIconStyle(item.icon)">{{item.name}}</div>
+            </el-checkbox>
+          </el-checkbox-group>
+        </div>
+        <!-- 区域显示设置 -->
+        <div class="jc-oprea-check-warp">
+          <div class="jc-oprea-check-title">区域：</div>
+          <el-checkbox-group v-model="areaType" @change="areaChange">
+            <el-checkbox class="jc-work-item" label="org">
+              <div class="jc-work-content">组织</div>
+            </el-checkbox>
+            <el-checkbox class="jc-work-item" v-for="item in controlAreaTypes" :label="item.id" :key="item.id">
+              <div class="jc-work-content" :style="getIconStyle(item.icon)">{{item.name}}</div>
+            </el-checkbox>
+          </el-checkbox-group>
+        </div>
+        <!-- 文字显示设置 -->
+        <div class="jc-oprea-check-warp">
+          <div class="jc-oprea-check-title">标题：</div>
+          <el-checkbox-group v-model="wordType" @change="wordChange">
+            <el-checkbox class="jc-work-item" label="user">
+              <div class="jc-work-content jc-work-nobg"><i class="iconfont iconrenyuan-5"></i>人员</div>
+            </el-checkbox>
+            <el-checkbox class="jc-work-item" label="org">
+              <div class="jc-work-content">组织</div>
+            </el-checkbox>
+            <!-- 新增事件与问题实体控件 -->
+            <el-checkbox class="jc-work-item" label="event">
+              <div class="jc-work-content jc-work-nobg"><i class="iconfont iconshijian-2"></i>事件</div>
+            </el-checkbox>
+            <el-checkbox class="jc-work-item" label="problem">
+              <div class="jc-work-content jc-work-nobg"><i class="iconfont iconwenti"></i>问题</div>
+            </el-checkbox>
+            <el-checkbox class="jc-work-item" label="device">
+              <div class="jc-work-content jc-work-nobg"><i class="iconfont iconshexiangtou"></i>设备</div>
+            </el-checkbox>
+
+            <!-- 动态实体 -->
+            <el-checkbox class="jc-work-item" v-for="item in controlAreaTypes" :label="item.id" :key="item.id">
+              <div class="jc-work-content" :style="getIconStyle(item.icon)">{{item.name}}</div>
+            </el-checkbox>
+          </el-checkbox-group>
+        </div>
+        <!-- 聚合设置 -->
+        <div class="jc-oprea-check-warp">
+          <div class="jc-oprea-check-title">聚合：</div>
+          <el-checkbox-group v-model="togetherType" @change="togetherChange">
+            <el-checkbox class="jc-work-item" label="user">
+              <div class="jc-work-content jc-work-nobg"><i class="iconfont iconrenyuan-5"></i>人员</div>
+            </el-checkbox>
+            <el-checkbox class="jc-work-item" label="event">
+              <div class="jc-work-content jc-work-nobg"><i class="iconfont iconshijian-2"></i>事件</div>
+            </el-checkbox>
+            <el-checkbox class="jc-work-item" label="problem">
+              <div class="jc-work-content jc-work-nobg"><i class="iconfont iconwenti"></i>问题</div>
+            </el-checkbox>
+            <el-checkbox class="jc-work-item" v-for="item in controlAreaTypes" :label="item.id" :key="item.id">
+              <div class="jc-work-content" :style="getIconStyle(item.icon)">{{item.name}}</div>
+            </el-checkbox>
+          </el-checkbox-group>
+        </div>
+      </div>
+    </div>
     <div class="jc-opreate-item" :class="{'jc-active': isSelect}">
       <i class="jc-select" title="框选" @click="userSelect"></i>
-    </div>
-    <div class="jc-opreate-item">
-      <i class="jc-show-area" title="显示区域"></i>
-      <div class="jc-opera-work">
-        <el-checkbox-group v-model="areaType" @change="areaChange">
-          <el-checkbox class="jc-work-item" label="org">
-            <div class="jc-work-content">组织</div>
-          </el-checkbox>
-          <el-checkbox class="jc-work-item" v-for="item in controlAreaTypes" :label="item.id" :key="item.id">
-            <div class="jc-work-content" :style="getIconStyle(item.icon)">{{item.name}}</div>
-          </el-checkbox>
-        </el-checkbox-group>
-      </div>
-    </div>
-    <div class="jc-opreate-item">
-      <i class="jc-show-word" title="显示实体"></i>
-      <div class="jc-opera-work">
-        <el-checkbox-group v-model="wordType" @change="wordChange">
-          <el-checkbox class="jc-work-item" label="user">
-            <div class="jc-work-content jc-work-nobg"><i class="iconfont iconrenyuan-5"></i>人员</div>
-          </el-checkbox>
-          <el-checkbox class="jc-work-item" label="org">
-            <div class="jc-work-content">组织</div>
-          </el-checkbox>
-          <!-- 新增事件与问题实体控件 -->
-          <el-checkbox class="jc-work-item" label="event">
-            <div class="jc-work-content jc-work-nobg"><i class="iconfont iconshijian-2"></i>事件</div>
-          </el-checkbox>
-          <el-checkbox class="jc-work-item" label="problem">
-            <div class="jc-work-content jc-work-nobg"><i class="iconfont iconwenti"></i>问题</div>
-          </el-checkbox>
-          <el-checkbox class="jc-work-item" label="device">
-            <div class="jc-work-content jc-work-nobg"><i class="iconfont iconshexiangtou"></i>设备</div>
-          </el-checkbox>
-
-          <!-- 动态实体 -->
-          <el-checkbox class="jc-work-item" v-for="item in controlAreaTypes" :label="item.id" :key="item.id">
-            <div class="jc-work-content" :style="getIconStyle(item.icon)">{{item.name}}</div>
-          </el-checkbox>
-        </el-checkbox-group>
-      </div>
-    </div>
-    <div class="jc-opreate-item">
-      <i class="jc-together" title="自动聚合"></i>
-      <div class="jc-opera-work">
-        <el-checkbox-group v-model="togetherType" @change="togetherChange">
-          <el-checkbox class="jc-work-item" label="user">
-            <div class="jc-work-content jc-work-nobg"><i class="iconfont iconrenyuan-5"></i>人员</div>
-          </el-checkbox>
-          <el-checkbox class="jc-work-item" label="event">
-            <div class="jc-work-content jc-work-nobg"><i class="iconfont iconshijian-2"></i>事件</div>
-          </el-checkbox>
-          <el-checkbox class="jc-work-item" label="problem">
-            <div class="jc-work-content jc-work-nobg"><i class="iconfont iconwenti"></i>问题</div>
-          </el-checkbox>
-          <el-checkbox class="jc-work-item" v-for="item in controlAreaTypes" :label="item.id" :key="item.id">
-            <div class="jc-work-content" :style="getIconStyle(item.icon)">{{item.name}}</div>
-          </el-checkbox>
-        </el-checkbox-group>
-      </div>
     </div>
     <div class="jc-opreate-item">
       <i class="jc-temporary-tasks" title="任务下发" @click="sendTemporaryTasks"></i>
     </div>
     <div class="jc-opreate-item">
-      <i class="jc-map-switch" title="地图切换"></i>
-      <div class="jc-opera-work jc-oprea-flex">
-        <div class="jc-map-switch-item" v-for="item in maps" :key="item.key" :class="activeStyle == item.value ? `jc-active map-${item.value}` : `map-${item.value}`" @click="switchMap(item.value)"></div>
-      </div>
-    </div>
-    <div class="jc-opreate-item">
       <i class="jc-message" @click="messageChange('CommandMessage')" title="任务&问题&事件"></i>
       <span class="jc-num-tip" v-if="messageVal > 0" v-text="messageVal < 100 ? messageVal : '99'"></span>
     </div>
-    <!-- <div class="jc-opreate-item">
-      <i class="jc-talk" @click="messageChange('ImTalk')" title="聊天消息"></i>
-      <span class="jc-num-tip" v-if="talkVal > 0" v-text="talkVal < 100 ? talkVal : '99'"></span>
-    </div> -->
   </div>
 </template>
 <script>
@@ -97,13 +120,14 @@ export default {
       messageVal: 0,
       activeStyle: mapStyle.BASE,
       maps: mapStyle.VALUES, //地图样式
-      talkVal: 0,
       isSelect: false,
       areaTypes: [], //存储所有 网格类型数组
+      signType: [], //存储 选择显示的实体
       areaType: ['org'], //选择显示区域范围的类型
       wordType: [], //存储选择显示文字的网格类型
       togetherType: [], //存储自动聚合的类型
-      mapGridTypes: [] //地图存在的类型
+      mapGridTypes: [], //地图存在的类型
+      allTypes: [] //地图上所有的types
     }
   },
   created() {
@@ -135,7 +159,9 @@ export default {
           })
         }
         this.areaTypes = areaTypes
-        this.wordType = allCheckIds
+        this.allTypes = ['org', 'event', 'problem', 'device', ...allCheckIds]
+        this.signType = ['org', ...allCheckIds]
+        this.wordType = [...this.allTypes]
         this.togetherType = allCheckIds
       } catch (error) {
         console.log(error)
@@ -183,6 +209,10 @@ export default {
       this.activeStyle = style
       console.log('operate地图背景切换', style)
       this.$EventBus.$emit('map-switch-change', style) //地图背景切换
+    },
+    signChange(signs) {
+      console.log('实体显示切换', signs)
+      this.$EventBus.$emit('show-sign-change', signs) //通知网格显示改变
     },
     areaChange(areas) {
       console.log('operate区域切换', areas)
