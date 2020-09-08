@@ -68,7 +68,7 @@ export default {
   async created() {
     await this.getOrgTree()
     await this.getProjects()
-    this.initData()
+    // this.initData()
   },
   methods: {
     formatTime(row, column, cellValue) {

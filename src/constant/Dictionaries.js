@@ -81,7 +81,7 @@ export const TASK_STATES = new JcEnum([
 ])
 
 /**
- * 任务处理 - 问题来源
+ * 任务处理 - 任务来源
  */
 export const TASK_SOURCES = new JcEnum([
   { key: 'government', value: '0', label: '12345' },

@@ -63,6 +63,15 @@ export default {
       date: null
     }
   },
+  created() {
+    console.log(this.$route.query)
+    const { projectId, type } = this.$route.query
+
+    if (projectId) {
+      this.form.projectId = projectId
+    }
+    this.onSubmit()
+  },
   methods: {
     orgChange() {
       this.$refs.orgCascader.dropDownVisible = false //级联选择器 选择任意一级后隐藏下拉框

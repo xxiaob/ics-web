@@ -24,6 +24,7 @@
 
 <script>
 import { TASK_PEOPLE_TYPES } from '@/constant/Dictionaries'
+import { organizationList } from '@/api/organization'
 import { getOrgUserList, getOrgUserListByProject } from '@/api/user'
 
 export default {
@@ -39,9 +40,6 @@ export default {
     peopleType: {
       type: String,
       default: TASK_PEOPLE_TYPES.PEOPLE
-    },
-    orgTree: {
-      type: Array
     }
   },
   data() {
@@ -54,7 +52,9 @@ export default {
       filterArr: [],
       filterArrPeople: [],
       checkedNodes: [],
-      first: true
+      first: true,
+      orgTree: []
+
     }
   },
   computed: {
@@ -88,6 +88,11 @@ export default {
         this.getProjectUsers(val)
       }
     }
+  },
+  async created() {
+    const res = await organizationList()
+
+    this.orgTree = this.formatOrgTree(res)
   },
   methods: {
     async initData(val) {
@@ -142,6 +147,28 @@ export default {
           if (children && children.length) {
             node.children = this.formatPeopleTree(children)
           }
+          trees.push(node)
+        })
+      }
+      return trees
+    },
+    formatOrgTree(child) {
+      let trees = []
+
+      if (child && child.length) {
+        child.forEach(item => {
+          let node = {
+            id: item.orgId,
+            value: item.orgId,
+            label: item.orgName
+          }
+
+          let children = this.formatOrgTree(item.children)
+
+          if (children && children.length) {
+            node.children = children
+          }
+
           trees.push(node)
         })
       }

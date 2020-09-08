@@ -39,7 +39,7 @@
       <!-- peopleProps[peopleType] -->
       <el-form-item label="任务人员" prop="" :rules="rules.SELECT_NOT_NULL">
         <!-- projectId 后期重写 -->
-        <jc-task-people :edit.sync="edit" :projectId="form.projectId==initProjectId?'':form.projectId" :emergency="emergency" :peopleType.sync="peopleType" :selecteds.sync="peoples" :orgTree="orgTree"></jc-task-people>
+        <jc-task-people :edit.sync="edit" :projectId="form.projectId==initProjectId?'':form.projectId" :emergency="emergency" :peopleType.sync="peopleType" :selecteds.sync="peoples"></jc-task-people>
       </el-form-item>
       <el-form-item label="任务描述" prop="taskDesc" :rules="rules.NOT_NULL">
         <jc-editor v-model="form.taskDesc"></jc-editor>
@@ -59,7 +59,6 @@
 </template>
 <script>
 import { taskSave } from '@/api/task'
-import { organizationList } from '@/api/organization'
 
 import FormMixins from '@/mixins/FormMixins'
 import projectsMixins from '@/bundles/taskBundle/mixins/projectsMixins'
@@ -137,7 +136,6 @@ export default {
         SELECT_NOT_NULL,
         NOT_NULL
       },
-      orgTree: [],
       taskSources: TASK_SOURCES.VALUES,
       taskSourceDisabled: false,
       position: {}
@@ -164,11 +162,8 @@ export default {
       deep: true
     }
   },
-  async created() {
-    const res = await organizationList()
-
-    this.orgTree = this.formatOrgTree(res)
-    await this.getProjects()
+  created() {
+    this.getProjects()
   },
   methods: {
     changeProject(val) {
@@ -183,28 +178,6 @@ export default {
       } else {
         this.peoples = [...new Set([...this.peoples, ...val])]
       }
-    },
-    formatOrgTree(child) {
-      let trees = []
-
-      if (child && child.length) {
-        child.forEach(item => {
-          let node = {
-            id: item.orgId,
-            value: item.orgId,
-            label: item.orgName
-          }
-
-          let children = this.formatOrgTree(item.children)
-
-          if (children && children.length) {
-            node.children = children
-          }
-
-          trees.push(node)
-        })
-      }
-      return trees
     },
     changeDate(value) {
       if (value) {
