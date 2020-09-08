@@ -16,6 +16,7 @@ class JcMapSign {
    * @param {String} options.mapStyle 地图使用样式key,对应mapStyle枚举
    * @param {Array} options.boundaries 边界数组
    * @param {Boolean} options.areaVisible 是否显示区域边界
+   * @param {Boolean} options.signVisible 标记是否可见，如果标记不可见，则标题固定不可见
    * @param {Boolean} options.tipVisible 是否显示中心点tip
    */
   constructor(options) {
@@ -30,6 +31,7 @@ class JcMapSign {
     this.active = options.active || false
     this.mapStyle = options.mapStyle
     this.areaVisible = options.areaVisible == false ? false : true
+    this.signVisible = options.signVisible == false ? false : true
     this.tipVisible = options.tipVisible == false ? false : true
   }
 

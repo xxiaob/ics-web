@@ -16,10 +16,12 @@ $jc-right-message-height: 150px; //右侧底部内容高度
 
 /* 大屏header */
 $jc-screen-height: 56px;
+$jc-oprea-height: 36px; //操作的高度
 
 .jc-screen-search {
   &.jc-map-search {
-    top: $jc-screen-height + $jc-default-dis;
+    top: $jc-screen-height + $jc-default-dis + 2;
+    left: $jc-default-dis * 5 + $jc-oprea-height * 6;
   }
 }
 
@@ -204,23 +206,20 @@ $jc-screen-height: 56px;
 /* 大屏操作区域 */
 /deep/ .jc-screen-opreate {
   position: absolute;
-  top: 40%;
-  left: $jc-default-dis;
+  top: $jc-screen-height + $jc-default-dis;
+  left: $jc-default-dis/2;
   z-index: 6;
-  transform: translateY(-50%);
 
   .jc-opreate-item {
     position: relative;
-    width: 36px;
-    height: 36px;
+    width: $jc-oprea-height;
+    height:$jc-oprea-height;
+    display: inline-block;
+    vertical-align: middle;
     background: url(../modules/operate/assets/operate-bg.png) no-repeat center;
     background-size: 100% 100%;
-    margin-top: $jc-default-dis/2;
+    margin-left: $jc-default-dis/2;
     cursor: pointer;
-
-    &:first-child {
-      margin-top: 0;
-    }
 
     &:hover,
     &.jc-active {
@@ -229,7 +228,7 @@ $jc-screen-height: 56px;
 
     &:hover {
       .jc-opera-work {
-        transform: translate(0, -50%);
+        transform: translate(0, $jc-oprea-height + 10);
         opacity: 1;
         visibility: visible;
       }
@@ -256,18 +255,8 @@ $jc-screen-height: 56px;
     @extend .jc-opreate-icon;
   }
 
-  .jc-together {
-    background-image: url("../modules/operate/assets/together.png");
-    @extend .jc-opreate-icon;
-  }
-
   .jc-show-area {
     background-image: url("../modules/operate/assets/show-area.png");
-    @extend .jc-opreate-icon;
-  }
-
-  .jc-show-word {
-    background-image: url("../modules/operate/assets/show-word.png");
     @extend .jc-opreate-icon;
   }
 
@@ -283,11 +272,6 @@ $jc-screen-height: 56px;
 
   .jc-message {
     background-image: url("../modules/operate/assets/message.png");
-    @extend .jc-opreate-icon;
-  }
-
-  .jc-talk {
-    background-image: url("../modules/operate/assets/talk.png");
     @extend .jc-opreate-icon;
   }
 
@@ -311,43 +295,35 @@ $jc-screen-height: 56px;
   /*显示面板区域*/
   .jc-opera-work {
     position: absolute;
-    left: 50px;
-    top: 50%;
-    width: 260px;
-    height: auto;
+    left: 0;
+    top: 0;
+    display: flex;
     padding: $jc-default-dis/2;
     box-shadow: $jc-box-shadow;
     background-color: $jc-color-white;
-    transform: translate(20px, -50%);
+    transform: translate(0, 100px);
     visibility: hidden;
     opacity: 0;
     transition: all 0.4s;
     will-change: transform;
 
-    &.jc-oprea-flex {
-      display: flex;
-    }
-
     &:before {
       position: absolute;
       content: "";
-      left: -6px;
-      top: 0;
-      bottom: 0;
-      margin: auto 0;
+      left: $jc-oprea-height/2 - 6;
+      top: -6px;
       width: 0;
       height: 0;
       border-width: 6px;
       border-style: solid;
-      border-color: transparent transparent $jc-color-white $jc-color-white;
+      border-color: $jc-color-white transparent transparent $jc-color-white;
       transform: rotate(45deg);
-      box-shadow: $jc-box-shadow;
     }
 
     .jc-work-item {
+      display: block;
       height: 25px;
       line-height: 25px;
-      width: 49.8%;
       margin-right: 0;
 
       .el-checkbox__label {
@@ -373,7 +349,7 @@ $jc-screen-height: 56px;
         padding-left: 0;
 
         .iconfont {
-          font-size: 13px;
+          font-size: $jc-font-size-base;
           padding-right: 2px;
           color: $jc-color-primary;
         }
@@ -382,13 +358,15 @@ $jc-screen-height: 56px;
 
     .jc-map-switch-item {
       display: block;
-      flex: 1;
+      width: 60px;
       height: 50px;
-      margin: 0 $jc-default-dis/2;
       background-repeat: no-repeat;
       background-position: center;
       background-size: 60px 100%;
       border-radius: 6px;
+      &:not(:last-child) {
+        margin-right: $jc-default-dis/2;
+      }
 
       &.jc-active {
         border: solid 1px $jc-color-primary;
@@ -405,6 +383,23 @@ $jc-screen-height: 56px;
       &.map-satellite {
         background-image: url("../modules//operate/assets/map-switch-satellite.png");
       }
+    }
+  }
+  .jc-oprea-check-warp {
+    position: relative;
+    width: 120px;
+   
+    &:not(:last-child) {
+      margin-right: $jc-default-dis/2;
+    }
+    .jc-oprea-check-title {
+      height: 30px;
+      line-height: 30px;
+      font-weight: bold;
+    }
+    .el-checkbox-group {
+      height: 200px;
+      overflow-y: auto;
     }
   }
 }
@@ -854,7 +849,7 @@ $jc-screen-height: 56px;
   $jc-video-height: 160px;
 
   position: absolute;
-  top: $jc-screen-height + $jc-default-dis;
+  top: $jc-screen-height + $jc-oprea-height + $jc-default-dis * 2;
   left: $jc-default-dis;
   height: $jc-video-header-height + $jc-video-height * 4 + $jc-default-dis * 2.5;
   z-index: 99;
