@@ -11,15 +11,16 @@ export const defaultOrgMarkerIcon = '/static/areaicons/org-default.png'
   * 图标icon
   */
 export const JcIcons = {
-  caichang: { name: '菜场', icon: '/static/areaicons/caichang.png', cluster: '/static/areaicons/cluster3.png', abnormal: '/static/mapIcons/caichang-abnormal.png' },
+  nmsc: { name: '农贸市场', icon: '/static/areaicons/nmsc.png', cluster: '/static/areaicons/cluster3.png', abnormal: '/static/mapIcons/nmsc-abnormal.png' },
   shiguangang: { name: '市管岗', icon: '/static/areaicons/shiguangang.png', cluster: '/static/areaicons/cluster4.png', abnormal: '/static/mapIcons/shiguangang-abnormal.png' },
   workspace: { name: '办公点', icon: '/static/areaicons/workspace.png', cluster: '/static/areaicons/cluster4.png', abnormal: '/static/mapIcons/workspace-abnormal.png' },
   dhyjbz: { name: '灯会应急保障', icon: '/static/areaicons/dhyjbz.png', cluster: '/static/areaicons/cluster4.png', abnormal: '/static/mapIcons/dhyjbz-abnormal.png' },
   fxd: { name: '防汛点', icon: '/static/areaicons/fxd.png', cluster: '/static/areaicons/cluster2.png', abnormal: '/static/mapIcons/fxd-abnormal.png' },
-  gkhkg: { name: '高考护考岗', icon: '/static/areaicons/gkhkg.png', cluster: '/static/areaicons/cluster3.png', abnormal: '/static/mapIcons/gkhkg-abnormal.png' },
   gongce: { name: '公厕', icon: '/static/areaicons/gongce.png', cluster: '/static/areaicons/cluster3.png', abnormal: '/static/mapIcons/gongce-abnormal.png' },
   gongji: { name: '公祭', icon: '/static/areaicons/gongji.png', cluster: '/static/areaicons/cluster5.png', abnormal: '/static/mapIcons/gongji-abnormal.png' },
   hxg: { name: '护学岗', icon: '/static/areaicons/hxg.png', cluster: '/static/areaicons/cluster3.png', abnormal: '/static/mapIcons/hxg-abnormal.png' },
+  zkhkg: { name: '中考护考岗', icon: '/static/areaicons/zkhkg.png', cluster: '/static/areaicons/cluster3.png', abnormal: '/static/mapIcons/zkhkg-abnormal.png' },
+  gkhkg: { name: '高考护考岗', icon: '/static/areaicons/gkhkg.png', cluster: '/static/areaicons/cluster3.png', abnormal: '/static/mapIcons/gkhkg-abnormal.png' },
   jxd: { name: '积雪点', icon: '/static/areaicons/jxd.png', cluster: '/static/areaicons/cluster2.png', abnormal: '/static/mapIcons/jxd-abnormal.png' },
   jxg: { name: '街巷岗', icon: '/static/areaicons/jxg.png', cluster: '/static/areaicons/cluster4.png', abnormal: '/static/mapIcons/jxg-abnormal.png' },
   tcd: { name: '停车点', icon: '/static/areaicons/tcd.png', cluster: '/static/areaicons/cluster3.png', abnormal: '/static/mapIcons/tcd-abnormal.png' },
