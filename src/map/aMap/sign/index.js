@@ -36,17 +36,14 @@ class JcMapSign extends JcMapSignBase {
 
   /**
    * 显示中心点和说明
-   * @param {Boolean} tipVisible tip是否可见
    */
-  showTip(tipVisible = null) {
-    if (tipVisible !== null) {
-      this.tipVisible = tipVisible == false ? false : true
-    }
-    if (this.tipVisible) {
+  showTip() {
+    if (this.signVisible) {
       if (this.marker) {
+        this.marker.titleVisible = this.tipVisible
         this.marker.show()
       } else if (this.center && this.center.length == 2) {
-        this.marker = new JcMapMarker({ map: this.map, position: this.center, name: this.name || '标记中心点', icon: this.icon })
+        this.marker = new JcMapMarker({ map: this.map, position: this.center, name: this.name || '标记中心点', icon: this.icon, titleVisible: this.tipVisible })
         this.marker.on('click', () => {
           this.fitView()
         })

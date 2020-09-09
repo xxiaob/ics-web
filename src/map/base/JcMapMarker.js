@@ -2,7 +2,7 @@
  * 地图标记点
  */
 
-class JcMapMarket {
+class JcMapMarker {
   /**
    * 构造
    * @param {*} options
@@ -106,8 +106,8 @@ class JcMapMarket {
   }
 
   get [Symbol.toStringTag]() {
-    return 'JcMapMarket'
+    return 'JcMapMarker'
   }
 }
 
-export default JcMapMarket
+export default JcMapMarker

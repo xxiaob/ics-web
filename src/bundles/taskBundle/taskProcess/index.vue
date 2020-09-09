@@ -38,9 +38,9 @@
 
     <jc-detail :orgTree="orgTree" :orgObj="orgObj" :info="info" :detailShow.sync="detailShow" v-show="detailShow" @save-success="initData"></jc-detail>
 
-    <jc-manage :selectType="filter.selectType" :orgTree="orgTree" :options="info" :visible.sync="visible" @save-success="initData"></jc-manage>
+    <jc-manage :selectType="filter.selectType" :options="info" :visible.sync="visible" @save-success="initData"></jc-manage>
 
-    <jc-manage-daily :selectType="filter.selectType" :EmergencySupport="EmergencySupport" :orgTree="orgTree" :projectList="projectList" :orgObj="orgObj" :orgId="orgId" :options="dailyInfo" :visible.sync="visibleDaily" @save-success="initData"></jc-manage-daily>
+    <jc-manage-daily :selectType="filter.selectType" :options="dailyInfo" :visible.sync="visibleDaily" @save-success="initData"></jc-manage-daily>
 
     <jc-detail-daily :orgTree="orgTree" :orgObj="orgObj" :info="dailyInfo" :dailyDetailShow.sync="dailyDetailShow" v-show="dailyDetailShow" @save-success="initData"></jc-detail-daily>
 

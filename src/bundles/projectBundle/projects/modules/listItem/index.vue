@@ -2,13 +2,12 @@
   <div class="jc-project-item" :class="getItemClass(item.projectType)">
     <div class="jc-title-warp">
       <div class="jc-title" v-text="item.projectName"></div>
+      <i class="iconfont iconlujing jc-del" @click="del"></i>
       <i class="jc-setting el-icon-setting" @click="$emit('manage')"></i>
     </div>
     <div class="jc-project-screen">
       <router-link :to="{name: 'commandProjectScreen', params: {projectId: this.item.projectId}}" class="jc-screen jc-screen-command" target="_blank">指挥大屏</router-link>
       <router-link :to="{name: 'dataProjectScreen', params: {projectId: this.item.projectId}}" class="jc-screen jc-screen-data" target="_blank">数据大屏</router-link>
-      <!-- <div class="jc-screen jc-screen-command">指挥大屏</div> -->
-      <!-- <div class="jc-screen jc-screen-data">数据大屏</div> -->
     </div>
     <div class="jc-project-footer">
       <div class="jc-project-info" :class="projectSC">
@@ -17,9 +16,10 @@
       </div>
       <div class="jc-project-opera">
         <div class="jc-opera-item first" @click="operaChange('resource-setting')"><i class="iconfont icontoufangziyuanshezhi"></i>资源设置</div>
-        <div class="jc-opera-item second" @click="operaChange('grid-setting')"><i class="iconfont iconwanggeshezhi"></i>网格设置</div>
-        <div class="jc-opera-item three"><i class="iconfont icontongjifenxi"></i>统计分析</div>
-        <div class="jc-opera-item four" @click="del"><i class="iconfont iconlujing"></i>删除项目</div>
+        <div class="jc-opera-item second" @click="operaChange('daily-task')"><i class="iconfont icontongjifenxi"></i>日常任务设置</div>
+        <div class="jc-opera-item three" @click="operaChange('grid-setting')"><i class="iconfont iconwanggeshezhi"></i>网格设置</div>
+        <router-link :to="{name: 'taskSearch', query: {projectId: item.projectId,type:'1'}}" class="jc-opera-item four" target="_blank"><i class="iconfont icontongjifenxi"></i>日常任务查询</router-link>
+        <!-- <div class="jc-opera-item three"><i class="iconfont icontongjifenxi"></i>统计分析</div> -->
       </div>
     </div>
   </div>

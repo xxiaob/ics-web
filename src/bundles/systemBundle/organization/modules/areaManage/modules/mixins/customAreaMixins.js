@@ -45,8 +45,10 @@ export default {
       if (myJcMapEditor) {
         myJcMapEditor.destroy()
         if (parentSign) {
-          myJcMapEditor.removeAdsorbPolygons([parentSign.sign])
-          parentSign.sign.hide()
+          if (parentSign.sign) {
+            myJcMapEditor.removeAdsorbPolygons([parentSign.sign])
+            parentSign.sign.hide()
+          }
           parentSign = null
         }
         myJcMapEditor = null
@@ -69,7 +71,7 @@ export default {
               id: item.orgId,
               map: myJcMap,
               name: item.areaName,
-              tipVisible: false,
+              signVisible: false,
               center: item.center.split(','),
               boundaries: apiBoundariesFormat(item)
             }) : null, show: false

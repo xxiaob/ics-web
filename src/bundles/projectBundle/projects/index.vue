@@ -19,6 +19,7 @@
     </div>
     <grid-setting :options="opreaData" :visible.sync="gridVisible"></grid-setting>
     <resource-setting :options="opreaData" :visible.sync="resourceVisible"></resource-setting>
+    <task-daily-manage :projectId="opreaData.projectId" :visible.sync="taskDailyVisible"></task-daily-manage>
   </div>
 </template>
 <script>
@@ -34,7 +35,8 @@ export default {
     JcManage: () => import('./modules/manage'),
     ListItem: () => import('./modules/listItem'),
     GridSetting: () => import('../projectSetting/grid'),
-    ResourceSetting: () => import('../projectSetting/resource')
+    ResourceSetting: () => import('../projectSetting/resource'),
+    TaskDailyManage: () => import('@/bundles/taskBundle/taskProcess/modules/manageDaily')
   },
   data() {
     return {
@@ -45,6 +47,7 @@ export default {
       opreaData: { projectName: '--' },
       gridVisible: false,
       resourceVisible: false,
+      taskDailyVisible: false,
       filter: {}
     }
   },
@@ -92,6 +95,8 @@ export default {
         this.gridVisible = true
       } else if (options.opera == 'resource-setting') {
         this.resourceVisible = true
+      } else if (options.opera == 'daily-task') {
+        this.taskDailyVisible = true
       }
     },
     manage(row) {

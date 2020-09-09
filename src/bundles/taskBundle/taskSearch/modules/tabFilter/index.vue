@@ -7,6 +7,11 @@
       <el-form-item prop="orgId" label="所属组织">
         <el-cascader :options="orgTree" v-model="form.orgId" :props="{expandTrigger: 'hover', emitPath: false,checkStrictly:true }" clearable @change="orgChange" ref="orgCascader"></el-cascader>
       </el-form-item>
+      <el-form-item prop="taskType" label="任务类型">
+        <el-select v-model="form.taskType" placeholder="选择任务类型">
+          <el-option v-for="item in TASK_TYPES.VALUES" :key="item.value" :label="item.label" :value="item.value"></el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item prop="state" label="任务状态">
         <el-select v-model="form.state" placeholder="选择任务状态">
           <el-option v-for="item in states" :key="item.value" :label="item.label" :value="item.value"></el-option>
@@ -28,7 +33,7 @@
   </el-card>
 </template>
 <script>
-import { TASK_STATES } from '@/constant/Dictionaries'
+import { TASK_STATES, TASK_TYPES } from '@/constant/Dictionaries'
 import { exportList } from '@/api/task'
 export default {
   name: 'TaskSearchFilter',
@@ -44,6 +49,7 @@ export default {
   },
   data() {
     return {
+      TASK_TYPES,
       states: TASK_STATES.VALUES,
       projectCascaderProps: {
         expandTrigger: 'hover',
@@ -58,10 +64,21 @@ export default {
         startDate: '',
         endDate: '',
         desc: '',
-        state: ''
+        state: '',
+        taskType: ''
       },
       date: null
     }
+  },
+  created() {
+    console.log(this.$route.query)
+    const { projectId, type } = this.$route.query
+
+    if (projectId) {
+      this.form.projectId = projectId
+      this.form.taskType = type
+    }
+    this.onSubmit()
   },
   methods: {
     orgChange() {

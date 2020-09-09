@@ -48,6 +48,14 @@
     background-color: rgba($color: $jc-color-black, $alpha: 0.3);
     display: flex;
     z-index: 10;
+
+    .jc-del{
+      font-size: 14px;
+      @extend .jc-hover-style;
+      transform: translateY(-60px);
+      transition: transform 0.3s;
+      will-change: transform;
+    }
   }
 
   .jc-title {
@@ -163,20 +171,21 @@
     }
 
     .jc-project-opera {
+      padding: 0 $jc-default-dis;
+      box-sizing: border-box;
       position: absolute;
       top: $jc-default-dis/2;
       left: $jc-default-dis/2;
       right: $jc-default-dis/2;
       bottom: $jc-default-dis/2;
-      text-align: center;
       z-index: 1;
 
       .jc-opera-item {
-        display: inline-block;
-        width: 38%;
+        float: left;
         font-size: $jc-font-size-smaller;
         height: 20px;
         line-height: 20px;
+        text-decoration: none;
 
         @extend .jc-hover-style;
         transform: translateY(60px);
@@ -187,6 +196,11 @@
 
   &:hover {
     box-shadow: $jc-box-shadow;
+
+    .jc-del {
+      transform: translateY(0);
+      transition: transform 0.3s;
+    }
 
     .jc-project-screen {
       .jc-screen {
@@ -217,18 +231,24 @@
 
         &.first {
           transition-delay: 0.2s;
+          width: 40%;
         }
 
         &.second {
           transition-delay: 0.35s;
+          text-align: right;
+          width: 60%;
         }
 
         &.three {
           transition-delay: 0.5s;
+          width: 40%;
         }
-
+ 
         &.four {
           transition-delay: 0.65s;
+          text-align: right;
+          width: 60%;
         }
       }
     }
