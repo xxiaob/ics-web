@@ -2,7 +2,7 @@
   <div class="jc-overview" :class="{'jc-active': viewShow}">
     <i class="jc-overview-icon" @click="changeViewShow"></i>
     <div class="jc-overview-contant" v-loading="loading" element-loading-background="rgba(0, 0, 0, 0)">
-      <div class="jc-overview-header jc-title-sign">指挥层级概览
+      <div class="jc-overview-header">指挥层级概览
         <div class="jc-close el-icon-close" @click.stop="viewShow = false"></div>
       </div>
       <div class="jc-content">
@@ -91,6 +91,7 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+$jc-screen-color: #142c79; //大屏颜色
 $jc-overview-color: #3783fb;
 .jc-overview {
   position: absolute;
@@ -124,7 +125,7 @@ $jc-overview-color: #3783fb;
     width: 640px;
     height: 320px;
     opacity: 0;
-    padding: $jc-default-dis/2;
+    // padding: $jc-default-dis/2;
     background-color: $jc-color-white;
     transition: opacity 0.4s;
   }
@@ -140,21 +141,23 @@ $jc-overview-color: #3783fb;
   }
   .jc-overview-header {
     position: relative;
-    height: 20px;
-    line-height: 20px;
+    height: 30px;
+    line-height: 30px;
+    color: $jc-color-white;
+    background-color: $jc-screen-color;
+    padding-left: $jc-default-dis;
     .jc-close {
       position: absolute;
       top: 2px;
       right: 0;
-      width: 16px;
-      height: 16px;
-      line-height: 16px;
+      width: 26px;
+      height: 26px;
+      line-height: 26px;
       text-align: center;
       overflow: hidden;
       border-radius: 50%;
       text-indent: 0;
-      background-color: $jc-overview-color;
-      color: $jc-color-white;
+      // color: $jc-color-white;
       font-size: $jc-font-size-smaller;
       @include jc-close-animation;
     }
@@ -163,11 +166,13 @@ $jc-overview-color: #3783fb;
 .jc-content-warp {
   height: 250px;
   overflow: auto;
+  padding: 0 $jc-default-dis/2;
 }
 .jc-content {
   display: flex;
   height: 30px;
   line-height: 30px;
+  padding: 0 $jc-default-dis/2;
   &:nth-child(odd) {
     background-color: rgba($color: #6879f2, $alpha: 0.05);
   }
