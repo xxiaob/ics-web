@@ -18,7 +18,7 @@
           <el-table-column prop="alarmDate" label="时间" width="160"></el-table-column>
           <el-table-column width="50" label="操作">
             <template slot-scope="scope">
-              <el-button type="text" size="mini" icon="el-icon-view" @click="handle(scope.row,false)" title="查看"></el-button>
+              <el-button type="text" size="mini" icon="el-icon-refresh-right" @click="handle(scope.row,true)" title="查看"></el-button>
             </template>
           </el-table-column>
 
@@ -26,7 +26,8 @@
         <el-pagination @current-change="currentChange" @size-change="sizeChange" :current-page.sync="page.pageNum" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.total" class="text-right jc-mt"></el-pagination>
       </el-card>
     </div>
-    <jc-detail v-show="detailShow" :types="types" :info="info" :detailShow.sync="detailShow" @save-success="initData"></jc-detail>
+
+    <jc-detail v-show="detailShow" :types="types" :info="info" :user="user" :orgTree="orgTree" :detailShow.sync="detailShow" @save-success="initData"></jc-detail>
   </div>
 </template>
 
@@ -35,12 +36,12 @@ import { getByType } from '@/api/supervise'
 import { getDregsAlarmList } from '@/api/dregsAlarm'
 import { LAWS_TYPES } from '@/constant/Dictionaries'
 import PaginationMixins from '@/mixins/PaginationMixins'
-
+import { organizationList } from '@/api/organization'
 import { createNamespacedHelpers } from 'vuex'
 const { mapState } = createNamespacedHelpers('user')
 
 export default {
-  name: 'dregsWaringIndex',
+  name: 'dregsWaringHandleIndex',
   mixins: [PaginationMixins],
   data() {
     return {
@@ -48,7 +49,7 @@ export default {
       list: [],
       filter: {},
       types: [],
-
+      orgTree: [],
       info: null,
       detailShow: false
     }
@@ -56,15 +57,43 @@ export default {
   computed: {
     ...mapState(['user'])
   },
-  mounted() {
+  async created() {
+    await this.getOrgTree()
     this.getStatuteTypes()
     this.initData()
   },
   components: {
     TabFilter: () => import('./modules/tabFilter'),
-    JcDetail: () => import('../waringHandle/modules/detail')
+    JcDetail: () => import('./modules/detail')
   },
   methods: {
+    formatOrgTree(child) {
+      let trees = []
+
+      if (child && child.length) {
+        child.forEach(item => {
+          let node = {
+            value: item.orgId,
+            label: item.orgName
+          }
+
+          let children = this.formatOrgTree(item.children)
+
+          if (children && children.length) {
+            node.children = children
+          }
+
+          trees.push(node)
+        })
+      }
+      return trees
+    },
+    async getOrgTree() {
+      const res = await organizationList()
+
+      this.orgTree = this.formatOrgTree(res)
+      this.firstOrgIds = res.map(item=>item.orgId)
+    },
     async initData() {
       // 初始获取数据
       if (!this.loading) {
@@ -104,7 +133,6 @@ export default {
       console.log('告警处理', row)
       this.info = row
       this.info.handle = handle
-      this.info.id = '81037736533819392'
       this.orgId = this.user.orgId
       this.detailShow = true
     }

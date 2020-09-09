@@ -27,4 +27,11 @@ export default [{
   meta: {
     title: '渣土管控-告警台账'
   }
+}, {
+  path: 'dregs/waringHandle',
+  name: 'dregsWaringHandle',
+  component: () => import('@/bundles/dregsBundle/waringHandle'),
+  meta: {
+    title: '渣土管控-告警处理'
+  }
 }]

@@ -70,6 +70,8 @@ export default {
       try {
         const orgsAndUsers = await getOrgUserListByProject({ projectId: this.project.projectId })
 
+        console.log('组织架构orgsAndUsers', orgsAndUsers )
+
         this.trees = this.formatUserOrgTrees(orgsAndUsers)//处理组织和用户
         this.expandedKeys = this.trees.length ? [this.trees[0].id] : [] //设置第一级默认展开
 

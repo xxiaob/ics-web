@@ -1,9 +1,15 @@
 <template>
-  <view-warp :title="options.deviceName"  v-loading="loading">
+  <view-warp :title="options.deviceName" v-loading="loading">
     <view-tabs v-model="tabComponent" :options="tabs"></view-tabs>
     <keep-alive>
       <component :is="tabComponent" :deviceDetaillData="deviceDetaillData"></component>
     </keep-alive>
+    <div class="jc-user-footer">
+      <div class="jc-opera-item">音频指挥</div>
+      <div class="jc-opera-item">视频指挥</div>
+      <div class="jc-opera-item">设备观摩</div>
+      <div class="jc-opera-item">轨迹查询</div>
+    </div>
   </view-warp>
 </template>
 <script>

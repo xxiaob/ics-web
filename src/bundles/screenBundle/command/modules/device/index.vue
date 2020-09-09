@@ -26,8 +26,10 @@
         </div>
       </div>
       <div class="jc-user-footer">
+        <div class="jc-opera-item" @click="goMeeting('audio')">音频会议</div>
+        <div class="jc-opera-item" @click="goMeeting('video')">视频会议</div>
+        <div class="jc-opera-item" @click="devicevideoPlay">多方观摩</div>
         <div class="jc-opera-item" @click="clearDevices">清除</div>
-        <div class="jc-opera-item" @click="devicevideoPlay">多屏视频</div>
       </div>
     </div>
   </view-warp>
@@ -35,8 +37,7 @@
 <script>
 import { getDeviceList } from '@/api/device'
 import TreesFilterMixins from '@/mixins/TreesFilterMixins'
-import { DEVICE_TYPES } from '@/constant/Dictionaries'
-
+import { DEVICE_TYPES, VIDEO_INVITE_TYPES } from '@/constant/Dictionaries'
 
 export default {
   name: 'ScreenCommandOrg',
@@ -57,6 +58,7 @@ export default {
     return {
       loading: false,
       devices: [],
+      usersToDevices: [], // 在线设备类型为网巡车集合
       filterText: '',
       trees: [],
       expandedKeys: [],
@@ -144,17 +146,25 @@ export default {
       // 选中设备
       let selectNodes = this.$refs.tree.getCheckedNodes()
 
-      let devices = []
+      console.log('选中设备', selectNodes)
+
+      let devices = [], usersToDevices = []
 
       if (selectNodes && selectNodes.length) {
         selectNodes.forEach(item => {
           if (item.type == 'device') {
             devices.push({ id: item.id, name: item.label })
+
+            if (item.deviceType === DEVICE_TYPES.NETPATROLCAR) {
+              // 选中的在线设备, 并且为网巡车, 记录
+              usersToDevices.push({ id: item.userid, name: item.label })
+            }
           }
         })
       }
 
       this.devices = devices
+      this.usersToDevices = usersToDevices
     },
     deviceDetail(deviceItem) {
       // 设备详情
@@ -210,6 +220,20 @@ export default {
         this.$EventBus.$emit('device-video-play', devices)
       } else {
         this.$message.error('请选择设备')
+      }
+    },
+    goMeeting(talkType) {
+      //去进行会议
+      if (this.usersToDevices.length) {
+        if (this.usersToDevices.length > 17) {
+          this.$message.error('最多支持17台设备')
+        } else {
+          this.$EventBus.$emit('screen-opera-control', { type: 'select', isSelect: false })
+          this.$EventBus.$emit('screen-media-live', { users: this.usersToDevices, type: talkType == 'video' ? VIDEO_INVITE_TYPES.MEETVIDEO : VIDEO_INVITE_TYPES.MEETAUDIO })
+          this.clearDevices() //清空用户
+        }
+      } else {
+        this.$message.error('未选择网巡车设备')
       }
     }
 

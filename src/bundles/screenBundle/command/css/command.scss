@@ -597,26 +597,28 @@ $jc-screen-height: 56px;
       }
     }
 
-    .jc-user-footer {
-      display: flex;
 
-      .jc-opera-item {
-        flex: 1;
-        cursor: pointer;
-        margin: 8px 0;
-        height: 20px;
-        color: $jc-color-text-secondary;
-        @include jc-vhcenter;
-        font-size: $jc-font-size-smaller;
-        border-right: solid 1px $jc-color-line-primary;
+  }
 
-        &:last-child {
-          border-right: none;
-        }
+  .jc-user-footer {
+    display: flex;
 
-        &:hover {
-          color: $jc-color-primary;
-        }
+    .jc-opera-item {
+      flex: 1;
+      cursor: pointer;
+      margin: 8px 0;
+      height: 20px;
+      color: $jc-color-text-secondary;
+      @include jc-vhcenter;
+      font-size: $jc-font-size-smaller;
+      border-right: solid 1px $jc-color-line-primary;
+
+      &:last-child {
+        border-right: none;
+      }
+
+      &:hover {
+        color: $jc-color-primary;
       }
     }
   }

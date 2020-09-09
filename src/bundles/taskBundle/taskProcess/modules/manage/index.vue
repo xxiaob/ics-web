@@ -221,7 +221,7 @@ export default {
       this.edit = true
 
       if (this.question) {
-        questionTaskSource = TASK_SOURCES.PROBLEMFEEDBACK
+        questionTaskSource = this.question.questionTaskSource || TASK_SOURCES.PROBLEMFEEDBACK
         taskSourceId = this.question.value
         paths = this.question.uploadFilePaths
         position = this.question.position
