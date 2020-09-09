@@ -88,8 +88,12 @@ export const TASK_SOURCES = new JcEnum([
   { key: 'CITYBUILD', value: '1', label: '12319' },
   { key: 'OTHER', value: '2', label: '其他来源' },
   { key: 'SELFCREATION', value: '3', label: '自主创建' },
-  { key: 'PROBLEMFEEDBACK', value: '4', label: '问题反馈' },
-  { key: 'WORKORDER', value: '5', label: '工单' }
+  { key: 'PROBLEMFEEDBACK', value: '4', label: '网巡问题' },
+  { key: 'DATAMANAGE', value: '5', label: '数字城管' },
+  { key: 'ASSIGNEBYLEADER', value: '6', label: '领导交办' },
+  { key: 'AIINTELLECT', value: '7', label: 'AI智能分析' },
+  { key: 'RESIDUEWARING', value: '8', label: '渣土告警' },
+  { key: 'RESIDUEPROBLEM', value: '9', label: '渣土问题' }
 ])
 
 /**
