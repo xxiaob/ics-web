@@ -408,14 +408,14 @@ $jc-oprea-height: 36px; //操作的高度
   position: absolute;
   width: 0;
   top: $jc-screen-height + $jc-default-dis;
-  bottom: $jc-default-dis/2;
+  bottom: $jc-default-dis*4;
   right: $jc-default-dis;
   transition: bottom 0.4s;
   z-index: 99;
 
-  &.jc-message-show {
-    bottom: $jc-right-message-height + $jc-default-dis * 1;
-  }
+  // &.jc-message-show {
+  //   bottom: $jc-right-message-height + $jc-default-dis * 1;
+  // }
 }
 
 /* 右侧内容区域 */
@@ -748,9 +748,9 @@ $jc-oprea-height: 36px; //操作的高度
   position: absolute;
   width: $jc-right-content-width;
   height: $jc-right-message-height;
-  right: $jc-default-dis;
+  left: $jc-default-dis;
   z-index: 8;
-  bottom: $jc-default-dis/2;
+  bottom: $jc-default-dis;
   background-color: $jc-color-white;
   transform: translateY(0);
   opacity: 1;
