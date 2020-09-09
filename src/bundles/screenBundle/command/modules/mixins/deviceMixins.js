@@ -16,7 +16,7 @@ export default {
     }
   },
   created() {
-    // 利用用户来模拟事件
+    // 利用设备来模拟事件
     // this.$EventBus.$on('map-device-change', this.deviceMap)
     //type 1 设备初始化在线， devices [{deviceId，type，name，lng, lat}] 在线
     //type 2 新增设备在线， devices {deviceId，type，name，lng, lat} 在线
@@ -32,8 +32,7 @@ export default {
   },
   methods: {
     deviceOrgChange(org) {
-      // 获取ordID
-      this.deviceOrgId = org.orgId
+      this.deviceOrgId = org.orgId //获取ordID
     },
     async initDeviceData() {
       // 获取摄像头固定设备数据
@@ -129,7 +128,7 @@ export default {
       // 处理地图数据
       MarkerCluster = await getMarkerCluster()
 
-      // 处理用户信息
+      // 处理设备信息
       if (data && data.length) {
         data.forEach(item => {
           // 计算事件的中心点坐标和key, 处理坐标相同的情况
@@ -164,12 +163,12 @@ export default {
       this.fitDevices() //控制设备显示
     },
     renderDeviceMarker(context) {
-      console.log('绘制用户-单点绘制', context)
+      console.log('绘制设备-单点绘制', context)
       let key = this.getKeyByLngLat(context.data[0].lnglat.lng, context.data[0].lnglat.lat)
 
       let deviceItem = deviceData.devices[key]
 
-      //过滤掉用户信息为空的场景
+      //过滤掉设备信息为空的场景
       if (!deviceItem) {
         return
       }
@@ -179,7 +178,7 @@ export default {
       if (this.deviceTipVisible) {
         content += `<div class="jc-marker-title">${deviceItem.name}</div>`
       }
-      //处理用户图标显示
+      //处理设备图标显示
       if (deviceItem.type == 1) {
         content += `<img src=${JcDeviceIcons.camera} class="jc-marker-icon"/></div>`
       } else if (deviceItem.resourceType == 2) {
@@ -188,13 +187,12 @@ export default {
         content += `<img src=${JcDeviceIcons.netpatrolcar} class="jc-marker-icon"/></div>`
       }
 
-
       context.marker.setPosition(deviceItem.center)
       context.marker.setContent(content)
     },
     markerDeviceClusterClick(context) {
       //  点击弹窗
-      console.log('绘制用户-点击', context)
+      console.log('绘制设备-点击', context)
       let myJcMap = this.getMyJcMap() //获取地图对象
 
       //处理数据，如果是单个则去通知显示详情，是多个的聚合，则定位到显示
@@ -225,7 +223,7 @@ export default {
 
       console.log('device', device)
       if (device && device.deviceId != deviceId) {
-        //如果该坐标用户存在，且不是当前用户，则将该用户位置进行偏差，再次进行处理
+        //如果该坐标设备存在，且不是当前设备，则将该设备位置进行偏差，再次进行处理
         return this.getDeviceCenterAndKey(parseFloat(lng) + 0.000001, parseFloat(lat) + 0.000001, deviceId)
       }
 
@@ -251,7 +249,7 @@ export default {
     fitDevices() {
       let myJcMap = this.getMyJcMap() //获取地图对象
 
-      //处理用户是否显示
+      //处理设备是否显示
       if (this.deviceTipVisible) {
         deviceData.markerCluster.setMap(myJcMap.map)
 
@@ -266,13 +264,13 @@ export default {
       if (deviceData && deviceData.markerCluster) {
         deviceData.markerCluster.setMap(null)
       }
-      this.gatherUserIds = [] //重置用户聚合id数组
-      this.abnormalUserIds = [] //重置用户异常id数组
+      this.gatherUserIds = [] //重置设备聚合id数组
+      this.abnormalUserIds = [] //重置设备异常id数组
 
       deviceData = { markerCluster: null, devices: {}, lnglats: [] }
     },
     deviceShowWordChange(words) {
-      this.deviceTipVisible = words.includes('device') //如果存在用户显示，则显示用户，否则不显示
+      this.deviceTipVisible = words.includes('device') //如果存在设备显示，则显示设备，否则不显示
       this.fitDevices()
     }
   },

@@ -4,6 +4,8 @@
 import { getMarkerCluster, getMouseTool } from '@/map/aMap/aMapUtil'
 import { JcUserIcons } from '@/config/JcIconConfig'
 import { VOICE_TYPE } from '@/config/JcVoiceAlertConfig'
+import { JcMapMarker } from '@/map'
+import { MAP_EVENT } from '@/constant/CONST'
 
 let usersData = { markerCluster: null, users: {}, lnglats: [] } //存储用户信息
 
@@ -20,7 +22,7 @@ export default {
       abnormalUserIds: [], //异常的用户id 数组
       userSignVisible: true, //用户是否显示
       userTipVisible: true, //用户名称是否显示
-      togetherVisible: true, //用户是否聚合
+      userTogetherVisible: true, //用户是否聚合
       locationUserId: null //定位的用户id
     }
   },
@@ -86,6 +88,9 @@ export default {
         data.offUserIds.forEach(offUserId => {
           for (let key in usersData.users) {
             if (usersData.users[key].userId == offUserId) {
+              if (usersData.users[key].labelMarker) {
+                usersData.users[key].labelMarker.hide()
+              }
               delete usersData.users[key]
               break
             }
@@ -184,25 +189,51 @@ export default {
       return { center, key }
     },
     fitUsers() {
-      if (!usersData.markerCluster) {
-        return
-      }
       let myJcMap = this.getMyJcMap() //获取地图对象
 
-      //处理用户是否显示
-      if (this.userTipVisible) {
+      if (this.userSignVisible && this.userTogetherVisible) {
         usersData.markerCluster.setMap(myJcMap.map)
-
-        //处理是否进行聚合
-        if (this.togetherVisible) {
-          usersData.markerCluster.setMaxZoom(18)
-        } else {
-          usersData.markerCluster.setMaxZoom(0)
-        }
-        //处理是否显示标题，以及状态
-        usersData.markerCluster.setGridSize(120)
+        usersData.markerCluster.setGridSize(120) //处理是否显示标题，以及状态
       } else {
         usersData.markerCluster.setMap(null)
+      }
+      //处理用户非聚合显示
+      let jcSignVisible = !this.userTogetherVisible && this.userSignVisible
+
+      for (let key in usersData.users) {
+        let signItem = usersData.users[key]
+
+        if (jcSignVisible) {
+          let signIcon = this.getUserIcon(signItem.userId)
+
+          if (signItem.labelMarker) {
+            signItem.labelMarker.icon = signIcon
+            signItem.labelMarker.titleVisible = this.userTipVisible
+            signItem.labelMarker.show(signItem.center)
+          } else {
+            signItem.labelMarker = new JcMapMarker({
+              id: signItem.areaId,
+              icon: signIcon,
+              map: myJcMap,
+              name: signItem.userName,
+              position: signItem.center,
+              titleVisible: this.userTipVisible
+            })
+            signItem.labelMarker.on(MAP_EVENT.CLICK, ()=> {
+              this.$EventBus.$emit('view-component-change', { component: 'UserDetail', options: {
+                userId: signItem.userId, userName: signItem.userName,
+                center: signItem.center
+              } }) //通知窗口改变
+            })
+          }
+          if (signItem.userId == this.locationUserId) {
+            signItem.labelMarker.marker.setTop(true)
+          } else {
+            signItem.labelMarker.marker.setzIndex(5)
+          }
+        } else if (signItem.labelMarker) {
+          signItem.labelMarker.hide()
+        }
       }
     },
     renderUserClusterMarker(context) {
@@ -271,6 +302,11 @@ export default {
       if (usersData && usersData.markerCluster) {
         usersData.markerCluster.setMap(null)
       }
+      for (let key in usersData.users) {
+        if (usersData.users[key].labelMarker) {
+          usersData.users[key].labelMarker.hide()
+        }
+      }
       this.gatherUserIds = [] //重置用户聚合id数组
       this.abnormalUserIds = [] //重置用户异常id数组
 
@@ -315,12 +351,12 @@ export default {
       this.fitUsers()
     },
     userTogetherChange(togethers) {
-      let togetherVisible = togethers.includes('user')
+      let userTogetherVisible = togethers.includes('user')
 
-      if (this.togetherVisible == togetherVisible) {
+      if (this.userTogetherVisible == userTogetherVisible) {
         return
       }
-      this.togetherVisible = togetherVisible
+      this.userTogetherVisible = userTogetherVisible
       this.fitUsers()
     }
   },
