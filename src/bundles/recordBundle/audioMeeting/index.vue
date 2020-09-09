@@ -13,7 +13,7 @@
         <el-table-column prop="orgId" label="所属组织" :formatter="formatOrg"></el-table-column>
         <el-table-column prop="createTime" label="发起时间" :formatter="formatTime"></el-table-column>
         <el-table-column prop="videoDuration" label="会议时长"></el-table-column>
-        <el-table-column prop="participants" label="参会人员" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="participants" label="应答方" show-overflow-tooltip></el-table-column>
         <el-table-column width="60" label="操作">
           <template slot-scope="scope">
             <el-button type="text" size="mini" icon="el-icon-microphone" @click="showAudio(scope.row)" title="播放"></el-button>
