@@ -1,5 +1,7 @@
 <template>
   <div class="jc-screen-message">
+    <div class="jc-title">信息推送</div>
+    <view-tabs v-model="tabComponent" :options="tabs"></view-tabs>
     <transition-group name="jc-list" tag="div" class="jc-message-content">
       <div class="jc-message-item" v-for="item in list" :key="item.id" @click="detail(item)">
         <div class="jc-message-title" :class="style[item.type]">{{item.title}}</div>
@@ -14,8 +16,17 @@ import { MESSAGE_TYPE } from '@/constant/Dictionaries'
 export default {
   name: 'ScreenCommandMessage',
   props: ['options', 'project'],
+  components: {
+    ViewTabs: () => import('../common/viewTabs')
+  },
   data() {
     return {
+      tabComponent: 'BaseVocation',
+      tabs: [
+        { label: '基础业务', value: 'BaseVocation' },
+        { label: '项目业务', value: 'ProjectVocation' },
+        { label: '待办信息', value: 'TodoInfo' }
+      ],
       visible: true,
       notReadNum: 0,
       maxLength: 20, //最大数量

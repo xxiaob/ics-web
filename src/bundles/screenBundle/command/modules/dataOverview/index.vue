@@ -141,8 +141,8 @@ $jc-overview-color: #3783fb;
   }
   .jc-overview-header {
     position: relative;
-    height: 30px;
-    line-height: 30px;
+    height: 36px;
+    line-height: 36px;
     color: $jc-color-white;
     background-color: $jc-screen-color;
     padding-left: $jc-default-dis;
@@ -150,9 +150,9 @@ $jc-overview-color: #3783fb;
       position: absolute;
       top: 2px;
       right: 0;
-      width: 26px;
-      height: 26px;
-      line-height: 26px;
+      width: 32px;
+      height: 32px;
+      line-height: 32px;
       text-align: center;
       overflow: hidden;
       border-radius: 50%;
