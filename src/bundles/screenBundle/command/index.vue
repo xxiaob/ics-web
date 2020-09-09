@@ -188,6 +188,15 @@ export default {
     getKeyByLngLat(lng, lat) {
       //根据经纬度去计算key
       return parseFloat(lng).toFixed(6) + ',' + parseFloat(lat).toFixed(6)
+    },
+    /**
+     * 设置marker显示和添加监听
+     * @param {Object} marker 图标对象
+     * @param { Boolean } isCluster 是否聚合对象
+     */
+    setMarkerAndListener(marker) {
+      marker.setOffset(new myJcMap.AMap.Pixel(0, 0))
+      marker.setAnchor('center')
     }
   },
   beforeDestroy() {

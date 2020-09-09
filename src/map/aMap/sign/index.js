@@ -40,6 +40,7 @@ class JcMapSign extends JcMapSignBase {
   showTip() {
     if (this.signVisible) {
       if (this.marker) {
+        this.marker.icon = this.icon
         this.marker.titleVisible = this.tipVisible
         this.marker.show()
       } else if (this.center && this.center.length == 2) {

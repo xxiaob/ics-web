@@ -106,7 +106,7 @@ export default {
                 map: myJcMap,
                 name: item.areaName,
                 center: item.center.split(','),
-                tipVisible: false,
+                signVisible: false,
                 areaVisible: false,
                 boundaries: apiBoundariesFormat(item)
               })
@@ -138,6 +138,7 @@ export default {
       }
       this.areaTipVisibles = mapGridTypes
       this.togetherVisibles = mapGridTypes
+      this.signVisibles = mapGridTypes
       this.$EventBus.$emit('map-grid-types-change', mapGridTypes) //通知地图存在类型
       this.fitGrids() //画出网格
     },
@@ -147,37 +148,40 @@ export default {
       for (let type in gridAreas) {
         let gridTypeMap = gridAreas[type]
 
-        //处理聚合是否显示
-        if (this.areaTipVisibles.includes(type)) {
-          gridTypeMap.markerCluster.setMap(myJcMap.map)
+        let signVisible = this.signVisibles.includes(type) //标记是否显示
 
-          //处理是否进行聚合
-          if (this.togetherVisibles.includes(type)) {
-            gridTypeMap.markerCluster.setMaxZoom(18)
-          } else {
-            gridTypeMap.markerCluster.setMaxZoom(0)
-          }
-          //处理是否显示标题
-          gridTypeMap.markerCluster.setGridSize(120)
+        let togetherVisible = this.togetherVisibles.includes(type) //是否聚合
+
+        //如果开启聚合，且显示该类型标记，则设置聚合显示
+        if (togetherVisible && signVisible) {
+          gridTypeMap.markerCluster.setMap(myJcMap.map)
+          gridTypeMap.markerCluster.setGridSize(120) //处理是否显示标题
         } else {
           gridTypeMap.markerCluster.setMap(null)
         }
 
         //地图区域显示控制
-        let showSign = this.areaAreaVisibles.includes(type)
+        let areaVisible = this.areaAreaVisibles.includes(type) //是否显示区域
+
+        let tipVisible = this.areaTipVisibles.includes(type) //是否显示标题
+
+        let jcSignVisible = !togetherVisible && signVisible //如果聚合开启，且需要显示标记，则JcMapSign需要显示标记
 
         for (let key in gridTypeMap.signs) {
-          if (showSign) {
-            gridTypeMap.signs[key].sign.areaVisible = true
-            gridTypeMap.signs[key].sign.setMap(myJcMap)
-          } else {
-            gridTypeMap.signs[key].sign.setMap(null)
-          }
+          let signItem = gridTypeMap.signs[key]
+
+          signItem.sign.icon = this.abnormalGridIds.includes(signItem.areaId) ? JcIcons[signItem.icon].abnormal : JcIcons[signItem.icon].icon
+          signItem.sign.tipVisible = tipVisible
+          signItem.sign.signVisible = jcSignVisible
+          signItem.sign.areaVisible = areaVisible
+          signItem.sign.showArea()
+          signItem.sign.showTip()
         }
       }
     },
     getGridMarkerCluster(gridTypeMap) {
       return new MarkerCluster(null, gridTypeMap.lnglats, {
+        maxZoom: 18,
         gridSize: 120,
         renderClusterMarker: (context) => {
           this.renderGridClusterMarker(gridTypeMap, context)
@@ -189,7 +193,7 @@ export default {
     },
     renderGridClusterMarker(gridTypeMap, context) {
       console.log('绘制网格-聚合绘制', context)
-      context.marker.setAnchor('center')
+      this.setMarkerAndListener(context.marker, true) //设置marker和添加监听
       context.marker.setContent(`<div class="jc-marker-content jc-marker-cluster" style="background-image: url(${JcIcons[gridTypeMap.icon].cluster});">${context.count}</div>`)
     },
     renderGridMarker(gridTypeMap, context) {
@@ -206,8 +210,9 @@ export default {
         content += `<div class="jc-marker-title">${signItem.areaName}</div>`
       }
 
-      context.marker.setAnchor('center')
+      this.setMarkerAndListener(context.marker) //设置marker和添加监听
       context.marker.setContent(content)
+      signItem.marker = context.marker //存储网格标记
     },
     markerGridClusterClick(gridTypeMap, context) {
       console.log('绘制网格-点击', context)

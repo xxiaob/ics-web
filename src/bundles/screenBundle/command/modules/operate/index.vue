@@ -160,9 +160,9 @@ export default {
         }
         this.areaTypes = areaTypes
         this.allTypes = ['org', 'event', 'problem', 'device', ...allCheckIds]
-        this.signType = ['org', ...allCheckIds]
+        this.signType = [...allCheckIds]
         this.wordType = [...this.allTypes]
-        this.togetherType = allCheckIds
+        this.togetherType = [...allCheckIds]
       } catch (error) {
         console.log(error)
       }

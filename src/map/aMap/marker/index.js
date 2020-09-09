@@ -46,13 +46,14 @@ class JcMapmarker extends JcMapmarkerBase {
     //处理标记显示
     if (this.draggable) {
       this.marker = new this.map.AMap.Marker({
+        offset: [0, 0],
         anchor: 'center',
         zIndex: 1,
         position: this.position,
         draggable: true
       })
     } else {
-      this.marker = new this.map.AMap.LabelMarker({ zIndex: 1, position: this.position, text: { } })
+      this.marker = new this.map.AMap.LabelMarker({ zIndex: 1, position: this.position, icon: { image: getIcon(this.icon), anchor: 'center', size: [30, 30] }, text: { } })
     }
     this.marker.on('mouseover', function (event) {
       event.target.setzIndex(2)
@@ -104,7 +105,7 @@ class JcMapmarker extends JcMapmarkerBase {
     if (this.draggable) {
       this.marker.setContent(getMarker({ icon: this.icon, title: this.name, titleVisible: this.titleVisible }))
     } else {
-      this.marker.setIcon({ image: getIcon(this.icon), anchor: 'center', size: [30, 30] })
+      this.marker.setIcon({ image: getIcon(this.icon) })
       this.marker.setText({
         content: this.titleVisible ? this.name : '',
         direction: 'top',

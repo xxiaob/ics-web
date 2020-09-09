@@ -18,7 +18,7 @@ export default {
       zoomOrgs: {},
       nowOrgId: null,
       orgSignVisible: false, //是否显示中心点标记
-      orgTipVisible: false, //组织是否显示名称
+      orgTipVisible: true, //组织是否显示名称
       orgAreaVisible: true //组织是否显示区域
     }
   },
@@ -94,7 +94,7 @@ export default {
               map: myJcMap,
               name: item.areaName,
               center: item.center.split(','),
-              signVisible: this.signVisible,
+              signVisible: this.orgSignVisible,
               tipVisible: this.orgTipVisible,
               areaVisible: this.orgAreaVisible,
               extData: { orgId: item.orgId, adcode: item.areaCode, areaId: item.areaId, areaName: item.areaName },
@@ -184,24 +184,37 @@ export default {
       }
     },
     orgShowAreaChange(areas) {
-      this.orgAreaVisible = areas.includes('org') //如果存在组织区域显示，则显示区域，否则不显示
+      let orgAreaVisible = areas.includes('org') //如果存在组织区域显示，则显示区域，否则不显示
+
+      if (this.orgAreaVisible == orgAreaVisible) {
+        return
+      }
+      this.orgAreaVisible = orgAreaVisible
       orgAreas.forEach(item => {
         item.showArea(this.orgAreaVisible)
       })
     },
     orgShowWordChange(words) {
-      this.orgTipVisible = words.includes('org')
+      let orgTipVisible = words.includes('org')
+
+      if (this.orgTipVisible == orgTipVisible) {
+        return
+      }
+      this.orgTipVisible = orgTipVisible
       orgAreas.forEach(item => {
         item.tipVisible = this.orgTipVisible
         item.showTip()
       })
     },
     orgShowSignChange(signs) {
-      this.orgSignVisible = signs.includes('org')
-      this.orgAreaVisible = this.orgSignVisible
+      let orgSignVisible = signs.includes('org')
+
+      if (this.orgSignVisible == orgSignVisible) {
+        return
+      }
+      this.orgSignVisible = orgSignVisible
       orgAreas.forEach(item => {
         item.signVisible = this.orgSignVisible
-        item.showArea(this.orgAreaVisible)
         item.showTip()
       })
     }
