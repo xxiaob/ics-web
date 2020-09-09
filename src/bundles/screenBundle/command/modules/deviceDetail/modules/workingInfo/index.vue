@@ -30,7 +30,7 @@ export default {
   },
   methods: {
     videoplay(deviceDetaillData) {
-      // console.log('device', deviceDetaillData)
+      // 设备观摩
       let { deviceName, deviceId } = deviceDetaillData
 
       this.$EventBus.$emit('device-video-play', [{ name: deviceName, deviceId }])

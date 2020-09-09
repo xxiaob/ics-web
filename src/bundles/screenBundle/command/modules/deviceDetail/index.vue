@@ -5,15 +5,15 @@
       <component :is="tabComponent" :deviceDetaillData="deviceDetaillData"></component>
     </keep-alive>
     <div class="jc-user-footer">
-      <div class="jc-opera-item">音频指挥</div>
-      <div class="jc-opera-item">视频指挥</div>
-      <div class="jc-opera-item">设备观摩</div>
-      <div class="jc-opera-item">轨迹查询</div>
+      <div class="jc-opera-item" @click="goMeeting('audio')">音频指挥</div>
+      <div class="jc-opera-item" @click="goMeeting('video')">视频指挥</div>
+      <div class="jc-opera-item" @click="devicevideoPlay">设备观摩</div>
+      <div class="jc-opera-item" @click="deviceTrajectory">轨迹查询</div>
     </div>
   </view-warp>
 </template>
 <script>
-import { VIDEO_INVITE_TYPES } from '@/constant/Dictionaries'
+import { DEVICE_TYPES, VIDEO_INVITE_TYPES } from '@/constant/Dictionaries'
 import { deviceDetail } from '@/api/device'
 
 
@@ -66,7 +66,49 @@ export default {
       }
 
       this.loading = false
+    },
+    goMeeting(talkType) {
+      //去进行会议
+
+      // 设备不在线
+      console.log('this.deviceDetaillData.online', this.deviceDetaillData.online)
+      if (!this.deviceDetaillData.online) {
+        this.$message.error('设备不在线')
+        return
+      }
+
+      // 设备不是网巡车
+      if (DEVICE_TYPES.NETPATROLCAR !== this.deviceDetaillData.deviceType) {
+        this.$message.error('设备不是网巡车')
+        return
+      }
+
+      // 如果设备在线, 并且为网巡车网巡车
+
+      this.$EventBus.$emit('screen-opera-control', { type: 'select', isSelect: false })
+      this.$EventBus.$emit('screen-media-live', { users: [{ id: this.deviceDetaillData.userId, name: this.deviceDetaillData.deviceName }], type: talkType == 'video' ? VIDEO_INVITE_TYPES.MEETVIDEO : VIDEO_INVITE_TYPES.MEETAUDIO })
+    },
+    devicevideoPlay() {
+      // 设备观摩
+      // 设备不在线
+      if (!this.deviceDetaillData.online) {
+        this.$message.error('设备不在线')
+        return
+      }
+      // 设备观摩
+      this.$EventBus.$emit('device-video-play', [{ deviceId: this.deviceDetaillData.deviceId, name: this.deviceDetaillData.deviceName }])
+    },
+    deviceTrajectory() {
+      // 设备不在线
+      if (!this.deviceDetaillData.online) {
+        this.$message.error('设备不在线')
+        return
+      }
+      // 设备轨迹
+      this.$EventBus.$emit('screen-user-trajectory', { id: this.deviceDetaillData.userId, name: this.deviceDetaillData.deviceName }) //查看用户轨迹
     }
+
+
   }
 }
 </script>
