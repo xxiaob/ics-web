@@ -18,7 +18,8 @@ export default {
     return {
       gatherUserIds: [], //正在采集的用户id 数组
       abnormalUserIds: [], //异常的用户id 数组
-      userTipVisible: true, //用户是否显示
+      userSignVisible: true, //用户是否显示
+      userTipVisible: true, //用户名称是否显示
       togetherVisible: true, //用户是否聚合
       locationUserId: null //定位的用户id
     }
@@ -26,6 +27,7 @@ export default {
   created() {
     this.$EventBus.$on('map-user-change', this.userMap) //监听用户改变
     this.$EventBus.$on('screen-user-location', this.userLocation) //监听用户定位
+    this.$EventBus.$on('show-sign-change', this.userShowSignChange) //显示实体
     this.$EventBus.$on('show-word-change', this.userShowWordChange) //监听文字显示切换
     this.$EventBus.$on('show-together-change', this.userTogetherChange) //监听聚合显示改变
     this.$EventBus.$on('screen-use-select', this.userSelect) //监听框选用户
@@ -157,6 +159,7 @@ export default {
         usersData.markerCluster.setData(usersData.lnglats)
       } else {
         usersData.markerCluster = new MarkerCluster(null, usersData.lnglats, {
+          maxZoom: 18,
           gridSize: 120,
           renderClusterMarker: this.renderUserClusterMarker,
           renderMarker: this.renderUserMarker
@@ -204,9 +207,8 @@ export default {
     },
     renderUserClusterMarker(context) {
       console.log('绘制用户-聚合绘制', context)
-      context.marker.setAnchor('center')
-      context.marker.setzIndex(20)
-      context.marker.setContent(`<div class="jc-cluster-content" style="background-image: url(${JcUserIcons.cluster});">${context.count}</div>`)
+      this.setMarkerAndListener(context.marker, true) //设置marker和添加监听
+      context.marker.setContent(`<div class="jc-marker-content jc-marker-cluster" style="background-image: url(${JcUserIcons.cluster});">${context.count}</div>`)
     },
     renderUserMarker(context) {
       console.log('绘制用户-单点绘制', context)
@@ -216,33 +218,32 @@ export default {
 
       //过滤掉用户信息为空的场景
       if (!userItem) {
-        return
+        return ''
       }
 
-      let content = '<div class="jc-marker-content jc-market-center">'
+      let content = `<div class="jc-marker-content" style="background-image: url(${this.getUserIcon(userItem.userId)});">`
 
       if (this.userTipVisible) {
         content += `<div class="jc-marker-title">${userItem.userName}</div>`
       }
-      let zIndex = 18 //设置位置
-
-      //处理用户图标显示
-      if (this.abnormalUserIds.includes(userItem.userId)) {
-        zIndex = 19
-        content += `<img src=${JcUserIcons.abnormal} class="jc-marker-icon"/></div>`
-      } else if (this.gatherUserIds.includes(userItem.userId)) {
-        content += `<img src=${JcUserIcons.gather} class="jc-marker-icon"/></div>`
-      } else {
-        content += `<img src=${JcUserIcons.online} class="jc-marker-icon"/></div>`
-      }
 
       //如果是定位的用户，则突出显示
       if (userItem.userId == this.locationUserId) {
-        context.marker.setzIndex(20)
+        context.marker.setTop(true)
+      } else {
+        context.marker.setzIndex(5)
       }
-      context.marker.setzIndex(zIndex)
-      context.marker.setPosition(userItem.center)
-      context.marker.setContent(content)
+      this.setMarkerAndListener(context.marker) //设置marker和添加监听
+      context.marker.setContent(content + '</div>')
+    },
+    getUserIcon(userId) {
+      if (this.abnormalUserIds.includes(userId)) {
+        return JcUserIcons.abnormal
+      }
+      if (this.gatherUserIds.includes(userId)) {
+        return JcUserIcons.gather
+      }
+      return JcUserIcons.online
     },
     markerUserClusterClick(context) {
       console.log('绘制用户-点击', context)
@@ -295,12 +296,31 @@ export default {
         this.$message.error('用户不在线或未显示')
       }
     },
+    userShowSignChange(signs) {
+      let userSignVisible = signs.includes('user')
+
+      if (this.userSignVisible == userSignVisible) {
+        return
+      }
+      this.userSignVisible = userSignVisible
+      this.fitUsers()
+    },
     userShowWordChange(words) {
-      this.userTipVisible = words.includes('user') //如果存在用户显示，则显示用户，否则不显示
+      let userTipVisible = words.includes('user')
+
+      if (this.userTipVisible == userTipVisible) {
+        return
+      }
+      this.userTipVisible = userTipVisible
       this.fitUsers()
     },
     userTogetherChange(togethers) {
-      this.togetherVisible = togethers.includes('user') //如果存在用户聚合，则聚合用户，否则不显示
+      let togetherVisible = togethers.includes('user')
+
+      if (this.togetherVisible == togetherVisible) {
+        return
+      }
+      this.togetherVisible = togetherVisible
       this.fitUsers()
     }
   },
@@ -309,7 +329,8 @@ export default {
     userMouseTool = null
     //去除事件监听
     this.$EventBus.$off('map-user-change', this.userMap)
-    this.$EventBus.$off('screen-user-location', this.userLocation) //监听用户定位
+    this.$EventBus.$off('screen-user-location', this.userLocation)
+    this.$EventBus.$off('show-sign-change', this.userShowSignChange)
     this.$EventBus.$off('show-word-change', this.orgShowWordChange)
     this.$EventBus.$off('show-together-change', this.userTogetherChange)
     this.$EventBus.$off('screen-use-select', this.userSelect)

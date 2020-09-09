@@ -94,10 +94,10 @@ class JcMap extends JcMapBase {
     this.mapStyle = style
     this.console('Amap setMapStyle', style)
     if (style == mapStyle.SATELLITE) {
-      this.map.setLayers([new this.AMap.TileLayer.Satellite({ zooms: this.zooms })])
+      this.map.setLayers([new this.AMap.TileLayer.Satellite({ zooms: this.zooms }), this.labelsLayer])
     } else {
       this.map.setMapStyle(MapOptions.mapOptions[this.mapStyle].mapStyle)
-      this.map.setLayers([new this.AMap.createDefaultLayer({ zooms: this.zooms })]) //eslint-disable-line
+      this.map.setLayers([new this.AMap.createDefaultLayer({ zooms: this.zooms }), this.labelsLayer]) //eslint-disable-line
     }
   }
 

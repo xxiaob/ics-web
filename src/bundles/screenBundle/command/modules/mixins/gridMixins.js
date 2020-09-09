@@ -2,9 +2,9 @@
  * 地图网格处理
  */
 import { areaList } from '@/api/area'
-import { AREAS_TYPE, AREAS_SEARCH_TYPE } from '@/constant/CONST'
+import { AREAS_TYPE, AREAS_SEARCH_TYPE, MAP_EVENT } from '@/constant/CONST'
 import { apiBoundariesFormat } from '@/libs/apiFormat'
-import { JcMapSign } from '@/map'
+import { JcMapSign, JcMapMarker } from '@/map'
 import { getMarkerCluster } from '@/map/aMap/aMapUtil'
 import { JcIcons } from '@/config/JcIconConfig'
 import { VOICE_TYPE } from '@/config/JcVoiceAlertConfig'
@@ -20,7 +20,7 @@ export default {
     return {
       gridOrg: null,
       abnormalGridIds: [], //异常的网格id 数组
-      signVisibles: [], //网格区域对应类型是否显示实体
+      areaSignVisibles: [], //网格区域对应类型是否显示实体
       areaTipVisibles: [], //网格区域对应类型是否显示名称
       areaAreaVisibles: [], //网格区域对应类型是否显示区域
       togetherVisibles: [] //网格区域对应类型是否聚合显示区域
@@ -102,7 +102,7 @@ export default {
 
             gridTypeMap.signs[item.center] = {
               areaId: item.areaId, areaName: item.areaName, areaTypeId: item.areaTypeId, center: item.center, icon: item.icon, sign: new JcMapSign({
-                id: item.orgId,
+                id: item.areaId,
                 map: myJcMap,
                 name: item.areaName,
                 center: item.center.split(','),
@@ -138,7 +138,7 @@ export default {
       }
       this.areaTipVisibles = mapGridTypes
       this.togetherVisibles = mapGridTypes
-      this.signVisibles = mapGridTypes
+      this.areaSignVisibles = mapGridTypes
       this.$EventBus.$emit('map-grid-types-change', mapGridTypes) //通知地图存在类型
       this.fitGrids() //画出网格
     },
@@ -148,7 +148,7 @@ export default {
       for (let type in gridAreas) {
         let gridTypeMap = gridAreas[type]
 
-        let signVisible = this.signVisibles.includes(type) //标记是否显示
+        let signVisible = this.areaSignVisibles.includes(type) //标记是否显示
 
         let togetherVisible = this.togetherVisibles.includes(type) //是否聚合
 
@@ -161,21 +161,40 @@ export default {
         }
 
         //地图区域显示控制
-        let areaVisible = this.areaAreaVisibles.includes(type) //是否显示区域
+        let areaVisible = signVisible && this.areaAreaVisibles.includes(type) //是否显示区域
 
-        let tipVisible = this.areaTipVisibles.includes(type) //是否显示标题
+        let tipVisible = signVisible && this.areaTipVisibles.includes(type) //是否显示标题
 
         let jcSignVisible = !togetherVisible && signVisible //如果聚合开启，且需要显示标记，则JcMapSign需要显示标记
 
         for (let key in gridTypeMap.signs) {
           let signItem = gridTypeMap.signs[key]
 
-          signItem.sign.icon = this.abnormalGridIds.includes(signItem.areaId) ? JcIcons[signItem.icon].abnormal : JcIcons[signItem.icon].icon
-          signItem.sign.tipVisible = tipVisible
-          signItem.sign.signVisible = jcSignVisible
-          signItem.sign.areaVisible = areaVisible
-          signItem.sign.showArea()
-          signItem.sign.showTip()
+          if (jcSignVisible) {
+            let signIcon = this.abnormalGridIds.includes(signItem.areaId) ? JcIcons[signItem.icon].abnormal : JcIcons[signItem.icon].icon
+
+            if (signItem.labelMarker) {
+              signItem.labelMarker.icon = signIcon
+              signItem.labelMarker.titleVisible = tipVisible
+              signItem.labelMarker.show()
+            } else {
+              signItem.labelMarker = new JcMapMarker({
+                id: signItem.areaId,
+                icon: signIcon,
+                map: myJcMap,
+                name: signItem.areaName,
+                position: signItem.sign.center,
+                titleVisible: tipVisible
+              })
+              signItem.labelMarker.on(MAP_EVENT.CLICK, ()=> {
+                this.$EventBus.$emit('view-component-change', { component: 'GridDetail', options: { areaId: signItem.areaId, areaName: signItem.areaName, areaTypeId: signItem.areaTypeId, center: signItem.center, icon: signItem.icon } }) //通知窗口改变
+              })
+            }
+          } else if (signItem.labelMarker) {
+            signItem.labelMarker.hide()
+          }
+
+          signItem.sign.showArea(areaVisible)
         }
       }
     },
@@ -211,8 +230,7 @@ export default {
       }
 
       this.setMarkerAndListener(context.marker) //设置marker和添加监听
-      context.marker.setContent(content)
-      signItem.marker = context.marker //存储网格标记
+      context.marker.setContent(content + '</div>')
     },
     markerGridClusterClick(gridTypeMap, context) {
       console.log('绘制网格-点击', context)
@@ -240,6 +258,9 @@ export default {
         //清除sign 显示
         for (let key in gridTypeMap.signs) {
           gridTypeMap.signs[key].sign.setMap(null)
+          if (gridTypeMap.signs[key].labelMarker) {
+            gridTypeMap.signs[key].labelMarker.hide()
+          }
         }
       }
       gridAreas = {}
@@ -293,7 +314,7 @@ export default {
       this.fitGrids()
     },
     gridShowSignChange(signs) {
-      this.signVisibles = [...signs]
+      this.areaSignVisibles = [...signs]
       this.fitGrids()
     }
   },
