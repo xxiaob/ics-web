@@ -108,6 +108,7 @@ export default {
       this.$EventBus.$on('view-component-back', this.viewBack) //监听 内容窗口返回
       this.$EventBus.$on('message-component-change', this.messageComponentChange) //消息 内容窗口改变
       this.$EventBus.$on('map-switch-change', this.mapSwitchChange) //地图背景切换
+      this.$EventBus.$on('view-component-close', this.viewComponentClose) ////监听 内容窗口关闭
 
       this.messageComponent = 'CommandMessage'
       this.$nextTick(() => {
@@ -155,6 +156,7 @@ export default {
       this.viewComponent = data.component
       this.viewComponentQueue.push(data)
       console.log('viewComponentChange', data, this.viewComponentQueue)
+      this.$EventBus.$emit('close-overview') //通知 指挥层级概览 弹框关闭
     },
     messageComponentChange(data) {
       //内容窗口处理
@@ -185,6 +187,10 @@ export default {
         this.viewComponent = item.component
       }
     },
+    viewComponentClose() {
+      this.viewOptions = null
+      this.viewComponent = ''
+    },
     getKeyByLngLat(lng, lat) {
       //根据经纬度去计算key
       return parseFloat(lng).toFixed(6) + ',' + parseFloat(lat).toFixed(6)
@@ -198,6 +204,7 @@ export default {
     this.$EventBus.$off('view-component-back', this.viewBack)
     this.$EventBus.$off('message-component-change', this.messageComponentChange)
     this.$EventBus.$off('map-switch-change', this.mapSwitchChange) //地图背景切换
+    this.$EventBus.$off('view-component-close', this.viewComponentClose)
   }
 }
 </script>

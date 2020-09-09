@@ -1,8 +1,8 @@
 <template>
   <div class="jc-overview" :class="{'jc-active': viewShow}">
-    <i class="jc-overview-icon" @click="viewShow = !viewShow"></i>
+    <i class="jc-overview-icon" @click="changeViewShow"></i>
     <div class="jc-overview-contant" v-loading="loading" element-loading-background="rgba(0, 0, 0, 0)">
-      <div class="jc-overview-header jc-title-sign">数据概览
+      <div class="jc-overview-header jc-title-sign">指挥层级概览
         <div class="jc-close el-icon-close" @click.stop="viewShow = false"></div>
       </div>
       <div class="jc-content">
@@ -42,8 +42,16 @@ export default {
   created() {
     this.$EventBus.$on('org-change', this.initData) //监听行级别切换
     this.interval = setInterval(this.initData, 1000 * 60 * 0.5) //定时进行数据轮询
+    this.$EventBus.$on('close-overview', this.closeViewShow) //监听当前弹框关闭
   },
   methods: {
+    closeViewShow() {
+      this.viewShow = false
+    },
+    changeViewShow() {
+      this.viewShow = !this.viewShow
+      this.$EventBus.$emit('view-component-close') //通知右侧弹框关闭
+    },
     async initData(org) {
       if (org) {
         this.org = org
@@ -78,6 +86,7 @@ export default {
     clearInterval(this.interval)
     //去除事件监听
     this.$EventBus.$off('org-change', this.initData)
+    this.$EventBus.$off('close-overview', this.closeViewShow)
   }
 }
 </script>
@@ -87,7 +96,7 @@ $jc-overview-color: #3783fb;
   position: absolute;
   width: 40px;
   height: 40px;
-  left: $jc-default-dis;
+  right: $jc-default-dis;
   bottom: $jc-default-dis;
   z-index: 8;
   cursor: pointer;
@@ -99,7 +108,7 @@ $jc-overview-color: #3783fb;
     position: absolute;
     width: 40px;
     height: 40px;
-    left: 0;
+    right: 0;
     bottom: 0;
     background: url(./assets/bg.png) no-repeat left bottom;
     background-size: 100% 100%;
@@ -112,16 +121,16 @@ $jc-overview-color: #3783fb;
     left: 0;
     bottom: 0;
     display: block;
-    width: 320px;
-    height: 160px;
+    width: 640px;
+    height: 320px;
     opacity: 0;
     padding: $jc-default-dis/2;
     background-color: $jc-color-white;
     transition: opacity 0.4s;
   }
   &.jc-active {
-    width: 320px;
-    height: 160px;
+    width: 640px;
+    height: 320px;
     .jc-overview-contant {
       opacity: 1;
     }
@@ -152,7 +161,7 @@ $jc-overview-color: #3783fb;
   }
 }
 .jc-content-warp {
-  height: 90px;
+  height: 250px;
   overflow: auto;
 }
 .jc-content {
