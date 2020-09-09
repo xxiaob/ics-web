@@ -5,7 +5,7 @@
       <el-tree ref="tree" :default-expanded-keys="expandedKeys" :data="trees" :props="props" :show-checkbox="true" node-key="id" :filter-node-method="filterNode" @check="checkChange">
         <div class="custom-tree-node" slot-scope="{ node,data}">
           <div class="jc-tree-label no-select jc-flex-warp" :class="{'jc-devices-offline': data.type=='device' && !data.online, 'jc-device':data.type=='device'}">
-            <i class="iconfont" :class="{'iconshexiangtou':data.deviceType==DEVICE_TYPES.CAMERA,'iconwurenji':data.deviceType==DEVICE_TYPES.UAV,'iconmap_policecar':data.deviceType==DEVICE_TYPES,'online':data.online}" v-if="data.type=='device'"></i>
+            <i class="iconfont" :class="{'iconshexiangtou':data.deviceType==DEVICE_TYPES.CAMERA,'iconwurenji':data.deviceType==DEVICE_TYPES.UAV,'iconmap_policecar':data.deviceType==DEVICE_TYPES.NETPATROLCAR,'online':data.online}" v-if="data.type=='device'"></i>
             <div class="jc-text-warp.NETPATROLCAR" v-text="node.label" :title="node.label"></div>
           </div>
           <div class="jc-tree-options" v-on:click.stop>
@@ -104,6 +104,8 @@ export default {
         console.log('orgsAndUsers', orgsAndDevice)
 
         this.trees = this.formatDeviceOrgTrees(orgsAndDevice) // 处理组织和用户
+
+        console.log('this.trees', this.trees)
         this.expandedKeys = this.trees.length ? [this.trees[0].id] : [] // 设置第一级默认展开
 
         this.initOptionsDevice() // 初始设备
@@ -157,7 +159,7 @@ export default {
 
             if (item.deviceType === DEVICE_TYPES.NETPATROLCAR) {
               // 选中的在线设备, 并且为网巡车, 记录
-              usersToDevices.push({ id: item.userid, name: item.label })
+              usersToDevices.push({ id: item.userId, name: item.label })
             }
           }
         })
@@ -199,7 +201,7 @@ export default {
 
           if (item.devices && item.devices.length) {
             item.devices.forEach(device => {
-              nodeChildren.push({ id: device.deviceId, label: device.deviceName, type: 'device', online: device.online, disabled: !device.online, deviceType: 1 })
+              nodeChildren.push({ id: device.deviceId, label: device.deviceName, type: 'device', online: device.online, disabled: !device.online, deviceType: device.deviceType, userId: device.userId })
             })
           }
           trees.push(nodeChildren && nodeChildren.length ? { ...node, children: nodeChildren } : node)
@@ -224,6 +226,17 @@ export default {
     },
     goMeeting(talkType) {
       //去进行会议
+
+      console.log('设备列表, this.usersToDevices', this.usersToDevices)
+
+      // 未选中设备,提示请选择设备
+      console.log('this.devices', this.devices)
+      if (!(this.devices && this.devices.length > 0)) {
+        this.$message.error('请选择设备')
+        return
+      }
+
+      // 如果选择设备, 就判断是不是有网巡车
       if (this.usersToDevices.length) {
         if (this.usersToDevices.length > 17) {
           this.$message.error('最多支持17台设备')
