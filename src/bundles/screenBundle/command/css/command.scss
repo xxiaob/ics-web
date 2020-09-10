@@ -763,7 +763,7 @@ $jc-oprea-height: 36px; //操作的高度
     height: 36px;
     line-height: 36px;
     padding: 0 $jc-default-dis;
-    @include jc-text-warp;
+    // @include jc-text-warp;
     background-color: $jc-screen-color;
     color: $jc-color-white;
   }
@@ -786,6 +786,7 @@ $jc-oprea-height: 36px; //操作的高度
     overflow-y: auto;
     // height: 100%;
     flex: 1;
+    padding-bottom: $jc-default-dis/2;
   }
 
   .jc-message-item {

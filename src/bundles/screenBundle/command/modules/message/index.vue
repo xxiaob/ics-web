@@ -2,22 +2,20 @@
   <div class="jc-screen-message">
     <div class="jc-title">信息推送</div>
     <view-tabs v-model="tabComponent" :options="tabs"></view-tabs>
-    <transition-group name="jc-list" tag="div" class="jc-message-content">
-      <div class="jc-message-item" v-for="item in list" :key="item.id" @click="detail(item)">
-        <div class="jc-message-title" :class="style[item.type]">{{item.title}}</div>
-        <div class="jc-message-user">{{item.userName}}</div>
-      </div>
-    </transition-group>
+    <message-list :list="this[tabComponent]" @todoChange="changeTodo"></message-list>
   </div>
 </template>
 <script>
 import { MESSAGE_TYPE } from '@/constant/Dictionaries'
+import { formatDate } from '@/libs/util'
+import { getTodoInfo, setTodoInfo } from '@/libs/storage'
 
 export default {
   name: 'ScreenCommandMessage',
   props: ['options', 'project'],
   components: {
-    ViewTabs: () => import('../common/viewTabs')
+    ViewTabs: () => import('../common/viewTabs'),
+    MessageList: () => import('./modules/List')
   },
   data() {
     return {
@@ -30,20 +28,22 @@ export default {
       visible: true,
       notReadNum: 0,
       maxLength: 20, //最大数量
-      list: [],
-      index: 0,
-      style: { [MESSAGE_TYPE.EVENT]: 'jc-event', [MESSAGE_TYPE.QUESTION]: 'jc-question', [MESSAGE_TYPE.TASK]: 'jc-task', [MESSAGE_TYPE.TEMPORARY]: 'jc-task' }
+      BaseVocation: [], //基础业务
+      ProjectVocation: [], //项目业务
+      TodoInfo: [], //待办信息
+      initTodoInfoIds: []
     }
   },
   created() {
+    const res = getTodoInfo()
+
+    console.log('getTodoInfo', res)
+    if (res && res.length) {
+      this.TodoInfo = res
+      this.initTodoInfoIds = res.map(item=>item.id)
+    }
     this.$EventBus.$on('screen-message-init', this.messageInit) //监听消息 初始化
     this.$EventBus.$on('screen-message-change', this.initData) //监听消息
-    // this.interval = setInterval(() => {
-    //   this.list.splice(0, 0, { id: this.index++, type: '3', title: '测试' })
-    //   if (this.list.length > this.maxLength) {
-    //     this.list.splice(this.maxLength, this.list.length - this.maxLength)
-    //   }
-    // }, 1000 * 3)
   },
   mounted() {
     this.$nextTick(() => {
@@ -66,10 +66,32 @@ export default {
         }
       }
 
-      this.list.splice(0, 0, { id: message.businessKey, type: message.messageType + '', title: message.titleName, userName: message.userName })
-      //处理列表只显示最大数量的事件问题
-      if (this.list.length > this.maxLength) {
-        this.list.splice(this.maxLength, this.list.length - this.maxLength)
+      if (message.messageType == MESSAGE_TYPE.DREGSQUESTION) { //项目业务
+        this.tabComponent = 'ProjectVocation'
+        this.ProjectVocation.splice(0, 0, {
+          id: message.businessKey,
+          type: message.messageType + '',
+          title: message.titleName,
+          userName: message.userName,
+          todo: false
+        })
+        //处理列表只显示最大数量的事件问题
+        if (this.ProjectVocation.length > this.maxLength) {
+          this.ProjectVocation.splice(this.maxLength, this.ProjectVocation.length - this.maxLength)
+        }
+      } else { //基础业务
+        this.tabComponent = 'BaseVocation'
+        this.BaseVocation.splice(0, 0, {
+          id: message.businessKey,
+          type: message.messageType + '',
+          title: message.titleName,
+          userName: message.userName,
+          todo: false
+        })
+        //处理列表只显示最大数量的事件问题
+        if (this.BaseVocation.length > this.maxLength) {
+          this.BaseVocation.splice(this.maxLength, this.BaseVocation.length - this.maxLength)
+        }
       }
 
       this.$EventBus.$emit('map-voice-alert', { type: message.messageType + '' }) //通知播放提示音
@@ -80,13 +102,36 @@ export default {
         let list = []
 
         data.forEach(item => {
-          list.push( { id: item.businessKey, type: MESSAGE_TYPE.TEMPORARY, title: item.taskName, userName: item.startUser })
+          let todo = false
+
+          if (this.initTodoInfoIds.includes(item.businessKey)) {
+            todo = true
+          }
+          list.push({
+            id: item.businessKey,
+            type: MESSAGE_TYPE.TEMPORARY,
+            title: item.taskName,
+            userName: item.startUser,
+            todo,
+            time: formatDate(item.createTime)
+          })
         })
-        this.list = list
+        this.BaseVocation = list
       }
     },
     detail(item) {
       this.$EventBus.$emit('view-component-change', { component: 'MessageDetail', options: item }) //通知窗口改变
+    },
+    changeTodo(item) {
+      console.log('changeTodo item', item)
+      if (item.todo) {
+        this.TodoInfo.push(item)
+      } else {
+        const index = this.TodoInfo.findIndex(v=>v.id == item.id)
+
+        this.TodoInfo.splice(index, 1)
+      }
+      setTodoInfo(this.TodoInfo)
     }
   },
   activated() {
