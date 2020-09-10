@@ -61,6 +61,10 @@ export default {
 
             let position = item.position.split(',') // 切割坐标
 
+            if (position.length < 2) {
+              return
+            }
+
             item.lng = position[0] // 获取精度
             item.lat = position[1] // 获取维度
 
@@ -184,7 +188,7 @@ export default {
               id: signItem.id,
               icon: JcEventIcons.plain,
               map: myJcMap,
-              name: signItem.eventTitle,
+              name: this.getMarkerTitle(signItem.eventTitle),
               position: signItem.center,
               titleVisible: this.eventTipVisible
             })
