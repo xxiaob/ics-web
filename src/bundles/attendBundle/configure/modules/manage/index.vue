@@ -39,8 +39,8 @@ import { getStringRule, NOT_NULL, SELECT_NOT_NULL, getNumberRule } from '@/libs/
 import FormMixins from '@/mixins/FormMixins'
 import { ATTEND_CONFIGURE_STATUSES } from '@/constant/Dictionaries'
 import viewOrgMixins from './viewOrgMixins'
-
 import { JcMap } from '@/map'
+
 let myJcMap
 
 let defaultForm = {
@@ -86,13 +86,10 @@ export default {
       this.$refs.tree.filter(val)
     }
   },
-  mounted() {
-
-  },
   methods: {
     initMap(orgId) {
       if (!myJcMap) {
-        this.$nextTick(()=>{
+        this.$nextTick(() => {
           myJcMap = new JcMap()
           myJcMap.init(this.$refs.myMap).then(() => {
             this.viewControl(myJcMap, orgId).then(() => {
@@ -101,7 +98,7 @@ export default {
           })
         })
       } else {
-        this.$nextTick(()=>{
+        this.$nextTick(() => {
           this.viewControl(myJcMap, orgId).then(() => {
             myJcMap.fitView()
           })
@@ -120,7 +117,7 @@ export default {
           }
           this.initMap(orgId)
         }
-        return { id, attendanceName, startWorkTime, endWorkTime, enabled, orgId, userIds: users.map(user=>user.userId) }
+        return { id, attendanceName, startWorkTime, endWorkTime, enabled, orgId, userIds: users.map(user => user.userId) }
       } else {
         if (this.orgId) {
           // this.getUsers(this.orgId)
@@ -169,6 +166,10 @@ export default {
         myJcMap.fitView()
       })
     }
+  },
+  beforeDestroy() {
+    myJcMap.destroy()
+    myJcMap = null
   }
 }
 </script>

@@ -42,7 +42,7 @@ export default {
   methods: {
     initMap(orgId) {
       if (!myJcMap) {
-        this.$nextTick(()=>{
+        this.$nextTick(() => {
           myJcMap = new JcMap()
           myJcMap.init(this.$refs.myMap).then(() => {
             this.viewControl(myJcMap, orgId).then(() => {
@@ -51,7 +51,7 @@ export default {
           })
         })
       } else {
-        this.$nextTick(()=>{
+        this.$nextTick(() => {
           this.viewControl(myJcMap, orgId).then(() => {
             myJcMap.fitView()
           })
@@ -65,11 +65,15 @@ export default {
         if (orgId) {
           this.initMap(orgId)
         }
-        return { id, attendanceName, startWorkTime, endWorkTime, enabled, orgId, orgName, users: users.map(user=>user.userName).join(' ') }
+        return { id, attendanceName, startWorkTime, endWorkTime, enabled, orgId, orgName, users: users.map(user => user.userName).join(' ') }
       } else {
         return {}
       }
     }
+  },
+  beforeDestroy() {
+    myJcMap.destroy()
+    myJcMap = null
   }
 }
 </script>
