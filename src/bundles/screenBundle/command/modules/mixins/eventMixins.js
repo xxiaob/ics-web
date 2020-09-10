@@ -1,6 +1,5 @@
 import { getMarkerCluster } from '@/map/aMap/aMapUtil'
 import { JcEventIcons } from '@/config/JcIconConfig'
-
 import { getScreenEventData } from '@/api/screen'
 import moment from 'moment'
 
@@ -39,9 +38,7 @@ export default {
 
         MarkerCluster = await getMarkerCluster()
 
-
         this.clearEvents() // 清除之前的记录
-
 
         // 处理用户信息
         if (ScreenEventData && ScreenEventData.length) {
@@ -185,8 +182,6 @@ export default {
       if (eventData && eventData.markerCluster) {
         eventData.markerCluster.setMap(null)
       }
-      this.gatherUserIds = [] //重置用户聚合id数组
-      this.abnormalUserIds = [] //重置用户异常id数组
 
       eventData = { markerCluster: null, events: {}, lnglats: [] }
     },

@@ -192,6 +192,9 @@ export default {
         clearInterval(this.deviceTimer) // 清理固定摄像头轮询
       }
 
+      this.hkDeviceIds = []
+      this.pushDeviceIds = []
+      this.fixedDeviceIds = []
       deviceData = { }
     },
     deviceShowWordChange(words) {
