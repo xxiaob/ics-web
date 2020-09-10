@@ -6,7 +6,7 @@ import { mapMutations } from 'vuex'
 import { login } from '@/api/auth'
 
 export default {
-  name: 'FathAuth',
+  name: 'FastAuth',
   data() {
     return {
       tip: '正在自动登录中，请稍后。。。'
