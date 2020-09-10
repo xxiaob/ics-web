@@ -72,8 +72,10 @@ export default {
     }
   },
   beforeDestroy() {
-    myJcMap.destroy()
-    myJcMap = null
+    if (myJcMap) {
+      myJcMap.destroy()
+      myJcMap = null
+    }
   }
 }
 </script>
