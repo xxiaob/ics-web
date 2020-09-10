@@ -127,7 +127,9 @@ export default {
       if (this.deviceSignVisible) {
         // 查看设备是否是否存在,存在更行,不存在则添加
         if (deviceData[data.id]) {
-          this.locationDeviceId = data.id
+          if (deviceData[data.id].labelMarker) {
+            deviceData[data.id].labelMarker.marker.setTop(true)
+          }
           let myJcMap = this.getMyJcMap() //获取地图对象
 
           myJcMap.map.setZoomAndCenter(20, deviceData[data.id].center)

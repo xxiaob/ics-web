@@ -272,7 +272,7 @@ export default {
       //先处理当前数据类型在地图上是否显示，如果不显示，则不处理
       let noGrid = true //处理网格是否存在，不存在则提示
 
-      if (this.areaTipVisibles.includes(data.areaTypeId)) {
+      if (this.areaSignVisibles.includes(data.areaTypeId)) {
         let gridTypeMap = gridAreas[data.areaTypeId]
 
         for (let i = 0; i < gridTypeMap.lnglats.length; i++) {
@@ -284,10 +284,11 @@ export default {
                 gridSign.sign.fitView()
                 noGrid = false //设置网格存在
               }
-            } else {
+            }
+            if (noGrid) {
               let myJcMap = this.getMyJcMap() //获取地图对象
 
-              myJcMap.map.setZoomAndCenter(18, gridTypeMap.lnglats[i].key.split(','))
+              myJcMap.map.setZoomAndCenter(20, gridTypeMap.lnglats[i].key.split(','))
               noGrid = false //设置网格存在
             }
             break

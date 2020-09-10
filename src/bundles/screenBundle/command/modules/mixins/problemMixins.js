@@ -1,7 +1,8 @@
 import { getMarkerCluster } from '@/map/aMap/aMapUtil'
 import { JcProblemIcons } from '@/config/JcIconConfig'
-
 import { getScreenProblemData } from '@/api/screen'
+import { JcMapMarker } from '@/map'
+import { MAP_EVENT } from '@/constant/CONST'
 import moment from 'moment'
 
 let problemData = { markerCluster: null, problems: {}, lnglats: [] }
@@ -18,7 +19,7 @@ export default {
   },
   created() {
     this.$EventBus.$on('show-word-change', this.problemShowWordChange) //监听文字显示切换
-    this.$EventBus.$on('org-change', this.problemOrgChange) //监听第一次组织级别切换
+    this.$EventBus.$on('org-change', this.problemOrgChange) //监听组织级别切换
     this.$EventBus.$on('show-together-change', this.problemTogetherChange) // 监听是否聚合
   },
   methods: {

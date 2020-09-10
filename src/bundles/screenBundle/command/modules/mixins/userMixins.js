@@ -316,7 +316,7 @@ export default {
       //用户定位id
       let noUser = true //处理是否有用户
 
-      if (this.userTipVisible) {
+      if (this.userSignVisible) {
         //查找该用户使用已经存在，如果存在则更新，否则进行添加
         let lnglat = usersData.lnglats.find(user => user.userId == data.id)
 
