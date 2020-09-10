@@ -18,7 +18,7 @@ export default {
       eventSignVisible: false, //事件是否显示
       eventTipVisible: true, //事件名称是否显示
       eventTogetherVisible: false, //事件是否聚合
-      today: new Date(moment().format('YYYY-MM-DD')).getTime() // 初始时间
+      eventToday: new Date(moment().format('YYYY-MM-DD')).getTime() // 初始时间
     }
   },
   created() {
@@ -35,21 +35,21 @@ export default {
       this.initEventData()
     },
     async initEventData() {
+      this.clearEvents() // 清除之前的记录
+
       //如果没有显示内容，则不进行请求
       if (!this.eventSignVisible) {
         return
       }
-      let startTime = new Date(this.today) // 开始时间
+      let startTime = new Date(this.eventToday) // 开始时间
 
-      let endTime = new Date(this.today + 24 * 60 * 60 * 1000) // 结束时间
+      let endTime = new Date(this.eventToday + 24 * 60 * 60 * 1000) // 结束时间
 
       try {
         // 发送请求获取数据
         let ScreenEventData = await getScreenEventData({ orgId: this.eventOrgId, projectId: this.project.projectId, startTime, endTime })
 
         MarkerCluster = await getMarkerCluster()
-
-        this.clearEvents() // 清除之前的记录
 
         // 处理事件信息
         if (ScreenEventData && ScreenEventData.length) {
@@ -195,22 +195,6 @@ export default {
         } else if (signItem.labelMarker) {
           signItem.labelMarker.hide()
         }
-      }
-      //处理事件是否显示
-      if (this.eventTipVisible) {
-        eventData.markerCluster.setMap(myJcMap.map)
-
-
-        //处理事件是否进行聚合
-        if (this.eventTogetherVisible) {
-          eventData.markerCluster.setMaxZoom(18)
-        } else {
-          eventData.markerCluster.setMaxZoom(0)
-        }
-        //处理是否显示标题，以及状态
-        eventData.markerCluster.setGridSize(120)
-      } else {
-        eventData.markerCluster.setMap(null)
       }
     },
     clearEvents() {
