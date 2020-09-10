@@ -1,7 +1,7 @@
 import { getMarkerCluster } from '@/map/aMap/aMapUtil'
 import { JcDeviceIcons } from '@/config/JcIconConfig'
-
 import { getScreenDeviceData } from '@/api/screen'
+
 let deviceData = { markerCluster: null, devices: {}, lnglats: [] }
 
 let MarkerCluster //存储 MarkerCluster
@@ -12,7 +12,9 @@ export default {
       hkDeviceIds: [], // 所有在线设备ids
       fixedDeviceIds: [], // 固定在线设备ids
       pushDeviceIds: [], // 所有推送在线设备ids
-      deviceOrgId: ''
+      deviceOrgId: '',
+      deviceSignVisible: false, //是否显示设备
+      deviceTipVisible: true //设备是否显示标题
     }
   },
   created() {
@@ -27,6 +29,7 @@ export default {
     //  推送设备(网巡车,无人机)初始化
     this.$EventBus.$on('map-device-change', this.initDeviceMap)
     this.$EventBus.$on('screen-device-location', this.deviceLocation) //监听设备定位
+    this.$EventBus.$on('show-sign-change', this.deviceShowSignChange) //显示实体
     this.$EventBus.$on('org-change', this.deviceOrgChange) //监听第一次组织级别切换
     this.$EventBus.$on('show-word-change', this.deviceShowWordChange) //监听实体显示切换
   },
@@ -270,16 +273,33 @@ export default {
       deviceData = { markerCluster: null, devices: {}, lnglats: [] }
     },
     deviceShowWordChange(words) {
-      this.deviceTipVisible = words.includes('device') //如果存在设备显示，则显示设备，否则不显示
+      let deviceTipVisible = words.includes('device')
+
+      if (this.deviceTipVisible == deviceTipVisible) {
+        return
+      }
+      this.deviceTipVisible = deviceTipVisible
+      this.fitDevices()
+    },
+    deviceShowSignChange(signs) {
+      let deviceSignVisible = signs.includes('device')
+
+      if (this.deviceSignVisible == deviceSignVisible) {
+        return
+      }
+      this.deviceSignVisible = deviceSignVisible
       this.fitDevices()
     }
   },
   beforeDestroy() {
     this.clearDevices()
+    if (this.deviceTimer) {
+      clearInterval(this.deviceTimer) // 清理固定摄像头轮询
+    }
     this.$EventBus.$off('map-device-change', this.initDeviceMap)
+    this.$EventBus.$off('show-sign-change', this.deviceShowSignChange)
     this.$EventBus.$off('org-change', this.deviceOrgChange)
     this.$EventBus.$off('show-word-change', this.deviceShowWordChange)
-    this.$EventBus.$off('screen-device-location', this.deviceLocation) //监听设备定位
-    clearInterval(this.deviceTimer) // 清理固定摄像头轮询
+    this.$EventBus.$off('screen-device-location', this.deviceLocation)
   }
 }
