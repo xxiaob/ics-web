@@ -161,6 +161,10 @@ export default {
     },
     orgLocation(data) {
       console.log('orgLocation', data, this.nowOrgId)
+      if (!this.orgAreaVisible) {
+        this.$message.error('组织结构区域未显示')
+        return
+      }
       //组织定位
       if (this.nowOrgId == data.id) {
         let myJcMap = this.getMyJcMap() //获取地图对象

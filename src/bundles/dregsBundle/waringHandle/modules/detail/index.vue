@@ -17,7 +17,7 @@
             <span>{{form.transportCompany}}</span>
           </el-form-item>
           <el-form-item label="企业地址：">
-            <span>{{form.transportCompany}}</span>
+            <span>{{form.transportCompanyAddress}}</span>
           </el-form-item>
 
           <el-form-item label="车牌号：">

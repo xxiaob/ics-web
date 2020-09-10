@@ -30,32 +30,37 @@ class JcMap extends JcMapBase {
         this.AMap = await initAmap()
         this.map = new this.AMap.Map(source, Object.assign({ ...MapOptions.mapOptions[this.mapStyle], zooms: this.zooms }, options))
 
+        this.tipTimes = 0 //初始化清除次数为0
+
+        this.clearAmapTip(source) //清除高德地图标志
+
         //设置地图 LabelsLayer
         this.labelsLayer = new this.AMap.LabelsLayer({ collision: false, allowCollision: true })
 
         this.map.add(this.labelsLayer) //添加到地图图层
-
-        let complete = false //防止map complete事件触发多次
-
-        this.map.on('complete', () => {
-          if (!complete) {
-            // 地图图块加载完成后触发
-            let mapEl = typeof source == 'string' ? document.getElementById(source) : source
-
-            let logoEL = mapEl.querySelector('.amap-logo')
-
-            let amapCopyrightEl = mapEl.querySelector('.amap-copyright')
-
-            logoEL.parentNode.removeChild(logoEL)
-            amapCopyrightEl.parentNode.removeChild(amapCopyrightEl)
-            complete = true
-          }
-        })
       } catch (error) {
         this.console('地图加载失败，请检查配置或网络...', error)
       }
     }
     return this
+  }
+
+  clearAmapTip(source) {
+    let mapEl = typeof source == 'string' ? document.getElementById(source) : source
+
+    let logoEL = mapEl.querySelector('.amap-logo')
+
+    let amapCopyrightEl = mapEl.querySelector('.amap-copyright')
+
+    if (logoEL && amapCopyrightEl) {
+      logoEL.parentNode.removeChild(logoEL)
+      amapCopyrightEl.parentNode.removeChild(amapCopyrightEl)
+    } else if (this.tipTimes < 8) {
+      this.tipTimes += 1
+      setTimeout(() => {
+        this.clearAmapTip(source)
+      }, 500)
+    }
   }
 
   /**

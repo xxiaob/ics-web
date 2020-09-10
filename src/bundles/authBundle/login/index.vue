@@ -111,7 +111,7 @@ export default {
         this.tip = '账号密码不能为空'
       }
     },
-    ...mapMutations('user', [ 'setUser' ])
+    ...mapMutations('user', ['setUser'])
   }
 }
 </script>

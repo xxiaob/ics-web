@@ -10,8 +10,8 @@
         <el-table :data="list" v-loading="loading" row-key="id" class="jc-table">
           <el-table-column type="index" :index="indexMethod" label="序号" width="80"></el-table-column>
           <el-table-column prop="alarmTypeName" label="告警类型" width="120"></el-table-column>
-          <el-table-column prop="transportCompany" label="企业" width="320"></el-table-column>
-          <el-table-column prop="carNumber" label="企业地址"></el-table-column>
+          <el-table-column prop="transportCompany" label="企业" width="200"></el-table-column>
+          <el-table-column prop="transportCompanyAddress" label="企业地址"></el-table-column>
           <el-table-column prop="carNumber" label="车牌号"></el-table-column>
           <el-table-column prop="carSpeed" label="车速"></el-table-column>
           <el-table-column prop="status" label="状态"></el-table-column>
