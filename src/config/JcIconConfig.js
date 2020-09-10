@@ -61,8 +61,8 @@ export const JcProblemIcons = {
  *  临时任务图标
  */
 export const JcTemporaryTaskIcons = {
-  abnormal: '/static/mapIcons/temporarytaskswarn.gif',
-  plain: '/static/mapIcons/temporarytasks.gif'
+  abnormal: '/static/mapIcons/temporarytaskswarn.png',
+  plain: '/static/mapIcons/temporarytasks.png'
 }
 
 /**
