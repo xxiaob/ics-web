@@ -1,10 +1,10 @@
-import { getMarkerCluster } from '@/map/aMap/aMapUtil'
 import { JcDeviceIcons } from '@/config/JcIconConfig'
 import { getScreenDeviceData } from '@/api/screen'
+import { DEVICE_TYPES } from '@/constant/Dictionaries'
+import { MAP_EVENT } from '@/constant/CONST'
+import { JcMapMarker } from '@/map'
 
-let deviceData = { markerCluster: null, devices: {}, lnglats: [] }
-
-let MarkerCluster //存储 MarkerCluster
+let deviceData = { } //存储所有的设备数据
 
 export default {
   data() {
@@ -25,7 +25,6 @@ export default {
     //type 3 设备离线 deviceIds
     //设备变更，处理完之后，知道在线的设备id，取出id数组
 
-
     //  推送设备(网巡车,无人机)初始化
     this.$EventBus.$on('map-device-change', this.initDeviceMap)
     this.$EventBus.$on('screen-device-location', this.deviceLocation) //监听设备定位
@@ -38,8 +37,10 @@ export default {
       this.deviceOrgId = org.orgId //获取ordID
     },
     async initDeviceData() {
-      // 获取摄像头固定设备数据
-      // 发送请求获取数据
+      // 获取摄像头固定设备数据，如果实体不显示，则不进行请求
+      if (!this.deviceSignVisible) {
+        return
+      }
       try {
         let screenDeviceData = await getScreenDeviceData({ orgId: this.deviceOrgId, projectId: this.project.projectId })
 
@@ -60,11 +61,9 @@ export default {
           }
         }
 
-        this.formatClearDevices(this.fixedDeviceIds) // 清理离线设备
         this.fixedDeviceIds = fixedDeviceIds // 保存当前所有在线摄像头的设备Id
         this.deviceMap(devices) // 处理数据
       } catch (error) {
-        // 请求出错
         console.log(error)
       }
     },
@@ -72,9 +71,6 @@ export default {
       console.log('推送设备数据', data)
       // 处理推送设备数据
       if (data.type == 3) {
-        // 如果类型为3, 删除离线设备
-        this.formatClearDevices(data.deviceIds)
-
         // 清理离线设备的id
         data.deviceIds.forEach(ddeviceId => {
           let index = this.pushDeviceIds.findIndex(deviceId => deviceId == ddeviceId)
@@ -86,10 +82,8 @@ export default {
       } else if (data.type == 1) {
         // 如果推荐设备类型为1 清空之前数据, 初始化
         this.clearDevices() // 清除之前的记录
-
-        // 初始化后重新执行固定设备
-        this.initDeviceData()
-        this.deviceTimer = window.setInterval(this.initDeviceData, 5 * 60 * 1000) // 固定摄像头轮询
+        this.initDeviceData() //初始化后重新执行固定设备
+        this.deviceTimer = setInterval(this.initDeviceData, 5 * 60 * 1000) // 固定摄像头轮询
       }
 
       // 获取所有在线推送设备id集合
@@ -100,149 +94,43 @@ export default {
           }
         })
       }
-
-      this.deviceMap(data.devices) // 将推送设备列表传递deviceMap处理
-    },
-    formatClearDevices(deviceIds) {
-      //清除离线设备
-      deviceIds.forEach(deviceId => {
-        // 清理devices
-        for (let key in deviceData.devices) {
-          if (deviceData.devices[key].deviceId == deviceId) {
-            delete deviceData.devices[key]
-            break
-          }
-        }
-
-        // 清理lnglats
-        for (let i = 0; i < deviceData.lnglats.length; i++) {
-          if (deviceData.lnglats[i].deviceId == deviceId) {
-            deviceData.lnglats.splice(i, 1)
-            break
-          }
-        }
-      })
+      this.deviceMap(data.devices) //将推送设备列表传递deviceMap处理
     },
     async deviceMap(data) {
       // 所有在线设备推送给设备列表展示
       this.hkDeviceIds = [...this.pushDeviceIds, ...this.fixedDeviceIds]
       this.$EventBus.$emit('map-device-online-change', this.hkDeviceIds)
 
-      // 处理地图数据
-      MarkerCluster = await getMarkerCluster()
-
       // 处理设备信息
       if (data && data.length) {
         data.forEach(item => {
-          // 计算事件的中心点坐标和key, 处理坐标相同的情况
-          let { center, key } = this.getDeviceCenterAndKey(item.lng, item.lat, item.deviceId)
-
-          // 判断
-          let lnglat = deviceData.lnglats.find(device => device.deviceId == item.deviceId)
-
-          if (lnglat) {
-            delete deviceData.devices[lnglat.key]
-            lnglat.lnglat = center
+          if (deviceData[item.deviceId]) {
+            Object.assign(deviceData[item.deviceId], item, { center: [item.lng, item.lat] })
           } else {
-            deviceData.lnglats.push({ lnglat: center, key, deviceId: item.deviceId })
+            deviceData[item.deviceId] = { ...item, center: [item.lng, item.lat] }
           }
-          deviceData.devices[key] = { ...item, center }
         })
-      }
-
-      if (deviceData.markerCluster) {
-        //如果已经存在，则去调整数据显示
-        deviceData.markerCluster.setData(deviceData.lnglats)
-      } else {
-        let myJcMap = this.getMyJcMap() //获取地图对象
-
-        deviceData.markerCluster = new MarkerCluster(myJcMap.map, deviceData.lnglats, {
-          gridSize: 120,
-          // renderClusterMarker: this.renderDeviceClusterMarker,  // 设备不需要聚合
-          renderMarker: this.renderDeviceMarker
-        })
-        deviceData.markerCluster.on('click', this.markerDeviceClusterClick)
       }
       this.fitDevices() //控制设备显示
     },
-    renderDeviceMarker(context) {
-      console.log('绘制设备-单点绘制', context)
-      let key = this.getKeyByLngLat(context.data[0].lnglat.lng, context.data[0].lnglat.lat)
-
-      let deviceItem = deviceData.devices[key]
-
-      //过滤掉设备信息为空的场景
-      if (!deviceItem) {
-        return
+    getDeviceIcon(device) {
+      if (device.type == DEVICE_TYPES.CAMERA) {
+        return JcDeviceIcons.camera
       }
-
-      let content = '<div class="jc-marker-content jc-market-center">'
-
-      if (this.deviceTipVisible) {
-        content += `<div class="jc-marker-title">${deviceItem.name}</div>`
+      if (device.type == DEVICE_TYPES.UAV) {
+        return JcDeviceIcons.uav
       }
-      //处理设备图标显示
-      if (deviceItem.type == 1) {
-        content += `<img src=${JcDeviceIcons.camera} class="jc-marker-icon"/></div>`
-      } else if (deviceItem.resourceType == 2) {
-        content += `<img src=${JcDeviceIcons.uav} class="jc-marker-icon"/></div>`
-      } else {
-        content += `<img src=${JcDeviceIcons.netpatrolcar} class="jc-marker-icon"/></div>`
-      }
-
-      context.marker.setPosition(deviceItem.center)
-      context.marker.setContent(content)
-    },
-    markerDeviceClusterClick(context) {
-      //  点击弹窗
-      console.log('绘制设备-点击', context)
-      let myJcMap = this.getMyJcMap() //获取地图对象
-
-      //处理数据，如果是单个则去通知显示详情，是多个的聚合，则定位到显示
-      if (context.clusterData.length > 1) {
-        myJcMap.map.setBounds(this.getAmapBundles(context.clusterData))
-      } else {
-        //获取信息去通知显示详情
-        let key = this.getKeyByLngLat(context.lnglat.lng, context.lnglat.lat)
-
-        let deviceItem = deviceData.devices[key]
-
-        this.$EventBus.$emit('view-component-change', {
-          component: 'DeviceDetail', options: {
-            deviceId: deviceItem.deviceId, deviceName: '设备详情',
-            center: deviceItem.center
-          }
-        }) //通知窗口改变
-      }
-    },
-    getDeviceCenterAndKey(lng, lat, deviceId) {
-      // 处理坐标
-      let center = [parseFloat(lng).toFixed(6), parseFloat(lat).toFixed(6)]
-
-      let key = center.join(',')
-
-      //处理是已经有事件和当前事件位置完全相同，如果相同则进行处理偏差处理
-      let device = deviceData.devices[key]
-
-      console.log('device', device)
-      if (device && device.deviceId != deviceId) {
-        //如果该坐标设备存在，且不是当前设备，则将该设备位置进行偏差，再次进行处理
-        return this.getDeviceCenterAndKey(parseFloat(lng) + 0.000001, parseFloat(lat) + 0.000001, deviceId)
-      }
-
-      return { center, key }
+      return JcDeviceIcons.netpatrolcar
     },
     deviceLocation(data) {
       //监听设备位置
-      if (this.deviceTipVisible) {
+      if (this.deviceSignVisible) {
         // 查看设备是否是否存在,存在更行,不存在则添加
-        let lnglat = deviceData.lnglats.find(device => device.deviceId == data.id)
-
-        if (lnglat) {
+        if (deviceData[data.id]) {
           this.locationDeviceId = data.id
           let myJcMap = this.getMyJcMap() //获取地图对象
 
-          myJcMap.map.setZoomAndCenter(20, lnglat.lnglat)
+          myJcMap.map.setZoomAndCenter(20, deviceData[data.id].center)
         }
       } else {
         // 设备未在指挥大屏显示
@@ -252,25 +140,59 @@ export default {
     fitDevices() {
       let myJcMap = this.getMyJcMap() //获取地图对象
 
-      //处理设备是否显示
-      if (this.deviceTipVisible) {
-        deviceData.markerCluster.setMap(myJcMap.map)
+      for (let deviceId in deviceData) {
+        let signItem = deviceData[deviceId]
 
-        //处理是否显示标题，以及状态
-        deviceData.markerCluster.setGridSize(120)
-      } else {
-        deviceData.markerCluster.setMap(null)
+        //先处理是否在在线列表，如果不在，则进行清理
+        if (!this.hkDeviceIds.includes(deviceId)) {
+          if (signItem.labelMarker) {
+            signItem.labelMarker.hide()
+          }
+          delete deviceData[deviceId]
+          continue
+        }
+
+        if (this.deviceSignVisible) {
+          let signIcon = this.getDeviceIcon(signItem)
+
+          if (signItem.labelMarker) {
+            signItem.labelMarker.icon = signIcon
+            signItem.labelMarker.titleVisible = this.deviceTipVisible
+            signItem.labelMarker.show(signItem.center)
+          } else {
+            signItem.labelMarker = new JcMapMarker({
+              id: signItem.deviceId,
+              icon: signIcon,
+              map: myJcMap,
+              name: signItem.name,
+              position: signItem.center,
+              titleVisible: this.deviceTipVisible
+            })
+            signItem.labelMarker.on(MAP_EVENT.CLICK, ()=> {
+              this.$EventBus.$emit('view-component-change', { component: 'DeviceDetail', options: {
+                deviceId: signItem.deviceId, deviceName: signItem.name, center: signItem.center
+              } }) //通知窗口改变
+            })
+          }
+        } else if (signItem.labelMarker) {
+          signItem.labelMarker.hide()
+        }
       }
     },
     clearDevices() {
       //清除所有数据
-      if (deviceData && deviceData.markerCluster) {
-        deviceData.markerCluster.setMap(null)
-      }
-      this.gatherUserIds = [] //重置设备聚合id数组
-      this.abnormalUserIds = [] //重置设备异常id数组
+      for (let deviceId in deviceData) {
+        let signItem = deviceData[deviceId]
 
-      deviceData = { markerCluster: null, devices: {}, lnglats: [] }
+        if (signItem.labelMarker) {
+          signItem.labelMarker.hide()
+        }
+      }
+      if (this.deviceTimer) {
+        clearInterval(this.deviceTimer) // 清理固定摄像头轮询
+      }
+
+      deviceData = { }
     },
     deviceShowWordChange(words) {
       let deviceTipVisible = words.includes('device')
@@ -281,21 +203,19 @@ export default {
       this.deviceTipVisible = deviceTipVisible
       this.fitDevices()
     },
-    deviceShowSignChange(signs) {
+    async deviceShowSignChange(signs) {
       let deviceSignVisible = signs.includes('device')
 
       if (this.deviceSignVisible == deviceSignVisible) {
         return
       }
       this.deviceSignVisible = deviceSignVisible
-      this.fitDevices()
+      await this.initDeviceData() //初始化后重新执行固定设备
+      // this.fitDevices()
     }
   },
   beforeDestroy() {
     this.clearDevices()
-    if (this.deviceTimer) {
-      clearInterval(this.deviceTimer) // 清理固定摄像头轮询
-    }
     this.$EventBus.$off('map-device-change', this.initDeviceMap)
     this.$EventBus.$off('show-sign-change', this.deviceShowSignChange)
     this.$EventBus.$off('org-change', this.deviceOrgChange)
