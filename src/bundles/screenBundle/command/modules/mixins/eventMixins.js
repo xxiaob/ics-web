@@ -74,6 +74,9 @@ export default {
             let lnglat = eventData.lnglats.find(event => event.eventId == item.id)
 
             if (lnglat) {
+              if (eventData.events[lnglat.key] && eventData.events[lnglat.key].labelMarker) {
+                eventData.events[lnglat.key].labelMarker.hide()
+              }
               delete eventData.events[lnglat.key]
             } else {
               eventData.lnglats.push({ lnglat: center, key, eventId: item.id })

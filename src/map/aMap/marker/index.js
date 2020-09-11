@@ -56,7 +56,7 @@ class JcMapmarker extends JcMapmarkerBase {
       this.marker = new this.map.AMap.LabelMarker({ zIndex: 5, position: this.position, icon: { image: getIcon(this.icon), anchor: 'center', size: [30, 30] }, text: { } })
     }
     this.marker.on('mouseover', function (event) {
-      event.target.setzIndex(10)
+      event.target.setzIndex(99)
     })
     this.marker.on('mouseout', function (event) {
       event.target.setzIndex(5)

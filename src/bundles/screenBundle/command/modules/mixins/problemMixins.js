@@ -72,7 +72,10 @@ export default {
             let lnglat = problemData.lnglats.find(problem => problem.problemId == item.businessKey)
 
             if (lnglat) {
-              delete problemData.users[lnglat.key]
+              if (problemData.problems[lnglat.key] && problemData.problems[lnglat.key].labelMarker) {
+                problemData.problems[lnglat.key].labelMarker.hide()
+              }
+              delete problemData.problems[lnglat.key]
             } else {
               problemData.lnglats.push({ lnglat: center, key, problemId: item.businessKey })
             }

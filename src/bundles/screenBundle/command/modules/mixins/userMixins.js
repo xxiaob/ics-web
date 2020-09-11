@@ -151,6 +151,9 @@ export default {
           let lnglat = usersData.lnglats.find(user => user.userId == item.userId)
 
           if (lnglat) {
+            if (usersData.users[lnglat.key] && usersData.users[lnglat.key].labelMarker) {
+              usersData.users[lnglat.key].labelMarker.hide()
+            }
             delete usersData.users[lnglat.key]
             lnglat.lnglat = center
           } else {
