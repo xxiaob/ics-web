@@ -24,6 +24,7 @@ class JcMapMarker {
     this.name = options.name || ''
     this.map = options.map || null
     this.zIndex = options.zIndex || 5
+    this.size = options.size || [30, 30]
     this.extData = options.extData
     this.position = options.position || []
     this.draggable = options.draggable || false

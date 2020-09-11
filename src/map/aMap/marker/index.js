@@ -53,7 +53,7 @@ class JcMapmarker extends JcMapmarkerBase {
         draggable: true
       })
     } else {
-      this.marker = new this.map.AMap.LabelMarker({ zIndex: this.zIndex, position: this.position, icon: { image: getIcon(this.icon), anchor: 'center', size: [30, 30] }, text: { } })
+      this.marker = new this.map.AMap.LabelMarker({ zIndex: this.zIndex, position: this.position, icon: { image: getIcon(this.icon), anchor: 'center', size: this.size }, text: { } })
     }
     this.marker.on('mouseover', function (event) {
       event.target.setzIndex(99)
