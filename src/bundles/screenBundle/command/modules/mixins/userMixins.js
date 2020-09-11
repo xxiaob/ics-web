@@ -5,7 +5,7 @@ import { getMarkerCluster, getMouseTool } from '@/map/aMap/aMapUtil'
 import { JcUserIcons } from '@/config/JcIconConfig'
 import { VOICE_TYPE } from '@/config/JcVoiceAlertConfig'
 import { JcMapMarker } from '@/map'
-import { MAP_EVENT } from '@/constant/CONST'
+import { MAP_EVENT, MAP_SIGN_ZINDEX } from '@/constant/CONST'
 
 let usersData = { markerCluster: null, users: {}, lnglats: [] } //存储用户信息
 
@@ -218,6 +218,7 @@ export default {
               id: signItem.areaId,
               icon: signIcon,
               map: myJcMap,
+              zIndex: MAP_SIGN_ZINDEX.USER,
               name: signItem.userName,
               position: signItem.center,
               titleVisible: this.userTipVisible
@@ -265,7 +266,7 @@ export default {
       if (userItem.userId == this.locationUserId) {
         context.marker.setTop(true)
       } else {
-        context.marker.setzIndex(5)
+        context.marker.setzIndex(MAP_SIGN_ZINDEX.USER)
       }
       this.setMarkerAndListener(context.marker) //设置marker和添加监听
       context.marker.setContent(content + '</div>')

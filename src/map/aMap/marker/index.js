@@ -48,18 +48,18 @@ class JcMapmarker extends JcMapmarkerBase {
       this.marker = new this.map.AMap.Marker({
         offset: [0, 0],
         anchor: 'center',
-        zIndex: 5,
+        zIndex: this.zIndex,
         position: this.position,
         draggable: true
       })
     } else {
-      this.marker = new this.map.AMap.LabelMarker({ zIndex: 5, position: this.position, icon: { image: getIcon(this.icon), anchor: 'center', size: [30, 30] }, text: { } })
+      this.marker = new this.map.AMap.LabelMarker({ zIndex: this.zIndex, position: this.position, icon: { image: getIcon(this.icon), anchor: 'center', size: [30, 30] }, text: { } })
     }
     this.marker.on('mouseover', function (event) {
       event.target.setzIndex(99)
     })
     this.marker.on('mouseout', function (event) {
-      event.target.setzIndex(5)
+      event.target.setzIndex(this.zIndex)
     })
     this.show()
     window.marker = this

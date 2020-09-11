@@ -2,7 +2,7 @@ import { getMarkerCluster } from '@/map/aMap/aMapUtil'
 import { JcEventIcons } from '@/config/JcIconConfig'
 import { getScreenEventData } from '@/api/screen'
 import { JcMapMarker } from '@/map'
-import { MAP_EVENT } from '@/constant/CONST'
+import { MAP_EVENT, MAP_SIGN_ZINDEX } from '@/constant/CONST'
 import moment from 'moment'
 
 let eventData = { markerCluster: null, events: {}, lnglats: [] }
@@ -191,6 +191,7 @@ export default {
               id: signItem.id,
               icon: JcEventIcons.plain,
               map: myJcMap,
+              zIndex: MAP_SIGN_ZINDEX.OTHER,
               name: this.getMarkerTitle(signItem.eventTitle),
               position: signItem.center,
               titleVisible: this.eventTipVisible

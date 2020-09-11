@@ -3,7 +3,7 @@
  */
 import { JcMapMarker } from '@/map'
 import { JcTemporaryTaskIcons } from '@/config/JcIconConfig'
-import { MAP_EVENT } from '@/constant/CONST'
+import { MAP_EVENT, MAP_SIGN_ZINDEX } from '@/constant/CONST'
 import { MESSAGE_TYPE } from '@/constant/Dictionaries'
 import { VOICE_TYPE } from '@/config/JcVoiceAlertConfig'
 import { getScreenTask } from '@/api/screen'
@@ -48,7 +48,7 @@ export default {
       }
       let myJcMap = this.getMyJcMap() //获取地图对象
 
-      let marker = new JcMapMarker({ map: myJcMap, name: task.taskName, icon: JcTemporaryTaskIcons.plain, position: task.center.split(',') })
+      let marker = new JcMapMarker({ map: myJcMap, name: task.taskName, zIndex: MAP_SIGN_ZINDEX.TASK, icon: JcTemporaryTaskIcons.plain, position: task.center.split(',') })
 
       //添加监听
       marker.on(MAP_EVENT.CLICK, () => {

@@ -2,7 +2,7 @@ import { getMarkerCluster } from '@/map/aMap/aMapUtil'
 import { JcProblemIcons } from '@/config/JcIconConfig'
 import { getScreenProblemData } from '@/api/screen'
 import { JcMapMarker } from '@/map'
-import { MAP_EVENT } from '@/constant/CONST'
+import { MAP_EVENT, MAP_SIGN_ZINDEX } from '@/constant/CONST'
 import moment from 'moment'
 
 let problemData = { markerCluster: null, problems: {}, lnglats: [] }
@@ -182,6 +182,7 @@ export default {
               id: signItem.businessKey,
               icon: JcProblemIcons.plain,
               map: myJcMap,
+              zIndex: MAP_SIGN_ZINDEX.OTHER,
               name: this.getMarkerTitle(signItem.problemTitle),
               position: signItem.center,
               titleVisible: this.problemTipVisible

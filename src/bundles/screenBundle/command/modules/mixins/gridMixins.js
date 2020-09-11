@@ -2,7 +2,7 @@
  * 地图网格处理
  */
 import { areaList } from '@/api/area'
-import { AREAS_TYPE, AREAS_SEARCH_TYPE, MAP_EVENT } from '@/constant/CONST'
+import { AREAS_TYPE, AREAS_SEARCH_TYPE, MAP_EVENT, MAP_SIGN_ZINDEX } from '@/constant/CONST'
 import { apiBoundariesFormat } from '@/libs/apiFormat'
 import { JcMapSign, JcMapMarker } from '@/map'
 import { getMarkerCluster } from '@/map/aMap/aMapUtil'
@@ -182,6 +182,7 @@ export default {
                 id: signItem.areaId,
                 icon: signIcon,
                 map: myJcMap,
+                zIndex: MAP_SIGN_ZINDEX.GRID,
                 name: signItem.areaName,
                 position: signItem.sign.center,
                 titleVisible: tipVisible
