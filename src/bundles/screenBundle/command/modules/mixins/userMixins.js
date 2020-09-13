@@ -5,7 +5,7 @@ import { getMarkerCluster, getMouseTool } from '@/map/aMap/aMapUtil'
 import { JcUserIcons } from '@/config/JcIconConfig'
 import { VOICE_TYPE } from '@/config/JcVoiceAlertConfig'
 import { JcMapMarker } from '@/map'
-import { MAP_EVENT } from '@/constant/CONST'
+import { MAP_EVENT, MAP_SIGN_ZINDEX } from '@/constant/CONST'
 
 let usersData = { markerCluster: null, users: {}, lnglats: [] } //存储用户信息
 
@@ -151,6 +151,9 @@ export default {
           let lnglat = usersData.lnglats.find(user => user.userId == item.userId)
 
           if (lnglat) {
+            if (usersData.users[lnglat.key] && usersData.users[lnglat.key].labelMarker) {
+              usersData.users[lnglat.key].labelMarker.hide()
+            }
             delete usersData.users[lnglat.key]
             lnglat.lnglat = center
           } else {
@@ -159,18 +162,7 @@ export default {
           usersData.users[key] = { ...item, center }
         })
       }
-      if (usersData.markerCluster) {
-        //如果已经存在，则去调整数据显示
-        usersData.markerCluster.setData(usersData.lnglats)
-      } else {
-        usersData.markerCluster = new MarkerCluster(null, usersData.lnglats, {
-          maxZoom: 18,
-          gridSize: 120,
-          renderClusterMarker: this.renderUserClusterMarker,
-          renderMarker: this.renderUserMarker
-        })
-        usersData.markerCluster.on('click', this.markerUserClusterClick)
-      }
+
       this.fitUsers() //控制用户显示
     },
     getUserCenterAndKey(lng, lat, userId) {
@@ -192,10 +184,24 @@ export default {
       let myJcMap = this.getMyJcMap() //获取地图对象
 
       if (this.userSignVisible && this.userTogetherVisible) {
+        if (usersData.markerCluster) {
+          //如果已经存在，则去调整数据显示
+          usersData.markerCluster.setData(usersData.lnglats)
+        } else {
+          usersData.markerCluster = new MarkerCluster(null, usersData.lnglats, {
+            maxZoom: 18,
+            gridSize: 120,
+            renderClusterMarker: this.renderUserClusterMarker,
+            renderMarker: this.renderUserMarker
+          })
+          usersData.markerCluster.on('click', this.markerUserClusterClick)
+        }
+
         usersData.markerCluster.setMap(myJcMap.map)
         usersData.markerCluster.setGridSize(120) //处理是否显示标题，以及状态
-      } else {
+      } else if (usersData.markerCluster) {
         usersData.markerCluster.setMap(null)
+        usersData.markerCluster = null
       }
       //处理用户非聚合显示
       let jcSignVisible = !this.userTogetherVisible && this.userSignVisible
@@ -215,6 +221,7 @@ export default {
               id: signItem.areaId,
               icon: signIcon,
               map: myJcMap,
+              zIndex: MAP_SIGN_ZINDEX.USER,
               name: signItem.userName,
               position: signItem.center,
               titleVisible: this.userTipVisible
@@ -262,7 +269,7 @@ export default {
       if (userItem.userId == this.locationUserId) {
         context.marker.setTop(true)
       } else {
-        context.marker.setzIndex(5)
+        context.marker.setzIndex(MAP_SIGN_ZINDEX.USER)
       }
       this.setMarkerAndListener(context.marker) //设置marker和添加监听
       context.marker.setContent(content + '</div>')

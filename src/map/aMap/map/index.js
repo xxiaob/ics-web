@@ -35,7 +35,7 @@ class JcMap extends JcMapBase {
         this.clearAmapTip(source) //清除高德地图标志
 
         //设置地图 LabelsLayer
-        this.labelsLayer = new this.AMap.LabelsLayer({ collision: false, allowCollision: true })
+        this.labelsLayer = new this.AMap.LabelsLayer({ collision: false, allowCollision: false })
 
         this.map.add(this.labelsLayer) //添加到地图图层
       } catch (error) {

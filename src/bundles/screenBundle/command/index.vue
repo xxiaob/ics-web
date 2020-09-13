@@ -203,6 +203,12 @@ export default {
     setMarkerAndListener(marker) {
       marker.setOffset(new myJcMap.AMap.Pixel(0, 0))
       marker.setAnchor('center')
+    },
+    getMarkerTitle(title) {
+      if (title.length > 8) {
+        return title.substr(0, 8) + '...'
+      }
+      return title
     }
   },
   beforeDestroy() {

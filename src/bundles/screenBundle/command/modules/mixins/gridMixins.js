@@ -2,7 +2,7 @@
  * 地图网格处理
  */
 import { areaList } from '@/api/area'
-import { AREAS_TYPE, AREAS_SEARCH_TYPE, MAP_EVENT } from '@/constant/CONST'
+import { AREAS_TYPE, AREAS_SEARCH_TYPE, MAP_EVENT, MAP_SIGN_ZINDEX } from '@/constant/CONST'
 import { apiBoundariesFormat } from '@/libs/apiFormat'
 import { JcMapSign, JcMapMarker } from '@/map'
 import { getMarkerCluster } from '@/map/aMap/aMapUtil'
@@ -129,12 +129,6 @@ export default {
 
       for (let type in gridAreas) {
         mapGridTypes.push(type)
-        let gridTypeMap = gridAreas[type]
-
-        gridTypeMap.markerCluster = this.getGridMarkerCluster(gridTypeMap)
-        gridTypeMap.markerCluster.on('click', (context) => {
-          this.markerGridClusterClick(gridTypeMap, context)
-        })
       }
       this.areaTipVisibles = mapGridTypes
       this.togetherVisibles = mapGridTypes
@@ -154,10 +148,19 @@ export default {
 
         //如果开启聚合，且显示该类型标记，则设置聚合显示
         if (togetherVisible && signVisible) {
+          if (gridTypeMap.markerCluster) {
+            gridTypeMap.markerCluster.setData(gridTypeMap.lnglats)
+          } else {
+            gridTypeMap.markerCluster = this.getGridMarkerCluster(gridTypeMap)
+            gridTypeMap.markerCluster.on('click', (context) => {
+              this.markerGridClusterClick(gridTypeMap, context)
+            })
+          }
           gridTypeMap.markerCluster.setMap(myJcMap.map)
           gridTypeMap.markerCluster.setGridSize(120) //处理是否显示标题
-        } else {
+        } else if (gridTypeMap.markerCluster) {
           gridTypeMap.markerCluster.setMap(null)
+          gridTypeMap.markerCluster = null
         }
 
         //地图区域显示控制
@@ -182,6 +185,7 @@ export default {
                 id: signItem.areaId,
                 icon: signIcon,
                 map: myJcMap,
+                zIndex: MAP_SIGN_ZINDEX.GRID,
                 name: signItem.areaName,
                 position: signItem.sign.center,
                 titleVisible: tipVisible

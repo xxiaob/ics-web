@@ -16,6 +16,7 @@ export default {
     DetailEvent: () => import('./modules/event'),
     DetailTask: () => import('./modules/task'),
     DetailQuestion: () => import('./modules/question'),
+    DetailDregsQuestion: () => import('./modules/dregsQuestion'),
     DetailTemporary: () => import('./modules/temporary')
   },
   data() {
@@ -24,7 +25,8 @@ export default {
         [MESSAGE_TYPE.EVENT]: 'DetailEvent',
         [MESSAGE_TYPE.QUESTION]: 'DetailQuestion',
         [MESSAGE_TYPE.TASK]: 'DetailTask',
-        [MESSAGE_TYPE.TEMPORARY]: 'DetailTemporary'
+        [MESSAGE_TYPE.TEMPORARY]: 'DetailTemporary',
+        [MESSAGE_TYPE.DREGSQUESTION]: 'DetailDregsQuestion'
       }
     }
   },

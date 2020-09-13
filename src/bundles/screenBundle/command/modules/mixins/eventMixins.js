@@ -2,7 +2,7 @@ import { getMarkerCluster } from '@/map/aMap/aMapUtil'
 import { JcEventIcons } from '@/config/JcIconConfig'
 import { getScreenEventData } from '@/api/screen'
 import { JcMapMarker } from '@/map'
-import { MAP_EVENT } from '@/constant/CONST'
+import { MAP_EVENT, MAP_SIGN_ZINDEX } from '@/constant/CONST'
 import moment from 'moment'
 
 let eventData = { markerCluster: null, events: {}, lnglats: [] }
@@ -18,7 +18,7 @@ export default {
       eventSignVisible: false, //事件是否显示
       eventTipVisible: true, //事件名称是否显示
       eventTogetherVisible: false, //事件是否聚合
-      today: new Date(moment().format('YYYY-MM-DD')).getTime() // 初始时间
+      eventToday: new Date(moment().format('YYYY-MM-DD')).getTime() // 初始时间
     }
   },
   created() {
@@ -35,21 +35,21 @@ export default {
       this.initEventData()
     },
     async initEventData() {
+      this.clearEvents() // 清除之前的记录
+
       //如果没有显示内容，则不进行请求
       if (!this.eventSignVisible) {
         return
       }
-      let startTime = new Date(this.today) // 开始时间
+      let startTime = new Date(this.eventToday) // 开始时间
 
-      let endTime = new Date(this.today + 24 * 60 * 60 * 1000) // 结束时间
+      let endTime = new Date(this.eventToday + 24 * 60 * 60 * 1000) // 结束时间
 
       try {
         // 发送请求获取数据
         let ScreenEventData = await getScreenEventData({ orgId: this.eventOrgId, projectId: this.project.projectId, startTime, endTime })
 
         MarkerCluster = await getMarkerCluster()
-
-        this.clearEvents() // 清除之前的记录
 
         // 处理事件信息
         if (ScreenEventData && ScreenEventData.length) {
@@ -61,6 +61,10 @@ export default {
 
             let position = item.position.split(',') // 切割坐标
 
+            if (position.length < 2) {
+              return
+            }
+
             item.lng = position[0] // 获取精度
             item.lat = position[1] // 获取维度
 
@@ -70,6 +74,9 @@ export default {
             let lnglat = eventData.lnglats.find(event => event.eventId == item.id)
 
             if (lnglat) {
+              if (eventData.events[lnglat.key] && eventData.events[lnglat.key].labelMarker) {
+                eventData.events[lnglat.key].labelMarker.hide()
+              }
               delete eventData.events[lnglat.key]
             } else {
               eventData.lnglats.push({ lnglat: center, key, eventId: item.id })
@@ -78,18 +85,6 @@ export default {
           })
         }
 
-        if (eventData.markerCluster) {
-          //如果已经存在，则去调整数据显示
-          eventData.markerCluster.setData(eventData.lnglats)
-        } else {
-          eventData.markerCluster = new MarkerCluster(null, eventData.lnglats, {
-            maxZoom: 18,
-            gridSize: 120,
-            renderClusterMarker: this.renderEventClusterMarker,
-            renderMarker: this.renderEventMarker
-          })
-          eventData.markerCluster.on('click', this.markerEventClusterClick)
-        }
         this.fitEvents() //控制事件显示
       } catch (error) {
         console.log(error)
@@ -164,10 +159,22 @@ export default {
       let myJcMap = this.getMyJcMap() //获取地图对象
 
       if (this.eventSignVisible && this.eventTogetherVisible) {
+        if (eventData.markerCluster) {
+          eventData.markerCluster.setData(eventData.lnglats)
+        } else {
+          eventData.markerCluster = new MarkerCluster(null, eventData.lnglats, {
+            maxZoom: 18,
+            gridSize: 120,
+            renderClusterMarker: this.renderEventClusterMarker,
+            renderMarker: this.renderEventMarker
+          })
+          eventData.markerCluster.on('click', this.markerEventClusterClick)
+        }
         eventData.markerCluster.setMap(myJcMap.map)
         eventData.markerCluster.setGridSize(120) //处理是否显示标题，以及状态
-      } else {
+      } else if (eventData.markerCluster) {
         eventData.markerCluster.setMap(null)
+        eventData.markerCluster = null
       }
 
       let jcSignVisible = !this.eventTogetherVisible && this.eventSignVisible
@@ -184,7 +191,8 @@ export default {
               id: signItem.id,
               icon: JcEventIcons.plain,
               map: myJcMap,
-              name: signItem.eventTitle,
+              zIndex: MAP_SIGN_ZINDEX.OTHER,
+              name: this.getMarkerTitle(signItem.eventTitle),
               position: signItem.center,
               titleVisible: this.eventTipVisible
             })
@@ -195,22 +203,6 @@ export default {
         } else if (signItem.labelMarker) {
           signItem.labelMarker.hide()
         }
-      }
-      //处理事件是否显示
-      if (this.eventTipVisible) {
-        eventData.markerCluster.setMap(myJcMap.map)
-
-
-        //处理事件是否进行聚合
-        if (this.eventTogetherVisible) {
-          eventData.markerCluster.setMaxZoom(18)
-        } else {
-          eventData.markerCluster.setMaxZoom(0)
-        }
-        //处理是否显示标题，以及状态
-        eventData.markerCluster.setGridSize(120)
-      } else {
-        eventData.markerCluster.setMap(null)
       }
     },
     clearEvents() {

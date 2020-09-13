@@ -11,6 +11,7 @@ class JcMapMarker {
    * @param {String} options.icon 中心点标记图标，可以为url，也可以为JcIcons 的 key
    * @param {String} options.name 标记名称
    * @param {JcMap} options.map JcMap地图对象
+   * @param {Number} options.zIndex 指标物层级
    * @param {*} options.extData 额外参数，用于自定义数据处理
    * @param {Array<String>} options.position 标记中心点
    * @param {Boolean} options.draggable 是否可以拖动
@@ -22,6 +23,8 @@ class JcMapMarker {
     this.icon = options.icon || null
     this.name = options.name || ''
     this.map = options.map || null
+    this.zIndex = options.zIndex || 5
+    this.size = options.size || [30, 30]
     this.extData = options.extData
     this.position = options.position || []
     this.draggable = options.draggable || false

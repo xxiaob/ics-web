@@ -141,9 +141,9 @@ export default {
       }
       if (path.length) {
         //设置移动的对象
-        moveMarker = new JcMapMarker({ map: myJcMap, position: path[0], icon: '/static/mapIcons/trajectorysign.png' })
+        moveMarker = new JcMapMarker({ map: myJcMap, position: path[0], icon: '/static/mapIcons/trajectorysign.png', size: [50, 50], zIndex: 9 })
 
-        moveMarker.marker.moveAlong(path, { duration: 400, autoRotation: true })
+        moveMarker.marker.moveAlong(path, { duration: 500, autoRotation: true, aniInterval: 10 })
         moveMarker.marker.stopMove()//暂停动画
         moveMarker.marker.on('moving', this.markerMoving)
         if (this.isPlay) {
@@ -152,6 +152,7 @@ export default {
       }
     },
     markerMoving(e) {
+      e.target.setzIndex(9)
       let lastP = e.passedPath[e.passedPath.length - 1]
 
       let key = this.getKeyByLngLat(lastP.lng, lastP.lat)

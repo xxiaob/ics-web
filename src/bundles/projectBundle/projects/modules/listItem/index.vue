@@ -16,9 +16,9 @@
       </div>
       <div class="jc-project-opera">
         <div class="jc-opera-item first" @click="operaChange('resource-setting')"><i class="iconfont icontoufangziyuanshezhi"></i>资源设置</div>
-        <div class="jc-opera-item second" @click="operaChange('daily-task')"><i class="iconfont icontongjifenxi"></i>日常任务设置</div>
+        <div class="jc-opera-item second" @click="operaChange('daily-task')"><i class="iconfont iconrichangrenwushezhi"></i>日常任务设置</div>
         <div class="jc-opera-item three" @click="operaChange('grid-setting')"><i class="iconfont iconwanggeshezhi"></i>网格设置</div>
-        <router-link :to="{name: 'taskSearch', query: {projectId: item.projectId,type:'1'}}" class="jc-opera-item four" target="_blank"><i class="iconfont icontongjifenxi"></i>日常任务查询</router-link>
+        <router-link :to="{name: 'taskSearch', query: {projectId: item.projectId,type:'1'}}" class="jc-opera-item four" target="_blank"><i class="iconfont iconrichangrenwuchaxun"></i>日常任务查询</router-link>
         <!-- <div class="jc-opera-item three"><i class="iconfont icontongjifenxi"></i>统计分析</div> -->
       </div>
     </div>

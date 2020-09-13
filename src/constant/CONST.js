@@ -50,3 +50,14 @@ export const MAP_EVENT = {
   MOURSEOUT: 'mouseout', //鼠标移出
   DRAGEND: 'dragend' //移动结束
 }
+
+/**
+ * 地图指标物层级
+ */
+export const MAP_SIGN_ZINDEX = {
+  TASK: 40, //任务
+  USER: 30, //用户
+  DEVICE: 20, //设备
+  GRID: 10, //网格
+  OTHER: 4 //事件，问题等
+}

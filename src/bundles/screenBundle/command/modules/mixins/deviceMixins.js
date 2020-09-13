@@ -1,7 +1,7 @@
 import { JcDeviceIcons } from '@/config/JcIconConfig'
 import { getScreenDeviceData } from '@/api/screen'
 import { DEVICE_TYPES } from '@/constant/Dictionaries'
-import { MAP_EVENT } from '@/constant/CONST'
+import { MAP_EVENT, MAP_SIGN_ZINDEX } from '@/constant/CONST'
 import { JcMapMarker } from '@/map'
 
 let deviceData = { } //存储所有的设备数据
@@ -166,6 +166,7 @@ export default {
               id: signItem.deviceId,
               icon: signIcon,
               map: myJcMap,
+              zIndex: MAP_SIGN_ZINDEX.DEVICE,
               name: signItem.name,
               position: signItem.center,
               titleVisible: this.deviceTipVisible
