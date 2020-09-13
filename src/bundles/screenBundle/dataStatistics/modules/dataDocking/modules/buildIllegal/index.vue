@@ -5,25 +5,25 @@
       <div class="jc-category-item jc-flex-warp jc-build-1">
         <span class="jc-category-title">违法建筑</span>
         <span class="jc-category-count">
-          <count-to :startVal="0" :endVal="0" :duration="3000" separator="" />件
+          <count-to :startVal="0" :endVal="25" :duration="3000" separator="" />件
         </span>
       </div>
       <div class="jc-category-item jc-flex-warp jc-build-2">
         <span class="jc-category-title">建筑面积</span>
         <span class="jc-category-count">
-          <count-to :startVal="0" :endVal="0" :duration="3000" separator="" />m<sup>2</sup>
+          <count-to :startVal="0" :endVal="610.5" :duration="3000" separator="" />m<sup>2</sup>
         </span>
       </div>
       <div class="jc-category-item jc-flex-warp jc-build-3">
         <span class="jc-category-title">拆除面积</span>
         <span class="jc-category-count">
-          <count-to :startVal="0" :endVal="0" :duration="3000" separator="" />m<sup>2</sup>
+          <count-to :startVal="0" :endVal="478.5" :duration="3000" separator="" />m<sup>2</sup>
         </span>
       </div>
       <div class="jc-category-item jc-flex-warp jc-build-4">
         <span class="jc-category-title">拆除比率</span>
         <span class="jc-category-count">
-          <count-to :startVal="0" :endVal="0" :decimals="2" :duration="3000" separator="" />%
+          <count-to :startVal="0" :endVal="78.3" :decimals="2" :duration="3000" separator="" />%
         </span>
       </div>
     </div>
