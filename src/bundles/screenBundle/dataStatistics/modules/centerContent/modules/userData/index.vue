@@ -17,9 +17,9 @@ export default {
   components: { countTo },
   data() {
     return {
-      list: [{ icon: 'jc-car', unit: '辆', name: '网巡车辆', key: 'first', start: 0, end: 0 },
-        { icon: 'jc-camera', unit: '个', name: '视频监控', key: 'second', start: 0, end: 0 },
-        { icon: 'jc-uav', unit: '架', name: '无人机', key: 'three', start: 0, end: 0 },
+      list: [{ icon: 'jc-car', unit: '辆', name: '网巡车辆', key: 'first', start: 0, end: 148 },
+        { icon: 'jc-camera', unit: '个', name: '视频监控', key: 'second', start: 0, end: 266 },
+        { icon: 'jc-uav', unit: '架', name: '无人机', key: 'three', start: 0, end: 18 },
         { icon: 'jc-sgg', unit: '个', name: '--', key: 'four', start: 0, end: 0 },
         { icon: 'jc-hxg', unit: '个', name: '--', key: 'five', start: 0, end: 0 },
         { icon: 'jc-zha', unit: '个', name: '--', key: 'six', start: 0, end: 0 }],
