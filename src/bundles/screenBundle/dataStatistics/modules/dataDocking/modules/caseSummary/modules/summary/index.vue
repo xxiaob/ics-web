@@ -6,7 +6,7 @@
       <div class="jc-summary-round summary-round-1">
         <div class="jc-summary-round-content jc-flex-warp jc-flex-vertical">
           <div class="jc-summary-count jc-flex-con-4 jc-flex-warp">
-            <span>0件</span>
+            <span>16件</span>
           </div>
           <div class="jc-summary-title jc-flex-con-3 jc-flex-warp">
             <span>餐饮油烟</span>
@@ -17,7 +17,7 @@
       <div class="jc-summary-round summary-round-2">
         <div class="jc-summary-round-content jc-flex-warp jc-flex-vertical">
           <div class="jc-summary-count jc-flex-con-4 jc-flex-warp">
-            <span>0%</span>
+            <span>89.30%</span>
           </div>
           <div class="jc-summary-title jc-flex-con-3 jc-flex-warp">
             <span>结案率</span>
@@ -27,7 +27,7 @@
       <div class="jc-summary-round summary-round-3">
         <div class="jc-summary-round-content jc-flex-warp jc-flex-vertical">
           <div class="jc-summary-count jc-flex-con-4 jc-flex-warp">
-            <span>0件</span>
+            <span>47件</span>
           </div>
           <div class="jc-summary-title jc-flex-con-3 jc-flex-warp">
             <span>处理中</span>
@@ -37,7 +37,7 @@
       <div class="jc-summary-round summary-round-4">
         <div class="jc-summary-round-content jc-flex-warp jc-flex-vertical">
           <div class="jc-summary-count jc-flex-con-4 jc-flex-warp">
-            <span>0件</span>
+            <span>389件</span>
           </div>
           <div class="jc-summary-title jc-flex-con-3 jc-flex-warp">
             <span>已结案</span>
@@ -47,7 +47,7 @@
       <div class="jc-summary-round summary-round-5">
         <div class="jc-summary-round-content jc-flex-warp jc-flex-vertical">
           <div class="jc-summary-count jc-flex-con-4 jc-flex-warp">
-            <span>0件</span>
+            <span>388件</span>
           </div>
           <div class="jc-summary-title jc-flex-con-3 jc-flex-warp">
             <span>渣土运输</span>
@@ -57,7 +57,7 @@
       <div class="jc-summary-round summary-round-6">
         <div class="jc-summary-round-content jc-flex-warp jc-flex-vertical">
           <div class="jc-summary-count jc-flex-con-4 jc-flex-warp">
-            <span>0件</span>
+            <span>7件</span>
           </div>
           <div class="jc-summary-title jc-flex-con-3 jc-flex-warp">
             <span>水务执法</span>
@@ -67,7 +67,7 @@
       <div class="jc-summary-round summary-round-7">
         <div class="jc-summary-round-content jc-flex-warp jc-flex-vertical">
           <div class="jc-summary-count jc-flex-con-4 jc-flex-warp">
-            <span>0件</span>
+            <span>25件</span>
           </div>
           <div class="jc-summary-title jc-flex-con-3 jc-flex-warp">
             <span>违章建筑</span>
@@ -154,7 +154,7 @@ export default {
 
         this.$forceUpdate() // 属性
 
-        this.endVal = 0 // 改变显示数字
+        this.endVal = 436 // 改变显示数字
       }, 5000)
     }
 
