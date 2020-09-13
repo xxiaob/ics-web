@@ -55,9 +55,9 @@ export const MAP_EVENT = {
  * 地图指标物层级
  */
 export const MAP_SIGN_ZINDEX = {
-  TASK: 10, //任务
-  USER: 9, //用户
-  DEVICE: 8, //设备
-  GRID: 7, //网格
+  TASK: 40, //任务
+  USER: 30, //用户
+  DEVICE: 20, //设备
+  GRID: 10, //网格
   OTHER: 4 //事件，问题等
 }

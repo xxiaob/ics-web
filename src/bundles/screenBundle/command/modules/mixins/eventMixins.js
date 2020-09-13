@@ -85,18 +85,6 @@ export default {
           })
         }
 
-        if (eventData.markerCluster) {
-          //如果已经存在，则去调整数据显示
-          eventData.markerCluster.setData(eventData.lnglats)
-        } else {
-          eventData.markerCluster = new MarkerCluster(null, eventData.lnglats, {
-            maxZoom: 18,
-            gridSize: 120,
-            renderClusterMarker: this.renderEventClusterMarker,
-            renderMarker: this.renderEventMarker
-          })
-          eventData.markerCluster.on('click', this.markerEventClusterClick)
-        }
         this.fitEvents() //控制事件显示
       } catch (error) {
         console.log(error)
@@ -171,10 +159,22 @@ export default {
       let myJcMap = this.getMyJcMap() //获取地图对象
 
       if (this.eventSignVisible && this.eventTogetherVisible) {
+        if (eventData.markerCluster) {
+          eventData.markerCluster.setData(eventData.lnglats)
+        } else {
+          eventData.markerCluster = new MarkerCluster(null, eventData.lnglats, {
+            maxZoom: 18,
+            gridSize: 120,
+            renderClusterMarker: this.renderEventClusterMarker,
+            renderMarker: this.renderEventMarker
+          })
+          eventData.markerCluster.on('click', this.markerEventClusterClick)
+        }
         eventData.markerCluster.setMap(myJcMap.map)
         eventData.markerCluster.setGridSize(120) //处理是否显示标题，以及状态
-      } else {
+      } else if (eventData.markerCluster) {
         eventData.markerCluster.setMap(null)
+        eventData.markerCluster = null
       }
 
       let jcSignVisible = !this.eventTogetherVisible && this.eventSignVisible

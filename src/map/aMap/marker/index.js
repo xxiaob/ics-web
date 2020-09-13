@@ -58,7 +58,7 @@ class JcMapmarker extends JcMapmarkerBase {
     this.marker.on('mouseover', function (event) {
       event.target.setzIndex(99)
     })
-    this.marker.on('mouseout', function (event) {
+    this.marker.on('mouseout', (event) => {
       event.target.setzIndex(this.zIndex)
     })
     this.show()

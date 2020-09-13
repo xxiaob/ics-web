@@ -162,18 +162,7 @@ export default {
           usersData.users[key] = { ...item, center }
         })
       }
-      if (usersData.markerCluster) {
-        //如果已经存在，则去调整数据显示
-        usersData.markerCluster.setData(usersData.lnglats)
-      } else {
-        usersData.markerCluster = new MarkerCluster(null, usersData.lnglats, {
-          maxZoom: 18,
-          gridSize: 120,
-          renderClusterMarker: this.renderUserClusterMarker,
-          renderMarker: this.renderUserMarker
-        })
-        usersData.markerCluster.on('click', this.markerUserClusterClick)
-      }
+
       this.fitUsers() //控制用户显示
     },
     getUserCenterAndKey(lng, lat, userId) {
@@ -195,10 +184,24 @@ export default {
       let myJcMap = this.getMyJcMap() //获取地图对象
 
       if (this.userSignVisible && this.userTogetherVisible) {
+        if (usersData.markerCluster) {
+          //如果已经存在，则去调整数据显示
+          usersData.markerCluster.setData(usersData.lnglats)
+        } else {
+          usersData.markerCluster = new MarkerCluster(null, usersData.lnglats, {
+            maxZoom: 18,
+            gridSize: 120,
+            renderClusterMarker: this.renderUserClusterMarker,
+            renderMarker: this.renderUserMarker
+          })
+          usersData.markerCluster.on('click', this.markerUserClusterClick)
+        }
+
         usersData.markerCluster.setMap(myJcMap.map)
         usersData.markerCluster.setGridSize(120) //处理是否显示标题，以及状态
-      } else {
+      } else if (usersData.markerCluster) {
         usersData.markerCluster.setMap(null)
+        usersData.markerCluster = null
       }
       //处理用户非聚合显示
       let jcSignVisible = !this.userTogetherVisible && this.userSignVisible

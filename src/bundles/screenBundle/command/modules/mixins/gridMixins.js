@@ -129,12 +129,6 @@ export default {
 
       for (let type in gridAreas) {
         mapGridTypes.push(type)
-        let gridTypeMap = gridAreas[type]
-
-        gridTypeMap.markerCluster = this.getGridMarkerCluster(gridTypeMap)
-        gridTypeMap.markerCluster.on('click', (context) => {
-          this.markerGridClusterClick(gridTypeMap, context)
-        })
       }
       this.areaTipVisibles = mapGridTypes
       this.togetherVisibles = mapGridTypes
@@ -154,10 +148,19 @@ export default {
 
         //如果开启聚合，且显示该类型标记，则设置聚合显示
         if (togetherVisible && signVisible) {
+          if (gridTypeMap.markerCluster) {
+            gridTypeMap.markerCluster.setData(gridTypeMap.lnglats)
+          } else {
+            gridTypeMap.markerCluster = this.getGridMarkerCluster(gridTypeMap)
+            gridTypeMap.markerCluster.on('click', (context) => {
+              this.markerGridClusterClick(gridTypeMap, context)
+            })
+          }
           gridTypeMap.markerCluster.setMap(myJcMap.map)
           gridTypeMap.markerCluster.setGridSize(120) //处理是否显示标题
-        } else {
+        } else if (gridTypeMap.markerCluster) {
           gridTypeMap.markerCluster.setMap(null)
+          gridTypeMap.markerCluster = null
         }
 
         //地图区域显示控制

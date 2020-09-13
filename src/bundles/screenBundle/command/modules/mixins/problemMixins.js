@@ -84,18 +84,6 @@ export default {
           })
         }
 
-        if (problemData.markerCluster) {
-          //如果已经存在，则去调整数据显示
-          problemData.markerCluster.setData(problemData.lnglats)
-        } else {
-          problemData.markerCluster = new MarkerCluster(null, problemData.lnglats, {
-            maxZoom: 18,
-            gridSize: 120,
-            renderClusterMarker: this.renderProblemClusterMarker,
-            renderMarker: this.renderProblemMarker
-          })
-          problemData.markerCluster.on('click', this.markerProblemClusterClick)
-        }
         this.fitProblems() //控制问题显示
       } catch (error) {
         console.log(error)
@@ -162,10 +150,22 @@ export default {
       let myJcMap = this.getMyJcMap() //获取地图对象
 
       if (this.problemSignVisible && this.problemTogetherVisible) {
+        if (problemData.markerCluster) {
+          problemData.markerCluster.setData(problemData.lnglats) //如果已经存在，则去调整数据显示
+        } else {
+          problemData.markerCluster = new MarkerCluster(null, problemData.lnglats, {
+            maxZoom: 18,
+            gridSize: 120,
+            renderClusterMarker: this.renderProblemClusterMarker,
+            renderMarker: this.renderProblemMarker
+          })
+          problemData.markerCluster.on('click', this.markerProblemClusterClick)
+        }
         problemData.markerCluster.setMap(myJcMap.map)
         problemData.markerCluster.setGridSize(120) //处理是否显示标题，以及状态
-      } else {
+      } else if (problemData.markerCluster) {
         problemData.markerCluster.setMap(null)
+        problemData.MarkerCluster = null
       }
 
       let jcSignVisible = !this.problemTogetherVisible && this.problemSignVisible
