@@ -49,6 +49,7 @@
 <script>
 
 import { TASK_SOURCES } from '@/constant/Dictionaries'
+import { closeAlarm } from '@/api/dregsAlarm'
 
 
 export default {
@@ -107,15 +108,13 @@ export default {
       //关闭告警
       this.$confirm('确认关闭告警', '提示', { type: 'warning' }).then(async () => {
         this.loading = true
-        // const form = {
-        //   ifUpload: false,
-        //   ifClose: true
-        // }
 
         try {
-          // this.$message.success('操作成功')
-          // this.loading = false
-          // this.questionReport(form)
+          const aa = await closeAlarm({ id: this.info.id })
+
+          console.log('aa', aa)
+          this.$message.success('关闭警告成功')
+          this.loading = false
         } catch (e) {
           console.error(e)
         }

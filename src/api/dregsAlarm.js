@@ -30,7 +30,20 @@ export function getStatus() {
  */
 
 export function getTaskByResource(data) {
-  return axios.post(API.dregsAlarm.getTaskByResource, {}, {
+  return axios.post(API.dregsAlarm.getTaskByResource, null, {
+    params: data
+  })
+}
+
+/**
+ * 关闭告警
+ * @param {object} data 参数对象
+ * @param {string} id  告警id
+ * @returns {Object} axios 对象
+ */
+
+export function closeAlarm(data) {
+  return axios.post(API.dregsAlarm.closeAlarm, null, {
     params: data
   })
 }
