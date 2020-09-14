@@ -39,6 +39,7 @@ axios.interceptors.response.use(function (res) {
       } else {
         Message.error(res.data.resMsg.msgText)
       }
+      return Promise.reject(res)
     }
   } else {
     errorRun()

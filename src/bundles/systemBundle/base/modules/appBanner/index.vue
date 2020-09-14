@@ -109,6 +109,7 @@ export default {
           this.$message.success('操作成功')
         } catch (error) {
           console.error(error)
+          row.enable = row.enable ? 0 : 1
         }
       }).catch(() => {
         row.enable = row.enable ? 0 : 1
