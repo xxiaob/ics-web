@@ -22,8 +22,25 @@ export default {
   created() {
     this.$EventBus.$on('org-change', this.temporaryTaskOrgChange) //监听第一次组织级别切换，然后去初始化地图临时任务
     this.$EventBus.$on('map-task-change', this.mapTaskChange) //临时任务考勤状态
+
+    this.abnormalTaskinterval = setInterval(this.abnormalTaskChange, 2000) //异常任务 超时没有推送 改变状态
   },
   methods: {
+    abnormalTaskChange() {
+      const nowTime = new Date().getTime()
+      const intervalTime = 10 * 1000
+      const overtimeAbnormalTask = []
+
+      this.abnormalTaskIds.forEach(taskId=>{
+        if (nowTime - abnormalTaskTimes[taskId] >= intervalTime) {
+          overtimeAbnormalTask.push({ status: 0, taskId })
+        }
+      })
+
+      if (overtimeAbnormalTask.length) {
+        this.mapTaskChange({ type: 1, tasks: overtimeAbnormalTask })
+      }
+    },
     temporaryTaskOrgChange(org) {
       this.temporaryTaskOrgId = org.orgId
       this.clearTasks()
@@ -121,5 +138,8 @@ export default {
     //去除事件监听
     this.$EventBus.$off('org-change', this.temporaryTaskOrgChange)
     this.$EventBus.$off('map-task-change', this.mapTaskChange)
+    if (this.abnormalTaskinterval) {
+      clearInterval(this.abnormalTaskinterval)
+    }
   }
 }

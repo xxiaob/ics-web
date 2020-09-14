@@ -15,6 +15,8 @@ let MouseTool = null //存储 MouseTool对象
 
 let userMouseTool //用户鼠标操作
 
+let abnormalUserTimes = [] //记录所有异常的用户时间，用于重置
+
 export default {
   data() {
     return {
@@ -33,8 +35,27 @@ export default {
     this.$EventBus.$on('show-word-change', this.userShowWordChange) //监听文字显示切换
     this.$EventBus.$on('show-together-change', this.userTogetherChange) //监听聚合显示改变
     this.$EventBus.$on('screen-use-select', this.userSelect) //监听框选用户
+
+    this.abnormalUserinterval = setInterval(this.abnormalUserChange, 2000) //异常用户 超时没有推送 改变状态
   },
   methods: {
+    abnormalUserChange() {
+      let repaint = false
+      const nowTime = new Date().getTime()
+      const intervalTime = 10 * 1000
+
+      for (const key in abnormalUserTimes) {
+        if (nowTime - abnormalUserTimes[key] >= intervalTime) {
+          const index = this.abnormalUserIds.indexOf(key)
+
+          this.abnormalUserIds.splice(index, 1)
+          repaint = true
+        }
+      }
+      if (repaint) {
+        this.fitUsers()
+      }
+    },
     async userSelect(data) {
       //用户框选
       let myJcMap = this.getMyJcMap() //获取地图对象
@@ -123,6 +144,11 @@ export default {
           let hasAbnormalUser = false //记录获取的批量用户里是否有新增，如果有，则通知播放提示音
 
           data.attendance.forEach(item => {
+            //记录异常报警的时间
+            if (item.status == 1) {
+              abnormalUserTimes[item.id] = new Date().getTime()
+            }
+
             let index = this.abnormalUserIds.indexOf(item.id)
 
             //如果异常用户列表，用户存在，用户为正常，则从异常列表移除，如果用户不存在，异常，则增加
@@ -377,5 +403,8 @@ export default {
     this.$EventBus.$off('show-word-change', this.orgShowWordChange)
     this.$EventBus.$off('show-together-change', this.userTogetherChange)
     this.$EventBus.$off('screen-use-select', this.userSelect)
+    if (this.abnormalUserinterval) {
+      clearInterval(this.abnormalUserinterval)
+    }
   }
 }

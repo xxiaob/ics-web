@@ -15,6 +15,8 @@ let gridAreas = {} //网格区域数组，例如数据： {'caichang': {markerCl
 
 let MarkerCluster //存储 MarkerCluster
 
+let abnormalGridTimes = [] //记录所有异常的岗点时间，用于重置
+
 export default {
   data() {
     return {
@@ -34,8 +36,27 @@ export default {
     this.$EventBus.$on('show-area-change', this.gridShowAreaChange) //监听区域显示切换
     this.$EventBus.$on('show-word-change', this.gridShowWordChange) //监听文字显示切换
     this.$EventBus.$on('show-together-change', this.gridTogetherChange) //监听聚合显示改变
+
+    this.abnormalUserinterval = setInterval(this.abnormalGridChange, 2000) //异常岗点 超时没有推送 改变状态
   },
   methods: {
+    abnormalGridChange() {
+      let repaint = false
+      const nowTime = new Date().getTime()
+      const intervalTime = 10 * 1000
+
+      for (const key in abnormalGridTimes) {
+        if (nowTime - abnormalGridTimes[key] >= intervalTime) {
+          const index = this.abnormalGridIds.indexOf(key)
+
+          this.abnormalGridIds.splice(index, 1)
+          repaint = true
+        }
+      }
+      if (repaint) {
+        this.fitGrids()
+      }
+    },
     mapGridChange(data) {
       if (data.type == 1) {
         //岗点考勤状态更新
@@ -43,6 +64,11 @@ export default {
           let hasAbnormalGrid = false //记录获取的批量岗点里是否有新增，如果有，则通知播放提示音
 
           data.attendance.forEach(item => {
+            //记录异常报警的时间
+            if (item.status == 1) {
+              abnormalGridTimes[item.id] = new Date().getTime()
+            }
+
             let index = this.abnormalGridIds.indexOf(item.id)
 
             //如果异常岗点列表，岗点存在，岗点为正常，则从异常列表移除，如果岗点不存在，异常，则增加
@@ -333,5 +359,8 @@ export default {
     this.$EventBus.$off('show-area-change', this.gridShowAreaChange)
     this.$EventBus.$off('show-word-change', this.gridShowWordChange)
     this.$EventBus.$off('show-together-change', this.gridTogetherChange)
+    if (this.abnormalUserinterval) {
+      clearInterval(this.abnormalUserinterval)
+    }
   }
 }
