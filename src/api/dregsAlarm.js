@@ -20,3 +20,19 @@ export function getDregsAlarmList(data) {
 export function getStatus() {
   return axios.post(API.dregsAlarm.statusList)
 }
+
+/**
+ * 查询告警台账转为的任务
+ * @param {object} data 参数对象
+ * @param {string} sourceId  告警id
+ * @param {string} sourceType   告警类型
+ * @returns {Object} axios 对象
+ */
+
+export function getTaskByResource(data) {
+  return axios.post(API.dregsAlarm.getTaskByResource, {}, {
+    params: data
+  })
+}
+
+

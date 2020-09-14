@@ -21,15 +21,20 @@
 </template>
 
 <script>
-import { listByProblemId } from '@/api/task'
+import { getTaskByResource } from '@/api/dregsAlarm'
 import { formatDate } from '@/libs/util'
 import projectsMixins from '@/bundles/taskBundle/mixins/projectsMixins'
+import { TASK_SOURCES } from '@/constant/Dictionaries'
 
 export default {
-  name: 'TaskQuestionProcessDetailTask',
+  name: 'dregsWaringDetailTask',
   mixins: [projectsMixins],
   props: {
-    problemId: {
+    sourceId: {
+      type: String,
+      default: ''
+    },
+    sourceType: {
       type: String,
       default: ''
     }
@@ -41,7 +46,7 @@ export default {
     }
   },
   watch: {
-    problemId(newValue) {
+    sourceId(newValue) {
       if (newValue) {
         this.initData(newValue)
       }
@@ -54,12 +59,13 @@ export default {
     formatTime(row, column, cellValue) {
       return formatDate(cellValue)
     },
-    async initData(problemId) {
+    async initData(sourceId ) {
       if (!this.loading) {
         this.loading = true
         try {
-          const resultList = await listByProblemId(problemId)
+          const resultList = await getTaskByResource({ sourceId, sourceType: TASK_SOURCES.RESIDUEWARING } )
 
+          console.log('resultList', resultList)
           this.list = resultList ? [resultList] : []
           this.loading = false
         } catch (error) {
@@ -71,6 +77,7 @@ export default {
     handle(row) {
       const { taskStatus, businessKey } = row
 
+      console.log('row', row)
       window.open(`/task/taskProcess?taskStatus=${taskStatus}&businessKey=${businessKey}`)
     }
   }

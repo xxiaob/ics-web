@@ -26,7 +26,7 @@
         <el-pagination @current-change="currentChange" @size-change="sizeChange" :current-page.sync="page.pageNum" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.total" class="text-right jc-mt"></el-pagination>
       </el-card>
     </div>
-    <jc-detail v-show="detailShow" :types="types" :info="info" :detailShow.sync="detailShow" @save-success="initData"></jc-detail>
+    <jc-detail v-show="detailShow" :info="info" :detailShow.sync="detailShow" @save-success="initData"></jc-detail>
   </div>
 </template>
 
@@ -36,8 +36,6 @@ import { getDregsAlarmList } from '@/api/dregsAlarm'
 import { LAWS_TYPES } from '@/constant/Dictionaries'
 import PaginationMixins from '@/mixins/PaginationMixins'
 
-import { createNamespacedHelpers } from 'vuex'
-const { mapState } = createNamespacedHelpers('user')
 
 export default {
   name: 'dregsWaringIndex',
@@ -48,13 +46,9 @@ export default {
       list: [],
       filter: {},
       types: [],
-
       info: null,
       detailShow: false
     }
-  },
-  computed: {
-    ...mapState(['user'])
   },
   mounted() {
     this.getStatuteTypes()
@@ -79,13 +73,14 @@ export default {
           })
           const { total, resultList } = await getDregsAlarmList({ ...this.filter, ...this.page })
 
+          console.log('resultList', resultList)
+
           this.page.total = total
           this.list = resultList
           this.loading = false
 
           // 请求数据
         } catch (error) {
-          console.error(error)
           this.loading = false
         }
       }
@@ -93,19 +88,17 @@ export default {
     async getStatuteTypes() {
       // 获取类型
       this.types = await getByType({ type: LAWS_TYPES.ALARM }) // 获取告警类型
-      console.log('this.type', this.types)
     },
     goFilter(filter) {
       this.filter = filter // 获取查询信息
       this.currentChange(1) // 切换页面方法,在切换页面方法中调用initData初始化数据
     },
-    //handle   true处理问题  false 查看问题
+
     handle(row, handle) {
-      console.log('告警处理', row)
+      // handle方法 就是告警详情列表处理
+      // handle 参数   true 告警处理(包含转任务,和关闭告警)  false 告警查询(查询告警转为的任务)
       this.info = row
       this.info.handle = handle
-      this.info.id = '81037736533819392'
-      this.orgId = this.user.orgId
       this.detailShow = true
     }
   }

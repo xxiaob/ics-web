@@ -27,18 +27,16 @@
       </el-card>
     </div>
 
-    <jc-detail v-show="detailShow" :types="types" :info="info" :user="user" :orgTree="orgTree" :detailShow.sync="detailShow" @save-success="initData"></jc-detail>
+    <jc-detail v-show="detailShow" :info="info" :detailShow.sync="detailShow" @save-success="initData"></jc-detail>
   </div>
 </template>
 
 <script>
-import { getByType } from '@/api/supervise'
-import { getDregsAlarmList } from '@/api/dregsAlarm'
-import { LAWS_TYPES } from '@/constant/Dictionaries'
+import { getByType } from '@/api/supervise' // 获取告警类型接口
+import { getDregsAlarmList } from '@/api/dregsAlarm' // 获取告警列表
+import { LAWS_TYPES } from '@/constant/Dictionaries' // 告警类型字典
 import PaginationMixins from '@/mixins/PaginationMixins'
-import { organizationList } from '@/api/organization'
-import { createNamespacedHelpers } from 'vuex'
-const { mapState } = createNamespacedHelpers('user')
+
 
 export default {
   name: 'dregsWaringHandleIndex',
@@ -49,51 +47,20 @@ export default {
       list: [],
       filter: {},
       types: [],
-      orgTree: [],
       info: null,
       detailShow: false
     }
   },
-  computed: {
-    ...mapState(['user'])
-  },
+
   async created() {
-    await this.getOrgTree()
-    this.getStatuteTypes()
-    this.initData()
+    this.getStatuteTypes() // 调用获取告警类型方法
+    this.initData() // 初始化告警列表数据方法
   },
   components: {
     TabFilter: () => import('./modules/tabFilter'),
     JcDetail: () => import('./modules/detail')
   },
   methods: {
-    formatOrgTree(child) {
-      let trees = []
-
-      if (child && child.length) {
-        child.forEach(item => {
-          let node = {
-            value: item.orgId,
-            label: item.orgName
-          }
-
-          let children = this.formatOrgTree(item.children)
-
-          if (children && children.length) {
-            node.children = children
-          }
-
-          trees.push(node)
-        })
-      }
-      return trees
-    },
-    async getOrgTree() {
-      const res = await organizationList()
-
-      this.orgTree = this.formatOrgTree(res)
-      this.firstOrgIds = res.map(item=>item.orgId)
-    },
     async initData() {
       // 初始获取数据
       if (!this.loading) {
@@ -106,40 +73,35 @@ export default {
               delete filter[key]
             }
           })
+
+          // 接口获取数据
           const { total, resultList } = await getDregsAlarmList({ ...this.filter, ...this.page })
 
           this.page.total = total
           this.list = resultList
           this.loading = false
-
-          // 请求数据
         } catch (error) {
-          console.error(error)
           this.loading = false
         }
       }
     },
     async getStatuteTypes() {
-      // 获取类型
       this.types = await getByType({ type: LAWS_TYPES.ALARM }) // 获取告警类型
-      console.log('this.type', this.types)
     },
     goFilter(filter) {
       this.filter = filter // 获取查询信息
       this.currentChange(1) // 切换页面方法,在切换页面方法中调用initData初始化数据
     },
-    //handle   true处理问题  false 查看问题
     handle(row, handle) {
-      console.log('告警处理', row)
+      // handle方法 就是告警详情列表处理
+      // handle 参数   true 告警处理(包含转任务,和关闭告警)  false 告警查询(查询告警转为的任务)
+
       this.info = row
       this.info.handle = handle
-      this.orgId = this.user.orgId
       this.detailShow = true
     }
   }
 }
 </script>
 
-<style lang="scss" scoped>
-</style>
 
