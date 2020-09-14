@@ -18,7 +18,7 @@ import { MAP_EVENT } from '@/constant/CONST'
 import MapSearch from '@/components/JcMap/MapSearch'
 import { getAddressByPosition, getMouseTool } from '@/map/aMap/aMapUtil'
 import { getUsersByPosition } from '@/api/user'
-import { JcUserIcons } from '@/config/JcIconConfig'
+import { JcUserIcons, JcTemporaryTaskIcons } from '@/config/JcIconConfig'
 
 let MouseTool = null //存储 MouseTool对象
 
@@ -160,7 +160,7 @@ export default {
         this.myMarker.name = name
         this.myMarker.show(center)
       } else {
-        this.myMarker = new JcMapMarker({ map: myJcMap, name, icon: '/static/mapIcons/temporarytasks.gif', position: center })
+        this.myMarker = new JcMapMarker({ map: myJcMap, name, icon: JcTemporaryTaskIcons.plain, position: center })
       }
     }
   },
