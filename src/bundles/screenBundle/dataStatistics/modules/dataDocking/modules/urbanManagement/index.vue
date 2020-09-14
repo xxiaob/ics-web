@@ -17,7 +17,7 @@
       <div class="jc-category-item jc-flex-warp">
         <span class="jc-category-title">结案比率</span>
         <span class="jc-category-count">
-          <count-to :startVal="0" :endVal="89.5" :decimals="2" :duration="3000" separator="" />%
+          <count-to :startVal="0" :endVal="89.50" :decimals="2" :duration="3000" separator="" />%
         </span>
       </div>
       <div class="jc-category-item jc-flex-warp">

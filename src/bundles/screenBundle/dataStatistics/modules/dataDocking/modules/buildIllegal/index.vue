@@ -23,7 +23,7 @@
       <div class="jc-category-item jc-flex-warp jc-build-4">
         <span class="jc-category-title">拆除比率</span>
         <span class="jc-category-count">
-          <count-to :startVal="0" :endVal="78.3" :decimals="2" :duration="3000" separator="" />%
+          <count-to :startVal="0" :endVal="78.30" :decimals="2" :duration="3000" separator="" />%
         </span>
       </div>
     </div>
