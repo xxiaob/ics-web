@@ -20,19 +20,21 @@ export default {
     LogoConfigure: () => import('./modules/logoConfigure'),
     ScreenConfigure: () => import('./modules/screenConfigure'),
     EntryRoute: () => import('./modules/entryRoute'),
-    BusinessSystem: () => import('./modules/businessSystem')
+    BusinessSystem: () => import('./modules/businessSystem'),
+    AppBanner: () => import('./modules/appBanner')
   },
   data() {
     return {
       authorityOrg: {},
       baseInfo: {},
-      tabComponent: 'IncorruptGovernment',
+      tabComponent: 'AppBanner',
       tabs: [
         { label: '廉政提醒', value: 'IncorruptGovernment' },
         { label: 'logo配置', value: 'LogoConfigure' },
         { label: '大屏配置', value: 'ScreenConfigure' },
         { label: '入口路由', value: 'EntryRoute' },
-        { label: '业务系统', value: 'BusinessSystem' }
+        { label: '业务系统', value: 'BusinessSystem' },
+        { label: 'AppBanner设置', value: 'AppBanner' }
       ]
     }
   },

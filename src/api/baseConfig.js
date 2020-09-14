@@ -77,3 +77,39 @@ export function rollingMessageSave(data) {
 export function getEnabledRollingMessage() {
   return axios.get(API.baseConfig.getEnabledRollingMessage)
 }
+
+/**
+ * 获取APPBanner列表
+ * @param {Object} data 参数
+ * @returns {Object} axios 对象
+ */
+export function appBannerList(data) {
+  return axios.post(API.baseConfig.appBannerList, data)
+}
+
+/**
+ * 新增appbanner
+ * @param {Object} data 参数
+ * @returns {Object} axios 对象
+ */
+export function addAppBanner(data) {
+  return axios.post(API.baseConfig.addAppBanner, data)
+}
+
+/**
+ * 删除appbanner
+ * @param {String} id 参数
+ * @returns {Object} axios 对象
+ */
+export function deleteAppBanner(id) {
+  return axios.post(API.baseConfig.deleteAppBanner + id)
+}
+/**
+ * 启用appbanner
+ * @param {String} id 参数
+ * @param {String} enable 参数
+ * @returns {Object} axios 对象
+ */
+export function enableAppBanner({ id, enable }) {
+  return axios.post(API.baseConfig.enableAppBanner + id + '?flag=' + enable)
+}

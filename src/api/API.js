@@ -283,7 +283,11 @@ export default {
     del: 'user-service/rollingMessage/delRollingMessage', // 廉政提醒删除
     getEnabledRollingMessage: 'user-service/rollingMessage/getEnabledRollingMessage', //根据组织获取滚动消息
     updateBase: 'user-service/orgBaseInfo/updOrgBaseInfo',
-    getBase: 'user-service/orgBaseInfo/getOrgBaseInfo'
+    getBase: 'user-service/orgBaseInfo/getOrgBaseInfo',
+    appBannerList: 'user-service/appBanner/appBannerList',
+    addAppBanner: 'user-service/appBanner/addAppBanner',
+    deleteAppBanner: 'user-service/appBanner/deleteAppBanner/',
+    enableAppBanner: 'user-service/appBanner/enableAppBanner/'
   },
   dregsAlarm: {
     // 渣土告警
@@ -292,3 +296,4 @@ export default {
     getTaskByResource: 'task-service/task/getTaskByResource' // 渣土告警台账查询任务
   }
 }
+
