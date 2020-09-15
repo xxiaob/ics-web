@@ -114,6 +114,8 @@ export default {
 
           console.log('aa', aa)
           this.$message.success('关闭警告成功')
+          this.$emit('save-success')
+          this.$emit('update:detailShow', false)
           this.loading = false
         } catch (e) {
           console.error(e)
