@@ -17,7 +17,7 @@ export default {
       eventOrgId: '',
       eventSignVisible: false, //事件是否显示
       eventTipVisible: true, //事件名称是否显示
-      eventTogetherVisible: false, //事件是否聚合
+      eventTogetherVisible: true, //事件是否聚合
       eventToday: new Date(moment().format('YYYY-MM-DD')).getTime() // 初始时间
     }
   },

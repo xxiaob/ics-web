@@ -17,7 +17,7 @@ export default {
       problemOrgId: '',
       problemSignVisible: false, //问题是否显示
       problemTipVisible: true, //问题名称是否显示
-      problemTogetherVisible: false, //问题是否聚合
+      problemTogetherVisible: true, //问题是否聚合
       problemToday: new Date(moment().format('YYYY-MM-DD')).getTime() //初始时间
     }
   },

@@ -162,7 +162,7 @@ export default {
         this.allTypes = ['org', 'event', 'problem', 'device', ...allCheckIds]
         this.signType = [...allCheckIds]
         this.wordType = [...this.allTypes]
-        this.togetherType = [...allCheckIds]
+        this.togetherType = ['event', 'problem', ...allCheckIds]
       } catch (error) {
         console.log(error)
       }
