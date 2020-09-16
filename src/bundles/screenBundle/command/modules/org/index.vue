@@ -34,7 +34,7 @@
 import { getOrgUserListByProject } from '@/api/user'
 import TreesFilterMixins from '@/mixins/TreesFilterMixins'
 import { VIDEO_INVITE_TYPES } from '@/constant/Dictionaries'
-let lastOrgIndex = -1
+let lastOrgIndex = 0
 
 
 export default {
@@ -108,7 +108,7 @@ export default {
       if (!trees) {
         return
       }
-      lastOrgIndex = -1
+
       for (let i = 0; i < trees.length; i++) {
         let treesItem = trees[i]
 
@@ -124,11 +124,9 @@ export default {
 
 
           // 如果人员在线,并且不是在人员第一位,在改变位置,如果第一位在线,只改变状态
-          if (isOnline && (lastOrgIndex + 1 != i)) {
-            if (lastOrgIndex > -1) {
-              this.$refs.tree.remove(treesItem)
-              this.$refs.tree.insertAfter(treesItem, trees[lastOrgIndex])
-            }
+          if (isOnline && (lastOrgIndex + 1 != i) && (lastOrgIndex != i)) {
+            this.$refs.tree.remove(treesItem)
+            this.$refs.tree.insertAfter(treesItem, trees[lastOrgIndex])
           }
         }
       }
