@@ -4,13 +4,13 @@
     <div class="jc-view-content" v-loading="loading" element-loading-background="rgba(0, 0, 0, 0)">
       <el-tree ref="tree" :default-expanded-keys="expandedKeys" :data="trees" :show-checkbox="true" :props="props" @check="checkChange" :filter-node-method="filterNode" node-key="id">
         <div class="custom-tree-node" slot-scope="{ node,data }">
-          <div class="jc-tree-label no-select jc-flex-warp" :class="{'jc-user': data.type=='user'}">
-            <i class="iconfont online" :class="{'iconrenyuan-5': data.type=='user'}"></i>
+          <div class="jc-tree-label no-select jc-flex-warp" :class="{'jc-user': data.type=='user','jc-users-offline': data.type=='user' && !data.online}">
+            <i class="iconfont" :class="{'iconrenyuan-5': data.type=='user','online':data.online }"></i>
             <div class="jc-text-warp" v-text="node.label" :title="node.label"></div>
           </div>
           <div class="jc-tree-options" v-on:click.stop>
-            <el-button type="text" size="small" icon="el-icon-map-location" @click="goLocation(data)" title="定位"></el-button>
-            <el-button type="text" size="small" icon="el-icon-view" v-if="data.type=='user'" @click="userDetail(data)" title="详情"></el-button>
+            <el-button type="text" size="small" icon="el-icon-map-location" :class="{'jc-users-offline': data.type=='user' && !data.online}" @click="goLocation(data)" title="定位"></el-button>
+            <el-button type="text" size="small" icon="el-icon-view" :class="{'jc-users-offline': data.type=='user' && !data.online}" v-if="data.type=='user'" @click="userDetail(data)" title="详情"></el-button>
           </div>
         </div>
       </el-tree>
@@ -34,6 +34,8 @@
 import { getOrgUserListByProject } from '@/api/user'
 import TreesFilterMixins from '@/mixins/TreesFilterMixins'
 import { VIDEO_INVITE_TYPES } from '@/constant/Dictionaries'
+let lastOrgIndex = 0
+
 
 export default {
   name: 'ScreenCommandOrg',
@@ -48,7 +50,11 @@ export default {
     },
     options() {
       this.initOptionsUsers() //初始化传入的用户
+    },
+    userOnlineData() {
+      this.onlineChange() // 监听在线人员列表
     }
+
   },
   data() {
     return {
@@ -58,16 +64,78 @@ export default {
       trees: [],
       expandedKeys: [],
       props: { children: 'children', label: 'label' },
-      checkKeys: []
+      checkKeys: [],
+      userOnlineData: [] // 在线用户列表
     }
   },
   created() {
     this.initData()
+    this.$EventBus.$on('map-user-online-change', this.getUserOnline ) // 推送用户在线/离线数据
   },
+
   methods: {
+    getUserOnline(userOnline) {
+      // 对于获取在线人员数据处理
+      let userOnlineData = this.userOnlineData
+
+      userOnline.forEach(item => {
+        if (item.status) {
+          // 用户在线推送
+          let index = userOnlineData.findIndex(userId => userId == item.userId)
+
+          // 如果在线人员列表里不存在在线人员id,就加入
+          if (index < 0) {
+            userOnlineData.push(item.userId)
+          }
+        } else {
+          // 用户离线推送
+          let index = userOnlineData.findIndex(userId => userId == item.userId)
+
+          // 如果在线人员列表里存在离线人员id,就删除
+          if (index > -1) {
+            userOnlineData.splice(index, 1)
+          }
+        }
+      })
+      this.userOnlineData = userOnlineData
+
+      // 执行在线人员以及排序方法
+      this.onlineChange(this.trees)
+    },
+    onlineChange(trees) {
+      // 处理离线/在线切换的方法
+
+      if (!trees) {
+        return
+      }
+
+      for (let i = 0; i < trees.length; i++) {
+        let treesItem = trees[i]
+
+
+        if (treesItem.type == 'org') {
+          lastOrgIndex = i
+          this.onlineChange(treesItem.children || []) // 递归调用处理在线离线设备方法
+        } else {
+          let isOnline = this.userOnlineData.includes(treesItem.id) // 判断是否在线
+
+          treesItem.online = isOnline
+          treesItem.disabled = !isOnline
+
+
+          // 如果人员在线,并且不是在人员第一位,在改变位置,如果第一位在线,只改变状态
+          if (isOnline && (lastOrgIndex + 1 != i)) {
+            this.$refs.tree.remove(treesItem)
+            this.$refs.tree.insertAfter(treesItem, trees[lastOrgIndex])
+          }
+        }
+      }
+    },
     async initData() {
+      // 初始化数据
       this.loading = true
       try {
+        // 获取用户列表数据
         const orgsAndUsers = await getOrgUserListByProject({ projectId: this.project.projectId })
 
         console.log('组织架构orgsAndUsers', orgsAndUsers )
@@ -75,10 +143,17 @@ export default {
         this.trees = this.formatUserOrgTrees(orgsAndUsers)//处理组织和用户
         this.expandedKeys = this.trees.length ? [this.trees[0].id] : [] //设置第一级默认展开
 
+
         this.initOptionsUsers() //初始化传入的用户
+
+        // 用户列表初始获取在线人员数据
+        this.$nextTick(() => {
+          this.$EventBus.$emit('screen-user-online-obtain', this.getUserOnline)
+        })
       } catch (error) {
         console.log(error)
       }
+
       this.loading = false
     },
     deleteUser(index) {
@@ -135,7 +210,7 @@ export default {
           //处理用户 userRespDTOList
           if (item.userRespDTOList && item.userRespDTOList.length) {
             item.userRespDTOList.forEach(user => {
-              nodeChildren.push({ id: user.userId, label: user.userName, pid: user.orgId, type: 'user' })
+              nodeChildren.push({ id: user.userId, label: user.userName, pid: user.orgId, type: 'user', online: false, disabled: true })
             })
           }
           trees.push(nodeChildren && nodeChildren.length ? { ...node, children: nodeChildren } : node)
@@ -154,7 +229,7 @@ export default {
     },
     userDetail(userItem) {
       //显示用户详情
-      this.$EventBus.$emit('view-component-change', { component: 'UserDetail', options: { userId: userItem.id, userName: userItem.label } }) //通知窗口改变
+      this.$EventBus.$emit('view-component-change', { component: 'UserDetail', options: { userId: userItem.id, userName: userItem.label, online: userItem.online } }) //通知窗口改变
     },
     goMeeting(talkType) {
       //去进行会议

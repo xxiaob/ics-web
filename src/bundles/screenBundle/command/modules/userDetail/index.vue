@@ -29,6 +29,7 @@ export default {
     WorkCheck: () => import('./modules/workCheck'), //考勤
     UserResources: () => import('./modules/resources') //用户资源，目前显示一键采集的内容
   },
+
   data() {
     return {
       tabComponent: 'BaseInfo',
@@ -38,6 +39,11 @@ export default {
   },
   methods: {
     async goMediaLive(type) {
+      if (!this.options.online) {
+        // 人员不在线
+        this.$message.error('人员不在线')
+        return
+      }
       if (type == VIDEO_INVITE_TYPES.OBSERVE) {
         //如果是观摩，则取查询观摩的房间号，如果房间号不存在，则不能观摩
         try {

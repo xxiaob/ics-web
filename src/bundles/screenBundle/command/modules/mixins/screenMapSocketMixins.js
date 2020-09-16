@@ -4,6 +4,11 @@
 import { screenMapSocket, screenMessageChannelSocket } from '@/api/socket'
 import { SOCKET_MESSAGE_TYPES } from '@/constant/Dictionaries'
 
+// 用户在线暂存
+let onlineUserData = [] // 如果用户没有打开用户列表,那么推送过来的在线用户暂存在这里
+
+let isCall = true // 判断用户列表是否取过初始数据
+
 export default {
   data() {
     return {
@@ -15,10 +20,19 @@ export default {
   created() {
     this.$EventBus.$on('org-change', this.initScreenMapSocket) //监听行级别切换，进行socket 连接
     this.$EventBus.$on('screen-message-channel', this.sendScreenMessageChannelSocket) //监听消息发送
+    this.$EventBus.$on('screen-user-online-obtain', this.getUserOnlien) // 获取在线用户信息
   },
   methods: {
+    getUserOnlien(callback) {
+      // 获取在线用户信息
+      callback(onlineUserData)
+
+      onlineUserData = null
+
+      isCall = false
+    },
     getUserAndDevices(locations) {
-      //用于区分用户和设备
+      // 用于区分用户和设备
       let users = [], devices = []
 
       if (locations && locations.length) {
@@ -92,6 +106,35 @@ export default {
         } else if (data.type == 9) {
           //临时任务推送
           this.$EventBus.$emit('map-task-change', { type: 3, task: data.messageDTO }) //通知新增临时任务
+        } else if (data.type == 10) {
+          //用户在线推送
+
+          if (isCall) {
+            // 用户列表没有打开,没有获取初始在线人员信息时
+            // 所有在线离线数据都处理在列表中
+            data.orgUserOnOrOffLineDTOS.forEach(item => {
+              if (item.status) {
+                // true 为用户在线推送
+                // 如果用户多端登录, 只需要保留一个在线就可以了
+                const index = onlineUserData.findIndex(user => user.userId == item.userId)
+
+                if (index < 0 ) {
+                  onlineUserData.push(item)
+                }
+              } else {
+                // false ,用户离线推送
+                // 用户离线, 删除在线数据
+                const index = onlineUserData.findIndex(user => user.userId == item.userId)
+
+                if (index > -1 ) {
+                  onlineUserData.splice(index, 1)
+                }
+              }
+            })
+          } else {
+            // 如果为false 说明打开过用户列表, 已经获取过数据, 转为推送
+            this.$EventBus.$emit('map-user-online-change', data.orgUserOnOrOffLineDTOS ) //
+          }
         }
       })
 

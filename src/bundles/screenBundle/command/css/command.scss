@@ -542,11 +542,14 @@ $jc-oprea-height: 36px; //操作的高度
 
     // 设备
     // 设备离线
-    &.jc-devices-offline {
+    .jc-devices-offline {
       color: #cccccc;
     }
 
-    .jc-devices-offline {
+    
+    // 人员 
+    // 人员离线
+    .jc-users-offline {
       color: #cccccc;
     }
   }
