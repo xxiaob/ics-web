@@ -9,6 +9,7 @@ export default class JcSocket {
   constructor(url) {
     this.url = url
     this.lockReconnect = false
+    this.reconnectTimes = 0
   }
 
   /**
@@ -21,6 +22,10 @@ export default class JcSocket {
 
     try {
       this.ws = new WebSocket(this.url)
+
+      this.ws.onopen = function () {
+        this.reconnectTimes = 0
+      }
 
       this.ws.onmessage = function (evt) {
         let data = evt.data
@@ -68,12 +73,14 @@ export default class JcSocket {
    * 重新连接
    */
   reconnect() {
-    if (this.lockReconnect) {
+    if (this.lockReconnect || this.reconnectTimes > 5) {
+      console.log('JcSocket 重连锁定 或者 超过重连次数')
       return
     }
     this.lockReconnect = true
     setTimeout(() => {
-      console.log('JcSocket 重连......')
+      this.reconnectTimes++
+      console.log(`JcSocket 第${this.reconnectTimes}次 重连......`)
       this.connect(this.callback)
       this.lockReconnect = false
     }, 3000)
