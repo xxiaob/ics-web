@@ -14,7 +14,7 @@
           <el-table-column prop="transportCompanyAddress" label="企业地址"></el-table-column>
           <el-table-column prop="carNumber" label="车牌号"></el-table-column>
           <el-table-column prop="carSpeed" label="车速"></el-table-column>
-          <el-table-column prop="status" label="状态"></el-table-column>
+          <el-table-column prop="status" label="状态" :formatter="formatStatus"></el-table-column>
           <el-table-column prop="alarmDate" label="时间" width="160"></el-table-column>
           <el-table-column width="50" label="操作">
             <template slot-scope="scope">
@@ -33,7 +33,7 @@
 <script>
 import { getByType } from '@/api/supervise'
 import { getDregsAlarmList } from '@/api/dregsAlarm'
-import { LAWS_TYPES } from '@/constant/Dictionaries'
+import { LAWS_TYPES, ALARM_STATUS } from '@/constant/Dictionaries'
 import PaginationMixins from '@/mixins/PaginationMixins'
 
 
@@ -59,6 +59,10 @@ export default {
     JcDetail: () => import('../waringHandle/modules/detail')
   },
   methods: {
+    formatStatus(row) {
+      // 告警状态
+      return ALARM_STATUS.toString(row.status)
+    },
     async initData() {
       // 初始获取数据
       if (!this.loading) {

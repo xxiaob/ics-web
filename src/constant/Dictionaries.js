@@ -251,3 +251,14 @@ export const LAWS_TYPES = new JcEnum([
   { key: 'POWER', value: 'powerListType', label: '条例类型' },
   { key: 'ALARM', value: 'alarm', label: '告警类型' }
 ])
+
+
+/**
+ * 渣土告警状态
+ */
+export const ALARM_STATUS = new JcEnum([
+  { key: 'NO_RESOLVE', value: '1', label: '未解除' },
+  { key: 'RESOLVE', value: '2', label: '已解除' },
+  { key: 'TASK_ING', value: '3', label: '任务处理中' }
+])
+

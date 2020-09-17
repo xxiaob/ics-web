@@ -294,7 +294,8 @@ export default {
     list: 'task-service/alarm/select', // 渣土告警列表
     statusList: '/user-service/systemConfig/getByType?type=alarmStatus',
     getTaskByResource: 'task-service/task/getTaskByResource', // 渣土告警台账查询任务
-    closeAlarm: 'task-service/alarm/closeAlarm' // 关闭告警
+    closeAlarm: 'task-service/alarm/closeAlarm', // 关闭告警
+    updateAlarm: 'task-service/alarm/updateAlarm' // 更新告警状态
   }
 }
 

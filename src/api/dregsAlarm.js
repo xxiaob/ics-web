@@ -49,3 +49,16 @@ export function closeAlarm(data) {
 }
 
 
+/**
+ * 更新告警桩体
+ * @param {object} data 参数对象
+ * @param {string} id  告警id
+ * @returns {Object} axios 对象
+ */
+
+export function updateAlarm(data) {
+  return axios.post(API.dregsAlarm.updateAlarm, null, {
+    params: data
+  })
+}
+

@@ -30,13 +30,13 @@
             <span>{{form.carSpeed}}</span>
           </el-form-item>
           <el-form-item label="状态：">
-            <span>{{form.status}}</span>
+            <span>{{ ALARM_STATUS.toString(form.status) }}</span>
           </el-form-item>
 
         </el-form>
         <div class="jc-detail-footer">
-          <el-button v-if="form.handle" @click="generateTask" :loading="loading" type="primary" size="small">生成任务</el-button>
-          <el-button v-if="form.handle" @click="closeWarning" :loading="loading" size="small">关闭告警</el-button>
+          <el-button v-if="form.handle && form.status == ALARM_STATUS.NO_RESOLVE" @click="generateTask" :loading="loading" type="primary" size="small">生成任务</el-button>
+          <el-button v-if="form.handle && form.status == ALARM_STATUS.NO_RESOLVE" @click="closeWarning" :loading="loading" size="small">关闭告警</el-button>
         </div>
 
         <task-manage :question="question" :visible.sync="TaskManageShow" @save-success="generateTaskSuccess"></task-manage>
@@ -48,8 +48,8 @@
 </template>
 <script>
 
-import { TASK_SOURCES } from '@/constant/Dictionaries'
-import { closeAlarm } from '@/api/dregsAlarm'
+import { TASK_SOURCES, ALARM_STATUS } from '@/constant/Dictionaries'
+import { closeAlarm, updateAlarm } from '@/api/dregsAlarm'
 
 
 export default {
@@ -63,7 +63,6 @@ export default {
       type: Boolean
     }
   },
-
   components: {
     TaskManage: () => import('@/bundles/taskBundle/taskProcess/modules/manage'),
     JcTask: ()=>import('./task.vue')
@@ -73,11 +72,13 @@ export default {
       loading: false,
       handle: false,
       question: null,
-      TaskManageShow: false
+      TaskManageShow: false,
+      ALARM_STATUS
     }
   },
   computed: {
     form() {
+      // console.log('this.info', this.info)
       return this.info || {}
     }
   },
@@ -97,22 +98,27 @@ export default {
       this.TaskManageShow = true // 生成任务显示
     },
 
-    generateTaskSuccess() {
-      //成功生成任务后的回调
-      this.$message.success('操作成功')
-      this.$emit('save-success')
-      this.$emit('update:detailShow', false)
+    async generateTaskSuccess() {
+      try {
+        //成功生成任务后的回调
+        await updateAlarm({ id: this.question.key }) // 更新任务方法
+        this.$message.success('操作成功')
+        this.$emit('save-success')
+        this.$emit('update:detailShow', false)
+      } catch (e) {
+        console.error(e)
+      }
     },
 
     closeWarning() {
       //关闭告警
+
       this.$confirm('确认关闭告警', '提示', { type: 'warning' }).then(async () => {
         this.loading = true
 
         try {
-          const aa = await closeAlarm({ id: this.info.id })
+          await closeAlarm({ id: this.info.id })
 
-          console.log('aa', aa)
           this.$message.success('关闭警告成功')
           this.$emit('save-success')
           this.$emit('update:detailShow', false)
