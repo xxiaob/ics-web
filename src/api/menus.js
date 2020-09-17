@@ -40,10 +40,11 @@ export function menusSave(data) {
 }
 /**
  * 根据用户获取菜单
+ * @param {String} deviceType
  * @returns {Object} axios 对象
  */
-export function menusGet() {
-  return axios.post(API.menus.get)
+export function menusGet(deviceType = '') {
+  return axios.post(API.menus.get + `?deviceType=${deviceType}`)
 }
 /**
  * 删除

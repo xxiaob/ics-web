@@ -6,7 +6,7 @@
 export default {
   name: 'SystemRoleManageMenuTree',
   props: {
-    isApp: '',
+    // deviceType: '',
     propMenuTree: {
       type: Array,
       default: ()=>[]
@@ -46,18 +46,18 @@ export default {
 
       if (child && child.length) {
         child.forEach(item => {
-          if (item.isApp == this.isApp) {
-            let node = { resId: item.resId, resName: item.resName }
+          // if (item.deviceType == this.deviceType) {
+          let node = { resId: item.resId, resName: item.resName }
 
-            let children = this.formatMenuTree(item.children)
+          let children = this.formatMenuTree(item.children)
 
-            if (children && children.length) {
-              node.children = children
-              this.parentKeys.push(item.resId)
-            }
-
-            trees.push(node)
+          if (children && children.length) {
+            node.children = children
+            this.parentKeys.push(item.resId)
           }
+
+          trees.push(node)
+          // }
         })
       }
       return trees

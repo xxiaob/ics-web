@@ -8,10 +8,12 @@
         <el-cascader v-model="form.orgId" :options="orgTree" filterable :props="{ expandTrigger: 'hover',checkStrictly: true,emitPath: false }" :disabled="isEdit"></el-cascader>
       </el-form-item>
       <el-form-item label="PC菜单权限" class="jc-menu-tree">
-        <menu-tree ref="pctree" isApp='' :propMenuTree="menuTree" :resIds="resIds"></menu-tree>
+        <!-- deviceType='' -->
+        <menu-tree ref="pctree" :propMenuTree="menuTree" :resIds="resIds"></menu-tree>
       </el-form-item>
       <el-form-item label="APP菜单权限" class="jc-menu-tree">
-        <menu-tree ref="apptree" isApp='1' :propMenuTree="menuTree" :resIds="resIds"></menu-tree>
+        <!-- deviceType='2' -->
+        <menu-tree ref="apptree" :propMenuTree="appMenuTree" :resIds="resIds"></menu-tree>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -41,6 +43,7 @@ export default {
       loading: false,
       orgTree: [],
       menuTree: [],
+      appMenuTree: [],
       resIds: [],
       rules: {
         Len50: getStringRule(1, 50),
@@ -55,6 +58,9 @@ export default {
       })
       menusGet().then(res => {
         this.menuTree = res
+      })
+      menusGet('2').then(res => {
+        this.appMenuTree = res
       })
     },
     formatOrgTree(child) {
