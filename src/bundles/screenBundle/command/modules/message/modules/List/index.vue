@@ -13,6 +13,10 @@
         <div class="jc-info-item">下发人：{{item.userName}}</div>
         <div class="jc-info-item">任务来源：{{item.typeName}}</div>
       </template>
+      <template v-else-if="item.type == types.ALARM">
+        <div class="jc-info-item">车牌号：{{item.userName}}</div>
+        <div class="jc-info-item">告警类型：{{item.typeName}}</div>
+      </template>
       <div class="jc-info-item" v-else>上报人：{{item.userName}}</div>
       <div class="jc-info-item" v-if="item.type == types.QUESTION">问题类型：{{item.typeName}}</div>
       <div class="jc-info-item" v-else-if="item.type == types.EVENT">事件类型：{{item.typeName}}</div>
@@ -38,7 +42,13 @@ export default {
   data() {
     return {
       types: MESSAGE_TYPE,
-      style: { [MESSAGE_TYPE.EVENT]: 'jc-event', [MESSAGE_TYPE.QUESTION]: 'jc-question', [MESSAGE_TYPE.TASK]: 'jc-task', [MESSAGE_TYPE.TEMPORARY]: 'jc-task' }
+      style: {
+        [MESSAGE_TYPE.EVENT]: 'jc-event',
+        [MESSAGE_TYPE.QUESTION]: 'jc-question',
+        [MESSAGE_TYPE.ALARM]: 'jc-question',
+        [MESSAGE_TYPE.TASK]: 'jc-task',
+        [MESSAGE_TYPE.TEMPORARY]: 'jc-task'
+      }
     }
   },
   methods: {
