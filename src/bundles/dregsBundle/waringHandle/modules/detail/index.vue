@@ -65,7 +65,7 @@ export default {
   },
   components: {
     TaskManage: () => import('@/bundles/taskBundle/taskProcess/modules/manage'),
-    JcTask: ()=>import('./task.vue')
+    JcTask: () => import('./task.vue')
   },
   data() {
     return {
@@ -78,7 +78,6 @@ export default {
   },
   computed: {
     form() {
-      // console.log('this.info', this.info)
       return this.info || {}
     }
   },
