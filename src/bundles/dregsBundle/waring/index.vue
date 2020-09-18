@@ -77,8 +77,6 @@ export default {
           })
           const { total, resultList } = await getDregsAlarmList({ ...this.filter, ...this.page })
 
-          console.log('resultList', resultList)
-
           this.page.total = total
           this.list = resultList
           this.loading = false

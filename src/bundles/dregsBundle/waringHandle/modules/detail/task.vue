@@ -57,6 +57,7 @@ export default {
   },
   methods: {
     formatTime(row, column, cellValue) {
+      // 格式化时间
       return formatDate(cellValue)
     },
     async initData(sourceId ) {
@@ -65,7 +66,6 @@ export default {
         try {
           const resultList = await getTaskByResource({ sourceId, sourceType: TASK_SOURCES.RESIDUEWARING } )
 
-          console.log('resultList', resultList)
           this.list = resultList ? [resultList] : []
           this.loading = false
         } catch (error) {
@@ -77,8 +77,7 @@ export default {
     handle(row) {
       const { taskStatus, businessKey } = row
 
-      console.log('row', row)
-      window.open(`/task/taskProcess?taskStatus=${taskStatus}&businessKey=${businessKey}`)
+      window.open(`/task/taskProcess?taskStatus=${taskStatus}&businessKey=${businessKey}`) // 打开转为任务
     }
   }
 }

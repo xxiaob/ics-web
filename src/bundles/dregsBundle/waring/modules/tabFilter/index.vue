@@ -51,12 +51,11 @@ export default {
     }
   },
   async created() {
-    this.statuses = await getStatus()
+    this.statuses = await getStatus() // 获取告警状态
   },
   methods: {
-    changeDate(value) { // 时间切换
-      console.log('value', value)
-      console.log('date', this.date)
+    changeDate(value) {
+      // 时间切换
       if (value) {
         this.form.startTime = formatDate(value[0])
         this.form.endTime = formatDate(value[1])
@@ -65,7 +64,8 @@ export default {
         this.form.endTime = ''
       }
     },
-    reset() { // 重置
+    reset() {
+      // 重置
       this.$refs.form.resetFields()
       this.form.subTypeCode = ''
       this.form.desc = ''
@@ -73,8 +73,8 @@ export default {
       this.form.endTime = ''
       this.date = null
     },
-    onSubmit() { // 提交
-      console.log('this.form', this.form)
+    onSubmit() {
+      // 提交
       this.$emit('filter', this.form) // 查询信息
     }
   }
