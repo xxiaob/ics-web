@@ -4,7 +4,7 @@
       <el-form-item label="事件ID : ">
         <span>{{form.eventNumber}}</span>
       </el-form-item>
-      <el-form-item label="上报人 : ">
+      <el-form-item :label="SYSTEM_MESSAGE_TYPE.DREGS==options.systemSourceType?'处置人 : ':'上报人 : '">
         <span>{{form.reportUserName}}</span>
       </el-form-item>
       <el-form-item label="所属组织 : ">
@@ -13,11 +13,14 @@
       <el-form-item label="事件标题 : ">
         <span>{{form.eventTitle}}</span>
       </el-form-item>
-      <el-form-item label="上报地点 : ">
-        <span>{{form.positionName}}</span>
+      <el-form-item label="车牌号 : " v-if="SYSTEM_MESSAGE_TYPE.DREGS==options.systemSourceType">
+        <span>{{form.carNumber}}</span>
       </el-form-item>
-      <el-form-item label="事件类型 : ">
+      <el-form-item label="事件类型 : " v-else>
         <span>{{form.typeName}}</span>
+      </el-form-item>
+      <el-form-item :label="SYSTEM_MESSAGE_TYPE.DREGS==options.systemSourceType?'处置地点 : ':'上报地点 : '">
+        <span>{{form.positionName}}</span>
       </el-form-item>
       <el-form-item label="事件描述 : ">
         <div v-html="form.desc"></div>
@@ -33,7 +36,7 @@
 <script>
 import { eventManageGet } from '@/api/eventManage'
 import JcMedia from '../../components/media'
-import { MESSAGE_DATA_TYPES } from '@/constant/Dictionaries'
+import { MESSAGE_DATA_TYPES, SYSTEM_MESSAGE_TYPE } from '@/constant/Dictionaries'
 
 export default {
   name: 'ScreenDataCenterContentScreenProjectionEvent',
@@ -46,6 +49,7 @@ export default {
   },
   data() {
     return {
+      SYSTEM_MESSAGE_TYPE,
       form: {}
     }
   },

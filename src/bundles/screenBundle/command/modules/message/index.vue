@@ -114,16 +114,13 @@ export default {
             title: item.taskName,
             userName: item.startUser,
             orgName: item.startOrg,
-            typeName: '',
+            typeName: item.taskSource,
             todo,
             time: formatDate(item.createTime)
           })
         })
         this.BaseVocation = list
       }
-    },
-    detail(item) {
-      this.$EventBus.$emit('view-component-change', { component: 'MessageDetail', options: item }) //通知窗口改变
     },
     changeTodo(item) {
       console.log('changeTodo item', item)

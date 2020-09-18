@@ -6,7 +6,7 @@
         <div class="jc-detail-content">{{form.eventNumber}}</div>
       </div>
       <div class="jc-detail-warp">
-        <div class="jc-detail-label">上报人</div>
+        <div class="jc-detail-label">{{SYSTEM_MESSAGE_TYPE.DREGS==info.systemSourceType?'处置人':'上报人'}}</div>
         <div class="jc-detail-content">{{form.reportUserName}}</div>
       </div>
       <div class="jc-detail-warp">
@@ -17,13 +17,17 @@
         <div class="jc-detail-label">事件标题</div>
         <div class="jc-detail-content">{{form.eventTitle}}</div>
       </div>
-      <div class="jc-detail-warp">
-        <div class="jc-detail-label">上报地点</div>
-        <div class="jc-detail-content">{{form.positionName}}</div>
+      <div class="jc-detail-warp" v-if="SYSTEM_MESSAGE_TYPE.DREGS==info.systemSourceType">
+        <div class="jc-detail-label">车牌号</div>
+        <div class="jc-detail-content">{{form.carNumber}}</div>
       </div>
-      <div class="jc-detail-warp">
+      <div class="jc-detail-warp" v-else>
         <div class="jc-detail-label">事件类型</div>
         <div class="jc-detail-content">{{form.typeName}}</div>
+      </div>
+      <div class="jc-detail-warp">
+        <div class="jc-detail-label">{{SYSTEM_MESSAGE_TYPE.DREGS==info.systemSourceType?'处置地点':'上报地点'}}</div>
+        <div class="jc-detail-content">{{form.positionName}}</div>
       </div>
       <div class="jc-detail-warp">
         <div class="jc-detail-label">事件描述</div>
@@ -84,7 +88,7 @@
 <script>
 import { eventManageGet } from '@/api/eventManage'
 import MediaMixins from '@/bundles/taskBundle/mixins/MediaMixins'
-import { MESSAGE_DATA_TYPES } from '@/constant/Dictionaries'
+import { MESSAGE_DATA_TYPES, SYSTEM_MESSAGE_TYPE } from '@/constant/Dictionaries'
 
 export default {
   name: 'ScreenCommandMessageDetailEvent',
@@ -97,6 +101,7 @@ export default {
   mixins: [MediaMixins],
   data() {
     return {
+      SYSTEM_MESSAGE_TYPE,
       form: {},
       loading: false,
       isSendScreen: false
@@ -127,7 +132,7 @@ export default {
         this.$message.success('关闭投屏成功')
       } else {
         this.isSendScreen = true
-        this.$EventBus.$emit('screen-message-channel', { type: MESSAGE_DATA_TYPES.EVENT, data: { id: this.info.id } })
+        this.$EventBus.$emit('screen-message-channel', { type: MESSAGE_DATA_TYPES.EVENT, data: { ...this.info } })
         this.$message.success('投屏发送成功')
       }
     },
