@@ -177,12 +177,17 @@ export const ATTEND_CONFIGURE_STATUSES = new JcEnum([
 /**
  * 事件推送类型 字典
  */
+export const SYSTEM_MESSAGE_TYPE = new JcEnum([
+  { key: 'SELF', value: '0', label: '本系统' },
+  { key: 'DREGS', value: '1', label: '溧水渣土' },
+  { key: 'PROSECUTION', value: '2', label: '溧水控违' }
+])
 export const MESSAGE_TYPE = new JcEnum([
   { key: 'TASK', value: '0', label: '日常任务' },
   { key: 'QUESTION', value: '1', label: '问题' },
   { key: 'EVENT', value: '2', label: '事件' },
   { key: 'TEMPORARY', value: '4', label: '临时任务' },
-  { key: 'DREGSQUESTION', value: '5', label: '渣土问题' }
+  { key: 'ALARM', value: '5', label: '告警' }
 ])
 
 /** 用户在岗 考勤状态 */

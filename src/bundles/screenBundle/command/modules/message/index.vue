@@ -6,7 +6,7 @@
   </div>
 </template>
 <script>
-import { MESSAGE_TYPE } from '@/constant/Dictionaries'
+import { MESSAGE_TYPE, SYSTEM_MESSAGE_TYPE } from '@/constant/Dictionaries'
 import { formatDate } from '@/libs/util'
 import { getTodoInfo, setTodoInfo } from '@/libs/storage'
 
@@ -66,28 +66,28 @@ export default {
         }
       }
 
-      if (message.messageType == MESSAGE_TYPE.DREGSQUESTION) { //项目业务
+      const item = {
+        id: message.businessKey,
+        type: message.messageType + '',
+        systemSourceType: message.systemSourceType + '',
+        title: message.titleName,
+        userName: message.userName,
+        typeName: message.typeName,
+        orgName: message.orgName,
+        todo: false,
+        time: formatDate(message.createTime)
+      }
+
+      if (message.messageType == SYSTEM_MESSAGE_TYPE.DREGS) { //项目业务
         this.tabComponent = 'ProjectVocation'
-        this.ProjectVocation.splice(0, 0, {
-          id: message.businessKey,
-          type: message.messageType + '',
-          title: message.titleName,
-          userName: message.userName,
-          todo: false
-        })
+        this.ProjectVocation.splice(0, 0, item)
         //处理列表只显示最大数量的事件问题
         if (this.ProjectVocation.length > this.maxLength) {
           this.ProjectVocation.splice(this.maxLength, this.ProjectVocation.length - this.maxLength)
         }
       } else { //基础业务
         this.tabComponent = 'BaseVocation'
-        this.BaseVocation.splice(0, 0, {
-          id: message.businessKey,
-          type: message.messageType + '',
-          title: message.titleName,
-          userName: message.userName,
-          todo: false
-        })
+        this.BaseVocation.splice(0, 0, item)
         //处理列表只显示最大数量的事件问题
         if (this.BaseVocation.length > this.maxLength) {
           this.BaseVocation.splice(this.maxLength, this.BaseVocation.length - this.maxLength)
@@ -110,8 +110,11 @@ export default {
           list.push({
             id: item.businessKey,
             type: MESSAGE_TYPE.TEMPORARY,
+            systemSourceType: SYSTEM_MESSAGE_TYPE.SELF,
             title: item.taskName,
             userName: item.startUser,
+            orgName: item.startOrg,
+            typeName: '',
             todo,
             time: formatDate(item.createTime)
           })
@@ -125,7 +128,7 @@ export default {
     changeTodo(item) {
       console.log('changeTodo item', item)
       if (item.todo) {
-        this.TodoInfo.push(item)
+        this.TodoInfo.unshift(item)
       } else {
         const index = this.TodoInfo.findIndex(v=>v.id == item.id)
 
