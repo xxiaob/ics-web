@@ -1,17 +1,19 @@
 <template>
   <el-dialog :title="options ? '编辑角色':'新增角色'" :visible.sync="dialogVisible" width="800px" :close-on-click-modal="false" :append-to-body="true" @close="dialogClose">
-    <el-form ref="form" label-width="100px" :model="form" class="jc-manage-form">
+    <el-form ref="form" label-width="80px" :model="form" class="jc-manage-form">
       <el-form-item label="角色名称" prop="roleName" :rules="rules.Len50">
         <el-input v-model="form.roleName" placeholder="请输入角色名称"></el-input>
       </el-form-item>
       <el-form-item label="所属组织" prop="orgId" :rules="rules.SELECT_NOT_NULL">
         <el-cascader v-model="form.orgId" :options="orgTree" filterable :props="{ expandTrigger: 'hover',checkStrictly: true,emitPath: false }" :disabled="isEdit"></el-cascader>
       </el-form-item>
-      <el-form-item label="PC菜单权限" class="jc-menu-tree">
+      <el-form-item label="菜单权限" class="jc-menu-tree">
+        <div>PC菜单权限</div>
         <!-- deviceType='' -->
         <menu-tree ref="pctree" :propMenuTree="menuTree" :resIds="resIds"></menu-tree>
       </el-form-item>
-      <el-form-item label="APP菜单权限" class="jc-menu-tree">
+      <el-form-item label="" class="jc-menu-tree">
+        <div>APP菜单权限</div>
         <!-- deviceType='2' -->
         <menu-tree ref="apptree" :propMenuTree="appMenuTree" :resIds="resIds"></menu-tree>
       </el-form-item>
@@ -122,7 +124,7 @@ export default {
 .jc-menu-tree {
   width: 50%;
   float: left;
-  /deep/ .el-form-item__content {
+  /deep/ .el-tree {
     height: 360px;
     overflow: auto;
   }
