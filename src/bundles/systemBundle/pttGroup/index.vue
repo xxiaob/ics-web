@@ -104,7 +104,7 @@ export default {
       return formatDate(cellValue)
     },
     formatUser(row, column, cellValue) {
-      const users = cellValue.map(item=>item.userName)
+      const users = cellValue.map(item => item.userName)
 
       return users.join('、')
     },
@@ -132,7 +132,7 @@ export default {
       let ids = []
 
       if (selections && selections.length) {
-        selections.forEach(item=> {
+        selections.forEach(item => {
           ids.push(item.channelUserId)
         })
       }
@@ -144,12 +144,12 @@ export default {
           this.$message.success('删除成功')
           this.getGroups()
         })
-      }).catch(() => {})
+      }).catch(() => { })
     },
     del(row) {
       this.$confirm('确认删除该用户', '提示', { type: 'warning' }).then(() => {
         this.remove([row.channelUserId])
-      }).catch(() => {})
+      }).catch(() => { })
     },
     //生成二维码
     async seeCode(row) {
@@ -168,7 +168,7 @@ export default {
       if (this.ids.length) {
         this.$confirm('确认删除选中的用户', '提示', { type: 'warning' }).then(() => {
           this.remove(this.ids)
-        }).catch(() => {})
+        }).catch(() => { })
       } else {
         this.$message.error('请先选择删除项')
       }
