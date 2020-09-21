@@ -44,8 +44,7 @@ export default {
   data() {
     return {
       types: [],
-      form: {},
-      dialogVideoVisible: false
+      form: {}
     }
   },
   watch: {

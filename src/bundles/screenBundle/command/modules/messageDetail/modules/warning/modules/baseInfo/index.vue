@@ -45,18 +45,16 @@
 </template>
 <script>
 import { getAlarmById, closeAlarm, updateAlarm } from '@/api/dregsAlarm'
-import MediaMixins from '@/bundles/taskBundle/mixins/MediaMixins'
 import { MESSAGE_DATA_TYPES, ALARM_STATUS, TASK_SOURCES } from '@/constant/Dictionaries'
 
 export default {
-  name: 'ScreenCommandMessageDetailQuestionBaseInfo',
+  name: 'ScreenCommandMessageDetailWarningBaseInfo',
   props: {
     info: {
       type: Object,
       default: ()=>{}
     }
   },
-  mixins: [MediaMixins],
   components: {
     TaskManage: () => import('@/bundles/taskBundle/taskProcess/modules/manage')
   },
@@ -103,7 +101,6 @@ export default {
           const res = await getAlarmById(this.info.id)
 
           this.form = { ...res }
-          this.handleUrls(this.form.uploadFilePaths)
           this.loading = false
         } catch (error) {
           this.form = {}
@@ -170,5 +167,4 @@ export default {
   text-align: center;
   padding: 10px 0;
 }
-@import "@/bundles/taskBundle/css/media.scss";
 </style>
