@@ -108,7 +108,6 @@ export default {
           this.$EventBus.$emit('map-task-change', { type: 3, task: data.messageDTO }) //通知新增临时任务
         } else if (data.type == 10) {
           //用户在线推送
-
           if (isCall) {
             // 用户列表没有打开,没有获取初始在线人员信息时
             // 所有在线离线数据都处理在列表中

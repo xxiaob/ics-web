@@ -18,6 +18,7 @@
 </template>
 <script>
 import { projectGet } from '@/api/projects'
+import { getScreenData } from '@/api/dataScreen' // 获取模拟数据
 import { screenMessageChannelSocket } from '@/api/socket'
 import { SOCKET_MESSAGE_TYPES } from '@/constant/Dictionaries'
 
@@ -54,8 +55,118 @@ export default {
   },
   mounted() {
     this.initData() //初始化基本内容
+    this.initMockData() // 获取数据大屏模拟数据
   },
   methods: {
+    async initMockData() {
+      // 获取数据大屏mock数据
+      try {
+        let { caseSummary, urbanManagement, illegalConstruction, residueControl, deviceData, videoSurveillance } = await getScreenData()
+
+        // 案件概要数据处理
+        if (caseSummary) {
+          // 案件概要数据存在则遍历处理数据
+          for (let key in caseSummary) {
+            caseSummary[key] = caseSummary[key] ? +caseSummary[key] : 0
+          }
+        } else {
+          //  如果数据不存在则使用默认值
+          caseSummary = {
+            caseTotal: 0,
+            cookingFume: 0,
+            closingRate: 0,
+            caseProcessing: 0,
+            caseClosed: 0,
+            muckTransportation: 0,
+            waterEnforcement: 0,
+            illegalConstruction: 0
+          }
+        }
+
+
+        // 数字城管数据处理
+        if (urbanManagement) {
+          // 数据存在则遍历处理数据
+          for (let key in urbanManagement) {
+            urbanManagement[key] = urbanManagement[key] ? +urbanManagement[key] : 0
+          }
+        } else {
+          //  如果数据不存在则使用默认值
+          urbanManagement = {
+            workOrderReport: 0,
+            workOrderProcessing: 0,
+            closingRate: 0,
+            onlineGridMember: 0
+          }
+        }
+
+
+        // 违法建筑数据处理
+        if (illegalConstruction) {
+          // 数据存在则遍历处理数据
+          for (let key in illegalConstruction) {
+            illegalConstruction[key] = illegalConstruction[key] ? +illegalConstruction[key] : 0
+          }
+        } else {
+          //  如果数据不存在则使用默认值
+          illegalConstruction = {
+            illegalConstruction: 0,
+            buildArea: 0,
+            demolitionArea: 0,
+            demolitionRatio: 0
+          }
+        }
+
+
+        // 渣土管控数据处理
+        if (residueControl) {
+          // 数据存在则遍历处理数据
+          for (let key in residueControl) {
+            residueControl[key] = residueControl[key] ? +residueControl[key] : 0
+          }
+        } else {
+          //  如果数据不存在则使用默认值
+          residueControl = {
+            unearthedTotal: 0,
+            unearthedConstructionSite: 0,
+            accommodationField: 0,
+            detectionAlarm: 0,
+            stickingPoint: 0,
+            illegalCases: 0
+          }
+        }
+
+        // 设备数据处理
+        if (deviceData) {
+          // 数据存在则遍历处理数据
+          for (let key in deviceData) {
+            deviceData[key] = deviceData[key] ? +deviceData[key] : 0
+          }
+        } else {
+          //  如果数据不存在则使用默认值
+          deviceData = {
+            netPatrolCar: 0,
+            videoSurveillance: 0,
+            uav: 0
+          }
+        }
+
+        // 监控视频数据处理
+        if (!videoSurveillance) {
+          //  如果数据不存在则使用默认值
+          videoSurveillance = []
+        }
+
+        this.$EventBus.$emit('data-statistics-case-summay', caseSummary)
+        this.$EventBus.$emit('data-statistics-urban-management', urbanManagement)
+        this.$EventBus.$emit('data-statistics-illegal-construction', illegalConstruction)
+        this.$EventBus.$emit('data-statistics-residue-control', residueControl)
+        this.$EventBus.$emit('data-statistics-device-data', deviceData)
+        this.$EventBus.$emit('data-statistics-video-surveillance', videoSurveillance)
+      } catch (error) {
+        console.log(error)
+      }
+    },
     async initData() {
       if (this.project.projectId) {
         //处理项目，如果项目id存在则获取项目详情
@@ -64,7 +175,7 @@ export default {
         this.project = { projectId, projectName, orgId, projectType }
       }
 
-      console.log('emit-data-statistics-init-success')
+      // console.log('emit-data-statistics-init-success')
       this.$EventBus.$emit('data-statistics-init-success', this.project) //通知基础数据初始化完成
       this.changeWindowSize(true)
     },

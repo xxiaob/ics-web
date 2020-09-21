@@ -17,10 +17,11 @@ export default {
   components: { countTo },
   data() {
     return {
+
       list: [
-        { icon: 'jc-car', unit: '辆', name: '网巡车辆', key: 'first', start: 0, end: 248 },
-        { icon: 'jc-camera', unit: '个', name: '视频监控', key: 'second', start: 0, end: 3645 },
-        { icon: 'jc-uav', unit: '架', name: '无人机', key: 'three', start: 0, end: 18 },
+        { icon: 'jc-car', unit: '辆', name: '网巡车辆', key: 'first', start: 0, end: 0 },
+        { icon: 'jc-camera', unit: '个', name: '视频监控', key: 'second', start: 0, end: 0 },
+        { icon: 'jc-uav', unit: '架', name: '无人机', key: 'three', start: 0, end: 0 },
         { icon: 'jc-sgg', unit: '个', name: '--', key: 'four', start: 0, end: 0 },
         { icon: 'jc-hxg', unit: '个', name: '--', key: 'five', start: 0, end: 0 },
         { icon: 'jc-zha', unit: '个', name: '--', key: 'six', start: 0, end: 0 }
@@ -28,10 +29,18 @@ export default {
       duration: 4000
     }
   },
+
   created() {
     this.initData()
+    this.$EventBus.$on('data-statistics-device-data', this.initDeviceData)
   },
   methods: {
+    initDeviceData(deviceData) {
+      // 设备数量模拟数据
+      this.list[0].end = deviceData.netPatrolCar
+      this.list[1].end = deviceData.videoSurveillance
+      this.list[2].end = deviceData.uav
+    },
     async initData() {
       try {
         let result = await getAreaManualTypeTop3({ projectId: this.$route.params.projectId })

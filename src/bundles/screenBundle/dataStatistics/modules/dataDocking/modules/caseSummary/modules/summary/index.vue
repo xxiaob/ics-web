@@ -6,7 +6,7 @@
       <div class="jc-summary-round summary-round-1">
         <div class="jc-summary-round-content jc-flex-warp jc-flex-vertical">
           <div class="jc-summary-count jc-flex-con-4 jc-flex-warp">
-            <span>16件</span>
+            <span>{{ caseSummaryData.cookingFume }}件</span>
           </div>
           <div class="jc-summary-title jc-flex-con-3 jc-flex-warp">
             <span>餐饮油烟</span>
@@ -17,7 +17,7 @@
       <div class="jc-summary-round summary-round-2">
         <div class="jc-summary-round-content jc-flex-warp jc-flex-vertical">
           <div class="jc-summary-count jc-flex-con-4 jc-flex-warp">
-            <span>89.30%</span>
+            <span>{{ caseSummaryData.closingRate }}%</span>
           </div>
           <div class="jc-summary-title jc-flex-con-3 jc-flex-warp">
             <span>结案率</span>
@@ -27,7 +27,7 @@
       <div class="jc-summary-round summary-round-3">
         <div class="jc-summary-round-content jc-flex-warp jc-flex-vertical">
           <div class="jc-summary-count jc-flex-con-4 jc-flex-warp">
-            <span>47件</span>
+            <span>{{ caseSummaryData.caseProcessing }}件</span>
           </div>
           <div class="jc-summary-title jc-flex-con-3 jc-flex-warp">
             <span>处理中</span>
@@ -37,7 +37,7 @@
       <div class="jc-summary-round summary-round-4">
         <div class="jc-summary-round-content jc-flex-warp jc-flex-vertical">
           <div class="jc-summary-count jc-flex-con-4 jc-flex-warp">
-            <span>389件</span>
+            <span>{{ caseSummaryData.caseClosed }}件</span>
           </div>
           <div class="jc-summary-title jc-flex-con-3 jc-flex-warp">
             <span>已结案</span>
@@ -47,7 +47,7 @@
       <div class="jc-summary-round summary-round-5">
         <div class="jc-summary-round-content jc-flex-warp jc-flex-vertical">
           <div class="jc-summary-count jc-flex-con-4 jc-flex-warp">
-            <span>388件</span>
+            <span>{{ caseSummaryData.muckTransportation }}件</span>
           </div>
           <div class="jc-summary-title jc-flex-con-3 jc-flex-warp">
             <span>渣土运输</span>
@@ -57,7 +57,7 @@
       <div class="jc-summary-round summary-round-6">
         <div class="jc-summary-round-content jc-flex-warp jc-flex-vertical">
           <div class="jc-summary-count jc-flex-con-4 jc-flex-warp">
-            <span>7件</span>
+            <span>{{ caseSummaryData.waterEnforcement }}件</span>
           </div>
           <div class="jc-summary-title jc-flex-con-3 jc-flex-warp">
             <span>水务执法</span>
@@ -67,7 +67,7 @@
       <div class="jc-summary-round summary-round-7">
         <div class="jc-summary-round-content jc-flex-warp jc-flex-vertical">
           <div class="jc-summary-count jc-flex-con-4 jc-flex-warp">
-            <span>25件</span>
+            <span>{{ caseSummaryData.illegalConstruction }}件</span>
           </div>
           <div class="jc-summary-title jc-flex-con-3 jc-flex-warp">
             <span>违章建筑</span>
@@ -91,6 +91,7 @@
 </template>
 
 <script>
+
 import countTo from 'vue-count-to'
 export default {
   name: 'ScreenDataStatisticsDataDockingCaseSummarySummary',
@@ -98,8 +99,12 @@ export default {
   data() {
     return {
       startVal: 0,
-      endVal: 0
+      endVal: 0,
+      caseSummaryData: {}
     }
+  },
+  created() {
+    this.$EventBus.$on('data-statistics-case-summay', this.initCaseSummary) // 案件概要模拟数据
   },
   mounted() {
     window.addEventListener('resize', this.resize)
@@ -112,6 +117,10 @@ export default {
     })
   },
   methods: {
+    initCaseSummary(caseSummaryData) {
+      //  案件概要模拟数据
+      this.caseSummaryData = caseSummaryData
+    },
     resize() {
       const width = this.$refs.summaryWrap.clientWidth - 100
       const height = this.$refs.summaryWrap.clientHeight - 26
@@ -154,7 +163,7 @@ export default {
 
         this.$forceUpdate() // 属性
 
-        this.endVal = 436 // 改变显示数字
+        this.endVal = this.caseSummaryData.caseTotal // 改变显示数字
       }, 5000)
     }
 

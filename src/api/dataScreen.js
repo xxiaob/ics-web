@@ -89,3 +89,13 @@ export function getEventAggregation(data) {
 export function getAreaManualTypeTop3(data) {
   return axios.post(API.screen.dataStatistics.getAreaManualTypeTop3, data)
 }
+
+/**
+ * 获取数据大屏模拟数据接口
+ * @returns {Object} axios 对象
+ */
+
+export function getScreenData() {
+  return axios.post(API.screen.dataStatistics.getScreenData)
+}
+

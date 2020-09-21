@@ -9,7 +9,7 @@
         <div class="jc-sanitation-content jc-flex-con jc-flex-warp jc-flex-vertical">
           <span class="jc-sanitation-title jc-flex-con">总出土量</span>
           <span class="jc-sanitation-count jc-flex-con">
-            <count-to :startVal="0" :endVal="220.8" :duration="3000" separator="" />万方
+            <count-to :startVal="0" :endVal="residueControlData.unearthedTotal"  :duration="3000" separator="" />万方
           </span>
         </div>
       </div>
@@ -20,7 +20,7 @@
         <div class="jc-sanitation-content jc-flex-con jc-flex-warp jc-flex-vertical">
           <span class="jc-sanitation-title">出土工地</span>
           <span class="jc-sanitation-count">
-            <count-to :startVal="0" :endVal="396" :duration="3000" separator="" />个
+            <count-to :startVal="0" :endVal="residueControlData.unearthedConstructionSite" :duration="3000" separator="" />个
           </span>
         </div>
       </div>
@@ -32,7 +32,7 @@
         <div class="jc-sanitation-content jc-flex-con jc-flex-warp jc-flex-vertical">
           <span class="jc-sanitation-title">消纳场</span>
           <span class="jc-sanitation-count">
-            <count-to :startVal="0" :endVal="33" :duration="3000" separator="" />个
+            <count-to :startVal="0" :endVal="residueControlData.accommodationField" :duration="3000" separator="" />个
           </span>
         </div>
       </div>
@@ -44,7 +44,7 @@
         <div class="jc-sanitation-content jc-flex-con jc-flex-warp jc-flex-vertical">
           <span class="jc-sanitation-title">检测报警</span>
           <span class="jc-sanitation-count">
-            <count-to :startVal="0" :endVal="248" :duration="3000" separator="" />个
+            <count-to :startVal="0" :endVal="residueControlData.detectionAlarm" :duration="3000" separator="" />个
           </span>
         </div>
       </div>
@@ -56,7 +56,7 @@
         <div class="jc-sanitation-content jc-flex-con jc-flex-warp jc-flex-vertical">
           <span class="jc-sanitation-title">卡点</span>
           <span class="jc-sanitation-count">
-            <count-to :startVal="0" :endVal="160" :duration="3000" separator="" />个
+            <count-to :startVal="0" :endVal="residueControlData.stickingPoint" :duration="3000" separator="" />个
           </span>
         </div>
       </div>
@@ -67,7 +67,7 @@
         <div class="jc-sanitation-content jc-flex-con jc-flex-warp jc-flex-vertical">
           <span class="jc-sanitation-title">违法案件</span>
           <span class="jc-sanitation-count">
-            <count-to :startVal="0" :endVal="388" :duration="3000" separator="" />件
+            <count-to :startVal="0" :endVal="residueControlData.illegalCases" :duration="3000" separator="" />件
           </span>
         </div>
       </div>
@@ -86,6 +86,20 @@ export default {
   components: {
     abstractArea,
     countTo
+  },
+  data() {
+    return {
+      residueControlData: {}
+    }
+  },
+  created() {
+    this.$EventBus.$on('data-statistics-residue-control', this.initResidueControl)
+  },
+  methods: {
+    initResidueControl(residueControlData) {
+      console.log('residueControlData', residueControlData)
+      this.residueControlData = residueControlData
+    }
   }
 }
 </script>

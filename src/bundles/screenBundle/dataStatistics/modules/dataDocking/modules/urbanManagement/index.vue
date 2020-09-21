@@ -5,25 +5,25 @@
       <div class="jc-category-item jc-flex-warp">
         <span class="jc-category-title">工单上报</span>
         <span class="jc-category-count">
-          <count-to :startVal="0" :endVal="869" :duration="3000" separator="" />件
+          <count-to :startVal="0" :endVal="urbanManagementData.workOrderReport" :duration="3000" separator="" />件
         </span>
       </div>
       <div class="jc-category-item jc-flex-warp">
         <span class="jc-category-title">工单处理</span>
         <span class="jc-category-count">
-          <count-to :startVal="0" :endVal="778" :duration="3000" separator="" />件
+          <count-to :startVal="0" :endVal="urbanManagementData.workOrderProcessing" :duration="3000" separator="" />件
         </span>
       </div>
       <div class="jc-category-item jc-flex-warp">
         <span class="jc-category-title">结案比率</span>
         <span class="jc-category-count">
-          <count-to :startVal="0" :endVal="89.50" :decimals="2" :duration="3000" separator="" />%
+          <count-to :startVal="0" :endVal="urbanManagementData.closingRate" :decimals="2" :duration="3000" separator="" />%
         </span>
       </div>
       <div class="jc-category-item jc-flex-warp">
         <span class="jc-category-title">在线网格员</span>
         <span class="jc-category-count">
-          <count-to :startVal="0" :endVal="160" :duration="3000" separator="" />个
+          <count-to :startVal="0" :endVal="urbanManagementData.onlineGridMember" :duration="3000" separator="" />个
         </span>
       </div>
 
@@ -42,6 +42,20 @@ export default {
   components: {
     abstractArea,
     countTo
+  },
+  data() {
+    return {
+      urbanManagementData: {}
+    }
+  },
+  created() {
+    this.$EventBus.$on('data-statistics-urban-management', this.initUrbanManagement)
+  },
+  methods: {
+    initUrbanManagement(urbanManagement) {
+      // 数字城管模拟数据
+      this.urbanManagementData = urbanManagement
+    }
   }
 }
 </script>

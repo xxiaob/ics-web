@@ -97,6 +97,7 @@ export default {
           }
         }
       })
+      console.log('userOnlineData', userOnlineData)
       this.userOnlineData = userOnlineData
 
       // 执行在线人员以及排序方法
