@@ -10,6 +10,9 @@
           </el-option>
         </el-select>
       </el-form-item> -->
+      <el-form-item prop="reportUserName" label="处置人">
+        <el-input v-model="form.reportUserName" placeholder="请输入处置人"></el-input>
+      </el-form-item>
       <el-form-item prop="desc" label="处置信息">
         <el-input v-model="form.desc" placeholder="请输入事件描述"></el-input>
       </el-form-item>
@@ -43,7 +46,8 @@ export default {
         endDate: '',
         desc: '',
         orgId: '',
-        eventType: ''
+        eventType: '',
+        reportUserName: ''
       },
       date: null
     }

@@ -27,7 +27,7 @@ export default {
     return {
       authorityOrg: {},
       baseInfo: {},
-      tabComponent: 'AppBanner',
+      tabComponent: 'IncorruptGovernment',
       tabs: [
         { label: '廉政提醒', value: 'IncorruptGovernment' },
         { label: 'logo配置', value: 'LogoConfigure' },

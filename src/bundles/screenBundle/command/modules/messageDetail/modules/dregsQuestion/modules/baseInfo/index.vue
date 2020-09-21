@@ -85,7 +85,7 @@
 
 </template>
 <script>
-import { questionReport, questionGet, questionTypeList, getProblemAuth } from '@/api/question'
+import { questionReport, questionGet, getProblemAuth } from '@/api/question'//questionTypeList,
 import MediaMixins from '@/bundles/taskBundle/mixins/MediaMixins'
 import { MESSAGE_DATA_TYPES } from '@/constant/Dictionaries'
 
@@ -105,7 +105,7 @@ export default {
     return {
       loading: false,
       form: {},
-      types: [],
+      // types: [],
       question: null,
       TaskManageShow: false,
       isSendScreen: false
@@ -122,7 +122,7 @@ export default {
     }
   },
   async created() {
-    this.types = await questionTypeList() || []
+    // this.types = await questionTypeList() || []
     if (this.info && this.info.id) {
       this.getDetail()
     }
@@ -157,15 +157,13 @@ export default {
           this.form = {}
           this.loading = false
         }
-      } else {
-        this.getDetail()
       }
     },
-    formatType(value) {
-      const type = this.types.filter(item=>item.id == value)
+    // formatType(value) {
+    //   const type = this.types.filter(item=>item.id == value)
 
-      return (type[0] && type[0].typeName) || ''
-    },
+    //   return (type[0] && type[0].typeName) || ''
+    // },
     //反馈至上级
     toSuperior() {
       this.$confirm('确认反馈至上级 ', '提示', { type: 'warning' }).then(async () => {
@@ -182,7 +180,7 @@ export default {
       const { id, problemTitle, uploadFilePaths, position, positionName } = this.form
 
       this.question = {
-        key: id.toString(),
+        // key: id.toString(),
         value: id,
         label: problemTitle,
         uploadFilePaths,

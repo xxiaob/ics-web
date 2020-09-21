@@ -62,3 +62,11 @@ export function updateAlarm(data) {
   })
 }
 
+/**
+ * 渣土告警详情
+ * @param {String} id
+ * @returns {Object} axios 对象
+ */
+export function getAlarmById(id) {
+  return axios.post(API.dregsAlarm.getAlarmById + '?id=' + id)
+}
