@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-card class="jc-table-card jc-mt">
+    <el-card class="jc-table-card">
       <div slot="header" class="jc-card-header">
         <div class="jc-card-title">内容列表</div>
         <div class="jc-button-group">

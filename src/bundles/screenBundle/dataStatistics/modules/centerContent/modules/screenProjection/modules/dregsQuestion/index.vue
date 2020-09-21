@@ -41,7 +41,7 @@ import JcMedia from '../../components/media'
 import { MESSAGE_DATA_TYPES, SYSTEM_MESSAGE_TYPE } from '@/constant/Dictionaries'
 
 export default {
-  name: 'ScreenDataCenterContentScreenProjectionQuestion',
+  name: 'ScreenDataCenterContentScreenProjectionDregsQuestion',
   components: { JcMedia },
   props: {
     options: {
@@ -52,8 +52,7 @@ export default {
   data() {
     return {
       types: [],
-      form: {},
-      dialogVideoVisible: false
+      form: {}
     }
   },
   watch: {

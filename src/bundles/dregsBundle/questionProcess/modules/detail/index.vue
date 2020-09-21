@@ -100,6 +100,7 @@
 <script>
 import { questionReport } from '@/api/question'
 import MediaMixins from '@/bundles/taskBundle/mixins/MediaMixins'
+import { TASK_SOURCES } from '@/constant/Dictionaries'
 
 export default {
   name: 'QuestionProcessDetail',
@@ -177,12 +178,13 @@ export default {
       const { id, problemTitle, uploadFilePaths, position, positionName } = this.form
 
       this.question = {
-        key: id.toString(),
+        // key: id.toString(),
         value: id,
         label: problemTitle,
         uploadFilePaths,
         position,
-        positionName
+        positionName,
+        questionTaskSource: TASK_SOURCES.RESIDUEPROBLEM
       }
       this.TaskManageShow = true
     },

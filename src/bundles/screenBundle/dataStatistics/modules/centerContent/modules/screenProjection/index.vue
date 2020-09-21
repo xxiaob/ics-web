@@ -8,7 +8,8 @@
       <jc-temporary-task v-show="showModule===MESSAGE_DATA_TYPES.TEMPORARY" :options="options"></jc-temporary-task>
       <jc-daily-task v-show="showModule===MESSAGE_DATA_TYPES.TASK" :options="options"></jc-daily-task>
 
-       <jc-dregs-question v-show="showModule===MESSAGE_DATA_TYPES.QUESTION&&SYSTEM_MESSAGE_TYPE.DREGS==options.systemSourceType" :options="options"></jc-dregs-question>
+      <jc-dregs-question v-show="showModule===MESSAGE_DATA_TYPES.QUESTION&&SYSTEM_MESSAGE_TYPE.DREGS==options.systemSourceType" :options="options"></jc-dregs-question>
+      <jc-dregs-warning v-show="showModule===MESSAGE_DATA_TYPES.ALARM&&SYSTEM_MESSAGE_TYPE.DREGS==options.systemSourceType" :options="options"></jc-dregs-warning>
     </div>
   </transition>
 
@@ -16,17 +17,21 @@
 
 <script>
 import JcLive from './modules/live'
-import JcEvent from './modules/event'
+
+import JcEvent from './modules/event' //本系统事件和溧水渣土事件共用 内部通过SYSTEM_MESSAGE_TYPE区分
 import JcQuestion from './modules/question'
 import JcTemporaryTask from './modules/temporaryTask'
 import JcDailyTask from './modules/dailyTask'
+
+//溧水渣土系统相关
 import JcDregsQuestion from './modules/dregsQuestion'
+import JcDregsWarning from './modules/warning'
 
 import { MESSAGE_DATA_TYPES, SYSTEM_MESSAGE_TYPE } from '@/constant/Dictionaries'
 
 export default {
   name: 'ScreenDataCenterContentScreenProjection',
-  components: { JcLive, JcEvent, JcQuestion, JcDailyTask, JcTemporaryTask, JcDregsQuestion },
+  components: { JcLive, JcEvent, JcQuestion, JcDailyTask, JcTemporaryTask, JcDregsQuestion, JcDregsWarning },
   data() {
     return {
       MESSAGE_DATA_TYPES,

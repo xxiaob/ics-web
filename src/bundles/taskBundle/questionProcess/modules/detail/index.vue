@@ -152,7 +152,7 @@ export default {
       const { id, problemTitle, uploadFilePaths, position, positionName } = this.form
 
       this.question = {
-        key: id.toString(),
+        // key: id.toString(),
         value: id,
         label: problemTitle,
         uploadFilePaths,

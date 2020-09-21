@@ -4,7 +4,7 @@
       <div class="jc-info-title">
         <span v-text="item.title"></span>
         <span class="jc-right">
-          <span>代办</span>
+          <span>待办</span>
           <el-switch v-model="item.todo" @click.stop.native @change="changeTodo(item)"></el-switch>
         </span>
       </div>

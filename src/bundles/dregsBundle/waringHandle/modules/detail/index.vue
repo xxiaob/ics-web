@@ -88,7 +88,7 @@ export default {
       const { id, alarmTypeName } = this.form
 
       this.question = { // 传递给生成任务组件的数据
-        key: id,
+        // key: id,
         value: id,
         label: alarmTypeName,
         questionTaskSource: TASK_SOURCES.RESIDUEWARING
@@ -100,7 +100,7 @@ export default {
     async generateTaskSuccess() {
       try {
         //成功生成任务后的回调
-        await updateAlarm({ id: this.question.key }) // 更新任务方法
+        await updateAlarm({ id: this.question.value }) // 更新任务方法
         this.$message.success('操作成功')
         this.$emit('save-success')
         this.$emit('update:detailShow', false)

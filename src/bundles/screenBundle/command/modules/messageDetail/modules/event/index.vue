@@ -150,8 +150,6 @@ export default {
           this.form = { ...this.info }
           this.loading = false
         }
-      } else {
-        this.getDetail()
       }
     }
   }
