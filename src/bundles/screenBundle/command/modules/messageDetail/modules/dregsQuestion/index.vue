@@ -2,7 +2,7 @@
   <div class="jc-question">
     <view-tabs v-model="tabComponent" :options="tabs"></view-tabs>
     <keep-alive>
-      <component :is="tabComponent" :questionId="info.id" :taskId="taskId"></component>
+      <component :is="tabComponent" :info="info" :taskId="taskId"></component>
     </keep-alive>
   </div>
 </template>

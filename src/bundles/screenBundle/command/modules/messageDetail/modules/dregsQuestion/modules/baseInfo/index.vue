@@ -92,9 +92,9 @@ import { MESSAGE_DATA_TYPES } from '@/constant/Dictionaries'
 export default {
   name: 'ScreenCommandMessageDetailQuestionBaseInfo',
   props: {
-    questionId: {
-      type: String,
-      default: ''
+    info: {
+      type: Object,
+      default: ()=>{}
     }
   },
   mixins: [MediaMixins],
@@ -112,15 +112,18 @@ export default {
     }
   },
   watch: {
-    questionId(v) {
-      if (v) {
-        this.getDetail()
+    info: {
+      deep: true,
+      handler() {
+        if (this.info && this.info.id) {
+          this.getDetail()
+        }
       }
     }
   },
   async created() {
     this.types = await questionTypeList() || []
-    if (this.questionId) {
+    if (this.info && this.info.id) {
       this.getDetail()
     }
   },
@@ -136,7 +139,7 @@ export default {
         this.$message.success('关闭投屏成功')
       } else {
         this.isSendScreen = true
-        this.$EventBus.$emit('screen-message-channel', { type: MESSAGE_DATA_TYPES.QUESTION, data: { id: this.questionId } })
+        this.$EventBus.$emit('screen-message-channel', { type: MESSAGE_DATA_TYPES.QUESTION, data: { ...this.info } })
         this.$message.success('投屏发送成功')
       }
     },
@@ -144,8 +147,8 @@ export default {
       if (!this.loading) {
         this.loading = true
         try {
-          const res = await questionGet(this.questionId)
-          const auth = await getProblemAuth(this.questionId)
+          const res = await questionGet(this.info.id)
+          const auth = await getProblemAuth(this.info.id)
 
           this.form = { ...res, auth: auth.auth, taskId: auth.taskId }
           this.handleUrls(this.form.uploadFilePaths)

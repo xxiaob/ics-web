@@ -33,7 +33,8 @@ export default {
         [SYSTEM_MESSAGE_TYPE.SELF + MESSAGE_TYPE.TEMPORARY]: 'DetailTemporary',
         //渣土事件 问题 告警
         [SYSTEM_MESSAGE_TYPE.DREGS + MESSAGE_TYPE.EVENT]: 'DetailEvent',
-        [SYSTEM_MESSAGE_TYPE.DREGS + MESSAGE_TYPE.QUESTION]: 'DetailDregsQuestion'
+        [SYSTEM_MESSAGE_TYPE.DREGS + MESSAGE_TYPE.QUESTION]: 'DetailDregsQuestion', //投屏无
+        [SYSTEM_MESSAGE_TYPE.DREGS + MESSAGE_TYPE.ALARM]: 'DetailDregsAlarm' //暂无
 
       }
     }

@@ -4,9 +4,11 @@
       <div class="jc-close" @click="close">投屏关闭</div>
       <jc-live v-show="showModule===MESSAGE_DATA_TYPES.LIVE" :options="options"></jc-live>
       <jc-event v-show="showModule===MESSAGE_DATA_TYPES.EVENT" :options="options"></jc-event>
-      <jc-question v-show="showModule===MESSAGE_DATA_TYPES.QUESTION" :options="options"></jc-question>
+      <jc-question v-show="showModule===MESSAGE_DATA_TYPES.QUESTION&&SYSTEM_MESSAGE_TYPE.SELF==options.systemSourceType" :options="options"></jc-question>
       <jc-temporary-task v-show="showModule===MESSAGE_DATA_TYPES.TEMPORARY" :options="options"></jc-temporary-task>
       <jc-daily-task v-show="showModule===MESSAGE_DATA_TYPES.TASK" :options="options"></jc-daily-task>
+
+       <jc-dregs-question v-show="showModule===MESSAGE_DATA_TYPES.QUESTION&&SYSTEM_MESSAGE_TYPE.DREGS==options.systemSourceType" :options="options"></jc-dregs-question>
     </div>
   </transition>
 
@@ -18,17 +20,20 @@ import JcEvent from './modules/event'
 import JcQuestion from './modules/question'
 import JcTemporaryTask from './modules/temporaryTask'
 import JcDailyTask from './modules/dailyTask'
-import { MESSAGE_DATA_TYPES } from '@/constant/Dictionaries'
+import JcDregsQuestion from './modules/dregsQuestion'
+
+import { MESSAGE_DATA_TYPES, SYSTEM_MESSAGE_TYPE } from '@/constant/Dictionaries'
 
 export default {
   name: 'ScreenDataCenterContentScreenProjection',
-  components: { JcLive, JcEvent, JcQuestion, JcDailyTask, JcTemporaryTask },
+  components: { JcLive, JcEvent, JcQuestion, JcDailyTask, JcTemporaryTask, JcDregsQuestion },
   data() {
     return {
       MESSAGE_DATA_TYPES,
+      SYSTEM_MESSAGE_TYPE,
       show: false,
       showModule: null,
-      options: null
+      options: {}
     }
   },
   created() {
@@ -38,7 +43,7 @@ export default {
         if (data.closeType === this.showModule) {
           this.show = false
           this.showModule = null
-          this.options = null
+          this.options = {}
         } else {
           console.log('关闭投屏类型', data.closeType)
         }
@@ -54,7 +59,7 @@ export default {
     close() {
       this.show = false
       this.showModule = null
-      this.options = null
+      this.options = {}
     }
   }
 }
