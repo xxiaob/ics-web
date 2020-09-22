@@ -35,13 +35,6 @@ export default [{
     title: '系统设置-区域类型'
   }
 }, {
-  path: 'system/device',
-  name: 'systemDevice',
-  component: () => import('@/bundles/systemBundle/device'),
-  meta: {
-    title: '系统设置-设备管理'
-  }
-}, {
   path: 'system/grid',
   name: 'systemGrid',
   component: () => import('@/bundles/systemBundle/grid'),

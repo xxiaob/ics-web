@@ -10,6 +10,13 @@ export default [
     meta: {
       title: '运维管理-菜单管理'
     }
+  }, {
+    path: 'operation/device',
+    name: 'operationDevice',
+    component: () => import('@/bundles/operationBundle/device'),
+    meta: {
+      title: '运维管理-设备管理'
+    }
   },
   {
     path: 'operation/deviceUpdate',
