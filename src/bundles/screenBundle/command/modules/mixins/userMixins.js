@@ -176,16 +176,19 @@ export default {
           //查找该用户使用已经存在，如果存在则更新，否则进行添加
           let lnglat = usersData.lnglats.find(user => user.userId == item.userId)
 
+          let labelMarker = null //记录用户的marker
+
           if (lnglat) {
             if (usersData.users[lnglat.key] && usersData.users[lnglat.key].labelMarker) {
-              usersData.users[lnglat.key].labelMarker.hide()
+              labelMarker = usersData.users[lnglat.key].labelMarker
             }
             delete usersData.users[lnglat.key]
             lnglat.lnglat = center
+            lnglat.key = key
           } else {
             usersData.lnglats.push({ lnglat: center, key, userId: item.userId })
           }
-          usersData.users[key] = { ...item, center }
+          usersData.users[key] = { ...item, center, labelMarker }
         })
       }
 
