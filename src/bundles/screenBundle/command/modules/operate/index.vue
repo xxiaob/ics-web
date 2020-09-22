@@ -103,7 +103,7 @@
       <i class="jc-temporary-tasks" title="任务下发" @click="sendTemporaryTasks"></i>
     </div>
     <div class="jc-opreate-item">
-      <i class="jc-message" @click="messageChange('CommandMessage')" title="任务&问题&事件"></i>
+      <i class="jc-message" @click="messageChange('CommandMessage')" title="信息推送"></i>
       <span class="jc-num-tip" v-if="messageVal > 0" v-text="messageVal < 100 ? messageVal : '99'"></span>
     </div>
   </div>
