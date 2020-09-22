@@ -42,11 +42,11 @@ export default {
     },
     formatFormData() {
       if (this.options) {
-        const { deviceId, deviceType, orgId, orgName } = this.options
+        const { deviceId, orgId, orgName } = this.options
 
         this.getUsers(orgId)
         this.orgName = orgName
-        return { userId: '', deviceId, deviceType, orgId }
+        return { userId: '', deviceIds: [deviceId] }
       } else {
         return { userId: '' }
       }

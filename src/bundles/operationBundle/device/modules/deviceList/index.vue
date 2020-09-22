@@ -10,7 +10,7 @@
           <el-button type="primary" size="small" @click="batchOperate('clear')">清除设置</el-button>
         </div>
       </div>
-      <el-table-column :data="list" v-loading="loading" row-key="roleId" class="jc-table" @selection-change="tableSelect">
+      <el-table :data="list" v-loading="loading" row-key="deviceId" class="jc-table" @selection-change="tableSelect">
         <el-table-column type="selection" width="40"></el-table-column>
         <el-table-column type="index" :index="indexMethod" label="序号" width="50"></el-table-column>
         <el-table-column prop="deviceName" label="设备名称"></el-table-column>
@@ -22,16 +22,16 @@
           <template slot-scope="scope">
             <el-button type="text" size="mini" icon="el-icon-view" @click="detail(scope.row)" title="详情"></el-button>
             <el-button type="text" size="mini" icon="el-icon-video-camera" @click="showVideo(scope.row)" title="视频记录"></el-button>
-            <el-button v-if="scope.row.bindFlag" type="text" size="mini" icon="el-icon-setting" @click="setUser(scope.row)" title="设置"></el-button>
+            <el-button v-if="scope.row.orgId" type="text" size="mini" icon="el-icon-setting" @click="setUser(scope.row)" title="设置"></el-button>
           </template>
         </el-table-column>
-      </el-table-column>
+      </el-table>
       <el-pagination @current-change="currentChange" @size-change="sizeChange" :current-page.sync="page.pageNum" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.total" class="text-right jc-mt"></el-pagination>
     </el-card>
 
     <jc-manage-user :options="info" :visible.sync="visible" @save-success="initData"></jc-manage-user>
-    <jc-manage-type :options="{ids}" :visible.sync="typeVisible" @save-success="initData"></jc-manage-type>
-    <jc-manage-org :orgTree="orgTree" :options="{ids}" :visible.sync="orgVisible" @save-success="initData"></jc-manage-org>
+    <jc-manage-type :options="{deviceIds}" :visible.sync="typeVisible" @save-success="initData"></jc-manage-type>
+    <jc-manage-org :orgTree="orgTree" :options="{deviceIds}" :visible.sync="orgVisible" @save-success="initData"></jc-manage-org>
 
     <jc-detail :options="detailInfo" :visible.sync="detailVisible"></jc-detail>
 
@@ -39,7 +39,7 @@
 </template>
 <script>
 import { organizationList } from '@/api/organization'
-import { deviceList, deviceDetail } from '@/api/device'
+import { deviceList, deviceDetail, bindRelease } from '@/api/device'
 import PaginationMixins from '@/mixins/PaginationMixins'
 
 export default {
@@ -54,7 +54,7 @@ export default {
   },
   data() {
     return {
-      ids: [],
+      deviceIds: [],
       list: [],
       orgTree: [],
       loading: false,
@@ -101,8 +101,8 @@ export default {
       this.info = row
       this.visible = true
     },
-    async showVideo({ deviceId, cameraId }) {
-      const type = cameraId ? 'camera' : 'law'
+    async showVideo({ deviceId, userId }) {
+      const type = userId ? 'law' : 'camera'
       const detail = await deviceDetail({ deviceId })
 
       this.$parent.checkShow(type, detail)
@@ -129,18 +129,18 @@ export default {
       return trees
     },
     tableSelect(selections) {
-      let ids = []
+      let deviceIds = []
 
       if (selections && selections.length) {
         selections.forEach(item => {
-          ids.push(item.channelUserId)
+          deviceIds.push(item.deviceId)
         })
       }
-      this.ids = ids
+      this.deviceIds = deviceIds
     },
     //批量操作
     batchOperate(fn) {
-      if (this.ids.length) {
+      if (this.deviceIds.length) {
         this[fn]()
       } else {
         this.$message.error('请先选择设备')
@@ -158,6 +158,13 @@ export default {
     clear() {
       this.$confirm('确认清除选中设备的设置', '提示', { type: 'warning' }).then(async () => {
         console.log('确定清除设置')
+        try {
+          await bindRelease({ deviceIds: this.deviceIds })
+          this.$message.success('操作成功')
+          this.initData()
+        } catch (error) {
+          console.error(error)
+        }
       }).catch(() => {})
     }
   }

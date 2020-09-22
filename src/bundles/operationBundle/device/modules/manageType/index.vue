@@ -34,9 +34,9 @@ export default {
   methods: {
     formatFormData() {
       if (this.options) {
-        const { ids } = this.options
+        const { deviceIds } = this.options
 
-        return { deviceType: '', ids }
+        return { deviceType: '', deviceIds }
       } else {
         return { deviceType: '' }
       }

@@ -23,12 +23,20 @@ export function deviceDetail(params) {
   return axios.get(API.device.detail, { params })
 }
 /**
- * 设备绑定用户
+ * 设备绑定
  * @param {object} data
  * @returns {Object} axios 对象
  */
 export function deviceBind(data) {
   return axios.post(API.device.bind, data)
+}
+/**
+ * 清除设备绑定
+ * @param {object} data
+ * @returns {Object} axios 对象
+ */
+export function bindRelease(data) {
+  return axios.post(API.device.bindRelease, data)
 }
 /**
  * 获取回放流

@@ -48,11 +48,12 @@ export default {
           const { deviceId, cameraId } = this.detail
           const res = await getRelay({ deviceId, cameraId, ...this.filter })
 
-          // 'http://ivi.bupt.edu.cn/hls/cctv1hd.m3u8'
+          // 'http://ivi.bupt.edu.cn/hls/cctv1hd.m3u8'  rtmp://58.200.131.2:1935/livetv/hunantv
           this.$nextTick(()=>{
             this.video = videojs('myVideo', {
               sources: [
                 {
+                  // src: 'rtmp://58.200.131.2:1935/livetv/hunantv'
                   src: res[0].url2
                   // type: 'rtmp/flv'
                 }

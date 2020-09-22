@@ -5,7 +5,7 @@
         <span>{{form.orgName}}</span>
       </el-form-item>
       <el-form-item label="设备编号：">
-        <span>{{form.deviceId}}</span>
+        <span>{{form.deviceCode}}</span>
       </el-form-item>
       <el-form-item label="设备名称：">
         <span>{{form.deviceName}}</span>
@@ -16,12 +16,9 @@
       <el-form-item label="设备状态：">
         <span>{{form.online?'在线':'离线'}}</span>
       </el-form-item>
-      <el-form-item label="设备序列号：">
+      <!-- <el-form-item label="设备序列号：">
         <span>{{form.deviceSeriNum}}</span>
-      </el-form-item>
-      <el-form-item label="ip：">
-        <span>{{form.ip}}</span>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item label="接入协议：">
         <span>{{form.treatyType}}</span>
       </el-form-item>
