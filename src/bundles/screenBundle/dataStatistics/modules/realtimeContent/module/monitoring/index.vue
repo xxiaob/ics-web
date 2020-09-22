@@ -63,10 +63,10 @@ export default {
       this.videoPlayDatas.forEach((item) => {
         let videoDatas = this.videoDatas[this.index]
 
-        item.url = videoDatas.url
-        item.name = videoDatas.name
-        item.vid = videoDatas.vid
-        item.href = videoDatas.href
+        item.url = videoDatas && videoDatas.url
+        item.name = videoDatas && videoDatas.name || '--'
+        item.vid = videoDatas && videoDatas.vid
+        item.href = videoDatas && videoDatas.href
 
 
         this.index = ++this.index % this.length

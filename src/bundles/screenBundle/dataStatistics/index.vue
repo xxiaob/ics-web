@@ -151,18 +151,19 @@ export default {
           }
         }
 
+
         // 监控视频数据处理
         if (!videoSurveillance) {
           //  如果数据不存在则使用默认值
           videoSurveillance = []
         }
 
-        this.$EventBus.$emit('data-statistics-case-summay', caseSummary)
-        this.$EventBus.$emit('data-statistics-urban-management', urbanManagement)
-        this.$EventBus.$emit('data-statistics-illegal-construction', illegalConstruction)
-        this.$EventBus.$emit('data-statistics-residue-control', residueControl)
-        this.$EventBus.$emit('data-statistics-device-data', deviceData)
-        this.$EventBus.$emit('data-statistics-video-surveillance', videoSurveillance)
+        this.$EventBus.$emit('data-statistics-case-summay', caseSummary) // 案件概要
+        this.$EventBus.$emit('data-statistics-urban-management', urbanManagement) //数字城管
+        this.$EventBus.$emit('data-statistics-illegal-construction', illegalConstruction) //违法建筑
+        this.$EventBus.$emit('data-statistics-residue-control', residueControl) // 渣土管控
+        this.$EventBus.$emit('data-statistics-device-data', deviceData) //设备数据
+        this.$EventBus.$emit('data-statistics-video-surveillance', videoSurveillance) //监控视频
       } catch (error) {
         console.log(error)
       }
