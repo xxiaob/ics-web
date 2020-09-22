@@ -34,7 +34,6 @@
 import { getOrgUserListByProject } from '@/api/user'
 import TreesFilterMixins from '@/mixins/TreesFilterMixins'
 import { VIDEO_INVITE_TYPES } from '@/constant/Dictionaries'
-let lastOrgIndex = 0
 
 
 export default {
@@ -109,13 +108,13 @@ export default {
       if (!trees) {
         return
       }
+      trees.index = 0
 
       for (let i = 0; i < trees.length; i++) {
         let treesItem = trees[i]
 
-
         if (treesItem.type == 'org') {
-          lastOrgIndex = i
+          trees.index = i
           this.onlineChange(treesItem.children || []) // 递归调用处理在线离线设备方法
         } else {
           let isOnline = this.userOnlineData.includes(treesItem.id) // 判断是否在线
@@ -125,9 +124,16 @@ export default {
 
 
           // 如果人员在线,并且不是在人员第一位,在改变位置,如果第一位在线,只改变状态
-          if (isOnline && (lastOrgIndex + 1 != i) && (lastOrgIndex != i)) {
+          if (isOnline && (trees.index + 1 != i) && (trees.index != i)) {
             this.$refs.tree.remove(treesItem)
-            this.$refs.tree.insertAfter(treesItem, trees[lastOrgIndex])
+
+            // 用于处理在组件下只有人员没有下级组织的情况
+            // 如果没有下级组织, 就判断所有是否为0,是就在前面插入, 有组织, 就在后面插入
+            if (trees.index !== 0) {
+              this.$refs.tree.insertAfter(treesItem, trees[trees.index])
+            } else {
+              this.$refs.tree.insertBefore(treesItem, trees[trees.index])
+            }
           }
         }
       }

@@ -39,7 +39,8 @@ export default {
   },
   methods: {
     async goMediaLive(type) {
-      if (!this.options.online) {
+      console.log('用户详情', this.options)
+      if (!this.options.center && !this.options.online) {
         // 人员不在线
         this.$message.error('人员不在线')
         return
