@@ -18,7 +18,7 @@ import { MAP_EVENT } from '@/constant/CONST'
 import MapSearch from '@/components/JcMap/MapSearch'
 import { getAddressByPosition, getMouseTool } from '@/map/aMap/aMapUtil'
 import { getUsersByPosition } from '@/api/user'
-import { JcUserIcons, JcTemporaryTaskIcons } from '@/config/JcIconConfig'
+import { JcUserIcons, JcTemporaryTaskIcons, JcProblemIcons } from '@/config/JcIconConfig'
 
 let MouseTool = null //存储 MouseTool对象
 
@@ -31,7 +31,7 @@ export default {
   model: { prop: 'value', event: 'change' },
   props: {
     value: { type: Object, default: {} },
-    isGetUser: { type: Boolean, default: true }
+    isGetUser: { type: Boolean, default: true } //是否开启框选用户权限   问题为false
   },
   components: { MapSearch },
   data() {
@@ -160,7 +160,12 @@ export default {
         this.myMarker.name = name
         this.myMarker.show(center)
       } else {
-        this.myMarker = new JcMapMarker({ map: myJcMap, name, icon: JcTemporaryTaskIcons.plain, position: center })
+        let icon = JcTemporaryTaskIcons.plain
+
+        if (!this.isGetUser) {
+          icon = JcProblemIcons.plain
+        }
+        this.myMarker = new JcMapMarker({ map: myJcMap, name, icon, position: center })
       }
     }
   },
