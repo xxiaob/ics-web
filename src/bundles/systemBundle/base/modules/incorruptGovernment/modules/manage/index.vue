@@ -42,11 +42,11 @@ export default {
   props: ['orgId'],
   methods: {
     formatFormData() {
-      console.log('options', this.options)
       if (this.options) {
         return {
           enableRolling: this.options.enableRolling,
           rollingMessage: this.options.rollingMessage,
+          messageId: this.options.messageId,
           orgId: this.orgId
         }
       } else {
@@ -54,7 +54,6 @@ export default {
       }
     },
     onSubmit() {
-      console.log('aa', this.form)
       this.loading = true
       this.$refs.form.validate(valid => {
         if (valid) {
