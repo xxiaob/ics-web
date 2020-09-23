@@ -10,7 +10,7 @@
       <el-form-item label="项目周期" prop="date" :rules="rules.NOT_NULL">
         <el-date-picker v-model="form.date" value-format="yyyy-MM-dd HH:mm:ss" type="datetimerange" :default-time="['00:00:00','23:59:59']" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
       </el-form-item>
-      <el-form-item label="描述" prop="description" :rules="rules.NOT_NULL">
+      <el-form-item label="描述" prop="description" :rules="rules.Len1000">
         <jc-editor v-model="form.description"></jc-editor>
       </el-form-item>
     </el-form>
@@ -41,6 +41,7 @@ export default {
       areaType: [],
       rules: {
         Len50: getStringRule(1, 50),
+        Len1000: getStringRule(1, 1000),
         NOT_NULL
       }
     }
