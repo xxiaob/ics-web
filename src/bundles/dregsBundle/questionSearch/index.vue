@@ -105,7 +105,7 @@ export default {
       if (!this.loading) {
         this.loading = true
         try {
-          const { total, resultList } = await questionList({ ...this.filter, ...this.page })
+          const { total, resultList } = await questionList({ systemModuleType: 1, ...this.filter, ...this.page })
 
           this.page.total = total
           this.list = resultList

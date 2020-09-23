@@ -122,7 +122,7 @@ export default {
       if (!this.loading) {
         this.loading = true
         try {
-          const { total, resultList } = await eventManageList({ ...this.filter, ...this.page })
+          const { total, resultList } = await eventManageList({ systemModuleType: 1, ...this.filter, ...this.page })
 
           this.page.total = total
           const list = []
