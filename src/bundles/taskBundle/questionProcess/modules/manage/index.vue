@@ -20,7 +20,7 @@
           <map-user-marker v-model="position" :isGetUser="false"></map-user-marker>
         </div>
       </el-form-item>
-      <el-form-item label="问题描述" prop="problemDesc" :rules="rules.NOT_NULL">
+      <el-form-item label="问题描述" prop="problemDesc" :rules="rules.Len255">
         <!-- <el-input v-model="form.problemDesc" placeholder="请输入问题描述" type="textarea"></el-input> -->
         <jc-editor v-model="form.problemDesc"></jc-editor>
       </el-form-item>
@@ -74,6 +74,7 @@ export default {
       loading: false,
       rules: {
         Len50: getStringRule(1, 50),
+        Len255: getStringRule(1, 255),
         SELECT_NOT_NULL,
         NOT_NULL
       }

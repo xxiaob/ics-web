@@ -41,7 +41,7 @@
         <!-- projectId 后期重写 -->
         <jc-task-people :edit.sync="edit" :projectId="form.projectId==initProjectId?'':form.projectId" :emergency="emergency" :peopleType.sync="peopleType" :selecteds.sync="peoples"></jc-task-people>
       </el-form-item>
-      <el-form-item label="任务描述" prop="taskDesc" :rules="rules.NOT_NULL">
+      <el-form-item label="任务描述" prop="taskDesc" :rules="rules.Len500">
         <jc-editor v-model="form.taskDesc"></jc-editor>
       </el-form-item>
       <el-form-item label="附件">
@@ -133,6 +133,7 @@ export default {
       loading: false,
       rules: {
         Len50: getStringRule(1, 50),
+        Len500: getStringRule(1, 500),
         SELECT_NOT_NULL,
         NOT_NULL
       },

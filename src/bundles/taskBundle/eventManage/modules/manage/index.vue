@@ -19,7 +19,7 @@
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item label="事件描述" prop="desc" :rules="rules.NOT_NULL">
+      <el-form-item label="事件描述" prop="desc" :rules="rules.Len100">
         <el-input v-model="form.desc" placeholder="请输入事件描述" type="textarea"></el-input>
         <!-- <jc-editor v-model="form.desc"></jc-editor> -->
       </el-form-item>
@@ -78,6 +78,7 @@ export default {
       loading: false,
       rules: {
         Len50: getStringRule(1, 50),
+        Len100: getStringRule(1, 100),
         SELECT_NOT_NULL,
         NOT_NULL
       },
