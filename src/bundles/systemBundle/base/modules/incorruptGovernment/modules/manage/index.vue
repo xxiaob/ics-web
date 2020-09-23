@@ -5,9 +5,10 @@
         <el-switch v-model="form.enableRolling" active-color="#409EFF" inactive-color="#cccccc" :active-value="1" :inactive-value="0">
         </el-switch>
       </el-form-item>
-      <el-form-item label="廉政语录" prop="rollingMessage" :rules="rules.NOT_NULL">
+      <el-form-item label="廉政语录" prop="rollingMessage" :rules="rules.Len500">
         <el-input type="textarea" :rows="3" placeholder="请输入廉政语录" v-model="form.rollingMessage" resize="none">
         </el-input>
+        <div class="rollingRemind">( 最多可录入500个字 )</div>
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
@@ -18,7 +19,7 @@
 </template>
 <script>
 import { rollingMessageSave } from '@/api/baseConfig'
-import { NOT_NULL } from '@/libs/rules'
+import { getStringRule } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
 
 let defaultForm = {
@@ -32,7 +33,7 @@ export default {
     return {
       loading: false,
       rules: {
-        NOT_NULL
+        Len500: getStringRule(1, 500)
       }
     }
   },
@@ -55,7 +56,9 @@ export default {
     },
     onSubmit() {
       this.loading = true
+
       this.$refs.form.validate(valid => {
+        console.log('valid', valid)
         if (valid) {
           rollingMessageSave(this.form).then(() => {
             this.$message.success('操作成功')
@@ -74,4 +77,8 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
+.rollingRemind{
+  color: #999;
+  font-size:12px;
+}
 </style>
