@@ -11,7 +11,7 @@
         <el-cascader :options="orgTree" disabled v-model="form.orgId" :props="{expandTrigger: 'hover', emitPath: false }" clearable></el-cascader>
       </el-form-item> -->
       <el-form-item label="事件标题" prop="eventTitle" :rules="rules.Len50">
-        <el-input v-model="form.eventTitle" placeholder="请输入事事件标题"></el-input>
+        <el-input v-model="form.eventTitle" placeholder="请输入事件标题"></el-input>
       </el-form-item>
       <el-form-item label="事件类型" prop="eventType" :rules="rules.SELECT_NOT_NULL">
         <el-select v-model="form.eventType" filterable placeholder="请选择事件类型">
