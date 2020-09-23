@@ -87,7 +87,7 @@ export default {
       }
 
       // 获取所有在线推送设备id集合
-      if (data.devices) {
+      if (data.devices && data.devices.length) {
         data.devices.forEach(device => {
           if (!this.pushDeviceIds.includes(device.deviceId)) {
             this.pushDeviceIds.push(device.deviceId)
