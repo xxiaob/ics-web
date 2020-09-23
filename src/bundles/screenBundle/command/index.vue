@@ -50,6 +50,7 @@ import TaskMixins from './modules/mixins/taskMixins' //任务处理
 import VoiceAlertMixins from './modules/mixins/voiceAlertMixins' //音频播放
 import CommandHeader from './modules/header'//顶部
 import CommandMessage from './modules/message'//任务等消息弹窗
+import DataOverview from './modules/dataOverview' //数据预览
 import MapSearch from '@/components/JcMap/MapSearch' //地图搜索
 
 let myJcMap //个人 map 对象
@@ -61,7 +62,7 @@ export default {
     CommandHeader,
     CommandOperate: () => import('./modules/operate'), //功能操作区域
     MapSearch,
-    DataOverview: () => import('./modules/dataOverview'), //左下角的数据预览
+    DataOverview,
     CommandMessage, //任务等消息弹窗
     ImTalk: () => import('./modules/imTalk'), //聊天消息
     CommandOrg: () => import('./modules/org'), //组织架构
