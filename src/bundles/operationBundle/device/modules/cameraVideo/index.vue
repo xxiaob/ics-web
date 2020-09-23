@@ -6,7 +6,7 @@
       </template>
     </video-filter>
     <el-card class="jc-table-card jc-mt">
-      <video id="myVideo" class="jc-video video-js vjs-default-skin"></video>
+      <video v-if="showVideo" id="myVideo" class="jc-video video-js vjs-default-skin"></video>
     </el-card>
   </div>
 </template>
@@ -23,7 +23,8 @@ export default {
   },
   data() {
     return {
-      filter: {}
+      filter: {},
+      showVideo: false
     }
   },
   components: {
@@ -43,25 +44,43 @@ export default {
   },
   methods: {
     async initData() {
+      const that = this
+
+      this.showVideo = false
       if (this.detail && this.detail.deviceId && this.filter && this.filter.startTime) {
         try {
           const { deviceId, cameraId } = this.detail
           const res = await getRelay({ deviceId, cameraId, ...this.filter })
 
           // 'http://ivi.bupt.edu.cn/hls/cctv1hd.m3u8'  rtmp://58.200.131.2:1935/livetv/hunantv
-          this.$nextTick(()=>{
-            this.video = videojs('myVideo', {
-              sources: [
-                {
+          if (res && res[0] && res[0].url1) {
+            this.showVideo = true
+            this.$nextTick(()=>{
+              this.video = videojs('myVideo', {
+                sources: [
+                  {
                   // src: 'rtmp://58.200.131.2:1935/livetv/hunantv'
-                  src: res[0].url2
+                    src: res[0].url1
                   // type: 'rtmp/flv'
-                }
-              ],
-              controls: true,
-              autoplay: true
+                  }
+                ],
+                controls: true,
+                autoplay: true
+              }, function () {
+                this.on('loadstart', function () {
+                  console.log('videojs -- 开始请求数据')
+                })
+                this.on('error', ()=> {
+                  console.log('videojs -- 加载错误')
+                  this.$message.error('视频加载错误')
+                  this.dispose()
+                  that.showVideo = false
+                })
+              })
             })
-          })
+          } else {
+            this.$message.error('当前时间段没有视频')
+          }
         } catch (error) {
           console.error(error)
         }
