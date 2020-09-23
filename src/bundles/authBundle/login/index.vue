@@ -137,7 +137,7 @@ export default {
   z-index: 9;
   background-image: url(/static/images/login-logo.png);
   background-repeat: no-repeat;
-  background-position: 60px center;
+  background-position: left center;
 }
 .jc-login-space {
   position: absolute;
