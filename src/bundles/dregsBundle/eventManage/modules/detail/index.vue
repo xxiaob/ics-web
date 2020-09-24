@@ -13,6 +13,12 @@
       <el-form-item label="处置人：">
         <span>{{form.reportUserName}}</span>
       </el-form-item>
+      <el-form-item label="处置时间：">
+        <span>{{form.handleDate}}</span>
+      </el-form-item>
+      <el-form-item label="处置意见：">
+        <span>{{form.opinion}}</span>
+      </el-form-item>
       <!-- <el-form-item label="所属组织：">
         <span>{{form.orgName}}</span>
       </el-form-item> -->

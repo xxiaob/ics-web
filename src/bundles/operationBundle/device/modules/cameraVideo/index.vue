@@ -46,7 +46,11 @@ export default {
     async initData() {
       const that = this
 
+      if (this.video) {
+        this.video.dispose()
+      }
       this.showVideo = false
+
       if (this.detail && this.detail.deviceId && this.filter && this.filter.startTime) {
         try {
           const { deviceId, cameraId } = this.detail

@@ -17,10 +17,21 @@
         <div class="jc-detail-label">事件标题</div>
         <div class="jc-detail-content">{{form.eventTitle}}</div>
       </div>
-      <div class="jc-detail-warp" v-if="SYSTEM_MESSAGE_TYPE.DREGS==info.systemSourceType">
-        <div class="jc-detail-label">车牌号</div>
-        <div class="jc-detail-content">{{form.carNumber}}</div>
+      <div v-if="SYSTEM_MESSAGE_TYPE.DREGS==info.systemSourceType">
+        <div class="jc-detail-warp">
+          <div class="jc-detail-label">车牌号</div>
+          <div class="jc-detail-content">{{form.carNumber}}</div>
+        </div>
+        <div class="jc-detail-warp">
+          <div class="jc-detail-label">处置时间</div>
+          <div class="jc-detail-content">{{form.handleDate}}</div>
+        </div>
+        <div class="jc-detail-warp">
+          <div class="jc-detail-label">处置意见</div>
+          <div class="jc-detail-content">{{form.opinion}}</div>
+        </div>
       </div>
+
       <div class="jc-detail-warp" v-else>
         <div class="jc-detail-label">事件类型</div>
         <div class="jc-detail-content">{{form.typeName}}</div>

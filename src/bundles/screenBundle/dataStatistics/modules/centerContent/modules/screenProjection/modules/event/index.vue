@@ -13,9 +13,18 @@
       <el-form-item label="事件标题 : ">
         <span>{{form.eventTitle}}</span>
       </el-form-item>
-      <el-form-item label="车牌号 : " v-if="SYSTEM_MESSAGE_TYPE.DREGS==options.systemSourceType">
-        <span>{{form.carNumber}}</span>
-      </el-form-item>
+      <div v-if="SYSTEM_MESSAGE_TYPE.DREGS==options.systemSourceType">
+        <el-form-item label="车牌号 : ">
+          <span>{{form.carNumber}}</span>
+        </el-form-item>
+        <el-form-item label="处置时间 : ">
+          <span>{{form.handleDate}}</span>
+        </el-form-item>
+        <el-form-item label="处置意见 : ">
+          <span>{{form.opinion}}</span>
+        </el-form-item>
+      </div>
+
       <el-form-item label="事件类型 : " v-else>
         <span>{{form.typeName}}</span>
       </el-form-item>
