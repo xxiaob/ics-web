@@ -98,6 +98,7 @@ export default {
 
       this.page.total = total
       this.userList = resultList
+      // this.userList = new Array(50).fill('1')
       this.loading = false
     },
     formatTime(row, column, cellValue) {
@@ -113,6 +114,7 @@ export default {
       // }
       this.loading = true
       try {
+        // this.list = new Array(50).fill('1')
         this.list = await pttGroupList({ ...this.filter })
 
         this.loading = false
@@ -190,6 +192,16 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+@mixin auto-el-card__body {
+  display: flex;
+  flex-direction: column;
+
+  /deep/ .el-card__body {
+    flex: 1;
+    overflow: auto;
+  }
+}
+
 .jc-main-full-container {
   padding: 20px;
   display: flex;
@@ -198,13 +210,16 @@ export default {
 .jc-flex {
   display: flex;
   flex: 1;
+  // height: 100%;
+  overflow: hidden;
   .jc-flex-left {
     width: 240px;
     margin-right: 20px;
-    overflow: auto;
+    @include auto-el-card__body;
   }
   .jc-flex-right {
     flex: 1;
+    @include auto-el-card__body;
   }
 }
 .group-list {
