@@ -71,7 +71,7 @@ export default {
     organizationList().then(res => {
       this.orgTree = this.formatOrgTree(res)
     })
-    this.initData()
+    // this.initData()
   },
   methods: {
     async initData() {
