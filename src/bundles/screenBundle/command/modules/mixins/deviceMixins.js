@@ -38,7 +38,7 @@ export default {
     },
     async initDeviceData() {
       // 获取摄像头固定设备数据，如果实体不显示，则不进行请求
-      if (!this.deviceSignVisible) {
+      if (!this.deviceSignVisible && !!this.fixedDeviceIds.length) {
         return
       }
       try {
@@ -60,7 +60,6 @@ export default {
             }
           }
         }
-
         this.fixedDeviceIds = fixedDeviceIds // 保存当前所有在线摄像头的设备Id
         this.deviceMap(devices) // 处理数据
       } catch (error) {
@@ -68,7 +67,6 @@ export default {
       }
     },
     async initDeviceMap(data) {
-      console.log('推送设备数据', data)
       // 处理推送设备数据
       if (data.type == 3) {
         // 清理离线设备的id
