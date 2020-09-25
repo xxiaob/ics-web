@@ -12,7 +12,7 @@
   </el-dialog>
 </template>
 <script>
-import { deviceBind } from '@/api/device'
+import { addDevice } from '@/api/device'
 import { NOT_NULL } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
 
@@ -41,7 +41,7 @@ export default {
     async confirmSubmit() {
       this.loading = true
       try {
-        await deviceBind({ ...this.form })
+        await addDevice({ ...this.form })
         this.$message.success('操作成功')
         this.dialogVisible = false
         this.$emit('save-success')

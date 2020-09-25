@@ -64,3 +64,12 @@ export function getDeviceList(params) {
 export function getLiveStreaming(data) {
   return axios.get(API.device.getLiveStreaming + '?' + qs.stringify(data, { indices: false }))
 }
+
+/**
+ * 新增设备
+ * @param {object} data
+ * @returns {Object} axios 对象
+ */
+export function addDevice(data) {
+  return axios.post(API.device.addDevice, data)
+}
