@@ -248,6 +248,13 @@ export const DEVICE_TYPES = new JcEnum([
   { key: 'UAV', value: 2, label: '无人机' },
   { key: 'NETPATROLCAR', value: 3, label: '网巡车' }
 ])
+/**
+ * 设备管理 设备来源
+ */
+export const DEVICE_SOURCES = new JcEnum([
+  { key: 'HANKER', value: 1, label: '海康摄像头' },
+  { key: 'SELF', value: 2, label: '绑定执法仪' }
+])
 
 /**
  * 法律法规和渣土告警类型

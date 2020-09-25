@@ -9,6 +9,11 @@
           <el-option v-for="item in deviceTypes" :key="item.value" :label="item.label" :value="item.value"></el-option>
         </el-select>
       </el-form-item>
+      <el-form-item prop="source" label="设备来源">
+        <el-select v-model="form.source" placeholder="设备来源">
+          <el-option v-for="item in deviceSources" :key="item.value" :label="item.label" :value="item.value"></el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item prop="deviceName" label="设备名称">
         <el-input v-model="form.deviceName" placeholder="请输入设备名称"></el-input>
       </el-form-item>
@@ -20,7 +25,7 @@
   </el-card>
 </template>
 <script>
-import { DEVICE_TYPES } from '@/constant/Dictionaries'
+import { DEVICE_TYPES, DEVICE_SOURCES } from '@/constant/Dictionaries'
 export default {
   props: {
     orgTree: {
@@ -32,12 +37,17 @@ export default {
   data() {
     return {
       deviceTypes: DEVICE_TYPES.VALUES,
+      deviceSources: DEVICE_SOURCES.VALUES,
       form: {
         deviceType: '',
         deviceName: '',
-        orgId: ''
+        orgId: '',
+        source: 1
       }
     }
+  },
+  created() {
+    this.onSubmit()
   },
   methods: {
     orgChange() {

@@ -8,6 +8,7 @@
           <el-button type="primary" size="small" @click="batchOperate('setType')">设置 设备类型</el-button>
           <el-button type="primary" size="small" @click="batchOperate('setOrg')">设置 所属组织</el-button>
           <el-button type="primary" size="small" @click="batchOperate('clear')">清除设置</el-button>
+          <el-button type="primary" size="small" @click="visible=true">新增设备</el-button>
         </div>
       </div>
       <el-table :data="list" v-loading="loading" row-key="deviceId" class="jc-table" @selection-change="tableSelect">
@@ -22,14 +23,15 @@
           <template slot-scope="scope">
             <el-button type="text" size="mini" icon="el-icon-view" @click="detail(scope.row)" title="详情"></el-button>
             <el-button type="text" size="mini" icon="el-icon-video-camera" @click="showVideo(scope.row)" title="视频记录"></el-button>
-            <el-button v-if="scope.row.orgId" type="text" size="mini" icon="el-icon-setting" @click="setUser(scope.row)" title="设置"></el-button>
+            <el-button v-if="source==2&&scope.row.orgId" type="text" size="mini" icon="el-icon-setting" @click="setUser(scope.row)" title="设置"></el-button>
           </template>
         </el-table-column>
       </el-table>
       <el-pagination @current-change="currentChange" @size-change="sizeChange" :current-page.sync="page.pageNum" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.total" class="text-right jc-mt"></el-pagination>
     </el-card>
 
-    <jc-manage-user :options="info" :visible.sync="visible" @save-success="initData"></jc-manage-user>
+    <jc-manage :visible.sync="visible" @save-success="initData"></jc-manage>
+    <jc-manage-user :options="info" :visible.sync="userVisible" @save-success="initData"></jc-manage-user>
     <jc-manage-type :options="{deviceIds}" :visible.sync="typeVisible" @save-success="initData"></jc-manage-type>
     <jc-manage-org :orgTree="orgTree" :options="{deviceIds}" :visible.sync="orgVisible" @save-success="initData"></jc-manage-org>
 
@@ -47,6 +49,7 @@ export default {
   mixins: [PaginationMixins],
   components: {
     TabFilter: () => import('../tabFilter'),
+    JcManage: () => import('../manage'),
     JcManageUser: () => import('../manageUser'),
     JcManageType: () => import('../manageType'),
     JcManageOrg: () => import('../manageOrg'),
@@ -54,11 +57,13 @@ export default {
   },
   data() {
     return {
+      source: 1,
       deviceIds: [],
       list: [],
       orgTree: [],
       loading: false,
       visible: false,
+      userVisible: false,
       info: null,
       detailInfo: null,
       detailVisible: false,
@@ -71,7 +76,7 @@ export default {
     organizationList().then(res => {
       this.orgTree = this.formatOrgTree(res)
     })
-    this.initData()
+    // this.initData()
   },
   methods: {
     async initData() {
@@ -82,6 +87,7 @@ export default {
 
           this.page.total = total
           this.list = data
+          this.source = this.filter.source
           this.loading = false
         } catch (error) {
           console.error(error)
@@ -99,7 +105,7 @@ export default {
     },
     setUser(row) {
       this.info = row
-      this.visible = true
+      this.userVisible = true
     },
     async showVideo({ deviceId, userId }) {
       const type = userId ? 'law' : 'camera'
