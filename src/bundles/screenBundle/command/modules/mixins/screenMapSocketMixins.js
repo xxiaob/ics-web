@@ -40,7 +40,7 @@ export default {
           if (item.userType == 0) {
             users.push(item)
           } else {
-            devices.push({ deviceId: item.deviceId, userId: item.userId, type: item.userType, name: item.userName, lng: item.lng, lat: item.lat })
+            devices.push({ deviceId: item.deviceId, userId: item.userId, type: item.userType, name: item.deviceName || item.userName, lng: item.lng, lat: item.lat })
           }
         })
       }
