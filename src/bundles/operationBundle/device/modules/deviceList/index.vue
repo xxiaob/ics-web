@@ -23,6 +23,7 @@
           <template slot-scope="scope">
             <el-button type="text" size="mini" icon="el-icon-view" @click="detail(scope.row)" title="详情"></el-button>
             <el-button type="text" size="mini" icon="el-icon-video-camera" @click="showVideo(scope.row)" title="视频记录"></el-button>
+            <el-button v-if="source==2" type="text" size="mini" icon="el-icon-delete" @click="del(scope.row)" title="删除"></el-button>
             <el-button v-if="source==2&&scope.row.orgId" type="text" size="mini" icon="el-icon-setting" @click="setUser(scope.row)" title="设置"></el-button>
           </template>
         </el-table-column>
@@ -41,7 +42,7 @@
 </template>
 <script>
 import { organizationList } from '@/api/organization'
-import { deviceList, deviceDetail, bindRelease } from '@/api/device'
+import { deviceList, deviceDetail, bindRelease, deleteDevice } from '@/api/device'
 import PaginationMixins from '@/mixins/PaginationMixins'
 
 export default {
@@ -172,6 +173,17 @@ export default {
           console.error(error)
         }
       }).catch(() => {})
+    },
+    del(row) {
+      this.$confirm('确认删除该设备', '提示', { type: 'warning' }).then(() => {
+        this.remove(row.deviceId)
+      }).catch(() => {})
+    },
+    remove(id) {
+      deleteDevice(id).then(() => {
+        this.$message.success('删除成功')
+        this.currentChange(this.page.pageNum - 1)
+      })
     }
   }
 }

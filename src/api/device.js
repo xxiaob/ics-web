@@ -73,3 +73,11 @@ export function getLiveStreaming(data) {
 export function addDevice(data) {
   return axios.post(API.device.addDevice, data)
 }
+/**
+ * 删除设备
+ * @param {String} deviceId
+ * @returns {Object} axios 对象
+ */
+export function deleteDevice(deviceId) {
+  return axios.post(API.device.deleteDevice + deviceId)
+}
