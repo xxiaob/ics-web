@@ -111,13 +111,13 @@ export default {
     processData() {
       if (this.activated === 1) {
         this.options.series[0].name = '上报事件'
-        this.options.series[0].data = this.events.sort((a, b)=> a.value - b.value)
+        this.options.series[0].data = this.events.sort((a, b)=> b.value - a.value)
       } else if (this.activated === 2) {
         this.options.series[0].name = '网巡问题'
-        this.options.series[0].data = this.problems.sort((a, b)=> a.value - b.value)
+        this.options.series[0].data = this.problems.sort((a, b)=> b.value - a.value)
       } else if (this.activated === 3) {
         this.options.series[0].name = '临时任务'
-        this.options.series[0].data = this.tasks.sort((a, b)=> a.value - b.value)
+        this.options.series[0].data = this.tasks.sort((a, b)=> b.value - a.value)
       }
     }
   },
@@ -156,7 +156,7 @@ export default {
           fontSize: 14,
           rich: {
             a: {
-              width: 120,
+              width: 140,
               fontSize: 14,
               color: '#fcfcfd'
             },

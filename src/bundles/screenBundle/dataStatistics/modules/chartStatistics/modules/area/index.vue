@@ -77,7 +77,7 @@ export default {
         }
 
         this.options.series[0].name = name
-        this.options.series[0].data = data.sort((a, b)=> a.value - b.value)
+        this.options.series[0].data = data.sort((a, b)=> b.value - a.value)
       }
     }
   },
@@ -114,7 +114,7 @@ export default {
           fontSize: 14,
           rich: {
             a: {
-              width: 120,
+              width: 140,
               fontSize: 14,
               color: '#fcfcfd'
             },
