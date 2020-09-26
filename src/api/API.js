@@ -93,6 +93,7 @@ export default {
     list: 'device-service/hikDevice/deviceList',
     detail: 'device-service/hikDevice/deviceDetail', // 获取设备详情数据
     addDevice: 'device-service/hikDevice/addDevice',
+    deleteDevice: 'device-service/hikDevice/deleteDevice/',
     bind: 'device-service/hikDevice/deviceBind',
     bindRelease: 'device-service/hikDevice/deviceBindRelease',
     deviceList: 'device-service/hikDevice/deviceAndOrgList', // 组织设备列表
