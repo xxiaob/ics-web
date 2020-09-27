@@ -61,7 +61,9 @@ export default {
     async initMockData() {
       // 获取数据大屏mock数据
       try {
-        let { caseSummary, urbanManagement, illegalConstruction, residueControl, deviceData, videoSurveillance } = await getScreenData()
+        let mockdata = await getScreenData() || {}
+
+        let { caseSummary, urbanManagement, illegalConstruction, residueControl, deviceData, videoSurveillance } = mockdata
 
         // 案件概要数据处理
         if (caseSummary) {
