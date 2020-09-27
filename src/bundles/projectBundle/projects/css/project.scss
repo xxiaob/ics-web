@@ -181,6 +181,7 @@
       z-index: 1;
 
       .jc-opera-item {
+
         float: left;
         font-size: $jc-font-size-smaller;
         height: 20px;
@@ -190,6 +191,14 @@
         @extend .jc-hover-style;
         transform: translateY(60px);
         will-change: transform;
+
+        &.first.jc-finished,
+        &.second.jc-finished,
+        &.three.jc-finished,
+        &.second.jc-not-start,
+        &.four.jc-not-start{
+          pointer-events: none;
+        }
       }
     }
   }
