@@ -192,7 +192,7 @@ export default {
   },
   computed: {
     taskSourceName() {
-      return TASK_SOURCES.toString(this.form.taskSource) + ' ' + this.form.taskSourceName
+      return TASK_SOURCES.toString(this.form.taskSource) + ' ' + (this.form.taskSourceName ? this.form.taskSourceName : '')
     },
     formatUsers() {
       if (this.form.assignees && this.form.assignees.length) {

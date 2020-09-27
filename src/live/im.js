@@ -195,6 +195,21 @@ export class IM {
     }).onFail((data) => {
       this.console('sendSingleMsg error:', data)
     })
+
+    //跨段发送消息
+    if (obj.inviteDevice == '1' || obj.inviteDevice == '3') {
+      this.JIM.sendSingleMsg({
+        appkey: '943e772fc00b93f607a372c8',
+        target_username: username,
+        content: JSON.stringify(obj),
+        extras: obj
+      }).onSuccess((data, msg) => {
+        this.console('跨段消息  sendSingleMsg success data:发送消息成功', data)
+        this.console('跨段消息  sendSingleMsg succes msg:发送消息成功', msg)
+      }).onFail((data) => {
+        this.console('跨段消息  sendSingleMsg error:', data)
+      })
+    }
   }
 
   //打印日志
