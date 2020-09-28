@@ -70,7 +70,7 @@ export default {
       AMap = await AMapLoader.load({ key: process.env.aMapConfig.accessKey, plugins: ['Map3D', 'AMap.Marker', 'AMap.GeometryUtil', 'AMap.Heatmap', 'AMap.Polygon'] })
 
       myJcMap = new AMap.Map(this.$refs.myMap, {
-        mapStyle: 'amap://styles/1b8b05391432855bd2473c0d1d3628b5', viewMode: '3D', features: ['bg', 'road'], pitch: 40, skyColor: 'rgba(0,0,0,0)'
+        mapStyle: 'amap://styles/d7ecd81fc4cd576463f7dbc8e03396e7', viewMode: '3D', features: ['bg', 'road'], pitch: 40, skyColor: 'rgba(0,0,0,0)'
         // ,dragEnable: false, zoomEnable: false, rotateEnable: false, keyboardEnable: false
       })
       this.clearMapSign() //清除地图标记
