@@ -60,7 +60,6 @@ let getTime = function (date, time1, time2) {
   return [new Date(startTime + ' ' + time1).getTime(), new Date(endTime + ' ' + time2).getTime()]
 }
 
-let type2IconClass = { wxcar: 'jc-trajectory-elcicle' }
 
 export default {
   name: 'ScreenCommandUserDetailTrajectory',
