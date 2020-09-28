@@ -52,6 +52,8 @@ let getTime = function (date, time1, time2) {
   return [new Date(startTime + ' ' + time1).getTime(), new Date(endTime + ' ' + time2).getTime()]
 }
 
+let type2IconClass = { wxcar: 'jc-trajectory-elcicle' }
+
 export default {
   name: 'ScreenCommandUserDetailTrajectory',
   data() {
@@ -103,7 +105,7 @@ export default {
         await myJcMap.init(this.$refs.myMap, { pitch: 45 }) //等待地图初始化
       }
       if (user) {
-        this.user = { userId: user.id, userName: user.name }
+        this.user = { userId: user.id, userName: user.name, type: user.type || 'user' }
       }
       this.clearMap()
       this.form.date = [new Date(today + ' 00:00:00').getTime(), new Date(today + ' 23:59:59').getTime()]
@@ -161,13 +163,18 @@ export default {
         //更新图标
         let style = 'jc-trajectory-walk'
 
-        let speed = parseFloat(pathData[key].s)
+        if (this.user.type == 'user') {
+          let speed = parseFloat(pathData[key].s)
 
-        if (speed > 20) {
-          style = 'jc-trajectory-car'
-        } else if (speed > 5) {
-          style = 'jc-trajectory-elcicle'
+          if (speed > 20) {
+            style = 'jc-trajectory-car'
+          } else if (speed > 5) {
+            style = 'jc-trajectory-elcicle'
+          }
+        } else {
+          style = type2IconClass[this.user.type]
         }
+
         this.runInfo = { addr: pathData[key].d, speed: pathData[key].s, key, style, time: pathData[key].t } //设置运行信息
       }
     },
