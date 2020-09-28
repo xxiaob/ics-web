@@ -6,6 +6,8 @@ import { JcMapMarker } from '@/map'
 
 let deviceData = { } //存储所有的设备数据
 
+let initGetFixedDeviceId = false // 初始获取一次固定设备
+
 export default {
   data() {
     return {
@@ -37,10 +39,11 @@ export default {
       this.deviceOrgId = org.orgId //获取ordID
     },
     async initDeviceData() {
-      // 获取摄像头固定设备数据，如果实体不显示，则不进行请求
-      if (!this.deviceSignVisible && !!this.fixedDeviceIds.length) {
+      //  当初始大屏不显示设备, 但是接口中有在线摄像头时请求一次,将在线摄像头id存储
+      if (!this.deviceSignVisible && initGetFixedDeviceId) {
         return
       }
+      initGetFixedDeviceId = true // 初始获取完毕以后, 未来是否轮询根据大屏是否显示设备出来决定
       try {
         let screenDeviceData = await getScreenDeviceData({ orgId: this.deviceOrgId, projectId: this.project.projectId })
 
@@ -214,8 +217,11 @@ export default {
         return
       }
       this.deviceSignVisible = deviceSignVisible
-      await this.initDeviceData() //初始化后重新执行固定设备
-      // this.fitDevices()
+      if (this.deviceSignVisible) {
+        await this.initDeviceData() //初始化后重新执行固定设备
+      } else {
+        this.fitDevices()
+      }
     }
   },
   beforeDestroy() {
