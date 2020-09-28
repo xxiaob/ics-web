@@ -104,8 +104,9 @@ export default {
         this.$message.error('设备不在线')
         return
       }
+      console.log('this.deviceDetaillData', this.deviceDetaillData)
       // 设备轨迹
-      this.$EventBus.$emit('screen-user-trajectory', { id: this.deviceDetaillData.userId, name: this.deviceDetaillData.deviceName }) //查看用户轨迹
+      this.$EventBus.$emit('screen-user-trajectory', { id: this.deviceDetaillData.userId, name: this.deviceDetaillData.deviceName, type: this.deviceDetaillData.deviceType }) //查看用户轨迹
     }
 
 

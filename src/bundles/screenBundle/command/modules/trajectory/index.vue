@@ -30,6 +30,7 @@ import { JcMap, JcMapMarker } from '@/map'
 import { initMoveAnimation, getAddressByPosition } from '@/map/aMap/aMapUtil'
 import { getUserHistoryPosition } from '@/api/screen'
 import { formatDate } from '@/libs/util'
+import { DEVICE_TYPES } from '@/constant/Dictionaries'
 
 let today = formatDate(null, true) //今天日期
 
@@ -40,6 +41,13 @@ let startMarker, endMarker, moveMarker //定义开始，结束和移动的marker
 let path = [] //记录处理的path坐标
 
 let pathData = {} //记录处理的详细数据
+
+let type2IconClass = {
+  [DEVICE_TYPES.NETPATROLCAR]: 'jc-trajectory-netpatrolCar',
+  [DEVICE_TYPES.UAV]: 'jc-trajectory-uav',
+  [DEVICE_TYPES.CAMERA]: 'jc-trajectory-camera',
+  user: 'jc-trajectory-walk'
+}
 
 //获取事件
 let getTime = function (date, time1, time2) {
@@ -103,7 +111,7 @@ export default {
         await myJcMap.init(this.$refs.myMap, { pitch: 45 }) //等待地图初始化
       }
       if (user) {
-        this.user = { userId: user.id, userName: user.name }
+        this.user = { userId: user.id, userName: user.name, type: user.type || 'user' }
       }
       this.clearMap()
       this.form.date = [new Date(today + ' 00:00:00').getTime(), new Date(today + ' 23:59:59').getTime()]
@@ -118,7 +126,7 @@ export default {
       }
       path = [] //记录处理的path坐标
       pathData = {} //记录处理的详细数据
-      this.runInfo = { addr: '--', speed: 0, style: 'jc-trajectory-walk', time: '' } //设置运行信息
+      this.runInfo = { addr: '--', speed: 0, style: type2IconClass[this.user.type], time: '' } //设置运行信息
       if (myJcMap) {
         myJcMap.clearSign()
       }
@@ -161,13 +169,19 @@ export default {
         //更新图标
         let style = 'jc-trajectory-walk'
 
-        let speed = parseFloat(pathData[key].s)
+        // 根据type类型 改变运动轨迹图标
+        if (this.user.type == 'user') {
+          let speed = parseFloat(pathData[key].s)
 
-        if (speed > 20) {
-          style = 'jc-trajectory-car'
-        } else if (speed > 5) {
-          style = 'jc-trajectory-elcicle'
+          if (speed > 20) {
+            style = 'jc-trajectory-car'
+          } else if (speed > 5) {
+            style = 'jc-trajectory-elcicle'
+          }
+        } else {
+          style = type2IconClass[this.user.type]
         }
+
         this.runInfo = { addr: pathData[key].d, speed: pathData[key].s, key, style, time: pathData[key].t } //设置运行信息
       }
     },
@@ -337,6 +351,15 @@ $jc-item-width: 36px;
     }
     &.jc-trajectory-elcicle {
       background-image: url(./assets/elcicle.png);
+    }
+    &.jc-trajectory-netpatrolCar {
+      background-image: url(./assets/netpatrolCar.png);
+    }
+    &.jc-trajectory-uav {
+      background-image: url(./assets/uav.png);
+    }
+    &.jc-trajectory-camera {
+      background-image: url(./assets/camera.png);
     }
   }
 
