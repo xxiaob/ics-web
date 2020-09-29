@@ -2,7 +2,7 @@
   <el-dialog :title="options ? '编辑banner':'新增banner'" :visible.sync="dialogVisible" width="600px" :close-on-click-modal="false" :append-to-body="true" @close="dialogClose">
     <el-form ref="form" label-width="100px" :model="form" class="jc-manage-form">
       <el-form-item label="banner图片" prop="banner" :rules="rules.NOT_NULL">
-        <upload-one-img :url.sync="form.banner"></upload-one-img>
+        <upload-one-img :url.sync="form.banner" tip="建议上传720*260尺寸图片"></upload-one-img>
       </el-form-item>
       <el-form-item label="启用" prop="enable" :rules="rules.NOT_NULL">
         <el-switch v-model="form.enable" :active-value="1" :inactive-value="0"></el-switch>
