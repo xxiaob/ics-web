@@ -15,10 +15,10 @@
     </div>
     <div class="jc-screen-title" v-text="title"></div>
     <div class="jc-header-right">
-      <div class="jc-grid" title="网格" @click="viewChange('CommandGrid')">
+      <div class="jc-grid" title="网格定位" @click="viewChange('CommandGrid')">
         <i class="iconfont iconwangge"></i>
       </div>
-      <div class="jc-org" title="组织结构" @click="viewChange('CommandOrg')">
+      <div class="jc-org" title="组织人员" @click="viewChange('CommandOrg')">
          <i class="iconfont iconzhihuirenyuan"></i>
       </div>
       <!-- 组织设备 -->

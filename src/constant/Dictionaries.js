@@ -46,7 +46,7 @@ export const QUESTION_TYPES = new JcEnum([
  */
 export const QUESTION_STATES = new JcEnum([
   { key: 'NOTREPORTED', value: '0', label: '未上报' },
-  { key: 'INPROGRESS', value: '1', label: '进行中' },
+  { key: 'INPROGRESS', value: '1', label: '问题进行中' },
   { key: 'CLOSED', value: '2', label: '已关闭' }
   // { key: 'TASK', value: '3', label: '转任务' },
 ])
@@ -63,10 +63,10 @@ export const TASK_TYPES = new JcEnum([
  * 任务处理 - 处理状态（个人）
  */
 export const TASK_SELECT_TYPES = new JcEnum([
-  { key: 'PENDING', value: '0', label: '待办' },
-  { key: 'DONE', value: '1', label: '已办' },
-  { key: 'ISSUED', value: '2', label: '已发' },
-  { key: 'DEAFT', value: '3', label: '草稿' }
+  { key: 'PENDING', value: '0', label: '待办理' },
+  { key: 'DONE', value: '1', label: '已办理' },
+  { key: 'ISSUED', value: '2', label: '已下发' },
+  { key: 'DEAFT', value: '3', label: '草稿箱' }
 ])
 
 /**

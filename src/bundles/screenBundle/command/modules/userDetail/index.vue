@@ -34,7 +34,7 @@ export default {
     return {
       tabComponent: 'BaseInfo',
       videoTypes: VIDEO_INVITE_TYPES,
-      tabs: [{ label: '基础信息', value: 'BaseInfo' }, { label: '综合', value: 'UserTask' }, { label: '考勤', value: 'WorkCheck' }, { label: '一键采集', value: 'UserResources' }]
+      tabs: [{ label: '基础信息', value: 'BaseInfo' }, { label: '综合业务', value: 'UserTask' }, { label: '考勤信息', value: 'WorkCheck' }, { label: '一键采集', value: 'UserResources' }]
     }
   },
   methods: {
