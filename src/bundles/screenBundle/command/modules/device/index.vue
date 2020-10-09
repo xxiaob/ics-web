@@ -77,21 +77,36 @@ export default {
     onlineDevicesChange(onlineDevices) {
       // 获取所有在线设备的id
       this.onlineDevices = onlineDevices
-
       this.onlineChange(this.trees) // 调用方法从新处理数据
     },
     onlineChange(trees) {
       // 处理离线/在线切换的方法
+      trees.index = -1
+
       for (let i = 0; i < trees.length; i++) {
         let treesItem = trees[i]
 
         if (treesItem.type == 'org') {
+          trees.index = i
           this.onlineChange(treesItem.children || []) // 递归调用处理在线离线设备方法
         } else {
           let isOnline = this.onlineDevices.includes(treesItem.id) // 判断是否在线
 
           treesItem.online = isOnline
           treesItem.disabled = !isOnline
+
+
+          // 如果设备在线,并且不是在设备第一位,则改变位置,如果设备已经是第一位,只改变状态
+          if (isOnline && (trees.index + 1 != i) && (trees.index != i)) {
+            this.$refs.tree.remove(treesItem)
+
+            // 如果trees.index标识为-1 标识当前组织下只有设备没有下级组织, 因此在第一个设备前插入在线设备
+            if (trees.index !== -1 ) {
+              this.$refs.tree.insertAfter(treesItem, trees[trees.index])
+            } else {
+              this.$refs.tree.insertBefore(treesItem, trees[0])
+            }
+          }
         }
       }
     },
@@ -101,11 +116,8 @@ export default {
       try {
         const orgsAndDevice = await getDeviceList({ projectId: this.project.projectId })
 
-        console.log('orgsAndUsers', orgsAndDevice)
-
         this.trees = this.formatDeviceOrgTrees(orgsAndDevice) // 处理组织和用户
 
-        console.log('this.trees', this.trees)
         this.expandedKeys = this.trees.length ? [this.trees[0].id] : [] // 设置第一级默认展开
 
         this.initOptionsDevice() // 初始设备
@@ -207,6 +219,7 @@ export default {
           trees.push(nodeChildren && nodeChildren.length ? { ...node, children: nodeChildren } : node)
         })
       }
+
       return trees
     },
     devicevideoPlay() {
@@ -230,7 +243,6 @@ export default {
       console.log('设备列表, this.usersToDevices', this.usersToDevices)
 
       // 未选中设备,提示请选择设备
-      console.log('this.devices', this.devices)
       if (!(this.devices && this.devices.length > 0)) {
         this.$message.error('请选择设备')
         return

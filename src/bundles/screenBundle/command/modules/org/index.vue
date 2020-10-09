@@ -108,7 +108,7 @@ export default {
       if (!trees) {
         return
       }
-      trees.index = 0
+      trees.index = -1
 
       for (let i = 0; i < trees.length; i++) {
         let treesItem = trees[i]
@@ -127,9 +127,8 @@ export default {
           if (isOnline && (trees.index + 1 != i) && (trees.index != i)) {
             this.$refs.tree.remove(treesItem)
 
-            // 用于处理在组件下只有人员没有下级组织的情况
-            // 如果没有下级组织, 就判断所有是否为0,是就在前面插入, 有组织, 就在后面插入
-            if (trees.index !== 0) {
+            // 如果trees.index标识为-1 标识当前组织下只有人员没有下级组织, 因此在第一个人员前插入在线人员
+            if (trees.index !== -1) {
               this.$refs.tree.insertAfter(treesItem, trees[trees.index])
             } else {
               this.$refs.tree.insertBefore(treesItem, trees[trees.index])
