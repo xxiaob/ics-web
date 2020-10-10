@@ -1,9 +1,9 @@
 <template>
   <div class="jc-media">
-    <div class="swiper-container" v-show="urls&&urls.length">
+    <div :class="'swiper-container' + uid" v-show="urls&&urls.length">
       <div class="swiper-wrapper">
         <div v-for="url in imgs" :key="url.id" class="swiper-slide jc-img">
-          <img class="img" :src="url" alt="">
+          <img class="img" :src="url" alt="" @click="showFullImg(url,imgs)">
         </div>
         <div class="jc-video swiper-slide" v-for="url in videos" :key="url" @click="showVideo(url)">
           <video :src="url"></video>
@@ -52,6 +52,7 @@ export default {
   },
   data() {
     return {
+      uid: this['_uid'],
       show: true
     }
   },
@@ -61,11 +62,17 @@ export default {
       deep: true,
       handler(newValue) {
         this.handleUrls(newValue)
-
+        if (this.mySwiper) {
+          this.mySwiper = null
+        }
         //轮播图初始化 的时候  必须要有数据
         if (newValue.length && !this.mySwiper) {
+          let centeredSlides = newValue.length == 1 ? true : false
+
+          // console.log('centeredSlides', newValue.length, centeredSlides)
           this.$nextTick(()=>{
-            this.mySwiper = new Swiper('.swiper-container', {
+            this.mySwiper = new Swiper('.swiper-container' + this.uid, {
+              centeredSlides,
               autoplay: {
                 delay: 3000,
                 stopOnLastSlide: false,
@@ -83,8 +90,15 @@ export default {
       }
     }
   },
-  mounted() {
-
+  methods: {
+    showFullImg(url, imgs) {
+      this.$EventBus.$emit('show-full-img', { url, imgs })
+    }
+  },
+  destroyed() {
+    if (this.mySwiper) {
+      this.mySwiper = null
+    }
   }
 }
 </script>
