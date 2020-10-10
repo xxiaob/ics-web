@@ -6,6 +6,7 @@
         <div class="jc-card-title">列表内容</div>
         <div class="jc-button-group">
           <el-button type="primary" icon="el-icon-plus" size="small" @click="manage(null)">添加</el-button>
+          <el-button type="primary" icon="el-icon-upload2" size="small" @click="photoVisible=true">批量照片</el-button>
           <el-button type="danger" icon="el-icon-delete" size="small" @click="removeAll">删除</el-button>
         </div>
       </div>
@@ -40,6 +41,7 @@
       <el-pagination @current-change="currentChange" @size-change="sizeChange" :current-page.sync="page.pageNum" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.total" class="text-right jc-mt"></el-pagination>
     </el-card>
     <jc-manage :options="info" :orgId="org.orgId" :visible.sync="visible" @save-success="initData"></jc-manage>
+    <jc-manage-photo  :visible.sync="photoVisible" ></jc-manage-photo>
     <user-detail :userId="userId" :visible.sync="detailVisible"></user-detail>
   </div>
 </template>
@@ -54,6 +56,7 @@ export default {
   components: {
     TabFilter: () => import('../tabFilter'),
     JcManage: () => import('../manage'),
+    JcManagePhoto: () => import('../managePhoto'),
     UserDetail: () => import('../detail')
   },
   data() {
@@ -62,6 +65,7 @@ export default {
       loading: false,
       visible: false,
       detailVisible: false,
+      photoVisible: false,
       info: null,
       userId: null,
       org: {},
@@ -173,6 +177,9 @@ export default {
         this.info = null
         this.visible = true
       }
+    },
+    uploadPhoto() {
+      console.log('uploadPhoto')
     }
   }
 }
