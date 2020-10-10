@@ -23,13 +23,13 @@
         <el-input v-model="form.desc" placeholder="请输入事件描述" type="textarea"></el-input>
         <!-- <jc-editor v-model="form.desc"></jc-editor> -->
       </el-form-item>
-      <el-form-item label="处理前图片" prop="beforePhoto" :rules="[{required: true, message: '请上传文件'}]">
+      <el-form-item label="处理前图片" prop="beforePhoto" :rules="[{required: !options, message: '请上传文件'}]">
         <upload :show="dialogVisible" :urls.sync="form.beforePhoto" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg"></upload>
       </el-form-item>
-      <el-form-item label="处理后图片" prop="afterPhoto" :rules="[{required: true, message: '请上传文件'}]">
+      <el-form-item label="处理后图片" prop="afterPhoto" :rules="[{required: !options, message: '请上传文件'}]">
         <upload :show="dialogVisible" :urls.sync="form.afterPhoto" accept="image/gif,image/jpeg,image/jpg,image/png,image/svg"></upload>
       </el-form-item>
-      <el-form-item label="视频文件" prop="videoAddr" :rules="[{required: true, message: '请上传文件'}]">
+      <el-form-item label="视频文件" prop="videoAddr" :rules="[{required: !options, message: '请上传文件'}]">
         <upload :show="dialogVisible" :urls.sync="form.videoAddr" accept="video/*"></upload>
       </el-form-item>
       <el-form-item label="音频文件" prop="audioAddr">

@@ -21,7 +21,7 @@ export default {
   data() {
     return {
       tabComponent: 'BaseInfo',
-      tabs: [{ label: '基础信息', value: 'BaseInfo' }, { label: '综合', value: 'GridTask' }, { label: '考勤', value: 'WorkCheck' }, { label: '一键采集', value: 'GridResources' }]
+      tabs: [{ label: '基础信息', value: 'BaseInfo' }, { label: '综合业务', value: 'GridTask' }, { label: '考勤信息', value: 'WorkCheck' }, { label: '一键采集', value: 'GridResources' }]
     }
   }
 }

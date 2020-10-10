@@ -18,6 +18,8 @@
         </el-table-column>
         <!-- <el-table-column prop="onguardDuration" label="巡逻时长(h)"></el-table-column> -->
         <!-- <el-table-column prop="journey" label="巡逻里程(km)"></el-table-column> -->
+        <el-table-column prop="inoutCount" label="迟到次数"></el-table-column>
+        <el-table-column prop="inoutCount" label="出圈"></el-table-column>
         <el-table-column prop="inoutCount" label="触岗次数"></el-table-column>
         <el-table-column prop="eventReportCount" label="事件上报数"></el-table-column>
         <el-table-column prop="problemFeedbackCount" label="问题反馈数"></el-table-column>
