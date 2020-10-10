@@ -14,6 +14,7 @@ import demoRouter from './demo' //demo 路由
 import operationRouter from './operation' //运维
 import superviseRouter from './supervise' //运维
 import dregsRouter from './dregs' //渣土管控
+import organizeRouter from './organize' // 组织信息
 
 // 解决两次访问相同路由地址报错
 // const originalPush = Router.prototype.push
@@ -42,7 +43,7 @@ let routerOptions = {
       meta: {
         title: '欢迎'
       }
-    }, ...systemRouter, ...taskRouter, ...projectRouter, ...attendRouter, ...overseeRouter, ...recordRouter, ...operationRouter, ...superviseRouter, ...dregsRouter]
+    }, ...systemRouter, ...taskRouter, ...projectRouter, ...attendRouter, ...overseeRouter, ...recordRouter, ...operationRouter, ...superviseRouter, ...dregsRouter, ...organizeRouter]
   }, {
     path: '/',
     name: 'fullPage',
