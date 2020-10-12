@@ -57,7 +57,7 @@ import { positionListAll } from '@/api/position'
 import { getStringRule, SELECT_NOT_NULL, getTelRule } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
 
-let defaultForm = { userName: '', account: '', phone: '', positionIds: '', chestNbr: '', lawNbr: '', description: '', partyMember: 0, photo: '' }
+let defaultForm = { userName: '', account: '', phone: '', chestNbr: '', lawNbr: '', description: '', partyMember: 0, photo: '' }
 
 export default {
   name: 'SystemUserManage',
@@ -152,7 +152,7 @@ export default {
           description: this.options.description
         }
       } else {
-        return { ...defaultForm, orgId: this.orgId, roleIds: [] }
+        return { ...defaultForm, orgId: this.orgId, roleIds: [], positionIds: [] }
       }
     },
     onSubmit() {

@@ -15,7 +15,7 @@ import { getToken } from '@/libs/storage'
 import FormMixins from '@/mixins/FormMixins'
 
 export default {
-  name: 'SystemUserManagePhoto',
+  name: 'SystemUserManagePhotos',
   mixins: [FormMixins],
   data() {
     return {

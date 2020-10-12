@@ -123,3 +123,25 @@ export function getOrgUserListByProject(data) {
 export function getUsersByPosition(data) {
   return axios.post(API.user.getUsersByPosition, data)
 }
+/**
+ * 导入人员
+ * @param {object} data 参数
+ * @returns {Object} axios 对象
+ */
+export function importUsers(data) {
+  const { orgId, roleIds, positionIds, file } = data
+  const formData = new FormData()
+
+  formData.append('file', file)
+
+  return axios({
+    url: API.user.importUsers,
+    method: 'post',
+    headers: { 'Content-Type': 'multipart/form-data' },
+    params: { orgId, roleIds, positionIds },
+    data: formData,
+    paramsSerializer(params) {
+      return qs.stringify(params, { arrayFormat: 'repeat' })
+    }
+  })
+}
