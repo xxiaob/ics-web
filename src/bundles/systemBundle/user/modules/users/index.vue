@@ -17,7 +17,7 @@
         <el-table-column prop="account" label="登录账号"></el-table-column>
         <el-table-column prop="phone" label="手机号"></el-table-column>
         <el-table-column prop="orgName" label="所属组织"></el-table-column>
-        <el-table-column prop="positionName" label="职位"></el-table-column>
+        <el-table-column prop="positions" label="职位" :formatter="formatPostions"></el-table-column>
         <el-table-column label="默认接收人">
           <template slot-scope="scope">
             <el-switch v-model="scope.row.isDefReceiver" active-value="1" inactive-value="0" @change="userStateChange(scope.row,1)"></el-switch>
@@ -74,6 +74,11 @@ export default {
     }
   },
   methods: {
+    formatPostions(row, column, cellValue) {
+      const positionNames = cellValue.map(item=>item.positionName)
+
+      return positionNames.join(',')
+    },
     initData(org) {
       if (org) {
         this.org = org
@@ -169,6 +174,14 @@ export default {
               roleIds.push(item.roleId)
             })
             res.roleIds = roleIds
+          }
+          if (res.positions && res.positions.length) {
+            let positionIds = []
+
+            res.positions.forEach(item => {
+              positionIds.push(item.positionId)
+            })
+            res.positionIds = positionIds
           }
           this.info = res
           this.visible = true

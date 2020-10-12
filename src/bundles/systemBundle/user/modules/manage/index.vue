@@ -17,8 +17,8 @@
         <el-form-item label="胸牌号" prop="chestNbr">
           <el-input v-model.trim="form.chestNbr" placeholder="请输入胸牌号"></el-input>
         </el-form-item>
-        <el-form-item label="职位" prop="positionId" :rules="rules.SELECT_NOT_NULL">
-          <el-select v-model="form.positionId" placeholder="职位" multiple>
+        <el-form-item label="职位" prop="positionIds" :rules="rules.SELECT_NOT_NULL">
+          <el-select v-model="form.positionIds" placeholder="职位" multiple>
             <el-option v-for="item in positions" :key="item.positionId" :label="item.positionName" :value="item.positionId"></el-option>
           </el-select>
         </el-form-item>
@@ -30,8 +30,8 @@
             <el-option v-for="item in roles" :key="item.roleId" :label="item.roleName" :value="item.roleId"></el-option>
           </el-select>
         </el-form-item>
-        <el-form-item label="是否党员" prop="isPartyMember">
-          <el-switch v-model="form.isPartyMember" :active-value="1" :inactive-value="0"></el-switch>
+        <el-form-item label="是否党员" prop="partyMember">
+          <el-switch v-model="form.partyMember" :active-value="1" :inactive-value="0"></el-switch>
         </el-form-item>
       </div>
       <div class="jc-left-width50">
@@ -57,7 +57,7 @@ import { positionListAll } from '@/api/position'
 import { getStringRule, SELECT_NOT_NULL, getTelRule } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
 
-let defaultForm = { userName: '', account: '', phone: '', positionId: '', chestNbr: '', lawNbr: '', description: '', isPartyMember: 0, photo: '' }
+let defaultForm = { userName: '', account: '', phone: '', positionIds: '', chestNbr: '', lawNbr: '', description: '', partyMember: 0, photo: '' }
 
 export default {
   name: 'SystemUserManage',
@@ -146,7 +146,9 @@ export default {
           lawNbr: this.options.lawNbr,
           roleIds: this.options.roleIds || [],
           orgId: this.options.orgId,
-          positionId: this.options.positionId,
+          positionIds: this.options.positionIds || [],
+          partyMember: this.options.partyMember,
+          photo: this.options.photo,
           description: this.options.description
         }
       } else {
