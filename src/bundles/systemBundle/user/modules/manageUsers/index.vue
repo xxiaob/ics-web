@@ -114,8 +114,20 @@ export default {
           try {
             const res = await importUsers(this.form)
 
-            if (res) {
+            if (res && res.length) {
               console.log('importUsers res', res)
+              let str = ''
+
+              res.forEach(item=>{
+                const resItem = `<div style="line-height:22px">${item} <br></div>`
+
+                str += resItem
+              })
+
+              this.$message({
+                dangerouslyUseHTMLString: true,
+                message: str
+              })
             } else {
               this.$message.success('操作成功')
             }
