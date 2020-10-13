@@ -10,7 +10,7 @@
             </div>
           </el-col>
           <el-col :span="6" v-for="item in list" :key="item.projectId">
-            <list-item :item="item" @manage="manage(item)" @opera-change="operaChange"></list-item>
+            <list-item :projectType="projectType" :item="item" @manage="manage(item)" @opera-change="operaChange"></list-item>
           </el-col>
         </el-row>
         <el-pagination @current-change="currentChange" @size-change="sizeChange" :current-page.sync="page.pageNum" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.total" class="text-right jc-mt"></el-pagination>

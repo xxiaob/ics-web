@@ -11,10 +11,10 @@
         <el-form-item label="项目周期" prop="date" :rules="rules.NOT_NULL">
           <el-date-picker v-model="form.date" value-format="yyyy-MM-dd HH:mm:ss" type="datetimerange" :default-time="['00:00:00','23:59:59']" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期"></el-date-picker>
         </el-form-item>
-        <el-form-item label="电子预案" prop="description" :rules="rules.Len1000">
+        <el-form-item :label="projectType==PROJECT_TYPES.EmergencySupport?'电子预案':'描述'" prop="description" :rules="rules.NOT_NULL">
           <jc-editor v-model="form.description"></jc-editor>
         </el-form-item>
-        <el-form-item label="预案附件">
+        <el-form-item label="预案附件" v-if="projectType==PROJECT_TYPES.EmergencySupport">
           <upload :show="dialogVisible" :urls.sync="form.uploadFilePaths" accept="*"></upload>
         </el-form-item>
       </div>
@@ -64,6 +64,7 @@ export default {
   props: ['projectType', 'projectList'],
   data() {
     return {
+      PROJECT_TYPES,
       loading: false,
       areaType: [],
       rules: {
