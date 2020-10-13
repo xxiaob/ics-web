@@ -384,3 +384,6 @@ input::-webkit-input-placeholder {
   color: #fff;
   @include jc-close-animation;
 }
+.el-image-viewer__wrapper{
+  z-index: 11000!important;
+}

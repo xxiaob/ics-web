@@ -15,8 +15,8 @@
         </el-row>
         <el-pagination @current-change="currentChange" @size-change="sizeChange" :current-page.sync="page.pageNum" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.total" class="text-right jc-mt"></el-pagination>
       </el-card>
-      <jc-manage :options="info" :projectType="projectType" :visible.sync="visible" @save-success="initData"></jc-manage>
     </div>
+    <jc-manage :options="info" :projectList="list" :projectType="projectType" :visible.sync="visible" @save-success="initData"></jc-manage>
     <grid-setting :options="opreaData" :visible.sync="gridVisible"></grid-setting>
     <resource-setting :options="opreaData" :visible.sync="resourceVisible"></resource-setting>
     <task-daily-manage :projectId="opreaData.projectId" :visible.sync="taskDailyVisible"></task-daily-manage>
