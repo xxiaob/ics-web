@@ -4,6 +4,9 @@
       <div class="jc-title" v-text="item.projectName"></div>
       <i class="iconfont iconlujing jc-del" @click="del"></i>
       <i class="jc-setting el-icon-setting" @click="$emit('manage')"></i>
+      <i class="jc-play el-icon-video-play" title="立即开始" @click="start" v-show="projectSC=='jc-not-start'"></i>
+      <i class="jc-play el-icon-video-pause" title="立即关闭" @click="stop" v-show="projectSC=='jc-running'"></i>
+      <i class="jc-play el-icon-finished" title="已结束" v-show="projectSC=='jc-finished'"></i>
     </div>
     <div class="jc-project-screen">
       <router-link :to="{name: 'commandProjectScreen', params: {projectId: this.item.projectId}}" class="jc-screen jc-screen-command" target="_blank">指挥大屏</router-link>
@@ -67,6 +70,22 @@ export default {
         await projectsDel(this.item.projectId)
         this.$message.success('删除成功')
         this.operaChange('delete-success')
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async start() {
+      try {
+        await this.$confirm('确认立即开始该项目', '提示', { type: 'warning' })
+        console.log('start')
+      } catch (error) {
+        console.log(error)
+      }
+    },
+    async stop() {
+      try {
+        await this.$confirm('确认立即关闭该项目', '提示', { type: 'warning' })
+        console.log('stop')
       } catch (error) {
         console.log(error)
       }
