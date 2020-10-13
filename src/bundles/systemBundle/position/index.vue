@@ -80,7 +80,9 @@ export default {
             res.resultList.forEach(item => {
               let type = item.loginType ? item.loginType.split(',') : []
 
-              list.push({ positionId: item.positionId, type, ...this.getDeviceStatusClass(item.loginType), positionName: item.positionName, createTime: formatDate(item.createTime) })
+              let media = item.mobileFunction ? item.mobileFunction.split(',') : []
+
+              list.push({ positionId: item.positionId, type, media, ...this.getDeviceStatusClass(item.loginType), positionName: item.positionName, createTime: formatDate(item.createTime) })
             })
           }
           this.list = list
@@ -108,7 +110,7 @@ export default {
       let ids = []
 
       if (selections && selections.length) {
-        selections.forEach(item=> {
+        selections.forEach(item => {
           ids.push(item.positionId)
         })
       }
@@ -117,13 +119,13 @@ export default {
     del(row) {
       this.$confirm('确认删除该职位', '提示', { type: 'warning' }).then(() => {
         this.remove([row.positionId])
-      }).catch(() => {})
+      }).catch(() => { })
     },
     removeAll() {
       if (this.ids.length) {
         this.$confirm('确认删除选中的职位', '提示', { type: 'warning' }).then(() => {
           this.remove(this.ids)
-        }).catch(() => {})
+        }).catch(() => { })
       } else {
         this.$message.error('请先选择删除项')
       }
