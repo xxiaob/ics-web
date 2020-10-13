@@ -393,7 +393,7 @@ export default {
         neetFit = true
       }
 
-      if (neetFit) {
+      if (neetFit && usersData.markerCluster) {
         this.fitUsers()
       }
     }
