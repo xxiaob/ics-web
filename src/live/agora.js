@@ -137,7 +137,7 @@ export class Live {
             this.console('getRemoteVideoStats 监听 远端流的情况', remoteVideoStatsMap)
 
             for (const key in remoteVideoStatsMap) {
-              if (remoteVideoStatsMap[key].PacketLossRate > 0) {
+              if (remoteVideoStatsMap[key].PacketLossRate > 10) {
                 badStreams.push(key.split('_')[0])
               }
             }

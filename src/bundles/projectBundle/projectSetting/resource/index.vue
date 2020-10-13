@@ -1,11 +1,15 @@
 <template>
-  <el-dialog :title="'资源设置 | '+options.projectName" :visible.sync="dialogVisible" width="600px" :close-on-click-modal="false" :append-to-body="true" @close="dialogClose">
-    <el-input v-model="filterText" prefix-icon="el-icon-search" clearable size="mini" placeholder="输入关键字进行过滤"></el-input>
-    <el-tree ref="tree" class="jc-uo-tree" v-loading="treesLoading" :default-expanded-keys="expandedKeys" :data="trees" :show-checkbox="true" :props="props" :filter-node-method="filterNode" node-key="id">
-      <div class="custom-tree-node" slot-scope="{ node,data }" :class="{'jc-user': data.type=='user'}">
-        <div class="jc-text-warp" v-text="data.label"></div>
+  <el-dialog :title="'资源设置 | '+options.projectName" :visible.sync="dialogVisible" width="800px" :close-on-click-modal="false" :append-to-body="true" @close="dialogClose">
+    <div class="jc-clearboth">
+      <div class="jc-left-width48">
+        <div class="jc-title">配置人员</div>
+        <tree-select ref="userTree" type="user" :treesLoading="userTreesLoading" :trees="userTrees" :checkKeys="userCheckKeys" ></tree-select>
       </div>
-    </el-tree>
+      <div class="jc-right-width48">
+        <div class="jc-title">配置设备</div>
+        <tree-select ref="deviceTree" type="device" :treesLoading="deviceTreesLoading" :trees="deviceTrees" :checkKeys="deviceCheckKeys" ></tree-select>
+      </div>
+    </div>
     <div slot="footer" class="dialog-footer">
       <el-button @click="dialogVisible = false">取 消</el-button>
       <el-button type="primary" :loading="loading" @click="onSubmit">确 定</el-button>
@@ -14,23 +18,26 @@
 </template>
 <script>
 import { getOrgUserList } from '@/api/user'
+import { getDeviceList } from '@/api/device'
 import { projectUserRefList, projectUserRefSave } from '@/api/projects'
-import TreesFilterMixins from '@/mixins/TreesFilterMixins'
+import treeSelect from './components/treeSelect'
 
 export default {
   name: 'ProjectProjectSettingResource',
   props: ['options', 'visible'],
-  mixins: [TreesFilterMixins],
+  components: { treeSelect },
   data() {
     return {
-      filterText: '',
       dialogVisible: false,
       loading: false,
-      treesLoading: '',
-      trees: [],
-      expandedKeys: [],
-      props: { children: 'children', label: 'label' },
-      checkKeys: []
+
+      userTreesLoading: false,
+      userTrees: [],
+      userCheckKeys: [],
+
+      deviceTreesLoading: false,
+      deviceTrees: [],
+      deviceCheckKeys: []
     }
   },
   watch: {
@@ -38,42 +45,33 @@ export default {
       if (newVal) {
         this.initData()
       }
-    },
-    filterText(val) {
-      this.filter(val)
     }
   },
   methods: {
-    async initData() {
-      this.trees = []
-      this.expandedKeys = []
-      this.checkKeys = []
-      this.filterText = ''
+    initData() {
       this.dialogVisible = this.visible
-      this.treesLoading = true
+      this.getUsers()
+      this.getDevices()
+    },
+    async getUsers() {
+      this.userTrees = []
+      this.userCheckKeys = []
+      this.userTreesLoading = true
       try {
         const orgsAndUsers = await getOrgUserList()
 
-        this.trees = this.formatUserOrgTrees(orgsAndUsers)//处理组织和用户
-        this.expandedKeys = this.trees.length ? [this.trees[0].id] : [] //设置第一级默认展开
+        this.userTrees = this.formatUserOrgTrees(orgsAndUsers)//处理组织和用户
 
         //处理原有用户显示
         const checkUsers = await projectUserRefList({ projectId: this.options.projectId })
 
         if (checkUsers && checkUsers.length) {
-          let checkKeys = []
-
-          checkUsers.forEach(item => {
-            checkKeys.push(item.userId)
-          })
-          this.checkKeys = checkKeys
+          this.userCheckKeys = checkUsers.map(item =>item.userId)
         }
-
-        this.$refs.tree.setCheckedKeys(this.checkKeys)
       } catch (error) {
         console.log(error)
       }
-      this.treesLoading = false
+      this.userTreesLoading = false
     },
     formatUserOrgTrees(child) {
       let trees = []
@@ -95,43 +93,46 @@ export default {
       }
       return trees
     },
+    async getDevices() {
+      this.deviceTrees = []
+      this.deviceCheckKeys = []
+      this.deviceTreesLoading = true
+      try {
+        const orgsAndDevice = await getDeviceList()
+
+        this.deviceTrees = this.formatDeviceOrgTrees(orgsAndDevice)
+      } catch (err) {
+        console.log(err)
+      }
+      this.deviceTreesLoading = false
+    },
+    formatDeviceOrgTrees(child) {
+      // 处理数据
+      let trees = []
+
+      if (child && child.length) {
+        child.forEach(item => {
+          let node = { id: item.orgId, label: item.orgName, type: 'org' }
+
+          let nodeChildren = this.formatDeviceOrgTrees(item.orgResps)
+
+          if (item.devices && item.devices.length) {
+            item.devices.forEach(device => {
+              nodeChildren.push({ id: device.deviceId, label: device.deviceName, type: 'device', deviceType: device.deviceType, userId: device.userId })
+            })
+          }
+          trees.push(nodeChildren && nodeChildren.length ? { ...node, children: nodeChildren } : node)
+        })
+      }
+
+      return trees
+    },
     async onSubmit() {
       this.loading = true
-      let checkNodes = this.$refs.tree.getCheckedNodes(true)
+      const { addIds: addUserIds, deleteIds: deleteUserIds } = this.$refs.userTree.getResult()
 
-      let checkUsers = []
-
-      checkNodes.forEach(item => {
-        if (item.type == 'user') {
-          checkUsers.push(item.id)
-        }
-      })
-
-      console.log('选中的用户id', checkUsers)
-      //处理保存参数
-      let params = { addUserIds: [], deleteUserIds: [], projectId: this.options.projectId }
-
-      if (this.checkKeys.length) {
-        if (checkUsers.length) {
-          this.checkKeys.forEach(id => {
-            let index = checkUsers.indexOf(id)
-
-            if (index < 0) {
-              params.deleteUserIds.push(id)
-            } else {
-              checkUsers.splice(index, 1)
-            }
-          })
-          params.addUserIds = checkUsers
-        } else {
-          params.deleteUserIds = this.checkKeys
-        }
-      } else {
-        params.addUserIds = checkUsers
-      }
-      console.log('提交用户更新', this.checkKeys, params)
       try {
-        await projectUserRefSave(params)
+        await projectUserRefSave({ addUserIds, deleteUserIds, projectId: this.options.projectId })
         this.$message.success('操作成功')
         this.dialogVisible = false
         this.$emit('save-success')
@@ -147,22 +148,22 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-.jc-uo-tree {
-  position: relative;
-  height: 360px;
-  overflow-y: auto;
-  margin-top: $jc-default-dis/2;
+.jc-clearboth::after,
+.jc-clearboth::before {
+  content: "";
+  display: table;
+  clear: both;
 }
-.custom-tree-node {
-  flex: 1;
-  display: flex;
-  width: 0;
-  font-size: $jc-font-size-small;
-  padding-left: 15px;
-  background: url(/static/areaicons/organization.png) no-repeat left center;
-  background-size: 12px auto;
-  &.jc-user {
-    background-image: url(./assets/user.png);
-  }
+.jc-left-width48 {
+  width: 48%;
+  float: left;
+}
+.jc-right-width48{
+  width: 48%;
+  float: right;
+}
+.jc-title{
+  text-align: center;
+  line-height: 28px;
 }
 </style>
