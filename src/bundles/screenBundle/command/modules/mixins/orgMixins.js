@@ -230,17 +230,17 @@ export default {
       //处理实体显示
       let orgSignVisible = data.signs.includes('org')
 
-      if (this.orgSignVisible == orgSignVisible) {
+      if (this.orgSignVisible != orgSignVisible) {
         this.orgSignVisible = orgSignVisible
         needUpdate = true
       }
 
       if (needUpdate) {
         orgAreas.forEach(item => {
+          item.areaVisible = this.orgAreaVisible
           item.tipVisible = this.orgTipVisible
           item.signVisible = this.orgSignVisible
-          item.showTip()
-          item.showArea(this.orgAreaVisible)
+          item.show()
         })
       }
     }
