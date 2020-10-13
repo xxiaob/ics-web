@@ -16,7 +16,7 @@ export default {
       pushDeviceIds: [], // 所有推送在线设备ids
       deviceOrgId: '',
       deviceSignVisible: false, //是否显示设备
-      deviceTipVisible: true //设备是否显示标题
+      deviceTipVisible: false //设备是否显示标题
     }
   },
   created() {
@@ -30,9 +30,8 @@ export default {
     //  推送设备(网巡车,无人机)初始化
     this.$EventBus.$on('map-device-change', this.initDeviceMap)
     this.$EventBus.$on('screen-device-location', this.deviceLocation) //监听设备定位
-    this.$EventBus.$on('show-sign-change', this.deviceShowSignChange) //显示实体
+    this.$EventBus.$on('show-sign-change', this.deviceShowSignChange) //过滤信息显示
     this.$EventBus.$on('org-change', this.deviceOrgChange) //监听第一次组织级别切换
-    this.$EventBus.$on('show-word-change', this.deviceShowWordChange) //监听实体显示切换
   },
   methods: {
     deviceOrgChange(org) {
@@ -210,16 +209,30 @@ export default {
       this.deviceTipVisible = deviceTipVisible
       this.fitDevices()
     },
-    async deviceShowSignChange(signs) {
-      let deviceSignVisible = signs.includes('device')
+    deviceShowSignChange(data) {
+      let needFit = false
 
-      if (this.deviceSignVisible == deviceSignVisible) {
-        return
+      //处理标题是否显示
+      let deviceTipVisible = data.words.includes('device')
+
+      if (this.deviceTipVisible != deviceTipVisible) {
+        this.deviceTipVisible = deviceTipVisible
+        needFit = true
       }
-      this.deviceSignVisible = deviceSignVisible
-      if (this.deviceSignVisible) {
-        await this.initDeviceData() //初始化后重新执行固定设备
-      } else {
+
+      //处理是否显示实体
+      let deviceSignVisible = data.signs.includes('device')
+
+      if (this.deviceSignVisible != deviceSignVisible) {
+        this.deviceSignVisible = deviceSignVisible
+        if (this.deviceSignVisible) {
+          this.initDeviceData() //初始化后重新执行固定设备
+          return
+        }
+        needFit = true
+      }
+
+      if (needFit) {
         this.fitDevices()
       }
     }
@@ -229,7 +242,6 @@ export default {
     this.$EventBus.$off('map-device-change', this.initDeviceMap)
     this.$EventBus.$off('show-sign-change', this.deviceShowSignChange)
     this.$EventBus.$off('org-change', this.deviceOrgChange)
-    this.$EventBus.$off('show-word-change', this.deviceShowWordChange)
     this.$EventBus.$off('screen-device-location', this.deviceLocation)
   }
 }
