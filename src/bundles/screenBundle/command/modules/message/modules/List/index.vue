@@ -18,6 +18,7 @@
         <div class="jc-info-item">车牌号：{{item.userName}}</div>
         <div class="jc-info-item">告警类型：{{item.typeName}}</div>
       </template>
+      <div class="jc-info-item" v-else-if="item.type == types.SELFALARM">地点：{{item.position}}</div>
       <div class="jc-info-item" v-else>上报人：{{item.userName}}</div>
       <div class="jc-info-item" v-if="item.type == types.QUESTION">问题类型：{{item.typeName}}</div>
       <div class="jc-info-item" v-else-if="item.type == types.EVENT">事件类型：{{item.typeName}}</div>

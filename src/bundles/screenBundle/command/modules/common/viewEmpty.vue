@@ -15,7 +15,7 @@ export default {
 <style lang="scss" scoped>
 .jc-view-empty {
   width: 100%;
-  background: url(./assets/empty.png) no-repeat 30px center;
+  background: url(./assets/empty.png) no-repeat center center;
   background-size: auto 210px;
   padding-top: 240px;
   color: $jc-color-text-secondary;
