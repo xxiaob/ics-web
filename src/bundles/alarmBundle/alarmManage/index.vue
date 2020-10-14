@@ -30,7 +30,7 @@
     </el-card>
 
 
-    <jc-detail :info="detailInfo" :visible.sync="detailVisible"></jc-detail>
+    <!-- <jc-detail :info="detailInfo" :visible.sync="detailVisible"></jc-detail> -->
 
   </div>
 </template>
@@ -44,11 +44,11 @@ import { createNamespacedHelpers } from 'vuex'
 const { mapState } = createNamespacedHelpers('user')
 
 export default {
-  name: 'PeopleInfoIndex',
+  name: 'AlarmMange',
   mixins: [PaginationMixins],
   components: {
-    TabFilter: () => import('./modules/tabFilter'),
-    JcDetail: () => import('./modules/detail')
+    TabFilter: () => import('./modules/tabFilter')
+    // JcDetail: () => import('./modules/detail')
   },
   data() {
     return {

@@ -43,35 +43,11 @@
     </el-card>
 
      <el-card class="jc-echart-card jc-mt">
-      <!-- <div slot="header" class="jc-card-header">
-        <div class="jc-card-title">组织业务</div>
-      </div> -->
       <el-row :gutter="0">
-        <el-col :span="8">
-          <el-card >
-           <div slot="header" class="jc-card-header">
-              <h3 >业务类比占比</h3>
-              <el-radio-group class="jc-button-group" v-model="businessType" size="mini">
-                <el-radio-button  label="event">事件</el-radio-button>
-                <el-radio-button  label="problem">问题</el-radio-button>
-                <el-radio-button  label="task">任务</el-radio-button>
-              </el-radio-group>
-            </div>
+        <jc-category></jc-category>
 
 
-          </el-card>
-        </el-col>
-        <el-col :span="16">
-          <el-card :body-style="{ padding: '0px' }">
-           <div slot="header" class="jc-card-header">
-            <h3>业务完成率</h3>
-            <el-radio-group class="jc-button-group" v-model="completeType" size="mini">
-                <el-radio-button  label="task">任务</el-radio-button>
-                <el-radio-button  label="problem">问题</el-radio-button>
-              </el-radio-group>
-          </div>
-          </el-card>
-        </el-col>
+        <jc-complete></jc-complete>
       </el-row>
     </el-card>
 
@@ -87,12 +63,16 @@
 import { createNamespacedHelpers } from 'vuex'
 const { mapState } = createNamespacedHelpers('user')
 
+
 export default {
   name: 'OrganizeBusinessIndex',
   // mixins: [PaginationMixins],
   components: {
     TabFilter: () => import('./modules/tabFilter'),
-    JcDetail: () => import('./modules/detail')
+    JcDetail: () => import('./modules/detail'),
+    JcCategory: () => import('./modules/category'),
+    JcComplete: () => import('./modules/complete')
+
   },
   data() {
     return {
@@ -106,13 +86,15 @@ export default {
       detailInfo: null,
       filter: {},
       orgId: '',
-      businessType: 'event',
-      completeType: 'task'
+
+      completeType: 'task', // 业务完成率占比
+      options: null // echarts参数
     }
   },
   computed: {
     ...mapState(['user'])
   },
+
   async created() {
     // await this.getOrgTree()
 
@@ -206,135 +188,11 @@ export default {
               problemHandle: 35,
               problemHandleRate: '89.74%'
             }
-            // {
 
-            //   orgName: '南京市',
-            //   eventReport: 105,
-            //   eventType: '市容环境 宣传广告 施工管理',
-            //   taskLssus: 37,
-            //   taskSource: '12345 12319 问题上报',
-            //   taskAccept: 39,
-            //   taskComplete: 35,
-            //   taskCompleteRate: '89.74%',
-            //   problemReport: 37,
-            //   problemType: '市容环境 宣传广告 施工管理',
-            //   problemAccept: 39,
-            //   problemHandle: 35,
-            //   problemHandleRate: '89.74%'
-            // },
-            // {
-
-            //   orgName: '南京市',
-            //   eventReport: 105,
-            //   eventType: '市容环境 宣传广告 施工管理',
-            //   taskLssus: 37,
-            //   taskSource: '12345 12319 问题上报',
-            //   taskAccept: 39,
-            //   taskComplete: 35,
-            //   taskCompleteRate: '89.74%',
-            //   problemReport: 37,
-            //   problemType: '市容环境 宣传广告 施工管理',
-            //   problemAccept: 39,
-            //   problemHandle: 35,
-            //   problemHandleRate: '89.74%'
-            // },
-            // {
-
-            //   orgName: '南京市',
-            //   eventReport: 105,
-            //   eventType: '市容环境 宣传广告 施工管理',
-            //   taskLssus: 37,
-            //   taskSource: '12345 12319 问题上报',
-            //   taskAccept: 39,
-            //   taskComplete: 35,
-            //   taskCompleteRate: '89.74%',
-            //   problemReport: 37,
-            //   problemType: '市容环境 宣传广告 施工管理',
-            //   problemAccept: 39,
-            //   problemHandle: 35,
-            //   problemHandleRate: '89.74%'
-            // },
-            // {
-
-            //   orgName: '南京市',
-            //   eventReport: 105,
-            //   eventType: '市容环境 宣传广告 施工管理',
-            //   taskLssus: 37,
-            //   taskSource: '12345 12319 问题上报',
-            //   taskAccept: 39,
-            //   taskComplete: 35,
-            //   taskCompleteRate: '89.74%',
-            //   problemReport: 37,
-            //   problemType: '市容环境 宣传广告 施工管理',
-            //   problemAccept: 39,
-            //   problemHandle: 35,
-            //   problemHandleRate: '89.74%'
-            // }
-            // {
-
-            //   orgName: '南京市',
-            //   eventReport: 105,
-            //   eventType: '市容环境 宣传广告 施工管理',
-            //   taskLssus: 37,
-            //   taskSource: '12345 12319 问题上报',
-            //   taskAccept: 39,
-            //   taskComplete: 35,
-            //   taskCompleteRate: '89.74%',
-            //   problemReport: 37,
-            //   problemType: '市容环境 宣传广告 施工管理',
-            //   problemAccept: 39,
-            //   problemHandle: 35,
-            //   problemHandleRate: '89.74%'
-            // },
-            // {
-
-            //   orgName: '南京市',
-            //   eventReport: 105,
-            //   eventType: '市容环境 宣传广告 施工管理',
-            //   taskLssus: 37,
-            //   taskSource: '12345 12319 问题上报',
-            //   taskAccept: 39,
-            //   taskComplete: 35,
-            //   taskCompleteRate: '89.74%',
-            //   problemReport: 37,
-            //   problemType: '市容环境 宣传广告 施工管理',
-            //   problemAccept: 39,
-            //   problemHandle: 35,
-            //   problemHandleRate: '89.74%'
-            // },
-            // {
-
-            //   orgName: '南京市',
-            //   eventReport: 105,
-            //   eventType: '市容环境 宣传广告 施工管理',
-            //   taskLssus: 37,
-            //   taskSource: '12345 12319 问题上报',
-            //   taskAccept: 39,
-            //   taskComplete: 35,
-            //   taskCompleteRate: '89.74%',
-            //   problemReport: 37,
-            //   problemType: '市容环境 宣传广告 施工管理',
-            //   problemAccept: 39,
-            //   problemHandle: 35,
-            //   problemHandleRate: '89.74%'
-            // },
-            // {
-
-            //   orgName: '南京市',
-            //   eventReport: 105,
-            //   eventType: '市容环境 宣传广告 施工管理',
-            //   taskLssus: 37,
-            //   taskSource: '12345 12319 问题上报',
-            //   taskAccept: 39,
-            //   taskComplete: 35,
-            //   taskCompleteRate: '89.74%',
-            //   problemReport: 37,
-            //   problemType: '市容环境 宣传广告 施工管理',
-            //   problemAccept: 39,
-            //   problemHandle: 35,
-            //   problemHandleRate: '89.74%'
-            // }
           ]
+
+          // 事件数据
+
 
           // if (resultList && resultList.length > 0) {
           //   resultList.forEach(item=>{
@@ -361,6 +219,7 @@ export default {
         }
       }
     },
+
     goFilter(filter) {
       console.log('filter', filter)
       this.filter = filter
@@ -378,6 +237,8 @@ export default {
       }
     }
   }
+
+
 }
 </script>
 
@@ -389,11 +250,25 @@ export default {
 /deep/ .jc-echart-card{
   & > .el-card__body{
     padding-top:0;
+
+    .el-card__header{
+      padding-left: 0;
+    }
+
   }
 
   .el-card{
     box-shadow: none;
     border: none;
+
+    .el-card__body{
+      padding:4px;
+    }
+  }
+
+
+  .jc-type-echarts{
+    height: 260px;
   }
 }
 </style>
