@@ -36,15 +36,18 @@
 </template>
 <script>
 // import { eventManageList, eventManageDel, eventManageGet } from '@/api/eventManage'
-import { eventManageList, eventManageDel } from '@/api/eventManage'
+import { eventManageDel } from '@/api/eventManage'
+import { organizationList } from '@/api/organization'
+
+import { getUserInfoList } from '@/api/organizeInfo'
 import { formatDate } from '@/libs/util'
 import PaginationMixins from '@/mixins/PaginationMixins'
-import { organizationList } from '@/api/organization'
+
 import { createNamespacedHelpers } from 'vuex'
 const { mapState } = createNamespacedHelpers('user')
 
 export default {
-  name: 'PeopleInfoIndex',
+  name: 'UserInfoIndex',
   mixins: [PaginationMixins],
   components: {
     TabFilter: () => import('./modules/tabFilter'),
@@ -68,6 +71,7 @@ export default {
     ...mapState(['user'])
   },
   async created() {
+    console.log(1111)
     await this.getOrgTree()
 
     this.initData()
@@ -122,8 +126,14 @@ export default {
     async initData() {
       if (!this.loading) {
         this.loading = true
+
         try {
-          const { total, resultList } = await eventManageList({ ...this.filter, ...this.page })
+          console.log('filter', this.filter)
+          console.log('page', this.page)
+          let data = await getUserInfoList({ ...this.filter, ...this.page })
+
+          console.log('data', data)
+          const { total, resultList } = data
 
           this.page.total = total
           const list = []

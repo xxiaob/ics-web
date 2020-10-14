@@ -303,6 +303,15 @@ export default {
     closeAlarm: 'task-service/alarm/closeAlarm', // 关闭告警
     updateAlarm: 'task-service/alarm/updateAlarm', // 更新告警状态
     getAlarmById: 'task-service/alarm/getAlarmById'
+  },
+  organizeInfo: {
+    // 组织信息
+    userInfo: {
+      // 人员信息库
+      list: 'user-service/org/userList', // 组织人员信息库列表
+      userExport: 'user-service/org/userExport', //组织人员信息库单个人员信息导出
+      listExport: 'user-service/org/userListExport' // 组织人员信息库列表导出
+    }
   }
 }
 
