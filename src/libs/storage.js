@@ -118,3 +118,21 @@ export function getTodoInfo() {
 export function setTodoInfo(info) {
   storageSet(STORAGE_KEY.COMMAND_MESSAGE_DATA_TODO_INFO, info)
 }
+
+/**
+ * 获取指挥大屏 用户操作信息（信息过滤）
+ * @param {String} projectId 项目id
+ * @returns {Object} 信息
+ */
+export function getCommandOprea(projectId) {
+  return storageGet(STORAGE_KEY.COMMAND_OPERA_DATA + getUser().userId + projectId)
+}
+
+/**
+ * 保存指挥大屏 用户操作信息（信息过滤）
+ * @param {String} projectId 项目id
+ * @param {object} info 信息
+ */
+export function setCommandOprea(projectId, info) {
+  storageSet(STORAGE_KEY.COMMAND_OPERA_DATA + getUser().userId + projectId, info)
+}

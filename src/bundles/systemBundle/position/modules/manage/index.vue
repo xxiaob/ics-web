@@ -9,6 +9,11 @@
           <el-checkbox v-for="item in types" :label="item.value" :key="item.value" name="type">{{item.label}}</el-checkbox>
         </el-checkbox-group>
       </el-form-item>
+      <el-form-item label="APP音视频" prop="media">
+        <el-checkbox-group v-model="form.media">
+          <el-checkbox label="1" name="media">视频通话</el-checkbox>
+        </el-checkbox-group>
+      </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">
       <el-button @click="dialogVisible = false">取 消</el-button>
@@ -43,10 +48,11 @@ export default {
         return {
           positionId: this.options.positionId,
           positionName: this.options.positionName,
-          type: this.options.type || []
+          type: this.options.type || [],
+          media: this.options.media || []
         }
       } else {
-        return { ...defaultForm, type: [] }
+        return { ...defaultForm, type: [], media: [] }
       }
     },
     onSubmit() {
@@ -54,6 +60,7 @@ export default {
       this.$refs.form.validate(valid => {
         if (valid) {
           this.form.loginType = this.form.type.join(',')
+          this.form.mobileFunction = this.form.media.join(',')
           positionSave(this.form).then(() => {
             this.$message.success('操作成功')
             this.dialogVisible = false

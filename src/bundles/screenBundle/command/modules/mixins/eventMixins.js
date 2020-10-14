@@ -16,16 +16,14 @@ export default {
     return {
       eventOrgId: '',
       eventSignVisible: false, //事件是否显示
-      eventTipVisible: true, //事件名称是否显示
-      eventTogetherVisible: true, //事件是否聚合
+      eventTipVisible: false, //事件名称是否显示
+      eventTogetherVisible: false, //事件是否聚合
       eventToday: new Date(moment().format('YYYY-MM-DD')).getTime() // 初始时间
     }
   },
   created() {
     this.$EventBus.$on('org-change', this.eventOrgChange) //监听组织级别切换
-    this.$EventBus.$on('show-sign-change', this.eventShowSignChange) //显示实体
-    this.$EventBus.$on('show-word-change', this.eventShowWordChange) //监听文字显示切换
-    this.$EventBus.$on('show-together-change', this.eventTogetherChange) // 监听是否聚合
+    this.$EventBus.$on('show-sign-change', this.eventShowSignChange) //过滤信息显示
   },
   methods: {
     eventOrgChange(org) {
@@ -219,39 +217,42 @@ export default {
 
       eventData = { markerCluster: null, events: {}, lnglats: [] }
     },
-    eventShowWordChange(words) {
-      let eventTipVisible = words.includes('event')
+    eventShowSignChange(data) {
+      let needFit = false
 
-      if (this.eventTipVisible == eventTipVisible) {
-        return
-      }
-      this.eventTipVisible = eventTipVisible
-      this.fitEvents()
-    },
-    eventTogetherChange(togethers) {
-      let eventTogetherVisible = togethers.includes('event')
+      //处理标题显示
+      let eventTipVisible = data.words.includes('event')
 
-      if (this.eventTogetherVisible == eventTogetherVisible) {
-        return
+      if (this.eventTipVisible != eventTipVisible) {
+        this.eventTipVisible = eventTipVisible
+        needFit = true
       }
-      this.eventTogetherVisible = eventTogetherVisible
-      this.fitEvents()
-    },
-    eventShowSignChange(signs) {
-      let eventSignVisible = signs.includes('event')
 
-      if (this.eventSignVisible == eventSignVisible) {
-        return
+      //处理聚合显示
+      let eventTogetherVisible = data.togethers.includes('event')
+
+      if (this.eventTogetherVisible != eventTogetherVisible) {
+        this.eventTogetherVisible = eventTogetherVisible
+        needFit = true
       }
-      this.eventSignVisible = eventSignVisible
-      this.initEventData()
+
+      //处理实体显示
+      let eventSignVisible = data.signs.includes('event')
+
+      if (this.eventSignVisible != eventSignVisible) {
+        this.eventSignVisible = eventSignVisible
+        this.initEventData()
+        needFit = false
+      }
+
+      if (needFit) {
+        this.fitEvents()
+      }
     }
   },
   beforeDestroy() {
     this.clearEvents()
     this.$EventBus.$off('org-change', this.eventOrgChange)
     this.$EventBus.$off('show-sign-change', this.eventShowSignChange)
-    this.$EventBus.$off('show-word-change', this.eventShowWordChange)
-    this.$EventBus.$off('show-together-change', this.eventTogetherChange)
   }
 }

@@ -54,7 +54,9 @@ export default {
     getOrgUserList: 'user-service/user/getOrgUserList',
     getOrgUserListByProject: 'user-service/user/getOrgUserListByProject',
     updPwd: 'user-service/user/updPwd',
-    getUsersByPosition: 'message-srv/message/getUsersByPosition'
+    getUsersByPosition: 'message-srv/message/getUsersByPosition',
+    updPhotos: 'user-service/user/updPhotos',
+    importUsers: 'user-service/user/import'
   },
   areaType: {
     //区域类型管理

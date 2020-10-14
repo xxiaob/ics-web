@@ -4,7 +4,7 @@
     <template v-if="isLogin">
       <div class="jc-header-menus">
         <div class="jc-user-warp">
-          <i class="jc-user-header"></i>{{user.userName}}
+          <i class="jc-user-header" :style="{backgroundImage:`url(${avatar})`}"></i>{{user.userName}}
           <i class="jc-arrow-icon el-icon-arrow-right"></i>
           <div class="jc-menu-popup">
             <div class="jc-menu-item" @click="visible = true">个人信息</div>
@@ -38,6 +38,9 @@ export default {
     ...mapState('user', {
       user: state => state.user
     }),
+    avatar() {
+      return this.user && this.user.photo ? this.user.photo : '/static/images/user-header.png'
+    },
     systemLogo() {
       return this.user && this.user.userRespInnerDTO && this.user.userRespInnerDTO.homePageLogo ? this.user.userRespInnerDTO.homePageLogo : '/static/images/header-logo.png'
     },
@@ -139,7 +142,7 @@ export default {
   background-position: center;
   background-repeat: no-repeat;
   background-size: 100% 100%;
-  background-image: url(/static/images/user-header.png);
+  // background-image: url(/static/images/user-header.png);
   vertical-align: middle;
   border-radius: 50%;
 }

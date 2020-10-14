@@ -6,6 +6,8 @@
         <div class="jc-card-title">列表内容</div>
         <div class="jc-button-group">
           <el-button type="primary" icon="el-icon-plus" size="small" @click="manage(null)">添加</el-button>
+          <el-button type="primary" icon="el-icon-upload2" size="small" @click="usersVisible=true">批量人员</el-button>
+          <el-button type="primary" icon="el-icon-upload2" size="small" @click="photosVisible=true">批量照片</el-button>
           <el-button type="danger" icon="el-icon-delete" size="small" @click="removeAll">删除</el-button>
         </div>
       </div>
@@ -16,7 +18,7 @@
         <el-table-column prop="account" label="登录账号"></el-table-column>
         <el-table-column prop="phone" label="手机号"></el-table-column>
         <el-table-column prop="orgName" label="所属组织"></el-table-column>
-        <el-table-column prop="positionName" label="职位"></el-table-column>
+        <el-table-column prop="positions" label="职位" :formatter="formatPostions"></el-table-column>
         <el-table-column label="默认接收人">
           <template slot-scope="scope">
             <el-switch v-model="scope.row.isDefReceiver" active-value="1" inactive-value="0" @change="userStateChange(scope.row,1)"></el-switch>
@@ -40,6 +42,8 @@
       <el-pagination @current-change="currentChange" @size-change="sizeChange" :current-page.sync="page.pageNum" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.total" class="text-right jc-mt"></el-pagination>
     </el-card>
     <jc-manage :options="info" :orgId="org.orgId" :visible.sync="visible" @save-success="initData"></jc-manage>
+    <jc-manage-photos :visible.sync="photosVisible"></jc-manage-photos>
+    <jc-manage-users :orgId="org.orgId" :visible.sync="usersVisible" @save-success="initData"></jc-manage-users>
     <user-detail :userId="userId" :visible.sync="detailVisible"></user-detail>
   </div>
 </template>
@@ -54,6 +58,8 @@ export default {
   components: {
     TabFilter: () => import('../tabFilter'),
     JcManage: () => import('../manage'),
+    JcManagePhotos: () => import('../managePhotos'),
+    JcManageUsers: () => import('../manageUsers'),
     UserDetail: () => import('../detail')
   },
   data() {
@@ -62,14 +68,21 @@ export default {
       loading: false,
       visible: false,
       detailVisible: false,
+      photosVisible: false,
+      usersVisible: false,
       info: null,
       userId: null,
       org: {},
       ids: [],
-      filter: { }
+      filter: {}
     }
   },
   methods: {
+    formatPostions(row, column, cellValue) {
+      const positionNames = cellValue.map(item=>item.positionName)
+
+      return positionNames.join(',')
+    },
     initData(org) {
       if (org) {
         this.org = org
@@ -166,6 +179,14 @@ export default {
             })
             res.roleIds = roleIds
           }
+          if (res.positions && res.positions.length) {
+            let positionIds = []
+
+            res.positions.forEach(item => {
+              positionIds.push(item.positionId)
+            })
+            res.positionIds = positionIds
+          }
           this.info = res
           this.visible = true
         })
@@ -173,6 +194,9 @@ export default {
         this.info = null
         this.visible = true
       }
+    },
+    uploadPhoto() {
+      console.log('uploadPhoto')
     }
   }
 }

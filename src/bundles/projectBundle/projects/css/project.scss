@@ -80,6 +80,16 @@
     }
   }
 
+  .jc-play{
+    display: block;
+    // width: 34px;
+    margin-right: 10px;
+    height: 30px;
+    line-height: 30px;
+    text-align: center;
+    @extend .jc-hover-style;
+  }
+
   .jc-project-screen {
     position: absolute;
     top: 28%;

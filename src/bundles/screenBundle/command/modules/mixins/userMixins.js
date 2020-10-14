@@ -22,18 +22,16 @@ export default {
     return {
       gatherUserIds: [], //正在采集的用户id 数组
       abnormalUserIds: [], //异常的用户id 数组
-      userSignVisible: true, //用户是否显示
-      userTipVisible: true, //用户名称是否显示
-      userTogetherVisible: true, //用户是否聚合
+      userSignVisible: false, //用户是否显示
+      userTipVisible: false, //用户名称是否显示
+      userTogetherVisible: false, //用户是否聚合
       locationUserId: null //定位的用户id
     }
   },
   created() {
     this.$EventBus.$on('map-user-change', this.userMap) //监听用户改变
     this.$EventBus.$on('screen-user-location', this.userLocation) //监听用户定位
-    this.$EventBus.$on('show-sign-change', this.userShowSignChange) //显示实体
-    this.$EventBus.$on('show-word-change', this.userShowWordChange) //监听文字显示切换
-    this.$EventBus.$on('show-together-change', this.userTogetherChange) //监听聚合显示改变
+    this.$EventBus.$on('show-sign-change', this.userShowSignChange) //过滤信息显示
     this.$EventBus.$on('screen-use-select', this.userSelect) //监听框选用户
 
     this.abnormalUserinterval = setInterval(this.abnormalUserChange, 2000) //异常用户 超时没有推送 改变状态
@@ -368,32 +366,36 @@ export default {
         this.$message.error('用户不在线或未显示')
       }
     },
-    userShowSignChange(signs) {
-      let userSignVisible = signs.includes('user')
+    userShowSignChange(data) {
+      let neetFit = false
 
-      if (this.userSignVisible == userSignVisible) {
-        return
-      }
-      this.userSignVisible = userSignVisible
-      this.fitUsers()
-    },
-    userShowWordChange(words) {
-      let userTipVisible = words.includes('user')
+      //处理标题
+      let userTipVisible = data.words.includes('user')
 
-      if (this.userTipVisible == userTipVisible) {
-        return
+      if (this.userTipVisible != userTipVisible) {
+        this.userTipVisible = userTipVisible
+        neetFit = true
       }
-      this.userTipVisible = userTipVisible
-      this.fitUsers()
-    },
-    userTogetherChange(togethers) {
-      let userTogetherVisible = togethers.includes('user')
 
-      if (this.userTogetherVisible == userTogetherVisible) {
-        return
+      //处理聚合
+      let userTogetherVisible = data.togethers.includes('user')
+
+      if (this.userTogetherVisible != userTogetherVisible) {
+        this.userTogetherVisible = userTogetherVisible
+        neetFit = true
       }
-      this.userTogetherVisible = userTogetherVisible
-      this.fitUsers()
+
+      //处理实体
+      let userSignVisible = data.signs.includes('user')
+
+      if (this.userSignVisible != userSignVisible) {
+        this.userSignVisible = userSignVisible
+        neetFit = true
+      }
+
+      if (neetFit && usersData.markerCluster) {
+        this.fitUsers()
+      }
     }
   },
   beforeDestroy() {
@@ -403,8 +405,6 @@ export default {
     this.$EventBus.$off('map-user-change', this.userMap)
     this.$EventBus.$off('screen-user-location', this.userLocation)
     this.$EventBus.$off('show-sign-change', this.userShowSignChange)
-    this.$EventBus.$off('show-word-change', this.orgShowWordChange)
-    this.$EventBus.$off('show-together-change', this.userTogetherChange)
     this.$EventBus.$off('screen-use-select', this.userSelect)
     if (this.abnormalUserinterval) {
       clearInterval(this.abnormalUserinterval)

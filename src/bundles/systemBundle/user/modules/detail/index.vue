@@ -2,7 +2,7 @@
   <el-dialog :title="title" :visible.sync="dialogVisible" width="600px" :append-to-body="true" :close-on-click-modal="false" @close="dialogClose">
     <div class="text-center">
       <div class="jc-mb">
-        <el-avatar :srcSet="user.photo ? user.photo : '/static/images/user-header.png'" :size="50">{{user.userName}}</el-avatar>
+        <el-avatar :src="user.photo ? user.photo : '/static/images/user-header.png'" :size="50">{{user.userName}}</el-avatar>
       </div>
       <div class="jc-user-content">
         <div class="jc-info-item">
@@ -27,7 +27,7 @@
         </div>
         <div class="jc-info-item">
           <label class="jc-info-label">职位：</label>
-          <div class="jc-info-content" v-text="user.positionName"></div>
+          <div class="jc-info-content" v-text="positionNames"></div>
         </div>
         <div class="jc-info-item">
           <label class="jc-info-label">所属组织：</label>
@@ -36,6 +36,10 @@
         <div class="jc-info-item">
           <label class="jc-info-label">角色：</label>
           <div class="jc-info-content" v-text="userRoles"></div>
+        </div>
+        <div class="jc-info-item">
+          <label class="jc-info-label">党员：</label>
+          <div class="jc-info-content">{{user.partyMember?'是':'否'}}</div>
         </div>
         <div class="jc-info-title">用户描述</div>
       </div>
@@ -71,6 +75,14 @@ export default {
           rolesName.push(item.roleName)
         })
         return rolesName.join('，')
+      }
+      return '--'
+    },
+    positionNames() {
+      if (this.user.positions && this.user.positions.length) {
+        const positionNames = this.user.positions.map(item=>item.positionName)
+
+        return positionNames.join('，')
       }
       return '--'
     }
