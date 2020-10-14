@@ -1,69 +1,62 @@
 <template>
-  <el-dialog title="事件详情" :visible.sync="dialogVisible" width="600px" :append-to-body="true" :close-on-click-modal="false" @close="dialogClose" top="5vh">
-    <el-form ref="form" label-width="100px" :model="form" class="jc-manage-form" size="mini">
-      <el-form-item label="事件ID：">
-        <span>{{form.eventNumber}}</span>
-      </el-form-item>
-      <el-form-item label="上报人：">
-        <span>{{form.reportUserName}}</span>
-      </el-form-item>
-      <el-form-item label="所属组织：">
-        <span>{{form.orgName}}</span>
-      </el-form-item>
-      <el-form-item label="事件标题：">
-        <span>{{form.eventTitle}}</span>
-      </el-form-item>
-      <el-form-item label="上报地点：">
-        <span>{{form.positionName}}</span>
-      </el-form-item>
-      <el-form-item label="事件类型：">
-        <span>{{form.typeName}}</span>
-      </el-form-item>
-      <el-form-item label="事件描述：">
-        <!-- <span>{{form.desc}}</span> -->
-        <div v-html="form.desc"></div>
-      </el-form-item>
-      <el-form-item label="处理前图片：">
-        <el-image v-for="url in form.beforePhotos" :key="url" :src="url" :preview-src-list="form.beforePhotos" class="jc-img"></el-image>
-      </el-form-item>
-      <el-form-item label="处理后图片：">
-        <el-image v-for="url in form.afterPhotos" :key="url" :src="url" :preview-src-list="form.afterPhotos" class="jc-img"></el-image>
-      </el-form-item>
-      <el-form-item label="视频文件：">
-        <div class="jc-video" v-for="url in form.videoAddrs" :key="url" @click="showVideo(url)">
-          <video :src="url"></video>
-          <div class="hover">
-            <img class="jc-video-play" src="../../../assets/play.png" alt="">
-          </div>
+  <el-dialog title="人员详情" :visible.sync="dialogVisible" width="600px" :append-to-body="true" :close-on-click-modal="false" @close="dialogClose" top="5vh">
+    <el-row :gutter="20">
+      <el-col :span="8">
+        <div class="userPhoto">
+          <img :src="form.photo" width="100%" alt="">
         </div>
-      </el-form-item>
-      <el-form-item label="音频文件：" prop="audioAddr">
-        <div v-for="(url,index) in form.audioAddrs" :key="url" class="jc-audio" @click="playAudio(url,index)">
-          <img class="jc-audio-mike" src="../../../assets/mike.png" alt="">
-          <div class="hover">
-            <img class="jc-video-play" src="../../../assets/play.png" alt="" v-show="audioPlayShows[index]">
-            <img class="jc-video-play" src="../../../assets/pause.png" alt="" v-show="!audioPlayShows[index]">
-          </div>
-        </div>
-        <audio v-if="dialogVisible" ref="audio" :src="audioUrl" style="width:0;height:0" @ended="audioEnded"></audio>
-      </el-form-item>
-    </el-form>
+      </el-col>
+      <el-col :span="16">
+        <el-form ref="form" label-width="100px" :model="form" class="jc-manage-form" size="mini">
+          <el-form-item label="姓 名：">
+            <span>{{form.userName}}</span>
+          </el-form-item>
+          <el-form-item label="登录账号：">
+            <span>{{form.account}}</span>
+          </el-form-item>
+          <el-form-item label="手机号码：">
+            <span>{{form.phone}}</span>
+          </el-form-item>
+          <el-form-item label="执法证号：">
+            <span>{{form.lawNbr}}</span>
+          </el-form-item>
+          <el-form-item label="胸牌编号：">
+            <span>{{form.chestNbr}}</span>
+          </el-form-item>
+          <el-form-item label="所属组织：">
+            <span>{{form.orgName}}</span>
+          </el-form-item>
+          <el-form-item label="是否党员：">
+            <span v-if="form.partyMember === '1'">是</span>
+            <span v-else>否</span>
+          </el-form-item>
+          <el-form-item label="用户角色：">
+            <div v-for="(role,index) in form.roles" :key="index">{{role}}</div>
+          </el-form-item>
+
+          <el-form-item label="用户职位：">
+             <div v-for="(position,index) in form.positions" :key="index">{{position}}</div>
+          </el-form-item>
+          <el-form-item label="用户任务：">
+             <div v-for="(task,index) in form.tasks" :key="index">{{task}}</div>
+          </el-form-item>
+          <el-form-item label="用户描述：">
+            <div v-html="form.description"></div>
+          </el-form-item>
+        </el-form>
+      </el-col>
+    </el-row>
+
     <div slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="downloadFile">文件下载</el-button>
-      <el-button type="primary" @click="downloadDetail">报表下载</el-button>
-      <el-button @click="dialogVisible = false">关闭窗口</el-button>
+      <el-button type="primary" @click="downloadDetail">导出</el-button>
     </div>
-    <el-dialog title="视频播放" :visible.sync="dialogVideoVisible" width="800px" :close-on-click-modal="false" :append-to-body="true">
-      <video v-if="dialogVideoVisible" :src="dialogVideoUrl" autoplay controls width="100%"></video>
-    </el-dialog>
   </el-dialog>
 </template>
 <script>
-import { eventManageGet, exportDetail, fileDownload } from '@/api/eventManage'
-import MediaMixins from '../../../mixins/MediaMixins'
 
+import { exportUserInfo } from '@/api/organizeInfo'
 export default {
-  name: 'EventManageDetail',
+  name: 'UserInfoDetail',
   props: {
     visible: {
       type: Boolean,
@@ -74,7 +67,7 @@ export default {
       default: ()=>{}
     }
   },
-  mixins: [MediaMixins],
+
   watch: {
     visible(newVal) {
       if (newVal) {
@@ -82,7 +75,6 @@ export default {
       }
     },
     info: {
-      // immediate: true,
       deep: true,
       handler() {
         this.getDetail()
@@ -92,8 +84,8 @@ export default {
   data() {
     return {
       dialogVisible: false,
-      form: {},
-      audios: []
+      form: {}
+
     }
   },
   created() {
@@ -103,28 +95,21 @@ export default {
   },
   methods: {
     async getDetail() {
-      const res = await eventManageGet(this.info.id)
-
-      this.form = { ...this.info, ...res }
-      this.audios = this.form.audioAddrs
-      this.audioPlayShows = new Array(this.audios.length).fill(true)
+      this.form = { ...this.info }
+      console.log('form', this.form)
     },
     dialogClose() {
       this.$emit('update:visible', false)
     },
     downloadDetail() {
-      console.log('downloadDetail')
-      exportDetail(this.info.id)
-    },
-    downloadFile() {
-      console.log('downloadFile')
-      fileDownload(this.info.id)
+      console.log('导出')
+      exportUserInfo({ userId: this.form.userId, orgId: this.form.orgId })
     }
   }
 }
 </script>
 <style lang="scss" scoped>
-@import "../../../css/media.scss";
+
 .dialog-footer {
   text-align: center;
 }

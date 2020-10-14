@@ -1,28 +1,50 @@
 <template>
   <div class="jc-main-container-warp">
-    <tab-filter :orgTree="orgTree" @filter="goFilter"></tab-filter>
+    <tab-filter :orgTree="orgTree" @filter="goFilter" :userIds="userIds"></tab-filter>
     <el-card class="jc-table-card jc-mt">
       <div slot="header" class="jc-card-header">
         <div class="jc-card-title">列表内容</div>
       </div>
-      <el-table :data="list" v-loading="loading" row-key="id" class="jc-table">
+      <el-table :data="list" v-loading="loading" row-key="id" class="jc-table" @selection-change="handleSelectionChange">
         <el-table-column type="selection" width="40"></el-table-column>
         <el-table-column type="index" :index="indexMethod" label="序号" width="50"></el-table-column>
-        <el-table-column prop="eventTitle" label="姓名"></el-table-column>
-        <el-table-column prop="typeName" label="照片"></el-table-column>
-        <el-table-column prop="reportUserName" label="手机号"></el-table-column>
-        <el-table-column prop="reportUserName" label="执法证号"></el-table-column>
-        <el-table-column prop="reportUserName" label="胸牌编号"></el-table-column>
-        <el-table-column prop="orgId" label="组织" :formatter="formatOrg"></el-table-column>
-        <el-table-column prop="positionName" label="党员" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="desc" label="职位" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="reportUserName" label="角色"></el-table-column>
-        <el-table-column prop="reportUserName" label="任务"></el-table-column>
+        <el-table-column prop="userName" label="姓名" width="100"></el-table-column>
+        <el-table-column prop="account" label="登录账户" width="100"></el-table-column>
+        <el-table-column label="照片" width="80">
+          <template slot-scope="scope">
+            <img :src="scope.row.photo" width="100%" alt="">
+          </template>
+        </el-table-column>
+        <el-table-column prop="phone" label="手机号" width="100"></el-table-column>
+        <el-table-column prop="lawNbr" label="执法证号" width="100"></el-table-column>
+        <el-table-column prop="chestNbr" label="胸牌编号" width="100"></el-table-column>
+        <el-table-column prop="orgName" label="组织"></el-table-column>
+        <el-table-column label="党员" width="60">
+          <template slot-scope="scope">
+            <span v-if="scope.row.partyMember === '1'">是</span>
+            <span v-else>否</span>
+          </template>
+        </el-table-column>
+        <el-table-column  label="职位" >
+          <template slot-scope="scope">
+            <div v-for="(position,index) in scope.row.positions" :key="index">{{position}}</div>
+          </template>
+        </el-table-column>
+        <el-table-column prop="roles" label="角色">
+           <template slot-scope="scope">
+            <div v-for="(role,index) in scope.row.roles" :key="index">{{role}}</div>
+          </template>
+        </el-table-column>
+        <el-table-column prop="tasks" label="任务">
+          <template slot-scope="scope">
+            <div v-for="(task,index) in scope.row.tasks" :key="index">{{task}}</div>
+          </template>
+        </el-table-column>
         <el-table-column prop="createTime" label="创建时间" :formatter="formatTime"></el-table-column>
-        <el-table-column width="100" label="操作">
+        <el-table-column width="80" label="操作">
           <template slot-scope="scope">
             <el-button type="text" size="mini" icon="el-icon-view" @click="detail(scope.row)" title="查看"></el-button>
-            <el-button type="text" size="mini" icon="el-icon-download" @click="del(scope.row)" title="下载"></el-button>
+            <el-button type="text" size="mini" icon="el-icon-download" @click="exportData(scope.row)" title="下载"></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -35,11 +57,10 @@
   </div>
 </template>
 <script>
-// import { eventManageList, eventManageDel, eventManageGet } from '@/api/eventManage'
-import { eventManageDel } from '@/api/eventManage'
-import { organizationList } from '@/api/organization'
 
-import { getUserInfoList } from '@/api/organizeInfo'
+import { organizationList } from '@/api/organization'
+import { getUserInfoList, exportUserInfo } from '@/api/organizeInfo'
+
 import { formatDate } from '@/libs/util'
 import PaginationMixins from '@/mixins/PaginationMixins'
 
@@ -64,14 +85,14 @@ export default {
       info: null,
       detailInfo: null,
       filter: {},
-      orgId: ''
+      orgId: '',
+      userIds: []
     }
   },
   computed: {
     ...mapState(['user'])
   },
   async created() {
-    console.log(1111)
     await this.getOrgTree()
 
     this.initData()
@@ -79,9 +100,6 @@ export default {
   methods: {
     formatTime(row, column, cellValue) {
       return formatDate(cellValue)
-    },
-    formatOrg(row, column, cellValue) {
-      return this.orgObj[cellValue]
     },
     formatOrgTree(child) {
       let trees = []
@@ -128,30 +146,37 @@ export default {
         this.loading = true
 
         try {
-          console.log('filter', this.filter)
-          console.log('page', this.page)
-          let data = await getUserInfoList({ ...this.filter, ...this.page })
-
-          console.log('data', data)
-          const { total, resultList } = data
+          const { total, resultList } = await getUserInfoList({ ...this.filter, ...this.page })
 
           this.page.total = total
           const list = []
 
           if (resultList && resultList.length > 0) {
             resultList.forEach(item=>{
+              // 处理列表数据
+              let positions = item.positions.map(position => position.positionName)
+
+              let roles = item.roles.map(role => role.roleName )
+
+              let tasks = item.tasks.map(task => task.taskName )
+
+              // 提取有用数据
               list.push({
-                createTime: item.createTime,
-                desc: item.desc,
-                positionName: item.positionName,
-                eventTitle: item.eventTitle,
-                eventNumber: item.eventNumber,
-                eventType: item.eventType,
-                typeName: item.typeName,
-                id: item.id,
+                userId: item.userId,
+                userName: item.userName,
+                account: item.account,
+                photo: item.photo,
+                phone: item.phone,
+                lawNbr: item.lawNbr,
+                chestNbr: item.chestNbr,
                 orgId: item.orgId,
-                reportUser: item.reportUser,
-                reportUserName: item.reportUserName
+                orgName: item.orgName,
+                partyMember: item.partyMember,
+                positions,
+                roles,
+                tasks,
+                createTime: item.createTime,
+                description: item.description
               })
             })
           }
@@ -163,20 +188,25 @@ export default {
         }
       }
     },
+    handleSelectionChange(selectVal) {
+      // 获取多选框选择的数据
+      this.userIds = selectVal.map(userInfo => userInfo.userId)
+    },
     goFilter(filter) {
       this.filter = filter
       this.currentChange(1)
     },
-    del(row) {
-      this.$confirm('确认删除该事件', '提示', { type: 'warning' }).then(() => {
-        this.remove(row.id)
-      }).catch(() => {})
+    detail(row) {
+      try {
+        this.detailInfo = row
+        this.detailVisible = true
+      } catch (error) {
+        console.error(error)
+      }
     },
-    remove(id) {
-      eventManageDel(id).then(() => {
-        this.$message.success('删除成功')
-        this.currentChange(this.page.pageNum - 1)
-      })
+    exportData(row) {
+      // 导出人员数据
+      exportUserInfo({ userId: row.userId, orgId: row.orgId })
     }
   }
 }

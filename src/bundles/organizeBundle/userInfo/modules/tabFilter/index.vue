@@ -4,14 +4,14 @@
       <el-form-item prop="orgId" label="组织">
         <el-cascader :options="orgTree" v-model="form.orgId" :props="{expandTrigger: 'hover', checkStrictly: true,emitPath: false }" clearable @change="orgChange" ref="orgCascader"></el-cascader>
       </el-form-item>
-      <el-form-item prop="eventType" label="职位">
-        <el-select v-model="form.eventType" filterable placeholder="全部">
-          <el-option v-for="item in eventTypes" :key="item.id" :label="item.typeName" :value="item.id">
+      <el-form-item prop="positionId" label="职位">
+        <el-select v-model="form.positionId" filterable placeholder="全部">
+          <el-option v-for="item in positions" :key="item.positionId" :label="item.positionName" :value="item.positionId">
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item prop="desc" label="用户信息">
-        <el-input v-model="form.desc" placeholder="姓名或手机号"></el-input>
+      <el-form-item prop="userInfo" label="用户信息">
+        <el-input v-model="form.userInfo" placeholder="姓名或手机号"></el-input>
       </el-form-item>
       <el-form-item class="jc-tabfilter-btns">
         <el-button type="primary" @click="onSubmit">查询</el-button>
@@ -22,68 +22,62 @@
   </el-card>
 </template>
 <script>
-import { eventManageTypeList, exportList } from '@/api/eventManage'
+
+import { exportUserList } from '@/api/organizeInfo'
+import { positionListAll } from '@/api/position'
+
 export default {
   name: 'EventManageFilter',
   props: {
     orgTree: {
       type: Array
+    },
+    userIds: {
+      type: Array
     }
   },
   data() {
     return {
-      eventTypes: [],
+      positions: [],
       loading: false,
       form: {
-        reportUserName: '',
-        startDate: '',
-        endDate: '',
-        desc: '',
+        userInfo: '',
         orgId: '',
-        eventType: ''
+        positionId: ''
       },
-      date: null
+      orgId: ''
     }
   },
   created() {
-    this.remoteMethod('')
+    this.remoteMethod()
   },
   methods: {
     orgChange() {
       this.$refs.orgCascader.dropDownVisible = false //级联选择器 选择任意一级后隐藏下拉框
     },
-    async remoteMethod(query) {
+    async remoteMethod() {
       this.loading = true
       try {
-        this.eventTypes = await eventManageTypeList(query)
+        this.positions = await positionListAll()
         this.loading = false
       } catch (error) {
         console.error(error)
         this.loading = false
       }
     },
-    changeDate(value) {
-      if (value) {
-        this.form.startDate = value[0]
-        this.form.endDate = value[1]
-      } else {
-        this.form.startDate = ''
-        this.form.endDate = ''
-      }
-    },
     reset() {
       this.$refs.form.resetFields()
       this.form.orgId = ''
-      this.form.startDate = ''
-      this.form.endDate = ''
-      this.orgIds = []
-      this.date = null
+      this.form.userInfo = ''
+      this.form.positionId = ''
     },
     onSubmit() {
+      this.orgId = this.form.orgId
       this.$emit('filter', this.form)
     },
     exportData() {
-      exportList(this.form)
+      // 导出列表数据
+      exportUserList({ userIds: this.userIds, orgId: this.orgId })
     }
   }
 }
