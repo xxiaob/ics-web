@@ -13,7 +13,7 @@ export default {
   components: {
     ViewTabs: () => import('../../../common/viewTabs'),
     BaseInfo: () => import('./modules/baseInfo'),
-    ForwardList: () => import('@/bundles/taskBundle/taskProcess/modules/detail/forwardList'),
+    ForwardList: () => import('./modules/forwardList'),
     EventList: () => import('./modules/eventList')
   },
   data() {
