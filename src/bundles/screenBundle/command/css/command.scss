@@ -226,7 +226,8 @@ $jc-oprea-height: 36px; //操作的高度
       background-image: url(../modules/operate/assets/operate-on.png);
     }
 
-    &:hover {
+    &.jc-auto-show:hover,
+    &.jc-work-show {
       .jc-opera-work {
         transform: translate(0, $jc-oprea-height + 10);
         opacity: 1;
@@ -235,6 +236,10 @@ $jc-oprea-height: 36px; //操作的高度
     }
   }
 
+  .jc-work-space {
+    text-align: center;
+    margin-top: $jc-default-dis/2;
+  }
   .jc-opreate-icon {
     position: relative;
     display: block;
@@ -297,7 +302,7 @@ $jc-oprea-height: 36px; //操作的高度
     position: absolute;
     left: 0;
     top: 0;
-    display: flex;
+    cursor: auto;
     padding: $jc-default-dis/2;
     box-shadow: $jc-box-shadow;
     background-color: $jc-color-white;
@@ -338,6 +343,12 @@ $jc-oprea-height: 36px; //操作的高度
       }
     }
 
+    .jc-oprea-line {
+      margin: $jc-default-dis/4 $jc-default-dis/4 $jc-default-dis/4 0;
+      height: 1px;
+      background-color: $jc-color-line-primary;
+    }
+    
     .jc-work-content {
       padding-left: 15px;
       background: url(/static/areaicons/organization.png) no-repeat left center;
@@ -360,6 +371,7 @@ $jc-oprea-height: 36px; //操作的高度
       display: block;
       width: 60px;
       height: 50px;
+      cursor: pointer;
       background-repeat: no-repeat;
       background-position: center;
       background-size: 60px 100%;

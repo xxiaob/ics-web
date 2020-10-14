@@ -16,16 +16,14 @@ export default {
     return {
       problemOrgId: '',
       problemSignVisible: false, //问题是否显示
-      problemTipVisible: true, //问题名称是否显示
-      problemTogetherVisible: true, //问题是否聚合
+      problemTipVisible: false, //问题名称是否显示
+      problemTogetherVisible: false, //问题是否聚合
       problemToday: new Date(moment().format('YYYY-MM-DD')).getTime() //初始时间
     }
   },
   created() {
     this.$EventBus.$on('org-change', this.problemOrgChange) //监听组织级别切换
-    this.$EventBus.$on('show-sign-change', this.problemShowSignChange) //显示实体
-    this.$EventBus.$on('show-word-change', this.problemShowWordChange) //监听文字显示切换
-    this.$EventBus.$on('show-together-change', this.problemTogetherChange) // 监听是否聚合
+    this.$EventBus.$on('show-sign-change', this.problemShowSignChange) //过滤信息显示
   },
   methods: {
     problemOrgChange(org) {
@@ -226,21 +224,42 @@ export default {
       this.problemTogetherVisible = problemTogetherVisible
       this.fitProblems()
     },
-    problemShowSignChange(signs) {
-      let problemSignVisible = signs.includes('problem')
+    problemShowSignChange(data) {
+      let neetFit = false
 
-      if (this.problemSignVisible == problemSignVisible) {
-        return
+      //处理标题显示
+      let problemTipVisible = data.words.includes('problem')
+
+      if (this.problemTipVisible != problemTipVisible) {
+        this.problemTipVisible = problemTipVisible
+        neetFit = true
       }
-      this.problemSignVisible = problemSignVisible
-      this.initProblemData()
+
+      //处理聚合
+      let problemTogetherVisible = data.togethers.includes('problem')
+
+      if (this.problemTogetherVisible != problemTogetherVisible) {
+        this.problemTogetherVisible = problemTogetherVisible
+        neetFit = true
+      }
+
+      //处理实体显示
+      let problemSignVisible = data.signs.includes('problem')
+
+      if (this.problemSignVisible != problemSignVisible) {
+        this.problemSignVisible = problemSignVisible
+        this.initProblemData()
+        neetFit = false
+      }
+
+      if (neetFit) {
+        this.fitProblems()
+      }
     }
   },
   beforeDestroy() {
     this.clearProblems()
     this.$EventBus.$off('org-change', this.eventOrgChange)
     this.$EventBus.$off('show-sign-change', this.problemShowSignChange)
-    this.$EventBus.$off('show-word-change', this.problemShowWordChange)
-    this.$EventBus.$off('show-together-change', this.problemTogetherChange) // 监听是否聚合
   }
 }

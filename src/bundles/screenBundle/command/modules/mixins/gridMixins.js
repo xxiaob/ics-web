@@ -32,10 +32,7 @@ export default {
     this.$EventBus.$on('org-change', this.areaMap) //监听行级别切换
     this.$EventBus.$on('map-grid-change', this.mapGridChange) //岗点考勤状态变化
     this.$EventBus.$on('screen-grid-location', this.gridLocation) //监听网格定位
-    this.$EventBus.$on('show-sign-change', this.gridShowSignChange) //显示实体
-    this.$EventBus.$on('show-area-change', this.gridShowAreaChange) //监听区域显示切换
-    this.$EventBus.$on('show-word-change', this.gridShowWordChange) //监听文字显示切换
-    this.$EventBus.$on('show-together-change', this.gridTogetherChange) //监听聚合显示改变
+    this.$EventBus.$on('show-sign-change', this.gridShowSignChange) //过滤信息显示
 
     this.abnormalUserinterval = setInterval(this.abnormalGridChange, 2000) //异常岗点 超时没有推送 改变状态
   },
@@ -156,9 +153,6 @@ export default {
       for (let type in gridAreas) {
         mapGridTypes.push(type)
       }
-      this.areaTipVisibles = mapGridTypes
-      this.togetherVisibles = mapGridTypes
-      this.areaSignVisibles = mapGridTypes
       this.$EventBus.$emit('map-grid-types-change', mapGridTypes) //通知地图存在类型
       this.fitGrids() //画出网格
     },
@@ -329,24 +323,28 @@ export default {
         this.$message.error('该网格未显示')
       }
     },
-    gridShowAreaChange(areas) {
-      //组织区域显示
-      this.areaAreaVisibles = [...areas]
-      this.fitGrids()
-    },
-    gridShowWordChange(words) {
-      //组织文字显示
-      this.areaTipVisibles = [...words]
-      this.fitGrids()
-    },
-    gridTogetherChange(togethers) {
-      //聚合显示控制
-      this.togetherVisibles = [...togethers]
-      this.fitGrids()
-    },
-    gridShowSignChange(signs) {
-      this.areaSignVisibles = [...signs]
-      this.fitGrids()
+    gridShowSignChange(data) {
+      let needFitGrid = false
+
+      if (data.signs.sort().toString() != this.areaSignVisibles.sort().toString()) {
+        this.areaSignVisibles = [...data.signs]
+        needFitGrid = true
+      }
+      if (data.areas.sort().toString() != this.areaAreaVisibles.sort().toString()) {
+        this.areaAreaVisibles = [...data.areas]
+        needFitGrid = true
+      }
+      if (data.words.sort().toString() != this.areaTipVisibles.sort().toString()) {
+        this.areaTipVisibles = [...data.words]
+        needFitGrid = true
+      }
+      if (data.togethers.sort().toString() != this.togetherVisibles.sort().toString()) {
+        this.togetherVisibles = [...data.togethers]
+        needFitGrid = true
+      }
+      if (needFitGrid) {
+        this.fitGrids()
+      }
     }
   },
   beforeDestroy() {
@@ -356,9 +354,6 @@ export default {
     this.$EventBus.$off('map-grid-change', this.mapGridChange)
     this.$EventBus.$off('screen-grid-location', this.gridLocation)
     this.$EventBus.$off('show-sign-change', this.gridShowSignChange)
-    this.$EventBus.$off('show-area-change', this.gridShowAreaChange)
-    this.$EventBus.$off('show-word-change', this.gridShowWordChange)
-    this.$EventBus.$off('show-together-change', this.gridTogetherChange)
     if (this.abnormalUserinterval) {
       clearInterval(this.abnormalUserinterval)
     }

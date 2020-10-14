@@ -19,9 +19,9 @@ export default [
     }
   },
   {
-    path: 'organize/peopleInfo',
-    name: 'organizePeopleInfo',
-    component: () => import('@/bundles/organizeBundle/peopleInfo'),
+    path: 'organize/userInfo',
+    name: 'organizeUserInfo',
+    component: () => import('@/bundles/organizeBundle/userInfo'),
     meta: {
       title: '组织信息-人员信息库'
     }

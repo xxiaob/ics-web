@@ -4,39 +4,39 @@
     <el-card class="jc-table-card jc-mt">
       <div slot="header" class="jc-card-header">
         <div class="jc-card-title">列表内容</div>
-        <div class="jc-button-group">
-          <el-button type="primary" icon="el-icon-plus" size="small" @click="manage(null)">事件上报</el-button>
-        </div>
       </div>
       <el-table :data="list" v-loading="loading" row-key="id" class="jc-table">
+        <el-table-column type="selection" width="40"></el-table-column>
         <el-table-column type="index" :index="indexMethod" label="序号" width="50"></el-table-column>
-        <el-table-column prop="eventTitle" label="事件标题"></el-table-column>
-        <el-table-column prop="typeName" label="事件类型"></el-table-column>
-        <el-table-column prop="reportUserName" label="上报人"></el-table-column>
-        <el-table-column prop="orgId" label="所属组织" :formatter="formatOrg"></el-table-column>
-        <el-table-column prop="positionName" label="上报地点" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="desc" label="事件描述" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="eventTitle" label="姓名"></el-table-column>
+        <el-table-column prop="typeName" label="照片"></el-table-column>
+        <el-table-column prop="reportUserName" label="手机号"></el-table-column>
+        <el-table-column prop="reportUserName" label="执法证号"></el-table-column>
+        <el-table-column prop="reportUserName" label="胸牌编号"></el-table-column>
+        <el-table-column prop="orgId" label="组织" :formatter="formatOrg"></el-table-column>
+        <el-table-column prop="positionName" label="党员" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="desc" label="职位" show-overflow-tooltip></el-table-column>
+        <el-table-column prop="reportUserName" label="角色"></el-table-column>
+        <el-table-column prop="reportUserName" label="任务"></el-table-column>
         <el-table-column prop="createTime" label="创建时间" :formatter="formatTime"></el-table-column>
         <el-table-column width="100" label="操作">
           <template slot-scope="scope">
             <el-button type="text" size="mini" icon="el-icon-view" @click="detail(scope.row)" title="查看"></el-button>
-            <!-- :disabled="scope.row.reportUser!==user.userId" -->
-            <el-button type="text" size="mini" icon="el-icon-edit-outline" @click="manage(scope.row)" title="编辑"></el-button>
-            <el-button type="text" size="mini" icon="el-icon-delete" @click="del(scope.row)" title="删除"></el-button>
+            <el-button type="text" size="mini" icon="el-icon-download" @click="del(scope.row)" title="下载"></el-button>
           </template>
         </el-table-column>
       </el-table>
       <el-pagination @current-change="currentChange" @size-change="sizeChange" :current-page.sync="page.pageNum" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.total" class="text-right jc-mt"></el-pagination>
     </el-card>
 
-    <jc-manage :orgTree="orgTree" :orgId="orgId" :options="info" :visible.sync="visible" @save-success="initData"></jc-manage>
 
-    <jc-detail :info="detailInfo" :visible.sync="detailVisible"></jc-detail>
+    <!-- <jc-detail :info="detailInfo" :visible.sync="detailVisible"></jc-detail> -->
 
   </div>
 </template>
 <script>
-import { eventManageList, eventManageDel, eventManageGet } from '@/api/eventManage'
+// import { eventManageList, eventManageDel, eventManageGet } from '@/api/eventManage'
+import { eventManageList, eventManageDel } from '@/api/eventManage'
 import { formatDate } from '@/libs/util'
 import PaginationMixins from '@/mixins/PaginationMixins'
 import { organizationList } from '@/api/organization'
@@ -44,12 +44,11 @@ import { createNamespacedHelpers } from 'vuex'
 const { mapState } = createNamespacedHelpers('user')
 
 export default {
-  name: 'PeopleInfoIndex',
+  name: 'AlarmMange',
   mixins: [PaginationMixins],
   components: {
-    TabFilter: () => import('./modules/tabFilter'),
-    JcManage: () => import('./modules/manage'),
-    JcDetail: () => import('./modules/detail')
+    TabFilter: () => import('./modules/tabFilter')
+    // JcDetail: () => import('./modules/detail')
   },
   data() {
     return {
@@ -168,27 +167,6 @@ export default {
         this.$message.success('删除成功')
         this.currentChange(this.page.pageNum - 1)
       })
-    },
-    async manage(row) {
-      if (row) {
-        try {
-          this.info = await eventManageGet(row.id)
-        } catch (error) {
-          console.error(error)
-        }
-      } else {
-        this.info = null
-      }
-      this.orgId = this.user.orgId
-      this.visible = true
-    },
-    async detail(row) {
-      try {
-        this.detailInfo = await eventManageGet(row.id)
-        this.detailVisible = true
-      } catch (error) {
-        console.error(error)
-      }
     }
   }
 }

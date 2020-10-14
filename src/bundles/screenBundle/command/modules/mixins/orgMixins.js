@@ -18,16 +18,14 @@ export default {
       zoomOrgs: {},
       nowOrgId: null,
       orgSignVisible: false, //是否显示中心点标记
-      orgTipVisible: true, //组织是否显示名称
-      orgAreaVisible: true //组织是否显示区域
+      orgTipVisible: false, //组织是否显示名称
+      orgAreaVisible: false //组织是否显示区域
     }
   },
   created() {
     this.$EventBus.$on('org-change', this.orgMap) //监听行级别切换
     this.$EventBus.$on('screen-org-location', this.orgLocation) //监听组织定位
-    this.$EventBus.$on('show-sign-change', this.orgShowSignChange) //显示组织实体
-    this.$EventBus.$on('show-area-change', this.orgShowAreaChange) //监听区域显示切换
-    this.$EventBus.$on('show-word-change', this.orgShowWordChange) //监听文字显示切换
+    this.$EventBus.$on('show-sign-change', this.orgShowSignChange) //过滤信息显示
   },
   methods: {
     orgMap(org) {
@@ -210,24 +208,46 @@ export default {
         item.showTip()
       })
     },
-    orgShowSignChange(signs) {
-      let orgSignVisible = signs.includes('org')
+    orgShowSignChange(data) {
+      let needUpdate = false
 
-      if (this.orgSignVisible == orgSignVisible) {
-        return
+      //处理区域显示
+      let orgAreaVisible = data.areas.includes('org') //如果存在组织区域显示，则显示区域，否则不显示
+
+      if (this.orgAreaVisible != orgAreaVisible) {
+        this.orgAreaVisible = orgAreaVisible
+        needUpdate = true
       }
-      this.orgSignVisible = orgSignVisible
-      orgAreas.forEach(item => {
-        item.signVisible = this.orgSignVisible
-        item.showTip()
-      })
+
+      //处理标题显示
+      let orgTipVisible = data.words.includes('org')
+
+      if (this.orgTipVisible != orgTipVisible) {
+        this.orgTipVisible = orgTipVisible
+        needUpdate = true
+      }
+
+      //处理实体显示
+      let orgSignVisible = data.signs.includes('org')
+
+      if (this.orgSignVisible != orgSignVisible) {
+        this.orgSignVisible = orgSignVisible
+        needUpdate = true
+      }
+
+      if (needUpdate) {
+        orgAreas.forEach(item => {
+          item.areaVisible = this.orgAreaVisible
+          item.tipVisible = this.orgTipVisible
+          item.signVisible = this.orgSignVisible
+          item.show()
+        })
+      }
     }
   },
   beforeDestroy() {
     //去除事件监听
     this.$EventBus.$off('org-change', this.orgMap)
     this.$EventBus.$off('show-sign-change', this.orgShowSignChange)
-    this.$EventBus.$off('show-area-change', this.orgShowAreaChange)
-    this.$EventBus.$off('show-word-change', this.orgShowWordChange)
   }
 }
