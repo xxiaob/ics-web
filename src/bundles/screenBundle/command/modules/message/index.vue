@@ -23,6 +23,7 @@ export default {
       tabs: [
         { label: '基础业务', value: 'BaseVocation' },
         { label: '项目业务', value: 'ProjectVocation' },
+        // { label: '告警信息', value: 'WarningInfo' },
         { label: '待办信息', value: 'TodoInfo' }
       ],
       visible: true,
@@ -31,11 +32,12 @@ export default {
       BaseVocation: [], //基础业务
       ProjectVocation: [], //项目业务
       TodoInfo: [], //待办信息
+      WarningInfo: [], //告警信息
       initTodoInfoIds: []
     }
   },
   created() {
-    const res = getTodoInfo()
+    const res = getTodoInfo(this.project.projectId)
 
     console.log('getTodoInfo', res)
     if (res && res.length) {
@@ -131,7 +133,7 @@ export default {
 
         this.TodoInfo.splice(index, 1)
       }
-      setTodoInfo(this.TodoInfo)
+      setTodoInfo(this.project.projectId, this.TodoInfo)
     }
   },
   activated() {

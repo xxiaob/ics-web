@@ -33,8 +33,8 @@
     </div>
 
     <div class="jc-footer">
-      <el-button @click="generateTask" :loading="loading" type="primary" size="small">生成任务</el-button>
-      <el-button @click="closeQuestion" :loading="loading" size="small">关闭告警</el-button>
+      <!-- <el-button @click="generateTask" :loading="loading" type="primary" size="small">生成任务</el-button>
+      <el-button @click="closeQuestion" :loading="loading" size="small">关闭告警</el-button> -->
       <el-button style="margin-top: 10px;" @click="sendScreen" type="primary" size="small">{{isSendScreen?'关闭投屏':'投屏'}}</el-button>
     </div>
 

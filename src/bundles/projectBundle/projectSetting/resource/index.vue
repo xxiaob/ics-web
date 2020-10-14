@@ -7,7 +7,7 @@
       </div>
       <div class="jc-right-width48">
         <div class="jc-title">配置设备</div>
-        <tree-select ref="deviceTree" type="device" :treesLoading="deviceTreesLoading" :trees="deviceTrees" :checkKeys="deviceCheckKeys" ></tree-select>
+        <!-- <tree-select ref="deviceTree" type="device" :treesLoading="deviceTreesLoading" :trees="deviceTrees" :checkKeys="deviceCheckKeys" ></tree-select> -->
       </div>
     </div>
     <div slot="footer" class="dialog-footer">

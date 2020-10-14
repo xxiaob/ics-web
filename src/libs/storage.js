@@ -105,18 +105,20 @@ export function setDomainLogoConfig(info) {
 
 /**
  * 获取指挥大屏 信息推送 代办信息
+ * @param {String} projectId 项目id
  * @returns {Object} 代办信息
  */
-export function getTodoInfo() {
-  return storageGet(STORAGE_KEY.COMMAND_MESSAGE_DATA_TODO_INFO)
+export function getTodoInfo(projectId) {
+  return storageGet(STORAGE_KEY.COMMAND_MESSAGE_DATA_TODO_INFO + getUser().userId + projectId)
 }
 
 /**
  * 保存指挥大屏 信息推送 代办信息
+ * @param {String} projectId 项目id
  * @param {object} info 代办信息
  */
-export function setTodoInfo(info) {
-  storageSet(STORAGE_KEY.COMMAND_MESSAGE_DATA_TODO_INFO, info)
+export function setTodoInfo(projectId, info) {
+  storageSet(STORAGE_KEY.COMMAND_MESSAGE_DATA_TODO_INFO + getUser().userId + projectId, info)
 }
 
 /**

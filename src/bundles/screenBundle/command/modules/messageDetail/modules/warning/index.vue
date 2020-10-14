@@ -1,9 +1,10 @@
 <template>
   <div class="jc-warning">
-    <view-tabs v-model="tabComponent" :options="tabs"></view-tabs>
+    <base-info :info="info"></base-info>
+    <!-- <view-tabs v-model="tabComponent" :options="tabs"></view-tabs>
     <keep-alive>
       <component :is="tabComponent" :info="info" :taskId="taskId"></component>
-    </keep-alive>
+    </keep-alive> -->
   </div>
 </template>
 <script>
