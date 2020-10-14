@@ -35,7 +35,7 @@ export default {
     }
   },
   created() {
-    const res = getTodoInfo()
+    const res = getTodoInfo(this.project.projectId)
 
     console.log('getTodoInfo', res)
     if (res && res.length) {
@@ -131,7 +131,7 @@ export default {
 
         this.TodoInfo.splice(index, 1)
       }
-      setTodoInfo(this.TodoInfo)
+      setTodoInfo(this.project.projectId, this.TodoInfo)
     }
   },
   activated() {

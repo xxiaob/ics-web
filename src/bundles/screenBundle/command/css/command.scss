@@ -12,7 +12,7 @@ $jc-screen-color: #142c79; //大屏颜色
 
 /*基础参数定义*/
 $jc-right-content-width: 320px; //右侧内容区域宽度
-$jc-right-message-height: 160px; //右侧底部内容高度
+$jc-right-message-height: 200px; //右侧底部内容高度
 
 /* 大屏header */
 $jc-screen-height: 56px;
@@ -749,7 +749,7 @@ $jc-oprea-height: 36px; //操作的高度
 /* 右下角消息窗口 */
 /deep/ .jc-screen-message {
   position: absolute;
-  width: $jc-right-content-width;
+  width: 460px;
   height: $jc-right-message-height*2;
   left: $jc-default-dis;
   z-index: 8;
