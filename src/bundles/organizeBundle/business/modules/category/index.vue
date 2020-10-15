@@ -11,7 +11,7 @@
         </div>
 
         <div class="jc-type-echarts jc-flex-con">
-          <jc-charts :options="options"></jc-charts>
+          <jc-charts :options="options" :isClear="true"></jc-charts>
         </div>
 
       </el-card>
@@ -90,7 +90,7 @@ export default {
   },
   created() {
     this.options = {
-      color: [ '#04e0f9', '#48f754', '#f9ff5c', '#ffba00', '#ff5d5d', '#04dcfc' ],
+      color: [ '#6AA3FF', '#0064FD', '#BD7EFF', '#FF7CA2', '#FFDB53', '#8CE78A' ],
       title: {
         text: '',
 

@@ -311,6 +311,10 @@ export default {
       list: 'user-service/org/userList', // 组织人员信息库列表
       userExport: 'user-service/org/userExport', //组织人员信息库单个人员信息导出
       listExport: 'user-service/org/userListExport' // 组织人员信息库列表导出
+    },
+    attendance: {
+      // 组织勤务
+      list: 'data-service/orgInfo/getOrgDataStatistics' // 勤务列表
     }
   }
 }

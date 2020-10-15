@@ -5,8 +5,17 @@ import axios from 'axios'
 import API from './API'
 import { download } from '@/libs/download'
 
+/*------------------------------- 组织勤务------------------------------------ */
+/**
+ *  组织勤务列表
+ * @param {object} data
+ * @returns {Object} axios 对象
+ */
+export function getAttendanceList(data = {}) {
+  return axios.post(API.organizeInfo.attendance.list, data)
+}
 
-/*-------------------------------组织信息------------------------------------ */
+/*-------------------------------人员信息库------------------------------------ */
 /**
  *  人员信息库列表
  * @param {object} data
@@ -32,3 +41,5 @@ export function exportUserInfo(data = {}) {
 export function exportUserList(data = {}) {
   download('人员信息列表.xlsx', API.organizeInfo.userInfo.listExport, data)
 }
+
+

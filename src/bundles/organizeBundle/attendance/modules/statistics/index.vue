@@ -10,7 +10,7 @@
         </div>
 
         <div class="jc-type-echarts jc-flex-con">
-          <jc-charts :options="options"></jc-charts>
+          <jc-charts :options="options" isClear="true"></jc-charts>
         </div>
 
       </el-card>
@@ -263,7 +263,6 @@ export default {
         this.options.series.push({
           name: data.name,
           type: 'line',
-          stack: '总量',
           symbol: 'circle',
           data: data.data.map(item => item.value)
         })

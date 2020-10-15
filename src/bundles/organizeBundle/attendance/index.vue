@@ -1,6 +1,6 @@
 <template>
   <div class="jc-main-container-warp">
-    <tab-filter @filter="goFilter"></tab-filter>
+    <tab-filter @filter="goFilter"  :projectList="projectList"></tab-filter>
     <el-card class="jc-table-card jc-mt">
       <div slot="header" class="jc-card-header">
         <div class="jc-card-title">组织业务</div>
@@ -8,33 +8,17 @@
       <el-table :data="list" v-loading="loading" row-key="id" class="jc-table" max-height="600">
         <el-table-column type="index" label="序号" width="50"></el-table-column>
         <el-table-column prop="orgName" label="组织名称"></el-table-column>
-        <el-table-column prop="eventReport" label="事件上报"></el-table-column>
-        <el-table-column  label="事件类型Top3">
-           <template slot-scope="scope">
-            <p v-for="(eventType,index) in scope.row.eventType" :key="index">{{eventType}}</p>
-          </template>
-        </el-table-column>
-        <el-table-column prop="taskLssus" label="任务下发"></el-table-column>
-        <el-table-column label="任务来源Top3">
-          <template slot-scope="scope">
-            <p v-for="(eventType,index) in scope.row.taskSource" :key="index">{{eventType}}</p>
-          </template>
-
-        </el-table-column>
-        <el-table-column prop="taskAccept" label="任务接受"></el-table-column>
-        <el-table-column prop="taskComplete" label="任务完成"></el-table-column>
-        <el-table-column prop="taskCompleteRate" label="任务完成率"></el-table-column>
-        <el-table-column prop="problemReport" label="问题上报"></el-table-column>
-        <el-table-column label="问题类型Top3">
-          <template slot-scope="scope">
-            <p v-for="(eventType,index) in scope.row.problemType" :key="index">{{eventType}}</p>
-          </template>
-
-        </el-table-column>
-        <el-table-column prop="problemAccept" label="问题接受"></el-table-column>
-        <el-table-column prop="problemHandle" label="问题处理"></el-table-column>
-        <el-table-column prop="problemHandleRate" label="问题处理率"></el-table-column>
-        <el-table-column width="80" label="操作">
+        <el-table-column prop="inCircleJourney" label="巡逻里程(km)"></el-table-column>
+        <el-table-column prop="inCircleDuration" label="巡逻时长(h)"></el-table-column>
+        <el-table-column prop="outCircleJourney" label="出圈里程(km)"></el-table-column>
+        <el-table-column prop="outCircleDuration" label="出圈时长(h)"></el-table-column>
+        <el-table-column prop="journey" label="在岗里程(km)"></el-table-column>
+        <el-table-column prop="onguardDuration" label="在岗时长(h)"></el-table-column>
+        <el-table-column prop="inoutCount" label="岗点触碰"></el-table-column>
+        <el-table-column prop="postTaskCount" label="岗点日常任务"></el-table-column>
+        <el-table-column prop="postReachTaskCount" label="岗点达标任务"></el-table-column>
+        <el-table-column prop="postReachRate" label="岗点任务达标率" :formatter="formatRate"></el-table-column>
+        <el-table-column width="60" label="操作">
           <template slot-scope="scope">
             <el-button type="text" size="mini" icon="el-icon-view" @click="detail(scope.row)" title="查看"></el-button>
           </template>
@@ -45,7 +29,7 @@
      <el-card class="jc-echart-card jc-mt">
       <el-row :gutter="0">
         <jc-statistics></jc-statistics>
-        <jc-service></jc-service>
+        <jc-service :list="list"></jc-service>
       </el-row>
     </el-card>
 
@@ -58,13 +42,16 @@
 // import { formatDate } from '@/libs/util'
 // import PaginationMixins from '@/mixins/PaginationMixins'
 // import { organizationList } from '@/api/organization'
+
+import { getAttendanceList } from '@/api/organizeInfo'
+import projectsMixins from '@/bundles/taskBundle/mixins/projectsMixins'
 import { createNamespacedHelpers } from 'vuex'
 const { mapState } = createNamespacedHelpers('user')
 
 
 export default {
   name: 'OrganizeAttendanceIndex',
-  // mixins: [PaginationMixins],
+  mixins: [projectsMixins],
   components: {
     TabFilter: () => import('./modules/tabFilter'),
     JcDetail: () => import('./modules/detail'),
@@ -92,13 +79,17 @@ export default {
   computed: {
     ...mapState(['user'])
   },
-
   async created() {
     // await this.getOrgTree()
+    await this.getProjects()
 
-    this.initData()
+    // this.initData()
   },
   methods: {
+    formatRate(row, column, cellValue) {
+      // 格式化比率
+      return cellValue * 100 + '%'
+    },
     // formatTime(row, column, cellValue) {
     //   return formatDate(cellValue)
     // },
@@ -148,67 +139,37 @@ export default {
     async initData() {
       if (!this.loading) {
         this.loading = true
+        console.log('111this.filter', this.filter)
         try {
           // const { total, resultList } = await eventManageList({ ...this.filter, ...this.page })
-          // const { total, resultList } = await eventManageList({ ...this.filter })
+          let resultList = await getAttendanceList({ ...this.filter })
 
-          // this.page.total = total
-          const list = [
-            {
+          console.log('datas', resultList)
 
-              orgName: '南京市',
-              eventReport: 105,
-              eventType: ['市容环境', '宣传广告', '施工管理'],
-              taskLssus: 37,
-              taskSource: ['12345', '12319', '问题上报'],
-              taskAccept: 39,
-              taskComplete: 35,
-              taskCompleteRate: '89.74%',
-              problemReport: 37,
-              problemType: ['市容环境', '宣传广告', '施工管理'],
-              problemAccept: 39,
-              problemHandle: 35,
-              problemHandleRate: '89.74%'
-            },
-            {
 
-              orgName: '南京市',
-              eventReport: 105,
-              eventType: ['市容环境', '宣传广告', '施工管理'],
-              taskLssus: 37,
-              taskSource: ['12345', '12319', '问题上报'],
-              taskAccept: 39,
-              taskComplete: 35,
-              taskCompleteRate: '89.74%',
-              problemReport: 37,
-              problemType: ['市容环境', '宣传广告', '施工管理'],
-              problemAccept: 39,
-              problemHandle: 35,
-              problemHandleRate: '89.74%'
-            }
-
-          ]
+          const list = []
 
           // 事件数据
-
-
-          // if (resultList && resultList.length > 0) {
-          //   resultList.forEach(item=>{
-          //     list.push({
-          //       createTime: item.createTime,
-          //       desc: item.desc,
-          //       positionName: item.positionName,
-          //       eventTitle: item.eventTitle,
-          //       eventNumber: item.eventNumber,
-          //       eventType: item.eventType,
-          //       typeName: item.typeName,
-          //       id: item.id,
-          //       orgId: item.orgId,
-          //       reportUser: item.reportUser,
-          //       reportUserName: item.reportUserName
-          //     })
-          //   })
-          // }
+          if (resultList && resultList.length > 0) {
+            resultList.forEach(item=>{
+              list.push({
+                inCircleDuration: item.inCircleDuration, // 巡逻时长
+                inCircleJourney: item.inCircleJourney, // 巡逻里程
+                outCircleDuration: item.outCircleDuration, // 出圈时长
+                outCircleJourney: item.outCircleJourney, // 出圈里程
+                onguardDuration: item.onguardDuration, //  在岗时长
+                journey: item.journey, // 在岗里程
+                inoutCount: item.inoutCount, // 岗点触碰
+                orgId: item.orgId, // 组织id
+                orgName: item.orgName, // 组成名称
+                postReachRate: item.postReachRate, // 岗点任务达标率
+                postReachTaskCount: item.postReachTaskCount, // 岗点任务达标
+                postTaskCount: item.postTaskCount, // 岗点日常任务
+                projectId: item.projectId,
+                projectName: item.projectName
+              })
+            })
+          }
           this.list = list
           this.loading = false
         } catch (error) {
@@ -219,9 +180,8 @@ export default {
     },
 
     goFilter(filter) {
-      console.log('filter', filter)
       this.filter = filter
-      this.currentChange(1)
+      this.initData()
     },
 
     async detail(row) {
