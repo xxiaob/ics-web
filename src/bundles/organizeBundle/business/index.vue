@@ -45,8 +45,6 @@
      <el-card class="jc-echart-card jc-mt">
       <el-row :gutter="0">
         <jc-category></jc-category>
-
-
         <jc-complete></jc-complete>
       </el-row>
     </el-card>
@@ -56,14 +54,9 @@
   </div>
 </template>
 <script>
-// import { eventManageList, eventManageDel, eventManageGet } from '@/api/eventManage'
-// import { formatDate } from '@/libs/util'
-// import PaginationMixins from '@/mixins/PaginationMixins'
-// import { organizationList } from '@/api/organization'
 import projectsMixins from '@/bundles/taskBundle/mixins/projectsMixins'
 import { createNamespacedHelpers } from 'vuex'
 const { mapState } = createNamespacedHelpers('user')
-
 
 export default {
   name: 'OrganizeBusinessIndex',
@@ -73,159 +66,43 @@ export default {
     JcDetail: () => import('./modules/detail'),
     JcCategory: () => import('./modules/category'),
     JcComplete: () => import('./modules/complete')
-
   },
   data() {
     return {
-      // orgTree: [],
-      // orgObj: {},
-      list: [],
+      list: [{ id: '1' }],
       loading: false,
-      visible: false,
       detailVisible: false,
-      info: null,
       detailInfo: null,
-      filter: {},
-      orgId: '',
-
-      completeType: 'task', // 业务完成率占比
-      options: null // echarts参数
+      filter: {}
     }
   },
   computed: {
     ...mapState(['user'])
   },
-
   async created() {
-    // await this.getOrgTree()
     await this.getProjects()
-
-    this.initData()
   },
   methods: {
-    // formatTime(row, column, cellValue) {
-    //   return formatDate(cellValue)
-    // },
-    // formatOrg(row, column, cellValue) {
-    //   return this.orgObj[cellValue]
-    // },
-    // formatOrgTree(child) {
-    //   let trees = []
-
-    //   if (child && child.length) {
-    //     child.forEach(item => {
-    //       let node = {
-    //         value: item.orgId,
-    //         label: item.orgName
-    //       }
-
-    //       let children = this.formatOrgTree(item.children)
-
-    //       if (children && children.length) {
-    //         node.children = children
-    //       }
-
-    //       trees.push(node)
-    //     })
-    //   }
-    //   return trees
-    // },
-    // formatOrgTreeToObj(child) {
-    //   let objs = {}
-
-    //   if (child && child.length) {
-    //     child.forEach(item => {
-    //       if (item.children && item.children.length) {
-    //         objs = Object.assign(objs, this.formatOrgTreeToObj(item.children))
-    //       }
-    //       objs[item.orgId] = item.orgName
-    //     })
-    //   }
-    //   return objs
-    // },
-    // async getOrgTree() {
-    //   const res = await organizationList()
-
-    //   this.orgTree = this.formatOrgTree(res)
-    //   this.orgObj = this.formatOrgTreeToObj(res)
-    // },
     async initData() {
+      console.log('initData')
       if (!this.loading) {
         this.loading = true
         try {
-          // const { total, resultList } = await eventManageList({ ...this.filter, ...this.page })
           // const { total, resultList } = await eventManageList({ ...this.filter })
 
           // this.page.total = total
-          const list = [
-            {
-
-              orgName: '南京市',
-              eventReport: 105,
-              eventType: ['市容环境', '宣传广告', '施工管理'],
-              taskLssus: 37,
-              taskSource: ['12345', '12319', '问题上报'],
-              taskAccept: 39,
-              taskComplete: 35,
-              taskCompleteRate: '89.74%',
-              problemReport: 37,
-              problemType: ['市容环境', '宣传广告', '施工管理'],
-              problemAccept: 39,
-              problemHandle: 35,
-              problemHandleRate: '89.74%'
-            },
-            {
-
-              orgName: '南京市',
-              eventReport: 105,
-              eventType: ['市容环境', '宣传广告', '施工管理'],
-              taskLssus: 37,
-              taskSource: ['12345', '12319', '问题上报'],
-              taskAccept: 39,
-              taskComplete: 35,
-              taskCompleteRate: '89.74%',
-              problemReport: 37,
-              problemType: ['市容环境', '宣传广告', '施工管理'],
-              problemAccept: 39,
-              problemHandle: 35,
-              problemHandleRate: '89.74%'
-            }
-
-          ]
-
-          // 事件数据
-
-
-          // if (resultList && resultList.length > 0) {
-          //   resultList.forEach(item=>{
-          //     list.push({
-          //       createTime: item.createTime,
-          //       desc: item.desc,
-          //       positionName: item.positionName,
-          //       eventTitle: item.eventTitle,
-          //       eventNumber: item.eventNumber,
-          //       eventType: item.eventType,
-          //       typeName: item.typeName,
-          //       id: item.id,
-          //       orgId: item.orgId,
-          //       reportUser: item.reportUser,
-          //       reportUserName: item.reportUserName
-          //     })
-          //   })
-          // }
-          this.list = list
-          this.loading = false
+          // this.list = resultList
         } catch (error) {
           console.error(error)
-          this.loading = false
         }
+        this.loading = false
       }
     },
 
     goFilter(filter) {
       console.log('filter', filter)
       this.filter = filter
-      // this.currentChange(1)s
+      this.initData()
     },
 
     async detail(row) {
@@ -239,7 +116,6 @@ export default {
       }
     }
   }
-
 
 }
 </script>

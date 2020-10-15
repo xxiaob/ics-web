@@ -5,10 +5,7 @@
       <div class="title-info">
         <span>{{ form.orgName}}</span> |
         <span>常态项目</span> |
-
         <span>2020-10-1 ~ 2020-10-30</span>
-
-
       </div>
     </div>
 
@@ -86,12 +83,8 @@
   </el-dialog>
 </template>
 <script>
-// import { eventManageGet, exportDetail, fileDownload } from '@/api/eventManage'
-import MediaMixins from '../../../mixins/MediaMixins'
-
 export default {
-  name: 'EventManageDetail',
-
+  name: 'OrganizeBusinessDetail',
   props: {
     visible: {
       type: Boolean,
@@ -102,7 +95,6 @@ export default {
       default: ()=>{}
     }
   },
-  mixins: [MediaMixins],
   watch: {
     visible(newVal) {
       if (newVal) {
@@ -120,27 +112,17 @@ export default {
   data() {
     return {
       dialogVisible: false,
-      form: {},
-      audios: [],
-      date: [
-        1602432000000, 1603987200000
-      ]
-    }
-  },
-  created() {
-    if (this.info && this.info.id) {
-      this.getDetail()
+      form: {}
     }
   },
   methods: {
     async getDetail() {
+      if (this.info && this.info.id) {
       // const res = await eventManageGet(this.info.id)
 
-      // this.form = { ...this.info, ...res }
-      this.form = { ...this.info }
-      console.log('this.form', this.form)
-      this.audios = this.form.audioAddrs
-      this.audioPlayShows = new Array(this.audios.length).fill(true)
+        // this.form = { ...this.info, ...res }
+        this.form = { ...this.info }
+      }
     },
     dialogClose() {
       this.$emit('update:visible', false)
@@ -148,19 +130,15 @@ export default {
     downloadDetail() {
       console.log('downloadDetail')
       // exportDetail(this.info.id)
-    },
-    downloadFile() {
-      console.log('downloadFile')
-      // fileDownload(this.info.id)
     }
   }
 }
 </script>
 <style lang="scss" scoped>
-
 .dialog-footer {
   text-align: center;
 }
+
 .dialog-title{
   display:flex;
   line-height: 30px;
@@ -173,14 +151,11 @@ export default {
       margin:0 10px;
     }
   }
-
 }
 
- .el-row {
-    .el-form-item{
-      margin-bottom:6px;
-    }
+.el-row {
+  .el-form-item{
+    margin-bottom:6px;
   }
-
-
+}
 </style>
