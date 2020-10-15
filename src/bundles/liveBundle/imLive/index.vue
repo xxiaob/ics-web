@@ -299,30 +299,34 @@ export default {
           this.inviteHandelMsg( agree, nickName)
         } else if (inviteType) {
           //我是被邀请方
+          this.fromUsername = fromUsername
+          this.users = [{
+            userId: fromUsername,
+            userName: nickName
+          }]
+          if (users) {
+            console.log('邀请的所有users', users)
+            users.forEach(item=>{
+              if (item.userId !== this.user.userId) {
+                this.users.push(item)
+              }
+            })
+          }
+
           if (this.live.joined) {
             console.log('正则频道里')
-            this.im.sendSingleMsg(fromUsername, {
-              msgType: '1',
-              nickName: this.user.userName,
-              channelId: this.channelId,
-              agree: '3'
+            this.users.forEach(item=>{
+              this.im.sendSingleMsg(item.userId, {
+                msgType: '1',
+                nickName: this.user.userName,
+                channelId: this.channelId,
+                agree: '3'
+              })
             })
           } else {
-            this.fromUsername = fromUsername
             this.$emit('update:visible', true)
             this.$emit('update:params', null)
-            this.users = [{
-              userId: fromUsername,
-              userName: nickName
-            }]
-            if (users) {
-              console.log('邀请的所有users', users)
-              users.forEach(item=>{
-                if (item.userId !== this.user.userId) {
-                  this.users.push(item)
-                }
-              })
-            }
+
             if (content === 'double' || content === 'help') {
               this.inviteType = mediaType === '0' ? '4' : '5'
             } else {
@@ -402,11 +406,13 @@ export default {
     },
     //加入频道
     joinChannel() {
-      this.im.sendSingleMsg(this.fromUsername, {
-        msgType: '1',
-        channelId: this.channelId,
-        nickName: this.user.userName,
-        agree: '1' // "0":拒绝邀请, "1":接受邀请,
+      this.users.forEach(item=>{
+        this.im.sendSingleMsg(item.userId, {
+          msgType: '1',
+          channelId: this.channelId,
+          nickName: this.user.userName,
+          agree: '1' // "0":拒绝邀请, "1":接受邀请,
+        })
       })
 
       const video = this.mediaType === '1' ? true : false
