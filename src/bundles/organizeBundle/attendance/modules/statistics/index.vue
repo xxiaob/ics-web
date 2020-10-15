@@ -100,10 +100,7 @@ let options = {
       }
     }
   },
-  series: [],
-  dataZoom: [
-
-  ]
+  series: []
 
 }
 

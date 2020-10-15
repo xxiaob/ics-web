@@ -4,76 +4,59 @@
       <h3>组织业务详情</h3>
       <div class="title-info">
         <span>{{ form.orgName}}</span> |
-        <span>常态项目</span> |
+        <span>{{ form.projectName }}</span> |
 
-        <span>2020-10-1 ~ 2020-10-30</span>
+        <span>{{filter.startTime | formatDate}} ~ {{filter.endTime | formatDate}}</span>
 
 
       </div>
     </div>
 
     <el-row :gutter="20">
-      <el-col :span="8">
+      <el-col :span="6">
         <el-form ref="form" label-width="120px" :model="form" class="jc-manage-form" size="mini">
-          <el-form-item label="事件上报：">
-            <span>{{form.eventReport}}</span>
+          <el-form-item label="巡逻里程(km):">
+            <span>{{form.inCircleJourney}}</span>
           </el-form-item>
-          <el-form-item label="事件类型占比：">
-            <div >市容环境 36.00%</div>
-            <div >市容环境 36.00%</div>
-            <div >市容环境 36.00%</div>
-            <div >市容环境 36.00%</div>
-            <div >市容环境 36.00%</div>
-            <div >市容环境 36.00%</div>
+          <el-form-item label="巡逻时长(h)：">
+             <span>{{form.inCircleDuration}}</span>
           </el-form-item>
 
         </el-form>
       </el-col>
-      <el-col :span="8">
+      <el-col :span="6">
         <el-form ref="form" label-width="120px" :model="form" class="jc-manage-form" size="mini">
-          <el-form-item label="任务下发：">
-            <span>{{form.taskLssus}}</span>
+          <el-form-item label="出圈里程(km)：">
+            <span>{{form.outCircleJourney}}</span>
           </el-form-item>
-          <el-form-item label="任务来源占比：">
-            <div >问题上报 16.00%</div>
-            <div >问题上报 36.00%</div>
-            <div >问题上报 36.00%</div>
-            <div >问题上报 36.00%</div>
-            <div >问题上报 36.00%</div>
-            <div >问题上报 36.00%</div>
-          </el-form-item>
-          <el-form-item label="任务接受：">
-            <span>{{form.taskAccept}}</span>
-          </el-form-item>
-          <el-form-item label="任务完成：">
-            <span>{{form.taskComplete}}</span>
-          </el-form-item>
-          <el-form-item label="任务完成率：">
-            <span>{{form.taskCompleteRate}}</span>
+          <el-form-item label="出圈时长(h)：">
+           <span>{{form.outCircleDuration}}</span>
           </el-form-item>
         </el-form>
       </el-col>
-      <el-col :span="8">
+      <el-col :span="6">
         <el-form ref="form" label-width="120px" :model="form" class="jc-manage-form" size="mini">
-          <el-form-item label="问题上报：">
-            <span>{{form.problemReport}}</span>
+          <el-form-item label="在岗里程(km)：">
+            <span>{{form.journey}}</span>
           </el-form-item>
-          <el-form-item label="问题类型占比：">
-             <div >问题上报 16.00%</div>
-              <div >问题上报 36.00%</div>
-              <div >问题上报 36.00%</div>
-              <div >问题上报 36.00%</div>
-              <div >问题上报 36.00%</div>
-              <div >问题上报 36.00%</div>
+          <el-form-item label="在岗时长(h)：">
+           <span>{{form.onguardDuration}}</span>
           </el-form-item>
-          <el-form-item label="问题接受：">
-            <span>{{form.problemAccept}}</span>
+        </el-form>
+      </el-col>
+      <el-col :span="6">
+        <el-form ref="form" label-width="120px" :model="form" class="jc-manage-form" size="mini">
+          <el-form-item label="岗点触碰：">
+            <span>{{form.inoutCount}}</span>
           </el-form-item>
-           <el-form-item label="问题处理：">
-            <span>{{form.problemHandle}}</span>
+          <el-form-item label="岗点日常任务：">
+             <span>{{form.postTaskCount}}</span>
           </el-form-item>
-          <el-form-item label="问题处理率：">
-            <span>{{form.problemHandleRate}}</span>
+          <el-form-item label="岗点达标任务：">
+            <span>{{form.postReachTaskCount}}</span>
+          </el-form-item>
+           <el-form-item label="岗点任务达标率:">
+            <span>{{form.postReachRate}}</span>
           </el-form-item>
         </el-form>
       </el-col>
@@ -86,11 +69,9 @@
   </el-dialog>
 </template>
 <script>
-// import { eventManageGet, exportDetail, fileDownload } from '@/api/eventManage'
-import MediaMixins from '../../../mixins/MediaMixins'
-
+import { exportAttendanceDetail } from '@/api/organizeInfo'
 export default {
-  name: 'EventManageDetail',
+  name: 'OrganizeAttendanceDetail',
 
   props: {
     visible: {
@@ -100,9 +81,13 @@ export default {
     info: {
       type: Object,
       default: ()=>{}
+    },
+    filter: {
+      type: Object,
+      default: ()=>{}
     }
   },
-  mixins: [MediaMixins],
+
   watch: {
     visible(newVal) {
       if (newVal) {
@@ -110,9 +95,9 @@ export default {
       }
     },
     info: {
-      // immediate: true,
       deep: true,
       handler() {
+        console.log('info', this.info)
         this.getDetail()
       }
     }
@@ -120,11 +105,13 @@ export default {
   data() {
     return {
       dialogVisible: false,
-      form: {},
-      audios: [],
-      date: [
-        1602432000000, 1603987200000
-      ]
+      form: {}
+    }
+  },
+  filters: {
+    formatDate(date) {
+      // console.log('val', val)
+      return date.toLocaleDateString()
     }
   },
   created() {
@@ -134,25 +121,15 @@ export default {
   },
   methods: {
     async getDetail() {
-      // const res = await eventManageGet(this.info.id)
-
-      // this.form = { ...this.info, ...res }
       this.form = { ...this.info }
-      console.log('this.form', this.form)
-      this.audios = this.form.audioAddrs
-      this.audioPlayShows = new Array(this.audios.length).fill(true)
     },
     dialogClose() {
       this.$emit('update:visible', false)
     },
     downloadDetail() {
-      console.log('downloadDetail')
-      // exportDetail(this.info.id)
-    },
-    downloadFile() {
-      console.log('downloadFile')
-      // fileDownload(this.info.id)
+      exportAttendanceDetail({ ...this.filter, orgId: this.form.orgId })
     }
+
   }
 }
 </script>

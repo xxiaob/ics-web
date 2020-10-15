@@ -23,9 +23,8 @@
   </el-card>
 </template>
 <script>
-// import { PROJECT_TYPES } from '@/constant/Dictionaries'
 
-import { exportList } from '@/api/eventManage'
+import { exportAttendanceList } from '@/api/organizeInfo'
 
 export default {
   name: 'EventManageFilter',
@@ -140,7 +139,7 @@ export default {
       this.$emit('filter', this.form)
     },
     exportData() {
-      exportList(this.form)
+      exportAttendanceList(this.form)
     }
   }
 }

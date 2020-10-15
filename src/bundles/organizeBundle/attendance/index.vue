@@ -33,7 +33,7 @@
       </el-row>
     </el-card>
 
-    <jc-detail :info="detailInfo" :visible.sync="detailVisible"></jc-detail>
+    <jc-detail :info="detailInfo" :filter="filter" :visible.sync="detailVisible"></jc-detail>
 
   </div>
 </template>
@@ -84,7 +84,7 @@ export default {
     async initData() {
       if (!this.loading) {
         this.loading = true
-        console.log('111this.filter', this.filter)
+
         try {
           let resultList = await getAttendanceList({ ...this.filter }) // 获取组织勤务列表
 

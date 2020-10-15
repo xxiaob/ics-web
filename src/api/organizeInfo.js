@@ -24,6 +24,25 @@ export function getAttendanceStatistics(data = {}) {
   return axios.post(API.organizeInfo.attendance.statistics, data)
 }
 
+/**
+ *  勤务列表导出
+ * @param {object} data
+ *
+ */
+export function exportAttendanceList(data = {}) {
+  download('组织勤务列表.xlsx', API.organizeInfo.attendance.exportList, data)
+}
+
+/**
+ *  勤务详情导出
+ * @param {object} data
+ *
+ */
+export function exportAttendanceDetail(data = {}) {
+  download('组织勤务详情.xlsx', API.organizeInfo.attendance.exportDetail, data)
+}
+
+
 /*-------------------------------人员信息库------------------------------------ */
 /**
  *  人员信息库列表
