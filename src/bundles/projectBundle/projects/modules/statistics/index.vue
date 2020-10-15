@@ -1,5 +1,12 @@
 <template>
-  <el-dialog :title="'项目统计 | '+options.projectName" :visible.sync="dialogVisible" width="1000px" :close-on-click-modal="false" :append-to-body="true" @close="dialogClose">
+  <el-dialog :visible.sync="dialogVisible" width="1000px" :close-on-click-modal="false" :append-to-body="true" @close="dialogClose">
+    <div slot="title" class="el-dialog__header__title">
+      <span class="title-name">项目统计</span>
+      <span class="title-divide">|</span>
+      <span class="title-project">{{options.projectName}}</span>
+      <span class="title-time">{{options.beginTime}}-{{options.endTime}}</span>
+    </div>
+
     <el-row :gutter="20">
       <el-col :span="6">
         <el-card>
@@ -153,7 +160,6 @@ export default {
       color: [ '#04e0f9', '#48f754', '#f9ff5c', '#ffba00', '#ff5d5d', '#04dcfc' ],
       title: {
         text: '',
-
         top: '36%',
         textAlign: 'center',
         left: '29%',
@@ -209,7 +215,6 @@ export default {
               // fontSize: 12
             }
           }
-
         },
         formatter: name=> {
           let index = 0, total = 0
@@ -249,7 +254,6 @@ export default {
             // }
           },
           data: [],
-
           animationType: 'scale',
           animationEasing: 'elasticOut',
           animationDelay: ()=> {
@@ -268,6 +272,21 @@ export default {
 
 <style lang="scss" scoped>
 /deep/{
+  .el-dialog__header__title{
+    line-height: 30px;
+    .title-name,.title-project{
+      font-weight: bold;
+      font-size: 16px;
+    }
+    .title-divide{
+      color: #999999;
+      margin: 0 $jc-default-dis/2;
+    }
+    .title-time{
+      margin-left: $jc-default-dis;
+      color: #999999;
+    }
+  }
   .el-dialog__body{
     padding: 0 $jc-default-dis;
   }
