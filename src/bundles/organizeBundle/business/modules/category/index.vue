@@ -23,15 +23,16 @@ import JcCharts from '@/components/JcForm/JcCharts' // echarts
 export default {
   name: 'OrganizeBusinessCategory',
   components: { JcCharts },
+  props: {
+  },
   data() {
     return {
-      activated: 1, // 业务类型占比,
+      activated: 1,
       options: null
     }
   },
   watch: {
-    activated(newVal) {
-      console.log('newVal', newVal)
+    activated() {
       this.processData()
     }
   },

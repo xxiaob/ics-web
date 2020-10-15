@@ -42,9 +42,6 @@ let options = {
   },
   tooltip: {
     show: true
-    // trigger: 'item',
-    // formatter: params => `${params.seriesName} <br/>${params.name} : ${params.value * 100}%`
-
   },
   grid: {
     left: 0,
@@ -67,6 +64,7 @@ let options = {
       axisLabel: { // 坐标轴标签
         show: true, // 是否显示
         margin: 12, // 刻度标签与轴线之间的距离
+        rotate: -20,
         fontSize: 12,
         color: '#666' // 默认取轴线的颜色
       },
@@ -102,7 +100,6 @@ let options = {
           type: 'dashed'
         }
       },
-
       gridIndex: 0
     }
   ],
@@ -156,9 +153,8 @@ export default {
   components: { JcCharts },
   data() {
     return {
-      activated: 1, // 业务类型占比,
-      options: null,
-      rankings: [] // 排名数据
+      activated: 1,
+      options: null
     }
   },
   props: {
@@ -170,28 +166,21 @@ export default {
     activated() {
       this.processData()
     },
-    list(val) {
-      console.log('val', val)
+    list() {
       this.processData()
     }
   },
-
-  created() {
-    // this.processData()
-  },
   methods: {
     processData() {
-      // let name = ''
       if (!this.list) {
         return
       }
       let list = this.list
 
-      let xAxisDatas = list.map(item => item.orgName)
+      let xAxisDatas = list.map(item => item.orgName) // 获取x轴坐标
 
 
       if (this.activated == 1) {
-        console.log(111)
         options.title.text = '岗点任务'
         serie1.name = '日常'
         serie2.name = '达标'
@@ -201,8 +190,6 @@ export default {
         let yData2 = list.map(item => item.postReachTaskCount)
 
         options.xAxis[0].data = xAxisDatas
-        options.yAxis[0].min = null
-        options.yAxis[0].max = null
         serie1.data = yData1
         serie2.data = yData2
         options.yAxis[0].axisLabel.formatter = value => `${value}`

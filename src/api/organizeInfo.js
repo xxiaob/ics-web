@@ -43,6 +43,17 @@ export function exportAttendanceDetail(data = {}) {
 }
 
 
+/*------------------------------- 组织业务------------------------------------ */
+/**
+ *  组织业务列表
+ * @param {object} data
+ * @returns {Object} axios 对象
+ */
+export function getBusinessList(data = {}) {
+  return axios.post(API.organizeInfo.business.list, data)
+}
+
+
 /*-------------------------------人员信息库------------------------------------ */
 /**
  *  人员信息库列表

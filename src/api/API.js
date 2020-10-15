@@ -319,6 +319,10 @@ export default {
       statistics: 'data-service/orgInfo/getOrgAttendancePolyline', // 出勤统计
       exportList: 'data-service/orgInfo/exportOrgStatisticsList', // 勤务列表导出
       exportDetail: 'data-service/orgInfo/exportOrgStatisticsDetail' //  单个勤务详情导出
+    },
+    business: {
+      // 组织业务
+      list: 'data-service/orgInfo/getOrgBusinessList' // 业务列表
     }
   }
 }

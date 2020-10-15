@@ -23,20 +23,12 @@
   </el-card>
 </template>
 <script>
-
+import { projectsTreeList } from '@/api/projects'
+import { PROJECT_TYPES } from '@/constant/Dictionaries'
 import { exportAttendanceList } from '@/api/organizeInfo'
 
 export default {
-  name: 'EventManageFilter',
-  props: {
-    projectList: {
-      type: Array,
-      default: ()=>[]
-    },
-    orgTree: {
-      type: Array
-    }
-  },
+  name: 'OrganizeAttendanceFilter',
   data() {
     return {
       loading: false,
@@ -51,30 +43,31 @@ export default {
         projectId: null,
         startTime: '',
         endTime: '',
-        type: 0
+        type: ''
       },
       date: null,
-      timeType: '0'
+      timeType: '0',
+      projectList: [],
+      projectObj: {},
+      EmergencySupport: []
     }
   },
   watch: {
     timeType() {
       this.initDate()
-      this.form.type = this.timeType
-    },
-    projectList() {
-      this.form.projectId = this.projectList[0].id
     }
   },
-  created() {
+  async created() {
     this.initDate()
-
+    await this.getProjects()
     this.$emit('filter', this.form)
   },
   methods: {
     initDate() {
       // 处理本周/本月/本年时间段
       let timeType = this.timeType
+
+      this.form.type = timeType
 
       // 获取时间
       let currentDate = new Date()
@@ -126,6 +119,35 @@ export default {
     orgChange() {
       this.$refs.orgCascader.dropDownVisible = false //级联选择器 选择任意一级后隐藏下拉框
     },
+    formatProject(row, column, cellValue) {
+      return this.projectObj[cellValue]
+    },
+    async getProjects() {
+      const res = await projectsTreeList()
+
+      this.projectList = res
+      this.form.projectId = this.projectList[0].id
+      this.projectObj = this.formatProjectTreeToObj(res)
+    },
+    formatProjectTreeToObj(child) {
+      let objs = {}
+
+      if (child && child.length) {
+        child.forEach(item => {
+          if (item.sonProjects && item.sonProjects.length) {
+            objs = Object.assign(objs, this.formatProjectTreeToObj(item.sonProjects))
+          }
+          objs[item.id] = item.name
+
+          //应急项目
+          if (item.type == PROJECT_TYPES.EmergencySupport) {
+            this.EmergencySupport.push(item)
+          }
+        })
+      }
+      return objs
+    },
+
     changeDate(value) {
       if (value) {
         this.form.startTime = new Date(value[0])

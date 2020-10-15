@@ -5,10 +5,7 @@
       <div class="title-info">
         <span>{{ form.orgName}}</span> |
         <span>{{ form.projectName }}</span> |
-
         <span>{{filter.startTime | formatDate}} ~ {{filter.endTime | formatDate}}</span>
-
-
       </div>
     </div>
 
@@ -72,7 +69,6 @@
 import { exportAttendanceDetail } from '@/api/organizeInfo'
 export default {
   name: 'OrganizeAttendanceDetail',
-
   props: {
     visible: {
       type: Boolean,
@@ -87,7 +83,6 @@ export default {
       default: ()=>{}
     }
   },
-
   watch: {
     visible(newVal) {
       if (newVal) {
@@ -97,7 +92,6 @@ export default {
     info: {
       deep: true,
       handler() {
-        console.log('info', this.info)
         this.getDetail()
       }
     }
@@ -110,12 +104,11 @@ export default {
   },
   filters: {
     formatDate(date) {
-      // console.log('val', val)
-      return date.toLocaleDateString()
+      return date && date.toLocaleDateString()
     }
   },
   created() {
-    if (this.info && this.info.id) {
+    if (this.info) {
       this.getDetail()
     }
   },

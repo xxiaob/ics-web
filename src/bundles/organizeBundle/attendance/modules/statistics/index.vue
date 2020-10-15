@@ -39,9 +39,9 @@ let options = {
 
   },
   grid: {
-    left: 0,
-    right: '4%',
-    bottom: '3%',
+    left: '2%',
+    right: '5%',
+    bottom: '8%',
     containLabel: true
   },
   tooltip: {
@@ -130,7 +130,7 @@ export default {
   components: { JcCharts },
   data() {
     return {
-      activated: 1, // 业务类型占比,
+      activated: 1,
       options: null
     }
   },
@@ -141,28 +141,22 @@ export default {
     }
   },
   watch: {
-    activated(newVal) {
-      console.log('newVal', newVal)
+    activated() {
       this.processData()
     },
-    statistics(val) {
-      console.log('val', val)
+    statistics() {
       this.processData()
     }
   },
   methods: {
     processData() {
-      console.log('statistics', this.statistics)
       if (!this.statistics) {
         return
       }
-      console.log('statistics', this.statistics)
       let statistics = this.statistics
-
 
       options.xAxis.data = statistics.map(item => item.time)
 
-      console.log('this.activated', this.activated)
       if (this.activated == 1) {
         options.title.text = '里程统计'
         series1.data = statistics.map(item => item.inCircleJourney)
@@ -179,10 +173,8 @@ export default {
       options.series = [series1, series2, series3]
       this.options = options
     }
-  },
-  created() {
-    this.processData()
   }
+
 }
 </script>
 

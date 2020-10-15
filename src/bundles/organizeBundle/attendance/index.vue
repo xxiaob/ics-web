@@ -1,6 +1,6 @@
 <template>
   <div class="jc-main-container-warp">
-    <tab-filter @filter="goFilter"  :projectList="projectList"></tab-filter>
+    <tab-filter @filter="goFilter"  ></tab-filter>
     <el-card class="jc-table-card jc-mt">
       <div slot="header" class="jc-card-header">
         <div class="jc-card-title">组织业务</div>
@@ -40,20 +40,14 @@
 <script>
 
 import { getAttendanceList, getAttendanceStatistics } from '@/api/organizeInfo'
-import projectsMixins from '@/bundles/taskBundle/mixins/projectsMixins'
-import { createNamespacedHelpers } from 'vuex'
-const { mapState } = createNamespacedHelpers('user')
-
 
 export default {
   name: 'OrganizeAttendanceIndex',
-  mixins: [projectsMixins],
   components: {
     TabFilter: () => import('./modules/tabFilter'),
     JcDetail: () => import('./modules/detail'),
     JcStatistics: () => import('./modules/statistics'),
     JcService: () => import('./modules/service')
-
   },
   data() {
     return {
@@ -64,17 +58,10 @@ export default {
       info: null,
       detailInfo: null,
       filter: {},
-      orgId: '',
+
       statistics: null,
-      completeType: 'task', // 业务完成率占比
       options: null // echarts参数
     }
-  },
-  computed: {
-    ...mapState(['user'])
-  },
-  async created() {
-    await this.getProjects()
   },
   methods: {
     formatRate(row, column, cellValue) {
@@ -86,38 +73,8 @@ export default {
         this.loading = true
 
         try {
-          let resultList = await getAttendanceList({ ...this.filter }) // 获取组织勤务列表
-
+          this.list = await getAttendanceList({ ...this.filter }) // 获取组织勤务列表
           this.statistics = await getAttendanceStatistics({ ...this.filter }) // 获取组织勤务统计
-
-
-          const list = []
-
-          //  组织列表数据
-          if (resultList && resultList.length > 0) {
-            resultList.forEach(item=>{
-              list.push({
-                inCircleDuration: item.inCircleDuration, // 巡逻时长
-                inCircleJourney: item.inCircleJourney, // 巡逻里程
-                outCircleDuration: item.outCircleDuration, // 出圈时长
-                outCircleJourney: item.outCircleJourney, // 出圈里程
-                onguardDuration: item.onguardDuration, //  在岗时长
-                journey: item.journey, // 在岗里程
-                inoutCount: item.inoutCount, // 岗点触碰
-                orgId: item.orgId, // 组织id
-                orgName: item.orgName, // 组成名称
-                // postReachRate: item.postReachRate, // 岗点任务达标率
-                // postReachTaskCount: item.postReachTaskCount, // 岗点任务达标
-                // postTaskCount: item.postTaskCount, // 岗点日常任务
-                projectId: item.projectId,
-                projectName: item.projectName,
-                postReachRate: 0.6, // 岗点任务达标率
-                postReachTaskCount: 80, // 岗点任务达标
-                postTaskCount: 100 // 岗点日常任务
-              })
-            })
-          }
-          this.list = list
           this.loading = false
         } catch (error) {
           console.error(error)
@@ -133,12 +90,8 @@ export default {
     },
     async detail(row) {
       // 详情
-      try {
-        this.detailInfo = row
-        this.detailVisible = true
-      } catch (error) {
-        console.error(error)
-      }
+      this.detailInfo = row
+      this.detailVisible = true
     }
   }
 

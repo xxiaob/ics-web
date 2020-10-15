@@ -41,7 +41,7 @@ export default {
   components: { JcCharts },
   data() {
     return {
-      activated: 1, // 业务类型占比,
+      activated: 1,
       options: null,
       rankings: [] // 排名数据
     }

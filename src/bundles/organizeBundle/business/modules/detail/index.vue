@@ -1,11 +1,11 @@
 <template>
-  <el-dialog title="组织业务详情" :visible.sync="dialogVisible" width="800px" :append-to-body="true" :close-on-click-modal="false" @close="dialogClose" top="16vh">
+  <el-dialog title="组织业务详情" :visible.sync="dialogVisible" width="1000px" :append-to-body="true" :close-on-click-modal="false" @close="dialogClose" top="16vh">
     <div slot="title" class="dialog-title">
       <h3>组织业务详情</h3>
       <div class="title-info">
         <span>{{ form.orgName}}</span> |
-        <span>常态项目</span> |
-        <span>2020-10-1 ~ 2020-10-30</span>
+        <span>{{ form.projectName }}</span> |
+        <span>{{filter.beginTime | formatDate}} ~ {{filter.endTime | formatDate}}</span>
       </div>
     </div>
 
@@ -13,15 +13,10 @@
       <el-col :span="8">
         <el-form ref="form" label-width="120px" :model="form" class="jc-manage-form" size="mini">
           <el-form-item label="事件上报：">
-            <span>{{form.eventReport}}</span>
+            <span>{{form.eventCount}}</span>
           </el-form-item>
           <el-form-item label="事件类型占比：">
-            <div >市容环境 36.00%</div>
-            <div >市容环境 36.00%</div>
-            <div >市容环境 36.00%</div>
-            <div >市容环境 36.00%</div>
-            <div >市容环境 36.00%</div>
-            <div >市容环境 36.00%</div>
+             <p v-for="(eventItem,index) in form.eventType" :key="index">{{eventItem.typeName}} {{ eventItem.rate | formatPercent}}</p>
           </el-form-item>
 
         </el-form>
@@ -29,48 +24,38 @@
       <el-col :span="8">
         <el-form ref="form" label-width="120px" :model="form" class="jc-manage-form" size="mini">
           <el-form-item label="任务下发：">
-            <span>{{form.taskLssus}}</span>
+            <span>{{form.taskCount}}</span>
           </el-form-item>
           <el-form-item label="任务来源占比：">
-            <div >问题上报 16.00%</div>
-            <div >问题上报 36.00%</div>
-            <div >问题上报 36.00%</div>
-            <div >问题上报 36.00%</div>
-            <div >问题上报 36.00%</div>
-            <div >问题上报 36.00%</div>
+            <p v-for="(taskItem,index) in form.taskSource" :key="index">{{taskItem.typeName}} {{ taskItem.rate | formatPercent}}</p>
           </el-form-item>
           <el-form-item label="任务接受：">
-            <span>{{form.taskAccept}}</span>
+            <span>{{form.taskReceiveCount}}</span>
           </el-form-item>
           <el-form-item label="任务完成：">
-            <span>{{form.taskComplete}}</span>
+            <span>{{form.taskCompletedCount}}</span>
           </el-form-item>
           <el-form-item label="任务完成率：">
-            <span>{{form.taskCompleteRate}}</span>
+            <span>{{form.taskCompletedRate * 100 +'%'}}</span>
           </el-form-item>
         </el-form>
       </el-col>
       <el-col :span="8">
         <el-form ref="form" label-width="120px" :model="form" class="jc-manage-form" size="mini">
           <el-form-item label="问题上报：">
-            <span>{{form.problemReport}}</span>
+            <span>{{form.problemReportCount}}</span>
           </el-form-item>
           <el-form-item label="问题类型占比：">
-             <div >问题上报 16.00%</div>
-              <div >问题上报 36.00%</div>
-              <div >问题上报 36.00%</div>
-              <div >问题上报 36.00%</div>
-              <div >问题上报 36.00%</div>
-              <div >问题上报 36.00%</div>
+             <p v-for="(problemItem,index) in form.problemType" :key="index">{{problemItem.typeName}} {{ problemItem.rate | formatPercent}}</p>
           </el-form-item>
           <el-form-item label="问题接受：">
-            <span>{{form.problemAccept}}</span>
+            <span>{{form.problemReceiveCount}}</span>
           </el-form-item>
            <el-form-item label="问题处理：">
-            <span>{{form.problemHandle}}</span>
+            <span>{{form.problemhandlingCount}}</span>
           </el-form-item>
           <el-form-item label="问题处理率：">
-            <span>{{form.problemHandleRate}}</span>
+            <span>{{form.problemhandlingRate*100 + '%'}}</span>
           </el-form-item>
         </el-form>
       </el-col>
@@ -83,6 +68,7 @@
   </el-dialog>
 </template>
 <script>
+import { amountFormatter } from '@/libs/dataFormatter'
 export default {
   name: 'OrganizeBusinessDetail',
   props: {
@@ -91,6 +77,10 @@ export default {
       default: false
     },
     info: {
+      type: Object,
+      default: ()=>{}
+    },
+    filter: {
       type: Object,
       default: ()=>{}
     }
@@ -102,7 +92,6 @@ export default {
       }
     },
     info: {
-      // immediate: true,
       deep: true,
       handler() {
         this.getDetail()
@@ -115,12 +104,17 @@ export default {
       form: {}
     }
   },
+  filters: {
+    formatDate(date) {
+      return date && date.toLocaleDateString()
+    },
+    formatPercent(val) {
+      return amountFormatter(val * 100, 2) + '%'
+    }
+  },
   methods: {
     async getDetail() {
-      if (this.info && this.info.id) {
-      // const res = await eventManageGet(this.info.id)
-
-        // this.form = { ...this.info, ...res }
+      if (this.info) {
         this.form = { ...this.info }
       }
     },

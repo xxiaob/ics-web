@@ -1,7 +1,7 @@
 <template>
   <el-card class="jc-tabfilter-card">
     <el-form ref="form" :inline="true" :model="form" class="jc-tabfilter-form" size="small">
-      <el-form-item prop="positionId" label="项目名称">
+      <el-form-item prop="projectId" label="项目名称">
         <el-cascader v-model="form.projectId" :options="projectList" :props="projectCascaderProps"></el-cascader>
       </el-form-item>
 
@@ -10,7 +10,7 @@
           <el-radio-button  label="0">本周</el-radio-button>
           <el-radio-button  label="1">本月</el-radio-button>
           <el-radio-button  label="2">全年</el-radio-button>
-          <el-radio-button  label="3">自定义</el-radio-button>
+          <el-radio-button  label="3">自定</el-radio-button>
         </el-radio-group>
          <el-date-picker v-model="date" :disabled="timeType !=='3'" @change="changeDate" value-format="timestamp" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期">
         </el-date-picker>
@@ -24,19 +24,14 @@
 </template>
 <script>
 
+import { projectsTreeList } from '@/api/projects'
+import { PROJECT_TYPES } from '@/constant/Dictionaries'
+
 export default {
   name: 'OrganizeBusinessFilter',
-  props: {
-    projectList: {
-      type: Array,
-      default: ()=>[]
-    },
-    orgTree: {
-      type: Array
-    }
-  },
   data() {
     return {
+      loading: false,
       projectCascaderProps: {
         expandTrigger: 'hover',
         emitPath: false,
@@ -45,29 +40,25 @@ export default {
         value: 'id'
       },
       form: {
-        projectId: '',
-        startTime: '',
+        beginTim: '',
         endTime: '',
-        type: 0
+        projectId: ''
       },
       date: null,
-      timeType: '0'
+      timeType: '0',
+      projectList: [],
+      projectObj: {},
+      EmergencySupport: []
     }
   },
   watch: {
-    time() {
-      console.log('time', this.time)
-    },
     timeType() {
       this.initDate()
-      this.form.type = this.timeType
-    },
-    projectList() {
-      this.form.projectId = this.projectList[0].id
     }
   },
-  created() {
+  async created() {
     this.initDate()
+    await this.getProjects()
     this.$emit('filter', this.form)
   },
   methods: {
@@ -85,7 +76,7 @@ export default {
 
       let day = currentDate.getDay()
 
-      let startTime = '',
+      let beginTim = '',
         endTime = ''
 
       if (timeType === '0') {
@@ -97,53 +88,75 @@ export default {
         }
 
         // 获取开始结束时间
-        startTime = new Date(year, month, ddate)
+        beginTim = new Date(year, month, ddate)
         endTime = new Date(year, month, ddate + 7)
 
-        this.date = [startTime, endTime]
-        this.form.startTime = startTime
+        this.date = [beginTim, endTime]
+        this.form.beginTim = beginTim
         this.form.endTime = endTime
       } else if (timeType === '1') {
         // 获取开始结束时间
-        startTime = new Date(year, month, 1)
+        beginTim = new Date(year, month, 1)
         endTime = new Date(year, month + 1, 1)
 
-        this.date = [startTime, endTime]
-        this.form.startTime = startTime
+        this.date = [beginTim, endTime]
+        this.form.beginTim = beginTim
         this.form.endTime = endTime
       } else if (timeType === '2') {
         // 获取开始结束时间
-        startTime = new Date(year, 0, 1)
+        beginTim = new Date(year, 0, 1)
         endTime = new Date(year + 1, 0, 1)
 
-        this.date = [startTime, endTime]
-        this.form.startTime = startTime
+        this.date = [beginTim, endTime]
+        this.form.beginTim = beginTim
         this.form.endTime = endTime
       }
-      console.log('this.form', this.form)
+    },
+    orgChange() {
+      this.$refs.orgCascader.dropDownVisible = false //级联选择器 选择任意一级后隐藏下拉框
+    },
+    formatProject(row, column, cellValue) {
+      return this.projectObj[cellValue]
+    },
+    async getProjects() {
+      const res = await projectsTreeList()
+
+      this.projectList = res
+      this.form.projectId = this.projectList[0].id
+      this.projectObj = this.formatProjectTreeToObj(res)
+    },
+    formatProjectTreeToObj(child) {
+      let objs = {}
+
+      if (child && child.length) {
+        child.forEach(item => {
+          if (item.sonProjects && item.sonProjects.length) {
+            objs = Object.assign(objs, this.formatProjectTreeToObj(item.sonProjects))
+          }
+          objs[item.id] = item.name
+
+          //应急项目
+          if (item.type == PROJECT_TYPES.EmergencySupport) {
+            this.EmergencySupport.push(item)
+          }
+        })
+      }
+      return objs
     },
     changeDate(value) {
-      console.log('value', value)
-      console.log('date', this.date)
       if (value) {
-        this.form.startTime = value[0]
-        this.form.endTime = value[1]
+        this.form.beginTim = new Date(value[0])
+        this.form.endTime = new Date(value[1])
       } else {
-        this.form.startTime = ''
+        this.form.beginTim = ''
         this.form.endTime = ''
       }
-    },
-    reset() {
-      this.$refs.form.resetFields()
-      this.form.startTime = ''
-      this.form.endTime = ''
-      this.date = null
     },
     onSubmit() {
       this.$emit('filter', this.form)
     },
     exportData() {
-      exportList(this.form)
+      // exportList(this.form)
     }
   }
 }
