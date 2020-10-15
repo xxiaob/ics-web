@@ -302,7 +302,8 @@ export default {
     getTaskByResource: 'task-service/task/getTaskByResource', // 渣土告警台账查询任务
     closeAlarm: 'task-service/alarm/closeAlarm', // 关闭告警
     updateAlarm: 'task-service/alarm/updateAlarm', // 更新告警状态
-    getAlarmById: 'task-service/alarm/getAlarmById'
+    getAlarmById: 'task-service/alarm/getAlarmById',
+    getPushAlarmById: 'task-service/alarm/getPushAlarmById'
   },
   organizeInfo: {
     // 组织信息

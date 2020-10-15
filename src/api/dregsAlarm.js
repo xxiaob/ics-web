@@ -68,5 +68,5 @@ export function updateAlarm(data) {
  * @returns {Object} axios 对象
  */
 export function getAlarmById(id) {
-  return axios.post(API.dregsAlarm.getAlarmById + '?id=' + id)
+  return axios.post(API.dregsAlarm.getPushAlarmById + '?id=' + id)
 }
