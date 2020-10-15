@@ -11,7 +11,7 @@
 
         <div class="jc-type-echarts jc-flex-warp">
           <div class="jc-flex-con">
-            <jc-charts :options="options"></jc-charts>
+            <jc-charts :options="options" :isClear="true"></jc-charts>
           </div>
           <div class="jc-complete-ranking">
             <div class="jc-complete-title">下辖组织排名<span>Top6</span></div>
@@ -92,7 +92,9 @@ export default {
           { org: '秦淮区', value: 0.7 },
           { org: '建邺区', value: 0.64 },
           { org: '鼓楼区', value: 0.8 },
-          { org: '鼓楼区', value: 0.86 }
+          { org: '鼓楼区3', value: 0.86 },
+          { org: '鼓楼区4', value: 0.9 },
+          { org: '鼓楼区5', value: 0.76 }
         ]
       }
 
@@ -199,7 +201,7 @@ export default {
           legendHoverLink: true,
           barWidth: 20,
           itemStyle: {
-            barBorderRadius: [100, 100, 0, 0]
+            barBorderRadius: [10, 10, 0, 0]
 
           },
           data: [],

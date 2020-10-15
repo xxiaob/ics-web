@@ -25,7 +25,7 @@
             <span v-else>否</span>
           </template>
         </el-table-column>
-        <el-table-column  label="职位" >
+        <el-table-column  label="职位" width='100'>
           <template slot-scope="scope">
             <div v-for="(position,index) in scope.row.positions" :key="index">{{position}}</div>
           </template>

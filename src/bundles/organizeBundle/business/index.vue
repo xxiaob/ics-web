@@ -1,6 +1,6 @@
 <template>
   <div class="jc-main-container-warp">
-    <tab-filter @filter="goFilter"></tab-filter>
+    <tab-filter @filter="goFilter" :projectList="projectList" ></tab-filter>
     <el-card class="jc-table-card jc-mt">
       <div slot="header" class="jc-card-header">
         <div class="jc-card-title">组织业务</div>
@@ -9,13 +9,13 @@
         <el-table-column type="index" label="序号" width="50"></el-table-column>
         <el-table-column prop="orgName" label="组织名称"></el-table-column>
         <el-table-column prop="eventReport" label="事件上报"></el-table-column>
-        <el-table-column  label="事件类型Top3">
+        <el-table-column  label="事件类型Top3" min-width='100'>
            <template slot-scope="scope">
             <p v-for="(eventType,index) in scope.row.eventType" :key="index">{{eventType}}</p>
           </template>
         </el-table-column>
         <el-table-column prop="taskLssus" label="任务下发"></el-table-column>
-        <el-table-column label="任务来源Top3">
+        <el-table-column label="任务来源Top3" min-width='100'>
           <template slot-scope="scope">
             <p v-for="(eventType,index) in scope.row.taskSource" :key="index">{{eventType}}</p>
           </template>
@@ -25,7 +25,7 @@
         <el-table-column prop="taskComplete" label="任务完成"></el-table-column>
         <el-table-column prop="taskCompleteRate" label="任务完成率"></el-table-column>
         <el-table-column prop="problemReport" label="问题上报"></el-table-column>
-        <el-table-column label="问题类型Top3">
+        <el-table-column label="问题类型Top3" min-width='100'>
           <template slot-scope="scope">
             <p v-for="(eventType,index) in scope.row.problemType" :key="index">{{eventType}}</p>
           </template>
@@ -60,13 +60,14 @@
 // import { formatDate } from '@/libs/util'
 // import PaginationMixins from '@/mixins/PaginationMixins'
 // import { organizationList } from '@/api/organization'
+import projectsMixins from '@/bundles/taskBundle/mixins/projectsMixins'
 import { createNamespacedHelpers } from 'vuex'
 const { mapState } = createNamespacedHelpers('user')
 
 
 export default {
   name: 'OrganizeBusinessIndex',
-  // mixins: [PaginationMixins],
+  mixins: [projectsMixins],
   components: {
     TabFilter: () => import('./modules/tabFilter'),
     JcDetail: () => import('./modules/detail'),
@@ -97,6 +98,7 @@ export default {
 
   async created() {
     // await this.getOrgTree()
+    await this.getProjects()
 
     this.initData()
   },
@@ -223,7 +225,7 @@ export default {
     goFilter(filter) {
       console.log('filter', filter)
       this.filter = filter
-      this.currentChange(1)
+      // this.currentChange(1)s
     },
 
     async detail(row) {
