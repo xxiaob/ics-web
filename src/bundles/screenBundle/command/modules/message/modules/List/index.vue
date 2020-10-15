@@ -56,6 +56,17 @@ export default {
   methods: {
     detail(item) {
       this.$EventBus.$emit('view-component-change', { component: 'MessageDetail', options: item }) //通知窗口改变
+      if (item.type == MESSAGE_TYPE.SELFALARM) {
+        console.log('在地图上定位告警位置')
+        // 告警类型
+        if (item.warnType == 'grid') {
+          // 岗点
+          this.$emit('screen-grid-location', { id: '', areaTypeId: '' })
+        } else if (item.warnType == 'user') {
+          //用户
+          this.$emit('screen-user-location', { id: '' })
+        }
+      }
     },
     changeTodo(item, todo) {
       item.todo = todo
