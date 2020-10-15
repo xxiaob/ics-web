@@ -24,7 +24,7 @@
         <div class="jc-opera-item second" :class="projectSC" @click="operaChange('daily-task')"><i class="iconfont iconrichangrenwushezhi"></i>日常任务设置</div>
         <div class="jc-opera-item three" :class="projectSC" @click="operaChange('grid-setting')"><i class="iconfont iconwanggeshezhi"></i>网格设置</div>
         <router-link :to="{name: 'taskSearch', query: {projectId: item.projectId,type:'1'}}" class="jc-opera-item four" :class="projectSC" target="_blank"><i class="iconfont iconrichangrenwuchaxun"></i>日常任务查询</router-link>
-        <!-- <div class="jc-opera-item three"><i class="iconfont icontongjifenxi"></i>统计分析</div> -->
+        <div class="jc-opera-item five" :class="projectSC" @click="operaChange('statistics')"><i class="iconfont icontongjifenxi"></i>统计分析</div>
       </div>
     </div>
   </div>

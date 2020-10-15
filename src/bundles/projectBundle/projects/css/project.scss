@@ -184,7 +184,8 @@
       padding: 0 $jc-default-dis;
       box-sizing: border-box;
       position: absolute;
-      top: $jc-default-dis/2;
+      // top: $jc-default-dis/2;
+      top: 5px;
       left: $jc-default-dis/2;
       right: $jc-default-dis/2;
       bottom: $jc-default-dis/2;
@@ -206,7 +207,8 @@
         &.second.jc-finished,
         &.three.jc-finished,
         &.second.jc-not-start,
-        &.four.jc-not-start{
+        &.four.jc-not-start,
+        &.five.jc-not-start{
           pointer-events: none;
         }
       }
@@ -239,6 +241,7 @@
     .jc-project-info {
       opacity: 0;
       transform: scale(1.2);
+      height: 50px;
     }
 
     .jc-project-opera {
@@ -268,6 +271,11 @@
           transition-delay: 0.65s;
           text-align: right;
           width: 60%;
+        }
+
+        &.five {
+          transition-delay: 0.8s;
+          width: 40%;
         }
       }
     }

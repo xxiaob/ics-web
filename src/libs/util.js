@@ -40,8 +40,42 @@ let localData = {
   }
 }
 
+let sessionData = {
+  /**
+   * 设置本地存储
+   * @param {string} key 设置sessionStorage本地存储key
+   * @param {string} value 设置sessionStorage本地存储value
+   */
+  setData(key, value) {
+    window.sessionStorage.setItem(key, value)
+  },
+  /**
+   * 获取本地存储
+   * @param {string} key 获取本地存储的key
+   * @returns {string} 返回获取的结果，如果为null，则返回''空字符串
+   */
+  getData(key) {
+    let data = window.sessionStorage.getItem(key)
+
+    return data ? data : null
+  },
+  /**
+   * 删除本地存储
+   * @param {string} key 移除本地存储
+   */
+  removeData(key) {
+    window.sessionStorage.removeItem(key)
+  },
+  /**
+   * 清除所有本地存储
+   */
+  clearAllData() {
+    window.sessionStorage.clear()
+  }
+}
+
 /*设置本地存储*/
-export { localData }
+export { localData, sessionData }
 
 /**
  * 匹配对象

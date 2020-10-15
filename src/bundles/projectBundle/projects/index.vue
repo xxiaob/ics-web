@@ -19,6 +19,7 @@
     <jc-manage :options="info" :projectList="list" :projectType="projectType" :visible.sync="visible" @save-success="initData"></jc-manage>
     <grid-setting :options="opreaData" :visible.sync="gridVisible"></grid-setting>
     <resource-setting :options="opreaData" :visible.sync="resourceVisible"></resource-setting>
+    <statistics :options="opreaData" :visible.sync="statisticsVisible"></statistics>
     <task-daily-manage :projectId="opreaData.projectId" :visible.sync="taskDailyVisible"></task-daily-manage>
   </div>
 </template>
@@ -34,6 +35,7 @@ export default {
     TabFilter: () => import('./modules/tabFilter'),
     JcManage: () => import('./modules/manage'),
     ListItem: () => import('./modules/listItem'),
+    Statistics: () => import('./modules/statistics'),
     GridSetting: () => import('../projectSetting/grid'),
     ResourceSetting: () => import('../projectSetting/resource'),
     TaskDailyManage: () => import('@/bundles/taskBundle/taskProcess/modules/manageDaily')
@@ -48,6 +50,7 @@ export default {
       gridVisible: false,
       resourceVisible: false,
       taskDailyVisible: false,
+      statisticsVisible: false,
       filter: {}
     }
   },
@@ -97,6 +100,8 @@ export default {
         this.resourceVisible = true
       } else if (options.opera == 'daily-task') {
         this.taskDailyVisible = true
+      } else if (options.opera == 'statistics') {
+        // this.statisticsVisible = true
       }
     },
     manage(row) {
