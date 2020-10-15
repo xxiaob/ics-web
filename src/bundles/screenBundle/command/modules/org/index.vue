@@ -69,7 +69,7 @@ export default {
   },
   created() {
     this.initData()
-    this.$EventBus.$on('map-user-online-change', this.getUserOnline ) // 推送用户在线/离线数据
+    this.$EventBus.$on('map-user-online-change', this.getUserOnline) // 推送用户在线/离线数据
   },
 
   methods: {
@@ -144,7 +144,7 @@ export default {
         // 获取用户列表数据
         const orgsAndUsers = await getOrgUserListByProject({ projectId: this.project.projectId })
 
-        console.log('组织架构orgsAndUsers', orgsAndUsers )
+        console.log('组织架构orgsAndUsers', orgsAndUsers)
 
         this.trees = this.formatUserOrgTrees(orgsAndUsers)//处理组织和用户
         this.expandedKeys = this.trees.length ? [this.trees[0].id] : [] //设置第一级默认展开
@@ -196,7 +196,7 @@ export default {
       let users = []
 
       if (selectNodes && selectNodes.length) {
-        selectNodes.forEach(item=> {
+        selectNodes.forEach(item => {
           if (item.type == 'user') {
             users.push({ id: item.id, name: item.label, pid: item.pid })
           }
