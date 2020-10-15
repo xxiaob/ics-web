@@ -1,5 +1,5 @@
 import STORAGE_KEY from '../constant/STORAGE_KEY'
-import { localData } from './util'
+import { localData, sessionData } from './util'
 
 //基础方法，设置和获取
 let storageSet = function (key, info) {
@@ -16,6 +16,27 @@ let storageSet = function (key, info) {
 
 let storageGet = function (key) {
   const data = localData.getData(key)
+
+  if (data) {
+    return JSON.parse(data)
+  }
+  return ''
+}
+
+let sessionSet = function (key, info) {
+  if (info) {
+    if (typeof info === 'string') {
+      sessionData.setData(key, info)
+    } else {
+      sessionData.setData(key, JSON.stringify(info))
+    }
+  } else {
+    sessionData.removeData(key)
+  }
+}
+
+let sessionGet = function (key) {
+  const data = sessionData.getData(key)
 
   if (data) {
     return JSON.parse(data)
@@ -109,7 +130,7 @@ export function setDomainLogoConfig(info) {
  * @returns {Object} 代办信息
  */
 export function getTodoInfo(projectId) {
-  return storageGet(STORAGE_KEY.COMMAND_MESSAGE_DATA_TODO_INFO + getUser().userId + projectId)
+  return sessionGet(STORAGE_KEY.COMMAND_MESSAGE_DATA_TODO_INFO + getUser().userId + projectId)
 }
 
 /**
@@ -118,7 +139,7 @@ export function getTodoInfo(projectId) {
  * @param {object} info 代办信息
  */
 export function setTodoInfo(projectId, info) {
-  storageSet(STORAGE_KEY.COMMAND_MESSAGE_DATA_TODO_INFO + getUser().userId + projectId, info)
+  sessionSet(STORAGE_KEY.COMMAND_MESSAGE_DATA_TODO_INFO + getUser().userId + projectId, info)
 }
 
 /**
