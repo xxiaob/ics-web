@@ -15,6 +15,15 @@ export function getAttendanceList(data = {}) {
   return axios.post(API.organizeInfo.attendance.list, data)
 }
 
+/**
+ *  出勤统计
+ * @param {object} data
+ * @returns {Object} axios 对象
+ */
+export function getAttendanceStatistics(data = {}) {
+  return axios.post(API.organizeInfo.attendance.statistics, data)
+}
+
 /*-------------------------------人员信息库------------------------------------ */
 /**
  *  人员信息库列表

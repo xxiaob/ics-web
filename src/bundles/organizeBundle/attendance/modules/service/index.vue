@@ -106,7 +106,15 @@ let options = {
       gridIndex: 0
     }
   ],
-  series: []
+  series: [],
+  dataZoom: [
+    {
+      type: 'inside',
+      startValue: 0,
+      maxValueSpan: 11,
+      endValue: 7
+    }
+  ]
 
 }
 
@@ -164,32 +172,29 @@ export default {
     },
     list(val) {
       console.log('val', val)
+      this.processData()
     }
   },
 
   created() {
-    this.processData()
+    // this.processData()
   },
   methods: {
     processData() {
       // let name = ''
+      if (!this.list) {
+        return
+      }
       let list = this.list
-
-
-      let title = ''
-
-      let formatter = null
 
       let xAxisDatas = list.map(item => item.orgName)
 
-      console.log('this.activated', this.activated)
+
       if (this.activated == 1) {
         console.log(111)
-        title = '岗点任务'
+        options.title.text = '岗点任务'
         serie1.name = '日常'
         serie2.name = '达标'
-        formatter = value => `${value}`
-
 
         let yData1 = list.map(item => item.postTaskCount)
 
@@ -200,30 +205,22 @@ export default {
         options.yAxis[0].max = null
         serie1.data = yData1
         serie2.data = yData2
-        options.yAxis[0].axisLabel.formatter = formatter
+        options.yAxis[0].axisLabel.formatter = value => `${value}`
 
         options.series = [serie1, serie2]
       } else if (this.activated == 2) {
-        console.log(222)
-        formatter = value => `${value * 100} %`
-        title = '达标比率'
+        options.title.text = '达标比率'
         serie1.name = '达标比率'
 
-
-        let yData1 = list.map(item => item.postReachRate)
+        let yData = list.map(item => item.postReachRate)
 
         options.xAxis[0].data = xAxisDatas
-        options.yAxis[0].axisLabel.formatter = formatter
-        // options.yAxis[0].min = 0
-        // options.yAxis[0].max = 1
+        options.yAxis[0].axisLabel.formatter = value => `${value * 100} %`
 
 
-        serie1.data = yData1
+        serie1.data = yData
         options.series = [serie1]
       }
-
-
-      options.title.text = `${ title}` // 标题
 
       this.options = options
     }

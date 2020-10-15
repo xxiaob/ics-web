@@ -314,7 +314,8 @@ export default {
     },
     attendance: {
       // 组织勤务
-      list: 'data-service/orgInfo/getOrgDataStatistics' // 勤务列表
+      list: 'data-service/orgInfo/getOrgDataStatistics', // 勤务列表
+      statistics: 'data-service/orgInfo/getOrgAttendancePolyline' // 出勤统计
     }
   }
 }

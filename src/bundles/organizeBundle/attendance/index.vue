@@ -28,7 +28,7 @@
 
      <el-card class="jc-echart-card jc-mt">
       <el-row :gutter="0">
-        <jc-statistics></jc-statistics>
+        <jc-statistics :statistics="statistics"></jc-statistics>
         <jc-service :list="list"></jc-service>
       </el-row>
     </el-card>
@@ -38,12 +38,8 @@
   </div>
 </template>
 <script>
-// import { eventManageList, eventManageDel, eventManageGet } from '@/api/eventManage'
-// import { formatDate } from '@/libs/util'
-// import PaginationMixins from '@/mixins/PaginationMixins'
-// import { organizationList } from '@/api/organization'
 
-import { getAttendanceList } from '@/api/organizeInfo'
+import { getAttendanceList, getAttendanceStatistics } from '@/api/organizeInfo'
 import projectsMixins from '@/bundles/taskBundle/mixins/projectsMixins'
 import { createNamespacedHelpers } from 'vuex'
 const { mapState } = createNamespacedHelpers('user')
@@ -61,8 +57,6 @@ export default {
   },
   data() {
     return {
-      // orgTree: [],
-      // orgObj: {},
       list: [],
       loading: false,
       visible: false,
@@ -71,7 +65,7 @@ export default {
       detailInfo: null,
       filter: {},
       orgId: '',
-
+      statistics: null,
       completeType: 'task', // 业务完成率占比
       options: null // echarts参数
     }
@@ -80,76 +74,26 @@ export default {
     ...mapState(['user'])
   },
   async created() {
-    // await this.getOrgTree()
     await this.getProjects()
-
-    // this.initData()
   },
   methods: {
     formatRate(row, column, cellValue) {
       // 格式化比率
       return cellValue * 100 + '%'
     },
-    // formatTime(row, column, cellValue) {
-    //   return formatDate(cellValue)
-    // },
-    // formatOrg(row, column, cellValue) {
-    //   return this.orgObj[cellValue]
-    // },
-    // formatOrgTree(child) {
-    //   let trees = []
-
-    //   if (child && child.length) {
-    //     child.forEach(item => {
-    //       let node = {
-    //         value: item.orgId,
-    //         label: item.orgName
-    //       }
-
-    //       let children = this.formatOrgTree(item.children)
-
-    //       if (children && children.length) {
-    //         node.children = children
-    //       }
-
-    //       trees.push(node)
-    //     })
-    //   }
-    //   return trees
-    // },
-    // formatOrgTreeToObj(child) {
-    //   let objs = {}
-
-    //   if (child && child.length) {
-    //     child.forEach(item => {
-    //       if (item.children && item.children.length) {
-    //         objs = Object.assign(objs, this.formatOrgTreeToObj(item.children))
-    //       }
-    //       objs[item.orgId] = item.orgName
-    //     })
-    //   }
-    //   return objs
-    // },
-    // async getOrgTree() {
-    //   const res = await organizationList()
-
-    //   this.orgTree = this.formatOrgTree(res)
-    //   this.orgObj = this.formatOrgTreeToObj(res)
-    // },
     async initData() {
       if (!this.loading) {
         this.loading = true
         console.log('111this.filter', this.filter)
         try {
-          // const { total, resultList } = await eventManageList({ ...this.filter, ...this.page })
-          let resultList = await getAttendanceList({ ...this.filter })
+          let resultList = await getAttendanceList({ ...this.filter }) // 获取组织勤务列表
 
-          console.log('datas', resultList)
+          this.statistics = await getAttendanceStatistics({ ...this.filter }) // 获取组织勤务统计
 
 
           const list = []
 
-          // 事件数据
+          //  组织列表数据
           if (resultList && resultList.length > 0) {
             resultList.forEach(item=>{
               list.push({
@@ -162,11 +106,14 @@ export default {
                 inoutCount: item.inoutCount, // 岗点触碰
                 orgId: item.orgId, // 组织id
                 orgName: item.orgName, // 组成名称
-                postReachRate: item.postReachRate, // 岗点任务达标率
-                postReachTaskCount: item.postReachTaskCount, // 岗点任务达标
-                postTaskCount: item.postTaskCount, // 岗点日常任务
+                // postReachRate: item.postReachRate, // 岗点任务达标率
+                // postReachTaskCount: item.postReachTaskCount, // 岗点任务达标
+                // postTaskCount: item.postTaskCount, // 岗点日常任务
                 projectId: item.projectId,
-                projectName: item.projectName
+                projectName: item.projectName,
+                postReachRate: 0.6, // 岗点任务达标率
+                postReachTaskCount: 80, // 岗点任务达标
+                postTaskCount: 100 // 岗点日常任务
               })
             })
           }
@@ -180,14 +127,13 @@ export default {
     },
 
     goFilter(filter) {
+      // 查询触发
       this.filter = filter
       this.initData()
     },
-
     async detail(row) {
-      console.log('row', row)
+      // 详情
       try {
-        // this.detailInfo = await eventManageGet(row.id)
         this.detailInfo = row
         this.detailVisible = true
       } catch (error) {
@@ -201,9 +147,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-// .jc-table{
-//   max-height: 600px;
-// }
 
 /deep/ .jc-echart-card{
   & > .el-card__body{
