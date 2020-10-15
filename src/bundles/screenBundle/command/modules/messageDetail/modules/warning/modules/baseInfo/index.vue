@@ -28,7 +28,7 @@
       </div>
       <div class="jc-detail-warp">
         <div class="jc-detail-label">状态</div>
-        <div class="jc-detail-content">{{formatStatus(form.status)}}</div>
+        <div class="jc-detail-content">{{form.status}}</div>
       </div>
     </div>
 
