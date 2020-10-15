@@ -14,7 +14,7 @@
           <el-table-column prop="transportCompanyAddress" label="企业地址"></el-table-column>
           <el-table-column prop="carNumber" label="车牌号"></el-table-column>
           <el-table-column prop="carSpeed" label="车速"></el-table-column>
-          <el-table-column prop="status" label="状态" :formatter="formatStatus"></el-table-column>
+          <el-table-column prop="status" label="状态"></el-table-column>
           <el-table-column prop="alarmDate" label="时间" width="160"></el-table-column>
           <el-table-column width="50" label="操作">
             <template slot-scope="scope">
@@ -32,7 +32,7 @@
 
 <script>
 import { getByType } from '@/api/supervise'
-import { getDregsAlarmList } from '@/api/dregsAlarm'
+import { getDregsAlarmPushList } from '@/api/dregsAlarm'
 import { LAWS_TYPES, ALARM_STATUS } from '@/constant/Dictionaries'
 import PaginationMixins from '@/mixins/PaginationMixins'
 
@@ -75,7 +75,7 @@ export default {
               delete filter[key]
             }
           })
-          const { total, resultList } = await getDregsAlarmList({ ...this.filter, ...this.page })
+          const { total, resultList } = await getDregsAlarmPushList({ ...this.filter, ...this.page })
 
           this.page.total = total
           this.list = resultList

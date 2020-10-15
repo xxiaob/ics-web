@@ -1,16 +1,17 @@
 <template>
   <el-card class="jc-tabfilter-card">
     <el-form ref="form" :inline="true" :model="form" class="jc-tabfilter-form" size="small">
-      <el-form-item prop="subTypeCode" label="告警类型">
-        <el-select v-model="form.subTypeCode" placeholder="选择告警类型">
-          <el-option v-for="item in types" :key="item.id" :label="item.configName" :value="item.configValue"></el-option>
-        </el-select>
+      <el-form-item prop="alarmType" label="告警类型">
+        <el-input v-model="form.alarmType" placeholder="输入告警类型"></el-input>
+        <!-- <el-select v-model="form.alarmType" placeholder="选择告警类型">
+          <el-option v-for="item in types" :key="item.id" :label="item.configName" :value="item.configName"></el-option>
+        </el-select> -->
       </el-form-item>
-      <el-form-item prop="status" label="状态">
+      <!-- <el-form-item prop="status" label="状态">
         <el-select v-model="form.status" placeholder="选择状态">
           <el-option v-for="item in statuses" :key="item.id" :label="item.configName" :value="item.configValue"></el-option>
         </el-select>
-      </el-form-item>
+      </el-form-item> -->
       <el-form-item prop="" label="时间">
         <el-date-picker v-model="date" @change="changeDate" type="datetimerange" range-separator="-" start-placeholder="开始时间" end-placeholder="结束时间">
         </el-date-picker>
@@ -40,7 +41,7 @@ export default {
   data() {
     return {
       form: {
-        subTypeCode: '',
+        alarmType: '',
         desc: '',
         startTime: '',
         endTime: '',

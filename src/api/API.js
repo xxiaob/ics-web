@@ -298,6 +298,7 @@ export default {
   dregsAlarm: {
     // 渣土告警
     list: 'task-service/alarm/select', // 渣土告警列表
+    pushList: 'task-service/alarm/selectPush', // 查询推送告警
     statusList: '/user-service/systemConfig/getByType?type=alarmStatus',
     getTaskByResource: 'task-service/task/getTaskByResource', // 渣土告警台账查询任务
     closeAlarm: 'task-service/alarm/closeAlarm', // 关闭告警

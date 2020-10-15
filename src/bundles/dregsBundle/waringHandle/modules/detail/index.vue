@@ -30,7 +30,7 @@
             <span>{{form.carSpeed}}</span>
           </el-form-item>
           <el-form-item label="状态：">
-            <span>{{ ALARM_STATUS.toString(form.status) }}</span>
+            <span>{{ ALARM_STATUS.toString(form.status)||form.status }}</span>
           </el-form-item>
 
         </el-form>

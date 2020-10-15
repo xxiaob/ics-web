@@ -14,6 +14,14 @@ export function getDregsAlarmList(data) {
   return axios.post(API.dregsAlarm.list, data)
 }
 /**
+ * 查询推送告警列表
+ * @param {object} data
+ * @returns {Object} axios 对象
+ */
+export function getDregsAlarmPushList(data) {
+  return axios.post(API.dregsAlarm.pushList, data)
+}
+/**
  * 获取状态
  * @returns {Object} axios 对象
  */
