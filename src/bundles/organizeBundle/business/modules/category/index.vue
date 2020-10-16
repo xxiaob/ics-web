@@ -4,9 +4,9 @@
       <div slot="header" class="jc-card-header">
           <div class="jc-card-title">业务类别占比</div>
           <el-radio-group class="jc-button-group" v-model="activated" size="mini">
-            <el-radio-button  label="1">事件</el-radio-button>
+            <el-radio-button  label="0">事件</el-radio-button>
             <el-radio-button  label="2">问题</el-radio-button>
-            <el-radio-button  label="3">任务</el-radio-button>
+            <el-radio-button  label="1">任务</el-radio-button>
           </el-radio-group>
         </div>
 
@@ -144,7 +144,7 @@ export default {
   },
   data() {
     return {
-      activated: 1,
+      activated: '0',
       options: null
     }
   },
@@ -158,6 +158,7 @@ export default {
   },
   methods: {
     processData() {
+      console.log('this.category', this.category)
       if (this.category && this.category.length) {
         let name = '', total = 0
 
@@ -165,38 +166,19 @@ export default {
 
         let data = []
 
-        if (this.activated == '1') {
-          categoryData = { ...this.category[0] }
-          name = categoryData.typeName
-          total = categoryData.countNumber
-          categoryData.typeRateDTOList.forEach(item => {
-            data.push({
-              name: item.typeName,
-              value: item.typeCount
+        this.category.forEach(item => {
+          if (item.index == this.activated) {
+            categoryData = { ...item }
+            name = categoryData.typeName
+            total = categoryData.countNumber
+            categoryData.typeRateDTOList.forEach(item2 => {
+              data.push({
+                name: item2.typeName,
+                value: item2.typeCount
+              })
             })
-          })
-        } else if (this.activated == '2') {
-          categoryData = { ...this.category[1] }
-          name = categoryData.typeName
-          total = categoryData.countNumber
-          categoryData.typeRateDTOList.forEach(item => {
-            data.push({
-              name: item.typeName,
-              value: item.typeCount
-            })
-          })
-        } else if (this.activated == '3') {
-          categoryData = { ...this.category[2] }
-          name = categoryData.typeName
-          total = categoryData.countNumber
-          categoryData.typeRateDTOList.forEach(item => {
-            data.push({
-              name: item.typeName,
-              value: item.typeCount
-            })
-          })
-        }
-
+          }
+        })
 
         options.series[0].name = name
         options.series[0].data = data
