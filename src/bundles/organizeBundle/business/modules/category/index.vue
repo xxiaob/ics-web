@@ -51,10 +51,13 @@ let options = {
     formatter: '{a} <br/>{b} : {c} ({d}%)'
   },
   legend: {
-    // pageIconColor: '#112adf',
-    // pageIconInactiveColor: '#0f89d2',
-    // pageIconSize: 12,
-
+    pageIconColor: '#112adf',
+    pageIconInactiveColor: '#0f89d2',
+    pageIconSize: 12,
+    type: 'scroll',
+    pageTextStyle: {
+      color: 'rgb(139,193,252)'
+    },
     icon: 'circle',
     orient: 'vertical',
     right: 0,
