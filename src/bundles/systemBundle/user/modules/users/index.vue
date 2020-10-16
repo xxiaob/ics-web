@@ -83,13 +83,15 @@ export default {
 
       return positionNames.join(',')
     },
-    initData(org) {
+    async initData(org) {
       if (org) {
         this.org = org
       }
       if (!this.loading) {
         this.loading = true
-        userList({ ...this.filter, ...this.page, orgId: this.org.orgId }).then(res => {
+        try {
+          const res = await userList({ ...this.filter, ...this.page, orgId: this.org.orgId })
+
           this.page.total = res.total
 
           let list = []
@@ -100,10 +102,15 @@ export default {
             })
           }
           this.list = list
-          this.loading = false
-        }).catch(() => {
-          this.loading = false
-        })
+        } catch (error) {
+          console.error(error)
+        }
+        this.loading = false
+        // userList({ ...this.filter, ...this.page, orgId: this.org.orgId }).then(res => {
+        //   this.loading = false
+        // }).catch(() => {
+        //   this.loading = false
+        // })
       }
     },
     goFilter(filter) {
