@@ -94,7 +94,7 @@ let options = {
     splitLine: {
       show: true,
       lineStyle: {
-        color: '#ccc',
+        color: '#EBEEF5',
         width: 1,
         type: 'dashed'
       }

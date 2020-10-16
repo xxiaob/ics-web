@@ -6,7 +6,7 @@
         <div class="jc-card-title">组织业务</div>
       </div>
       <el-table :data="list" v-loading="loading" row-key="id" class="jc-table" max-height="600">
-        <el-table-column type="index" label="序号" width="50"></el-table-column>
+        <el-table-column type="index" :index="indexMethod" label="序号" width="50"></el-table-column>
         <el-table-column prop="orgName" label="组织名称" min-width="120"></el-table-column>
         <el-table-column prop="eventCount" label="事件上报"></el-table-column>
         <el-table-column  label="事件类型Top3" min-width='100'>
@@ -81,6 +81,13 @@ export default {
       // 格式化比率
       return cellValue * 100 + '%'
     },
+    indexMethod(index) {
+      //处理序号
+      if (index == 0) {
+        return '总'
+      }
+      return index
+    },
     async initData() {
       if (!this.loading) {
         this.loading = true
@@ -120,13 +127,13 @@ export default {
     },
 
     goFilter(filter) {
-      console.log('filter', filter)
+      // console.log('filter', filter)
       this.filter = filter
       this.initData()
     },
 
     async detail(row) {
-      console.log('row', row)
+      // console.log('row', row)
       try {
         this.detailInfo = row
         this.detailVisible = true
@@ -141,6 +148,14 @@ export default {
 
 <style lang="scss" scoped>
 
+
+.jc-table{
+  & >>> .el-table__row{
+    &:first-child {
+      color: $jc-color-primary
+    }
+  }
+}
 /deep/ .jc-echart-card{
   & > .el-card__body{
     padding-top:0;
