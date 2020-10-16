@@ -7,7 +7,7 @@
       </div>
       <el-table :data="list" v-loading="loading" row-key="id" class="jc-table" max-height="600">
         <el-table-column type="index" label="序号" width="50"></el-table-column>
-        <el-table-column prop="orgName" label="组织名称"></el-table-column>
+        <el-table-column prop="orgName" label="组织名称" min-width="120"></el-table-column>
         <el-table-column prop="eventCount" label="事件上报"></el-table-column>
         <el-table-column  label="事件类型Top3" min-width='100'>
            <template slot-scope="scope">
@@ -23,7 +23,7 @@
         </el-table-column>
         <el-table-column prop="taskReceiveCount" label="任务接受"></el-table-column>
         <el-table-column prop="taskCompletedCount" label="任务完成"></el-table-column>
-        <el-table-column prop="taskCompletedRate" label="任务完成率"></el-table-column>
+        <el-table-column prop="taskCompletedRate" label="任务完成率" :formatter="formatRate"></el-table-column>
         <el-table-column prop="problemReportCount" label="问题上报"></el-table-column>
         <el-table-column label="问题类型Top3" min-width='100'>
           <template slot-scope="scope">
@@ -31,10 +31,7 @@
           </template>
 
         </el-table-column>
-        <el-table-column prop="problemReceiveCount" label="问题接受"></el-table-column>
-        <el-table-column prop="problemhandlingCount" label="问题处理"></el-table-column>
-        <el-table-column prop="problemhandlingRate" label="问题处理率"></el-table-column>
-        <el-table-column width="80" label="操作">
+        <el-table-column width="60" label="操作">
           <template slot-scope="scope">
             <el-button type="text" size="mini" icon="el-icon-view" @click="detail(scope.row)" title="查看"></el-button>
           </template>
@@ -44,8 +41,8 @@
 
      <el-card class="jc-echart-card jc-mt">
       <el-row :gutter="0">
-        <jc-category ></jc-category>
-        <jc-complete></jc-complete>
+        <jc-category :category="category"></jc-category>
+        <jc-complete :taskRate="taskRate"></jc-complete>
       </el-row>
     </el-card>
 
@@ -72,19 +69,26 @@ export default {
       loading: false,
       detailVisible: false,
       detailInfo: null,
-      filter: {}
-      // businessType: {}
+      filter: {},
+      taskRate: [], // 任务完成比例
+      category: [] // 类别占比
     }
   },
 
 
   methods: {
+    formatRate(row, column, cellValue) {
+      // 格式化比率
+      return cellValue * 100 + '%'
+    },
     async initData() {
       if (!this.loading) {
         this.loading = true
         try {
-          const resultList = await getBusinessList(this.filter)
+          const { top: resultList, left: category } = await getBusinessList(this.filter)
 
+
+          // 处理top数据
           if (resultList && resultList.length) {
             resultList.forEach(item => {
               item.eventTypeFilter = [...(item.eventType || [])].splice(0, 3)
@@ -92,21 +96,22 @@ export default {
               item.taskSourceFilter = [...(item.taskSource || [])].splice(0, 3)
             })
           }
-
-
-          // this.businessType = {
-          //   eventType: resultList.eventType,
-          //   problemType: resultList.problemType,
-          //   taskSource: resultList.taskSource
-          // }
-
           this.list = resultList
 
 
-          console.log('resultList', resultList)
+          // 处理业务完成率数据
+          let taskRate = resultList.map(item => {
+            return {
+              orgName: item.orgName,
+              taskCompletedRate: item.taskCompletedRate
+            }
+          })
 
-          // this.page.total = total
-          // this.list = resultList
+          this.taskRate = taskRate
+
+
+          // 业务类别占比
+          this.category = category
         } catch (error) {
           console.error(error)
         }
@@ -135,9 +140,6 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-// .jc-table{
-//   max-height: 600px;
-// }
 
 /deep/ .jc-echart-card{
   & > .el-card__body{

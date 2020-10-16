@@ -5,7 +5,7 @@
       <div class="title-info">
         <span>{{ form.orgName}}</span> |
         <span>{{ form.projectName }}</span> |
-        <span>{{filter.beginTime | formatDate}} ~ {{filter.endTime | formatDate}}</span>
+        <span>{{date.start}} ~ {{date.end}}</span>
       </div>
     </div>
 
@@ -16,7 +16,7 @@
             <span>{{form.eventCount}}</span>
           </el-form-item>
           <el-form-item label="事件类型占比：">
-             <p v-for="(eventItem,index) in form.eventType" :key="index">{{eventItem.typeName}} {{ eventItem.rate | formatPercent}}</p>
+             <p v-for="(eventItem,index) in form.eventType" :key="index">{{eventItem.proportion}}</p>
           </el-form-item>
 
         </el-form>
@@ -27,7 +27,7 @@
             <span>{{form.taskCount}}</span>
           </el-form-item>
           <el-form-item label="任务来源占比：">
-            <p v-for="(taskItem,index) in form.taskSource" :key="index">{{taskItem.typeName}} {{ taskItem.rate | formatPercent}}</p>
+            <p v-for="(taskItem,index) in form.taskSource" :key="index">{{taskItem.proportion}}</p>
           </el-form-item>
           <el-form-item label="任务接受：">
             <span>{{form.taskReceiveCount}}</span>
@@ -46,16 +46,7 @@
             <span>{{form.problemReportCount}}</span>
           </el-form-item>
           <el-form-item label="问题类型占比：">
-             <p v-for="(problemItem,index) in form.problemType" :key="index">{{problemItem.typeName}} {{ problemItem.rate | formatPercent}}</p>
-          </el-form-item>
-          <el-form-item label="问题接受：">
-            <span>{{form.problemReceiveCount}}</span>
-          </el-form-item>
-           <el-form-item label="问题处理：">
-            <span>{{form.problemhandlingCount}}</span>
-          </el-form-item>
-          <el-form-item label="问题处理率：">
-            <span>{{form.problemhandlingRate*100 + '%'}}</span>
+             <p v-for="(problemItem,index) in form.problemType" :key="index">{{problemItem.proportion}}</p>
           </el-form-item>
         </el-form>
       </el-col>
@@ -68,7 +59,7 @@
   </el-dialog>
 </template>
 <script>
-import { amountFormatter } from '@/libs/dataFormatter'
+import { exportBusinessDetail } from '@/api/organizeInfo'
 export default {
   name: 'OrganizeBusinessDetail',
   props: {
@@ -96,34 +87,59 @@ export default {
       handler() {
         this.getDetail()
       }
+    },
+    filter: {
+      deep: true,
+      handler() {
+        if (this.filter) {
+          let date = { ...this.filter }
+
+
+          date.start = date.beginTime.toLocaleDateString()
+          date.end = date.endTime.toLocaleDateString()
+
+          this.date = date
+        }
+      }
     }
   },
   data() {
     return {
       dialogVisible: false,
-      form: {}
+      form: {},
+      date: {}
     }
   },
-  filters: {
-    formatDate(date) {
-      return date && date.toLocaleDateString()
-    },
-    formatPercent(val) {
-      return amountFormatter(val * 100, 2) + '%'
-    }
-  },
+
   methods: {
     async getDetail() {
       if (this.info) {
-        this.form = { ...this.info }
+        let form = {
+          ...this.info
+
+        }
+
+        // 处理事件类型/任务来源/问题类型比例占比
+        form.eventType.forEach(item => {
+          item.proportion = `${item.typeName}  ${item.rate * 100}%`
+        })
+
+        form.taskSource.forEach(item => {
+          item.proportion = `${item.typeName}  ${item.rate * 100}%`
+        })
+
+        form.problemType.forEach(item => {
+          item.proportion = `${item.typeName}  ${item.rate * 100}%`
+        })
+
+        this.form = form
       }
     },
     dialogClose() {
       this.$emit('update:visible', false)
     },
     downloadDetail() {
-      console.log('downloadDetail')
-      // exportDetail(this.info.id)
+      exportBusinessDetail({ ...this.filter, orgId: this.form.orgId })
     }
   }
 }

@@ -5,7 +5,7 @@
       <div class="title-info">
         <span>{{ form.orgName}}</span> |
         <span>{{ form.projectName }}</span> |
-        <span>{{filter.startTime | formatDate}} ~ {{filter.endTime | formatDate}}</span>
+        <span>{{ date.start }} ~ {{ date.end }}</span>
       </div>
     </div>
 
@@ -94,17 +94,27 @@ export default {
       handler() {
         this.getDetail()
       }
+    },
+    filter: {
+      deep: true,
+      handler() {
+        if (this.filter) {
+          let date = { ...this.filter }
+
+
+          date.start = date.startTime.toLocaleDateString()
+          date.end = date.endTime.toLocaleDateString()
+
+          this.date = date
+        }
+      }
     }
   },
   data() {
     return {
       dialogVisible: false,
-      form: {}
-    }
-  },
-  filters: {
-    formatDate(date) {
-      return date && date.toLocaleDateString()
+      form: {},
+      date: {}
     }
   },
   created() {

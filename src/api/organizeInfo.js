@@ -53,6 +53,23 @@ export function getBusinessList(data = {}) {
   return axios.post(API.organizeInfo.business.list, data)
 }
 
+/**
+ *  业务列表导出
+ * @param {object} data
+ *
+ */
+export function exportBusinessList(data = {}) {
+  download('组织业务列表.xlsx', API.organizeInfo.business.exportList, data)
+}
+
+/**
+ *  业务详情导出
+ * @param {object} data
+ *
+ */
+export function exportBusinessDetail(data = {}) {
+  download('组织业务详情.xlsx', API.organizeInfo.business.exportDetail, data)
+}
 
 /*-------------------------------人员信息库------------------------------------ */
 /**

@@ -26,6 +26,7 @@
 
 import { projectsTreeList } from '@/api/projects'
 import { PROJECT_TYPES } from '@/constant/Dictionaries'
+import { exportBusinessList } from '@/api/organizeInfo'
 
 export default {
   name: 'OrganizeBusinessFilter',
@@ -40,7 +41,7 @@ export default {
         value: 'id'
       },
       form: {
-        beginTim: '',
+        beginTime: '',
         endTime: '',
         projectId: ''
       },
@@ -76,7 +77,7 @@ export default {
 
       let day = currentDate.getDay()
 
-      let beginTim = '',
+      let beginTime = '',
         endTime = ''
 
       if (timeType === '0') {
@@ -88,27 +89,27 @@ export default {
         }
 
         // 获取开始结束时间
-        beginTim = new Date(year, month, ddate)
+        beginTime = new Date(year, month, ddate)
         endTime = new Date(year, month, ddate + 7)
 
-        this.date = [beginTim, endTime]
-        this.form.beginTim = beginTim
+        this.date = [beginTime, endTime]
+        this.form.beginTime = beginTime
         this.form.endTime = endTime
       } else if (timeType === '1') {
         // 获取开始结束时间
-        beginTim = new Date(year, month, 1)
+        beginTime = new Date(year, month, 1)
         endTime = new Date(year, month + 1, 1)
 
-        this.date = [beginTim, endTime]
-        this.form.beginTim = beginTim
+        this.date = [beginTime, endTime]
+        this.form.beginTime = beginTime
         this.form.endTime = endTime
       } else if (timeType === '2') {
         // 获取开始结束时间
-        beginTim = new Date(year, 0, 1)
+        beginTime = new Date(year, 0, 1)
         endTime = new Date(year + 1, 0, 1)
 
-        this.date = [beginTim, endTime]
-        this.form.beginTim = beginTim
+        this.date = [beginTime, endTime]
+        this.form.beginTime = beginTime
         this.form.endTime = endTime
       }
     },
@@ -145,10 +146,10 @@ export default {
     },
     changeDate(value) {
       if (value) {
-        this.form.beginTim = new Date(value[0])
+        this.form.beginTime = new Date(value[0])
         this.form.endTime = new Date(value[1])
       } else {
-        this.form.beginTim = ''
+        this.form.beginTime = ''
         this.form.endTime = ''
       }
     },
@@ -156,7 +157,7 @@ export default {
       this.$emit('filter', this.form)
     },
     exportData() {
-      // exportList(this.form)
+      exportBusinessList(this.form)
     }
   }
 }

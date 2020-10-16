@@ -323,7 +323,9 @@ export default {
     },
     business: {
       // 组织业务
-      list: 'data-service/orgInfo/getOrgBusinessList' // 业务列表
+      list: 'data-service/orgInfo/getOrgBusinessList', // 业务列表
+      exportList: 'data-service/orgInfo/exportOrgBusinessList', // 业务列表导出
+      exportDetail: 'data-service/orgInfo/exportOrgBusinessDetail' // 业务详情导出
     }
   }
 }
