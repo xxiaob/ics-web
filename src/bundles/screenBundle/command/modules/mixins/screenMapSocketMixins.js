@@ -30,6 +30,7 @@ export default {
       onlineUserData = null
 
       isCall = false
+      this.$EventBus.$off('screen-user-online-obtain', this.getUserOnlien)
     },
     getUserAndDevices(locations) {
       // 用于区分用户和设备
@@ -133,7 +134,7 @@ export default {
             })
           } else {
             // 如果为false 说明打开过用户列表, 已经获取过数据, 转为推送
-            this.$EventBus.$emit('map-user-online-change', data.orgUserOnOrOffLineDTOS ) //
+            this.$EventBus.$emit('map-user-online-change', data.orgUserOnOrOffLineDTOS) //
           }
         }
       })

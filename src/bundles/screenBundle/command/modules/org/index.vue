@@ -131,7 +131,7 @@ export default {
             if (trees.index !== -1) {
               this.$refs.tree.insertAfter(treesItem, trees[trees.index])
             } else {
-              this.$refs.tree.insertBefore(treesItem, trees[trees.index])
+              this.$refs.tree.insertBefore(treesItem, trees[0])
             }
           }
         }
