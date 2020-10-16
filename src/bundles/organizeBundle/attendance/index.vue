@@ -6,7 +6,7 @@
         <div class="jc-card-title">组织业务</div>
       </div>
       <el-table :data="list" v-loading="loading" row-key="id" class="jc-table" max-height="600">
-        <el-table-column type="index" label="序号" width="50"></el-table-column>
+        <el-table-column type="index" :index="indexMethod" label="序号" width="50"></el-table-column>
         <el-table-column prop="orgName" label="组织名称"></el-table-column>
         <el-table-column prop="inCircleJourney" label="巡逻里程(km)"></el-table-column>
         <el-table-column prop="inCircleDuration" label="巡逻时长(h)"></el-table-column>
@@ -68,6 +68,13 @@ export default {
       // 格式化比率
       return cellValue * 100 + '%'
     },
+    indexMethod(index) {
+      //处理序号
+      if (index == 0) {
+        return '总'
+      }
+      return index
+    },
     async initData() {
       if (!this.loading) {
         this.loading = true
@@ -100,10 +107,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.jc-table{
+  & >>> .el-table__row{
+    &:first-child {
+      color: $jc-color-primary
+    }
+  }
+}
 
 /deep/ .jc-echart-card{
   & > .el-card__body{
     padding-top:0;
+    padding-bottom: 6px;
 
     .el-card__header{
       padding-left: 0;

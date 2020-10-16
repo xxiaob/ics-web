@@ -54,11 +54,11 @@ let options = {
 
   },
   grid: {
-    left: 0,
-    right: '10%',
-    bottom: '10%',
+    left: '8%',
+    right: '6%',
+    bottom: '24%',
     top: '20%',
-    containLabel: true
+    containLabel: false
   },
   xAxis: [
     {
@@ -73,7 +73,7 @@ let options = {
       },
       axisLabel: { // 坐标轴标签
         show: true, // 是否显示
-        margin: 12, // 刻度标签与轴线之间的距离
+        margin: 20, // 刻度标签与轴线之间的距离
         fontSize: 12,
         color: '#666', // 默认取轴线的颜色
         rotate: -20
@@ -137,6 +137,18 @@ let options = {
   ],
   dataZoom: [
     {
+      show: true,
+      height: 8,
+      xAxisIndex: [
+        0
+      ],
+      bottom: '20%',
+      startValue: 0,
+      endValue: 7,
+      showDetail: false
+
+    },
+    {
       type: 'inside',
       startValue: 0,
       maxValueSpan: 11,
@@ -171,7 +183,7 @@ export default {
     processData() {
       // 处理echarts数据和 排名
       if (this.taskRate && this.taskRate.length) {
-        let data = this.taskRate
+        let data = [...this.taskRate].splice(1)
 
         // echarts
         let xAxisDatas = data.map(item => item.orgName)

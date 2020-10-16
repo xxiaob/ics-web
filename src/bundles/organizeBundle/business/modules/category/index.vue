@@ -175,7 +175,6 @@ export default {
               value: item.typeCount
             })
           })
-          console.log('data', data)
         } else if (this.activated == '2') {
           categoryData = { ...this.category[1] }
           name = categoryData.typeName

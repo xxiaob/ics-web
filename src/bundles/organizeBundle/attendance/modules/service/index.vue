@@ -44,11 +44,11 @@ let options = {
     show: true
   },
   grid: {
-    left: 0,
+    left: '8%',
     right: '6%',
-    bottom: '10%',
+    bottom: '24%',
     top: '20%',
-    containLabel: true
+    containLabel: false
   },
   xAxis: [
     {
@@ -68,12 +68,12 @@ let options = {
         fontSize: 12,
         color: '#666' // 默认取轴线的颜色
       },
-
       splitLine: {
         show: false
       },
 
       gridIndex: 0,
+      offset: 10,
       data: []
     }
   ],
@@ -106,10 +106,23 @@ let options = {
   series: [],
   dataZoom: [
     {
+      show: true,
+      height: 8,
+      xAxisIndex: [
+        0
+      ],
+      bottom: '20%',
+      startValue: 0,
+      endValue: 7,
+      showDetail: false
+
+    },
+    {
       type: 'inside',
       startValue: 0,
       maxValueSpan: 11,
       endValue: 7
+      // xAxisIndex: [0, 1]
     }
   ]
 
@@ -175,7 +188,8 @@ export default {
       if (!this.list) {
         return
       }
-      let list = this.list
+      let list = [...this.list].splice(1)
+
 
       let xAxisDatas = list.map(item => item.orgName) // 获取x轴坐标
 
