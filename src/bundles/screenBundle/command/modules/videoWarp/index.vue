@@ -110,7 +110,7 @@ export default {
             } else {
               playItem.player = videojs('device' + item.deviceId, {
                 sources: [{ src: item.hls }], //'rtmp://58.200.131.2:1935/livetv/hunantv'
-                controls: false,
+                controls: true,
                 autoplay: true
               }, function () {
                 console.log('执行 播放回调方法')
