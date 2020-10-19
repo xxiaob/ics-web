@@ -8,21 +8,16 @@
       <el-table :data="list" v-loading="loading" row-key="id" class="jc-table">
         <el-table-column type="selection" width="40"></el-table-column>
         <el-table-column type="index" :index="indexMethod" label="序号" width="50"></el-table-column>
-        <el-table-column prop="eventTitle" label="姓名"></el-table-column>
-        <el-table-column prop="typeName" label="照片"></el-table-column>
-        <el-table-column prop="reportUserName" label="手机号"></el-table-column>
-        <el-table-column prop="reportUserName" label="执法证号"></el-table-column>
-        <el-table-column prop="reportUserName" label="胸牌编号"></el-table-column>
-        <el-table-column prop="orgId" label="组织" :formatter="formatOrg"></el-table-column>
-        <el-table-column prop="positionName" label="党员" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="desc" label="职位" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="reportUserName" label="角色"></el-table-column>
-        <el-table-column prop="reportUserName" label="任务"></el-table-column>
-        <el-table-column prop="createTime" label="创建时间" :formatter="formatTime"></el-table-column>
-        <el-table-column width="100" label="操作">
+        <el-table-column prop="eventTitle" label="告警来源"></el-table-column>
+        <el-table-column prop="orgId" label="所属组织" :formatter="formatOrg"></el-table-column>
+        <el-table-column prop="createTime" label="告警时间" :formatter="formatTime"></el-table-column>
+        <el-table-column prop="reportUserName" label="告警地点"></el-table-column>
+        <el-table-column prop="reportUserName" label="相关人员"></el-table-column>
+        <el-table-column prop="reportUserName" label="告警描述"></el-table-column>
+        <el-table-column prop="reportUserName" label="告警状态"></el-table-column>
+        <el-table-column width="80" label="操作">
           <template slot-scope="scope">
-            <el-button type="text" size="mini" icon="el-icon-view" @click="detail(scope.row)" title="查看"></el-button>
-            <el-button type="text" size="mini" icon="el-icon-download" @click="del(scope.row)" title="下载"></el-button>
+            <el-button type="text" size="mini" icon="el-icon-chat-dot-round" @click="detail(scope.row)" title="告警"></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -30,12 +25,10 @@
     </el-card>
 
 
-    <!-- <jc-detail :info="detailInfo" :visible.sync="detailVisible"></jc-detail> -->
-
   </div>
 </template>
 <script>
-// import { eventManageList, eventManageDel, eventManageGet } from '@/api/eventManage'
+
 import { eventManageList, eventManageDel } from '@/api/eventManage'
 import { formatDate } from '@/libs/util'
 import PaginationMixins from '@/mixins/PaginationMixins'
@@ -48,7 +41,7 @@ export default {
   mixins: [PaginationMixins],
   components: {
     TabFilter: () => import('./modules/tabFilter')
-    // JcDetail: () => import('./modules/detail')
+
   },
   data() {
     return {
