@@ -11,9 +11,10 @@ export class Live {
    * @param {String} remoteId 远端流播放的容器id
    * @param {Function} cb
    * @param {Function} remoteStremCb
+   * @param {Function} playCb
    * @param {Boolean} debug
   */
-  constructor(userId, localId = 'live', remoteId = 'tolive', cb, remoteStremCb, debug = true) {
+  constructor(userId, localId = 'live', remoteId = 'tolive', cb, remoteStremCb, playCb, debug = true) {
     this.userId = userId
     this.debug = debug
     this.localId = localId
@@ -46,7 +47,7 @@ export class Live {
     }
 
     this.init()
-    this.on(cb, remoteStremCb)
+    this.on(cb, remoteStremCb, playCb)
   }
 
   //sdk初始化
@@ -68,8 +69,9 @@ export class Live {
    * 监听事件
    * @param {Function} cb 监听回调
    * @param {Function} remoteStremCb 监听回调
+   * @param {Function} playCb 监听回调
    */
-  on(cb = this.noop, remoteStremCb = this.noop) {
+  on(cb = this.noop, remoteStremCb = this.noop, playCb = this.noop) {
     //报错信息
     this.rtc.client.on('error', err => {
       this.console('监听报错信息 error', err)
@@ -113,7 +115,7 @@ export class Live {
       this.console('remoteId', remoteId)
       // e.stream.play(this.remoteId)
       e.stream.play(remoteId)
-
+      playCb(e.stream.streamId)
       if (!this.interval) {
         this.interval = setInterval(() => {
           this.rtc.client.getRemoteVideoStats(remoteVideoStatsMap => {

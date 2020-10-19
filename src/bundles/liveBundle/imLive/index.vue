@@ -168,6 +168,7 @@ export default {
     //一个人进多个频道强制观摩
     this.$EventBus.$on('notice-compulsory-observation', ({ type, userId })=>{
       console.log('notice-compulsory-observation', userId)
+      this.inviteType = '2'
       if (type === 'start') {
         this.startObservation(userId)
       } else if (type === 'stop') {
@@ -179,7 +180,7 @@ export default {
     if (this.live) {
       console.log('直播客户端已经初始化')
     } else {
-      this.live = new Live(this.user.userId, 'live', 'tolive', this.liveNetworkCb, this.liveStreamCb)
+      this.live = new Live(this.user.userId, 'live', 'tolive', this.liveNetworkCb, this.liveStreamCb, this.playCb)
     }
   },
   methods: {
@@ -236,6 +237,14 @@ export default {
     liveStreamCb(v) {
       console.log('liveStreamCb', v)
       this.badStreams = v
+    },
+    playCb(v) {
+      if (this.inviteType === '2' || this.inviteType === '3') {
+        const video = document.getElementById('video' + v)
+
+        video.controls = 'controls'
+        // console.log('playCb', v, video)
+      }
     },
     //投屏
     sendScreen() {
