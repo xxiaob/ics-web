@@ -3,6 +3,7 @@
  */
 import { screenMapSocket, screenMessageChannelSocket } from '@/api/socket'
 import { SOCKET_MESSAGE_TYPES } from '@/constant/Dictionaries'
+import { getScreenMapData } from '@/api/screen'
 
 // 用户在线暂存
 let onlineUserData = [] // 如果用户没有打开用户列表,那么推送过来的在线用户暂存在这里
@@ -47,17 +48,22 @@ export default {
       }
       return { users, devices }
     },
-    initScreenMapSocket(org) {
+    async initScreenMapSocket(org) {
       this.screenSocketOrg = org
       if (this.screenSocket) {
         this.screenSocket.disconnect() //如果已经存在，则断开连接
       }
+
+      let result = await getScreenMapData({ orgId: this.screenSocketOrg.orgId, projectId: this.project.projectId })
+
+      this.initBaseInfo(result) //初始化基础数据
+
       this.screenSocket = screenMapSocket({ subOrgId: this.screenSocketOrg.orgId, subProjectId: this.project.projectId })
       this.screenSocket.connect((data) => {
         console.log('screenMapSocket message data:', data)
         /**
          * 根据 消息type 区分消息类型
-         * 0为用户信息,2为一开始订阅所有,3为事件问题任务消息,4为一键采集,5为任务结束,6人员考勤,7岗点考勤,8异常临时任务 9.临时任务推送
+         * 0为用户信息,3为事件问题任务消息,4为一键采集,5为任务结束,6人员考勤,7岗点考勤,8异常临时任务 9.临时任务推送
          */
         if (data.type == 0) {
           //数据类型为用户信息变更
@@ -77,15 +83,6 @@ export default {
           if (data.deviceId && data.userType != 0) {
             this.$EventBus.$emit('map-device-change', { type: 3, deviceIds: [data.deviceId] }) //通知设备离线
           }
-        } else if (data.type == 2) {
-          //数据类型为第一次连接的数据
-          let { users, devices } = this.getUserAndDevices(data.locations)
-
-          if (users.length) {
-            this.$EventBus.$emit('map-user-change', { type: 1, users }) //通知用户初始化
-          }
-          this.$EventBus.$emit('map-device-change', { type: 1, devices }) //通知设备初始化
-          this.$EventBus.$emit('screen-message-init', data.tasks) //通知消息初始化
         } else if (data.type == 3) {
           //数据类型为问题，任务消息
           this.$EventBus.$emit('screen-message-change', data) //通知任务事件
@@ -157,6 +154,19 @@ export default {
         //如果消息存在，则去发送消息
         this.screenMessageChannelSocket.send(JSON.stringify({ sendType: SOCKET_MESSAGE_TYPES.DATA_STATISTICS, data: message }))
       }
+    },
+    /**
+     * 初始化数据处理
+     * @param {Object} data 数据
+     */
+    initBaseInfo(data) {
+      let { users, devices } = this.getUserAndDevices(data.locations)
+
+      if (users.length) {
+        this.$EventBus.$emit('map-user-change', { type: 1, users }) //通知用户初始化
+      }
+      this.$EventBus.$emit('map-device-change', { type: 1, devices }) //通知设备初始化
+      this.$EventBus.$emit('screen-message-init', data.tasks) //通知消息初始化
     }
   },
   beforeDestroy() {

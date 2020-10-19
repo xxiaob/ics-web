@@ -21,13 +21,16 @@ export default class JcSocket {
     this.disconnect()
 
     try {
+      console.log('JcSocket 开始连接......', this.url)
       this.ws = new WebSocket(this.url)
 
-      this.ws.onopen = function () {
+      this.ws.onopen = function (e) {
+        console.log('JcSocket onopen......', e)
         this.reconnectTimes = 0
       }
 
       this.ws.onmessage = function (evt) {
+        console.log('JcSocket onmessage......', evt)
         let data = evt.data
 
         if (data) {
@@ -35,16 +38,16 @@ export default class JcSocket {
         }
         callback(data)
       }
-      this.ws.onclose = () => {
-        console.log('JcSocket onclose......')
+      this.ws.onclose = (e) => {
+        console.log('JcSocket onclose......', e)
         this.reconnect()
       }
-      this.ws.onerror = () => {
-        console.log('JcSocket onerror......')
+      this.ws.onerror = (e) => {
+        console.log('JcSocket onerror......', e)
         this.reconnect()
       }
     } catch (error) {
-      console.log(error)
+      console.log('JcSocket', error)
     }
   }
 

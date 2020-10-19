@@ -121,4 +121,11 @@ export function getScreenDeviceData(params) {
   return axios.get(API.screen.command.getScreenDeviceData, { params })
 }
 
-
+/**
+ * 获取地图初始化数据
+ * @param {object} data 参数
+ * @returns {Object} axios 对象
+ */
+export function getScreenMapData(data) {
+  return axios.post(API.screen.command.getScreenMapData + '?' + qs.stringify(data))
+}

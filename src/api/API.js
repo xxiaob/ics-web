@@ -225,7 +225,8 @@ export default {
       getScreenOverallData: 'task-service/taskScreen/getScreenOverallData', //根据用户和网格查询综合数据
       getScreenEventData: 'task-service/event/screenSelect', // 指挥大屏的事件数据
       getScreenProblemData: 'task-service/problem/selectScreenTask', // 指挥大屏问题数据
-      getScreenDeviceData: 'device-service/hikDevice/screenDataDevice' // 指挥大屏设备数据
+      getScreenDeviceData: 'device-service/hikDevice/screenDataDevice', // 指挥大屏设备数据
+      getScreenMapData: 'message-srv/message/getScreenMapData' //获取地图初始化数据
     },
     dataStatistics: {
       accumulateInfo: 'data-service/largeScreen/accumulateInfo',
