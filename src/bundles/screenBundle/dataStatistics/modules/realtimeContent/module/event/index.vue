@@ -11,7 +11,7 @@
       <transition-group name="jc-list" tag="div">
         <div class="jc-list-item jc-flex-warp" v-for="item in list" :key="item.id">
           <div class="img">
-            <img v-if="(item.beforePhotos&&item.beforePhotos.length)||(item.afterPhotos&&item.afterPhotos.length)" :src="item.beforePhotos[0]||item.afterPhotos[0]" alt="" width="100%" height="100%">
+            <img class="has-img" v-if="(item.beforePhotos&&item.beforePhotos.length)||(item.afterPhotos&&item.afterPhotos.length)" :src="item.beforePhotos[0]||item.afterPhotos[0]" alt="" width="100%" height="100%" @click="showFullImg(item.beforePhotos[0]||item.afterPhotos[0])">
             <img v-else src="./assets/none.png" alt="" width="100%" height="100%">
           </div>
           <div class="jc-flex-con jc-list-item-content jc-flex-warp jc-flex-vertical">
@@ -74,6 +74,9 @@ export default {
           this.loading = false
         }
       }
+    },
+    showFullImg(url) {
+      this.$EventBus.$emit('show-full-img', { url, imgs: [url] })
     }
   },
   mounted() {
@@ -112,6 +115,9 @@ export default {
 
     .img {
       width: 140px;
+      .has-img{
+        cursor: pointer;
+      }
     }
 
     .jc-list-item-content {

@@ -16,7 +16,7 @@
             <!-- 监控视频存放位置 -->
             <div class="montitoring jc-flex-con">
               <div class="montitoring-video">
-                <video :src="video && video.url" autoplay muted></video>
+                <video :src="video && video.url" autoplay muted controls></video>
               </div>
             </div>
           </div>
