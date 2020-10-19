@@ -122,3 +122,11 @@ export function getScreenDeviceData(params) {
 }
 
 
+/**
+ * 指挥大屏初始在线人数获取
+ * @param {object} params
+ * @returns {Object} axios 对象
+ */
+export function getScreenOnlineUser(params) {
+  return axios.get(API.screen.command.getScreenOnlineUser, { params })
+}

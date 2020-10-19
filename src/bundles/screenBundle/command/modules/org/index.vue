@@ -32,6 +32,7 @@
 </template>
 <script>
 import { getOrgUserListByProject } from '@/api/user'
+import { getScreenOnlineUser } from '@/api/screen'
 import TreesFilterMixins from '@/mixins/TreesFilterMixins'
 import { VIDEO_INVITE_TYPES } from '@/constant/Dictionaries'
 
@@ -152,8 +153,12 @@ export default {
 
         this.initOptionsUsers() //初始化传入的用户
 
+
         // 用户列表初始获取在线人员数据
+        let onlineUser = await getScreenOnlineUser({ projectId: this.project.projectId })
+
         this.$nextTick(() => {
+          this.getUserOnline(onlineUser)
           this.$EventBus.$emit('screen-user-online-obtain', this.getUserOnline)
         })
       } catch (error) {
