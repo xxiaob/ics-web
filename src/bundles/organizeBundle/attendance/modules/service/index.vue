@@ -122,7 +122,6 @@ let options = {
       startValue: 0,
       maxValueSpan: 11,
       endValue: 7
-      // xAxisIndex: [0, 1]
     }
   ]
 

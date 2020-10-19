@@ -4,14 +4,23 @@
       <el-form-item prop="orgId" label="组织">
         <el-cascader :options="orgTree" v-model="form.orgId" :props="{expandTrigger: 'hover', checkStrictly: true,emitPath: false }" clearable @change="orgChange" ref="orgCascader"></el-cascader>
       </el-form-item>
-      <el-form-item prop="eventType" label="职位">
-        <el-select v-model="form.eventType" filterable placeholder="全部">
+      <el-form-item prop="" label="时间">
+        <el-date-picker v-model="date" @change="changeDate"  type="datetimerange" range-separator="-" start-placeholder="开始时间" end-placeholder="结束时间"></el-date-picker>
+      </el-form-item>
+      <el-form-item prop="eventType" label="告警来源">
+        <el-select v-model="form.eventType" filterable placeholder="请选择">
           <el-option v-for="item in eventTypes" :key="item.id" :label="item.typeName" :value="item.id">
           </el-option>
         </el-select>
       </el-form-item>
-      <el-form-item prop="desc" label="用户信息">
-        <el-input v-model="form.desc" placeholder="姓名或手机号"></el-input>
+      <el-form-item prop="desc" label="相关人员">
+        <el-input v-model="form.desc" placeholder="请输入相关人员"></el-input>
+      </el-form-item>
+      <el-form-item prop="state" label="告警状态">
+        <el-select v-model="form.eventType" filterable placeholder="请选择">
+          <el-option v-for="item in eventTypes" :key="item.id" :label="item.typeName" :value="item.id">
+          </el-option>
+        </el-select>
       </el-form-item>
       <el-form-item class="jc-tabfilter-btns">
         <el-button type="primary" @click="onSubmit">查询</el-button>
@@ -40,7 +49,8 @@ export default {
         endDate: '',
         desc: '',
         orgId: '',
-        eventType: ''
+        eventType: '',
+        state: ''
       },
       date: null
     }
@@ -63,6 +73,7 @@ export default {
       }
     },
     changeDate(value) {
+      console.log('value', value)
       if (value) {
         this.form.startDate = value[0]
         this.form.endDate = value[1]

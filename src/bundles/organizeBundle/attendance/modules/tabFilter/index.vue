@@ -12,7 +12,7 @@
           <el-radio-button  label="2">全年</el-radio-button>
           <el-radio-button  label="3">自定</el-radio-button>
         </el-radio-group>
-         <el-date-picker v-model="date" :disabled="timeType !=='3'" @change="changeDate" value-format="timestamp" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期">
+         <el-date-picker v-model="date" :disabled="timeType !=='3'" @change="changeDate"  value-format="timestamp" type="daterange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期">
         </el-date-picker>
       </el-form-item>
       <el-form-item class="jc-tabfilter-btns">
