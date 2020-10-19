@@ -71,18 +71,13 @@ let options = {
       fontSize: 12,
       rich: {
         name: {
-          // fontSize: 12,
           lineHeight: 24
         },
         percentage: {
-          // fontSize: 12,
           width: 60,
           align: 'left',
           color: '#999',
           padding: [0, 0, 0, 12 ]
-        },
-        value: {
-          // fontSize: 12
         }
       }
 
@@ -91,7 +86,7 @@ let options = {
       let index = 0, total = 0
       const datas = options.series[0].data
 
-      if (datas.length) {
+      if (datas && datas.length) {
         datas.forEach((v, i) => {
           total += v.value
           if (v.name == name) {
@@ -119,10 +114,6 @@ let options = {
       itemStyle: {
         borderWidth: 3,
         borderColor: '#fff'
-        // normal: {
-        //   borderColor: '#fff',
-        //   borderWidth: 6
-        // }
       },
       data: [],
 
@@ -174,14 +165,18 @@ export default {
             categoryData = { ...item }
             name = categoryData.typeName
             total = categoryData.countNumber
-            categoryData.typeRateDTOList.forEach(item2 => {
-              data.push({
-                name: item2.typeName,
-                value: item2.typeCount
+            if ( categoryData.typeRateDTOList && categoryData.typeRateDTOList.length) {
+              console.log(111)
+              categoryData.typeRateDTOList.forEach(item2 => {
+                data.push({
+                  name: item2.typeName,
+                  value: item2.typeCount
+                })
               })
-            })
+            }
           }
         })
+
 
         options.series[0].name = name
         options.series[0].data = data
