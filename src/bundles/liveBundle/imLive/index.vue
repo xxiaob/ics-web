@@ -490,7 +490,7 @@ export default {
 
       let inviteDevice = '3'
 
-      if (this.inviteType === '2' || this.inviteType === '3') {
+      if (this.inviteType === '2') {
         inviteDevice = '2'
       }
       const msg = {
