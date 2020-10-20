@@ -32,7 +32,7 @@
             <div class="jc-node-times">{{item.time}}<br />{{item.date}}</div>
             <div class="jc-node-content">
               <div>{{item.userName + ' ' + item.typeName}}</div>
-              <div v-if="outTypes.includes(item.type)">{{`在岗时长${item.duration}H，巡逻里程${item.distence}KM，上报事件数${item.reportEvent}件`}}</div>
+              <div v-if="inTypes.includes(item.type)">{{`在岗时长${item.duration}H，巡逻里程${item.distence}KM，上报事件数${item.reportEvent}件`}}</div>
               <template v-if="inTypes.includes(item.type) && item.url">
                 <div class="jc-node-success">打卡成功</div>
                 <el-image :src="item.url" @click="showFullImg(item.url,[item.url])"></el-image>
