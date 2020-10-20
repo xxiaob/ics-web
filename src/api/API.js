@@ -2,8 +2,8 @@
 export default {
   auth: {
     //用户鉴权域
-    login: 'user-service/login'
-    // login: 'user-service/login'
+    login: 'user-service/login',
+    loginByCode: 'open-service/open/thirdPartyLogin/loginByCode' //根据code登录
   },
   menus: {
     //菜单管理
