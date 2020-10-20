@@ -16,3 +16,26 @@ export function numberFormatter(num) {
 export function amountFormatter(amount = 0, num = 8) {
   return parseFloat(amount || 0).toFixed(num).replace(/(?:\.0*|(\.\d+?)0+)$/, '$1') * 1
 }
+
+/**
+ * 判断经纬度坐标是否正确
+ * @param { String } position 经纬度字符串
+ * @returns { Object } 经纬度是
+ */
+export function mapPositionFormatter(position) {
+  let result = { legal: false }
+
+  if (!position) {
+    return result
+  }
+  let lnglat = position.split(',') // 切割坐标
+
+  try {
+    result.lng = parseFloat(lnglat[0])
+    result.lat = parseFloat(lnglat[1])
+    result.legal = result.lng >= -180 && result.lng <= 180 && result.lat >= -180 && result.lat <= 180
+  } catch (error) {
+    console.log(error)
+  }
+  return result
+}
