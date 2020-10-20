@@ -9,7 +9,7 @@
           <el-checkbox v-for="item in types" :label="item.value" :key="item.value" name="type">{{item.label}}</el-checkbox>
         </el-checkbox-group>
       </el-form-item>
-      <el-form-item label="APP音视频" prop="media">
+      <el-form-item label="APP音视频" prop="media" v-if="opera">
         <el-checkbox-group v-model="form.media">
           <el-checkbox label="1" name="media">视频通话</el-checkbox>
         </el-checkbox-group>
@@ -42,6 +42,7 @@ export default {
       }
     }
   },
+  props: { opera: false },
   methods: {
     formatFormData() {
       if (this.options) {

@@ -28,6 +28,14 @@ export default [{
     title: '系统设置-职位管理'
   }
 }, {
+  path: 'system/optposition',
+  name: 'operationsPosition',
+  component: () => import('@/bundles/systemBundle/position'),
+  meta: {
+    title: '运维管理-职位运维'
+  },
+  props: { opera: true }
+}, {
   path: 'system/areatype',
   name: 'systemAreaType',
   component: () => import('@/bundles/systemBundle/areaType'),

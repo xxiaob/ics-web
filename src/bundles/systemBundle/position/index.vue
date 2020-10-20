@@ -38,7 +38,7 @@
       </el-table>
       <el-pagination @current-change="currentChange" @size-change="sizeChange" :current-page.sync="page.pageNum" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.total" class="text-right jc-mt"></el-pagination>
     </el-card>
-    <jc-manage :options="info" :visible.sync="visible" @save-success="initData"></jc-manage>
+    <jc-manage :options="info" :opera="opera" :visible.sync="visible" @save-success="initData"></jc-manage>
   </div>
 </template>
 <script>
@@ -64,6 +64,7 @@ export default {
       filter: {}
     }
   },
+  props: { opera: false },
   created() {
     this.initData()
   },
