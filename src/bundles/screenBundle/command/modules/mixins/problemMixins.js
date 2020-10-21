@@ -4,6 +4,7 @@ import { getScreenProblemData } from '@/api/screen'
 import { JcMapMarker } from '@/map'
 import { MAP_EVENT, MAP_SIGN_ZINDEX } from '@/constant/CONST'
 import moment from 'moment'
+import { mapPositionFormatter } from '@/libs/dataFormatter'
 
 let problemData = { markerCluster: null, problems: {}, lnglats: [] }
 
@@ -51,18 +52,14 @@ export default {
         if (ScreenProblemData && ScreenProblemData.length) {
           ScreenProblemData.forEach(item => {
             // 过滤没有坐标的问题
-            if (!item.position) {
+            let { legal, lng, lat } = mapPositionFormatter(item.position)
+
+            if (!legal) {
               return
             }
 
-            let position = item.position.split(',') // 切割坐标
-
-            if (position.length < 2) {
-              return
-            }
-
-            item.lng = position[0] // 获取精度
-            item.lat = position[1] // 获取维度
+            item.lng = lng // 获取精度
+            item.lat = lat // 获取维度
 
             // 计算问题的中心点坐标和key, 处理坐标相同的情况
             let { center, key } = this.getProblemCenterAndKey(item.lng, item.lat, item.businessKey)

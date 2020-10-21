@@ -3,6 +3,7 @@ import { getScreenDeviceData } from '@/api/screen'
 import { DEVICE_TYPES } from '@/constant/Dictionaries'
 import { MAP_EVENT, MAP_SIGN_ZINDEX } from '@/constant/CONST'
 import { JcMapMarker } from '@/map'
+import { mapPositionFormatter } from '@/libs/dataFormatter'
 
 let deviceData = { } //存储所有的设备数据
 
@@ -54,11 +55,11 @@ export default {
             let deviceItem = screenDeviceData[i] // 取出数据
 
             // 处理经纬度
-            if (deviceItem.position) {
-              fixedDeviceIds.push(deviceItem.deviceId) // 获取所有在线固定设备id
-              let position = deviceItem.position.split(',') // 切割坐标
+            let { legal, lng, lat } = mapPositionFormatter(deviceItem.position)
 
-              devices.push({ deviceId: deviceItem.deviceId, type: deviceItem.resourceType, name: deviceItem.deviceName, lng: position[0], lat: position[1] })
+            if (legal) {
+              fixedDeviceIds.push(deviceItem.deviceId) // 获取所有在线固定设备id
+              devices.push({ deviceId: deviceItem.deviceId, type: deviceItem.resourceType, name: deviceItem.deviceName, lng, lat })
             }
           }
         }

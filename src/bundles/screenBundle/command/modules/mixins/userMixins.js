@@ -96,9 +96,7 @@ export default {
         this.$message.error('地图初始化中，请稍后')
       }
     },
-    async userMap(data) {
-      MarkerCluster = await getMarkerCluster() //获取 MarkerCluster 对象
-
+    userMap(data) {
       if (data.type == 1) {
         //如果是重新初始化，则清除之前的用户显示
         this.clearUsers()
@@ -207,7 +205,7 @@ export default {
 
       return { center, key }
     },
-    fitUsers() {
+    async fitUsers() {
       let myJcMap = this.getMyJcMap() //获取地图对象
 
       if (this.userSignVisible && this.userTogetherVisible) {
@@ -215,6 +213,7 @@ export default {
           //如果已经存在，则去调整数据显示
           usersData.markerCluster.setData(usersData.lnglats)
         } else {
+          MarkerCluster = await getMarkerCluster() //获取 MarkerCluster 对象
           usersData.markerCluster = new MarkerCluster(null, usersData.lnglats, {
             maxZoom: 18,
             gridSize: 120,
@@ -393,7 +392,7 @@ export default {
         neetFit = true
       }
 
-      if (neetFit && usersData.markerCluster) {
+      if (neetFit) {
         this.fitUsers()
       }
     }

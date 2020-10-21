@@ -3,6 +3,7 @@
  */
 import axios from 'axios'
 import API from './API'
+import qs from 'qs'
 
 /**
  * 登录
@@ -13,4 +14,12 @@ import API from './API'
  */
 export function login(data) {
   return axios.post(API.auth.login, data)
+}
+/**
+ * 根据code登录
+ * @param {object} data 参数
+ * @returns {Object} axios 对象
+ */
+export function loginByCode(data) {
+  return axios.post(API.auth.loginByCode + '?' + qs.stringify(data))
 }
