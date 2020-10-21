@@ -29,8 +29,11 @@
           <template slot-scope="scope">
             <p v-for="(problemType,index) in scope.row.problemTypeFilter" :key="index">{{problemType.typeName}}</p>
           </template>
-
         </el-table-column>
+        <el-table-column prop="problemReceiveCount" label="问题接受"></el-table-column>
+        <el-table-column prop="problemhandlingCount" label="问题处理"></el-table-column>
+        <el-table-column prop="problemhandlingRate" label="问题处理率" :formatter="formatRate"></el-table-column>
+
         <el-table-column width="60" label="操作">
           <template slot-scope="scope">
             <el-button type="text" size="mini" icon="el-icon-view" @click="detail(scope.row)" title="查看"></el-button>
@@ -110,7 +113,8 @@ export default {
           let taskRate = resultList.map(item => {
             return {
               orgName: item.orgName,
-              taskCompletedRate: item.taskCompletedRate
+              taskCompletedRate: item.taskCompletedRate,
+              problemhandlingRate: item.problemhandlingRate
             }
           })
 

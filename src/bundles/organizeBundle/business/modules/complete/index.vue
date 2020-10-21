@@ -3,10 +3,10 @@
       <el-card >
       <div slot="header" class="jc-card-header">
           <div class="jc-card-title">业务完成率</div>
-          <!-- <el-radio-group class="jc-button-group" v-model="activated" size="mini">
+          <el-radio-group class="jc-button-group" v-model="activated" size="mini">
             <el-radio-button  label="1">任务</el-radio-button>
             <el-radio-button  label="2">问题</el-radio-button>
-          </el-radio-group> -->
+          </el-radio-group>
         </div>
 
         <div class="jc-type-echarts jc-flex-warp">
@@ -47,11 +47,6 @@ let options = {
       fontWeight: '600'
     },
     padding: [16, 0, 0, 0] // 位置
-  },
-  tooltip: {
-    trigger: 'item',
-    formatter: params => `${params.seriesName} <br/>${params.name} : ${params.value * 100}%`
-
   },
   grid: {
     left: '8%',
@@ -169,13 +164,16 @@ export default {
   },
   data() {
     return {
-      // activated: 1, //  未来可能需要
+      activated: '1',
       options: null,
       rankings: [] // 排名数据
     }
   },
   watch: {
     taskRate() {
+      this.processData()
+    },
+    activated() {
       this.processData()
     }
   },
@@ -185,10 +183,32 @@ export default {
       if (this.taskRate && this.taskRate.length) {
         let data = [...this.taskRate].splice(1)
 
+        let rankings = []
+        // 处理数据排名
+
+        data.forEach(item => {
+          rankings.push({ ...item })
+        })
+
         // echarts
         let xAxisDatas = data.map(item => item.orgName)
 
-        let yAxisDatas = data.map(item => item.taskCompletedRate)
+        let yAxisDatas = []
+
+        if (this.activated === '1') {
+          yAxisDatas = data.map(item => item.taskCompletedRate)
+          rankings = rankings.sort((a, b) => b.taskCompletedRate - a.taskCompletedRate).filter((v, i) => i < 6)
+          rankings.forEach(item => {
+            item.taskRate = item.taskCompletedRate * 100 + '%'
+          })
+        } else if (this.activated === '2') {
+          yAxisDatas = data.map(item => item.problemhandlingRate)
+          rankings = rankings.sort((a, b) => b.problemhandlingRate - a.problemhandlingRate).filter((v, i) => i < 6)
+          rankings.forEach(item => {
+            item.taskRate = item.problemhandlingRate * 100 + '%'
+          })
+        }
+
 
         options.series[0].name = '任务完成率'
         options.title.text = '下辖组织 任务完成率' // 标题
@@ -197,12 +217,6 @@ export default {
 
         this.options = options
 
-        // 处理数据排名
-        let rankings = [...data].sort((a, b) => b.taskCompletedRate - a.taskCompletedRate).filter((v, i) => i < 6)
-
-        rankings.forEach(item => {
-          item.taskRate = item.taskCompletedRate * 100 + '%'
-        })
         this.rankings = rankings
       }
     }
