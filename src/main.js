@@ -27,6 +27,9 @@ ElementLocale.i18n((key, value) => i18n.t(key, value))
 
 console.log(i18nOptions)
 
+import fullscreen from 'vue-fullscreen'
+Vue.use(fullscreen)
+
 /* eslint-disable no-new */
 new Vue({
   router,

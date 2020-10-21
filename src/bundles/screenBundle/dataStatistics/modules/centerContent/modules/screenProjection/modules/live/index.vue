@@ -1,5 +1,6 @@
 <template>
-  <div class="jc-live-out">
+  <div class="jc-live-out" ref="jcLive">
+    <el-button class="full-screen-button" size="mini" @click="toggle">全屏</el-button>
     <div class="jc-live data-statistics-scrollbar">
       <div class="big-box" :class="{audio:inviteType==='0'||inviteType==='4'}"></div>
       <div class="live-in">
@@ -30,6 +31,7 @@ export default {
   },
   data() {
     return {
+      fullscreen: false,
       bigLiveId: 1,
       inviteType: '1',
       users: [
@@ -66,6 +68,15 @@ export default {
     }
   },
   methods: {
+    toggle() {
+      this.$fullscreen.toggle(this.$refs.jcLive, {
+        wrap: false,
+        callback: this.fullscreenChange
+      })
+    },
+    fullscreenChange(fullscreen) {
+      this.fullscreen = fullscreen
+    },
     //切换小视频为大视频
     checkBigLive(val) {
       this.bigLiveId = val
@@ -89,7 +100,15 @@ export default {
   height: 100%;
   position: relative;
 }
-
+.full-screen-button{
+  position: absolute;
+  top: -28px;
+  right: -24px;
+  z-index: 1000;
+  background: #033c93;
+  color: white;
+  border: none;
+}
 .jc-live {
   height: 100%;
   overflow-x: hidden;
