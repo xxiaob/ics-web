@@ -3,7 +3,7 @@
   <div class="imLive">
 
     <transition-group name="fade">
-      <div key="1" class="content" :class="{'full-content':contentSize==='2','full-animation':contentSize==='2','normal-animation':showNormal,observe:inviteType==='2'||inviteType==='3'}" v-show="contentShow&&contentSize!=='0'">
+      <div key="1" class="content" :class="{'full-content':contentSize==='2','full-animation':contentSize==='2','normal-animation':showNormal,observe:inviteType==='2'||inviteType==='3'}" v-show="contentShow&&contentSize!=='0'" ref="jcLive">
         <div class="title">
           <span>{{title}}</span>
           <div class="right">
@@ -12,30 +12,40 @@
               <img src="./assets/bigScreen1.png" alt="" width="20">
               <img src="./assets/bigScreen2.png" alt="" width="20">
             </span>
-            <span title="全屏" v-show="contentSize==='1'&&(inviteType!='2'&&inviteType!='3')" @click="changeSize('2')">
+            <span title="全屏" v-show="(contentSize==='2'&&!fullscreen)&&(inviteType!='2'&&inviteType!='3')" @click="toggle">
               <img src="./assets/full1.png" alt="" width="20">
               <img src="./assets/full2.png" alt="" width="20">
             </span>
-            <span title="取消全屏" v-show="contentSize==='2'&&(inviteType!='2'&&inviteType!='3')" @click="changeSize('1')">
+            <span title="放大窗口" v-show="contentSize==='1'&&(inviteType!='2'&&inviteType!='3')" @click="changeSize('2')">
+              <img src="./assets/full1.png" alt="" width="20">
+              <img src="./assets/full2.png" alt="" width="20">
+            </span>
+            <span title="取消全屏" v-show="contentSize==='2'&&fullscreen&&(inviteType!='2'&&inviteType!='3')" @click="toggle">
               <img src="./assets/closeFull1.png" alt="" width="20">
               <img src="./assets/closeFull2.png" alt="" width="20">
             </span>
-            <span title="缩小" @click="changeSize('0')" v-show="contentSize==='1'&&(inviteType!='2'&&inviteType!='3')">
+            <span title="缩小窗口" v-show="contentSize==='2'&&!fullscreen&&(inviteType!='2'&&inviteType!='3')" @click="changeSize('1')">
+              <img src="./assets/closeFull1.png" alt="" width="20">
+              <img src="./assets/closeFull2.png" alt="" width="20">
+            </span>
+            <span title="最小化" @click="changeSize('0')" v-show="contentSize==='1'&&(inviteType!='2'&&inviteType!='3')">
               <img src="./assets/narrow1.png" alt="" width="20">
               <img src="./assets/narrow2.png" alt="" width="20">
             </span>
           </div>
         </div>
         <div class="live-out">
-          <div class="big-box"></div>
-          <div class="live-in">
-            <div id="live" v-show="myShow" class="live" :class="{audio:inviteType==='0'||inviteType==='4','big-live':bigLiveId===user.userId}" @click="checkBigLive(user.userId)">
-              <div class="userName">{{user.userName}}</div>
-              <div class="badNetwork" v-show="badNetwork">您当前网络不好</div>
-            </div>
-            <div class="live" @click="checkBigLive(user.userId)" :class="{audio:inviteType==='0'||inviteType==='4','big-live':bigLiveId===user.userId}" v-for="user in users" :key="user.userId" :id="user.userId">
-              <div class="userName">{{user.userName}}</div>
-              <div class="badStream" v-show="badStreams.includes(user.userId)">对方网络不好</div>
+          <div class="jc-live">
+            <div class="big-box"></div>
+            <div class="live-in">
+              <div id="live" v-show="myShow" class="live" :class="{audio:inviteType==='0'||inviteType==='4','big-live':bigLiveId===user.userId}" @click="checkBigLive(user.userId)">
+                <div class="userName">{{user.userName}}</div>
+                <div class="badNetwork" v-show="badNetwork">您当前网络不好</div>
+              </div>
+              <div class="live" @click="checkBigLive(user.userId)" :class="{audio:inviteType==='0'||inviteType==='4','big-live':bigLiveId===user.userId}" v-for="user in users" :key="user.userId" :id="user.userId">
+                <div class="userName">{{user.userName}}</div>
+                <div class="badStream" v-show="badStreams.includes(user.userId)">对方网络不好</div>
+              </div>
             </div>
           </div>
         </div>
@@ -87,6 +97,7 @@ export default {
   },
   data() {
     return {
+      fullscreen: false,
       isSendScreen: false,
       title: '视频',
       showNormal: false, //大弹框到中等弹框的过渡类
@@ -184,6 +195,15 @@ export default {
     }
   },
   methods: {
+    toggle() {
+      this.$fullscreen.toggle(this.$refs.jcLive, {
+        wrap: false,
+        callback: this.fullscreenChange
+      })
+    },
+    fullscreenChange(fullscreen) {
+      this.fullscreen = fullscreen
+    },
     //一个人进多个频道强制观摩-------------------------------------------
     startObservation(userId) {
       console.log(this['live' + userId])
@@ -542,6 +562,9 @@ export default {
     },
     //结束按钮操作
     exit() {
+      if (this.fullscreen) {
+        this.toggle()
+      }
       this.$confirm('确认退出', '提示', { type: 'warning' }).then( () => {
         this.confirmExit()
       }).catch(() => {})
