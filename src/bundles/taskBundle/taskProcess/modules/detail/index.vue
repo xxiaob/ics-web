@@ -72,12 +72,45 @@
         </el-form-item>
       </el-form>
     </el-card>
-    <el-card class="jc-table-card jc-mt">
-      <div slot="header">
-        <div class="jc-title">流转记录</div>
-      </div>
-      <jc-forward-list :taskId="form.businessKey" ref="forward"></jc-forward-list>
-    </el-card>
+
+
+    <el-row :gutter="12" type="flex" class="jc-mt">
+      <el-col :span="superviseShow ? 12: 24">
+        <el-card class="jc-table-card jc-height100">
+          <div slot="header">
+            <div class="jc-title">流转记录</div>
+          </div>
+          <jc-forward-list :taskId="form.businessKey" ref="forward"></jc-forward-list>
+        </el-card>
+      </el-col>
+      <el-col :span="superviseShow ? 12 : 0">
+        <el-card class="jc-table-card jc-height100">
+          <div slot="header">
+            <div class="jc-title">督办信息</div>
+          </div>
+          <el-form ref="form" label-width="100px" :model="form" class="jc-manage-form" size="mini">
+            <el-form-item label="督办人员：">
+              <!-- <span>{{form.carNumber}}</span> -->
+              <span>罗高山</span>
+            </el-form-item>
+            <el-form-item label="督办时间：">
+              <!-- <span>{{form.carNumber}}</span> -->
+              <span>2020-08-06  11:30:00</span>
+            </el-form-item>
+            <el-form-item label="督办意见：">
+              <!-- <span>{{form.reportUserName}}</span> -->
+              <span>督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见
+                督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见
+                督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见
+                督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见
+                督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见
+              </span>
+            </el-form-item>
+          </el-form>
+        </el-card>
+      </el-col>
+
+    </el-row>
     <el-card class="jc-table-card jc-mt" v-if="TASK_STATES.FINISHED==form.state">
       <div slot="header">
         <div class="jc-title">关联事件</div>
@@ -145,6 +178,7 @@ export default {
   },
   data() {
     return {
+      superviseShow: true, // 是否存在督办
       peopleType: TASK_PEOPLE_TYPES.PEOPLE,
       peopleProps: {
         [TASK_PEOPLE_TYPES.ORG]: 'orgIds',
@@ -334,6 +368,15 @@ export default {
 .jc-detail-footer {
   text-align: center;
   margin-top: $jc-default-dis;
+}
+
+.jc-height100{
+  height:100%;
+  min-height: 100%;
+
+  /deep/ .el-form-item {
+    margin-bottom: 20px;
+  }
 }
 .jc-left-width50 {
   width: 50%;

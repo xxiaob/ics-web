@@ -79,6 +79,12 @@ export default {
 </script>
 <style lang="scss" scoped>
 $jc-task-icon-width: 60px;
+
+::-webkit-scrollbar-thumb {
+  background: #ddd;
+}
+
+
 .jc-task-item {
   position: relative;
   // background-color: #e4f3fe;

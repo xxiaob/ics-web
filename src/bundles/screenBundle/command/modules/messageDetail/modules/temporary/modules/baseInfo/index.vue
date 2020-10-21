@@ -1,110 +1,134 @@
 <template>
   <div class="jc-temporary">
-    <div v-show="taskId" class="jc-view-content" v-loading="loading" element-loading-background="rgba(0, 0, 0, 0)">
-      <div class="jc-detail-warp">
-        <div class="jc-detail-label">任务名称</div>
-        <div class="jc-detail-content">{{form.taskName}}</div>
+    <div class="jc-supervise">
+      <div class="jc-supervise-icon">
+        <img src="./assets/duban.svg" alt="">
       </div>
       <div class="jc-detail-warp">
-        <div class="jc-detail-label">创建时间</div>
-        <div class="jc-detail-content">{{form.createDate|filterTime}}</div>
+        <div class="jc-detail-label">督办人员</div>
+        <!-- <div class="jc-detail-content">{{form.taskName}}</div> -->
+        <div class="jc-detail-content">罗山</div>
+
       </div>
       <div class="jc-detail-warp">
-        <div class="jc-detail-label">项目名称</div>
-        <div class="jc-detail-content">{{form.projectName}}</div>
+        <div class="jc-detail-label">督办时间</div>
+        <!-- <div class="jc-detail-content">{{form.taskName}}</div> -->
+        <div class="jc-detail-content">2020-06-08  11:30:00</div>
+
       </div>
       <div class="jc-detail-warp">
-        <div class="jc-detail-label">任务时间</div>
-        <div class="jc-detail-content">{{form.startDate|filterTime}} - {{form.endDate|filterTime}}</div>
-      </div>
-      <div class="jc-detail-warp">
-        <div class="jc-detail-label">任务类型</div>
-        <div class="jc-detail-content">临时任务</div>
-      </div>
-      <div class="jc-detail-warp">
-        <div class="jc-detail-label">任务状态</div>
-        <div class="jc-detail-content">{{form.taskStatusName}}</div>
-      </div>
-      <div class="jc-detail-warp">
-        <div class="jc-detail-label">任务来源</div>
-        <div class="jc-detail-content">{{taskSourceName}}</div>
-      </div>
-      <div class="jc-detail-warp">
-        <div class="jc-detail-label">下发组织</div>
-        <div class="jc-detail-content">{{form.startOrg}}</div>
-      </div>
-      <div class="jc-detail-warp">
-        <div class="jc-detail-label">下发人</div>
-        <div class="jc-detail-content">{{form.startUser}}</div>
-      </div>
-      <div class="jc-detail-warp">
-        <div class="jc-detail-label">任务位置</div>
-        <div class="jc-detail-content">{{form.taskPositionName}}</div>
-      </div>
-      <div class="jc-detail-warp">
-        <div class="jc-detail-label">任务人员</div>
-        <div class="jc-detail-content">{{formatUsers}}</div>
-      </div>
-      <div class="jc-detail-warp">
-        <div class="jc-detail-label">任务描述</div>
-        <div class="jc-detail-content">
-          <div v-html="form.taskDesc"></div>
-        </div>
-      </div>
-      <div class="jc-detail-warp">
-        <div class="jc-detail-label">附件</div>
-        <div class="jc-detail-content">
-          <img v-for="url in imgs" :key="url" :src="url" class="jc-img" @click="showFullImg(url)">
-          <div class="jc-video" v-for="url in videos" :key="url" @click="showVideo(url)">
-            <video :src="url"></video>
-            <div class="hover">
-              <img class="jc-video-play" src="@/bundles/taskBundle/assets/play.png" alt="">
-            </div>
-          </div>
-          <div v-for="(url,index) in audios" :key="url" class="jc-audio" @click="playAudio(url,index)">
-            <img class="jc-audio-mike" src="@/bundles/taskBundle/assets/mike.png" alt="">
-            <div class="hover">
-              <img class="jc-video-play" src="@/bundles/taskBundle/assets/play.png" alt="" v-show="audioPlayShows[index]">
-              <img class="jc-video-play" src="@/bundles/taskBundle/assets/pause.png" alt="" v-show="!audioPlayShows[index]">
-            </div>
-          </div>
-          <audio ref="audio" :src="audioUrl" style="width:0;height:0" @ended="audioEnded"></audio>
-          <a class="jc-other" v-for="url in others" :key="url" :href="url" download="" title="点击下载">
-            <img class="jc-other-down" src="@/bundles/taskBundle/assets/down.png" alt="">
-          </a>
-        </div>
+        <div class="jc-detail-label">督办意见</div>
+        <!-- <div class="jc-detail-content">{{form.taskName}}</div> -->
+        <div class="jc-detail-content jc-option">意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见</div>
       </div>
     </div>
 
-    <div v-show="taskId" class="jc-footer">
-      <el-button v-if="form.auth" @click="handleTask(true)" size="small" type="primary">流转任务</el-button>
-      <el-button v-if="form.auth" @click="handleTask(false)" size="small">完成任务</el-button>
-      <el-button v-if="form.auth" @click="closeTask" size="small">关闭任务</el-button>
-      <el-button style="margin-top: 10px;" @click="sendScreen" type="primary" size="small">{{isSendScreen?'关闭投屏':'投屏'}}</el-button>
+    <div class="jc-temporary-content">
+      <div v-show="taskId" class="jc-view-content" v-loading="loading" element-loading-background="rgba(0, 0, 0, 0)">
+        <div class="jc-detail-warp">
+          <div class="jc-detail-label">任务名称</div>
+          <div class="jc-detail-content">{{form.taskName}}</div>
+        </div>
+        <div class="jc-detail-warp">
+          <div class="jc-detail-label">创建时间</div>
+          <div class="jc-detail-content">{{form.createDate|filterTime}}</div>
+        </div>
+        <div class="jc-detail-warp">
+          <div class="jc-detail-label">项目名称</div>
+          <div class="jc-detail-content">{{form.projectName}}</div>
+        </div>
+        <div class="jc-detail-warp">
+          <div class="jc-detail-label">任务时间</div>
+          <div class="jc-detail-content">{{form.startDate|filterTime}} - {{form.endDate|filterTime}}</div>
+        </div>
+        <div class="jc-detail-warp">
+          <div class="jc-detail-label">任务类型</div>
+          <div class="jc-detail-content">临时任务</div>
+        </div>
+        <div class="jc-detail-warp">
+          <div class="jc-detail-label">任务状态</div>
+          <div class="jc-detail-content">{{form.taskStatusName}}</div>
+        </div>
+        <div class="jc-detail-warp">
+          <div class="jc-detail-label">任务来源</div>
+          <div class="jc-detail-content">{{taskSourceName}}</div>
+        </div>
+        <div class="jc-detail-warp">
+          <div class="jc-detail-label">下发组织</div>
+          <div class="jc-detail-content">{{form.startOrg}}</div>
+        </div>
+        <div class="jc-detail-warp">
+          <div class="jc-detail-label">下发人</div>
+          <div class="jc-detail-content">{{form.startUser}}</div>
+        </div>
+        <div class="jc-detail-warp">
+          <div class="jc-detail-label">任务位置</div>
+          <div class="jc-detail-content">{{form.taskPositionName}}</div>
+        </div>
+        <div class="jc-detail-warp">
+          <div class="jc-detail-label">任务人员</div>
+          <div class="jc-detail-content">{{formatUsers}}</div>
+        </div>
+        <div class="jc-detail-warp">
+          <div class="jc-detail-label">任务描述</div>
+          <div class="jc-detail-content">
+            <div v-html="form.taskDesc"></div>
+          </div>
+        </div>
+        <div class="jc-detail-warp">
+          <div class="jc-detail-label">附件</div>
+          <div class="jc-detail-content">
+            <img v-for="url in imgs" :key="url" :src="url" class="jc-img" @click="showFullImg(url)">
+            <div class="jc-video" v-for="url in videos" :key="url" @click="showVideo(url)">
+              <video :src="url"></video>
+              <div class="hover">
+                <img class="jc-video-play" src="@/bundles/taskBundle/assets/play.png" alt="">
+              </div>
+            </div>
+            <div v-for="(url,index) in audios" :key="url" class="jc-audio" @click="playAudio(url,index)">
+              <img class="jc-audio-mike" src="@/bundles/taskBundle/assets/mike.png" alt="">
+              <div class="hover">
+                <img class="jc-video-play" src="@/bundles/taskBundle/assets/play.png" alt="" v-show="audioPlayShows[index]">
+                <img class="jc-video-play" src="@/bundles/taskBundle/assets/pause.png" alt="" v-show="!audioPlayShows[index]">
+              </div>
+            </div>
+            <audio ref="audio" :src="audioUrl" style="width:0;height:0" @ended="audioEnded"></audio>
+            <a class="jc-other" v-for="url in others" :key="url" :href="url" download="" title="点击下载">
+              <img class="jc-other-down" src="@/bundles/taskBundle/assets/down.png" alt="">
+            </a>
+          </div>
+        </div>
+      </div>
+
+      <div v-show="taskId" class="jc-footer">
+        <el-button v-if="form.auth" @click="handleTask(true)" size="small" type="primary">流转任务</el-button>
+        <el-button v-if="form.auth" @click="handleTask(false)" size="small">完成任务</el-button>
+        <el-button v-if="form.auth" @click="closeTask" size="small">关闭任务</el-button>
+        <el-button style="margin-top: 10px;" @click="sendScreen" type="primary" size="small">{{isSendScreen?'关闭投屏':'投屏'}}</el-button>
+      </div>
+      <view-empty v-if="!taskId"></view-empty>
+
+      <el-dialog :title="taskForm.ifUpload?'流转任务':'完成任务'" :visible.sync="dialogVisibleHandle" :close-on-click-modal="false" width="600px" append-to-body>
+        <el-form ref="taskForm" label-width="80px" :model="taskForm" class="jc-manage-form">
+          <el-form-item label="任务人员" :prop="peopleProps[peopleType]" :rules="rules.SELECT_NOT_NULL" v-if="taskForm.ifUpload" class="jc-mb">
+            <jc-task-people :peopleType.sync="peopleType" :selecteds.sync="peoples" :orgTree="orgTree"></jc-task-people>
+          </el-form-item>
+          <el-form-item label="事件" prop="eventIds" :rules="rules.SELECT_NOT_NULL" v-if="!taskForm.ifUpload" class="jc-mb">
+            <el-select v-model="taskForm.eventIds" multiple clearable filterable placeholder="请选择事件">
+              <el-option v-for="item in events" :key="item.id" :label="item.title" :value="item.id">
+              </el-option>
+            </el-select>
+          </el-form-item>
+          <el-form-item label="备注" prop="remark" :rules="rules.NOT_NULL">
+            <el-input v-model="taskForm.remark" placeholder="请输入备注" type="textarea"></el-input>
+          </el-form-item>
+        </el-form>
+        <span slot="footer" class="dialog-footer">
+          <el-button @click="dialogVisibleHandle = false">取 消</el-button>
+          <el-button type="primary" @click="onSubmitTask">确 定</el-button>
+        </span>
+      </el-dialog>
     </div>
-    <view-empty v-if="!taskId"></view-empty>
-
-    <el-dialog :title="taskForm.ifUpload?'流转任务':'完成任务'" :visible.sync="dialogVisibleHandle" :close-on-click-modal="false" width="600px" append-to-body>
-      <el-form ref="taskForm" label-width="80px" :model="taskForm" class="jc-manage-form">
-        <el-form-item label="任务人员" :prop="peopleProps[peopleType]" :rules="rules.SELECT_NOT_NULL" v-if="taskForm.ifUpload" class="jc-mb">
-          <jc-task-people :peopleType.sync="peopleType" :selecteds.sync="peoples" :orgTree="orgTree"></jc-task-people>
-        </el-form-item>
-        <el-form-item label="事件" prop="eventIds" :rules="rules.SELECT_NOT_NULL" v-if="!taskForm.ifUpload" class="jc-mb">
-          <el-select v-model="taskForm.eventIds" multiple clearable filterable placeholder="请选择事件">
-            <el-option v-for="item in events" :key="item.id" :label="item.title" :value="item.id">
-            </el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="备注" prop="remark" :rules="rules.NOT_NULL">
-          <el-input v-model="taskForm.remark" placeholder="请输入备注" type="textarea"></el-input>
-        </el-form-item>
-      </el-form>
-      <span slot="footer" class="dialog-footer">
-        <el-button @click="dialogVisibleHandle = false">取 消</el-button>
-        <el-button type="primary" @click="onSubmitTask">确 定</el-button>
-      </span>
-    </el-dialog>
-
   </div>
 
 </template>
@@ -379,7 +403,45 @@ export default {
   flex: 1;
   display: flex;
   flex-direction: column;
+}
+
+.jc-supervise{
+  position: relative;
+  border-bottom:1px solid #eee;
+  font-size:12px;
+  padding:6px 0;
+  background: #F5F7FA;
+
+  .jc-supervise-icon{
+    position: absolute;
+    top:8px;
+    right:16px;
+    width:20px;
+    height:20px;
+    img{
+      width: 100%;
+    }
+  }
+
+  .jc-detail-warp{
+    .jc-detail-label,
+    .jc-detail-content{
+      padding: 0;
+    }
+  }
+  .jc-option{
+    @include jc-text-warp(2);
+  }
+}
+.jc-temporary-content{
+  flex: 1;
+  display: flex;
+  flex-direction: column;
   overflow: auto;
+
+  ::-webkit-scrollbar-thumb {
+    background: #ddd;
+  }
 }
 .jc-footer {
   text-align: center;
