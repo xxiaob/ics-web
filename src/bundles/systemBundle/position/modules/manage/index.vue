@@ -4,6 +4,15 @@
       <el-form-item label="职位名称" prop="positionName" :rules="rules.Len50">
         <el-input v-model="form.positionName" placeholder="请输入职位名称"></el-input>
       </el-form-item>
+      <el-form-item label="职位优先级" prop="index" :rules="rules.Int">
+        <el-input v-model.number="form.index" placeholder="请输入职位优先级"></el-input>
+      </el-form-item>
+      <el-form-item label="默认头像" prop="photo">
+        <div class="jc-icon-img" :style="getIconStyle(form.photo)"></div>
+        <div class="jc-icon-space">
+          <div class="jc-icon-item" v-for="(item,key) in icons" @click="iconsClick(key)" :key="key" :title="item.name" :style="{'background-image':` url(${item.icon})`}"></div>
+        </div>
+      </el-form-item>
       <el-form-item label="允许登录终端" prop="type">
         <el-checkbox-group v-model="form.type">
           <el-checkbox v-for="item in types" :label="item.value" :key="item.value" name="type">{{item.label}}</el-checkbox>
@@ -26,8 +35,9 @@ import { positionSave } from '@/api/position'
 import { getStringRule, getIntegerRule } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
 import { LOGIN_DEVICE_TYPES } from '@/constant/Dictionaries'
+import { JcUserIcons } from '@/config/JcIconConfig'
 
-let defaultForm = { positionName: '' }
+let defaultForm = { positionName: '', index: 0 }
 
 export default {
   name: 'SystemPositionManage',
@@ -36,6 +46,7 @@ export default {
     return {
       loading: false,
       types: LOGIN_DEVICE_TYPES.VALUES,
+      icons: JcUserIcons.icons,
       rules: {
         Len50: getStringRule(1, 50),
         Int: getIntegerRule()
@@ -44,17 +55,27 @@ export default {
   },
   props: { opera: false },
   methods: {
+    iconsClick(photo) {
+      this.form.photo = photo
+    },
     formatFormData() {
       if (this.options) {
         return {
           positionId: this.options.positionId,
           positionName: this.options.positionName,
+          photo: this.options.photo,
+          index: this.options.index,
           type: this.options.type || [],
           media: this.options.media || []
         }
       } else {
         return { ...defaultForm, type: [], media: [] }
       }
+    },
+    getIconStyle(photo) {
+      let icon = photo && JcUserIcons.icons[photo] ? JcUserIcons.icons[photo].icon : JcUserIcons.online
+
+      return `background-image: url(${icon});`
     },
     onSubmit() {
       this.loading = true
@@ -78,3 +99,37 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.jc-icon-img {
+  width: 50px;
+  height: 40px;
+  cursor: pointer;
+  background-position: center;
+  background-repeat: no-repeat;
+  background-size: auto 40px;
+}
+.jc-icon-space {
+  position: relative;
+  width: 100%;
+  border-top: solid 1px $jc-color-line-primary;
+  max-height: 200px;
+  margin-top: 10px;
+  padding-top: 10px;
+  overflow: auto;
+  .jc-icon-item {
+    display: block;
+    float: left;
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: auto 40px;
+    opacity: 0.9;
+    &:hover {
+      opacity: 1;
+      background-color: $jc-bg-color;
+    }
+  }
+}
+</style>

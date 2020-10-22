@@ -236,7 +236,7 @@ export default {
         let signItem = usersData.users[key]
 
         if (jcSignVisible) {
-          let signIcon = this.getUserIcon(signItem.userId)
+          let signIcon = this.getUserIcon(signItem)
 
           if (signItem.labelMarker) {
             signItem.labelMarker.icon = signIcon
@@ -285,7 +285,7 @@ export default {
         return ''
       }
 
-      let content = `<div class="jc-marker-content" style="background-image: url(${this.getUserIcon(userItem.userId)});">`
+      let content = `<div class="jc-marker-content" style="background-image: url(${this.getUserIcon(userItem)});">`
 
       if (this.userTipVisible) {
         content += `<div class="jc-marker-title">${userItem.userName}</div>`
@@ -300,14 +300,14 @@ export default {
       this.setMarkerAndListener(context.marker) //设置marker和添加监听
       context.marker.setContent(content + '</div>')
     },
-    getUserIcon(userId) {
-      if (this.abnormalUserIds.includes(userId)) {
+    getUserIcon(user) {
+      if (this.abnormalUserIds.includes(user.userId)) {
         return JcUserIcons.abnormal
       }
-      if (this.gatherUserIds.includes(userId)) {
+      if (this.gatherUserIds.includes(user.userId)) {
         return JcUserIcons.gather
       }
-      return JcUserIcons.online
+      return user.photo && JcUserIcons.icons[user.photo] ? JcUserIcons.icons[user.photo].icon : JcUserIcons.online
     },
     markerUserClusterClick(context) {
       console.log('绘制用户-点击', context)

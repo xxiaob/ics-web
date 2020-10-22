@@ -38,7 +38,12 @@ export const JcUserIcons = {
   cluster: '/static/mapIcons/usercluster.png', //聚合图标
   online: '/static/mapIcons/useronline.png', //在线图标
   gather: '/static/mapIcons/usergather.png', //采集图标
-  abnormal: '/static/mapIcons/userabnormal.png' //异常报警图标
+  abnormal: '/static/mapIcons/userabnormal.png', //异常报警图标
+  //用户其他图标
+  icons: {
+    baseicon: { name: '默认头像', icon: '/static/mapIcons/useronline.png' },
+    usergrid: { name: '网格责任人', icon: '/static/mapIcons/usergrid.png' }
+  }
 }
 
 /**

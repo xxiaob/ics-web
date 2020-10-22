@@ -42,7 +42,6 @@ export default {
   methods: {
     iconsClick(icon) {
       this.form.icon = icon
-      this.showIcons = false
     },
     getIconStyle(icon) {
       let useIcon = JcIcons[icon] || {}

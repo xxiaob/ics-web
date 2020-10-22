@@ -12,7 +12,13 @@
       <el-table :data="list" v-loading="loading" row-key="positionId" class="jc-table" @selection-change="tableSelect">
         <el-table-column type="selection" width="40"></el-table-column>
         <el-table-column type="index" :index="indexMethod" label="序号" width="50"></el-table-column>
+        <el-table-column prop="icon" label="默认头像">
+          <template slot-scope="scope">
+            <i class="jc-position-icon" :style="getIconStyle(scope.row.photo)"></i>
+          </template>
+        </el-table-column>
         <el-table-column prop="positionName" label="职位名称"></el-table-column>
+        <el-table-column prop="index" label="职位优先级"></el-table-column>
         <el-table-column label="电脑端">
           <template slot-scope="scope">
             <i class="jc-position-status" :class="{'jc-status-on': scope.row.pc}"></i>
@@ -46,6 +52,7 @@ import PaginationMixins from '@/mixins/PaginationMixins'
 import { positionList, positionDel } from '@/api/position'
 import { formatDate } from '@/libs/util'
 import { LOGIN_DEVICE_TYPES } from '@/constant/Dictionaries'
+import { JcUserIcons } from '@/config/JcIconConfig'
 
 export default {
   name: 'SystemPositionIndex',
@@ -83,7 +90,7 @@ export default {
 
               let media = item.mobileFunction ? item.mobileFunction.split(',') : []
 
-              list.push({ positionId: item.positionId, type, media, ...this.getDeviceStatusClass(item.loginType), positionName: item.positionName, createTime: formatDate(item.createTime) })
+              list.push({ positionId: item.positionId, photo: item.photo, index: item.index, type, media, ...this.getDeviceStatusClass(item.loginType), positionName: item.positionName, createTime: formatDate(item.createTime) })
             })
           }
           this.list = list
@@ -102,6 +109,11 @@ export default {
         }
       }
       return { pc: '', mobile: '', law: '' }
+    },
+    getIconStyle(photo) {
+      let icon = photo && JcUserIcons.icons[photo] ? JcUserIcons.icons[photo].icon : JcUserIcons.online
+
+      return `background-image: url(${icon});`
     },
     goFilter(filter) {
       this.filter = { ...filter }
@@ -162,5 +174,18 @@ export default {
   &.jc-status-on {
     background-image: url(./assets/on.png);
   }
+}
+.jc-position-icon {
+  position: absolute;
+  display: block;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  margin: auto 0;
+  width: 40px;
+  height: 40px;
+  background-size: auto 100%;
+  background-repeat: no-repeat;
+  background-position: center;
 }
 </style>
