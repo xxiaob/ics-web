@@ -56,7 +56,8 @@ export default {
     updPwd: 'user-service/user/updPwd',
     getUsersByPosition: 'message-srv/message/getUsersByPosition',
     updPhotos: 'user-service/user/updPhotos',
-    importUsers: 'user-service/user/import'
+    importUsers: 'user-service/user/import',
+    getOrgDeviceTree: 'user-service/user/getOrgDeviceTree'
   },
   areaType: {
     //区域类型管理
@@ -100,7 +101,8 @@ export default {
     bindRelease: 'device-service/hikDevice/deviceBindRelease',
     deviceList: 'device-service/hikDevice/deviceAndOrgList', // 组织设备列表
     relay: 'device-service/hikDevice/getRelayStreaming',
-    getLiveStreaming: 'device-service/hikDevice/getLiveStreaming' //获取实时流
+    getLiveStreaming: 'device-service/hikDevice/getLiveStreaming', //获取实时流
+    deviceBindProject: 'device-service/hikDevice/deviceBindProject'
   },
   eventManage: {
     //事件管理
