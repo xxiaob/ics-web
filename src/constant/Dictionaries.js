@@ -30,6 +30,14 @@ export const PROJECT_STATUS = new JcEnum([
   { key: 'FINISHED', value: '3', label: '已结束' }
 ])
 
+/**
+ * 项目操作
+ */
+export const PROJECT_OPERATES = new JcEnum([
+  { key: 'START', value: 0, label: '立即开始' },
+  { key: 'STOP', value: 1, label: '立即关闭' }
+])
+
 
 /**
  * 问题处理 - 处理状态（个人）

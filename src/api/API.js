@@ -179,7 +179,9 @@ export default {
       //项目关联人员
       save: 'user-service/projectUserRef',
       list: 'user-service/projectUserRef/list'
-    }
+    },
+    startAndCloseProject: 'user-service/project/startAndCloseProject',
+    getAreaProject: 'user-service/project/getAreaProject'
   },
   live: {
     //直播相关
