@@ -60,14 +60,12 @@ export default {
       }
     }
   },
-  created() {
-    this.initData()
-  },
+
   methods: {
     initData() {
       if (!this.loading) {
         this.loading = true
-        menusList().then(res => {
+        menusList({ deviceType: this.filter.deviceType }).then(res => {
           this.list = this.formatTree(res)
           this.loading = false
         }).catch(() => {
@@ -80,14 +78,21 @@ export default {
 
       if (child && child.length) {
         child.forEach(item => {
-          list.push({ resId: item.resId, resName: item.resName, sort: item.sort, pid: item.pid, pName: pName, url: item.url, icon: item.icon || '' })
+          list.push({ resId: item.resId, resName: item.resName, sort: item.sort, pid: item.pid, pName: pName, url: item.url, icon: item.icon || '', deviceType: item.deviceType })
           list = [...list, ...this.formatTree(item.children, item.resName)]
         })
       }
       return list
     },
     goFilter(filter) {
+      let currFilter = { ...this.filter }
+
       this.filter = { ...filter }
+
+      // 如果deviceType 没有发生变化的时候, 就不用调用接口, name通过本地过滤
+      if (currFilter.deviceType !== filter.deviceType) {
+        this.initData()
+      }
     },
     del(row) {
       this.$confirm('确认删除该菜单', '提示', { type: 'warning' }).then(() => {

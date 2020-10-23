@@ -10,7 +10,7 @@
 
       <!-- 菜单类型 -->
       <el-form-item label="菜单类型" prop="type">
-        <el-select v-model="form.type" placeholder="请选择菜单类型">
+        <el-select v-model="form.deviceType" placeholder="请选择菜单类型">
           <el-option
             v-for="item in menuType"
             :key="item.value"
@@ -42,7 +42,7 @@ import { menusList, menusSave } from '@/api/menus'
 import { getStringRule, getIntegerRule } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
 
-let defaultForm = { resName: '', sort: 1, pid: '', url: '', icon: '', type: '1' }
+let defaultForm = { resName: '', sort: 1, pid: '', url: '', icon: '', deviceType: null }
 
 export default {
   name: 'SystemMenusManage',
@@ -58,18 +58,23 @@ export default {
       menuType: [
         {
           label: 'PC端',
-          value: '1'
+          value: null
         },
         {
           label: 'APP端',
-          value: '2'
+          value: 2
         }
       ]
     }
   },
+  watch: {
+    'form.deviceType'() {
+      this.initData()
+    }
+  },
   methods: {
     initData() {
-      menusList().then(res => {
+      menusList({ deviceType: this.form.deviceType }).then(res => {
         this.menus = this.formatMenus(res)
       })
     },
@@ -85,7 +90,6 @@ export default {
     },
     formatFormData() {
       if (this.options) {
-        console.log('this.options', this.options)
         return {
           resId: this.options.resId,
           resName: this.options.resName,
@@ -93,7 +97,7 @@ export default {
           pid: this.options.pid,
           url: this.options.url,
           icon: this.options.icon,
-          type: '1' //当前菜单类型
+          deviceType: this.options.deviceType //当前菜单类型
         }
       } else {
         return { ...defaultForm }
