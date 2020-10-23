@@ -2,7 +2,7 @@
   <el-card class="jc-tabfilter-card">
     <el-form ref="form" :inline="true" :model="form" class="jc-tabfilter-form" size="small" @submit.native.prevent>
       <el-form-item prop="type" label="菜单类型">
-        <el-select v-model="form.type" placeholder="请选择菜单类型">
+        <el-select v-model="form.deviceType" placeholder="请选择菜单类型">
           <el-option
             v-for="item in menuType"
             :key="item.value"
@@ -28,19 +28,22 @@ export default {
     return {
       form: {
         name: '',
-        type: '1'
+        deviceType: null
       },
       menuType: [
         {
           label: 'PC端',
-          value: '1'
+          value: null
         },
         {
           label: 'APP端',
-          value: '2'
+          value: 2
         }
       ]
     }
+  },
+  created() {
+    this.$emit('filter', this.form)
   },
   methods: {
     reset() {
