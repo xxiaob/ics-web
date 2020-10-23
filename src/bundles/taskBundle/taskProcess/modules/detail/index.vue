@@ -83,28 +83,20 @@
           <jc-forward-list :taskId="form.businessKey" ref="forward"></jc-forward-list>
         </el-card>
       </el-col>
-      <el-col :span="superviseShow ? 12 : 0">
+      <el-col :span="12" v-if="superviseShow">
         <el-card class="jc-table-card jc-height100">
           <div slot="header">
             <div class="jc-title">督办信息</div>
           </div>
-          <el-form ref="form" label-width="100px" :model="form" class="jc-manage-form" size="mini">
+          <el-form ref="superviseInfo" label-width="100px" :model="form" class="jc-manage-form" size="mini">
             <el-form-item label="督办人员：">
-              <!-- <span>{{form.carNumber}}</span> -->
-              <span>罗高山</span>
+              <span>{{ superviseInfo.userName }}</span>
             </el-form-item>
             <el-form-item label="督办时间：">
-              <!-- <span>{{form.carNumber}}</span> -->
-              <span>2020-08-06  11:30:00</span>
+              <span>{{superviseInfo.createTime | filterTime}}</span>
             </el-form-item>
             <el-form-item label="督办意见：">
-              <!-- <span>{{form.reportUserName}}</span> -->
-              <span>督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见
-                督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见
-                督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见
-                督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见
-                督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见督办意见
-              </span>
+              <span>{{superviseInfo.remark}}</span>
             </el-form-item>
           </el-form>
         </el-card>
@@ -178,7 +170,7 @@ export default {
   },
   data() {
     return {
-      superviseShow: true, // 是否存在督办
+
       peopleType: TASK_PEOPLE_TYPES.PEOPLE,
       peopleProps: {
         [TASK_PEOPLE_TYPES.ORG]: 'orgIds',
@@ -200,7 +192,9 @@ export default {
         orgIds: [],
         userIds: [],
         eventIds: []
-      }
+      },
+      superviseShow: false, // 是否存在督办
+      superviseInfo: null // 督办数据
     }
   },
   watch: {
@@ -228,6 +222,21 @@ export default {
   computed: {
     form() {
       if (this.info) {
+        // 处理督办信息
+        let taskSupervisePO = this.info.taskSupervisePO
+
+        if (taskSupervisePO) {
+          this.superviseShow = true
+          this.superviseInfo = {
+            createTime: taskSupervisePO.createTime,
+            remark: taskSupervisePO.remark,
+            userName: taskSupervisePO.userName
+
+          }
+        } else {
+          this.superviseShow = false
+          this.superviseInfo = null
+        }
         return { ...this.info, ...this.info.detailViewVO, ...this.info.taskDetailVO, taskStatusName: this.info.taskStatusName }
       } else {
         return {}
