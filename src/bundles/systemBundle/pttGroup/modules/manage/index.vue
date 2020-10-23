@@ -4,9 +4,11 @@
       <el-form-item label="群组名称" prop="groupName" :rules="rules.Len20">
         <el-input v-model="form.groupName" placeholder="请输入群组名称"></el-input>
       </el-form-item>
-      <el-form-item label="群组用户" prop="addUserIds" :rules="rules.SELECT_NOT_NULL">
-        <el-cascader :options="orgTree" v-model="orgIds" :props="{expandTrigger: 'hover', emitPath: false, multiple: true ,checkStrictly: true}" clearable placeholder="请选择组织" :show-all-levels="false" @change="changeOrg" class="jc-left-width50"></el-cascader>
-        <el-select v-model="form.addUserIds" multiple placeholder="请选择用户" class="jc-left-width50">
+      <el-form-item label="所属组织" prop="orgId" :rules="rules.SELECT_NOT_NULL">
+        <el-cascader :options="orgTree" v-model="form.orgId" :props="{expandTrigger: 'hover', emitPath: false, checkStrictly: true}" clearable placeholder="请选择组织" :show-all-levels="false" @change="changeOrg"></el-cascader>
+      </el-form-item>
+      <el-form-item label="群组用户" prop="addUserIds" :rules="rules.SELECT_NOT_NULL" v-if="!options">
+        <el-select v-model="form.addUserIds" multiple placeholder="请选择用户">
           <el-option v-for="item in users" :key="item.id" :label="item.name" :value="item.id">
           </el-option>
         </el-select>
@@ -25,7 +27,7 @@ import { userListByOrg } from '@/api/user'
 import { getStringRule, NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
 
-let defaultForm = { groupName: '', addUserIds: [] }
+let defaultForm = { groupName: '', orgId: '', addUserIds: [] }
 
 export default {
   name: 'SystemPttGroupManage',
@@ -39,7 +41,6 @@ export default {
         NOT_NULL
       },
       orgTree: [],
-      orgIds: [],
       users: []
     }
   },
@@ -73,13 +74,11 @@ export default {
       }
       return trees
     },
-    changeOrg(orgIds) {
-      if (orgIds.length) {
-        this.getUser(orgIds)
-      } else {
-        this.addUserIds = []
+    changeOrg(orgId) {
+      if (!this.options) {
+        this.getUser(orgId)
+        this.form.addUserIds = []
       }
-      this.form.addUserIds = []
     },
     async getUser(orgIds) {
       try {
@@ -101,26 +100,14 @@ export default {
     },
     formatFormData() {
       if (this.options) {
-        const { groupId, groupName, userIds } = this.options
-        const addUserIds = [], orgIds = []
+        const { groupId, groupName, orgId } = this.options
 
-        userIds.forEach(item=>{
-          addUserIds.push(item.userId)
-          if (!orgIds.includes(item.orgId)) {
-            orgIds.push(item.orgId)
-          }
-        })
-        this.orgIds = orgIds
-        if (orgIds.length) {
-          this.getUser(orgIds)
-        }
         return {
           groupId,
           groupName,
-          addUserIds
+          orgId
         }
       } else {
-        this.orgIds = []
         return { ...defaultForm }
       }
     },

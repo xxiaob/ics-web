@@ -159,7 +159,7 @@ export default {
     //PTT群组
     add: 'user-service/userGroup/addGroup',
     list: 'user-service/userGroup/selectGroup',
-    update: 'user-service/userGroup/updateGroup',
+    update: 'user-service/userGroup/updateGroupBasic',
     del: 'user-service/userGroup/deleteGroup',
     userList: 'user-service/userGroup/getGroupUser',
     userDel: 'user-service/userGroup/delGroupUser',
