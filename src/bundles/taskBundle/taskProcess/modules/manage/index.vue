@@ -189,7 +189,7 @@ export default {
       }
     },
     formatFormData() {
-      let questionTaskSource = '', paths = [], taskSourceId = '', position = '', positionName = ''
+      let questionTaskSource = '', paths = [], taskSourceId = '', position = '', positionName = '', problemTitle = '', problemDesc = ''
 
       this.edit = true
 
@@ -199,6 +199,8 @@ export default {
         paths = this.question.uploadFilePaths
         position = this.question.position
         positionName = this.question.positionName
+        problemTitle = this.question.label
+        problemDesc = this.question.problemDesc
         this.taskSourceName = this.question.label
         this.taskSourceDisabled = true
       } else {
@@ -257,7 +259,7 @@ export default {
         }
 
         return { ...defaultForm, taskSource: questionTaskSource, projectId: newProjectId, beginTime, endTime, date: [beginTime, endTime], uploadFilePaths: paths, taskSourceId, taskPosition: position,
-          taskPositionName: positionName }
+          taskPositionName: positionName, taskDesc: problemDesc, taskName: problemTitle }
       }
     },
     onSubmit(ifStart) {

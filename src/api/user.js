@@ -145,3 +145,14 @@ export function importUsers(data) {
     }
   })
 }
+
+/**
+ * 根据项目id查询所有组织和设备
+ * @param {String} projectId
+ * @returns {Object} axios 对象
+ */
+export function getOrgDeviceTree(projectId) {
+  return axios.get(API.user.getOrgDeviceTree, {
+    params: { projectId }
+  })
+}

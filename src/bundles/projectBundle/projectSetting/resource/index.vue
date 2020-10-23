@@ -7,7 +7,7 @@
       </div>
       <div class="jc-right-width48">
         <div class="jc-title">配置设备</div>
-        <!-- <tree-select ref="deviceTree" type="device" :treesLoading="deviceTreesLoading" :trees="deviceTrees" :checkKeys="deviceCheckKeys" ></tree-select> -->
+        <tree-select ref="deviceTree" type="device" :treesLoading="deviceTreesLoading" :trees="deviceTrees" :checkKeys="deviceCheckKeys" ></tree-select>
       </div>
     </div>
     <div slot="footer" class="dialog-footer">
@@ -17,8 +17,8 @@
   </el-dialog>
 </template>
 <script>
-import { getOrgUserList } from '@/api/user'
-import { getDeviceList } from '@/api/device'
+import { getOrgUserList, getOrgDeviceTree } from '@/api/user'
+import { deviceBindProject } from '@/api/device'
 import { projectUserRefList, projectUserRefSave } from '@/api/projects'
 import treeSelect from './components/treeSelect'
 
@@ -98,9 +98,9 @@ export default {
       this.deviceCheckKeys = []
       this.deviceTreesLoading = true
       try {
-        const orgsAndDevice = await getDeviceList()
+        const orgsAndDevice = await getOrgDeviceTree(this.options.projectId)
 
-        this.deviceTrees = this.formatDeviceOrgTrees(orgsAndDevice)
+        this.deviceTrees = this.formatDeviceOrgTrees([orgsAndDevice])
       } catch (err) {
         console.log(err)
       }
@@ -114,11 +114,14 @@ export default {
         child.forEach(item => {
           let node = { id: item.orgId, label: item.orgName, type: 'org' }
 
-          let nodeChildren = this.formatDeviceOrgTrees(item.orgResps)
+          let nodeChildren = this.formatDeviceOrgTrees(item.orgList)
 
-          if (item.devices && item.devices.length) {
-            item.devices.forEach(device => {
-              nodeChildren.push({ id: device.deviceId, label: device.deviceName, type: 'device', deviceType: device.deviceType, userId: device.userId })
+          if (item.deviceList && item.deviceList.length) {
+            item.deviceList.forEach(device => {
+              if (device.flag) {
+                this.deviceCheckKeys.push(device.deviceId)
+              }
+              nodeChildren.push({ id: device.deviceId, label: device.deviceName, type: 'device', deviceType: device.type })
             })
           }
           trees.push(nodeChildren && nodeChildren.length ? { ...node, children: nodeChildren } : node)
@@ -130,9 +133,11 @@ export default {
     async onSubmit() {
       this.loading = true
       const { addIds: addUserIds, deleteIds: deleteUserIds } = this.$refs.userTree.getResult()
+      const { addIds: addDeviceIds, deleteIds: deleteDeviceIds } = this.$refs.deviceTree.getResult()
 
       try {
         await projectUserRefSave({ addUserIds, deleteUserIds, projectId: this.options.projectId })
+        await deviceBindProject({ addDeviceIds, deleteDeviceIds, projectId: this.options.projectId })
         this.$message.success('操作成功')
         this.dialogVisible = false
         this.$emit('save-success')
