@@ -103,7 +103,7 @@ export default {
       } else if (options.opera == 'daily-task') {
         this.taskDailyVisible = true
       } else if (options.opera == 'statistics') {
-        // this.statisticsVisible = true
+        this.statisticsVisible = true
       }
     },
     manage(row) {

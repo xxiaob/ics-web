@@ -105,3 +105,13 @@ export function getAreaProject(type) {
     params: { type }
   })
 }
+/**
+ * 项目统计
+ * @param {String} projectId
+ * @returns {Object} axios 对象
+ */
+export function getProjectInfoData(projectId) {
+  return axios.get(API.projects.getProjectInfoData, {
+    params: { projectId }
+  })
+}

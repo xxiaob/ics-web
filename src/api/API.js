@@ -181,7 +181,8 @@ export default {
       list: 'user-service/projectUserRef/list'
     },
     startAndCloseProject: 'user-service/project/startAndCloseProject',
-    getAreaProject: 'user-service/project/getAreaProject'
+    getAreaProject: 'user-service/project/getAreaProject',
+    getProjectInfoData: 'data-service/project/getProjectInfoData'
   },
   live: {
     //直播相关

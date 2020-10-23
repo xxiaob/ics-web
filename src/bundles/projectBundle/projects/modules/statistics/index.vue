@@ -16,19 +16,19 @@
           <div class="jc-detail">
             <p>
               <span>人员：</span>
-              <span class="jc-right">7名</span>
+              <span class="jc-right">{{info.userCount}}名</span>
             </p>
             <p>
               <span>网巡车：</span>
-              <span class="jc-right">2辆</span>
+              <span class="jc-right">{{info.carCount}}辆</span>
             </p>
             <p>
               <span>固定监控：</span>
-              <span class="jc-right">56个</span>
+              <span class="jc-right">{{info.monitorCount}}个</span>
             </p>
             <p>
               <span>无人机：</span>
-              <span class="jc-right">56架</span>
+              <span class="jc-right">{{info.uavcount}}架</span>
             </p>
           </div>
         </el-card>
@@ -41,27 +41,27 @@
           <div class="jc-detail">
             <p>
               <span>在岗里程：</span>
-              <span class="jc-right">119公里</span>
+              <span class="jc-right">{{info.journey}}公里</span>
             </p>
             <p>
               <span>在岗时长：</span>
-              <span class="jc-right">223小时</span>
+              <span class="jc-right">{{info.onGuardDuration}}小时</span>
             </p>
             <p>
               <span>岗点触碰：</span>
-              <span class="jc-right">56个</span>
+              <span class="jc-right">{{info.inOutCount}}个</span>
             </p>
             <p>
               <span>岗点日常任务：</span>
-              <span class="jc-right">56个</span>
+              <span class="jc-right">{{info.dailyTaskAllCount}}个</span>
             </p>
             <p>
               <span>岗点达标任务：</span>
-              <span class="jc-right">56个</span>
+              <span class="jc-right">{{info.dailyTaskReachCount}}个</span>
             </p>
             <p>
               <span>岗点任务达标率：</span>
-              <span class="jc-right">56个</span>
+              <span class="jc-right">{{info.dailyTaskReachRate*100}}%</span>
             </p>
           </div>
         </el-card>
@@ -86,6 +86,7 @@
 
 <script>
 import JcCharts from '@/components/JcForm/JcCharts'
+import { getProjectInfoData } from '@/api/projects'
 export default {
   name: 'ProjectProjectsStatistics',
   props: ['options', 'visible'],
@@ -94,7 +95,8 @@ export default {
     return {
       activated: 1,
       dialogVisible: false,
-      chartOptions: null
+      chartOptions: null,
+      info: {}
     }
   },
   watch: {
@@ -109,8 +111,11 @@ export default {
     }
   },
   methods: {
-    initData() {
+    async initData() {
+      this.activated = 1
+      this.info = await getProjectInfoData(this.options.projectId)
       this.dialogVisible = this.visible
+      this.processData()
     },
     dialogClose() {
       this.$emit('update:visible', false)
@@ -120,33 +125,17 @@ export default {
 
       let datas = []
 
-      console.log('this.activated', this.activated)
       if (this.activated == 1) {
-        console.log(111)
         name = '事件'
-        datas = [
-          { value: 18, name: '市容环境' },
-          { value: 10, name: '宣传广告' },
-          { value: 8, name: '施工管理' },
-          { value: 5, name: '街面秩序' },
-          { value: 5, name: '突发事件' },
-          { value: 4, name: '其他事件' }
-        ]
+        if (this.info.eventTypes && this.info.eventTypes.length) {
+          datas = this.info.eventTypes.map(item=>({ value: item.count, name: item.typeName }))
+        }
       } else if (this.activated == 2) {
-        console.log(222)
-
         name = '任务'
-        datas = [
-          { value: 30, name: '市容环境' },
-          { value: 19, name: '宣传广告' },
-          { value: 21, name: '施工管理' },
-          { value: 16, name: '街面秩序' },
-          { value: 7, name: '突发事件' },
-          { value: 9, name: '其他事件' }
-        ]
+        if (this.info.taskTypes && this.info.taskTypes.length) {
+          datas = this.info.taskTypes.map(item=>({ value: item.count, name: item.typeName }))
+        }
       }
-
-      console.log('datas', datas)
 
       let total = datas.reduce((prev, current) => prev + current.value * 1, 0)
 
@@ -184,10 +173,10 @@ export default {
         formatter: '{a} <br/>{b} : {c} ({d}%)'
       },
       legend: {
-        // pageIconColor: '#112adf',
-        // pageIconInactiveColor: '#0f89d2',
-        // pageIconSize: 12,
-
+        pageIconColor: '#112adf',
+        pageIconInactiveColor: '#0f89d2',
+        pageIconSize: 12,
+        type: 'scroll',
         icon: 'circle',
         orient: 'vertical',
         right: 0,
@@ -263,8 +252,6 @@ export default {
       ]
 
     }
-
-    this.processData()
   }
 
 }
