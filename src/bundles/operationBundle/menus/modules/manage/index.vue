@@ -7,6 +7,20 @@
       <el-form-item label="上级菜单" prop="pid">
         <el-cascader v-model="form.pid" :options="menus" filterable :props="{ expandTrigger: 'hover',checkStrictly: true,emitPath: false }"></el-cascader>
       </el-form-item>
+
+      <!-- 菜单类型 -->
+      <el-form-item label="菜单类型" prop="type">
+        <el-select v-model="form.type" placeholder="请选择菜单类型">
+          <el-option
+            v-for="item in menuType"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value">
+          </el-option>
+        </el-select>
+      </el-form-item>
+
+
       <el-form-item label="菜单图标" prop="icon">
         <el-input v-model="form.icon" placeholder="请输入菜单图标"></el-input>
       </el-form-item>
@@ -28,7 +42,7 @@ import { menusList, menusSave } from '@/api/menus'
 import { getStringRule, getIntegerRule } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
 
-let defaultForm = { resName: '', sort: 1, pid: '', url: '', icon: '' }
+let defaultForm = { resName: '', sort: 1, pid: '', url: '', icon: '', type: '1' }
 
 export default {
   name: 'SystemMenusManage',
@@ -40,7 +54,17 @@ export default {
       rules: {
         Len50: getStringRule(1, 50),
         Int: getIntegerRule()
-      }
+      },
+      menuType: [
+        {
+          label: 'PC端',
+          value: '1'
+        },
+        {
+          label: 'APP端',
+          value: '2'
+        }
+      ]
     }
   },
   methods: {
@@ -61,13 +85,15 @@ export default {
     },
     formatFormData() {
       if (this.options) {
+        console.log('this.options', this.options)
         return {
           resId: this.options.resId,
           resName: this.options.resName,
           sort: this.options.sort,
           pid: this.options.pid,
           url: this.options.url,
-          icon: this.options.icon
+          icon: this.options.icon,
+          type: '1' //当前菜单类型
         }
       } else {
         return { ...defaultForm }

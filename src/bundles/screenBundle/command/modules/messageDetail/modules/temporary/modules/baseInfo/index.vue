@@ -1,25 +1,22 @@
 <template>
   <div class="jc-temporary">
-    <div class="jc-supervise">
+    <div class="jc-supervise" v-if="superviseShow" @click="dialogVisibleSupervise = true">
       <div class="jc-supervise-icon">
         <img src="./assets/duban.svg" alt="">
       </div>
       <div class="jc-detail-warp">
         <div class="jc-detail-label">督办人员</div>
-        <!-- <div class="jc-detail-content">{{form.taskName}}</div> -->
-        <div class="jc-detail-content">罗山</div>
+        <div class="jc-detail-content">{{ superviseInfo.userName }}</div>
 
       </div>
       <div class="jc-detail-warp">
         <div class="jc-detail-label">督办时间</div>
-        <!-- <div class="jc-detail-content">{{form.taskName}}</div> -->
-        <div class="jc-detail-content">2020-06-08  11:30:00</div>
+        <div class="jc-detail-content">{{ superviseInfo.createTime | filterTime }}</div>
 
       </div>
       <div class="jc-detail-warp">
         <div class="jc-detail-label">督办意见</div>
-        <!-- <div class="jc-detail-content">{{form.taskName}}</div> -->
-        <div class="jc-detail-content jc-option">意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见意见</div>
+        <div class="jc-detail-content jc-option">{{ superviseInfo.remark }}</div>
       </div>
     </div>
 
@@ -128,6 +125,32 @@
           <el-button type="primary" @click="onSubmitTask">确 定</el-button>
         </span>
       </el-dialog>
+
+      <el-dialog
+        title="督办信息"
+        :visible.sync="dialogVisibleSupervise"
+        width="600px"
+        class="jc-supervise-info"
+        :close-on-click-modal="false"
+        append-to-body
+        center
+        >
+
+          <el-form :model="form">
+            <el-form-item label="督办人员:">
+              <div>{{ superviseInfo && superviseInfo.userName }}</div>
+
+            </el-form-item>
+            <el-form-item label="督办时间:">
+              <div>{{ superviseInfo && superviseInfo.createTime | filterTime }}</div>
+
+            </el-form-item>
+            <el-form-item label="督办意见:">
+              <div>{{ superviseInfo && superviseInfo.remark }}</div>
+            </el-form-item>
+          </el-form>
+
+      </el-dialog>
     </div>
   </div>
 
@@ -164,6 +187,7 @@ export default {
       },
       peoples: [],
       dialogVisibleHandle: false,
+      dialogVisibleSupervise: false, // 督办信息详细弹窗
       events: [],
       loading: false,
       form: {},
@@ -180,7 +204,9 @@ export default {
         userIds: [],
         eventIds: []
       },
-      isSendScreen: false
+      isSendScreen: false,
+      superviseShow: false, // 是否存在督办
+      superviseInfo: null // 督办数据
     }
   },
   watch: {
@@ -317,6 +343,20 @@ export default {
           const res = await taskGet(this.taskId)
           const auth = await getTaskAuth(this.taskId)
 
+          console.log('res', res)
+          if (res.taskSupervisePO) {
+            this.superviseShow = true
+            this.superviseInfo = {
+              createTime: res.taskSupervisePO.createTime,
+              remark: res.taskSupervisePO.remark,
+              userName: res.taskSupervisePO.userName
+
+            }
+          } else {
+            this.superviseShow = false
+            this.superviseInfo = null
+          }
+
           this.form = { ...this.info, ...res, ...res.detailViewVO, ...res.taskDetailVO, auth: auth.auth, taskId: auth.taskId }
           this.handleUrls(this.form.uploadFilePaths)
           this.loading = false
@@ -451,6 +491,17 @@ export default {
 .el-textarea /deep/ textarea {
   font-family: "微软雅黑", "Microsoft Yahei", "Helvetica Naue", Helvetica,
     sans-serif !important;
+}
+
+.jc-supervise-info {
+  /deep/ {
+    .el-form-item {
+      margin-bottom:10px;
+    }
+    .el-form-item__content{
+      padding-left: 80px;
+    }
+  }
 }
 @import "@/bundles/taskBundle/css/media.scss";
 </style>
