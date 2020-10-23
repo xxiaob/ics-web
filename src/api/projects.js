@@ -87,3 +87,21 @@ export function projectUserRefList(data = {}) {
 export function projectUserRefSave(data = {}) {
   return axios.post(API.projects.projectUserRef.save, data)
 }
+/**
+ * 立即开始和结束应急项目
+ * @param {object} data
+ * @returns {Object} axios 对象
+ */
+export function startAndCloseProject(data) {
+  return axios.post(API.projects.startAndCloseProject, data)
+}
+/**
+ * 获取有区域的已结束的项目
+ * @param {String} type
+ * @returns {Object} axios 对象
+ */
+export function getAreaProject(type) {
+  return axios.get(API.projects.getAreaProject, {
+    params: { type }
+  })
+}

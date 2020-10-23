@@ -16,7 +16,7 @@
         <el-pagination @current-change="currentChange" @size-change="sizeChange" :current-page.sync="page.pageNum" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.total" class="text-right jc-mt"></el-pagination>
       </el-card>
     </div>
-    <jc-manage :options="info" :projectList="list" :projectType="projectType" :visible.sync="visible" @save-success="initData"></jc-manage>
+    <jc-manage :options="info" :projectType="projectType" :visible.sync="visible" @save-success="initData"></jc-manage>
     <grid-setting :options="opreaData" :visible.sync="gridVisible"></grid-setting>
     <resource-setting :options="opreaData" :visible.sync="resourceVisible"></resource-setting>
     <statistics :options="opreaData" :visible.sync="statisticsVisible"></statistics>
@@ -73,14 +73,14 @@ export default {
         const { total, resultList } = await projectsListByPage({ projectType: this.projectType, ...this.filter })
 
         this.page.total = total
-        let list = []
+        // let list = []
 
-        if (resultList && resultList.length) {
-          resultList.forEach(item => {
-            list.push({ projectId: item.projectId, projectName: item.projectName, projectType: item.projectType, beginTime: item.beginTime, endTime: item.endTime, orgId: item.orgId, orgName: item.orgName, description: item.description })
-          })
-        }
-        this.list = list
+        // if (resultList && resultList.length) {
+        //   resultList.forEach(item => {
+        //     list.push({ projectId: item.projectId, projectName: item.projectName, projectType: item.projectType, beginTime: item.beginTime, endTime: item.endTime, orgId: item.orgId, orgName: item.orgName, description: item.description })
+        //   })
+        // }
+        this.list = resultList
       } catch (error) {
         console.log(error)
       }
@@ -92,7 +92,9 @@ export default {
     },
     operaChange(options) {
       this.opreaData = options.data
-      if (options.opera == 'delete-success') {
+      if (options.opera == 'start-stop-project') {
+        this.initData()
+      } else if (options.opera == 'delete-success') {
         this.currentChange(this.page.pageNum - 1)
       } else if (options.opera == 'grid-setting') {
         this.gridVisible = true

@@ -30,8 +30,8 @@
   </div>
 </template>
 <script>
-import { PROJECT_TYPES } from '@/constant/Dictionaries'
-import { projectsDel } from '@/api/projects'
+import { PROJECT_TYPES, PROJECT_OPERATES } from '@/constant/Dictionaries'
+import { projectsDel, startAndCloseProject } from '@/api/projects'
 import { formatDate } from '@/libs/util'
 
 export default {
@@ -44,7 +44,12 @@ export default {
   },
   computed: {
     projectTime() {
-      return formatDate(this.item.beginTime, true) + ' ~ ' + formatDate(this.item.endTime, true)
+      let endTime = ''
+
+      if (this.item.endTime) {
+        endTime = formatDate(this.item.endTime, true)
+      }
+      return formatDate(this.item.beginTime, true) + ' ~ ' + endTime
     },
     projectSC() {
       let startTime = new Date(this.item.beginTime).getTime()
@@ -54,6 +59,11 @@ export default {
       if (startTime > nowTime) {
         return 'jc-not-start'
       }
+
+      if (!this.item.endTime) {
+        return 'jc-running'
+      }
+
       let endTime = new Date(this.item.endTime).getTime()
 
       if (nowTime > endTime) {
@@ -84,7 +94,7 @@ export default {
     async start() {
       try {
         await this.$confirm('确认立即开始该项目', '提示', { type: 'warning' })
-        console.log('start')
+        this.confirmStartOrStop(PROJECT_OPERATES.START)
       } catch (error) {
         console.log(error)
       }
@@ -92,10 +102,15 @@ export default {
     async stop() {
       try {
         await this.$confirm('确认立即关闭该项目', '提示', { type: 'warning' })
-        console.log('stop')
+        this.confirmStartOrStop(PROJECT_OPERATES.STOP)
       } catch (error) {
         console.log(error)
       }
+    },
+    async confirmStartOrStop(type) {
+      await startAndCloseProject({ projectId: this.item.projectId, type })
+      this.$message.success('操作成功')
+      this.operaChange('start-stop-project')
     }
   }
 }
