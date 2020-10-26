@@ -36,7 +36,7 @@
         </el-form>
         <div class="jc-detail-footer">
           <el-button v-if="form.handle && form.status == ALARM_STATUS.NO_RESOLVE" @click="generateTask" :loading="loading" type="primary" size="small">生成任务</el-button>
-          <el-button v-if="form.handle && form.status == ALARM_STATUS.NO_RESOLVE" @click="closeWarning" :loading="loading" size="small">关闭告警</el-button>
+          <!-- <el-button v-if="form.handle && form.status == ALARM_STATUS.NO_RESOLVE" @click="closeWarning" :loading="loading" size="small">关闭告警</el-button> -->
         </div>
 
         <task-manage :question="question" :visible.sync="TaskManageShow" @save-success="generateTaskSuccess"></task-manage>
