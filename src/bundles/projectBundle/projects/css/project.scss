@@ -88,6 +88,13 @@
     line-height: 30px;
     text-align: center;
     @extend .jc-hover-style;
+
+    &.iconguanbi{
+    color: rgba($color: $jc-color-white, $alpha: 0.6);
+    }
+    &.iconjieshu{
+    color: rgba($color: $jc-color-white, $alpha: 0.4);
+    }
   }
 
   .jc-project-screen {

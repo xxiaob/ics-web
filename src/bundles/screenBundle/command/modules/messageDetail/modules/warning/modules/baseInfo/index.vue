@@ -28,13 +28,13 @@
       </div>
       <div class="jc-detail-warp">
         <div class="jc-detail-label">状态</div>
-        <div class="jc-detail-content">{{form.status}}</div>
+        <div class="jc-detail-content">{{formatStatus(form.status)}}</div>
       </div>
     </div>
 
     <div class="jc-footer">
-      <!-- <el-button @click="generateTask" :loading="loading" type="primary" size="small">生成任务</el-button>
-      <el-button @click="closeQuestion" :loading="loading" size="small">关闭告警</el-button> -->
+      <el-button @click="generateTask" :loading="loading" type="primary" size="small">生成任务</el-button>
+      <!-- <el-button @click="closeQuestion" :loading="loading" size="small">关闭告警</el-button> -->
       <el-button style="margin-top: 10px;" @click="sendScreen" type="primary" size="small">{{isSendScreen?'关闭投屏':'投屏'}}</el-button>
     </div>
 

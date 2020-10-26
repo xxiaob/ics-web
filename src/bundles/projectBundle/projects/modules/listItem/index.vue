@@ -5,9 +5,9 @@
       <i class="iconfont iconlujing jc-del" @click="del"></i>
       <i class="jc-setting el-icon-setting" @click="$emit('manage')"></i>
       <span v-if="projectType==PROJECT_TYPES.EmergencySupport">
-        <i class="jc-play el-icon-video-play" title="立即开始" @click="start" v-show="projectSC=='jc-not-start'"></i>
-        <i class="jc-play el-icon-video-pause" title="立即关闭" @click="stop" v-show="projectSC=='jc-running'"></i>
-        <i class="jc-play el-icon-finished" title="已结束" v-show="projectSC=='jc-finished'"></i>
+        <i class="jc-play iconfont iconkaishi" title="立即开始" @click="start" v-show="projectSC=='jc-not-start'"></i>
+        <i class="jc-play iconfont iconguanbi" title="立即关闭" @click="stop" v-show="projectSC=='jc-running'"></i>
+        <i class="jc-play iconfont iconjieshu" title="已结束" v-show="projectSC=='jc-finished'"></i>
       </span>
     </div>
     <div class="jc-project-screen">
