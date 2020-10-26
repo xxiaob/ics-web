@@ -121,15 +121,15 @@ export default {
 
         // 处理事件类型/任务来源/问题类型比例占比
         form.eventType.forEach(item => {
-          item.proportion = `${item.typeName}  ${item.rate * 100}%`
+          item.proportion = `${item.typeName}  ${(item.rate * 100).toFixed(2)}%`
         })
 
         form.taskSource.forEach(item => {
-          item.proportion = `${item.typeName}  ${item.rate * 100}%`
+          item.proportion = `${item.typeName}  ${(item.rate * 100).toFixed(2)}%`
         })
 
         form.problemType.forEach(item => {
-          item.proportion = `${item.typeName}  ${item.rate * 100}%`
+          item.proportion = `${item.typeName}  ${(item.rate * 100).toFixed(2)}%`
         })
 
         this.form = form
