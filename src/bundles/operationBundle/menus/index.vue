@@ -27,7 +27,7 @@
         </el-table-column>
       </el-table>
     </el-card>
-    <jc-manage :options="info" :visible.sync="visible" @save-success="initData"></jc-manage>
+    <jc-manage :options="info" :filter="filter" :visible.sync="visible" @save-success="initData"></jc-manage>
   </div>
 </template>
 <script>

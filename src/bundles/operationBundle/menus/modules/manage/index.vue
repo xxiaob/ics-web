@@ -42,11 +42,17 @@ import { menusList, menusSave } from '@/api/menus'
 import { getStringRule, getIntegerRule } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
 
-let defaultForm = { resName: '', sort: 1, pid: '', url: '', icon: '', deviceType: null }
+let defaultForm = { resName: '', sort: 1, pid: '', url: '', icon: '' }
 
 export default {
   name: 'SystemMenusManage',
   mixins: [FormMixins],
+  props: {
+    filter: {
+      type: Object,
+      default: () => {}
+    }
+  },
   data() {
     return {
       loading: false,
@@ -64,12 +70,16 @@ export default {
           label: 'APP端',
           value: 2
         }
-      ]
+      ],
+      deviceType: null // 保存查询条件中的菜单类型
     }
   },
   watch: {
     'form.deviceType'() {
       this.initData()
+    },
+    filter(filter) {
+      this.deviceType = filter.deviceType
     }
   },
   methods: {
@@ -100,7 +110,10 @@ export default {
           deviceType: this.options.deviceType //当前菜单类型
         }
       } else {
-        return { ...defaultForm }
+        return {
+          ...defaultForm,
+          deviceType: this.deviceType
+        }
       }
     },
     onSubmit() {
