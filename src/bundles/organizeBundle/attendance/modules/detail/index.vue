@@ -1,7 +1,7 @@
 <template>
-  <el-dialog title="组织业务详情" :visible.sync="dialogVisible" width="800px" :append-to-body="true" :close-on-click-modal="false" @close="dialogClose" top="16vh">
+  <el-dialog title="组织勤务详情" :visible.sync="dialogVisible" width="800px" :append-to-body="true" :close-on-click-modal="false" @close="dialogClose" top="16vh">
     <div slot="title" class="dialog-title">
-      <h3>组织业务详情</h3>
+      <h3>组织勤务详情</h3>
       <div class="title-info">
         <span>{{ form.orgName}}</span> |
         <span>{{ form.projectName }}</span> |
