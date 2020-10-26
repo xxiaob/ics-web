@@ -241,6 +241,7 @@ export default {
           item.tipVisible = this.orgTipVisible
           item.signVisible = this.orgSignVisible
           item.show()
+          this.addMapSignListener(item) //添加监听
         })
       }
     }
