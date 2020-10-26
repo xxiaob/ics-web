@@ -7,7 +7,7 @@
     <div class="jc-user-detail-footer">
       <div class="jc-user-detail-item" @click="goMediaLive(videoTypes.DOUBLEAUDIO)">音频指挥</div>
       <div class="jc-user-detail-item" @click="goMediaLive(videoTypes.DOUBLEVIDEO)">视频指挥</div>
-      <div class="jc-user-detail-item" @click="goMediaLive(videoTypes.OBSERVE)">观摩</div>
+      <div class="jc-user-detail-item" @click="goMediaLive(videoTypes.OBSERVE)">采集观摩</div>
       <div class="jc-user-detail-item" @click="goMediaLive(videoTypes.FORCEOBSERVE)">强制观摩</div>
       <div class="jc-user-detail-item" @click="userTrajectory">轨迹</div>
       <!-- <div class="jc-user-detail-item">投屏</div> -->
