@@ -36,6 +36,7 @@ import { getScreenOnlineUser } from '@/api/screen'
 import TreesFilterMixins from '@/mixins/TreesFilterMixins'
 import { VIDEO_INVITE_TYPES } from '@/constant/Dictionaries'
 
+let userMap = {} //存储所有在线用户信息
 
 export default {
   name: 'ScreenCommandOrg',
@@ -78,6 +79,7 @@ export default {
       // 对于获取在线人员数据处理
       let userOnlineData = this.userOnlineData
 
+
       userOnline.forEach(item => {
         if (item.status) {
           // 用户在线推送
@@ -96,8 +98,8 @@ export default {
             userOnlineData.splice(index, 1)
           }
         }
+        userMap[item.userId] = item
       })
-      console.log('userOnlineData', userOnlineData)
       this.userOnlineData = userOnlineData
 
       // 执行在线人员以及排序方法
@@ -119,6 +121,7 @@ export default {
           this.onlineChange(treesItem.children || []) // 递归调用处理在线离线设备方法
         } else {
           let isOnline = this.userOnlineData.includes(treesItem.id) // 判断是否在线
+
 
           treesItem.online = isOnline
           treesItem.disabled = !isOnline
@@ -157,6 +160,7 @@ export default {
         // 用户列表初始获取在线人员数据
         let onlineUser = await getScreenOnlineUser({ projectId: this.project.projectId })
 
+        console.log('online', onlineUser)
         this.$nextTick(() => {
           this.getUserOnline(onlineUser)
           this.$EventBus.$emit('screen-user-online-obtain', this.getUserOnline)
@@ -230,9 +234,13 @@ export default {
       return trees
     },
     goLocation(data) {
-      //去定位
-      console.log('screen-org-location-data', data)
+      // 去定位
       if (data.type == 'user') {
+        // 判断如果在线人员是设备不推送
+        if (userMap[data.id].flag) {
+          this.$message.error('当前人员绑定了设备')
+          return
+        }
         this.$EventBus.$emit('screen-user-location', { id: data.id }) //通知网格定位
       } else if (data.type == 'org') {
         this.$EventBus.$emit('screen-org-location', { id: data.id }) //通知组织定位
