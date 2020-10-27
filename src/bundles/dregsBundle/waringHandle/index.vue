@@ -18,7 +18,7 @@
           <el-table-column prop="alarmDate" label="时间" width="160"></el-table-column>
           <el-table-column width="50" label="操作">
             <template slot-scope="scope">
-              <el-button type="text" size="mini" icon="el-icon-refresh-right" @click="handle(scope.row,true)" title="查看"></el-button>
+              <el-button type="text" size="mini" icon="el-icon-document" @click="handle(scope.row,true)" title="查看"></el-button>
             </template>
           </el-table-column>
 
