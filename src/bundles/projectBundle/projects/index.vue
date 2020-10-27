@@ -70,7 +70,7 @@ export default {
       }
       this.loading = true
       try {
-        const { total, resultList } = await projectsListByPage({ projectType: this.projectType, ...this.filter })
+        const { total, resultList } = await projectsListByPage({ ...this.page, projectType: this.projectType, ...this.filter })
 
         this.page.total = total
         // let list = []
