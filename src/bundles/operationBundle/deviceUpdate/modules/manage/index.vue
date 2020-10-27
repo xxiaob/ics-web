@@ -12,8 +12,8 @@
       <el-form-item label="应用信息" prop="updateInfo" :rules="rules.NOT_NULL">
         <el-input v-model="form.updateInfo" :disabled="view" placeholder="请输入应用信息" type="textarea"></el-input>
       </el-form-item>
-      <el-form-item label="版本号" prop="version" :rules="rules.NOT_NULL">
-        <el-input v-model="form.version" :disabled="view" placeholder="请输入版本号"></el-input>
+      <el-form-item label="版本号" prop="version" :rules="rules.number">
+        <el-input v-model.number="form.version" :disabled="view" placeholder="请输入版本号"></el-input>
       </el-form-item>
       <el-form-item label="强制升级" prop="enableForced" :rules="rules.SELECT_NOT_NULL">
         <el-switch v-model="form.enableForced" :active-value="1" :inactive-value="0">
@@ -34,7 +34,7 @@
 </template>
 <script>
 import { deviceUpdateSave } from '@/api/deviceUpdate'
-import { getStringRule, NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
+import { getStringRule, NOT_NULL, SELECT_NOT_NULL, getNumberRule } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
 import api from '@/api/API'
 import { getToken } from '@/libs/storage'
@@ -60,7 +60,8 @@ export default {
       rules: {
         Len20: getStringRule(1, 20),
         SELECT_NOT_NULL,
-        NOT_NULL
+        NOT_NULL,
+        number: getNumberRule(true)
       },
       fileList: [],
       view: false
