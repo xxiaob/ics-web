@@ -1,11 +1,19 @@
 <template>
   <div class="jc-main-container-warp">
     <tab-filter @filter="goFilter"></tab-filter>
+
+    <el-card class="jc-echart-card jc-mt">
+      <el-row :gutter="0">
+        <jc-statistics :statistics="statistics"></jc-statistics>
+        <jc-service :list="list"></jc-service>
+      </el-row>
+    </el-card>
+
     <el-card class="jc-table-card jc-mt">
       <div slot="header" class="jc-card-header">
         <div class="jc-card-title">组织业务</div>
       </div>
-      <el-table :data="list" v-loading="loading" row-key="id" class="jc-table" max-height="500">
+      <el-table :data="list" v-loading="loading" row-key="id" class="jc-table">
         <el-table-column type="index" :index="indexMethod" label="序号" width="50"></el-table-column>
         <el-table-column prop="orgName" label="组织名称"></el-table-column>
         <el-table-column prop="inCircleJourney" label="巡逻里程(km)"></el-table-column>
@@ -24,13 +32,6 @@
           </template>
         </el-table-column>
       </el-table>
-    </el-card>
-
-    <el-card class="jc-echart-card jc-mt">
-      <el-row :gutter="0">
-        <jc-statistics :statistics="statistics"></jc-statistics>
-        <jc-service :list="list"></jc-service>
-      </el-row>
     </el-card>
 
     <jc-detail :info="detailInfo" :filter="filter" :visible.sync="detailVisible"></jc-detail>

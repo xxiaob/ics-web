@@ -1,11 +1,19 @@
 <template>
   <div class="jc-main-container-warp">
     <tab-filter @filter="goFilter"></tab-filter>
+
+    <el-card class="jc-echart-card jc-mt">
+      <el-row :gutter="0">
+        <jc-category :category="category"></jc-category>
+        <jc-complete :taskRate="taskRate"></jc-complete>
+      </el-row>
+    </el-card>
+
     <el-card class="jc-table-card jc-mt">
       <div slot="header" class="jc-card-header">
         <div class="jc-card-title">组织业务</div>
       </div>
-      <el-table :data="list" v-loading="loading" row-key="id" class="jc-table" max-height="500">
+      <el-table :data="list" v-loading="loading" row-key="id" class="jc-table">
         <el-table-column type="index" :index="indexMethod" label="序号" width="50"></el-table-column>
         <el-table-column prop="orgName" label="组织名称" min-width="120"></el-table-column>
         <el-table-column prop="eventCount" label="事件上报"></el-table-column>
@@ -40,13 +48,6 @@
           </template>
         </el-table-column>
       </el-table>
-    </el-card>
-
-    <el-card class="jc-echart-card jc-mt">
-      <el-row :gutter="0">
-        <jc-category :category="category"></jc-category>
-        <jc-complete :taskRate="taskRate"></jc-complete>
-      </el-row>
     </el-card>
 
     <jc-detail :info="detailInfo" :filter="filter" :visible.sync="detailVisible"></jc-detail>
