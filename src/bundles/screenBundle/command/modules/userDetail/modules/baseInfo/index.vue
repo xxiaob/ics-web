@@ -22,7 +22,7 @@
     </div>
     <div class="jc-detail-warp">
       <div class="jc-detail-label">职位：</div>
-      <div class="jc-detail-content" v-text="detail.positionName || '--'"></div>
+      <div class="jc-detail-content" v-text="positionNames"></div>
     </div>
     <div class="jc-detail-warp">
       <div class="jc-detail-label">所属组织：</div>
@@ -61,6 +61,15 @@ export default {
         return rolesName.join('，')
       }
       return '--'
+    },
+    positionNames() {
+      if (this.detail.positions && this.detail.positions.length) {
+        const positionNames = this.detail.positions.map(item=>item.positionName)
+
+        return positionNames.join('，')
+      } else {
+        return '--'
+      }
     }
   },
   watch: {
