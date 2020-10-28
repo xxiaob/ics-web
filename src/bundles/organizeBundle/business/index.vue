@@ -1,16 +1,16 @@
 <template>
   <div class="jc-main-container-warp">
-    <tab-filter @filter="goFilter" ></tab-filter>
+    <tab-filter @filter="goFilter"></tab-filter>
     <el-card class="jc-table-card jc-mt">
       <div slot="header" class="jc-card-header">
         <div class="jc-card-title">组织业务</div>
       </div>
-      <el-table :data="list" v-loading="loading" row-key="id" class="jc-table" max-height="600">
+      <el-table :data="list" v-loading="loading" row-key="id" class="jc-table" max-height="500">
         <el-table-column type="index" :index="indexMethod" label="序号" width="50"></el-table-column>
         <el-table-column prop="orgName" label="组织名称" min-width="120"></el-table-column>
         <el-table-column prop="eventCount" label="事件上报"></el-table-column>
-        <el-table-column  label="事件类型Top3" min-width='100'>
-           <template slot-scope="scope">
+        <el-table-column label="事件类型Top3" min-width='100'>
+          <template slot-scope="scope">
             <p v-for="(eventType,index) in scope.row.eventTypeFilter" :key="index">{{eventType.typeName}}</p>
           </template>
         </el-table-column>
@@ -42,7 +42,7 @@
       </el-table>
     </el-card>
 
-     <el-card class="jc-echart-card jc-mt">
+    <el-card class="jc-echart-card jc-mt">
       <el-row :gutter="0">
         <jc-category :category="category"></jc-category>
         <jc-complete :taskRate="taskRate"></jc-complete>
@@ -151,36 +151,32 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-
-
-.jc-table{
-  & >>> .el-table__row{
+.jc-table {
+  & >>> .el-table__row {
     &:first-child {
-      color: $jc-color-primary
+      color: $jc-color-primary;
     }
   }
 }
-/deep/ .jc-echart-card{
-  & > .el-card__body{
-    padding-top:0;
+/deep/ .jc-echart-card {
+  & > .el-card__body {
+    padding-top: 0;
 
-    .el-card__header{
+    .el-card__header {
       padding-left: 0;
     }
-
   }
 
-  .el-card{
+  .el-card {
     box-shadow: none;
     border: none;
 
-    .el-card__body{
-      padding:4px;
+    .el-card__body {
+      padding: 4px;
     }
   }
 
-
-  .jc-type-echarts{
+  .jc-type-echarts {
     height: 260px;
   }
 }

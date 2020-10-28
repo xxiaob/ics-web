@@ -1,11 +1,11 @@
 <template>
   <div class="jc-main-container-warp">
-    <tab-filter @filter="goFilter"  ></tab-filter>
+    <tab-filter @filter="goFilter"></tab-filter>
     <el-card class="jc-table-card jc-mt">
       <div slot="header" class="jc-card-header">
         <div class="jc-card-title">组织业务</div>
       </div>
-      <el-table :data="list" v-loading="loading" row-key="id" class="jc-table" max-height="600">
+      <el-table :data="list" v-loading="loading" row-key="id" class="jc-table" max-height="500">
         <el-table-column type="index" :index="indexMethod" label="序号" width="50"></el-table-column>
         <el-table-column prop="orgName" label="组织名称"></el-table-column>
         <el-table-column prop="inCircleJourney" label="巡逻里程(km)"></el-table-column>
@@ -26,7 +26,7 @@
       </el-table>
     </el-card>
 
-     <el-card class="jc-echart-card jc-mt">
+    <el-card class="jc-echart-card jc-mt">
       <el-row :gutter="0">
         <jc-statistics :statistics="statistics"></jc-statistics>
         <jc-service :list="list"></jc-service>
@@ -107,36 +107,34 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.jc-table{
-  & >>> .el-table__row{
+.jc-table {
+  & >>> .el-table__row {
     &:first-child {
-      color: $jc-color-primary
+      color: $jc-color-primary;
     }
   }
 }
 
-/deep/ .jc-echart-card{
-  & > .el-card__body{
-    padding-top:0;
+/deep/ .jc-echart-card {
+  & > .el-card__body {
+    padding-top: 0;
     padding-bottom: 6px;
 
-    .el-card__header{
+    .el-card__header {
       padding-left: 0;
     }
-
   }
 
-  .el-card{
+  .el-card {
     box-shadow: none;
     border: none;
 
-    .el-card__body{
-      padding:4px;
+    .el-card__body {
+      padding: 4px;
     }
   }
 
-
-  .jc-type-echarts{
+  .jc-type-echarts {
     height: 260px;
   }
 }
