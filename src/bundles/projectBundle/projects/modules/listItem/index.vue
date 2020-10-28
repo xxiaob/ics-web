@@ -5,8 +5,15 @@
       <i class="iconfont iconlujing jc-del" @click="del"></i>
       <i class="jc-setting el-icon-setting" @click="$emit('manage')"></i>
       <span v-if="projectType==PROJECT_TYPES.EmergencySupport">
-        <i class="jc-play iconfont iconkaishi" title="立即开始" @click="start" v-show="projectSC=='jc-not-start'"></i>
-        <i class="jc-play iconfont iconguanbi" title="立即关闭" @click="stop" v-show="projectSC=='jc-running'"></i>
+        <el-switch
+          v-show="projectSC!='jc-finished'"
+          v-model="projectStatus"
+          active-color="#13ce66"
+          inactive-color="#cccccc"
+          :title="projectStatus===false?'立即开始':'立即关闭'"
+          @change="switchChange"
+          >
+        </el-switch>
         <i class="jc-play iconfont iconjieshu" title="已结束" v-show="projectSC=='jc-finished'"></i>
       </span>
     </div>
@@ -39,7 +46,8 @@ export default {
   props: ['item', 'projectType'],
   data() {
     return {
-      PROJECT_TYPES
+      PROJECT_TYPES,
+      projectStatus: false
     }
   },
   computed: {
@@ -57,9 +65,10 @@ export default {
       let nowTime = new Date().getTime()
 
       if (startTime > nowTime) {
+        this.projectStatus = false
         return 'jc-not-start'
       }
-
+      this.projectStatus = true
       if (!this.item.endTime) {
         return 'jc-running'
       }
@@ -73,6 +82,19 @@ export default {
     }
   },
   methods: {
+    switchChange(v) {
+      console.log('switchChange', v, this.projectStatus)
+      this.$confirm(`确认${v ? '立即开始' : '立即关闭'}项目`, '提示', { type: 'warning' }).then(async () => {
+        if (v) {
+          this.confirmStartOrStop(PROJECT_OPERATES.START)
+        } else {
+          this.confirmStartOrStop(PROJECT_OPERATES.STOP)
+        }
+      }).catch(() => {
+        console.log('catch')
+        this.projectStatus = !v
+      })
+    },
     getItemClass(projectType) {
       let types = new Map([[PROJECT_TYPES.EmergencySupport, 'jc-project-es'], [PROJECT_TYPES.SpecialControl, 'jc-project-sc']])
 
@@ -91,22 +113,6 @@ export default {
         console.log(error)
       }
     },
-    async start() {
-      try {
-        await this.$confirm('确认立即开始该项目', '提示', { type: 'warning' })
-        this.confirmStartOrStop(PROJECT_OPERATES.START)
-      } catch (error) {
-        console.log(error)
-      }
-    },
-    async stop() {
-      try {
-        await this.$confirm('确认立即关闭该项目', '提示', { type: 'warning' })
-        this.confirmStartOrStop(PROJECT_OPERATES.STOP)
-      } catch (error) {
-        console.log(error)
-      }
-    },
     async confirmStartOrStop(type) {
       await startAndCloseProject({ projectId: this.item.projectId, type })
       this.$message.success('操作成功')
@@ -115,3 +121,28 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+.el-switch{
+  position: relative;
+  top: -1px;
+  margin-right: 10px;
+  width: 30px;
+  height: 14px;
+  line-height: 14px;
+  /deep/{
+    &.is-checked .el-switch__core::after {
+      margin-left: -13px;
+    }
+    .el-switch__core{
+      border: none;
+      height: inherit;
+      line-height: inherit;
+      &::after{
+        width: 12px;
+        height: 12px;
+      }
+    }
+  }
+
+}
+</style>
