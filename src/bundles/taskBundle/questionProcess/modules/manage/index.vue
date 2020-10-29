@@ -10,6 +10,11 @@
           </el-option>
         </el-select>
       </el-form-item>
+      <el-form-item prop="problemSource" label="问题来源" :rules="rules.SELECT_NOT_NULL">
+        <el-select v-model="form.problemSource" placeholder="选择问题来源">
+          <el-option v-for="item in QUESTION_SOURCES.VALUES" :key="item.value" :label="item.label" :value="item.value"></el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item label="问题位置" prop="position" :rules="rules.NOT_NULL">
         <el-input v-model="form.position" style="display:none"></el-input>
         <span>{{form.positionName}}</span>
@@ -37,6 +42,7 @@
 </template>
 <script>
 import { questionSave } from '@/api/question'
+import { QUESTION_SOURCES } from '@/constant/Dictionaries'
 import { getStringRule, NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
 
@@ -46,7 +52,8 @@ let defaultForm = {
   problemType: '',
   uploadFilePaths: [],
   position: '',
-  positionName: ''
+  positionName: '',
+  problemSource: ''
 }
 
 export default {
@@ -70,6 +77,7 @@ export default {
   },
   data() {
     return {
+      QUESTION_SOURCES,
       position: {},
       loading: false,
       rules: {
@@ -91,7 +99,7 @@ export default {
   methods: {
     formatFormData() {
       if (this.options) {
-        const { id, taskId, orgId, userName, problemDesc, problemTitle, problemType, uploadFilePaths, position, positionName } = this.options
+        const { id, taskId, orgId, userName, problemDesc, problemTitle, problemType, uploadFilePaths, position, positionName, problemSource } = this.options
 
         this.position = { position: position, name: positionName }
         return {
@@ -104,6 +112,7 @@ export default {
           positionName,
           position,
           problemType: problemType.toString(),
+          problemSource: problemSource && (problemSource + ''),
           uploadFilePaths
         }
       } else {

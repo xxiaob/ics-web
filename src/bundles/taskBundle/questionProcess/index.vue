@@ -14,6 +14,7 @@
         <el-table :data="list" v-loading="loading" row-key="id" class="jc-table">
           <el-table-column type="index" :index="indexMethod" label="序号" width="50"></el-table-column>
           <el-table-column prop="problemType" label="问题类型" :formatter="formatType"></el-table-column>
+          <el-table-column prop="problemSource" label="问题来源" :formatter="formatSource"></el-table-column>
           <el-table-column prop="userName" label="反馈人"></el-table-column>
           <el-table-column prop="orgName" label="所属组织"></el-table-column>
           <el-table-column prop="problemTitle" label="标题"></el-table-column>
@@ -41,7 +42,7 @@
 </template>
 <script>
 import { questionList, questionDel, questionStart, questionGet, questionTypeList } from '@/api/question'
-import { QUESTION_TYPES } from '@/constant/Dictionaries'
+import { QUESTION_TYPES, QUESTION_SOURCES } from '@/constant/Dictionaries'
 import { formatDate } from '@/libs/util'
 import PaginationMixins from '@/mixins/PaginationMixins'
 import { organizationList } from '@/api/organization'
@@ -89,6 +90,9 @@ export default {
       const type = this.types.filter(item=>item.id == cellValue)
 
       return (type[0] && type[0].typeName) || ''
+    },
+    formatSource(row, column, cellValue) {
+      return QUESTION_SOURCES.toString(cellValue + '')
     },
     formatOrg(row, column, cellValue) {
       return this.orgObj[cellValue]

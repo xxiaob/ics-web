@@ -24,6 +24,9 @@
           <el-form-item label="问题类型">
             <span>{{formatType(form.problemType)}}</span>
           </el-form-item>
+          <el-form-item label="问题来源">
+            <span>{{formatSource(form.problemSource)}}</span>
+          </el-form-item>
           <el-form-item label="问题位置">
             <span>{{form.positionName}}</span>
           </el-form-item>
@@ -73,6 +76,7 @@
 
 </template>
 <script>
+import { QUESTION_SOURCES } from '@/constant/Dictionaries'
 import { questionReport, exportDetail, fileDownload } from '@/api/question'
 import MediaMixins from '../../../mixins/MediaMixins'
 
@@ -135,6 +139,9 @@ export default {
       const type = this.types.filter(item=>item.id == value)
 
       return (type[0] && type[0].typeName) || ''
+    },
+    formatSource(value) {
+      return QUESTION_SOURCES.toString(value + '')
     },
     //反馈至上级
     toSuperior() {

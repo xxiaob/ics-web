@@ -9,6 +9,11 @@
           <el-option v-for="item in types" :key="item.id" :label="item.typeName" :value="item.id"></el-option>
         </el-select>
       </el-form-item>
+      <el-form-item prop="problemSource" label="问题来源">
+        <el-select v-model="form.problemSource" placeholder="选择问题来源">
+          <el-option v-for="item in QUESTION_SOURCES.VALUES" :key="item.value" :label="item.label" :value="item.value"></el-option>
+        </el-select>
+      </el-form-item>
       <el-form-item prop="" label="时间">
         <el-date-picker v-model="date" @change="changeDate" value-format="timestamp" type="datetimerange" range-separator="-" start-placeholder="开始时间" end-placeholder="结束时间">
         </el-date-picker>
@@ -26,6 +31,7 @@
 </template>
 <script>
 import { exportList } from '@/api/question'
+import { QUESTION_SOURCES } from '@/constant/Dictionaries'
 export default {
   name: 'TaskQuestionProcessFilter',
   props: {
@@ -40,12 +46,14 @@ export default {
   },
   data() {
     return {
+      QUESTION_SOURCES,
       form: {
         problemType: '',
         startDate: '',
         endDate: '',
         problemDesc: '',
-        orgId: ''
+        orgId: '',
+        problemSource: ''
       },
       date: null
     }
