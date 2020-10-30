@@ -2,7 +2,7 @@
   <div class="jc-main-container-warp">
 
     <div v-show="!detailShow">
-      <tab-filter :types="types" :orgTree="orgTree" @filter="goFilter"></tab-filter>
+      <tab-filter :types="types" @filter="goFilter"></tab-filter>
       <el-card class="jc-table-card jc-mt">
         <div slot="header" class="jc-card-header">
           <div class="jc-card-title">列表内容</div>
@@ -31,15 +31,15 @@
   </div>
 </template>
 <script>
-import { questionList, questionGet, questionTypeList } from '@/api/question'
+import { questionList, questionGet, questionTypeTree } from '@/api/question'
 import { QUESTION_SOURCES } from '@/constant/Dictionaries'
 import { formatDate } from '@/libs/util'
 import PaginationMixins from '@/mixins/PaginationMixins'
-import OrgTreeMixins from '@/mixins/OrgTreeMixins'
+
 
 export default {
   name: 'TaskQuestionProcessIndex',
-  mixins: [PaginationMixins, OrgTreeMixins],
+  mixins: [PaginationMixins],
   components: {
     TabFilter: () => import('./modules/tabFilter'),
     JcDetail: () => import('../questionProcess/modules/detail')
@@ -56,18 +56,12 @@ export default {
     }
   },
   async created() {
-    await this.getOrgTree()
     await this.getTypeTree()
     this.initData()
   },
   methods: {
     formatTime(row, column, cellValue) {
       return formatDate(cellValue)
-    },
-    formatType(row, column, cellValue) {
-      const type = this.types.filter(item=>item.id == cellValue)
-
-      return (type[0] && type[0].typeName) || ''
     },
     formatSource(row, column, cellValue) {
       return QUESTION_SOURCES.toString(cellValue + '')
@@ -94,7 +88,7 @@ export default {
       return trees
     },
     async getTypeTree() {
-      const res = await questionTypeList()
+      const res = await questionTypeTree()
 
       this.types = this.formatTypeTree(res)
     },

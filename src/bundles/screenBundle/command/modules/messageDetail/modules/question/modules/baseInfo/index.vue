@@ -74,7 +74,7 @@
 
 </template>
 <script>
-import { questionReport, questionGet, questionTypeList, getProblemAuth } from '@/api/question'
+import { questionReport, questionGet, getProblemAuth } from '@/api/question'
 import MediaMixins from '@/bundles/taskBundle/mixins/MediaMixins'
 import { MESSAGE_DATA_TYPES, QUESTION_SOURCES } from '@/constant/Dictionaries'
 
@@ -94,7 +94,6 @@ export default {
     return {
       loading: false,
       form: {},
-      types: [],
       question: null,
       TaskManageShow: false,
       isSendScreen: false
@@ -111,7 +110,6 @@ export default {
     }
   },
   async created() {
-    this.types = await questionTypeList() || []
     if (this.info && this.info.id) {
       this.getDetail()
     }
@@ -147,11 +145,6 @@ export default {
           this.loading = false
         }
       }
-    },
-    formatType(value) {
-      const type = this.types.filter(item=>item.id == value)
-
-      return (type[0] && type[0].typeName) || ''
     },
     formatSource(value) {
       return QUESTION_SOURCES.toString(value + '')

@@ -30,14 +30,13 @@
 <script>
 import { exportList } from '@/api/question'
 import { QUESTION_SOURCES } from '@/constant/Dictionaries'
+import OrgTreeMixins from '@/mixins/OrgTreeMixins'
+
 export default {
   name: 'TaskQuestionProcessFilter',
+  mixins: [ OrgTreeMixins],
   props: {
     types: {
-      type: Array,
-      default: ()=>[]
-    },
-    orgTree: {
       type: Array,
       default: ()=>[]
     }
@@ -57,6 +56,9 @@ export default {
       },
       date: null
     }
+  },
+  created() {
+    this.getOrgTree()
   },
   methods: {
     typeChange(v) {

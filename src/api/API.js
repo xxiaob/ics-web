@@ -149,7 +149,7 @@ export default {
     start: 'task-service/problem/start',
     report: 'task-service/problem/report',
     get: 'task-service/problem/getProblemTask',
-    typeList: 'task-service/problem/getProblemTypeTree',
+    typeTree: 'task-service/problem/getProblemTypeTree',
     getProblemAuth: 'task-service/problem/getProblemAuth',
     exportList: 'task-service/problem/listExport',
     exportDetail: 'task-service/problem/detailExport',

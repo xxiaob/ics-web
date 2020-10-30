@@ -16,9 +16,6 @@
       <el-form-item label="车牌号 : ">
         <span>{{form.carNumber}}</span>
       </el-form-item>
-      <!-- <el-form-item label="问题类型 : ">
-        <span>{{formatType(form.problemType)}}</span>
-      </el-form-item> -->
       <el-form-item label="运输公司 : ">
         <span>{{form.transportCompany}}</span>
       </el-form-item>
@@ -36,7 +33,7 @@
 </template>
 
 <script>
-import { questionGet, questionTypeList } from '@/api/question'
+import { questionGet } from '@/api/question'
 import JcMedia from '../../components/media'
 import { MESSAGE_DATA_TYPES, SYSTEM_MESSAGE_TYPE } from '@/constant/Dictionaries'
 
@@ -51,7 +48,6 @@ export default {
   },
   data() {
     return {
-      types: [],
       form: {}
     }
   },
@@ -64,15 +60,9 @@ export default {
     }
   },
   async created() {
-    this.types = await questionTypeList() || []
     this.getDetail()
   },
   methods: {
-    formatType(value) {
-      const type = this.types.filter(item=>item.id == value)
-
-      return (type[0] && type[0].typeName) || ''
-    },
     async getDetail() {
       if (this.options && this.options.id && this.options.type === MESSAGE_DATA_TYPES.QUESTION && this.options.systemSourceType == SYSTEM_MESSAGE_TYPE.DREGS) {
         try {

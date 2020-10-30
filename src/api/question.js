@@ -72,11 +72,11 @@ export function questionReport(data) {
   return axios.post(API.question.report, data)
 }
 /**
- * 问题类型列表
+ * 问题类型树
  * @returns {Object} axios 对象
  */
-export function questionTypeList() {
-  return axios.post(API.question.typeList)
+export function questionTypeTree() {
+  return axios.post(API.question.typeTree)
 }
 /**
  * 用户是否具有问题处理权限

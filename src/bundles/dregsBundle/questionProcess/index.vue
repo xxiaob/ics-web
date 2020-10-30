@@ -14,7 +14,6 @@
         <el-table :data="list" v-loading="loading" row-key="id" class="jc-table">
           <el-table-column type="index" :index="indexMethod" label="序号" width="50"></el-table-column>
           <el-table-column prop="problemTitle" label="问题标题"></el-table-column>
-          <!-- <el-table-column prop="problemType" label="问题类型" :formatter="formatType"></el-table-column> -->
           <el-table-column prop="carNumber" label="车牌号"></el-table-column>
           <el-table-column prop="userName" label="反馈人"></el-table-column>
           <el-table-column prop="problemDesc" label="问题描述" show-overflow-tooltip>
@@ -22,7 +21,6 @@
               <div v-html="scope.row.problemDesc"></div>
             </template>
           </el-table-column>
-          <!-- <el-table-column prop="orgName" label="所属组织"></el-table-column> -->
           <el-table-column prop="statusName" label="状态"></el-table-column>
           <el-table-column prop="createTime" label="创建时间" :formatter="formatTime" width="140"></el-table-column>
           <el-table-column width="90" label="操作">
@@ -44,7 +42,7 @@
   </div>
 </template>
 <script>
-import { questionList, questionDel, questionStart, questionGet, questionTypeList } from '@/api/question'
+import { questionList, questionDel, questionStart, questionGet } from '@/api/question'
 import { QUESTION_TYPES } from '@/constant/Dictionaries'
 import { formatDate } from '@/libs/util'
 import PaginationMixins from '@/mixins/PaginationMixins'
@@ -61,7 +59,6 @@ export default {
   },
   data() {
     return {
-      types: [],
       orgTree: [],
       list: [],
       loading: false,
@@ -81,17 +78,11 @@ export default {
   },
   async created() {
     await this.getOrgTree()
-    this.types = await questionTypeList() || []
     this.initData()
   },
   methods: {
     formatTime(row, column, cellValue) {
       return formatDate(cellValue)
-    },
-    formatType(row, column, cellValue) {
-      const type = this.types.filter(item=>item.id == cellValue)
-
-      return (type[0] && type[0].typeName) || ''
     },
     formatOrg(row, column, cellValue) {
       return this.orgObj[cellValue]

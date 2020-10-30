@@ -41,7 +41,7 @@
   </div>
 </template>
 <script>
-import { questionList, questionDel, questionStart, questionGet, questionTypeList } from '@/api/question'
+import { questionList, questionDel, questionStart, questionGet, questionTypeTree } from '@/api/question'
 import { QUESTION_TYPES, QUESTION_SOURCES } from '@/constant/Dictionaries'
 import { formatDate } from '@/libs/util'
 import PaginationMixins from '@/mixins/PaginationMixins'
@@ -82,11 +82,6 @@ export default {
     formatTime(row, column, cellValue) {
       return formatDate(cellValue)
     },
-    formatType(row, column, cellValue) {
-      const type = this.types.filter(item=>item.id == cellValue)
-
-      return (type[0] && type[0].typeName) || ''
-    },
     formatSource(row, column, cellValue) {
       return QUESTION_SOURCES.toString(cellValue + '')
     },
@@ -112,7 +107,7 @@ export default {
       return trees
     },
     async getTypeTree() {
-      const res = await questionTypeList()
+      const res = await questionTypeTree()
 
       this.types = this.formatTypeTree(res)
     },

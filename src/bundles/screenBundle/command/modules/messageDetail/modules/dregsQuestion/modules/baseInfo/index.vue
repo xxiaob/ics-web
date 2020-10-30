@@ -22,10 +22,6 @@
         <div class="jc-detail-label">车牌号</div>
         <div class="jc-detail-content">{{form.carNumber}}</div>
       </div>
-      <!-- <div class="jc-detail-warp">
-        <div class="jc-detail-label">问题类型</div>
-        <div class="jc-detail-content">{{formatType(form.problemType)}}</div>
-      </div> -->
       <div class="jc-detail-warp">
         <div class="jc-detail-label">运输公司</div>
         <div class="jc-detail-content">{{form.transportCompany}}</div>
@@ -85,7 +81,7 @@
 
 </template>
 <script>
-import { questionReport, questionGet, getProblemAuth } from '@/api/question'//questionTypeList,
+import { questionReport, questionGet, getProblemAuth } from '@/api/question'
 import MediaMixins from '@/bundles/taskBundle/mixins/MediaMixins'
 import { MESSAGE_DATA_TYPES } from '@/constant/Dictionaries'
 
@@ -105,7 +101,6 @@ export default {
     return {
       loading: false,
       form: {},
-      // types: [],
       question: null,
       TaskManageShow: false,
       isSendScreen: false
@@ -122,7 +117,6 @@ export default {
     }
   },
   async created() {
-    // this.types = await questionTypeList() || []
     if (this.info && this.info.id) {
       this.getDetail()
     }
@@ -159,11 +153,6 @@ export default {
         }
       }
     },
-    // formatType(value) {
-    //   const type = this.types.filter(item=>item.id == value)
-
-    //   return (type[0] && type[0].typeName) || ''
-    // },
     //反馈至上级
     toSuperior() {
       this.$confirm('确认反馈至上级 ', '提示', { type: 'warning' }).then(async () => {
