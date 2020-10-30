@@ -100,9 +100,9 @@ export default {
           x2: 0,
           y2: 0,
           colorStops: [{
-            offset: 0, color: this.colors[key] ? this.colors[key][0] : this.colors[0][0] // 0% 处的颜色
+            offset: 0, color: this.colors[key % 5][0] // 0% 处的颜色
           }, {
-            offset: 1, color: this.colors[key] ? this.colors[key][1] : this.colors[0][1]// 100% 处的颜色
+            offset: 1, color: this.colors[key % 5][1]// 100% 处的颜色
           }],
           global: false // 缺省为 false
         }
