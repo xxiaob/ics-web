@@ -13,7 +13,7 @@
         </div>
         <el-table :data="list" v-loading="loading" row-key="id" class="jc-table">
           <el-table-column type="index" :index="indexMethod" label="序号" width="50"></el-table-column>
-          <el-table-column prop="problemType" label="问题类型" :formatter="formatType"></el-table-column>
+          <el-table-column prop="problemTypeName" label="问题类型"></el-table-column>
           <el-table-column prop="problemSource" label="问题来源" :formatter="formatSource"></el-table-column>
           <el-table-column prop="userName" label="反馈人"></el-table-column>
           <el-table-column prop="orgName" label="所属组织"></el-table-column>

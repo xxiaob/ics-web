@@ -22,7 +22,7 @@
             <span>{{form.problemTitle}}</span>
           </el-form-item>
           <el-form-item label="问题类型">
-            <span>{{formatType(form.problemType)}}</span>
+            <span>{{form.problemTypeName}}</span>
           </el-form-item>
           <el-form-item label="问题来源">
             <span>{{formatSource(form.problemSource)}}</span>

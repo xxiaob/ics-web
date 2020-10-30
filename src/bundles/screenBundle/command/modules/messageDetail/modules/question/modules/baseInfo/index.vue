@@ -20,7 +20,7 @@
       </div>
       <div class="jc-detail-warp">
         <div class="jc-detail-label">问题类型</div>
-        <div class="jc-detail-content">{{formatType(form.problemType)}}</div>
+        <div class="jc-detail-content">{{form.problemTypeName}}</div>
       </div>
       <div class="jc-detail-warp">
         <div class="jc-detail-label">问题来源</div>
