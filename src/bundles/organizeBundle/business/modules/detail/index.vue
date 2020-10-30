@@ -139,7 +139,7 @@ export default {
       this.$emit('update:visible', false)
     },
     downloadDetail() {
-      exportBusinessDetail({ ...this.filter, orgId: this.form.orgId })
+      exportBusinessDetail({ ...this.filter, orgIds: [this.form.orgId] })
     }
   }
 }
