@@ -26,7 +26,7 @@
       </el-card>
     </div>
 
-    <jc-detail v-show="detailShow" :types="types" :info="info" :firstOrgIds="firstOrgIds" :detailShow.sync="detailShow" @save-success="initData"></jc-detail>
+    <jc-detail v-show="detailShow" :info="info" :detailShow.sync="detailShow" @save-success="initData"></jc-detail>
 
   </div>
 </template>
@@ -35,11 +35,11 @@ import { questionList, questionGet, questionTypeList } from '@/api/question'
 import { QUESTION_SOURCES } from '@/constant/Dictionaries'
 import { formatDate } from '@/libs/util'
 import PaginationMixins from '@/mixins/PaginationMixins'
-import { organizationList } from '@/api/organization'
+import OrgTreeMixins from '@/mixins/OrgTreeMixins'
 
 export default {
   name: 'TaskQuestionProcessIndex',
-  mixins: [PaginationMixins],
+  mixins: [PaginationMixins, OrgTreeMixins],
   components: {
     TabFilter: () => import('./modules/tabFilter'),
     JcDetail: () => import('../questionProcess/modules/detail')
@@ -47,19 +47,17 @@ export default {
   data() {
     return {
       types: [],
-      orgTree: [],
       list: [],
       loading: false,
       visible: false,
       info: null,
       filter: {},
-      firstOrgIds: [],
       detailShow: false
     }
   },
   async created() {
     await this.getOrgTree()
-    this.types = await questionTypeList() || []
+    await this.getTypeTree()
     this.initData()
   },
   methods: {
@@ -74,17 +72,17 @@ export default {
     formatSource(row, column, cellValue) {
       return QUESTION_SOURCES.toString(cellValue + '')
     },
-    formatOrgTree(child) {
+    formatTypeTree(child) {
       let trees = []
 
       if (child && child.length) {
         child.forEach(item => {
           let node = {
-            value: item.orgId,
-            label: item.orgName
+            value: item.id || item.typeName,
+            label: item.typeName
           }
 
-          let children = this.formatOrgTree(item.children)
+          let children = this.formatTypeTree(item.children)
 
           if (children && children.length) {
             node.children = children
@@ -95,10 +93,10 @@ export default {
       }
       return trees
     },
-    async getOrgTree() {
-      const res = await organizationList()
+    async getTypeTree() {
+      const res = await questionTypeList()
 
-      this.orgTree = this.formatOrgTree(res)
+      this.types = this.formatTypeTree(res)
     },
     async initData() {
       if (!this.loading) {

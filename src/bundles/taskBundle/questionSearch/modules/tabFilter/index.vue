@@ -4,7 +4,7 @@
       <el-form-item prop="orgId" label="所属组织">
         <el-cascader :options="orgTree" v-model="form.orgId" :props="{expandTrigger: 'hover', emitPath: false,checkStrictly:true }" clearable @change="orgChange" ref="orgCascader"></el-cascader>
       </el-form-item>
-       <el-form-item label="问题类型">
+      <el-form-item label="问题类型">
         <el-cascader :options="types" v-model="problemTypeArr" :props="{expandTrigger: 'hover', checkStrictly:true }" clearable @change="typeChange" ref="typeCascader"></el-cascader>
       </el-form-item>
       <el-form-item prop="problemSource" label="问题来源">

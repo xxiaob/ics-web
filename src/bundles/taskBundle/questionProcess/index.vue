@@ -34,9 +34,9 @@
       </el-card>
     </div>
 
-    <jc-detail v-show="detailShow" :types="types" :info="info" :orgTree="orgTree" :user="user" :firstOrgIds="firstOrgIds" :detailShow.sync="detailShow" @save-success="initData"></jc-detail>
+    <jc-detail v-show="detailShow" :info="info" :detailShow.sync="detailShow" @save-success="initData"></jc-detail>
 
-    <jc-manage :types="types" :orgTree="orgTree" :orgId="orgId" :options="info" :visible.sync="visible" @save-success="initData"></jc-manage>
+    <jc-manage :types="types" :orgId="orgId" :options="info" :visible.sync="visible" @save-success="initData"></jc-manage>
 
   </div>
 </template>
@@ -45,7 +45,6 @@ import { questionList, questionDel, questionStart, questionGet, questionTypeList
 import { QUESTION_TYPES, QUESTION_SOURCES } from '@/constant/Dictionaries'
 import { formatDate } from '@/libs/util'
 import PaginationMixins from '@/mixins/PaginationMixins'
-import { organizationList } from '@/api/organization'
 import { createNamespacedHelpers } from 'vuex'
 const { mapState } = createNamespacedHelpers('user')
 
@@ -60,7 +59,6 @@ export default {
   data() {
     return {
       types: [],
-      orgTree: [],
       list: [],
       loading: false,
       visible: false,
@@ -70,7 +68,6 @@ export default {
         selectType: QUESTION_TYPES.PENDING
       },
       orgId: '',
-      firstOrgIds: [],
       detailShow: false
     }
   },
@@ -78,7 +75,6 @@ export default {
     ...mapState(['user'])
   },
   async created() {
-    await this.getOrgTree()
     await this.getTypeTree()
     this.initData()
   },
@@ -93,30 +89,6 @@ export default {
     },
     formatSource(row, column, cellValue) {
       return QUESTION_SOURCES.toString(cellValue + '')
-    },
-    formatOrg(row, column, cellValue) {
-      return this.orgObj[cellValue]
-    },
-    formatOrgTree(child) {
-      let trees = []
-
-      if (child && child.length) {
-        child.forEach(item => {
-          let node = {
-            value: item.orgId,
-            label: item.orgName
-          }
-
-          let children = this.formatOrgTree(item.children)
-
-          if (children && children.length) {
-            node.children = children
-          }
-
-          trees.push(node)
-        })
-      }
-      return trees
     },
     formatTypeTree(child) {
       let trees = []
@@ -143,12 +115,6 @@ export default {
       const res = await questionTypeList()
 
       this.types = this.formatTypeTree(res)
-    },
-    async getOrgTree() {
-      const res = await organizationList()
-
-      this.orgTree = this.formatOrgTree(res)
-      this.firstOrgIds = res.map(item=>item.orgId)
     },
     async initData() {
       if (!this.loading) {

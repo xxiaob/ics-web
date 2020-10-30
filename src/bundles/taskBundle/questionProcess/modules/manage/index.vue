@@ -23,7 +23,6 @@
         </div>
       </el-form-item>
       <el-form-item label="问题描述" prop="problemDesc" :rules="rules.NOT_NULL">
-        <!-- <el-input v-model="form.problemDesc" placeholder="请输入问题描述" type="textarea"></el-input> -->
         <jc-editor v-model="form.problemDesc"></jc-editor>
       </el-form-item>
       <el-form-item label="附件" prop="uploadFilePaths">
@@ -58,9 +57,6 @@ export default {
   mixins: [FormMixins],
   props: {
     types: {
-      type: Array
-    },
-    orgTree: {
       type: Array
     },
     orgId: {
