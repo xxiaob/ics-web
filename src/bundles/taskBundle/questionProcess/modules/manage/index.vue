@@ -5,10 +5,7 @@
         <el-input v-model="form.problemTitle" placeholder="请输入问题标题"></el-input>
       </el-form-item>
       <el-form-item label="问题类型" prop="problemType" :rules="rules.SELECT_NOT_NULL">
-        <el-select v-model="form.problemType" placeholder="选择问题类型">
-          <el-option v-for="item in types" :key="item.id" :label="item.typeName" :value="item.id">
-          </el-option>
-        </el-select>
+        <el-cascader :options="types" v-model="form.problemType" :props="{expandTrigger: 'hover', emitPath: false }" clearable></el-cascader>
       </el-form-item>
       <el-form-item prop="problemSource" label="问题来源" :rules="rules.SELECT_NOT_NULL">
         <el-select v-model="form.problemSource" placeholder="选择问题来源">

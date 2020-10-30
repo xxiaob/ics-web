@@ -79,7 +79,7 @@ export default {
   },
   async created() {
     await this.getOrgTree()
-    this.types = await questionTypeList() || []
+    await this.getTypeTree()
     this.initData()
   },
   methods: {
@@ -117,6 +117,32 @@ export default {
         })
       }
       return trees
+    },
+    formatTypeTree(child) {
+      let trees = []
+
+      if (child && child.length) {
+        child.forEach(item => {
+          let node = {
+            value: item.id || item.typeName,
+            label: item.typeName
+          }
+
+          let children = this.formatTypeTree(item.children)
+
+          if (children && children.length) {
+            node.children = children
+          }
+
+          trees.push(node)
+        })
+      }
+      return trees
+    },
+    async getTypeTree() {
+      const res = await questionTypeList()
+
+      this.types = this.formatTypeTree(res)
     },
     async getOrgTree() {
       const res = await organizationList()

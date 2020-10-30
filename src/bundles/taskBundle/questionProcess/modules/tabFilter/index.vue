@@ -7,10 +7,8 @@
       <slot name="manage"></slot>
     </div>
     <el-form ref="form" :inline="true" :model="form" class="jc-tabfilter-form" size="small">
-      <el-form-item prop="problemType" label="问题类型">
-        <el-select v-model="form.problemType" placeholder="选择问题类型">
-          <el-option v-for="item in types" :key="item.id" :label="item.typeName" :value="item.id"></el-option>
-        </el-select>
+      <el-form-item label="问题类型">
+        <el-cascader :options="types" v-model="problemTypeArr" :props="{expandTrigger: 'hover', checkStrictly:true }" clearable @change="typeChange" ref="typeCascader"></el-cascader>
       </el-form-item>
       <el-form-item prop="problemSource" label="问题来源">
         <el-select v-model="form.problemSource" placeholder="选择问题来源">
@@ -46,9 +44,11 @@ export default {
       QUESTION_SOURCES,
       selectTypes: QUESTION_TYPES.VALUES,
       status: QUESTION_TYPES.PENDING,
+      problemTypeArr: [],
       form: {
         selectType: QUESTION_TYPES.PENDING,
         problemType: '',
+        problemBigTypeName: '',
         startDate: '',
         endDate: '',
         problemDesc: '',
@@ -57,10 +57,13 @@ export default {
       date: null
     }
   },
-  created() {
-
-  },
   methods: {
+    typeChange(v) {
+      // console.log('typeChange', v)
+      this.form.problemBigTypeName = v[0]
+      this.form.problemType = v[1]
+      this.$refs.typeCascader.dropDownVisible = false //级联选择器 选择任意一级后隐藏下拉框
+    },
     changeStatus(value) {
       // console.log(value)
       this.reset()
