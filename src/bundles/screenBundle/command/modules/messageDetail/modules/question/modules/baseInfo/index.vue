@@ -2,10 +2,10 @@
   <div class="jc-question">
 
     <div class="jc-view-content" v-loading="loading" element-loading-background="rgba(0, 0, 0, 0)">
-      <div class="jc-detail-warp">
+      <!-- <div class="jc-detail-warp">
         <div class="jc-detail-label">问题ID</div>
         <div class="jc-detail-content">{{form.id}}</div>
-      </div>
+      </div> -->
       <div class="jc-detail-warp">
         <div class="jc-detail-label">上报人</div>
         <div class="jc-detail-content">{{form.userName}}</div>
@@ -20,7 +20,11 @@
       </div>
       <div class="jc-detail-warp">
         <div class="jc-detail-label">问题类型</div>
-        <div class="jc-detail-content">{{formatType(form.problemType)}}</div>
+        <div class="jc-detail-content">{{form.problemTypeName}}</div>
+      </div>
+      <div class="jc-detail-warp">
+        <div class="jc-detail-label">问题来源</div>
+        <div class="jc-detail-content">{{formatSource(form.problemSource)}}</div>
       </div>
       <div class="jc-detail-warp">
         <div class="jc-detail-label">问题位置</div>
@@ -72,7 +76,7 @@
 <script>
 import { questionReport, questionGet, questionTypeList, getProblemAuth } from '@/api/question'
 import MediaMixins from '@/bundles/taskBundle/mixins/MediaMixins'
-import { MESSAGE_DATA_TYPES } from '@/constant/Dictionaries'
+import { MESSAGE_DATA_TYPES, QUESTION_SOURCES } from '@/constant/Dictionaries'
 
 export default {
   name: 'ScreenCommandMessageDetailQuestionBaseInfo',
@@ -148,6 +152,9 @@ export default {
       const type = this.types.filter(item=>item.id == value)
 
       return (type[0] && type[0].typeName) || ''
+    },
+    formatSource(value) {
+      return QUESTION_SOURCES.toString(value + '')
     },
     //反馈至上级
     toSuperior() {

@@ -5,9 +5,11 @@
         <el-input v-model="form.problemTitle" placeholder="请输入问题标题"></el-input>
       </el-form-item>
       <el-form-item label="问题类型" prop="problemType" :rules="rules.SELECT_NOT_NULL">
-        <el-select v-model="form.problemType" placeholder="选择问题类型">
-          <el-option v-for="item in types" :key="item.id" :label="item.typeName" :value="item.id">
-          </el-option>
+        <el-cascader :options="types" v-model="form.problemType" :props="{expandTrigger: 'hover', emitPath: false }" clearable></el-cascader>
+      </el-form-item>
+      <el-form-item prop="problemSource" label="问题来源" :rules="rules.SELECT_NOT_NULL">
+        <el-select v-model="form.problemSource" placeholder="选择问题来源">
+          <el-option v-for="item in QUESTION_SOURCES.VALUES" :key="item.value" :label="item.label" :value="item.value"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item label="问题位置" prop="position" :rules="rules.NOT_NULL">
@@ -21,7 +23,6 @@
         </div>
       </el-form-item>
       <el-form-item label="问题描述" prop="problemDesc" :rules="rules.NOT_NULL">
-        <!-- <el-input v-model="form.problemDesc" placeholder="请输入问题描述" type="textarea"></el-input> -->
         <jc-editor v-model="form.problemDesc"></jc-editor>
       </el-form-item>
       <el-form-item label="附件" prop="uploadFilePaths">
@@ -37,6 +38,7 @@
 </template>
 <script>
 import { questionSave } from '@/api/question'
+import { QUESTION_SOURCES } from '@/constant/Dictionaries'
 import { getStringRule, NOT_NULL, SELECT_NOT_NULL } from '@/libs/rules'
 import FormMixins from '@/mixins/FormMixins'
 
@@ -46,7 +48,8 @@ let defaultForm = {
   problemType: '',
   uploadFilePaths: [],
   position: '',
-  positionName: ''
+  positionName: '',
+  problemSource: ''
 }
 
 export default {
@@ -54,9 +57,6 @@ export default {
   mixins: [FormMixins],
   props: {
     types: {
-      type: Array
-    },
-    orgTree: {
       type: Array
     },
     orgId: {
@@ -70,6 +70,7 @@ export default {
   },
   data() {
     return {
+      QUESTION_SOURCES,
       position: {},
       loading: false,
       rules: {
@@ -91,7 +92,7 @@ export default {
   methods: {
     formatFormData() {
       if (this.options) {
-        const { id, taskId, orgId, userName, problemDesc, problemTitle, problemType, uploadFilePaths, position, positionName } = this.options
+        const { id, taskId, orgId, userName, problemDesc, problemTitle, problemType, uploadFilePaths, position, positionName, problemSource } = this.options
 
         this.position = { position: position, name: positionName }
         return {
@@ -104,6 +105,7 @@ export default {
           positionName,
           position,
           problemType: problemType.toString(),
+          problemSource: problemSource && (problemSource + ''),
           uploadFilePaths
         }
       } else {

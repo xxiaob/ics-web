@@ -4,9 +4,12 @@
       <el-form-item prop="orgId" label="所属组织">
         <el-cascader :options="orgTree" v-model="form.orgId" :props="{expandTrigger: 'hover', emitPath: false,checkStrictly:true }" clearable @change="orgChange" ref="orgCascader"></el-cascader>
       </el-form-item>
-      <el-form-item prop="problemType" label="问题类型">
-        <el-select v-model="form.problemType" placeholder="选择问题类型">
-          <el-option v-for="item in types" :key="item.id" :label="item.typeName" :value="item.id"></el-option>
+      <el-form-item label="问题类型">
+        <el-cascader :options="types" v-model="problemTypeArr" :props="{expandTrigger: 'hover', checkStrictly:true }" clearable @change="typeChange" ref="typeCascader"></el-cascader>
+      </el-form-item>
+      <el-form-item prop="problemSource" label="问题来源">
+        <el-select v-model="form.problemSource" placeholder="选择问题来源">
+          <el-option v-for="item in QUESTION_SOURCES.VALUES" :key="item.value" :label="item.label" :value="item.value"></el-option>
         </el-select>
       </el-form-item>
       <el-form-item prop="" label="时间">
@@ -26,6 +29,7 @@
 </template>
 <script>
 import { exportList } from '@/api/question'
+import { QUESTION_SOURCES } from '@/constant/Dictionaries'
 export default {
   name: 'TaskQuestionProcessFilter',
   props: {
@@ -40,17 +44,27 @@ export default {
   },
   data() {
     return {
+      QUESTION_SOURCES,
+      problemTypeArr: [],
       form: {
         problemType: '',
+        problemBigTypeName: '',
         startDate: '',
         endDate: '',
         problemDesc: '',
-        orgId: ''
+        orgId: '',
+        problemSource: ''
       },
       date: null
     }
   },
   methods: {
+    typeChange(v) {
+      // console.log('typeChange', v)
+      this.form.problemBigTypeName = v[0]
+      this.form.problemType = v[1]
+      this.$refs.typeCascader.dropDownVisible = false //级联选择器 选择任意一级后隐藏下拉框
+    },
     orgChange() {
       this.$refs.orgCascader.dropDownVisible = false //级联选择器 选择任意一级后隐藏下拉框
     },

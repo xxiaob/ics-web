@@ -22,13 +22,15 @@
             <span>{{form.problemTitle}}</span>
           </el-form-item>
           <el-form-item label="问题类型">
-            <span>{{formatType(form.problemType)}}</span>
+            <span>{{form.problemTypeName}}</span>
+          </el-form-item>
+          <el-form-item label="问题来源">
+            <span>{{formatSource(form.problemSource)}}</span>
           </el-form-item>
           <el-form-item label="问题位置">
             <span>{{form.positionName}}</span>
           </el-form-item>
           <el-form-item label="问题描述">
-            <!-- <span>{{form.problemDesc}}</span> -->
             <div v-html="form.problemDesc"></div>
           </el-form-item>
           <el-form-item label="附件">
@@ -54,14 +56,13 @@
         </el-form>
         <div class="jc-detail-footer">
           <el-button v-if="form.handle" @click="toSuperior" :loading="loading" type="primary" size="small">反馈至上级</el-button>
-          <!-- v-if="!firstOrgIds.includes(form.orgId)" -->
           <el-button v-if="form.handle" @click="generateTask" :loading="loading" type="primary" size="small">生成任务</el-button>
           <el-button v-if="form.handle" @click="closeQuestion" :loading="loading" size="small">关闭问题</el-button>
           <el-button size="small" type="primary" @click="downloadFile" v-if="form.uploadFilePaths&&form.uploadFilePaths.length">文件下载</el-button>
           <el-button size="small" type="primary" @click="downloadDetail">报表下载</el-button>
         </div>
 
-        <task-manage :projectId="form.projectId" :orgTree="orgTree" :user="user" :question="question" :visible.sync="TaskManageShow" @save-success="generateTaskSuccess"></task-manage>
+        <task-manage :projectId="form.projectId" :question="question" :visible.sync="TaskManageShow" @save-success="generateTaskSuccess"></task-manage>
 
         <el-dialog title="视频播放" :visible.sync="dialogVideoVisible" width="800px" :close-on-click-modal="false" :append-to-body="true">
           <video v-if="dialogVideoVisible" :src="dialogVideoUrl" autoplay controls width="100%"></video>
@@ -73,28 +74,16 @@
 
 </template>
 <script>
+import { QUESTION_SOURCES } from '@/constant/Dictionaries'
 import { questionReport, exportDetail, fileDownload } from '@/api/question'
 import MediaMixins from '../../../mixins/MediaMixins'
 
 export default {
   name: 'QuestionProcessDetail',
   props: {
-    orgTree: {
-      type: Array
-    },
-    user: {
-      type: Object
-    },
-    types: {
-      type: Array,
-      default: ()=>[]
-    },
     info: {
       type: Object,
       default: ()=>{}
-    },
-    firstOrgIds: {
-      type: Array
     },
     detailShow: {
       type: Boolean
@@ -131,10 +120,8 @@ export default {
     }
   },
   methods: {
-    formatType(value) {
-      const type = this.types.filter(item=>item.id == value)
-
-      return (type[0] && type[0].typeName) || ''
+    formatSource(value) {
+      return QUESTION_SOURCES.toString(value + '')
     },
     //反馈至上级
     toSuperior() {

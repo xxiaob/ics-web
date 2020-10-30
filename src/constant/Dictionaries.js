@@ -60,6 +60,20 @@ export const QUESTION_STATES = new JcEnum([
 ])
 
 /**
+ * 问题处理 - 问题来源
+ */
+export const QUESTION_SOURCES = new JcEnum([
+  { key: 'GOVERNMENT', value: '0', label: '12345' },
+  { key: 'CITYBUILD', value: '1', label: '12319' },
+  { key: 'OTHER', value: '2', label: '其他来源' },
+  { key: 'SELFCREATION', value: '3', label: '自主创建' },
+  { key: 'PROBLEMFEEDBACK', value: '4', label: '网巡问题' },
+  { key: 'DATAMANAGE', value: '5', label: '数字城管' },
+  { key: 'ASSIGNEBYLEADER', value: '6', label: '领导交办' },
+  { key: 'AIINTELLECT', value: '7', label: 'AI诊断异常' }
+])
+
+/**
  * 任务处理 - 任务类型
  */
 export const TASK_TYPES = new JcEnum([
@@ -92,7 +106,7 @@ export const TASK_STATES = new JcEnum([
  * 任务处理 - 任务来源
  */
 export const TASK_SOURCES = new JcEnum([
-  { key: 'government', value: '0', label: '12345' },
+  { key: 'GOVERNMENT', value: '0', label: '12345' },
   { key: 'CITYBUILD', value: '1', label: '12319' },
   { key: 'OTHER', value: '2', label: '其他来源' },
   { key: 'SELFCREATION', value: '3', label: '自主创建' },
