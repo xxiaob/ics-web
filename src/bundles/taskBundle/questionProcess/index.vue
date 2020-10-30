@@ -41,16 +41,17 @@
   </div>
 </template>
 <script>
-import { questionList, questionDel, questionStart, questionGet, questionTypeTree } from '@/api/question'
+import { questionList, questionDel, questionStart, questionGet } from '@/api/question'
 import { QUESTION_TYPES, QUESTION_SOURCES } from '@/constant/Dictionaries'
 import { formatDate } from '@/libs/util'
 import PaginationMixins from '@/mixins/PaginationMixins'
+import TypeTreeMixins from './mixins/TypeTreeMixins'
 import { createNamespacedHelpers } from 'vuex'
 const { mapState } = createNamespacedHelpers('user')
 
 export default {
   name: 'QuestionProcessIndex',
-  mixins: [PaginationMixins],
+  mixins: [PaginationMixins, TypeTreeMixins],
   components: {
     TabFilter: () => import('./modules/tabFilter'),
     JcManage: () => import('./modules/manage'),
@@ -58,7 +59,6 @@ export default {
   },
   data() {
     return {
-      types: [],
       list: [],
       loading: false,
       visible: false,
@@ -74,8 +74,8 @@ export default {
   computed: {
     ...mapState(['user'])
   },
-  async created() {
-    await this.getTypeTree()
+  created() {
+    this.getTypeTree()
     this.initData()
   },
   methods: {
@@ -84,32 +84,6 @@ export default {
     },
     formatSource(row, column, cellValue) {
       return QUESTION_SOURCES.toString(cellValue + '')
-    },
-    formatTypeTree(child) {
-      let trees = []
-
-      if (child && child.length) {
-        child.forEach(item => {
-          let node = {
-            value: item.id || item.typeName,
-            label: item.typeName
-          }
-
-          let children = this.formatTypeTree(item.children)
-
-          if (children && children.length) {
-            node.children = children
-          }
-
-          trees.push(node)
-        })
-      }
-      return trees
-    },
-    async getTypeTree() {
-      const res = await questionTypeTree()
-
-      this.types = this.formatTypeTree(res)
     },
     async initData() {
       if (!this.loading) {

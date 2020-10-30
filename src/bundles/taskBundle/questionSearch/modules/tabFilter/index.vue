@@ -31,16 +31,11 @@
 import { exportList } from '@/api/question'
 import { QUESTION_SOURCES } from '@/constant/Dictionaries'
 import OrgTreeMixins from '@/mixins/OrgTreeMixins'
+import TypeTreeMixins from '@/bundles/taskBundle/questionProcess/mixins/TypeTreeMixins'
 
 export default {
   name: 'TaskQuestionProcessFilter',
-  mixins: [ OrgTreeMixins],
-  props: {
-    types: {
-      type: Array,
-      default: ()=>[]
-    }
-  },
+  mixins: [ OrgTreeMixins, TypeTreeMixins],
   data() {
     return {
       QUESTION_SOURCES,
@@ -59,6 +54,7 @@ export default {
   },
   created() {
     this.getOrgTree()
+    this.getTypeTree()
   },
   methods: {
     typeChange(v) {

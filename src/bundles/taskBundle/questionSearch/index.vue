@@ -2,7 +2,7 @@
   <div class="jc-main-container-warp">
 
     <div v-show="!detailShow">
-      <tab-filter :types="types" @filter="goFilter"></tab-filter>
+      <tab-filter @filter="goFilter"></tab-filter>
       <el-card class="jc-table-card jc-mt">
         <div slot="header" class="jc-card-header">
           <div class="jc-card-title">列表内容</div>
@@ -31,7 +31,7 @@
   </div>
 </template>
 <script>
-import { questionList, questionGet, questionTypeTree } from '@/api/question'
+import { questionList, questionGet } from '@/api/question'
 import { QUESTION_SOURCES } from '@/constant/Dictionaries'
 import { formatDate } from '@/libs/util'
 import PaginationMixins from '@/mixins/PaginationMixins'
@@ -46,7 +46,6 @@ export default {
   },
   data() {
     return {
-      types: [],
       list: [],
       loading: false,
       visible: false,
@@ -55,8 +54,7 @@ export default {
       detailShow: false
     }
   },
-  async created() {
-    await this.getTypeTree()
+  created() {
     this.initData()
   },
   methods: {
@@ -65,32 +63,6 @@ export default {
     },
     formatSource(row, column, cellValue) {
       return QUESTION_SOURCES.toString(cellValue + '')
-    },
-    formatTypeTree(child) {
-      let trees = []
-
-      if (child && child.length) {
-        child.forEach(item => {
-          let node = {
-            value: item.id || item.typeName,
-            label: item.typeName
-          }
-
-          let children = this.formatTypeTree(item.children)
-
-          if (children && children.length) {
-            node.children = children
-          }
-
-          trees.push(node)
-        })
-      }
-      return trees
-    },
-    async getTypeTree() {
-      const res = await questionTypeTree()
-
-      this.types = this.formatTypeTree(res)
     },
     async initData() {
       if (!this.loading) {
