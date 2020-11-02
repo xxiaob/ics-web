@@ -15,7 +15,8 @@ import operationRouter from './operation' //运维
 import superviseRouter from './supervise' //运维
 import dregsRouter from './dregs' //渣土管控
 import organizeRouter from './organize' // 组织信息
-import alarmRouter from './alarm' // 组织信息
+import alarmRouter from './alarm' // 告警台账
+import controlRouter from './control' // 智慧控违
 
 // 解决两次访问相同路由地址报错
 // const originalPush = Router.prototype.push
@@ -44,7 +45,7 @@ let routerOptions = {
       meta: {
         title: '欢迎'
       }
-    }, ...systemRouter, ...taskRouter, ...projectRouter, ...attendRouter, ...overseeRouter, ...recordRouter, ...operationRouter, ...superviseRouter, ...dregsRouter, ...organizeRouter, ...alarmRouter]
+    }, ...systemRouter, ...taskRouter, ...projectRouter, ...attendRouter, ...overseeRouter, ...recordRouter, ...operationRouter, ...superviseRouter, ...dregsRouter, ...organizeRouter, ...alarmRouter, ...controlRouter]
   }, {
     path: '/',
     name: 'fullPage',

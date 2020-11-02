@@ -16,6 +16,7 @@
           <el-table-column prop="problemTitle" label="问题标题"></el-table-column>
           <el-table-column prop="carNumber" label="车牌号"></el-table-column>
           <el-table-column prop="userName" label="反馈人"></el-table-column>
+          <el-table-column prop="dregsProblemTypeName" label="问题类型"></el-table-column>
           <el-table-column prop="problemDesc" label="问题描述" show-overflow-tooltip>
             <template slot-scope="scope">
               <div v-html="scope.row.problemDesc"></div>
@@ -43,6 +44,7 @@
 </template>
 <script>
 import { questionList, questionDel, questionStart, questionGet } from '@/api/question'
+import { getByType } from '@/api/supervise'
 import { QUESTION_TYPES } from '@/constant/Dictionaries'
 import { formatDate } from '@/libs/util'
 import PaginationMixins from '@/mixins/PaginationMixins'
@@ -70,7 +72,8 @@ export default {
       },
       orgId: '',
       firstOrgIds: [],
-      detailShow: false
+      detailShow: false,
+      types: [] // 问题类型
     }
   },
   computed: {
@@ -120,6 +123,7 @@ export default {
         try {
           const { total, resultList } = await questionList({ systemModuleType: 1, ...this.filter, ...this.page })
 
+          this.types = await getByType({ type: 'problemType' })
           this.page.total = total
           this.list = resultList
           this.loading = false

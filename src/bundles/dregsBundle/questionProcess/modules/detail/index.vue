@@ -21,6 +21,9 @@
           <el-form-item label="上报人：">
             <span>{{form.userName}}</span>
           </el-form-item>
+          <el-form-item label="问题类型：">
+            <span>{{form.dregsProblemTypeName}}</span>
+          </el-form-item>
           <!-- <el-form-item label="所属组织">
             <span>{{form.orgName}}</span>
           </el-form-item>

@@ -35,6 +35,7 @@
 </template>
 <script>
 import { questionList, questionGet } from '@/api/question'
+import { getByType } from '@/api/supervise'
 import { formatDate } from '@/libs/util'
 import PaginationMixins from '@/mixins/PaginationMixins'
 import { organizationList } from '@/api/organization'
@@ -55,7 +56,8 @@ export default {
       info: null,
       filter: {},
       firstOrgIds: [],
-      detailShow: false
+      detailShow: false,
+      types: [] // 问题类型
     }
   },
   async created() {
@@ -97,6 +99,8 @@ export default {
         this.loading = true
         try {
           const { total, resultList } = await questionList({ systemModuleType: 1, ...this.filter, ...this.page })
+
+          this.types = await getByType({ type: 'problemType' })
 
           this.page.total = total
           this.list = resultList

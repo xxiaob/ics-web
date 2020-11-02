@@ -34,4 +34,12 @@ export default [{
   meta: {
     title: '渣土管控-告警处理'
   }
-}]
+}, {
+  path: 'dregs/caseRecords',
+  name: 'dregsCaseRecords',
+  component: () => import('@/bundles/dregsBundle/caseRecords'),
+  meta: {
+    title: '渣土管控-案件留痕'
+  }
+}
+]
