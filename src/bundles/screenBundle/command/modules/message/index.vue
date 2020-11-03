@@ -80,7 +80,7 @@ export default {
         time: formatDate(message.createTime)
       }
 
-      if (message.systemSourceType == SYSTEM_MESSAGE_TYPE.DREGS) { //项目业务
+      if (message.systemSourceType == SYSTEM_MESSAGE_TYPE.DREGS || message.systemSourceType == SYSTEM_MESSAGE_TYPE.PROSECUTION) { //项目业务  溧水渣土 溧水控违
         this.tabComponent = 'ProjectVocation'
         this.ProjectVocation.splice(0, 0, item)
         //处理列表只显示最大数量的事件问题
