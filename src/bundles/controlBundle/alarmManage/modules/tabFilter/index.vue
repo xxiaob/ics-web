@@ -10,11 +10,11 @@
           </el-option>
         </el-select>
       </el-form-item> -->
-      <el-form-item prop="reportUserName" label="处置人">
+      <!-- <el-form-item prop="reportUserName" label="处置人">
         <el-input v-model="form.reportUserName" placeholder="请输入处置人"></el-input>
-      </el-form-item>
-      <el-form-item prop="desc" label="处置信息">
-        <el-input v-model="form.desc" placeholder="请输入事件描述"></el-input>
+      </el-form-item> -->
+      <el-form-item prop="desc" label="告警信息">
+        <el-input v-model="form.desc" placeholder="请输入告警信息"></el-input>
       </el-form-item>
       <el-form-item prop="" label="时间">
         <el-date-picker v-model="date" @change="changeDate" value-format="timestamp" type="datetimerange" range-separator="-" start-placeholder="开始日期" end-placeholder="结束日期">
@@ -29,7 +29,8 @@
   </el-card>
 </template>
 <script>
-import { eventManageTypeList, exportList } from '@/api/eventManage'
+// import { eventManageTypeList, exportList } from '@/api/eventManage'
+import { eventManageTypeList } from '@/api/eventManage'
 export default {
   name: 'EventManageFilter',
   props: {
@@ -88,10 +89,6 @@ export default {
     },
     onSubmit() {
       this.$emit('filter', this.form)
-    },
-    exportData() {
-      console.log('event exportList')
-      exportList(this.form)
     }
   }
 }

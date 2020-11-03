@@ -9,21 +9,15 @@
         </div> -->
       </div>
       <el-table :data="list" v-loading="loading" row-key="id" class="jc-table">
-        <el-table-column type="index" :index="indexMethod" label="序号" width="50"></el-table-column>
-        <el-table-column prop="eventTitle" label="事件标题"></el-table-column>
-        <el-table-column prop="carNumber" label="车牌号"></el-table-column>
-        <!-- <el-table-column prop="typeName" label="事件类型"></el-table-column> -->
-        <el-table-column prop="reportUserName" label="处置人"></el-table-column>
-        <el-table-column prop="orgId" label="所属组织" :formatter="formatOrg"></el-table-column>
-        <el-table-column prop="positionName" label="处置地点" show-overflow-tooltip></el-table-column>
-        <el-table-column prop="desc" label="事件描述" show-overflow-tooltip></el-table-column>
+        <el-table-column type="index" :index="indexMethod" label="序号" width="80"></el-table-column>
+        <el-table-column prop="sources" label="信息来源"></el-table-column>
+        <el-table-column prop="mark" label="违建标记"></el-table-column>
+        <el-table-column prop="address" label="建筑地址"></el-table-column>
+        <el-table-column prop="land" label="占地面积" ></el-table-column>
         <el-table-column prop="createTime" label="处置时间" :formatter="formatTime"></el-table-column>
         <el-table-column width="60" label="操作">
           <template slot-scope="scope">
             <el-button type="text" size="mini" icon="el-icon-view" @click="detail(scope.row)" title="查看"></el-button>
-            <!-- :disabled="scope.row.reportUser!==user.userId" -->
-            <!-- <el-button type="text" size="mini" icon="el-icon-edit-outline" @click="manage(scope.row)" title="编辑"></el-button> -->
-            <!-- <el-button type="text" size="mini" icon="el-icon-delete" @click="del(scope.row)" title="删除"></el-button> -->
           </template>
         </el-table-column>
       </el-table>
@@ -35,7 +29,8 @@
   </div>
 </template>
 <script>
-import { eventManageList, eventManageDel, eventManageGet } from '@/api/eventManage'
+// import { eventManageList, eventManageDel, eventManageGet } from '@/api/eventManage'
+import { eventManageDel, eventManageGet } from '@/api/eventManage'
 import { formatDate } from '@/libs/util'
 import PaginationMixins from '@/mixins/PaginationMixins'
 import { organizationList } from '@/api/organization'
@@ -122,26 +117,22 @@ export default {
       if (!this.loading) {
         this.loading = true
         try {
-          const { total, resultList } = await eventManageList({ systemModuleType: 1, ...this.filter, ...this.page })
+          // const { total, resultList } = await eventManageList({ systemModuleType: 1, ...this.filter, ...this.page })
 
-          this.page.total = total
+          // this.page.total = total
+
+          let resultList = new Array(4).fill(null)
           const list = []
 
           if (resultList && resultList.length > 0) {
-            resultList.forEach(item=>{
+            resultList.forEach(()=>{
               list.push({
-                createTime: item.createTime,
-                carNumber: item.carNumber,
-                desc: item.desc,
-                positionName: item.positionName,
-                eventTitle: item.eventTitle,
-                eventNumber: item.eventNumber,
-                eventType: item.eventType,
-                typeName: item.typeName,
-                id: item.id,
-                orgId: item.orgId,
-                reportUser: item.reportUser,
-                reportUserName: item.reportUserName
+                createTime: '2020-07-04',
+                sources: '无人机提取',
+                mark: '疑似漏报',
+                address: '南京大数据产业基地',
+                land: 89
+
               })
             })
           }

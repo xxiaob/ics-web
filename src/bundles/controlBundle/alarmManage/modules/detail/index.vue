@@ -1,73 +1,27 @@
 <template>
-  <el-dialog title="事件详情" :visible.sync="dialogVisible" width="600px" :append-to-body="true" :close-on-click-modal="false" @close="dialogClose" top="5vh">
+  <el-dialog title="告警详情" :visible.sync="dialogVisible" width="600px" :append-to-body="true" :close-on-click-modal="false" @close="dialogClose" top="15vh">
     <el-form ref="form" label-width="100px" :model="form" class="jc-manage-form" size="mini">
-      <!-- <el-form-item label="事件ID：">
-        <span>{{form.eventNumber}}</span>
-      </el-form-item> -->
-      <el-form-item label="事件标题：">
-        <span>{{form.eventTitle}}</span>
+
+      <el-form-item label="信息来源：">
+        <span>{{form.sources}}</span>
       </el-form-item>
-      <el-form-item label="车牌号：">
-        <span>{{form.carNumber}}</span>
+      <el-form-item label="违建类型：">
+        <span>{{form.mark}}</span>
       </el-form-item>
-      <el-form-item label="处置人：">
-        <span>{{form.reportUserName}}</span>
+      <el-form-item label="建筑地址：">
+        <span>{{form.address}}</span>
       </el-form-item>
-      <el-form-item label="处置时间：">
-        <span>{{form.handleDate}}</span>
+      <el-form-item label="占地面积：">
+        <span>{{form.land}}</span>
       </el-form-item>
-      <el-form-item label="处置意见：">
+      <el-form-item label="时间：">
+        <span>{{form.createTime}}</span>
+      </el-form-item>
+      <el-form-item label="图斑：">
         <span>{{form.opinion}}</span>
       </el-form-item>
-      <!-- <el-form-item label="所属组织：">
-        <span>{{form.orgName}}</span>
-      </el-form-item> -->
-      <!-- <el-form-item label="事件类型：">
-        <span>{{form.typeName}}</span>
-      </el-form-item> -->
-      <el-form-item label="事件描述：">
-        <!-- <span>{{form.desc}}</span> -->
-        <div v-html="form.desc"></div>
-      </el-form-item>
-      <el-form-item label="处置地点：">
-        <span>{{form.positionName}}</span>
-      </el-form-item>
-      <el-form-item label="处置意见：">
-        <span>{{form.desc}}</span>
-      </el-form-item>
-      <el-form-item label="处理前图片：">
-        <el-image v-for="url in form.beforePhotos" :key="url" :src="url" :preview-src-list="form.beforePhotos" class="jc-img"></el-image>
-      </el-form-item>
-      <el-form-item label="处理后图片：">
-        <el-image v-for="url in form.afterPhotos" :key="url" :src="url" :preview-src-list="form.afterPhotos" class="jc-img"></el-image>
-      </el-form-item>
-      <el-form-item label="视频文件：">
-        <div class="jc-video" v-for="url in form.videoAddrs" :key="url" @click="showVideo(url)">
-          <video :src="url"></video>
-          <div class="hover">
-            <img class="jc-video-play" src="@/bundles/taskBundle/assets/play.png" alt="">
-          </div>
-        </div>
-      </el-form-item>
-      <el-form-item label="音频文件：" prop="audioAddr">
-        <div v-for="(url,index) in form.audioAddrs" :key="url" class="jc-audio" @click="playAudio(url,index)">
-          <img class="jc-audio-mike" src="@/bundles/taskBundle/assets/mike.png" alt="">
-          <div class="hover">
-            <img class="jc-video-play" src="@/bundles/taskBundle/assets/play.png" alt="" v-show="audioPlayShows[index]">
-            <img class="jc-video-play" src="@/bundles/taskBundle/assets/pause.png" alt="" v-show="!audioPlayShows[index]">
-          </div>
-        </div>
-        <audio v-if="dialogVisible" ref="audio" :src="audioUrl" style="width:0;height:0" @ended="audioEnded"></audio>
-      </el-form-item>
+
     </el-form>
-    <!-- <div slot="footer" class="dialog-footer">
-      <el-button type="primary" @click="download">文件下载</el-button>
-      <el-button type="primary" @click="download">报表下载</el-button>
-      <el-button @click="dialogVisible = false">关闭窗口</el-button>
-    </div> -->
-    <el-dialog title="视频播放" :visible.sync="dialogVideoVisible" width="800px" :close-on-click-modal="false" :append-to-body="true">
-      <video v-if="dialogVideoVisible" :src="dialogVideoUrl" autoplay controls width="100%"></video>
-    </el-dialog>
   </el-dialog>
 </template>
 <script>
@@ -118,8 +72,8 @@ export default {
       const res = await eventManageGet(this.info.id)
 
       this.form = { ...this.info, ...res }
-      this.audios = this.form.audioAddrs
-      this.audioPlayShows = new Array(this.audios.length).fill(true)
+      // this.audios = this.form.audioAddrs
+      // this.audioPlayShows = new Array(this.audios.length).fill(true)
     },
     dialogClose() {
       this.$emit('update:visible', false)
