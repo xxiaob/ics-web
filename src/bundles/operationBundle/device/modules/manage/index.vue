@@ -66,6 +66,7 @@ export default {
   },
   methods: {
     formatFormData() {
+      this.location = {}
       return { deviceName: '', deviceSource: DEVICE_SOURCES.LAW, url: '', location: '' }
     },
     onSubmit() {
