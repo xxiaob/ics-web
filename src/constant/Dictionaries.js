@@ -261,7 +261,8 @@ export const DEVICE_TYPES = new JcEnum([
  */
 export const DEVICE_SOURCES = new JcEnum([
   { key: 'HANKER', value: 1, label: '海康摄像头' },
-  { key: 'SELF', value: 2, label: '绑定执法仪' }
+  { key: 'LAW', value: 2, label: '绑定执法仪' },
+  { key: 'FIXEDFLOW', value: 3, label: '固定流播放' }
 ])
 
 /**

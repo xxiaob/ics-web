@@ -37,7 +37,7 @@
 <script>
 import { getDeviceList } from '@/api/device'
 import TreesFilterMixins from '@/mixins/TreesFilterMixins'
-import { DEVICE_TYPES, VIDEO_INVITE_TYPES } from '@/constant/Dictionaries'
+import { DEVICE_TYPES, VIDEO_INVITE_TYPES, DEVICE_SOURCES } from '@/constant/Dictionaries'
 
 export default {
   name: 'ScreenCommandOrg',
@@ -167,9 +167,9 @@ export default {
       if (selectNodes && selectNodes.length) {
         selectNodes.forEach(item => {
           if (item.type == 'device') {
-            devices.push({ id: item.id, name: item.label })
+            devices.push({ id: item.id, name: item.label, url: item.url })
 
-            if (item.deviceType === DEVICE_TYPES.NETPATROLCAR) {
+            if (item.deviceSource === DEVICE_SOURCES.LAW) {
               // 选中的在线设备, 并且为网巡车, 记录
               usersToDevices.push({ id: item.userId, name: item.label })
             }
@@ -213,7 +213,7 @@ export default {
 
           if (item.devices && item.devices.length) {
             item.devices.forEach(device => {
-              nodeChildren.push({ id: device.deviceId, label: device.deviceName, type: 'device', online: device.online, disabled: !device.online, deviceType: device.deviceType, userId: device.userId })
+              nodeChildren.push({ id: device.deviceId, label: device.deviceName, type: 'device', online: device.online, disabled: !device.online, deviceType: device.deviceType, userId: device.userId, url: device.url, deviceSource: device.deviceSource })
             })
           }
           trees.push(nodeChildren && nodeChildren.length ? { ...node, children: nodeChildren } : node)
@@ -228,7 +228,8 @@ export default {
         let devices = this.devices.map(item => (
           {
             deviceId: item.id,
-            name: item.name
+            name: item.name,
+            hls: item.url
           }
         ))
 
