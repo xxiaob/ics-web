@@ -1,6 +1,6 @@
 <template>
   <transition-group name="jc-list" tag="div" class="jc-message-content">
-    <div class="jc-task-item" v-for="item in list" :key="item.id" :class="style[item.type]" @click.stop="detail(item)">
+    <div class="jc-task-item" v-for="item in list" :key="item.id+item.warnType" :class="style[item.type]" @click.stop="detail(item)">
       <div class="jc-info-title">
         <span v-text="item.title"></span>
         <span class="jc-right">
@@ -14,11 +14,11 @@
         <div class="jc-info-item">下发人：{{item.userName}}</div>
         <div class="jc-info-item">任务来源：{{item.typeName}}</div>
       </template>
-      <template v-else-if="item.type == types.ALARM">
+      <template v-else-if="item.type == types.ALARM && item.systemSourceType == SYSTEM_MESSAGE_TYPE.DREGS">
         <div class="jc-info-item">车牌号：{{item.userName}}</div>
         <div class="jc-info-item">告警类型：{{item.typeName}}</div>
       </template>
-      <div class="jc-info-item" v-else-if="item.type == types.SELFALARM">地点：{{item.position}}</div>
+      <div class="jc-info-item" v-else-if="item.type == types.ALARM && item.systemSourceType == SYSTEM_MESSAGE_TYPE.SELF">地点：{{item.location}}</div>
       <div class="jc-info-item" v-else>上报人：{{item.userName}}</div>
       <div class="jc-info-item" v-if="item.type == types.QUESTION">问题类型：{{item.typeName}}</div>
       <div class="jc-info-item" v-else-if="item.type == types.EVENT">事件类型：{{item.typeName}}</div>
@@ -28,7 +28,7 @@
   </transition-group>
 </template>
 <script>
-import { MESSAGE_TYPE } from '@/constant/Dictionaries'
+import { MESSAGE_TYPE, SYSTEM_MESSAGE_TYPE, WARNING_TYPE } from '@/constant/Dictionaries'
 
 export default {
   name: 'ScreenCommandMessageList',
@@ -43,29 +43,40 @@ export default {
   },
   data() {
     return {
+      SYSTEM_MESSAGE_TYPE,
       types: MESSAGE_TYPE,
       style: {
         [MESSAGE_TYPE.EVENT]: 'jc-event',
         [MESSAGE_TYPE.QUESTION]: 'jc-question',
-        [MESSAGE_TYPE.ALARM]: 'jc-question',
         [MESSAGE_TYPE.TASK]: 'jc-task',
-        [MESSAGE_TYPE.TEMPORARY]: 'jc-task'
+        [MESSAGE_TYPE.TEMPORARY]: 'jc-task',
+        [MESSAGE_TYPE.ALARM]: 'jc-question'
       }
     }
   },
   methods: {
     detail(item) {
-      this.$EventBus.$emit('view-component-change', { component: 'MessageDetail', options: item }) //通知窗口改变
-      if (item.type == MESSAGE_TYPE.SELFALARM) {
-        console.log('在地图上定位告警位置')
-        // 告警类型
-        if (item.warnType == 'grid') {
-          // 岗点
-          this.$emit('screen-grid-location', { id: '', areaTypeId: '' })
-        } else if (item.warnType == 'user') {
-          //用户
-          this.$emit('screen-user-location', { id: '' })
-        }
+      // 告警类型
+      if (item.warnType == WARNING_TYPE.GRID_ARRIVE_ABNORMAL || item.warnType == WARNING_TYPE.GRID_TIME_ABNORMAL || item.warnType == WARNING_TYPE.GRID_USER_ABNORMAL) {
+        // 岗点
+        console.log('在地图上定位告警位置  岗点', item)
+        this.$EventBus.$emit('screen-grid-location', { id: item.id, areaTypeId: item.areaTypeId })
+        this.$EventBus.$emit('view-component-change', { component: 'GridDetail', options: {
+          areaId: item.id, areaTypeId: item.areaTypeId, areaName: item.businessName
+        } })
+      } else if (item.warnType == WARNING_TYPE.USER_ABNORMAL) {
+        //用户
+        console.log('在地图上定位告警位置  用户')
+        this.$EventBus.$emit('screen-user-location', { id: item.id })
+        this.$EventBus.$emit('view-component-change', { component: 'UserDetail', options: {
+          userId: item.id, userName: item.businessName
+        } })
+      } else if (item.warnType == WARNING_TYPE.TEMPORARY_ABNORMAL) {
+        //临时任务
+        this.$EventBus.$emit('view-component-change', { component: 'MessageDetail', options: { ...item, type: MESSAGE_TYPE.TEMPORARY } }) //通知窗口改变
+      } else {
+        // 基础业务 和 项目业务
+        this.$EventBus.$emit('view-component-change', { component: 'MessageDetail', options: item }) //通知窗口改变
       }
     },
     changeTodo(item, todo) {

@@ -13,6 +13,7 @@ let isCall = true // 判断用户列表是否取过初始数据
 export default {
   data() {
     return {
+      init: true, //初始化连接标识
       screenSocketOrg: null,
       screenSocket: null,
       screenMessageChannelSocket: null
@@ -49,6 +50,7 @@ export default {
       return { users, devices }
     },
     async initScreenMapSocket(org) {
+      this.init = true
       this.screenSocketOrg = org
       if (this.screenSocket) {
         this.screenSocket.disconnect() //如果已经存在，则断开连接
@@ -133,7 +135,11 @@ export default {
             // 如果为false 说明打开过用户列表, 已经获取过数据, 转为推送
             this.$EventBus.$emit('map-user-online-change', data.orgUserOnOrOffLineDTOS) //
           }
+        } else if (data.type == 11) {//告警推送
+          // console.log('warning', data)
+          this.$EventBus.$emit('screen-message-warning-change', { init: this.init, data: data.systemAlarmPushDTOS }) //通知任务事件
         }
+        this.init = false
       })
 
       this.sendScreenMessageChannelSocket() //发送消息
@@ -160,6 +166,7 @@ export default {
      * @param {Object} data 数据
      */
     initBaseInfo(data) {
+      console.log('initBaseInfo', data)
       let { users, devices } = this.getUserAndDevices(data.locations)
 
       if (users.length) {

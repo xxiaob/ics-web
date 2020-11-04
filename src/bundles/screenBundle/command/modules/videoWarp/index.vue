@@ -46,34 +46,41 @@ export default {
       }
 
       try {
-        let result = await getLiveStreaming({ deviceIds: devices.map(device => device.deviceId) })
+        this.list = devices.filter(item=>item.hls)
 
-        if (result && result.length) {
+        const noUrlDevices = devices.filter(item=>!item.hls)
+
+        if (noUrlDevices.length) {
           let list = []
 
-          result.forEach(item => {
-            let device = devices.find(deviceItem => deviceItem.deviceId == item.deviceId)
+          let result = await getLiveStreaming({ deviceIds: noUrlDevices.map(device => device.deviceId) })
 
-            list.push({ ...item, name: device.name })
-          })
-          //对增加的和需要播放的进行合并
-          for (let i = 0; i < this.list.length; i++) {
-            let item = this.list[i]
+          if (result && result.length) {
+            result.forEach(item => {
+              let device = devices.find(deviceItem => deviceItem.deviceId == item.deviceId)
 
-            //查看是否已经存在，如果不存在，则添加，否则不处理
-            let index = list.findIndex(device => device.deviceId == item.deviceId)
+              list.push({ ...item, name: device.name })
+            })
+            //对增加的和需要播放的进行合并
+            for (let i = 0; i < this.list.length; i++) {
+              let item = this.list[i]
 
-            if (index < 0) {
-              list.push({ ...item })
+              //查看是否已经存在，如果不存在，则添加，否则不处理
+              let index = list.findIndex(device => device.deviceId == item.deviceId)
+
+              if (index < 0) {
+                list.push({ ...item })
+              }
+              //如果达到播放数量，则剩余的抛弃
+              if (list.length >= this.maxLength) {
+                break
+              }
             }
-            //如果达到播放数量，则剩余的抛弃
-            if (list.length >= this.maxLength) {
-              break
-            }
+            this.list = list
           }
-          this.list = list
-          this.goVideoPlay()
         }
+
+        this.goVideoPlay()
       } catch (error) {
         console.log(error)
       }

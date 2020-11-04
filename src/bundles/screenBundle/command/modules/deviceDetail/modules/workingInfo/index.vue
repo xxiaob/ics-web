@@ -31,9 +31,9 @@ export default {
   methods: {
     videoplay(deviceDetaillData) {
       // 设备观摩
-      let { deviceName, deviceId } = deviceDetaillData
+      let { deviceName, deviceId, url } = deviceDetaillData
 
-      this.$EventBus.$emit('device-video-play', [{ name: deviceName, deviceId }])
+      this.$EventBus.$emit('device-video-play', [{ name: deviceName, deviceId, hls: url }])
     }
   }
 }

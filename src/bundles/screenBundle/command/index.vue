@@ -52,6 +52,7 @@ import CommandHeader from './modules/header'//顶部
 import CommandMessage from './modules/message'//任务等消息弹窗
 import DataOverview from './modules/dataOverview' //数据预览
 import MapSearch from '@/components/JcMap/MapSearch' //地图搜索
+import CommandOperate from './modules/operate'//功能操作区域
 
 let myJcMap //个人 map 对象
 
@@ -60,7 +61,7 @@ export default {
   mixins: [OrgMixins, EventMixins, ProblemMixins, DeviceMixins, GridMixins, UserMixins, TaskMixins, TemporaryTasksMixins, ScreenMapSocketMixins, VoiceAlertMixins],
   components: {
     CommandHeader,
-    CommandOperate: () => import('./modules/operate'), //功能操作区域
+    CommandOperate,
     MapSearch,
     DataOverview,
     CommandMessage, //任务等消息弹窗

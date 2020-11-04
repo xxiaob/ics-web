@@ -5,15 +5,15 @@
       <component :is="tabComponent" :deviceDetaillData="deviceDetaillData"></component>
     </keep-alive>
     <div class="jc-user-footer">
-      <div class="jc-opera-item" @click="goMeeting('audio')">音频指挥</div>
-      <div class="jc-opera-item" @click="goMeeting('video')">视频指挥</div>
+      <div class="jc-opera-item" @click="goMeeting('audio')" v-if="deviceDetaillData.deviceSource==DEVICE_SOURCES.LAW">音频指挥</div>
+      <div class="jc-opera-item" @click="goMeeting('video')" v-if="deviceDetaillData.deviceSource==DEVICE_SOURCES.LAW">视频指挥</div>
       <div class="jc-opera-item" @click="devicevideoPlay">设备观摩</div>
-      <div class="jc-opera-item" @click="deviceTrajectory">轨迹查询</div>
+      <div class="jc-opera-item" @click="deviceTrajectory" v-if="deviceDetaillData.deviceSource==DEVICE_SOURCES.LAW">轨迹查询</div>
     </div>
   </view-warp>
 </template>
 <script>
-import { DEVICE_TYPES, VIDEO_INVITE_TYPES } from '@/constant/Dictionaries'
+import { DEVICE_TYPES, VIDEO_INVITE_TYPES, DEVICE_SOURCES } from '@/constant/Dictionaries'
 import { deviceDetail } from '@/api/device'
 
 
@@ -29,6 +29,7 @@ export default {
   },
   data() {
     return {
+      DEVICE_SOURCES,
       loading: false,
       tabComponent: 'BaseInfo',
       videoTypes: VIDEO_INVITE_TYPES,
@@ -78,10 +79,10 @@ export default {
       }
 
       // 设备不是网巡车
-      if (DEVICE_TYPES.NETPATROLCAR !== this.deviceDetaillData.deviceType) {
-        this.$message.error('设备不是网巡车')
-        return
-      }
+      // if (DEVICE_TYPES.NETPATROLCAR !== this.deviceDetaillData.deviceType) {
+      //   this.$message.error('设备不是网巡车')
+      //   return
+      // }
 
       // 如果设备在线, 并且为网巡车网巡车
 
@@ -96,7 +97,8 @@ export default {
         return
       }
       // 设备观摩
-      this.$EventBus.$emit('device-video-play', [{ deviceId: this.deviceDetaillData.deviceId, name: this.deviceDetaillData.deviceName }])
+      // console.log(this.deviceDetaillData)
+      this.$EventBus.$emit('device-video-play', [{ deviceId: this.deviceDetaillData.deviceId, name: this.deviceDetaillData.deviceName, hls: this.deviceDetaillData.url }])
     },
     deviceTrajectory() {
       // 设备不在线

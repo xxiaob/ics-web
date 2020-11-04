@@ -11,18 +11,22 @@ export default {
   methods: {
     voicePlay(data) {
       console.log('指挥大屏，收到提示音处理', data)
-      let source = VoiceSource[data.type]
+      const audio = this.$refs.myScreenAudio
 
-      if (data.loop) {
-        this.$refs.myScreenAudio.loop = 'loop'
-      } else {
-        this.$refs.myScreenAudio.removeAttribute('loop')
-      }
+      if (audio.paused) { //audio 在暂停状态 才允许播放
+        console.log('play 播放提示音')
+        let source = VoiceSource[data.type]
 
-      if (source) {
-        this.voicePause()
-        this.$refs.myScreenAudio.src = source
-        this.$refs.myScreenAudio.play()
+        if (data.loop) {
+          audio.loop = 'loop'
+        } else {
+          audio.removeAttribute('loop')
+        }
+
+        if (source) {
+          audio.src = source
+          audio.play()
+        }
       }
     },
     voicePause() {
