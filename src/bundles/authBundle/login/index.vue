@@ -1,7 +1,11 @@
 <template>
   <div class="jc-login-warp">
     <img :src="systemBg" class="jc-login-bg" />
-    <div class="jc-login-header" :style="systemLogo"></div>
+    <div class="jc-login-header" :style="systemLogo">
+      <div class="jc-app-download">移动端App下载 <i class="el-icon-arrow-right"></i>
+        <img class="jc-download" src="./assets/app-download.png" />
+      </div>
+    </div>
     <div class="jc-login-space" :style="loginBg" :class="loginPosition">
       <div class="jc-logon-content">
         <div class="jc-login-title">欢迎登录</div>
@@ -138,6 +142,31 @@ export default {
   background-image: url(/static/images/login-logo.png);
   background-repeat: no-repeat;
   background-position: left center;
+
+  .jc-app-download{
+    position: absolute;
+    right: 60px;
+    top:26px;
+    padding:20px;
+    color: rgba(255,255,255,.5);
+    cursor: pointer;
+
+    .jc-download{
+      display: none;
+      position: absolute;
+      top:50px;
+      left:20px;
+    }
+
+    &:hover{
+      color: rgba(255,255,255,1);
+
+      .jc-download{
+        display: block;
+      }
+    }
+
+  }
 }
 .jc-login-space {
   position: absolute;

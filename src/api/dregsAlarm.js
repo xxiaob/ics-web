@@ -78,3 +78,25 @@ export function updateAlarm(data) {
 export function getAlarmById(id) {
   return axios.post(API.dregsAlarm.getAlarmById + '?id=' + id)
 }
+
+
+/**
+ * 案件留痕列表
+ * @param {String} data  参数对象
+ * @returns {Object} axios 对象
+ */
+export function getCaseList(data) {
+  return axios.post(API.dregsAlarm.caseList, data)
+}
+
+
+/**
+ * 根据立案id查询问题详情
+ * @param {String} id  立案id
+ * @returns {Object} axios 对象
+ */
+export function getProblemDetail(id) {
+  return axios.post(API.dregsAlarm.getProblemDetail + '?caseId=' + id)
+}
+
+

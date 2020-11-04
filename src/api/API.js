@@ -311,7 +311,9 @@ export default {
     closeAlarm: 'task-service/alarm/closeAlarm', // 关闭告警
     updateAlarm: 'task-service/alarm/updateAlarm', // 更新告警状态
     getAlarmById: 'task-service/alarm/getAlarmById',
-    getPushAlarmById: 'task-service/alarm/getPushAlarmById'
+    getPushAlarmById: 'task-service/alarm/getPushAlarmById',
+    caseList: 'task-service/problemCase/select', // 案件留痕(立案查询列表)
+    getProblemDetail: 'task-service/problem/getProblemByCaseId' // 根据立案id查询问题详情
   },
   organizeInfo: {
     // 组织信息
