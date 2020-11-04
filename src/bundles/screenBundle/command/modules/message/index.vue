@@ -68,7 +68,17 @@ export default {
       }
 
       if (data && data.length) {
+        const userWarning = [], taskWarning = [], gridWarning = []
+
         data.forEach(item => {
+          if (item.alarmSourceType == WARNING_TYPE.USER_ABNORMAL) {
+            userWarning.push({ ...item, id: item.businessId })
+          } else if (item.alarmSourceType == WARNING_TYPE.TEMPORARY_ABNORMAL) {
+            taskWarning.push({ ...item, taskId: item.businessId })
+          } else {
+            gridWarning.push({ ...item, id: item.businessId, warnType: item.alarmSourceType + '' })
+          }
+
           const index = this.WarningInfoIds.indexOf(item.businessId + item.alarmSourceType)
 
           if (index > -1) {
@@ -103,6 +113,10 @@ export default {
         if (this.WarningInfo.length > this.maxLength) {
           this.WarningInfo.splice(this.maxLength, this.WarningInfo.length - this.maxLength)
         }
+        console.log('initWarningData', userWarning, taskWarning, gridWarning)
+        this.$EventBus.$emit('map-user-change', { type: 5, attendance: userWarning, init }) //通知用户考勤状态
+        this.$EventBus.$emit('map-task-change', { type: 1, tasks: taskWarning, init }) //通知临时任务考勤状态
+        this.$EventBus.$emit('map-grid-change', { type: 1, attendance: gridWarning, init }) //通知岗点考勤状态
       }
     },
     initData(data) {

@@ -3,6 +3,7 @@
  */
 import { areaList } from '@/api/area'
 import { AREAS_TYPE, AREAS_SEARCH_TYPE, MAP_EVENT, MAP_SIGN_ZINDEX } from '@/constant/CONST'
+import { WARNING_TYPE } from '@/constant/Dictionaries'
 import { apiBoundariesFormat } from '@/libs/apiFormat'
 import { JcMapSign, JcMapMarker } from '@/map'
 import { getMarkerCluster } from '@/map/aMap/aMapUtil'
@@ -55,12 +56,13 @@ export default {
       }
     },
     mapGridChange(data) {
+      // console.log('mapGridChange', data)
       if (data.type == 1) {
         //岗点考勤状态更新
         if (data.attendance && data.attendance.length) {
           let hasAbnormalGrid = false //记录获取的批量岗点里是否有新增，如果有，则通知播放提示音
 
-          // let hasAbnormalGridTypes = []
+          let hasAbnormalGridTypes = []
 
           data.attendance.forEach(item => {
             //记录异常报警的时间
@@ -78,15 +80,21 @@ export default {
             } else if (item.status == 1) {
               this.abnormalGridIds.push(item.id)
               hasAbnormalGrid = true
-              // hasAbnormalGridTypes.push(item.warnType)
+              hasAbnormalGridTypes.push(item.warnType)
             }
           })
 
-          if (hasAbnormalGrid) {
-            this.$EventBus.$emit('map-voice-alert', { type: VOICE_TYPE.GRID_ABNORMAL }) //通知播放提示音
-            // hasAbnormalGridTypes.forEach(item=>{
-            //   this.$EventBus.$emit('map-voice-alert', { type: item }) //通知播放提示音
-            // })
+          if (hasAbnormalGrid && !data.init) {
+            // this.$EventBus.$emit('map-voice-alert', { type: VOICE_TYPE.GRID_ABNORMAL }) //通知播放提示音
+            hasAbnormalGridTypes.forEach(warnType=>{
+              if (warnType == WARNING_TYPE.GRID_ARRIVE_ABNORMAL) {
+                this.$EventBus.$emit('map-voice-alert', { type: VOICE_TYPE.GRID_ARRIVE_ABNORMAL })
+              } else if (warnType == WARNING_TYPE.GRID_TIME_ABNORMAL) {
+                this.$EventBus.$emit('map-voice-alert', { type: VOICE_TYPE.GRID_TIME_ABNORMAL })
+              } else if (warnType == WARNING_TYPE.GRID_USER_ABNORMAL) {
+                this.$EventBus.$emit('map-voice-alert', { type: VOICE_TYPE.GRID_USER_ABNORMAL })
+              }
+            })
           }
         }
       }

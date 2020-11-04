@@ -28,7 +28,7 @@ export default {
   methods: {
     abnormalTaskChange() {
       const nowTime = new Date().getTime()
-      const intervalTime = 10 * 1000
+      const intervalTime = 10 * 60 * 1000
       const overtimeAbnormalTask = []
 
       this.abnormalTaskIds.forEach(taskId=>{
@@ -75,6 +75,7 @@ export default {
       userTasks[task.taskId] = { taskId: task.taskId, center: marker.position, marker }
     },
     mapTaskChange(data) {
+      // console.log('mapTaskChange', data)
       if (data.type == 1) {
         //临时任务考勤状态更新
         if (data.tasks && data.tasks.length) {
@@ -106,7 +107,7 @@ export default {
             }
           })
 
-          if (hasAbnormalTask) {
+          if (hasAbnormalTask && !data.init) {
             this.$EventBus.$emit('map-voice-alert', { type: VOICE_TYPE.TEMPORARY_ABNORMAL }) //通知播放提示音
           }
         }

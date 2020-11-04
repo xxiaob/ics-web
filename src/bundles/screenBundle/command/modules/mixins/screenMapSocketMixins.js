@@ -93,13 +93,13 @@ export default {
           this.$EventBus.$emit('map-user-change', { type: 4, collectUser: data.collectUser }) //通知用户进入一键采集
         } else if (data.type == 6) {
           //数据类型为人员考勤
-          this.$EventBus.$emit('map-user-change', { type: 5, attendance: data.attendance }) //通知用户考勤状态
+          // this.$EventBus.$emit('map-user-change', { type: 5, attendance: data.attendance }) //通知用户考勤状态
         } else if (data.type == 7) {
           //数据类型为岗点考勤
-          this.$EventBus.$emit('map-grid-change', { type: 1, attendance: data.attendance }) //通知岗点考勤状态
+          // this.$EventBus.$emit('map-grid-change', { type: 1, attendance: data.attendance }) //通知岗点考勤状态
         } else if (data.type == 8) {
           //异常临时任务
-          this.$EventBus.$emit('map-task-change', { type: 1, tasks: data.abnormalTasks }) //通知临时任务考勤状态
+          // this.$EventBus.$emit('map-task-change', { type: 1, tasks: data.abnormalTasks }) //通知临时任务考勤状态
         } else if (data.type == 5) {
           //为任务结束
           this.$EventBus.$emit('map-task-change', { type: 2, taskId: data.taskId }) //通知临时任务结束

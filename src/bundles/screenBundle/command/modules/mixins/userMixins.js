@@ -97,6 +97,7 @@ export default {
       }
     },
     userMap(data) {
+      // console.log('userMap', data)
       if (data.type == 1) {
         //如果是重新初始化，则清除之前的用户显示
         this.clearUsers()
@@ -158,7 +159,7 @@ export default {
             }
           })
 
-          if (hasAbnormalUser) {
+          if (hasAbnormalUser && !data.init) {
             this.$EventBus.$emit('map-voice-alert', { type: VOICE_TYPE.USER_ABNORMAL }) //通知播放提示音
           }
         }
