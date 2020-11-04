@@ -212,6 +212,13 @@ export const MESSAGE_TYPE = new JcEnum([
   { key: 'TEMPORARY', value: '4', label: '临时任务' },
   { key: 'ALARM', value: '5', label: '告警' }
 ])
+export const WARNING_TYPE = new JcEnum([//告警类型
+  { key: 'USER_ABNORMAL', value: '0', label: '人员考勤-脱离区域' },
+  { key: 'GRID_ARRIVE_ABNORMAL', value: '1', label: '岗点日常-未准点到达' },
+  { key: 'GRID_TIME_ABNORMAL', value: '2', label: '岗点日常-时长不足' },
+  { key: 'GRID_USER_ABNORMAL', value: '3', label: '岗点日常-人员不足' },
+  { key: 'TEMPORARY_ABNORMAL', value: '4', label: '临时任务-任务超时' }
+])
 
 /** 用户在岗 考勤状态 */
 export const USER_GRID_STATUS = new JcEnum([

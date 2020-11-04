@@ -40,7 +40,7 @@ export default {
     abnormalUserChange() {
       let repaint = false
       const nowTime = new Date().getTime()
-      const intervalTime = 10 * 1000
+      const intervalTime = 10 * 60 * 1000
 
       for (const key in abnormalUserTimes) {
         if (nowTime - abnormalUserTimes[key] >= intervalTime) {

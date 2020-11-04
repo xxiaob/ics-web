@@ -6,7 +6,7 @@
   </div>
 </template>
 <script>
-import { MESSAGE_TYPE, SYSTEM_MESSAGE_TYPE } from '@/constant/Dictionaries'
+import { MESSAGE_TYPE, SYSTEM_MESSAGE_TYPE, WARNING_TYPE } from '@/constant/Dictionaries'
 import { formatDate } from '@/libs/util'
 import { getTodoInfo, setTodoInfo } from '@/libs/storage'
 
@@ -23,7 +23,7 @@ export default {
       tabs: [
         { label: '基础业务', value: 'BaseVocation' },
         { label: '项目业务', value: 'ProjectVocation' },
-        // { label: '告警信息', value: 'WarningInfo' },
+        { label: '告警信息', value: 'WarningInfo' },
         { label: '待办信息', value: 'TodoInfo' }
       ],
       visible: true,
@@ -33,6 +33,7 @@ export default {
       ProjectVocation: [], //项目业务
       TodoInfo: [], //待办信息
       WarningInfo: [], //告警信息
+      WarningInfoIds: [],
       initTodoInfoIds: []
     }
   },
@@ -46,6 +47,7 @@ export default {
     }
     this.$EventBus.$on('screen-message-init', this.messageInit) //监听消息 初始化
     this.$EventBus.$on('screen-message-change', this.initData) //监听消息
+    this.$EventBus.$on('screen-message-warning-change', this.initWarningData) //监听告警消息
   },
   mounted() {
     this.$nextTick(() => {
@@ -53,9 +55,60 @@ export default {
     })
   },
   methods: {
+    initWarningData({ init, data }) {
+      console.log('initWarningData', init, data)
+      if (init) {
+        this.WarningInfo = []
+        this.WarningInfoIds = []
+      } else {
+        if (!this.visible) {
+          this.$EventBus.$emit('message-num-change', { type: 2 }) //通知事件变更
+        }
+        this.tabComponent = 'WarningInfo'
+      }
+
+      if (data && data.length) {
+        data.forEach(item => {
+          const index = this.WarningInfoIds.indexOf(item.businessId + item.alarmSourceType)
+
+          if (index > -1) {
+            if (item.status == 0) {
+              this.WarningInfoIds.splice(index, 1)
+              this.WarningInfo.splice(index, 1)
+            }
+          } else if (item.status == 1) {
+            this.WarningInfoIds.unshift(item.businessId + item.alarmSourceType)
+
+            let todo = false
+
+            if (this.initTodoInfoIds.includes(item.businessId)) {
+              todo = true
+            }
+            this.WarningInfo.unshift({
+              id: item.businessId,
+              systemSourceType: SYSTEM_MESSAGE_TYPE.SELF,
+              title: WARNING_TYPE.toString(item.alarmSourceType + ''),
+              type: MESSAGE_TYPE.ALARM,
+              warnType: item.alarmSourceType + '',
+              location: item.locationName,
+              orgName: item.orgName,
+              areaTypeId: item.areaTypeId,
+              businessName: item.businessName,
+              todo,
+              time: item.time
+            })
+          }
+        })
+
+        if (this.WarningInfo.length > this.maxLength) {
+          this.WarningInfo.splice(this.maxLength, this.WarningInfo.length - this.maxLength)
+        }
+      }
+    },
     initData(data) {
       let message = data.messageDTO
 
+      console.log('screen-message-change', message)
       /**
        * 如果当前窗口隐藏，接收到的消息是事件则通知未读数据变化，如果是其他则弹出显示
        */
@@ -77,6 +130,7 @@ export default {
         typeName: message.typeName,
         orgName: message.orgName,
         todo: false,
+        warnType: '',
         time: formatDate(message.createTime)
       }
 
@@ -100,6 +154,8 @@ export default {
     },
     messageInit(data) {
       console.log('screen-message-init', data)
+      this.BaseVocation = []
+      this.ProjectVocation = []
       if (data && data.length) {
         let list = []
 
@@ -118,6 +174,7 @@ export default {
             orgName: item.startOrg,
             typeName: item.taskSource,
             todo,
+            warnType: '',
             time: formatDate(item.createTime)
           })
         })

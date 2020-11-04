@@ -40,7 +40,7 @@ export default {
     abnormalGridChange() {
       let repaint = false
       const nowTime = new Date().getTime()
-      const intervalTime = 10 * 1000
+      const intervalTime = 10 * 60 * 1000
 
       for (const key in abnormalGridTimes) {
         if (nowTime - abnormalGridTimes[key] >= intervalTime) {
