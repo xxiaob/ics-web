@@ -72,11 +72,11 @@ export default {
                 list.push({ ...item })
               }
               //如果达到播放数量，则剩余的抛弃
-              if (list.length >= this.maxLength) {
-                break
-              }
+              // if (list.length >= this.maxLength) {
+              //   break
+              // }
             }
-            this.list = list
+            this.list = list.splice(0, this.maxLength)
           }
         }
 
