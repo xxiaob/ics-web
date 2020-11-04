@@ -242,7 +242,7 @@ export default {
       this.leaveObservation(userId)
     },
     async leaveObservation(userId) {
-      if (this['live' + userId].joined) {
+      if (this['live' + userId] && this['live' + userId].joined) {
         await this['live' + userId].leaveChannel()
         this['live' + userId] = null
       }

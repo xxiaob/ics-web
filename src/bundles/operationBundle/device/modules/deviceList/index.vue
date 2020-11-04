@@ -17,13 +17,15 @@
         <el-table-column prop="deviceName" label="设备名称"></el-table-column>
         <el-table-column prop="orgName" label="所属组织"></el-table-column>
         <el-table-column prop="deviceTypeName" label="设备类型"></el-table-column>
-        <el-table-column prop="treatyType" label="接入协议"></el-table-column>
-        <el-table-column prop="userName" label="绑定用户"></el-table-column>
+        <el-table-column prop="treatyType" label="接入协议" v-if="source==1"></el-table-column>
+        <el-table-column prop="userName" label="绑定用户" v-if="source==2"></el-table-column>
+        <el-table-column prop="location" label="经纬度" v-if="source==3"></el-table-column>
+        <el-table-column prop="url" label="固定流地址" v-if="source==3"></el-table-column>
         <el-table-column width="100" label="操作">
           <template slot-scope="scope">
-            <el-button type="text" size="mini" icon="el-icon-view" @click="detail(scope.row)" title="详情"></el-button>
-            <el-button type="text" size="mini" icon="el-icon-video-camera" @click="showVideo(scope.row)" title="视频记录"></el-button>
-            <el-button v-if="source==2" type="text" size="mini" icon="el-icon-delete" @click="del(scope.row)" title="删除"></el-button>
+            <el-button  v-if="source==1" type="text" size="mini" icon="el-icon-view" @click="detail(scope.row)" title="详情"></el-button>
+            <el-button  v-if="source!=3" type="text" size="mini" icon="el-icon-video-camera" @click="showVideo(scope.row)" title="视频记录"></el-button>
+            <el-button v-if="source!=1" type="text" size="mini" icon="el-icon-delete" @click="del(scope.row)" title="删除"></el-button>
             <el-button v-if="source==2&&scope.row.orgId" type="text" size="mini" icon="el-icon-setting" @click="setUser(scope.row)" title="设置"></el-button>
           </template>
         </el-table-column>
