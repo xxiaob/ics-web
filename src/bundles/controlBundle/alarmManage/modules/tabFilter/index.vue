@@ -29,8 +29,8 @@ export default {
     return {
       loading: false,
       form: {
-        startDate: '',
-        endDate: '',
+        startTime: '',
+        endTime: '',
         address: ''
       },
       date: null
@@ -39,17 +39,17 @@ export default {
   methods: {
     changeDate(value) {
       if (value) {
-        this.form.startDate = value[0]
-        this.form.endDate = value[1]
+        this.form.startTime = value[0]
+        this.form.endTime = value[1]
       } else {
-        this.form.startDate = ''
-        this.form.endDate = ''
+        this.form.startTime = ''
+        this.form.endTime = ''
       }
     },
     reset() {
       this.$refs.form.resetFields()
-      this.form.startDate = ''
-      this.form.endDate = ''
+      this.form.startTime = ''
+      this.form.endTime = ''
       this.form.address = ''
       this.date = null
     },
