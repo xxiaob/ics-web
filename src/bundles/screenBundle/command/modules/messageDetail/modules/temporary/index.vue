@@ -2,14 +2,14 @@
   <div class="jc-temporary">
     <view-tabs v-model="tabComponent" :options="tabs"></view-tabs>
     <keep-alive>
-      <component :is="tabComponent" :taskId="info.id"></component>
+      <component :is="tabComponent" :taskId="info.id" :projectId="projectId"></component>
     </keep-alive>
   </div>
 </template>
 <script>
 export default {
   name: 'ScreenCommandMessageDetailTemporary',
-  props: ['info'],
+  props: ['info', 'projectId'],
   components: {
     ViewTabs: () => import('../../../common/viewTabs'),
     BaseInfo: () => import('./modules/baseInfo'),

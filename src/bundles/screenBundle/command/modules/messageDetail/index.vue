@@ -1,7 +1,7 @@
 <template>
   <view-warp :title="title">
     <keep-alive>
-      <component :is="types[(options.systemSourceType?options.systemSourceType:'') + options.type]" :info="options"></component>
+      <component :is="types[(options.systemSourceType?options.systemSourceType:'') + options.type]" :info="options" :projectId="project.projectId"></component>
     </keep-alive>
     <!-- {id:'80964647959658496'} -->
   </view-warp>
@@ -10,7 +10,7 @@
 import { MESSAGE_TYPE, SYSTEM_MESSAGE_TYPE } from '@/constant/Dictionaries'
 export default {
   name: 'ScreenCommandMessageDetail',
-  props: ['options'],
+  props: ['options', 'project'],
   components: {
     ViewWarp: () => import('../common/viewWarp'),
     DetailEvent: () => import('./modules/event'),

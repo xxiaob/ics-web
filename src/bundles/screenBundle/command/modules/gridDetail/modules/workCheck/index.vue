@@ -25,6 +25,9 @@
           <div class="jc-title">上报事件数/件</div>
         </div>
       </div>
+
+      <warning-list :list="warnList"></warning-list>
+
       <template v-if="list.length">
         <div class="jc-card-title">出入岗记录</div>
         <div class="jc-node-warp jc-view-content">
@@ -41,24 +44,27 @@
           </div>
         </div>
       </template>
-      <view-empty v-else></view-empty>
+      <view-empty v-if="!list.length&&!warnList.length"></view-empty>
     </div>
   </div>
 </template>
 <script>
 import { getTaskPostLine } from '@/api/screen'
-import { USER_GRID_STATUS } from '@/constant/Dictionaries'
+import { USER_GRID_STATUS, WARNING_DETAIL_TYPE } from '@/constant/Dictionaries'
+import { getDetail } from '@/api/warning'
 
 export default {
   name: 'ScreenCommandGridDetailWorkCheck',
   props: ['options', 'project'],
   components: {
+    WarningList: () => import('@/bundles/screenBundle/command/modules/common/warningList'),
     ViewEmpty: () =>import('@/bundles/screenBundle/command/modules/common/viewEmpty')
   },
   data() {
     return {
       loading: false,
       list: [],
+      warnList: [],
       outTypes: [USER_GRID_STATUS.OUTCIRCLE, USER_GRID_STATUS.OUTGUARD],
       inTypes: [USER_GRID_STATUS.INGUARD, USER_GRID_STATUS.INCIRCLE],
       analysis: {}
@@ -67,12 +73,25 @@ export default {
   watch: {
     options() {
       this.initData()
+      this.getWarning()
     }
   },
   created() {
     this.initData()
+    this.getWarning()
   },
   methods: {
+    async getWarning() {
+      try {
+        this.warnList = await getDetail({
+          businessId: this.options.areaId,
+          projectId: this.project.projectId,
+          selectType: WARNING_DETAIL_TYPE.POST
+        })
+      } catch (error) {
+        console.error(error)
+      }
+    },
     async initData() {
       this.loading = true
       this.analysis = {}

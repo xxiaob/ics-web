@@ -1,5 +1,6 @@
 <template>
   <div class="jc-view-content" v-loading="loading" element-loading-background="rgba(0, 0, 0, 0)">
+    <warning-list :list="warnList"></warning-list>
     <div class="jc-pt" v-if="list.length">
       <div class="jc-node-warp">
         <div class="jc-node" v-for="(item,index) in list" :key="index">
@@ -15,23 +16,26 @@
         </div>
       </div>
     </div>
-    <view-empty v-else></view-empty>
+    <view-empty v-if="!list.length&&!warnList.length"></view-empty>
   </div>
 </template>
 <script>
 import { getTaskPersonalLine } from '@/api/screen'
-import { USER_GRID_STATUS } from '@/constant/Dictionaries'
+import { USER_GRID_STATUS, WARNING_DETAIL_TYPE } from '@/constant/Dictionaries'
+import { getDetail } from '@/api/warning'
 
 export default {
   name: 'ScreenCommandUserDetailWorkCheck',
   props: ['options', 'project'],
   components: {
+    WarningList: () => import('@/bundles/screenBundle/command/modules/common/warningList'),
     ViewEmpty: () =>import('@/bundles/screenBundle/command/modules/common/viewEmpty')
   },
   data() {
     return {
       loading: false,
       list: [],
+      warnList: [],
       outTypes: [USER_GRID_STATUS.OUTCIRCLE, USER_GRID_STATUS.OUTGUARD],
       inTypes: [USER_GRID_STATUS.INGUARD, USER_GRID_STATUS.INCIRCLE]
     }
@@ -39,12 +43,25 @@ export default {
   watch: {
     options() {
       this.initData()
+      this.getWarning()
     }
   },
   created() {
     this.initData()
+    this.getWarning()
   },
   methods: {
+    async getWarning() {
+      try {
+        this.warnList = await getDetail({
+          businessId: this.options.userId,
+          projectId: this.project.projectId,
+          selectType: WARNING_DETAIL_TYPE.PEOPLE
+        })
+      } catch (error) {
+        console.error(error)
+      }
+    },
     async initData() {
       this.loading = true
       this.analysis = {}
