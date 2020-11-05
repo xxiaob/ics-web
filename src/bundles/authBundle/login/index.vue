@@ -2,9 +2,9 @@
   <div class="jc-login-warp">
     <img :src="systemBg" class="jc-login-bg" />
     <div class="jc-login-header" :style="systemLogo">
-      <div class="jc-app-download">移动端App下载 <i class="el-icon-arrow-right"></i>
+      <!-- <div class="jc-app-download">移动端App下载 <i class="el-icon-arrow-right"></i>
         <img class="jc-download" src="./assets/app-download.png" />
-      </div>
+      </div> -->
     </div>
     <div class="jc-login-space" :style="loginBg" :class="loginPosition">
       <div class="jc-logon-content">
