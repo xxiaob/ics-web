@@ -30,7 +30,7 @@
 
       <template v-if="list.length">
         <div class="jc-card-title">出入岗记录</div>
-        <div class="jc-node-warp jc-view-content">
+        <div class="jc-node-warp">
           <div class="jc-node" v-for="(item,index) in list" :key="index">
             <div class="jc-node-times">{{item.time}}<br />{{item.date}}</div>
             <div class="jc-node-content">

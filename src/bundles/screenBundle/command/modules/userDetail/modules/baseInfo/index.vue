@@ -85,7 +85,7 @@ export default {
       this.loading = true
       this.detail = {}
       try {
-        this.detail = await userGet({ userId: this.options.userId })
+        this.detail = await userGet({ userId: this.options.userId }) || {}
       } catch (error) {
         console.log(error)
       }
