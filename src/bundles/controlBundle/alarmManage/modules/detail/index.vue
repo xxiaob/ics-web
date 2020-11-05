@@ -70,7 +70,6 @@ export default {
   methods: {
     async getDetail() {
       this.form = { ...this.info }
-      console.log('this.form', this.form)
     },
     dialogClose() {
       this.$emit('update:visible', false)

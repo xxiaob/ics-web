@@ -33,6 +33,8 @@
 <script>
 
 import { SYSTEM_ALARM_STATUS, WARNING_TYPE } from '@/constant/Dictionaries'
+import { exportAlarmList } from '@/api/warning'
+
 
 export default {
   name: 'EventManageFilter',
@@ -87,8 +89,20 @@ export default {
       this.$emit('filter', this.form)
     },
     exportData() {
-      // exportList(this.form)
+      // 过滤筛选条件的空项
+      let filter = {}
+
+      for (let key in this.form) {
+        if (this.form[key] !== '') {
+          filter[key] = this.form[key]
+        }
+      }
+
+      // 导出
+      exportAlarmList(filter)
     }
+
+
   }
 }
 </script>

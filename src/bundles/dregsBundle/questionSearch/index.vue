@@ -12,6 +12,7 @@
           <el-table-column prop="problemTitle" label="标题"></el-table-column>
           <el-table-column prop="carNumber" label="车牌号"></el-table-column>
           <el-table-column prop="userName" label="反馈人"></el-table-column>
+          <el-table-column prop="dregsProblemTypeName" label="问题类型"></el-table-column>
           <el-table-column prop="problemDesc" label="问题描述" show-overflow-tooltip>
             <template slot-scope="scope">
               <div v-html="scope.row.problemDesc"></div>
