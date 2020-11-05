@@ -23,11 +23,16 @@
 </template>
 
 <script>
-import { WARNING_TYPE } from '@/constant/Dictionaries'
+import { WARNING_TYPE, SYSTEM_ALARM_STATUS } from '@/constant/Dictionaries'
 import { formatDate } from '@/libs/util'
 
 export default {
   name: 'ScreenCommandWarningList',
+  data() {
+    return {
+      SYSTEM_ALARM_STATUS
+    }
+  },
   props: {
     list: {
       type: Array,

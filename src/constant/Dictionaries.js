@@ -314,8 +314,8 @@ export const ALARM_STATUS = new JcEnum([
  * 系统告警状态
  */
 export const SYSTEM_ALARM_STATUS = new JcEnum([
-  { key: 'OPEN', value: 0, label: '开启' },
-  { key: 'CLOSE', value: 1, label: '关闭' }
+  { key: 'OPEN', value: 1, label: '开启' },
+  { key: 'CLOSE', value: 0, label: '关闭' }
 ])
 
 
