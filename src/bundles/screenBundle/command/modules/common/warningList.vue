@@ -1,21 +1,21 @@
 <template>
   <div class="jc-warning-list" v-if="list&&list.length">
     <el-menu
-      :default-active="list[0]"
+      :default-openeds="[list[0].id]"
       background-color="#fff"
       text-color="#E43939"
       active-text-color="#E43939">
-      <el-submenu v-for="item in list" :index="item" :key="item">
+      <el-submenu v-for="item in list" :index="item.id" :key="item.id">
         <template slot="title">
-          <span class="jc-title">告警：岗点日常-未准点到达</span>
+          <span class="jc-title">告警：{{formatType(item.alarmSource)}}</span>
           <img class="jc-right" src="./assets/remind.png" alt="" @click.stop="remind" title="提醒相关人员">
         </template>
         <div class="jc-detail">
-          <p>组织：南京城管总队</p>
-          <p>时间：2020-09-09 10:08:04</p>
-          <p>地点：南京市鼓楼区湖南路街道北京西路1-1号</p>
-          <p>描述：周世林脱离考勤区</p>
-          <p>状态：关闭</p>
+          <p>组织：{{item.orgName}}</p>
+          <p>时间：{{formatTime(item.alarmTime)}}</p>
+          <p>地点：{{item.alarmLocation}}</p>
+          <p>描述：{{item.alarmDesc}}</p>
+          <p>状态：{{item.enabled?'开启':'关闭'}}</p>
         </div>
       </el-submenu>
     </el-menu>
@@ -23,15 +23,24 @@
 </template>
 
 <script>
+import { WARNING_TYPE } from '@/constant/Dictionaries'
+import { formatDate } from '@/libs/util'
+
 export default {
   name: 'ScreenCommandWarningList',
-  data() {
-    return {
-      list: []
-      // list: ['1', '2', '3', '4']
+  props: {
+    list: {
+      type: Array,
+      default: ()=>[]
     }
   },
   methods: {
+    formatTime(time) {
+      return formatDate(time)
+    },
+    formatType(type) {
+      return WARNING_TYPE.toString(type + '')
+    },
     remind() {
       console.log('remind')
     }

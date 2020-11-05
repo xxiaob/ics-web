@@ -219,6 +219,11 @@ export const WARNING_TYPE = new JcEnum([//告警类型
   { key: 'GRID_USER_ABNORMAL', value: '3', label: '岗点日常-人员不足' },
   { key: 'TEMPORARY_ABNORMAL', value: '4', label: '临时任务-任务超时' }
 ])
+export const WARNING_DETAIL_TYPE = new JcEnum([//告警详情查询
+  { key: 'PEOPLE', value: '0', label: '人员' },
+  { key: 'TASK', value: '1', label: '任务' },
+  { key: 'POST', value: '2', label: '岗点' }
+])
 
 /** 用户在岗 考勤状态 */
 export const USER_GRID_STATUS = new JcEnum([
