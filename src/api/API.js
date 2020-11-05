@@ -338,7 +338,8 @@ export default {
     }
   },
   warning: {
-    getDetail: 'task-service/systemAlarm/getDetail'
+    getDetail: 'task-service/systemAlarm/getDetail',
+    list: 'task-service/systemAlarm/select' // 告警台账列表
   },
   controlViolate: {
     // 智慧控违

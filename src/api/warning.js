@@ -13,3 +13,13 @@ import API from './API'
 export function getDetail(data) {
   return axios.post(API.warning.getDetail, data)
 }
+
+
+/**
+ * 列表
+ * @param {object} data
+ * @returns {Object} axios 对象
+ */
+export function getAlarmList(data) {
+  return axios.post(API.warning.list, data)
+}

@@ -305,3 +305,12 @@ export const ALARM_STATUS = new JcEnum([
   { key: 'TASK_ING', value: '3', label: '任务处理中' }
 ])
 
+/**
+ * 系统告警状态
+ */
+export const SYSTEM_ALARM_STATUS = new JcEnum([
+  { key: 'OPEN', value: 0, label: '开启' },
+  { key: 'CLOSE', value: 1, label: '关闭' }
+])
+
+
