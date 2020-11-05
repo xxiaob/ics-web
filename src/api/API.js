@@ -336,6 +336,9 @@ export default {
       exportList: 'data-service/orgInfo/exportOrgBusinessList', // 业务列表导出
       exportDetail: 'data-service/orgInfo/exportOrgBusinessDetail' // 业务详情导出
     }
+  },
+  warning: {
+    getDetail: 'task-service/systemAlarm/getDetail'
   }
 }
 
