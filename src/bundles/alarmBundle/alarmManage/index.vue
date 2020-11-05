@@ -9,15 +9,15 @@
         <el-table-column type="selection" width="40"></el-table-column>
         <el-table-column type="index" :index="indexMethod" label="序号" width="50"></el-table-column>
         <el-table-column prop="alarmSourceName" label="告警来源"></el-table-column>
-        <el-table-column prop="orgName" label="所属组织" :formatter="formatOrg"></el-table-column>
-        <el-table-column prop="createTime" label="告警时间" :formatter="formatTime"></el-table-column>
+        <el-table-column prop="orgName" label="所属组织"></el-table-column>
+        <el-table-column prop="createTime" label="告警时间" min-width="120" :formatter="formatTime"></el-table-column>
         <el-table-column prop="alarmLocation" label="告警地点"></el-table-column>
-        <el-table-column prop="alarmUsers" label="相关人员"></el-table-column>
+        <el-table-column prop="alarmUsers" label="相关人员" width="100"></el-table-column>
         <el-table-column prop="alarmDesc" label="告警描述"></el-table-column>
-        <el-table-column prop="enabledName" label="告警状态"></el-table-column>
+        <el-table-column prop="enabledName" label="告警状态" width="80"></el-table-column>
         <el-table-column width="80" label="操作">
           <template slot-scope="scope">
-            <el-button type="text" size="mini" icon="el-icon-chat-dot-round" @click="detail(scope.row)" title="告警"></el-button>
+            <el-button type="text" size="mini" icon="el-icon-chat-dot-round" @click="send(scope.row)" title="告警"></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -29,20 +29,17 @@
 </template>
 <script>
 
-import { eventManageDel } from '@/api/eventManage'
 import { getAlarmList } from '@/api/warning'
 import { formatDate } from '@/libs/util'
 import PaginationMixins from '@/mixins/PaginationMixins'
 import { organizationList } from '@/api/organization'
-import { createNamespacedHelpers } from 'vuex'
-const { mapState } = createNamespacedHelpers('user')
+
 
 export default {
   name: 'AlarmMange',
   mixins: [PaginationMixins],
   components: {
     TabFilter: () => import('./modules/tabFilter')
-
   },
   data() {
     return {
@@ -58,9 +55,7 @@ export default {
       orgId: ''
     }
   },
-  computed: {
-    ...mapState(['user'])
-  },
+
   async created() {
     await this.getOrgTree()
 
@@ -116,12 +111,20 @@ export default {
     async initData() {
       if (!this.loading) {
         this.loading = true
+        let filter = {}
+
+        for (let key in this.filter) {
+          if (this.filter[key] !== '') {
+            filter[key] = this.filter[key]
+          }
+        }
+        console.log('filter', filter)
         try {
-          const { total, resultList } = await getAlarmList({ ...this.filter, ...this.page })
+          const { total, resultList } = await getAlarmList({ ...filter, ...this.page })
 
           if (resultList && resultList.length) {
             resultList.forEach(item => {
-              item.enabledName = item.enabled ? '关闭' : '开启'
+              item.enabledName = item.enabled ? '开启' : '关闭'
             })
           }
           console.log('resultList', resultList)
@@ -168,16 +171,8 @@ export default {
       this.filter = filter
       this.currentChange(1)
     },
-    del(row) {
-      this.$confirm('确认删除该事件', '提示', { type: 'warning' }).then(() => {
-        this.remove(row.id)
-      }).catch(() => {})
-    },
-    remove(id) {
-      eventManageDel(id).then(() => {
-        this.$message.success('删除成功')
-        this.currentChange(this.page.pageNum - 1)
-      })
+    send(row) {
+      console.log('row', row)
     }
   }
 }

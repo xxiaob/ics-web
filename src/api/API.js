@@ -339,7 +339,8 @@ export default {
   },
   warning: {
     getDetail: 'task-service/systemAlarm/getDetail',
-    list: 'task-service/systemAlarm/select' // 告警台账列表
+    list: 'task-service/systemAlarm/select', // 告警台账列表
+    send: 'task-service/systemAlarm/sendInfoToUser'
   },
   controlViolate: {
     // 智慧控违

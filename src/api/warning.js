@@ -23,3 +23,13 @@ export function getDetail(data) {
 export function getAlarmList(data) {
   return axios.post(API.warning.list, data)
 }
+
+
+/**
+ * 发送提醒
+ * @param {object} id 告警id
+ * @returns {Object} axios 对象
+ */
+export function sendRemind(id) {
+  return axios.post(API.warning.send + `?alarmId=${id}`)
+}
