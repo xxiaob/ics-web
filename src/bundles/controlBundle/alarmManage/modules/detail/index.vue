@@ -3,33 +3,31 @@
     <el-form ref="form" label-width="100px" :model="form" class="jc-manage-form" size="mini">
 
       <el-form-item label="信息来源：">
-        <span>{{form.sources}}</span>
+        <span>{{form.source}}</span>
       </el-form-item>
       <el-form-item label="违建类型：">
-        <span>{{form.mark}}</span>
+        <span>{{form.remark}}</span>
       </el-form-item>
       <el-form-item label="建筑地址：">
-        <span>{{form.address}}</span>
+        <span>{{form.positionName}}</span>
       </el-form-item>
       <el-form-item label="占地面积：">
-        <span>{{form.land}}</span>
+        <span>{{form.areaCovered}}</span>
       </el-form-item>
       <el-form-item label="时间：">
-        <span>{{form.createTime}}</span>
+        <span>{{form.createDate| filterTime}}</span>
       </el-form-item>
       <el-form-item label="图斑：">
-        <span>{{form.opinion}}</span>
+        <el-image v-for="url in form.photos" :key="url" :src="url" :preview-src-list="form.photos"  class="jc-img"></el-image>
       </el-form-item>
-
     </el-form>
   </el-dialog>
 </template>
 <script>
-import { eventManageGet } from '@/api/eventManage'
-import MediaMixins from '@/bundles/taskBundle/mixins/MediaMixins'
 
+import { formatDate } from '@/libs/util'
 export default {
-  name: 'EventManageDetail',
+  name: 'alarmManageDetail',
   props: {
     visible: {
       type: Boolean,
@@ -40,7 +38,6 @@ export default {
       default: ()=>{}
     }
   },
-  mixins: [MediaMixins],
   watch: {
     visible(newVal) {
       if (newVal) {
@@ -48,7 +45,6 @@ export default {
       }
     },
     info: {
-      // immediate: true,
       deep: true,
       handler() {
         this.getDetail()
@@ -58,8 +54,7 @@ export default {
   data() {
     return {
       dialogVisible: false,
-      form: {},
-      audios: []
+      form: {}
     }
   },
   created() {
@@ -67,26 +62,23 @@ export default {
       this.getDetail()
     }
   },
+  filters: {
+    filterTime(value) {
+      return formatDate(value)
+    }
+  },
   methods: {
     async getDetail() {
-      const res = await eventManageGet(this.info.id)
-
-      this.form = { ...this.info, ...res }
-      // this.audios = this.form.audioAddrs
-      // this.audioPlayShows = new Array(this.audios.length).fill(true)
+      this.form = { ...this.info }
+      console.log('this.form', this.form)
     },
     dialogClose() {
       this.$emit('update:visible', false)
-    },
-    download() {
-      console.log('download')
     }
   }
 }
 </script>
 <style lang="scss" scoped>
 @import "@/bundles/taskBundle/css/media.scss";
-.dialog-footer {
-  text-align: center;
-}
+
 </style>

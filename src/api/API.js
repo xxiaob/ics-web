@@ -339,6 +339,10 @@ export default {
   },
   warning: {
     getDetail: 'task-service/systemAlarm/getDetail'
+  },
+  controlViolate: {
+    // 智慧控违
+    list: 'task-service/controlBuild/select'
   }
 }
 
