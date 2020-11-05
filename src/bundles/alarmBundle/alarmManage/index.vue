@@ -6,7 +6,6 @@
         <div class="jc-card-title">列表内容</div>
       </div>
       <el-table :data="list" v-loading="loading" row-key="id" class="jc-table">
-        <el-table-column type="selection" width="40"></el-table-column>
         <el-table-column type="index" :index="indexMethod" label="序号" width="50"></el-table-column>
         <el-table-column prop="alarmSourceName" label="告警来源"></el-table-column>
         <el-table-column prop="orgName" label="所属组织"></el-table-column>
@@ -17,19 +16,17 @@
         <el-table-column prop="enabledName" label="告警状态" width="80"></el-table-column>
         <el-table-column width="80" label="操作">
           <template slot-scope="scope">
-            <el-button type="text" size="mini" icon="el-icon-chat-dot-round" @click="send(scope.row)" title="告警"></el-button>
+            <el-button type="text" size="mini" icon="el-icon-chat-dot-round" @click="send(scope.row, !scope.row.enabled)" :class="{isDisabled:!scope.row.enabled}" title="告警"></el-button>
           </template>
         </el-table-column>
       </el-table>
       <el-pagination @current-change="currentChange" @size-change="sizeChange" :current-page.sync="page.pageNum" :page-size="page.pageSize" layout="total, sizes, prev, pager, next" :total="page.total" class="text-right jc-mt"></el-pagination>
     </el-card>
-
-
   </div>
 </template>
 <script>
 
-import { getAlarmList } from '@/api/warning'
+import { getAlarmList, sendRemind } from '@/api/warning'
 import { formatDate } from '@/libs/util'
 import PaginationMixins from '@/mixins/PaginationMixins'
 import { organizationList } from '@/api/organization'
@@ -47,12 +44,7 @@ export default {
       orgObj: {},
       list: [],
       loading: false,
-      visible: false,
-      detailVisible: false,
-      info: null,
-      detailInfo: null,
-      filter: {},
-      orgId: ''
+      filter: {}
     }
   },
 
@@ -65,9 +57,7 @@ export default {
     formatTime(row, column, cellValue) {
       return formatDate(cellValue)
     },
-    formatOrg(row, column, cellValue) {
-      return this.orgObj[cellValue]
-    },
+
     formatOrgTree(child) {
       let trees = []
 
@@ -111,6 +101,7 @@ export default {
     async initData() {
       if (!this.loading) {
         this.loading = true
+        // 过滤筛选条件的空项
         let filter = {}
 
         for (let key in this.filter) {
@@ -118,7 +109,7 @@ export default {
             filter[key] = this.filter[key]
           }
         }
-        console.log('filter', filter)
+
         try {
           const { total, resultList } = await getAlarmList({ ...filter, ...this.page })
 
@@ -127,38 +118,8 @@ export default {
               item.enabledName = item.enabled ? '开启' : '关闭'
             })
           }
-          console.log('resultList', resultList)
-
-          /*
-
-            alarmDesc: "金鑫测试任务aaa人员未准点达到"
-            alarmLocation: "云密城城城城城城城城城城"
-            alarmPositionName: null
-            alarmSource: 1
-            alarmSourceName: null
-            alarmTime: 1604513460000
-            alarmUsers: null
-            businessId: "83616006336937984"
-            createTime: 1604513460000
-            creatorId: null
-            enabled: 0
-            id: "1"
-            isDelete: 0
-            lat: "31.972751"
-            lng: "118.748361"
-            modifierId: null
-            orgId: "1"
-            orgName: null
-            projectId: null
-            updateTime: null
-          */
-
-          console.log('total', total)
-          console.log('resultList', resultList)
 
           this.page.total = total
-
-
           this.list = resultList
           this.loading = false
         } catch (error) {
@@ -171,12 +132,36 @@ export default {
       this.filter = filter
       this.currentChange(1)
     },
-    send(row) {
-      console.log('row', row)
+    async send(row, isDisabled) {
+      // 如果告警已关闭不发送告警提醒
+      if (isDisabled) {
+        this.$message({
+          message: '当前告警已关闭'
+        })
+        return
+      }
+
+
+      // 如果告警开启发送告警提醒
+      this.loading = true
+      try {
+        await sendRemind(row.id)
+        this.loading = false
+        this.$message({
+          message: '提醒已发送',
+          type: 'success'
+        })
+      } catch (error) {
+        console.error(error)
+        this.loading = false
+      }
     }
   }
 }
 </script>
 
 <style lang="scss" scoped>
+.isDisabled{
+  color:#ccc;
+}
 </style>

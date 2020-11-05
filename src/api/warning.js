@@ -3,6 +3,8 @@
  */
 import axios from 'axios'
 import API from './API'
+import { download } from '@/libs/download'
+
 
 /*-------------------------------系统告警------------------------------------ */
 /**
@@ -32,4 +34,13 @@ export function getAlarmList(data) {
  */
 export function sendRemind(id) {
   return axios.post(API.warning.send + `?alarmId=${id}`)
+}
+
+/**
+ *  告警列表导出
+ * @param {object} data
+ *
+ */
+export function exportAlarmList(data = {}) {
+  download('告警列表.xlsx', API.warning.export, data)
 }
