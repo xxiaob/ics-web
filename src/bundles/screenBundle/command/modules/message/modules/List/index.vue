@@ -1,6 +1,6 @@
 <template>
   <transition-group name="jc-list" tag="div" class="jc-message-content">
-    <div class="jc-task-item" v-for="item in list" :key="item.id+item.warnType" :class="style[item.type]" @click.stop="detail(item)">
+    <div class="jc-task-item" v-for="item in list" :key="item.id+item.warnType" :class="style[item.type+item.warnType]" @click.stop="detail(item)">
       <div class="jc-info-title">
         <span v-text="item.title"></span>
         <span class="jc-right">
@@ -10,18 +10,18 @@
         </span>
       </div>
       <div class="jc-info-item">组织：{{item.orgName}}</div>
-      <template v-if="item.type == types.TEMPORARY">
+      <template v-if="item.type == MESSAGE_TYPE.TEMPORARY">
         <div class="jc-info-item">下发人：{{item.userName}}</div>
         <div class="jc-info-item">任务来源：{{item.typeName}}</div>
       </template>
-      <template v-else-if="item.type == types.ALARM && item.systemSourceType == SYSTEM_MESSAGE_TYPE.DREGS">
+      <template v-else-if="item.type == MESSAGE_TYPE.ALARM && item.systemSourceType == SYSTEM_MESSAGE_TYPE.DREGS">
         <div class="jc-info-item">车牌号：{{item.userName}}</div>
         <div class="jc-info-item">告警类型：{{item.typeName}}</div>
       </template>
-      <div class="jc-info-item" v-else-if="item.type == types.ALARM && item.systemSourceType == SYSTEM_MESSAGE_TYPE.SELF">地点：{{item.location}}</div>
+      <div class="jc-info-item" v-else-if="item.type == MESSAGE_TYPE.ALARM && item.systemSourceType == SYSTEM_MESSAGE_TYPE.SELF">地点：{{item.location}}</div>
       <div class="jc-info-item" v-else>上报人：{{item.userName}}</div>
-      <div class="jc-info-item" v-if="item.type == types.QUESTION">问题类型：{{item.typeName}}</div>
-      <div class="jc-info-item" v-else-if="item.type == types.EVENT">事件类型：{{item.typeName}}</div>
+      <div class="jc-info-item" v-if="item.type == MESSAGE_TYPE.QUESTION">问题类型：{{item.typeName}}</div>
+      <div class="jc-info-item" v-else-if="item.type == MESSAGE_TYPE.EVENT">事件类型：{{item.typeName}}</div>
       <div class="jc-info-item">时间：{{item.time}}</div>
     </div>
     <view-empty v-if="list.length < 1" key="0"></view-empty>
@@ -44,13 +44,20 @@ export default {
   data() {
     return {
       SYSTEM_MESSAGE_TYPE,
-      types: MESSAGE_TYPE,
+      MESSAGE_TYPE,
       style: {
         [MESSAGE_TYPE.EVENT]: 'jc-event',
         [MESSAGE_TYPE.QUESTION]: 'jc-question',
         [MESSAGE_TYPE.TASK]: 'jc-task',
         [MESSAGE_TYPE.TEMPORARY]: 'jc-task',
-        [MESSAGE_TYPE.ALARM]: 'jc-question'
+        [MESSAGE_TYPE.ALARM]: 'jc-alarm',
+
+        //告警类型区分
+        [MESSAGE_TYPE.ALARM + WARNING_TYPE.TEMPORARY_ABNORMAL]: 'jc-task-alarm',
+        [MESSAGE_TYPE.ALARM + WARNING_TYPE.USER_ABNORMAL]: 'jc-user',
+        [MESSAGE_TYPE.ALARM + WARNING_TYPE.GRID_ARRIVE_ABNORMAL]: 'jc-grid',
+        [MESSAGE_TYPE.ALARM + WARNING_TYPE.GRID_TIME_ABNORMAL]: 'jc-grid',
+        [MESSAGE_TYPE.ALARM + WARNING_TYPE.GRID_USER_ABNORMAL]: 'jc-grid'
       }
     }
   },
@@ -95,7 +102,6 @@ $jc-task-icon-width: 60px;
   background: #ddd;
 }
 
-
 .jc-task-item {
   position: relative;
   // background-color: #e4f3fe;
@@ -137,6 +143,19 @@ $jc-task-icon-width: 60px;
   &.jc-task {
     background-image: url(./assets/task.png);
   }
+  &.jc-alarm {
+    background-image: url(./assets/alarm.png);
+  }
+  &.jc-task-alarm {
+    background-image: url(./assets/task-alarm.png);
+  }
+  &.jc-user {
+    background-image: url(./assets/user.png);
+  }
+  &.jc-grid {
+    background-image: url(./assets/grid.png);
+  }
+
   .jc-info-title {
     color: #333333;
     font-size: 14px;

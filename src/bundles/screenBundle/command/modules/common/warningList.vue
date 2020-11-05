@@ -8,7 +8,7 @@
       <el-submenu v-for="item in list" :index="item.id" :key="item.id">
         <template slot="title">
           <span class="jc-title">告警：{{formatType(item.alarmSource)}}</span>
-          <img class="jc-right" src="./assets/remind.png" alt="" @click.stop="remind" title="提醒相关人员">
+          <img class="jc-right" src="./assets/remind.png" alt="" @click.stop="remind(item)" title="提醒相关人员">
         </template>
         <div class="jc-detail">
           <p>组织：{{item.orgName}}</p>
@@ -25,6 +25,7 @@
 <script>
 import { WARNING_TYPE, SYSTEM_ALARM_STATUS } from '@/constant/Dictionaries'
 import { formatDate } from '@/libs/util'
+import { sendRemind } from '@/api/warning'
 
 export default {
   name: 'ScreenCommandWarningList',
@@ -44,8 +45,17 @@ export default {
     formatType(type) {
       return WARNING_TYPE.toString(type + '')
     },
-    remind() {
-      console.log('remind')
+    async remind({ id, enabled }) {
+      if (enabled == SYSTEM_ALARM_STATUS.OPEN) {
+        try {
+          await sendRemind(id)
+          this.$message.success('操作成功')
+        } catch (error) {
+          console.error(error)
+        }
+      } else {
+        this.$message.error('告警已关闭')
+      }
     }
   }
 }
