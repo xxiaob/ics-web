@@ -15,7 +15,7 @@
           <p>时间：{{formatTime(item.alarmTime)}}</p>
           <p>地点：{{item.alarmLocation}}</p>
           <p>描述：{{item.alarmDesc}}</p>
-          <p>状态：{{item.enabled?'开启':'关闭'}}</p>
+          <p>状态：{{formatStatus(item.enabled)}}</p>
         </div>
       </el-submenu>
     </el-menu>
@@ -28,11 +28,6 @@ import { formatDate } from '@/libs/util'
 
 export default {
   name: 'ScreenCommandWarningList',
-  data() {
-    return {
-      SYSTEM_ALARM_STATUS
-    }
-  },
   props: {
     list: {
       type: Array,
@@ -40,6 +35,9 @@ export default {
     }
   },
   methods: {
+    formatStatus(status) {
+      return SYSTEM_ALARM_STATUS.toString(status)
+    },
     formatTime(time) {
       return formatDate(time)
     },

@@ -3,7 +3,7 @@
  */
 import { areaList } from '@/api/area'
 import { AREAS_TYPE, AREAS_SEARCH_TYPE, MAP_EVENT, MAP_SIGN_ZINDEX } from '@/constant/CONST'
-import { WARNING_TYPE } from '@/constant/Dictionaries'
+import { WARNING_TYPE, SYSTEM_ALARM_STATUS } from '@/constant/Dictionaries'
 import { apiBoundariesFormat } from '@/libs/apiFormat'
 import { JcMapSign, JcMapMarker } from '@/map'
 import { getMarkerCluster } from '@/map/aMap/aMapUtil'
@@ -66,7 +66,7 @@ export default {
 
           data.attendance.forEach(item => {
             //记录异常报警的时间
-            if (item.status == 1) {
+            if (item.status == SYSTEM_ALARM_STATUS.OPEN) {
               abnormalGridTimes[item.id] = new Date().getTime()
             }
 
@@ -74,10 +74,10 @@ export default {
 
             //如果异常岗点列表，岗点存在，岗点为正常，则从异常列表移除，如果岗点不存在，异常，则增加
             if (index > -1) {
-              if (item.status == 0) {
+              if (item.status == SYSTEM_ALARM_STATUS.CLOSE) {
                 this.abnormalGridIds.splice(index, 1)
               }
-            } else if (item.status == 1) {
+            } else if (item.status == SYSTEM_ALARM_STATUS.OPEN) {
               this.abnormalGridIds.push(item.id)
               hasAbnormalGrid = true
               hasAbnormalGridTypes.push(item.warnType)

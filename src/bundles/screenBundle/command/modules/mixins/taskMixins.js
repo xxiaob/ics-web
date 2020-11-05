@@ -4,7 +4,7 @@
 import { JcMapMarker } from '@/map'
 import { JcTemporaryTaskIcons } from '@/config/JcIconConfig'
 import { MAP_EVENT, MAP_SIGN_ZINDEX } from '@/constant/CONST'
-import { MESSAGE_TYPE } from '@/constant/Dictionaries'
+import { MESSAGE_TYPE, SYSTEM_ALARM_STATUS } from '@/constant/Dictionaries'
 import { VOICE_TYPE } from '@/config/JcVoiceAlertConfig'
 import { getScreenTask } from '@/api/screen'
 
@@ -83,7 +83,7 @@ export default {
 
           data.tasks.forEach(item => {
             //记录异常报警的时间
-            if (item.status == 1) {
+            if (item.status == SYSTEM_ALARM_STATUS.OPEN) {
               abnormalTaskTimes[item.taskId] = new Date().getTime()
             }
 
@@ -91,10 +91,10 @@ export default {
 
             //如果任务正常，从异常列表移除，恢复任务显示，如果不正常，则去显示异常任务标识
             if (index > -1) {
-              if (item.status == 0) {
+              if (item.status == SYSTEM_ALARM_STATUS.CLOSE) {
                 this.abnormalTaskIds.splice(index, 1)
               }
-            } else if (item.status == 1) {
+            } else if (item.status == SYSTEM_ALARM_STATUS.OPEN) {
               this.abnormalTaskIds.push(item.taskId)
               hasAbnormalTask = true
             }
@@ -102,7 +102,7 @@ export default {
             if (userTasks[item.taskId]) {
               let marker = userTasks[item.taskId].marker
 
-              marker.icon = item.status == 0 ? JcTemporaryTaskIcons.plain : JcTemporaryTaskIcons.abnormal
+              marker.icon = item.status == SYSTEM_ALARM_STATUS.CLOSE ? JcTemporaryTaskIcons.plain : JcTemporaryTaskIcons.abnormal
               marker.setContent()
             }
           })

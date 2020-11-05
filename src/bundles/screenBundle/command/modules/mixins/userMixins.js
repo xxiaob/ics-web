@@ -6,6 +6,8 @@ import { JcUserIcons } from '@/config/JcIconConfig'
 import { VOICE_TYPE } from '@/config/JcVoiceAlertConfig'
 import { JcMapMarker } from '@/map'
 import { MAP_EVENT, MAP_SIGN_ZINDEX } from '@/constant/CONST'
+import { SYSTEM_ALARM_STATUS } from '@/constant/Dictionaries'
+
 
 let usersData = { markerCluster: null, users: {}, lnglats: [] } //存储用户信息
 
@@ -142,7 +144,7 @@ export default {
 
           data.attendance.forEach(item => {
             //记录异常报警的时间
-            if (item.status == 1) {
+            if (item.status == SYSTEM_ALARM_STATUS.OPEN) {
               abnormalUserTimes[item.id] = new Date().getTime()
             }
 
@@ -150,10 +152,10 @@ export default {
 
             //如果异常用户列表，用户存在，用户为正常，则从异常列表移除，如果用户不存在，异常，则增加
             if (index > -1) {
-              if (item.status == 0) {
+              if (item.status == SYSTEM_ALARM_STATUS.CLOSE) {
                 this.abnormalUserIds.splice(index, 1)
               }
-            } else if (item.status == 1) {
+            } else if (item.status == SYSTEM_ALARM_STATUS.OPEN) {
               this.abnormalUserIds.push(item.id)
               hasAbnormalUser = true
             }
