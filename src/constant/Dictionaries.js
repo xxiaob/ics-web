@@ -230,7 +230,9 @@ export const USER_GRID_STATUS = new JcEnum([
   { key: 'INCIRCLE', value: '0', label: '进圈' },
   { key: 'OUTCIRCLE', value: '1', label: '出圈' },
   { key: 'INGUARD', value: '2', label: '进岗' },
-  { key: 'OUTGUARD', value: '3', label: '离岗' }
+  { key: 'OUTGUARD', value: '3', label: '离岗' },
+  { key: 'APPGOTOWORK', value: '4', label: 'APP上班打卡' },
+  { key: 'APPGOOFFWORK', value: '5', label: 'APP下班打卡' }
 ])
 
 /**
