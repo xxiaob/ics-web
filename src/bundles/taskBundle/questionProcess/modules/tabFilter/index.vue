@@ -85,6 +85,10 @@ export default {
       this.form.endDate = ''
       this.date = null
       this.form.selectType = this.status
+
+      this.problemTypeArr = []
+      this.form.problemBigTypeName = ''
+      this.form.problemType = ''
     },
     onSubmit() {
       const form = {}
