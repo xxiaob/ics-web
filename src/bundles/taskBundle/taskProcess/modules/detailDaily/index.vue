@@ -11,7 +11,7 @@
             <span>{{form.taskName}}</span>
           </el-form-item>
           <el-form-item label="创建时间：" class="jc-left-width25">
-            <span>{{form.createTime|filterTime}}</span>
+            <span>{{form.createDate|filterTime}}</span>
           </el-form-item>
           <el-form-item label="项目名称：" class="jc-left-width50">
             <span>{{form.projectName}}</span>
