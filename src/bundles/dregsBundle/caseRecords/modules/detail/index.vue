@@ -65,7 +65,7 @@
 
 
           <el-form-item label="现场照片：">
-            <el-image v-for="url in problemDetail.filePO && problemDetail.filePO.photos" :key="url" :src="url" :preview-src-list="imgs"  class="jc-img"></el-image>
+            <el-image v-for="url in problemDetail.filePO && problemDetail.filePO.photos" :key="url" :src="url" :preview-src-list="problemDetail.filePO.photos"  class="jc-img"></el-image>
           </el-form-item>
           <el-form-item label="视频：">
             <div class="jc-video" v-for="url in problemDetail.filePO && problemDetail.filePO.videoAddrs" :key="url" @click="showVideo(url)">
