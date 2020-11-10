@@ -5,7 +5,7 @@
         <el-cascader :options="orgTree" v-model="form.orgId" :props="{expandTrigger: 'hover', emitPath: false,checkStrictly:true }" clearable @change="orgChange" ref="orgCascader"></el-cascader>
       </el-form-item>
       <el-form-item prop="problemType" label="问题类型">
-        <el-select v-model="form.problemType" placeholder="选择问题类型">
+        <el-select v-model="form.dregsProblemType" placeholder="选择问题类型">
           <el-option v-for="item in types" :key="item.id" :label="item.configName" :value="item.configValue"></el-option>
         </el-select>
       </el-form-item>
@@ -41,7 +41,7 @@ export default {
   data() {
     return {
       form: {
-        problemType: '',
+        dregsProblemType: '',
         startDate: '',
         endDate: '',
         problemDesc: '',
