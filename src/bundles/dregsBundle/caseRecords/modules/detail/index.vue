@@ -149,7 +149,6 @@ export default {
 
       // 问题详情
       this.problemDetail = await getProblemDetail(this.info.id)
-      console.log('pp', this.problemDetail)
     }
   }
 }
