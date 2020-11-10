@@ -8,9 +8,11 @@
           <div class="jc-node-content">
             <div>{{item.userName + ' ' + item.typeName + ' ' + item.areaName}}</div>
             <div v-if="inTypes.includes(item.type)">{{`在岗时长${item.duration}H，巡逻里程${item.distence}KM，上报事件数${item.reportEvent}件`}}</div>
-            <template v-if="inTypes.includes(item.type) && item.url">
-              <div class="jc-node-success">打卡成功</div>
-            </template>
+            <!-- <template v-if="inTypes.includes(item.type) && item.url">
+              <div class="jc-node-success">打卡成功(执法仪)</div>
+            </template> -->
+             <div v-if="item.type==USER_GRID_STATUS.APPGOTOWORK||item.type==USER_GRID_STATUS.APPGOOFFWORK">(APP)</div>
+              <div v-else>(执法仪)</div>
             <el-image v-if="item.url" :src="item.url" @click="showFullImg(item.url,[item.url])"></el-image>
           </div>
         </div>
@@ -33,6 +35,7 @@ export default {
   },
   data() {
     return {
+      USER_GRID_STATUS,
       loading: false,
       list: [],
       warnList: [],
