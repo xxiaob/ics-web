@@ -73,6 +73,7 @@ export default {
       this.$refs.form.resetFields()
       this.form.startDate = ''
       this.form.endDate = ''
+      this.form.dregsProblemType = ''
       this.date = null
       this.form.selectType = this.status
     },
