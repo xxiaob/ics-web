@@ -123,7 +123,7 @@ export default {
         try {
           const { total, resultList } = await questionList({ systemModuleType: 1, ...this.filter, ...this.page })
 
-          this.types = await getByType({ type: 'problemType' })
+          this.types = await getByType({ type: 'dregsProblemType' })
           this.page.total = total
           this.list = resultList
           this.loading = false
