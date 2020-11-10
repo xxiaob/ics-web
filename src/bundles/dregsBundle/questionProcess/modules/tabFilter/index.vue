@@ -8,7 +8,7 @@
     </div>
     <el-form ref="form" :inline="true" :model="form" class="jc-tabfilter-form" size="small">
       <el-form-item prop="problemType" label="问题类型">
-        <el-select v-model="form.problemType" placeholder="选择问题类型">
+        <el-select v-model="form.dregsProblemType" placeholder="选择问题类型">
           <el-option v-for="item in types" :key="item.id" :label="item.configName" :value="item.configValue"></el-option>
         </el-select>
       </el-form-item>
@@ -42,7 +42,7 @@ export default {
       status: QUESTION_TYPES.PENDING,
       form: {
         selectType: QUESTION_TYPES.PENDING,
-        problemType: '',
+        dregsProblemType: '',
         startDate: '',
         endDate: '',
         problemDesc: ''
