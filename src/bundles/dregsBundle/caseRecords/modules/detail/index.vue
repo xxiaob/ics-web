@@ -65,10 +65,10 @@
 
 
           <el-form-item label="现场照片：">
-            <el-image v-for="url in imgs" :key="url" :src="url" :preview-src-list="imgs"  class="jc-img"></el-image>
+            <el-image v-for="url in problemDetail.filePO && problemDetail.filePO.photos" :key="url" :src="url" :preview-src-list="imgs"  class="jc-img"></el-image>
           </el-form-item>
           <el-form-item label="视频：">
-            <div class="jc-video" v-for="url in videos" :key="url" @click="showVideo(url)">
+            <div class="jc-video" v-for="url in problemDetail.filePO && problemDetail.filePO.videoAddrs" :key="url" @click="showVideo(url)">
               <video :src="url"></video>
               <div class="hover">
                 <img class="jc-video-play" src="@/bundles/taskBundle/assets/play.png" alt="">
@@ -76,7 +76,7 @@
             </div>
           </el-form-item>
           <el-form-item label="音频：">
-              <div v-for="(url,index) in audios" :key="url" class="jc-audio" @click="playAudio(url,index)">
+              <div v-for="(url,index) in problemDetail.filePO && problemDetail.filePO.audioAddrs" :key="url" class="jc-audio" @click="playAudio(url,index)">
                 <img class="jc-audio-mike" src="@/bundles/taskBundle/assets/mike.png" alt="">
                 <div class="hover">
                   <img class="jc-video-play" src="@/bundles/taskBundle/assets/play.png" alt="" v-show="audioPlayShows[index]">
@@ -149,10 +149,7 @@ export default {
 
       // 问题详情
       this.problemDetail = await getProblemDetail(this.info.id)
-
-      const { uploadFilePaths } = this.problemDetail
-
-      this.handleUrls(uploadFilePaths)
+      console.log('pp', this.problemDetail)
     }
   }
 }
