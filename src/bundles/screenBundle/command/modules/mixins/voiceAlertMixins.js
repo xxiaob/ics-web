@@ -1,7 +1,9 @@
 /**
  * 声音提醒
  */
-import { VoiceSource } from '@/config/JcVoiceAlertConfig'
+import { VoiceSource, VOICE_TYPE } from '@/config/JcVoiceAlertConfig'
+import { getWarningPlay } from '@/libs/storage'
+const warningVoices = [VOICE_TYPE.GRID_ABNORMAL, VOICE_TYPE.GRID_ARRIVE_ABNORMAL, VOICE_TYPE.GRID_TIME_ABNORMAL, VOICE_TYPE.GRID_USER_ABNORMAL, VOICE_TYPE.USER_ABNORMAL, VOICE_TYPE.TEMPORARY_ABNORMAL]
 
 export default {
   created() {
@@ -11,6 +13,10 @@ export default {
   methods: {
     voicePlay(data) {
       console.log('指挥大屏，收到提示音处理', data)
+      if (getWarningPlay() == '' && warningVoices.includes(data.type)) {
+        console.log('告警提示音不播放')
+        return
+      }
       const audio = this.$refs.myScreenAudio
 
       if (audio.paused) { //audio 在暂停状态 才允许播放

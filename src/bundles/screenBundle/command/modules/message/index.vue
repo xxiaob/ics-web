@@ -23,7 +23,7 @@ export default {
       tabs: [
         { label: '基础业务', value: 'BaseVocation' },
         { label: '项目业务', value: 'ProjectVocation' },
-        { label: '告警信息', value: 'WarningInfo' },
+        { label: '告警信息', value: 'WarningInfo', warningPlay: true },
         { label: '待办信息', value: 'TodoInfo' }
       ],
       visible: true,

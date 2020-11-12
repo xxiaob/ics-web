@@ -159,3 +159,19 @@ export function getCommandOprea(projectId) {
 export function setCommandOprea(projectId, info) {
   storageSet(STORAGE_KEY.COMMAND_OPERA_DATA + getUser().userId + projectId, info)
 }
+
+/**
+ * 获取 指挥大屏 告警提示音 是否播放
+ * @returns {String} 是否播放
+ */
+export function getWarningPlay() {
+  return storageGet(STORAGE_KEY.WARNING_PLAY)
+}
+
+/**
+ * 设置 指挥大屏 告警提示音 是否播放
+ * @param {String} info
+ */
+export function setWarningPlay(info) {
+  storageSet(STORAGE_KEY.WARNING_PLAY, info)
+}
