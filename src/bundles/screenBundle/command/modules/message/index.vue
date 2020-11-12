@@ -1,14 +1,14 @@
 <template>
   <div class="jc-screen-message">
     <div class="jc-title">信息推送</div>
-    <view-tabs v-model="tabComponent" :options="tabs"></view-tabs>
+    <view-tabs v-model="tabComponent" :options="tabs" @icon-click="changeWarningPlay"></view-tabs>
     <message-list :list="this[tabComponent]" @todoChange="changeTodo"></message-list>
   </div>
 </template>
 <script>
 import { MESSAGE_TYPE, SYSTEM_MESSAGE_TYPE, WARNING_TYPE } from '@/constant/Dictionaries'
 import { formatDate } from '@/libs/util'
-import { getTodoInfo, setTodoInfo } from '@/libs/storage'
+import { getTodoInfo, setTodoInfo, getWarningPlay, setWarningPlay } from '@/libs/storage'
 
 export default {
   name: 'ScreenCommandMessage',
@@ -19,11 +19,15 @@ export default {
   },
   data() {
     return {
+      warningPlay: getWarningPlay(),
       tabComponent: 'BaseVocation',
       tabs: [
         { label: '基础业务', value: 'BaseVocation' },
         { label: '项目业务', value: 'ProjectVocation' },
-        { label: '告警信息', value: 'WarningInfo', warningPlay: true },
+        { label: '告警信息', value: 'WarningInfo',
+          icon: getWarningPlay() ? 'iconshengyin' : 'iconwushengyin',
+          iconTitle: getWarningPlay() ? '关闭告警提示音' : '开启告警提示音'
+        },
         { label: '待办信息', value: 'TodoInfo' }
       ],
       visible: true,
@@ -55,6 +59,19 @@ export default {
     })
   },
   methods: {
+    changeWarningPlay() {
+      if (this.warningPlay) {
+        this.tabs[2].icon = 'iconwushengyin'
+        this.tabs[2].iconTitle = '开启告警提示音'
+        setWarningPlay('')
+        this.warningPlay = ''
+      } else {
+        this.tabs[2].icon = 'iconshengyin'
+        this.tabs[2].iconTitle = '关闭告警提示音'
+        setWarningPlay('1')
+        this.warningPlay = '1'
+      }
+    },
     initWarningData({ init, data }) {
       console.log('initWarningData', init, data)
       if (init) {
@@ -225,3 +242,17 @@ export default {
   }
 }
 </script>
+<style lang="scss" scoped>
+/deep/{
+  .jc-tabs-warp .jc-tabs-item{
+    .iconfont{
+      &.iconshengyin{
+        color: $jc-color-primary;
+      }
+      &.iconwushengyin{
+        color: #ccc;
+      }
+    }
+  }
+}
+</style>

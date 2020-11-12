@@ -2,15 +2,11 @@
   <div class="jc-tabs-warp no-select">
     <div class="jc-tabs-item" v-for="item in checkItems" :key="item.value" @click="itemClick(item)" :class="{'jc-disabled': item.disabled, 'jc-active': value == item.value}">
       {{item.label}}
-      <span v-if="item.warningPlay">
-        <i v-if="warningPlay" class="iconfont iconshengyin" title="关闭告警提示音" @click.stop="changeWarningPlay('')"></i>
-        <i v-else class="iconfont iconwushengyin" title="开启告警提示音" @click.stop="changeWarningPlay('1')"></i>
-      </span>
+      <i v-if="item.icon" class="iconfont" :class="item.icon" :title="item.iconTitle" @click.stop="$emit('icon-click')"></i>
     </div>
   </div>
 </template>
 <script>
-import { getWarningPlay, setWarningPlay } from '@/libs/storage'
 
 export default {
   name: 'ScreenCommandViewTabs',
@@ -23,11 +19,6 @@ export default {
       }
     },
     value: null
-  },
-  data() {
-    return {
-      warningPlay: getWarningPlay()
-    }
   },
   computed: {
     checkItems() {
@@ -58,11 +49,6 @@ export default {
       if (!item.disabled) {
         this.$emit('change', item.value)
       }
-    },
-    changeWarningPlay(v) {
-      console.log('changeWarningPlay', v)
-      this.warningPlay = v
-      setWarningPlay(v)
     }
   }
 }
@@ -93,12 +79,6 @@ export default {
     }
     .iconfont{
       font-size: $jc-font-size-small;
-      &.iconshengyin{
-        color: $jc-color-primary;
-      }
-      &.iconwushengyin{
-        color: #ccc;
-      }
     }
   }
 }
