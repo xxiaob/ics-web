@@ -2,7 +2,7 @@
   <!--  建筑违法  -->
   <abstract-area title="建筑违法">
     <div class="jc-category jc-flex-con jc-flex-warp">
-      <div class="jc-category-item jc-flex-warp jc-build-1">
+      <!-- <div class="jc-category-item jc-flex-warp jc-build-1">
         <span class="jc-category-title">违法建筑</span>
         <span class="jc-category-count">
           <count-to :startVal="0" :endVal="illegalConstructiondata.illegalConstruction" :duration="3000" separator="" />件
@@ -25,6 +25,15 @@
         <span class="jc-category-count">
           <count-to :startVal="0" :endVal="illegalConstructiondata.demolitionRatio" :decimals="2" :duration="3000" separator="" />%
         </span>
+      </div> -->
+
+      <div class="jc-category-item jc-flex-warp jc-build-4" v-for="(item,index) in illegalConstructiondata" :key="index" :class="`jc-build-${index+1}`">
+        <span class="jc-category-title">{{item.cname}}</span>
+        <span class="jc-category-count">
+          <count-to v-if="parseInt(item.value) == parseFloat(item.value)" :startVal="0" :endVal="item.value" :duration="3000" separator="" />
+          <count-to v-else :startVal="0" :endVal="item.value" :decimals="2" :duration="3000" separator="" />
+          {{item.company}}
+        </span>
       </div>
     </div>
 
@@ -43,7 +52,28 @@ export default {
   },
   data() {
     return {
-      illegalConstructiondata: {}
+      illegalConstructiondata: [
+        {
+          cname: '违法建设',
+          value: 0,
+          company: '起'
+        },
+        {
+          cname: '查处面积',
+          value: 0,
+          company: '㎡'
+        },
+        {
+          cname: '拆除新增',
+          value: 0,
+          company: '起'
+        },
+        {
+          cname: '拆除新增',
+          value: 0,
+          company: '㎡'
+        }
+      ]
     }
   },
   created() {
@@ -51,7 +81,11 @@ export default {
   },
   methods: {
     initIllegalConstruction(illegalConstructiondata) {
-      this.illegalConstructiondata = illegalConstructiondata
+      illegalConstructiondata.forEach((item, index) => {
+        this.illegalConstructiondata[index].cname = item.cname || this.illegalConstructiondata[index].cname
+        this.illegalConstructiondata[index].value = item.value || this.illegalConstructiondata[index].value
+        this.illegalConstructiondata[index].company = item.company || this.illegalConstructiondata[index].company
+      })
     }
   }
 }

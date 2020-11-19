@@ -65,77 +65,36 @@ export default {
 
         let { caseSummary, urbanManagement, illegalConstruction, residueControl, deviceData, videoSurveillance } = mockdata
 
+        console.log('mockdata', mockdata)
+
         // 案件概要数据处理
-        if (caseSummary) {
-          // 案件概要数据存在则遍历处理数据
-          for (let key in caseSummary) {
-            caseSummary[key] = caseSummary[key] ? +caseSummary[key] : 0
-          }
-        } else {
+        if (!caseSummary) {
           //  如果数据不存在则使用默认值
           caseSummary = {
             caseTotal: 0,
-            cookingFume: 0,
-            closingRate: 0,
-            caseProcessing: 0,
-            caseClosed: 0,
-            muckTransportation: 0,
-            waterEnforcement: 0,
-            illegalConstruction: 0
+            datas: []
           }
         }
 
 
         // 数字城管数据处理
-        if (urbanManagement) {
-          // 数据存在则遍历处理数据
-          for (let key in urbanManagement) {
-            urbanManagement[key] = urbanManagement[key] ? +urbanManagement[key] : 0
-          }
-        } else {
+        if (!urbanManagement) {
           //  如果数据不存在则使用默认值
-          urbanManagement = {
-            workOrderReport: 0,
-            workOrderProcessing: 0,
-            closingRate: 0,
-            onlineGridMember: 0
-          }
+          urbanManagement = []
         }
 
 
         // 违法建筑数据处理
-        if (illegalConstruction) {
-          // 数据存在则遍历处理数据
-          for (let key in illegalConstruction) {
-            illegalConstruction[key] = illegalConstruction[key] ? +illegalConstruction[key] : 0
-          }
-        } else {
+        if (!illegalConstruction) {
           //  如果数据不存在则使用默认值
-          illegalConstruction = {
-            illegalConstruction: 0,
-            buildArea: 0,
-            demolitionArea: 0,
-            demolitionRatio: 0
-          }
+          illegalConstruction = []
         }
 
 
         // 渣土管控数据处理
-        if (residueControl) {
-          // 数据存在则遍历处理数据
-          for (let key in residueControl) {
-            residueControl[key] = residueControl[key] ? +residueControl[key] : 0
-          }
-        } else {
+        if (!residueControl) {
           //  如果数据不存在则使用默认值
-          residueControl = {
-            unearthedTotal: 0,
-            unearthedConstructionSite: 0,
-            accommodationField: 0,
-            detectionAlarm: 0,
-            stickingPoint: 0,
-            illegalCases: 0
-          }
+          residueControl = []
         }
 
         // 设备数据处理

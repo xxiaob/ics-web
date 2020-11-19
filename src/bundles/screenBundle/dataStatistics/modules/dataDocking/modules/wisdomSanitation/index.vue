@@ -2,7 +2,7 @@
   <!--  智慧环卫 改 渣土管控  -->
   <abstract-area title="渣土管控">
     <div class="jc-category jc-flex-warp">
-      <div class="jc-category-item jc-flex-warp">
+      <!-- <div class="jc-category-item jc-flex-warp">
         <div class="jc-sanitation-img">
           <img src="./assets/dregs-unearthed.png" width="100%" alt="">
         </div>
@@ -70,6 +70,18 @@
             <count-to :startVal="0" :endVal="residueControlData.illegalCases" :duration="3000" separator="" />件
           </span>
         </div>
+      </div> -->
+
+      <div class="jc-category-item jc-flex-warp" v-for="(item, index) in residueControlData" :key="index">
+        <div class="jc-sanitation-img">
+          <img :src="item.src" width="100%" alt="">
+        </div>
+        <div class="jc-sanitation-content jc-flex-con jc-flex-warp jc-flex-vertical">
+          <span class="jc-sanitation-title">{{ item.cname }}</span>
+          <span class="jc-sanitation-count">
+            <count-to :startVal="0" :endVal="item.value" :duration="3000" separator="" />{{item.company}}
+          </span>
+        </div>
       </div>
 
     </div>
@@ -89,7 +101,40 @@ export default {
   },
   data() {
     return {
-      residueControlData: {}
+      residueControlData: [
+        {
+          cname: '总出土量',
+          src: require('./assets/dregs-unearthed.png'),
+          value: 0,
+          company: '万方'
+        },
+        {
+          cname: '出土工地',
+          src: require('./assets/dregs-construction.png'),
+          value: 0,
+          company: '个'
+        }, {
+          cname: '消纳场',
+          src: require('./assets/dregs-absorption.png'),
+          value: 0,
+          company: '个'
+        }, {
+          cname: '检测报警',
+          src: require('./assets/dregs-warning.png'),
+          value: 0,
+          company: '个'
+        }, {
+          cname: '卡点',
+          src: require('./assets/dregs-bayonet.png'),
+          value: 0,
+          company: '个'
+        }, {
+          cname: '违法案件',
+          src: require('./assets/dregs-case.png'),
+          value: 0,
+          company: '件'
+        }
+      ]
     }
   },
   created() {
@@ -97,8 +142,11 @@ export default {
   },
   methods: {
     initResidueControl(residueControlData) {
-      console.log('residueControlData', residueControlData)
-      this.residueControlData = residueControlData
+      residueControlData.forEach((item, index) => {
+        this.residueControlData[index].cname = item.cname || this.residueControlData[index].cname
+        this.residueControlData[index].value = item.value || this.residueControlData[index].value
+        this.residueControlData[index].company = item.company || this.residueControlData[index].company
+      })
     }
   }
 }

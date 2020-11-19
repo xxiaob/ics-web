@@ -3,74 +3,13 @@
     <div class="jc-summary-round-wrap jc-flex-con" ref="summaryWrap">
 
       <!-- 旋转小球 -->
-      <div class="jc-summary-round summary-round-1">
+      <div class="jc-summary-round" v-for="(item,index) in caseSummaryData.datas" :key="index" :class="`summary-round-${index+1}`">
         <div class="jc-summary-round-content jc-flex-warp jc-flex-vertical">
           <div class="jc-summary-count jc-flex-con-4 jc-flex-warp">
-            <span>{{ caseSummaryData.cookingFume }}件</span>
+            <span>{{ item.value }}{{item.company}}</span>
           </div>
           <div class="jc-summary-title jc-flex-con-3 jc-flex-warp">
-            <span>餐饮油烟</span>
-          </div>
-        </div>
-      </div>
-
-      <div class="jc-summary-round summary-round-2">
-        <div class="jc-summary-round-content jc-flex-warp jc-flex-vertical">
-          <div class="jc-summary-count jc-flex-con-4 jc-flex-warp">
-            <span>{{ caseSummaryData.closingRate }}%</span>
-          </div>
-          <div class="jc-summary-title jc-flex-con-3 jc-flex-warp">
-            <span>结案率</span>
-          </div>
-        </div>
-      </div>
-      <div class="jc-summary-round summary-round-3">
-        <div class="jc-summary-round-content jc-flex-warp jc-flex-vertical">
-          <div class="jc-summary-count jc-flex-con-4 jc-flex-warp">
-            <span>{{ caseSummaryData.caseProcessing }}件</span>
-          </div>
-          <div class="jc-summary-title jc-flex-con-3 jc-flex-warp">
-            <span>处理中</span>
-          </div>
-        </div>
-      </div>
-      <div class="jc-summary-round summary-round-4">
-        <div class="jc-summary-round-content jc-flex-warp jc-flex-vertical">
-          <div class="jc-summary-count jc-flex-con-4 jc-flex-warp">
-            <span>{{ caseSummaryData.caseClosed }}件</span>
-          </div>
-          <div class="jc-summary-title jc-flex-con-3 jc-flex-warp">
-            <span>已结案</span>
-          </div>
-        </div>
-      </div>
-      <div class="jc-summary-round summary-round-5">
-        <div class="jc-summary-round-content jc-flex-warp jc-flex-vertical">
-          <div class="jc-summary-count jc-flex-con-4 jc-flex-warp">
-            <span>{{ caseSummaryData.muckTransportation }}件</span>
-          </div>
-          <div class="jc-summary-title jc-flex-con-3 jc-flex-warp">
-            <span>渣土运输</span>
-          </div>
-        </div>
-      </div>
-      <div class="jc-summary-round summary-round-6">
-        <div class="jc-summary-round-content jc-flex-warp jc-flex-vertical">
-          <div class="jc-summary-count jc-flex-con-4 jc-flex-warp">
-            <span>{{ caseSummaryData.waterEnforcement }}件</span>
-          </div>
-          <div class="jc-summary-title jc-flex-con-3 jc-flex-warp">
-            <span>水务执法</span>
-          </div>
-        </div>
-      </div>
-      <div class="jc-summary-round summary-round-7">
-        <div class="jc-summary-round-content jc-flex-warp jc-flex-vertical">
-          <div class="jc-summary-count jc-flex-con-4 jc-flex-warp">
-            <span>{{ caseSummaryData.illegalConstruction }}件</span>
-          </div>
-          <div class="jc-summary-title jc-flex-con-3 jc-flex-warp">
-            <span>违章建筑</span>
+            <span>{{item.cname}}</span>
           </div>
         </div>
       </div>
@@ -100,7 +39,45 @@ export default {
     return {
       startVal: 0,
       endVal: 0,
-      caseSummaryData: {}
+      caseSummaryData: {
+        caseTotal: 0,
+        datas: [
+          {
+            cname: '渣土类',
+            value: 0,
+            company: '件'
+          }, {
+            cname: '环卫类',
+            value: 0,
+            company: '件'
+          }, {
+            cname: '占道类',
+            value: 0,
+            company: '件'
+          }, {
+            cname: '三乱类',
+            value: 0,
+            company: '件'
+          }, {
+            cname: '生活类',
+            value: 0,
+            company: '件'
+          }, {
+            cname: '排水类',
+            value: 0,
+            company: '件'
+          }, {
+            cname: '违法建设',
+            value: 0,
+            company: '件'
+          },
+          {
+            cname: '园林绿化',
+            value: 0,
+            company: '件'
+          }
+        ]
+      }
     }
   },
   created() {
@@ -119,7 +96,17 @@ export default {
   methods: {
     initCaseSummary(caseSummaryData) {
       //  案件概要模拟数据
-      this.caseSummaryData = caseSummaryData
+      this.caseSummaryData.caseTotal = caseSummaryData.caseTotal || 0
+
+      caseSummaryData.datas.forEach((item, index) => {
+        let mockData = { ...this.caseSummaryData.datas[index] }
+
+        mockData.cname = item.cname || mockData.cname
+        mockData.value = item.value || mockData.value
+        mockData.company = item.company || mockData.company
+
+        this.caseSummaryData.datas[index] = mockData
+      })
     },
     resize() {
       const width = this.$refs.summaryWrap.clientWidth - 100
@@ -152,6 +139,25 @@ export default {
       }
 
       keyframeVal += '}'
+
+      // 根据数据的不同,调整动画延迟
+      let datas = this.caseSummaryData.datas
+
+      let length = datas.length
+
+      keyframeVal += `
+        .jc-summary-round{
+          animation: jc-summary-move ${length * 2}s linear infinite backwards;
+        }
+      `
+
+      datas.forEach((item, index) => {
+        keyframeVal += `
+          .summary-round-${index + 1} {
+            animation-delay: ${index * 2}s;
+          }
+        `
+      })
 
       oStyle.innerHTML = keyframeVal
 
@@ -204,31 +210,7 @@ export default {
       padding-top: 14%;
       border-radius: 50%;
       background: url("./assets/summary-round.png") no-repeat center/100%;
-      animation: jc-summary-move 14s linear infinite backwards;
 
-      &.summary-round-2 {
-        animation-delay: 2s;
-      }
-
-      &.summary-round-3 {
-        animation-delay: 4s;
-      }
-
-      &.summary-round-4 {
-        animation-delay: 6s;
-      }
-
-      &.summary-round-5 {
-        animation-delay: 8s;
-      }
-
-      &.summary-round-6 {
-        animation-delay: 10s;
-      }
-
-      &.summary-round-7 {
-        animation-delay: 12s;
-      }
 
       .jc-summary-round-content {
         position: absolute;
