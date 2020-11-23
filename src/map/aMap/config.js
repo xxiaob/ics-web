@@ -1,7 +1,7 @@
 /**
  * 高德地图配置数据
  */
-import { mapStyle, markerStyle } from '@/map/mapConst'
+import { mapStyle } from '@/map/mapConst'
 
 //事件转换
 export const EventTrans = {}
@@ -106,7 +106,7 @@ export const CircleStyle = {
 export const PolylineStyle = {
   [mapStyle.BASE]: {
     base: {
-      strokeWeight: 2,
+      strokeWeight: 6,
       strokeStyle: 'dashed',
       lineJoin: 'round',
       lineCap: 'round'
@@ -116,7 +116,7 @@ export const PolylineStyle = {
   },
   [mapStyle.DARK]: {
     base: {
-      strokeWeight: 2,
+      strokeWeight: 6,
       strokeStyle: 'dashed',
       lineJoin: 'round',
       lineCap: 'round'
@@ -126,7 +126,7 @@ export const PolylineStyle = {
   },
   [mapStyle.SATELLITE]: {
     base: {
-      strokeWeight: 2,
+      strokeWeight: 6,
       strokeStyle: 'dashed',
       lineJoin: 'round',
       lineCap: 'round'
