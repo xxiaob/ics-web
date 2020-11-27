@@ -2,30 +2,6 @@
   <!--  数字城管  -->
   <abstract-area title="数字城管">
     <div class="jc-category jc-flex-con jc-flex-warp">
-      <!-- <div class="jc-category-item jc-flex-warp">
-        <span class="jc-category-title">工单上报</span>
-        <span class="jc-category-count">
-          <count-to :startVal="0" :endVal="urbanManagementData.workOrderReport" :duration="3000" separator="" />件
-        </span>
-      </div>
-      <div class="jc-category-item jc-flex-warp">
-        <span class="jc-category-title">工单处理</span>
-        <span class="jc-category-count">
-          <count-to :startVal="0" :endVal="urbanManagementData.workOrderProcessing" :duration="3000" separator="" />件
-        </span>
-      </div>
-      <div class="jc-category-item jc-flex-warp">
-        <span class="jc-category-title">结案比率</span>
-        <span class="jc-category-count">
-          <count-to :startVal="0" :endVal="urbanManagementData.closingRate" :decimals="2" :duration="3000" separator="" />%
-        </span>
-      </div>
-      <div class="jc-category-item jc-flex-warp">
-        <span class="jc-category-title">在线网格员</span>
-        <span class="jc-category-count">
-          <count-to :startVal="0" :endVal="urbanManagementData.onlineGridMember" :duration="3000" separator="" />个
-        </span>
-      </div> -->
 
       <div class="jc-category-item jc-flex-warp" v-for="(item,index) in urbanManagementData" :key="index">
         <span class="jc-category-title">{{ item.cname }}</span>
@@ -90,8 +66,6 @@ export default {
         this.urbanManagementData[index].value = item.value || this.urbanManagementData[index].value
         this.urbanManagementData[index].company = item.company || this.urbanManagementData[index].company
       })
-
-      console.log('this.urbanManagementData', this.urbanManagementData)
     }
   }
 }

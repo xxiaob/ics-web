@@ -65,7 +65,6 @@ export default {
 
         let { caseSummary, urbanManagement, illegalConstruction, residueControl, deviceData, videoSurveillance } = mockdata
 
-        console.log('mockdata', mockdata)
 
         // 案件概要数据处理
         if (!caseSummary) {

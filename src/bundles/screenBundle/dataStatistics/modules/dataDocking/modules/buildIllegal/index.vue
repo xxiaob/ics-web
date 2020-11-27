@@ -2,30 +2,6 @@
   <!--  建筑违法  -->
   <abstract-area title="建筑违法">
     <div class="jc-category jc-flex-con jc-flex-warp">
-      <!-- <div class="jc-category-item jc-flex-warp jc-build-1">
-        <span class="jc-category-title">违法建筑</span>
-        <span class="jc-category-count">
-          <count-to :startVal="0" :endVal="illegalConstructiondata.illegalConstruction" :duration="3000" separator="" />件
-        </span>
-      </div>
-      <div class="jc-category-item jc-flex-warp jc-build-2">
-        <span class="jc-category-title">建筑面积</span>
-        <span class="jc-category-count">
-          <count-to :startVal="0" :endVal="illegalConstructiondata.buildArea" :decimals="2" :duration="3000" separator="" />m<sup>2</sup>
-        </span>
-      </div>
-      <div class="jc-category-item jc-flex-warp jc-build-3">
-        <span class="jc-category-title">拆除面积</span>
-        <span class="jc-category-count">
-          <count-to :startVal="0" :endVal="illegalConstructiondata.demolitionArea" :decimals="2" :duration="3000" separator="" />m<sup>2</sup>
-        </span>
-      </div>
-      <div class="jc-category-item jc-flex-warp jc-build-4">
-        <span class="jc-category-title">拆除比率</span>
-        <span class="jc-category-count">
-          <count-to :startVal="0" :endVal="illegalConstructiondata.demolitionRatio" :decimals="2" :duration="3000" separator="" />%
-        </span>
-      </div> -->
 
       <div class="jc-category-item jc-flex-warp jc-build-4" v-for="(item,index) in illegalConstructiondata" :key="index" :class="`jc-build-${index+1}`">
         <span class="jc-category-title">{{item.cname}}</span>
