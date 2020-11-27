@@ -28,6 +28,7 @@ export const JcIcons = {
   xcd: { name: '巡查点', icon: '/static/areaicons/xcd.png', cluster: '/static/areaicons/cluster4.png', abnormal: '/static/areaicons/xcd-abnormal.png' },
   zjgd: { name: '在建工地', icon: '/static/areaicons/zjgd.png', cluster: '/static/areaicons/cluster1.png', abnormal: '/static/areaicons/zjgd-abnormal.png' },
   ztkd: { name: '渣土卡点', icon: '/static/areaicons/ztkd.png', cluster: '/static/areaicons/cluster1.png', abnormal: '/static/areaicons/ztkd-abnormal.png' },
+  mls: { name: '马拉松岗点', icon: '/static/areaicons/mls.png', cluster: '/static/areaicons/cluster1.png', abnormal: '/static/areaicons/mls-abnormal.png' },
   other: { name: '自建岗点', icon: '/static/areaicons/other.png', cluster: '/static/areaicons/other.png', abnormal: '/static/areaicons/other-abnormal.png' }
 }
 
