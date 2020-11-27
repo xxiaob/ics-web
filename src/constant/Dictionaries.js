@@ -292,6 +292,28 @@ export const DEVICE_SOURCES = new JcEnum([
   { key: 'LAW', value: 2, label: '绑定执法仪' },
   { key: 'FIXEDFLOW', value: 3, label: '固定流播放' }
 ])
+/**
+ * 设备管理 通信类型
+ */
+export const DEVICE_TRANSMODE_TYPES = new JcEnum([
+  { key: 'UDP', value: '0', label: 'udp' },
+  { key: 'TCP', value: '1', label: 'tcp' }
+])
+/**
+ * 设备管理 码流类型
+ */
+export const DEVICE_STREAM_TYPES = new JcEnum([
+  { key: 'MAIN', value: '0', label: '主码流' },
+  { key: 'SON', value: '1', label: '子码流' }
+])
+/**
+ * 设备管理 协议类型
+ */
+export const DEVICE_PROTOCOL_TYPES = new JcEnum([
+  { key: 'RTSP', value: 'rtsp', label: 'rtsp协议' },
+  { key: 'RTMP', value: 'rtmp', label: 'rtmp协议' },
+  { key: 'HLS', value: 'hls', label: 'hls协议' }
+])
 
 /**
  * 法律法规和渣土告警类型

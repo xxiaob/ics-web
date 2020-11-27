@@ -102,7 +102,8 @@ export default {
     deviceList: 'device-service/hikDevice/deviceAndOrgList', // 组织设备列表
     relay: 'device-service/hikDevice/getRelayStreaming',
     getLiveStreaming: 'device-service/hikDevice/getLiveStreaming', //获取实时流
-    deviceBindProject: 'device-service/hikDevice/deviceBindProject'
+    deviceBindProject: 'device-service/hikDevice/deviceBindProject',
+    updateDevice: 'device-service/hikDevice/updateDevice'
   },
   eventManage: {
     //事件管理

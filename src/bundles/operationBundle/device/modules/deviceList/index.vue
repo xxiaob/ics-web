@@ -17,16 +17,27 @@
         <el-table-column prop="deviceName" label="设备名称"></el-table-column>
         <el-table-column prop="orgName" label="所属组织"></el-table-column>
         <el-table-column prop="deviceTypeName" label="设备类型"></el-table-column>
-        <el-table-column prop="treatyType" label="接入协议" v-if="source==1"></el-table-column>
-        <el-table-column prop="userName" label="绑定用户" v-if="source==2"></el-table-column>
-        <el-table-column prop="location" label="经纬度" v-if="source==3"></el-table-column>
-        <el-table-column prop="url" label="固定流地址" v-if="source==3"></el-table-column>
+        <template v-if="source==DEVICE_SOURCES.HANKER">
+          <el-table-column prop="streamType" label="码流类型" :formatter="formatStreamType"></el-table-column>
+          <el-table-column prop="protocol" label="协议类型" :formatter="formatProtocol"></el-table-column>
+          <el-table-column prop="transmode" label="通信类型" :formatter="formatTransmode"></el-table-column>
+          <el-table-column prop="expand" label="扩展字段"></el-table-column>
+          <!-- <el-table-column prop="treatyType" label="接入协议"></el-table-column> -->
+        </template>
+        <el-table-column prop="userName" label="绑定用户" v-if="source==DEVICE_SOURCES.LAW"></el-table-column>
+        <template v-if="source==DEVICE_SOURCES.FIXEDFLOW">
+          <el-table-column prop="location" label="经纬度"></el-table-column>
+          <el-table-column prop="url" label="固定流地址"></el-table-column>
+        </template>
         <el-table-column width="100" label="操作">
           <template slot-scope="scope">
-            <el-button  v-if="source==1" type="text" size="mini" icon="el-icon-view" @click="detail(scope.row)" title="详情"></el-button>
-            <el-button  v-if="source!=3" type="text" size="mini" icon="el-icon-video-camera" @click="showVideo(scope.row)" title="视频记录"></el-button>
-            <el-button v-if="source!=1" type="text" size="mini" icon="el-icon-delete" @click="del(scope.row)" title="删除"></el-button>
-            <el-button v-if="source==2&&scope.row.orgId" type="text" size="mini" icon="el-icon-setting" @click="setUser(scope.row)" title="设置"></el-button>
+            <template  v-if="source==DEVICE_SOURCES.HANKER">
+              <el-button type="text" size="mini" icon="el-icon-edit-outline" @click="edit(scope.row)" title="编辑"></el-button>
+              <el-button type="text" size="mini" icon="el-icon-view" @click="detail(scope.row)" title="详情"></el-button>
+            </template>
+            <el-button  v-if="source!=DEVICE_SOURCES.FIXEDFLOW" type="text" size="mini" icon="el-icon-video-camera" @click="showVideo(scope.row)" title="视频记录"></el-button>
+            <el-button v-if="source!=DEVICE_SOURCES.HANKER" type="text" size="mini" icon="el-icon-delete" @click="del(scope.row)" title="删除"></el-button>
+            <el-button v-if="source==DEVICE_SOURCES.LAW&&scope.row.orgId" type="text" size="mini" icon="el-icon-setting" @click="setUser(scope.row)" title="设置"></el-button>
           </template>
         </el-table-column>
       </el-table>
@@ -37,6 +48,7 @@
     <jc-manage-user :options="info" :visible.sync="userVisible" @save-success="initData"></jc-manage-user>
     <jc-manage-type :options="{deviceIds}" :visible.sync="typeVisible" @save-success="initData"></jc-manage-type>
     <jc-manage-org :orgTree="orgTree" :options="{deviceIds}" :visible.sync="orgVisible" @save-success="initData"></jc-manage-org>
+    <jc-manage-other :options="otherInfo" :visible.sync="otherVisible" @save-success="initData"></jc-manage-other>
 
     <jc-detail :options="detailInfo" :visible.sync="detailVisible"></jc-detail>
 
@@ -45,6 +57,7 @@
 <script>
 import { organizationList } from '@/api/organization'
 import { deviceList, deviceDetail, bindRelease, deleteDevice } from '@/api/device'
+import { DEVICE_SOURCES, DEVICE_TRANSMODE_TYPES, DEVICE_STREAM_TYPES, DEVICE_PROTOCOL_TYPES } from '@/constant/Dictionaries'
 import PaginationMixins from '@/mixins/PaginationMixins'
 
 export default {
@@ -56,11 +69,13 @@ export default {
     JcManageUser: () => import('../manageUser'),
     JcManageType: () => import('../manageType'),
     JcManageOrg: () => import('../manageOrg'),
+    JcManageOther: () => import('../manageOther'),
     JcDetail: () => import('../detail')
   },
   data() {
     return {
-      source: 1,
+      DEVICE_SOURCES,
+      source: DEVICE_SOURCES.HANKER,
       deviceIds: [],
       list: [],
       orgTree: [],
@@ -72,7 +87,9 @@ export default {
       detailVisible: false,
       filter: {},
       typeVisible: false,
-      orgVisible: false
+      orgVisible: false,
+      otherInfo: null,
+      otherVisible: false
     }
   },
   created() {
@@ -82,6 +99,18 @@ export default {
     // this.initData()
   },
   methods: {
+    formatTransmode(row, column, cellValue) {
+      return DEVICE_TRANSMODE_TYPES.toString(cellValue + '')
+    },
+    formatStreamType(row, column, cellValue) {
+      return DEVICE_STREAM_TYPES.toString(cellValue + '')
+    },
+    formatProtocol(row, column, cellValue) {
+      if (cellValue) {
+        return DEVICE_PROTOCOL_TYPES.toString(cellValue)
+      }
+      return ''
+    },
     async initData() {
       if (!this.loading) {
         this.loading = true
@@ -115,6 +144,10 @@ export default {
       const detail = await deviceDetail({ deviceId })
 
       this.$parent.checkShow(type, detail)
+    },
+    edit(row) {
+      this.otherInfo = row
+      this.otherVisible = true
     },
     formatOrgTree(child) {
       let trees = []

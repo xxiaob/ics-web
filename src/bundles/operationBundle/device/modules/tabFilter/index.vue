@@ -42,7 +42,7 @@ export default {
         deviceType: '',
         deviceName: '',
         orgId: '',
-        source: 1
+        source: DEVICE_SOURCES.HANKER
       }
     }
   },

@@ -89,3 +89,11 @@ export function deleteDevice(deviceId) {
 export function deviceBindProject(data) {
   return axios.post(API.device.deviceBindProject, data)
 }
+/**
+ * 修改设备
+ * @param {object} data
+ * @returns {Object} axios 对象
+ */
+export function updateDevice(data) {
+  return axios.post(API.device.updateDevice, data)
+}
