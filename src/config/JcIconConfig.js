@@ -43,7 +43,8 @@ export const JcUserIcons = {
   //用户其他图标
   icons: {
     baseicon: { name: '默认头像', icon: '/static/mapIcons/useronline.png' },
-    usergrid: { name: '网格责任人', icon: '/static/mapIcons/usergrid.png' }
+    usergrid: { name: '网格责任人', icon: '/static/mapIcons/usergrid.png' },
+    usermj: { name: '民警', icon: '/static/mapIcons/usermj.png' }
   }
 }
 
