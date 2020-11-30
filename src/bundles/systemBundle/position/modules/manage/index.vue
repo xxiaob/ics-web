@@ -37,7 +37,7 @@ import FormMixins from '@/mixins/FormMixins'
 import { LOGIN_DEVICE_TYPES } from '@/constant/Dictionaries'
 import { JcUserIcons } from '@/config/JcIconConfig'
 
-let defaultForm = { positionName: '', index: 0 }
+let defaultForm = { positionName: '', photo: '', index: 0 }
 
 export default {
   name: 'SystemPositionManage',
