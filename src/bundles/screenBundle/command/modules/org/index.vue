@@ -122,20 +122,27 @@ export default {
         } else {
           let isOnline = this.userOnlineData.includes(treesItem.id) // 判断是否在线
 
+          if (treesItem.online != isOnline) {
+            treesItem.online = isOnline
+            treesItem.disabled = !isOnline
 
-          treesItem.online = isOnline
-          treesItem.disabled = !isOnline
 
+            // 如果人员在线,并且不是在人员第一位,在改变位置,如果第一位在线,只改变状态
+            if (isOnline && (trees.index + 1 != i) && (trees.index != i)) {
+              this.$refs.tree.remove(treesItem)
 
-          // 如果人员在线,并且不是在人员第一位,在改变位置,如果第一位在线,只改变状态
-          if (isOnline && (trees.index + 1 != i) && (trees.index != i)) {
-            this.$refs.tree.remove(treesItem)
+              // 如果trees.index标识为-1 标识当前组织下只有人员没有下级组织, 因此在第一个人员前插入在线人员
+              if (trees.index !== -1) {
+                this.$refs.tree.insertAfter(treesItem, trees[trees.index])
+              } else {
+                this.$refs.tree.insertBefore(treesItem, trees[0])
+              }
+            }
 
-            // 如果trees.index标识为-1 标识当前组织下只有人员没有下级组织, 因此在第一个人员前插入在线人员
-            if (trees.index !== -1) {
-              this.$refs.tree.insertAfter(treesItem, trees[trees.index])
-            } else {
-              this.$refs.tree.insertBefore(treesItem, trees[0])
+            // 如果人员离线状态,则将位置调整到当前组织最后位置
+            if (!isOnline) {
+              this.$refs.tree.remove(treesItem)
+              this.$refs.tree.insertAfter(treesItem, trees[trees.length - 1])
             }
           }
         }
@@ -160,7 +167,6 @@ export default {
         // 用户列表初始获取在线人员数据
         let onlineUser = await getScreenOnlineUser({ projectId: this.project.projectId })
 
-        console.log('online', onlineUser)
         this.$nextTick(() => {
           this.getUserOnline(onlineUser)
           this.$EventBus.$emit('screen-user-online-obtain', this.getUserOnline)
