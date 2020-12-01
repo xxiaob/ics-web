@@ -17,6 +17,7 @@ export default {
       org: null,
       zoomOrgs: {},
       nowOrgId: null,
+      isFirstLoad: true, //是否首次加载
       orgSignVisible: false, //是否显示中心点标记
       orgTipVisible: false, //组织是否显示名称
       orgAreaVisible: false //组织是否显示区域
@@ -243,6 +244,12 @@ export default {
           item.show()
           this.addMapSignListener(item) //添加监听
         })
+        if (this.isFirstLoad) {
+          this.isFirstLoad = false
+          let myJcMap = this.getMyJcMap() //获取地图对象
+
+          myJcMap.fitView(orgAreas)
+        }
       }
     }
   },
